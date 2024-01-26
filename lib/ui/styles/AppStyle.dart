@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:hommie/src/styles/AppColors.dart';
+import 'package:hommie/ui/styles/AppColors.dart';
 
 final $style = AppStyle();
 

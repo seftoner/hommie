@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/src/app.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hommie/app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const HommieApp());
+  runApp(const ProviderScope(child: HommieApp()));
 }
