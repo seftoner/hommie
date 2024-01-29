@@ -2,9 +2,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hommie/networking/credential_storage.dart';
 import 'package:oauth2/oauth2.dart';
 
-class SecureCredentialsStorage implements CredentialStorage {
+class SecureCredentialStorage implements CredentialStorage {
   final FlutterSecureStorage _storage;
-  SecureCredentialsStorage(this._storage);
+  SecureCredentialStorage(this._storage);
 
   static const String _key = "oauthCredentials";
   Credentials? _cachedCredentials;

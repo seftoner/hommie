@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/router.dart';
 import 'package:hommie/router/router.dart';
 import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

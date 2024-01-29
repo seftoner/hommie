@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hommie/state/provider.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-// final loginProvider =
-//     ChangeNotifierProvider<LoginProvider>((ref) => LoginProvider());
 
 class LoginPage extends HookConsumerWidget {
   const LoginPage({super.key});
@@ -34,7 +32,10 @@ class LoginPage extends HookConsumerWidget {
             FilledButton(
               style: FilledButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor),
-              onPressed: () {},
+              onPressed: () {
+                watch.read(authcontrollerNotifierProvider.notifier).login();
+                // watch.read(authControllerProvider.notifier).login();
+              },
               child: const Text('Connect'),
             ),
           ],
