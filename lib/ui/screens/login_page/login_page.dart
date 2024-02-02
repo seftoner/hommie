@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/state/provider.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hommie/auth/auth_controller.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -8,6 +9,9 @@ class LoginPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef watch) {
+    final haServerURLController =
+        useTextEditingController(text: "http://192.168.0.109:8123");
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(
@@ -22,22 +26,22 @@ class LoginPage extends HookConsumerWidget {
             Text('Enter your hub address',
                 style: Theme.of(context).textTheme.headlineMedium),
             $h64,
-            const TextField(
-              // onChanged: (value) => watch(loginProvider).setPassword(value),
-              decoration: InputDecoration(
+            TextField(
+              controller: haServerURLController,
+              decoration: const InputDecoration(
                 labelText: 'Hub address',
               ),
             ),
             Spacer(),
             FilledButton(
-              style: FilledButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor),
-              onPressed: () {
-                watch.read(authcontrollerNotifierProvider.notifier).login();
-                // watch.read(authControllerProvider.notifier).login();
-              },
-              child: const Text('Connect'),
-            ),
+                style: FilledButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor),
+                onPressed: () {
+                  watch
+                      .read(authControllerProvider.notifier)
+                      .login(haServerURLController.text);
+                },
+                child: const Text('Connect')),
           ],
         ),
       ),

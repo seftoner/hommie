@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -9,15 +8,14 @@ import 'package:oauth2/oauth2.dart';
 
 class HAAuthenticator {
   final CredentialStorage _credentialStorage;
-  final String _haURL;
+  late String _haServerURL;
 
-  HAAuthenticator(this._credentialStorage, this._haURL);
+  HAAuthenticator(this._credentialStorage);
 
-  Uri get _authorizeUrl => Uri.parse(_haURL + "/auth/authorize");
+  Uri get _authorizeUrl => Uri.parse(_haServerURL + "/auth/authorize");
   //Token URL used for getting the access token, refreshing the token and revoking the token
-  Uri get _tokenUrl => Uri.parse(_haURL + "/auth/token");
-  Uri _redirectUrl = Uri.parse("hommie://auth");
-  String _clientID = "http://192.168.0.111";
+  Uri get _tokenUrl => Uri.parse(_haServerURL + "/auth/token");
+  String _clientID = "http://192.168.0.106";
 
   Future<Credentials?> getSignedInCredentials() async {
     try {
@@ -75,7 +73,8 @@ class HAAuthenticator {
   Future<bool> isSignedIn() =>
       getSignedInCredentials().then((value) => value != null);
 
-  AuthorizationCodeGrant createGrant() {
+  AuthorizationCodeGrant createGrant(String haServerURL) {
+    _haServerURL = haServerURL;
     return AuthorizationCodeGrant(
       _clientID,
       _authorizeUrl,
@@ -85,15 +84,14 @@ class HAAuthenticator {
 
   Future<Either<AuthFailure, Unit>> signOut() async {
     try {
-      final accessToken = await _credentialStorage
-          .read()
-          .then((credentials) => credentials?.accessToken);
+      final credentials = await _credentialStorage.read();
 
       try {
         var client = HttpClient();
         var request = await client.postUrl(_tokenUrl);
-        request.headers.add("Authorization", "Bearer $accessToken");
-        request.write('token=$accessToken&action=revoke');
+        request.headers
+            .add("Authorization", "Bearer ${credentials?.accessToken}");
+        request.write('token=${credentials?.accessToken}&action=revoke');
         await request.close();
         client.close();
       } on SocketException catch (e) {

@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hommie/data/auth_state.dart';
 import 'package:hommie/router/routes.dart';
-import 'package:hommie/state/auth_controller.dart';
+import 'package:hommie/auth/auth_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
@@ -15,8 +16,8 @@ GoRouter router(RouterRef ref) {
     // update the listenable, when some provider value changes
     // here, we are just interested in wheter the user's logged in
     ..listen(
-      authControllerProvider
-          .select((value) => value.whenData((value) => value.isAuth)),
+      authControllerProvider.select((value) =>
+          value.whenData((value) => value == AuthState.authenticated())),
       (_, next) {
         isAuth.value = next;
       },

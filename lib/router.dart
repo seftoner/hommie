@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:hommie/ui/screens/login_page/LoginPage.dart';
+import 'package:hommie/ui/screens/login_page/login_page.dart';
 
 class ScreenPaths {
   static String login = "/login";

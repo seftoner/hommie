@@ -18,27 +18,24 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AuthState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String token) signedIn,
     required TResult Function() initial,
-    required TResult Function() signedOut,
+    required TResult Function() authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthFailure failure) failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String token)? signedIn,
     TResult? Function()? initial,
-    TResult? Function()? signedOut,
+    TResult? Function()? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthFailure failure)? failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String token)? signedIn,
     TResult Function()? initial,
-    TResult Function()? signedOut,
+    TResult Function()? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
@@ -46,27 +43,24 @@ mixin _$AuthState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_SignedIn value) signedIn,
     required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedOut value) signedOut,
+    required TResult Function(_SignedIn value) authenticated,
     required TResult Function(_Unauthicated value) unauthenticated,
     required TResult Function(_Failure value) failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignedIn value)? signedIn,
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedOut value)? signedOut,
+    TResult? Function(_SignedIn value)? authenticated,
     TResult? Function(_Unauthicated value)? unauthenticated,
     TResult? Function(_Failure value)? failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignedIn value)? signedIn,
     TResult Function(_Initial value)? initial,
-    TResult Function(_SignedOut value)? signedOut,
+    TResult Function(_SignedIn value)? authenticated,
     TResult Function(_Unauthicated value)? unauthenticated,
     TResult Function(_Failure value)? failure,
     required TResult orElse(),
@@ -89,158 +83,6 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-}
-
-/// @nodoc
-abstract class _$$SignedInImplCopyWith<$Res> {
-  factory _$$SignedInImplCopyWith(
-          _$SignedInImpl value, $Res Function(_$SignedInImpl) then) =
-      __$$SignedInImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String token});
-}
-
-/// @nodoc
-class __$$SignedInImplCopyWithImpl<$Res>
-    extends _$AuthStateCopyWithImpl<$Res, _$SignedInImpl>
-    implements _$$SignedInImplCopyWith<$Res> {
-  __$$SignedInImplCopyWithImpl(
-      _$SignedInImpl _value, $Res Function(_$SignedInImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? token = null,
-  }) {
-    return _then(_$SignedInImpl(
-      token: null == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$SignedInImpl extends _SignedIn {
-  const _$SignedInImpl({required this.token}) : super._();
-
-  @override
-  final String token;
-
-  @override
-  String toString() {
-    return 'AuthState.signedIn(token: $token)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SignedInImpl &&
-            (identical(other.token, token) || other.token == token));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, token);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SignedInImplCopyWith<_$SignedInImpl> get copyWith =>
-      __$$SignedInImplCopyWithImpl<_$SignedInImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String token) signedIn,
-    required TResult Function() initial,
-    required TResult Function() signedOut,
-    required TResult Function() unauthenticated,
-    required TResult Function(AuthFailure failure) failure,
-  }) {
-    return signedIn(token);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String token)? signedIn,
-    TResult? Function()? initial,
-    TResult? Function()? signedOut,
-    TResult? Function()? unauthenticated,
-    TResult? Function(AuthFailure failure)? failure,
-  }) {
-    return signedIn?.call(token);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String token)? signedIn,
-    TResult Function()? initial,
-    TResult Function()? signedOut,
-    TResult Function()? unauthenticated,
-    TResult Function(AuthFailure failure)? failure,
-    required TResult orElse(),
-  }) {
-    if (signedIn != null) {
-      return signedIn(token);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_SignedIn value) signedIn,
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedOut value) signedOut,
-    required TResult Function(_Unauthicated value) unauthenticated,
-    required TResult Function(_Failure value) failure,
-  }) {
-    return signedIn(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignedIn value)? signedIn,
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedOut value)? signedOut,
-    TResult? Function(_Unauthicated value)? unauthenticated,
-    TResult? Function(_Failure value)? failure,
-  }) {
-    return signedIn?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignedIn value)? signedIn,
-    TResult Function(_Initial value)? initial,
-    TResult Function(_SignedOut value)? signedOut,
-    TResult Function(_Unauthicated value)? unauthenticated,
-    TResult Function(_Failure value)? failure,
-    required TResult orElse(),
-  }) {
-    if (signedIn != null) {
-      return signedIn(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _SignedIn extends AuthState {
-  const factory _SignedIn({required final String token}) = _$SignedInImpl;
-  const _SignedIn._() : super._();
-
-  String get token;
-  @JsonKey(ignore: true)
-  _$$SignedInImplCopyWith<_$SignedInImpl> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -281,9 +123,8 @@ class _$InitialImpl extends _Initial {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String token) signedIn,
     required TResult Function() initial,
-    required TResult Function() signedOut,
+    required TResult Function() authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthFailure failure) failure,
   }) {
@@ -293,9 +134,8 @@ class _$InitialImpl extends _Initial {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String token)? signedIn,
     TResult? Function()? initial,
-    TResult? Function()? signedOut,
+    TResult? Function()? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthFailure failure)? failure,
   }) {
@@ -305,9 +145,8 @@ class _$InitialImpl extends _Initial {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String token)? signedIn,
     TResult Function()? initial,
-    TResult Function()? signedOut,
+    TResult Function()? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
@@ -321,9 +160,8 @@ class _$InitialImpl extends _Initial {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_SignedIn value) signedIn,
     required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedOut value) signedOut,
+    required TResult Function(_SignedIn value) authenticated,
     required TResult Function(_Unauthicated value) unauthenticated,
     required TResult Function(_Failure value) failure,
   }) {
@@ -333,9 +171,8 @@ class _$InitialImpl extends _Initial {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignedIn value)? signedIn,
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedOut value)? signedOut,
+    TResult? Function(_SignedIn value)? authenticated,
     TResult? Function(_Unauthicated value)? unauthenticated,
     TResult? Function(_Failure value)? failure,
   }) {
@@ -345,9 +182,8 @@ class _$InitialImpl extends _Initial {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignedIn value)? signedIn,
     TResult Function(_Initial value)? initial,
-    TResult Function(_SignedOut value)? signedOut,
+    TResult Function(_SignedIn value)? authenticated,
     TResult Function(_Unauthicated value)? unauthenticated,
     TResult Function(_Failure value)? failure,
     required TResult orElse(),
@@ -365,35 +201,35 @@ abstract class _Initial extends AuthState {
 }
 
 /// @nodoc
-abstract class _$$SignedOutImplCopyWith<$Res> {
-  factory _$$SignedOutImplCopyWith(
-          _$SignedOutImpl value, $Res Function(_$SignedOutImpl) then) =
-      __$$SignedOutImplCopyWithImpl<$Res>;
+abstract class _$$SignedInImplCopyWith<$Res> {
+  factory _$$SignedInImplCopyWith(
+          _$SignedInImpl value, $Res Function(_$SignedInImpl) then) =
+      __$$SignedInImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$SignedOutImplCopyWithImpl<$Res>
-    extends _$AuthStateCopyWithImpl<$Res, _$SignedOutImpl>
-    implements _$$SignedOutImplCopyWith<$Res> {
-  __$$SignedOutImplCopyWithImpl(
-      _$SignedOutImpl _value, $Res Function(_$SignedOutImpl) _then)
+class __$$SignedInImplCopyWithImpl<$Res>
+    extends _$AuthStateCopyWithImpl<$Res, _$SignedInImpl>
+    implements _$$SignedInImplCopyWith<$Res> {
+  __$$SignedInImplCopyWithImpl(
+      _$SignedInImpl _value, $Res Function(_$SignedInImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$SignedOutImpl extends _SignedOut {
-  const _$SignedOutImpl() : super._();
+class _$SignedInImpl extends _SignedIn {
+  const _$SignedInImpl() : super._();
 
   @override
   String toString() {
-    return 'AuthState.signedOut()';
+    return 'AuthState.authenticated()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$SignedOutImpl);
+        (other.runtimeType == runtimeType && other is _$SignedInImpl);
   }
 
   @override
@@ -402,39 +238,36 @@ class _$SignedOutImpl extends _SignedOut {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String token) signedIn,
     required TResult Function() initial,
-    required TResult Function() signedOut,
+    required TResult Function() authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthFailure failure) failure,
   }) {
-    return signedOut();
+    return authenticated();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String token)? signedIn,
     TResult? Function()? initial,
-    TResult? Function()? signedOut,
+    TResult? Function()? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthFailure failure)? failure,
   }) {
-    return signedOut?.call();
+    return authenticated?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String token)? signedIn,
     TResult Function()? initial,
-    TResult Function()? signedOut,
+    TResult Function()? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
   }) {
-    if (signedOut != null) {
-      return signedOut();
+    if (authenticated != null) {
+      return authenticated();
     }
     return orElse();
   }
@@ -442,47 +275,44 @@ class _$SignedOutImpl extends _SignedOut {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_SignedIn value) signedIn,
     required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedOut value) signedOut,
+    required TResult Function(_SignedIn value) authenticated,
     required TResult Function(_Unauthicated value) unauthenticated,
     required TResult Function(_Failure value) failure,
   }) {
-    return signedOut(this);
+    return authenticated(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignedIn value)? signedIn,
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedOut value)? signedOut,
+    TResult? Function(_SignedIn value)? authenticated,
     TResult? Function(_Unauthicated value)? unauthenticated,
     TResult? Function(_Failure value)? failure,
   }) {
-    return signedOut?.call(this);
+    return authenticated?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignedIn value)? signedIn,
     TResult Function(_Initial value)? initial,
-    TResult Function(_SignedOut value)? signedOut,
+    TResult Function(_SignedIn value)? authenticated,
     TResult Function(_Unauthicated value)? unauthenticated,
     TResult Function(_Failure value)? failure,
     required TResult orElse(),
   }) {
-    if (signedOut != null) {
-      return signedOut(this);
+    if (authenticated != null) {
+      return authenticated(this);
     }
     return orElse();
   }
 }
 
-abstract class _SignedOut extends AuthState {
-  const factory _SignedOut() = _$SignedOutImpl;
-  const _SignedOut._() : super._();
+abstract class _SignedIn extends AuthState {
+  const factory _SignedIn() = _$SignedInImpl;
+  const _SignedIn._() : super._();
 }
 
 /// @nodoc
@@ -523,9 +353,8 @@ class _$UnauthicatedImpl extends _Unauthicated {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String token) signedIn,
     required TResult Function() initial,
-    required TResult Function() signedOut,
+    required TResult Function() authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthFailure failure) failure,
   }) {
@@ -535,9 +364,8 @@ class _$UnauthicatedImpl extends _Unauthicated {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String token)? signedIn,
     TResult? Function()? initial,
-    TResult? Function()? signedOut,
+    TResult? Function()? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthFailure failure)? failure,
   }) {
@@ -547,9 +375,8 @@ class _$UnauthicatedImpl extends _Unauthicated {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String token)? signedIn,
     TResult Function()? initial,
-    TResult Function()? signedOut,
+    TResult Function()? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
@@ -563,9 +390,8 @@ class _$UnauthicatedImpl extends _Unauthicated {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_SignedIn value) signedIn,
     required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedOut value) signedOut,
+    required TResult Function(_SignedIn value) authenticated,
     required TResult Function(_Unauthicated value) unauthenticated,
     required TResult Function(_Failure value) failure,
   }) {
@@ -575,9 +401,8 @@ class _$UnauthicatedImpl extends _Unauthicated {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignedIn value)? signedIn,
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedOut value)? signedOut,
+    TResult? Function(_SignedIn value)? authenticated,
     TResult? Function(_Unauthicated value)? unauthenticated,
     TResult? Function(_Failure value)? failure,
   }) {
@@ -587,9 +412,8 @@ class _$UnauthicatedImpl extends _Unauthicated {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignedIn value)? signedIn,
     TResult Function(_Initial value)? initial,
-    TResult Function(_SignedOut value)? signedOut,
+    TResult Function(_SignedIn value)? authenticated,
     TResult Function(_Unauthicated value)? unauthenticated,
     TResult Function(_Failure value)? failure,
     required TResult orElse(),
@@ -680,9 +504,8 @@ class _$FailureImpl extends _Failure {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String token) signedIn,
     required TResult Function() initial,
-    required TResult Function() signedOut,
+    required TResult Function() authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthFailure failure) failure,
   }) {
@@ -692,9 +515,8 @@ class _$FailureImpl extends _Failure {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String token)? signedIn,
     TResult? Function()? initial,
-    TResult? Function()? signedOut,
+    TResult? Function()? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthFailure failure)? failure,
   }) {
@@ -704,9 +526,8 @@ class _$FailureImpl extends _Failure {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String token)? signedIn,
     TResult Function()? initial,
-    TResult Function()? signedOut,
+    TResult Function()? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthFailure failure)? failure,
     required TResult orElse(),
@@ -720,9 +541,8 @@ class _$FailureImpl extends _Failure {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_SignedIn value) signedIn,
     required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedOut value) signedOut,
+    required TResult Function(_SignedIn value) authenticated,
     required TResult Function(_Unauthicated value) unauthenticated,
     required TResult Function(_Failure value) failure,
   }) {
@@ -732,9 +552,8 @@ class _$FailureImpl extends _Failure {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignedIn value)? signedIn,
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedOut value)? signedOut,
+    TResult? Function(_SignedIn value)? authenticated,
     TResult? Function(_Unauthicated value)? unauthenticated,
     TResult? Function(_Failure value)? failure,
   }) {
@@ -744,9 +563,8 @@ class _$FailureImpl extends _Failure {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignedIn value)? signedIn,
     TResult Function(_Initial value)? initial,
-    TResult Function(_SignedOut value)? signedOut,
+    TResult Function(_SignedIn value)? authenticated,
     TResult Function(_Unauthicated value)? unauthenticated,
     TResult Function(_Failure value)? failure,
     required TResult orElse(),

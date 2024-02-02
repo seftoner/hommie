@@ -15,12 +15,12 @@ class SecureCredentialStorage implements CredentialStorage {
       return _cachedCredentials!;
     }
 
-    final credentials = await _storage.read(key: _key);
-    if (credentials == null) {
+    final json = await _storage.read(key: _key);
+    if (json == null) {
       return null;
     }
     try {
-      return _cachedCredentials = Credentials.fromJson(credentials);
+      return _cachedCredentials = Credentials.fromJson(json);
     } on FormatException catch (e) {
       print('Error parsing credentials: $e');
       return null;
@@ -29,9 +29,8 @@ class SecureCredentialStorage implements CredentialStorage {
 
   @override
   Future<void> save(Credentials credentials) async {
-    await _storage.write(key: 'oauthCredentials', value: credentials.toJson());
-    await _storage.write(key: 'token', value: credentials.accessToken);
-    await _storage.write(key: 'refreshToken', value: credentials.refreshToken);
+    _cachedCredentials = credentials;
+    return _storage.write(key: _key, value: credentials.toJson());
   }
 
   @override
