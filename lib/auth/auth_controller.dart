@@ -17,7 +17,7 @@ class AuthController extends _$AuthController {
 
   @override
   FutureOr<AuthState> build() async {
-    _haAuthenticator = ref.read(uaAuthenticatorProvider);
+    _haAuthenticator = ref.watch(uaAuthenticatorProvider);
     _persistenceRefreshLogic();
 
     return _loginRecoveryAttempt();

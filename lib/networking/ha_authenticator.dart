@@ -8,13 +8,8 @@ import 'package:oauth2/oauth2.dart';
 
 class HAAuthenticator {
   final CredentialStorage _credentialStorage;
-  late String _haServerURL;
 
   HAAuthenticator(this._credentialStorage);
-
-  Uri get _authorizeUrl => Uri.parse(_haServerURL + "/auth/authorize");
-  //Token URL used for getting the access token, refreshing the token and revoking the token
-  Uri get _tokenUrl => Uri.parse(_haServerURL + "/auth/token");
   String _clientID = "http://192.168.0.106";
 
   Future<Credentials?> getSignedInCredentials() async {
@@ -74,28 +69,27 @@ class HAAuthenticator {
       getSignedInCredentials().then((value) => value != null);
 
   AuthorizationCodeGrant createGrant(String haServerURL) {
-    _haServerURL = haServerURL;
     return AuthorizationCodeGrant(
       _clientID,
-      _authorizeUrl,
-      _tokenUrl,
+      Uri.parse(haServerURL + "/auth/authorize"),
+      Uri.parse(haServerURL + "/auth/token"),
     );
   }
 
   Future<Either<AuthFailure, Unit>> signOut() async {
     try {
       final credentials = await _credentialStorage.read();
-
+      var client = HttpClient();
       try {
-        var client = HttpClient();
-        var request = await client.postUrl(_tokenUrl);
+        var request = await client.postUrl(credentials!.tokenEndpoint!);
         request.headers
             .add("Authorization", "Bearer ${credentials?.accessToken}");
         request.write('token=${credentials?.accessToken}&action=revoke');
         await request.close();
-        client.close();
       } on SocketException catch (e) {
         print('Token revocation failed: $e');
+      } finally {
+        client.close();
       }
 
       await _credentialStorage.clear();
