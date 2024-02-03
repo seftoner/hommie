@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:hommie/auth/provider.dart';
+import 'package:hommie/networking/auth_failure.dart';
 import 'package:hommie/networking/ha_authenticator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -43,21 +45,30 @@ class AuthController extends _$AuthController {
   Future<void> login(String haServerURL) async {
     final grant = _haAuthenticator.createGrant(haServerURL);
 
-    final String redirectScheme = "hommie";
-    Uri _redirectUrl = Uri.parse("$redirectScheme://");
+    const String redirectScheme = "hommie";
+    Uri redirectUrl = Uri.parse("$redirectScheme://");
 
-    //Exception has occurred.
     //PlatformException (PlatformException(CANCELED, User canceled login, null, null))
-    final result = await FlutterWebAuth2.authenticate(
-        url: grant.getAuthorizationUrl(_redirectUrl).toString(),
-        callbackUrlScheme: redirectScheme);
 
-    final failureOrSuccess = await _haAuthenticator.handleAuthorizationResponse(
-        grant, Uri.parse(result).queryParameters);
-    state = failureOrSuccess.fold(
-      (l) => AsyncData(AuthState.failure(l)),
-      (r) => AsyncData(const AuthState.authenticated()),
-    );
+    try {
+      final result = await FlutterWebAuth2.authenticate(
+          url: grant.getAuthorizationUrl(redirectUrl).toString(),
+          callbackUrlScheme: redirectScheme);
+
+      final failureOrSuccess =
+          await _haAuthenticator.handleAuthorizationResponse(
+              grant, Uri.parse(result).queryParameters);
+      state = failureOrSuccess.fold(
+        (l) => AsyncData(AuthState.failure(l)),
+        (r) => AsyncData(const AuthState.authenticated()),
+      );
+    } on PlatformException catch (e) {
+      if (e.code == 'CANCELED') {
+        print(e.message);
+        AsyncData(AuthState.failure(AuthFailure.userBrake(e.message)));
+      }
+    }
+
     grant.close();
   }
 
