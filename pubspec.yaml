@@ -22,8 +22,8 @@ dependencies:
   shared_preferences: ^2.2.2
   oauth2: ^2.0.2
   flutter_secure_storage: ^9.0.0
-  dartz: ^0.10.1
   flutter_web_auth_2: ^3.1.1
+  fpdart: ^1.1.0
 
 dev_dependencies:
   build_runner:

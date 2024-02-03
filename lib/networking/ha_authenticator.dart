@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hommie/networking/auth_failure.dart';
 import 'package:hommie/networking/credential_storage.dart';
 import 'package:oauth2/oauth2.dart';

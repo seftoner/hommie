@@ -60,9 +60,10 @@ class AuthController extends _$AuthController {
               grant, Uri.parse(result).queryParameters);
       state = failureOrSuccess.fold(
         (l) => AsyncData(AuthState.failure(l)),
-        (r) => AsyncData(const AuthState.authenticated()),
+        (r) => const AsyncData(AuthState.authenticated()),
       );
     } on PlatformException catch (e) {
+      //BUG: Not sure that 'CANCELED' message will be return on all platforms
       if (e.code == 'CANCELED') {
         print(e.message);
         AsyncData(AuthState.failure(AuthFailure.userBrake(e.message)));
