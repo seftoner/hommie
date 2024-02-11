@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hommie/networking/home_assitant_websocket/hass_event.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/hass_event.dart';
 
 part 'web_socket_response.freezed.dart';
 part 'web_socket_response.g.dart';

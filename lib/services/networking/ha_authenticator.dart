@@ -2,15 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:hommie/networking/auth_failure.dart';
-import 'package:hommie/networking/credential_storage.dart';
+import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
+import 'package:hommie/services/networking/credential_storage.dart';
 import 'package:oauth2/oauth2.dart';
+import 'package:http/http.dart' as http;
 
 class HAAuthenticator {
   final CredentialStorage _credentialStorage;
 
   HAAuthenticator(this._credentialStorage);
-  String _clientID = "http://192.168.0.106";
+  String _clientID = "http://192.168.0.108";
 
   Future<Credentials?> getSignedInCredentials() async {
     try {
@@ -48,9 +49,7 @@ class HAAuthenticator {
       Credentials storedCredentials) async {
     try {
       final refreshedCredentials = await storedCredentials.refresh(
-        identifier: _clientID,
-        basicAuth: false,
-      );
+          identifier: _clientID, basicAuth: false);
 
       await _credentialStorage.save(refreshedCredentials);
       return right(refreshedCredentials);
@@ -79,13 +78,13 @@ class HAAuthenticator {
   Future<Either<AuthFailure, Unit>> signOut() async {
     try {
       final credentials = await _credentialStorage.read();
-      var client = HttpClient();
+      var client = http.Client();
       try {
-        var request = await client.postUrl(credentials!.tokenEndpoint!);
-        request.headers
-            .add("Authorization", "Bearer ${credentials?.accessToken}");
-        request.write('token=${credentials?.accessToken}&action=revoke');
-        await request.close();
+        //TODO handle internet connection error
+        await client.post(credentials!.tokenEndpoint!, body: {
+          'token': credentials.accessToken,
+          'action': 'revoke',
+        });
       } on SocketException catch (e) {
         print('Token revocation failed: $e');
       } finally {

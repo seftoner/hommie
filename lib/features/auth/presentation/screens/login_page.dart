@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hommie/auth/auth_controller.dart';
+import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -8,7 +8,7 @@ class LoginPage extends HookConsumerWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final haServerURLController =
         useTextEditingController(text: "http://192.168.0.109:8123");
 
@@ -37,7 +37,7 @@ class LoginPage extends HookConsumerWidget {
                 style: FilledButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor),
                 onPressed: () {
-                  watch
+                  ref
                       .read(authControllerProvider.notifier)
                       .login(haServerURLController.text);
                 },
@@ -46,32 +46,5 @@ class LoginPage extends HookConsumerWidget {
         ),
       ),
     );
-  }
-}
-
-class LoginProvider extends ChangeNotifier {
-  String _username = '';
-  String _password = '';
-  String _errorMessage = '';
-
-  String get errorMessage => _errorMessage;
-
-  void setUsername(String username) {
-    _username = username;
-  }
-
-  void setPassword(String password) {
-    _password = password;
-  }
-
-  void login() {
-    if (_username.isEmpty || _password.isEmpty) {
-      _errorMessage = 'Please enter username and password';
-    } else {
-      // Perform login logic here
-      // If successful, navigate to the next screen
-      // If failed, set _errorMessage accordingly
-    }
-    notifyListeners();
   }
 }

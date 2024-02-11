@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hommie/networking/auth_failure.dart';
+import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 
 part 'auth_state.freezed.dart';
 
