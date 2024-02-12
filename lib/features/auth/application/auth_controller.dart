@@ -54,6 +54,7 @@ class AuthController extends _$AuthController {
           serverUrl: haServerURL,
           redirectUrl: redirectUrl,
           handler: (uri) async {
+            ///TODO: handle sing in brake event here
             final authenticateResult = await FlutterWebAuth2.authenticate(
                 url: uri.toString(), callbackUrlScheme: redirectUrl.scheme);
 
