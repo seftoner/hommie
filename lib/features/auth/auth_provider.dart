@@ -14,7 +14,4 @@ AuthRepository authRepository(AuthRepositoryRef ref) {
 }
 
 /// Provides a [ValueNotifier] to the app router to redirect on auth state change
-
 final authStateListenable = ValueNotifier<bool>(false);
-
-//   final isAuth = ValueNotifier<AsyncValue<bool>>(const AsyncLoading());

@@ -4,76 +4,78 @@ import 'package:hommie/services/networking/home_assitant_websocket/hass_event.da
 part 'web_socket_response.freezed.dart';
 part 'web_socket_response.g.dart';
 
-@Freezed(unionKey: 'type')
+@freezed
+abstract class Error with _$Error {
+  const factory Error({
+    required String code,
+    required String message,
+  }) = _Error;
+
+  factory Error.fromJson(Map<String, dynamic> json) => _$ErrorFromJson(json);
+}
+
+@freezed
 class WebSocketResponse with _$WebSocketResponse {
-  @FreezedUnionValue('pong')
   const factory WebSocketResponse.pong({required int id}) =
       WebSocketPongResponse;
 
-  @FreezedUnionValue('event')
   const factory WebSocketResponse.event({
     required int id,
     required HassEvent event,
   }) = WebSocketEventResponse;
 
-  @FreezedUnionValue('result')
   const factory WebSocketResponse.resultSuccess({
     required int id,
     required dynamic result,
+    @Default(true) bool success,
   }) = WebSocketResultResponseSuccess;
 
-  @FreezedUnionValue('result')
   const factory WebSocketResponse.resultError({
     required int id,
-    required String code,
-    required String message,
+    @Default(false) bool success,
+    required Error error,
   }) = WebSocketResultResponseError;
 
   factory WebSocketResponse.fromJson(Map<String, dynamic> json) =>
-      _$WebSocketResponseFromJson(json);
+      const WebSocketResponseConverter().fromJson(json);
 }
 
-/*
-// @WebSocketResponseConverter()
- class WebSocketResponseConverter
+class WebSocketResponseConverter
     implements JsonConverter<WebSocketResponse, Map<String, dynamic>> {
   const WebSocketResponseConverter();
 
   @override
   WebSocketResponse fromJson(Map<String, dynamic> json) {
-    // // type data was already set (e.g. because we serialized it ourselves)
-    // if (json['runtimeType'] != null) {
-    //   return MyResponse.fromJson(json);
-    // }
+    final type = json['type'] as String;
+    final id = json['id'] as int;
+    final success = json['success'] as bool;
+    final result = json['result'];
 
-    switch (json['type']) {
+    switch (type) {
       case 'pong':
-        return WebSocketResponse.pong(id: json['id']);
+        return WebSocketResponse.pong(id: id);
       case 'event':
         return WebSocketResponse.event(
-          id: json['id'],
-          event: HassEvent.fromJson(json['event']),
+            id: id, event: HassEvent.fromJson(result as Map<String, dynamic>));
+      case 'result' when success:
+        return WebSocketResponse.resultSuccess(
+          id: id,
+          result: result,
+          success: true,
         );
-      case 'result':
-        if (json['success']) {
-          return WebSocketResponse.resultSuccess(
-            id: json['id'],
-            result: json['result'],
-          );
-        } else {
-          return WebSocketResponse.resultError(
-            id: json['id'],
-            code: json['error']['code'],
-            message: json['error']['message'],
-          );
-        }
+      case 'result' when !success:
+        return WebSocketResponse.resultError(
+          id: id,
+          success: false,
+          error: Error.fromJson(json['error'] as Map<String, dynamic>),
+        );
       default:
-        throw Exception(
-            'Could not determine the constructor for mapping from JSON');
+        throw UnsupportedError('Unsupported response type: $type');
     }
   }
 
   @override
-  Map<String, dynamic> toJson(WebSocketResponse data) => data.toJson();
+  Map<String, dynamic> toJson(WebSocketResponse object) {
+    return object.toJson();
+  }
 }
- */

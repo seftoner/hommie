@@ -37,6 +37,7 @@ class AuthRepository implements IAuthRepository {
     } on AuthorizationException catch (e) {
       return left(AuthFailure.server('${e.error}: ${e.description}'));
     } on PlatformException {
+      //User manually cancel login procedure
       return left(const AuthFailure.storage());
     }
   }

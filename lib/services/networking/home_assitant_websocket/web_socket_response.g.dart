@@ -6,18 +6,29 @@ part of 'web_socket_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$ErrorImpl _$$ErrorImplFromJson(Map<String, dynamic> json) => _$ErrorImpl(
+      code: json['code'] as String,
+      message: json['message'] as String,
+    );
+
+Map<String, dynamic> _$$ErrorImplToJson(_$ErrorImpl instance) =>
+    <String, dynamic>{
+      'code': instance.code,
+      'message': instance.message,
+    };
+
 _$WebSocketPongResponseImpl _$$WebSocketPongResponseImplFromJson(
         Map<String, dynamic> json) =>
     _$WebSocketPongResponseImpl(
       id: json['id'] as int,
-      $type: json['type'] as String?,
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$WebSocketPongResponseImplToJson(
         _$WebSocketPongResponseImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'type': instance.$type,
+      'runtimeType': instance.$type,
     };
 
 _$WebSocketEventResponseImpl _$$WebSocketEventResponseImplFromJson(
@@ -25,7 +36,7 @@ _$WebSocketEventResponseImpl _$$WebSocketEventResponseImplFromJson(
     _$WebSocketEventResponseImpl(
       id: json['id'] as int,
       event: HassEvent.fromJson(json['event'] as Map<String, dynamic>),
-      $type: json['type'] as String?,
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$WebSocketEventResponseImplToJson(
@@ -33,7 +44,7 @@ Map<String, dynamic> _$$WebSocketEventResponseImplToJson(
     <String, dynamic>{
       'id': instance.id,
       'event': instance.event,
-      'type': instance.$type,
+      'runtimeType': instance.$type,
     };
 
 _$WebSocketResultResponseSuccessImpl
@@ -41,7 +52,8 @@ _$WebSocketResultResponseSuccessImpl
         _$WebSocketResultResponseSuccessImpl(
           id: json['id'] as int,
           result: json['result'],
-          $type: json['type'] as String?,
+          success: json['success'] as bool? ?? true,
+          $type: json['runtimeType'] as String?,
         );
 
 Map<String, dynamic> _$$WebSocketResultResponseSuccessImplToJson(
@@ -49,23 +61,24 @@ Map<String, dynamic> _$$WebSocketResultResponseSuccessImplToJson(
     <String, dynamic>{
       'id': instance.id,
       'result': instance.result,
-      'type': instance.$type,
+      'success': instance.success,
+      'runtimeType': instance.$type,
     };
 
 _$WebSocketResultResponseErrorImpl _$$WebSocketResultResponseErrorImplFromJson(
         Map<String, dynamic> json) =>
     _$WebSocketResultResponseErrorImpl(
       id: json['id'] as int,
-      code: json['code'] as String,
-      message: json['message'] as String,
-      $type: json['type'] as String?,
+      success: json['success'] as bool? ?? false,
+      error: Error.fromJson(json['error'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$WebSocketResultResponseErrorImplToJson(
         _$WebSocketResultResponseErrorImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'code': instance.code,
-      'message': instance.message,
-      'type': instance.$type,
+      'success': instance.success,
+      'error': instance.error,
+      'runtimeType': instance.$type,
     };

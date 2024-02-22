@@ -6,7 +6,7 @@ part of 'auth_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authControllerHash() => r'1c272a350d8e9cb1e9d125f4b441fe34424c8240';
+String _$authControllerHash() => r'f4967e07687a42ed078866f0a7d993c136562890';
 
 /// This controller is an [AsyncNotifier] that holds and handles our authentication state
 ///

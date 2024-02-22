@@ -54,6 +54,12 @@ class Messages {
     };
   }
 
+  static Map<String, dynamic> areas() {
+    return {
+      'type': 'config/area_registry/list',
+    };
+  }
+
   static Map<String, dynamic> states() {
     return {
       'type': 'get_states',

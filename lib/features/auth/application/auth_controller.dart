@@ -2,11 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
-import 'package:hommie/auth/provider.dart';
 import 'package:hommie/features/auth/auth_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
-import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
-import 'package:hommie/services/networking/ha_authenticator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/features/auth/application/auth_state.dart';
@@ -20,12 +17,13 @@ class AuthController extends _$AuthController {
   // late final HAAuthenticator _haAuthenticator;
 
   @override
-  FutureOr<AuthState> build() async {
+  Future<AuthState> build() async {
     final repository = ref.watch(authRepositoryProvider);
 
     final credentials = await repository.getCredentials();
 
     if (credentials != null) {
+      authStateListenable.value = true;
       return const AuthState.authenticated();
     }
 
