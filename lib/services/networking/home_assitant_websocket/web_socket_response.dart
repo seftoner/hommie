@@ -15,7 +15,7 @@ abstract class Error with _$Error {
 }
 
 @freezed
-class WebSocketResponse with _$WebSocketResponse {
+sealed class WebSocketResponse with _$WebSocketResponse {
   const factory WebSocketResponse.pong({required int id}) =
       WebSocketPongResponse;
 
