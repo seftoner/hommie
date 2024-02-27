@@ -90,6 +90,9 @@ class HAConnectionOption {
     serverUrl += ":${_credentials.tokenEndpoint?.port}/api/websocket";
     Completer<HASocket> completer = Completer();
     _connect(Uri.parse(serverUrl), completer);
+    print(
+        "HAConnectionOption.createSocket: Trying to establish a new connection to $serverUrl");
+
     return completer.future;
   }
 
@@ -104,9 +107,11 @@ class HAConnectionOption {
       if (messageJson.containsKey("type")) {
         switch (messageJson["type"]) {
           case _authRequired:
+            print("Auth REQUIRED");
             socket.sendMessage(Messages.auth(_credentials.accessToken));
             break;
           case _authInvalid:
+            print("Auth INVALID");
             completer.completeError(messageJson["message"]);
             break;
           case _authOk:
@@ -124,13 +129,17 @@ class HAConnectionOption {
     handleClose() {
       print("Auth closed");
       subscription?.cancel();
-      completer.completeError(Exception(
-          "Socket is closed. Code ${socket.closeCode} Reason: ${socket.closeReason}"));
+      if (!completer.isCompleted) {
+        completer.completeError(Exception(
+            "Socket is closed. Code ${socket.closeCode} Reason: ${socket.closeReason}"));
+      }
     }
 
     handleError(dynamic error) {
       print("Auth error $error");
-      completer.completeError(error);
+      if (!completer.isCompleted) {
+        completer.completeError(error);
+      }
     }
 
     subscription = socket.stream

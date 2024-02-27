@@ -100,6 +100,8 @@ class HAConnection {
 
   void _reconnect() {
     Future.delayed(const Duration(seconds: 1), () {
+      print("HAConnection.reconnect: trying to reconnect");
+
       haConnectionOption
           .createSocket()
           .then((socket) => _setSocket(socket))
