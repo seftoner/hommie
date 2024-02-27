@@ -30,7 +30,7 @@ class AuthRepository implements IAuthRepository {
           await handler(grant.getAuthorizationUrl(redirectUrl));
       final httpClient = await grant.handleAuthorizationResponse(responseCode);
       await _credentialStorage.save(httpClient.credentials);
-      grant.close();
+      // grant.close();
       return right(httpClient.credentials);
     } on FormatException {
       return left(const AuthFailure.server());
