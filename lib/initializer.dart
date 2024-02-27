@@ -8,7 +8,7 @@ Future<ProviderContainer> initialize() async {
 
   final container = ProviderContainer(
     overrides: [],
-    observers: [const StateLogger()],
+    // observers: [const StateLogger()],
   );
 
   /// Auth

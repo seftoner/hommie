@@ -2,12 +2,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'types.freezed.dart';
 part 'types.g.dart';
 
-class Context {
-  final String id;
-  final String? user_id;
-  final String? parent_id;
+@freezed
+class Context with _$Context {
+  const factory Context(
+      {required String id, String? user_id, String? parent_id}) = _Context;
 
-  Context({required this.id, this.user_id, this.parent_id});
+  factory Context.fromJson(Map<String, dynamic> json) =>
+      _$ContextFromJson(json);
 }
 
 sealed class HassEventBase {
@@ -40,6 +41,9 @@ class HassEntityAttributeBase with _$HassEntityAttributeBase {
     String? state_class,
     bool? restored,
   }) = _HassEntityAttributeBase;
+
+  factory HassEntityAttributeBase.fromJson(Map<String, dynamic> json) =>
+      _$HassEntityAttributeBaseFromJson(json);
 }
 
 typedef HassEntities = Map<String, HassEntity>;
@@ -63,6 +67,9 @@ sealed class HassEntity with _$HassEntity {
     required HassEntityAttributeBase attributes,
     required Context context,
   }) = _HassEntity;
+
+  factory HassEntity.fromJson(Map<String, dynamic> json) =>
+      _$HassEntityFromJson(json);
 }
 
 @freezed

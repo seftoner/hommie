@@ -14,6 +14,179 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Context _$ContextFromJson(Map<String, dynamic> json) {
+  return _Context.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Context {
+  String get id => throw _privateConstructorUsedError;
+  String? get user_id => throw _privateConstructorUsedError;
+  String? get parent_id => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ContextCopyWith<Context> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ContextCopyWith<$Res> {
+  factory $ContextCopyWith(Context value, $Res Function(Context) then) =
+      _$ContextCopyWithImpl<$Res, Context>;
+  @useResult
+  $Res call({String id, String? user_id, String? parent_id});
+}
+
+/// @nodoc
+class _$ContextCopyWithImpl<$Res, $Val extends Context>
+    implements $ContextCopyWith<$Res> {
+  _$ContextCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? user_id = freezed,
+    Object? parent_id = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      user_id: freezed == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      parent_id: freezed == parent_id
+          ? _value.parent_id
+          : parent_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ContextImplCopyWith<$Res> implements $ContextCopyWith<$Res> {
+  factory _$$ContextImplCopyWith(
+          _$ContextImpl value, $Res Function(_$ContextImpl) then) =
+      __$$ContextImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String id, String? user_id, String? parent_id});
+}
+
+/// @nodoc
+class __$$ContextImplCopyWithImpl<$Res>
+    extends _$ContextCopyWithImpl<$Res, _$ContextImpl>
+    implements _$$ContextImplCopyWith<$Res> {
+  __$$ContextImplCopyWithImpl(
+      _$ContextImpl _value, $Res Function(_$ContextImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? user_id = freezed,
+    Object? parent_id = freezed,
+  }) {
+    return _then(_$ContextImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      user_id: freezed == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      parent_id: freezed == parent_id
+          ? _value.parent_id
+          : parent_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ContextImpl implements _Context {
+  const _$ContextImpl({required this.id, this.user_id, this.parent_id});
+
+  factory _$ContextImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ContextImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String? user_id;
+  @override
+  final String? parent_id;
+
+  @override
+  String toString() {
+    return 'Context(id: $id, user_id: $user_id, parent_id: $parent_id)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ContextImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.user_id, user_id) || other.user_id == user_id) &&
+            (identical(other.parent_id, parent_id) ||
+                other.parent_id == parent_id));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, user_id, parent_id);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ContextImplCopyWith<_$ContextImpl> get copyWith =>
+      __$$ContextImplCopyWithImpl<_$ContextImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ContextImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Context implements Context {
+  const factory _Context(
+      {required final String id,
+      final String? user_id,
+      final String? parent_id}) = _$ContextImpl;
+
+  factory _Context.fromJson(Map<String, dynamic> json) = _$ContextImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String? get user_id;
+  @override
+  String? get parent_id;
+  @override
+  @JsonKey(ignore: true)
+  _$$ContextImplCopyWith<_$ContextImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+HassEntityAttributeBase _$HassEntityAttributeBaseFromJson(
+    Map<String, dynamic> json) {
+  return _HassEntityAttributeBase.fromJson(json);
+}
+
 /// @nodoc
 mixin _$HassEntityAttributeBase {
   String? get friendly_name => throw _privateConstructorUsedError;
@@ -27,6 +200,7 @@ mixin _$HassEntityAttributeBase {
   String? get state_class => throw _privateConstructorUsedError;
   bool? get restored => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $HassEntityAttributeBaseCopyWith<HassEntityAttributeBase> get copyWith =>
       throw _privateConstructorUsedError;
@@ -213,7 +387,7 @@ class __$$HassEntityAttributeBaseImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$HassEntityAttributeBaseImpl implements _HassEntityAttributeBase {
   const _$HassEntityAttributeBaseImpl(
       {this.friendly_name,
@@ -226,6 +400,9 @@ class _$HassEntityAttributeBaseImpl implements _HassEntityAttributeBase {
       this.device_class,
       this.state_class,
       this.restored});
+
+  factory _$HassEntityAttributeBaseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$HassEntityAttributeBaseImplFromJson(json);
 
   @override
   final String? friendly_name;
@@ -278,6 +455,7 @@ class _$HassEntityAttributeBaseImpl implements _HassEntityAttributeBase {
                 other.restored == restored));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -298,6 +476,13 @@ class _$HassEntityAttributeBaseImpl implements _HassEntityAttributeBase {
   _$$HassEntityAttributeBaseImplCopyWith<_$HassEntityAttributeBaseImpl>
       get copyWith => __$$HassEntityAttributeBaseImplCopyWithImpl<
           _$HassEntityAttributeBaseImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$HassEntityAttributeBaseImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _HassEntityAttributeBase implements HassEntityAttributeBase {
@@ -312,6 +497,9 @@ abstract class _HassEntityAttributeBase implements HassEntityAttributeBase {
       final String? device_class,
       final String? state_class,
       final bool? restored}) = _$HassEntityAttributeBaseImpl;
+
+  factory _HassEntityAttributeBase.fromJson(Map<String, dynamic> json) =
+      _$HassEntityAttributeBaseImpl.fromJson;
 
   @override
   String? get friendly_name;
@@ -339,6 +527,10 @@ abstract class _HassEntityAttributeBase implements HassEntityAttributeBase {
       get copyWith => throw _privateConstructorUsedError;
 }
 
+HassEntity _$HassEntityFromJson(Map<String, dynamic> json) {
+  return _HassEntity.fromJson(json);
+}
+
 /// @nodoc
 mixin _$HassEntity {
   String get entity_id => throw _privateConstructorUsedError;
@@ -348,6 +540,7 @@ mixin _$HassEntity {
   HassEntityAttributeBase get attributes => throw _privateConstructorUsedError;
   Context get context => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $HassEntityCopyWith<HassEntity> get copyWith =>
       throw _privateConstructorUsedError;
@@ -368,6 +561,7 @@ abstract class $HassEntityCopyWith<$Res> {
       Context context});
 
   $HassEntityAttributeBaseCopyWith<$Res> get attributes;
+  $ContextCopyWith<$Res> get context;
 }
 
 /// @nodoc
@@ -425,6 +619,14 @@ class _$HassEntityCopyWithImpl<$Res, $Val extends HassEntity>
       return _then(_value.copyWith(attributes: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ContextCopyWith<$Res> get context {
+    return $ContextCopyWith<$Res>(_value.context, (value) {
+      return _then(_value.copyWith(context: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -445,6 +647,8 @@ abstract class _$$HassEntityImplCopyWith<$Res>
 
   @override
   $HassEntityAttributeBaseCopyWith<$Res> get attributes;
+  @override
+  $ContextCopyWith<$Res> get context;
 }
 
 /// @nodoc
@@ -495,7 +699,7 @@ class __$$HassEntityImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$HassEntityImpl implements _HassEntity {
   const _$HassEntityImpl(
       {required this.entity_id,
@@ -504,6 +708,9 @@ class _$HassEntityImpl implements _HassEntity {
       required this.last_updated,
       required this.attributes,
       required this.context});
+
+  factory _$HassEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$HassEntityImplFromJson(json);
 
   @override
   final String entity_id;
@@ -540,6 +747,7 @@ class _$HassEntityImpl implements _HassEntity {
             (identical(other.context, context) || other.context == context));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, entity_id, state, last_changed,
       last_updated, attributes, context);
@@ -549,6 +757,13 @@ class _$HassEntityImpl implements _HassEntity {
   @pragma('vm:prefer-inline')
   _$$HassEntityImplCopyWith<_$HassEntityImpl> get copyWith =>
       __$$HassEntityImplCopyWithImpl<_$HassEntityImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$HassEntityImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _HassEntity implements HassEntity {
@@ -559,6 +774,9 @@ abstract class _HassEntity implements HassEntity {
       required final String last_updated,
       required final HassEntityAttributeBase attributes,
       required final Context context}) = _$HassEntityImpl;
+
+  factory _HassEntity.fromJson(Map<String, dynamic> json) =
+      _$HassEntityImpl.fromJson;
 
   @override
   String get entity_id;

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/areas/application/areas_controller.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
-import 'package:hommie/services/networking/provider.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_websockets_connection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends HookConsumerWidget {

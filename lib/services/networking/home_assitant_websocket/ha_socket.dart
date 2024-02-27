@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:hommie/services/networking/home_assitant_websocket/messages.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
@@ -15,10 +16,6 @@ class HASocket {
   Stream<dynamic> get stream => _streamController.stream;
   int? get closeCode => _innerchanel.closeCode;
   String? get closeReason => _innerchanel.closeReason;
-
-  bool _isFirstRestart = false;
-  bool _isFollowingRestart = false;
-  bool _isManuallyClosed = false;
 
   HASocket.connect(this._wsUri) {
     _streamController = StreamController.broadcast();
@@ -37,44 +34,23 @@ class HASocket {
 
     _innerchanel.stream.listen(
       (event) {
-        _isFirstRestart = false;
         _streamController.add(event);
       },
       onError: (error) {
-        //TODO: Make propper reconnection
-        // _handleLostConnection();
         print("Inner socket error: $error");
         _streamController.addError(error);
       },
       onDone: () {
-        if (!_isManuallyClosed) {
-          //TODO: Make propper reconnection
-          // _handleLostConnection();
-        }
         print(
             "Inner socket is closed. Code ${_innerchanel.closeCode} Reason: ${_innerchanel.closeReason}");
-
-        //Close _controller????
+        _streamController.close();
       },
     );
   }
 
-  void _handleLostConnection() {
-    if (_isFirstRestart && !_isFollowingRestart) {
-      Future.delayed(const Duration(seconds: 3), () {
-        _isFollowingRestart = false;
-        _startConnection();
-      });
-      _isFollowingRestart = true;
-    } else {
-      _isFirstRestart = true;
-      _startConnection();
-    }
-  }
-
-  void sendMessage(dynamic data) {
+  void sendMessage(Map<String, dynamic> data) {
     print("Sending message: $data");
-    _innerchanel.sink.add(data);
+    _innerchanel.sink.add(jsonEncode(data));
   }
 
   bool isClosed() {
@@ -83,7 +59,6 @@ class HASocket {
 
   void close() {
     print("Going to close socket");
-    _isManuallyClosed = true;
     _innerchanel.sink.close(status.goingAway);
     _streamController.close();
   }
@@ -91,6 +66,10 @@ class HASocket {
 
 class HAConnectionOption {
   final Credentials _credentials;
+
+  static const _authRequired = "auth_required";
+  static const _authInvalid = "auth_invalid";
+  static const _authOk = "auth_ok";
 
   HAConnectionOption(this._credentials);
 
@@ -120,31 +99,21 @@ class HAConnectionOption {
     StreamSubscription<dynamic>? subscription;
 
     handleOpen(dynamic message) {
-      print(message);
-      const MSG_TYPE_AUTH_REQUIRED = "auth_required";
-      const MSG_TYPE_AUTH_INVALID = "auth_invalid";
-      const MSG_TYPE_AUTH_OK = "auth_ok";
-
       Map<String, dynamic> messageJson = jsonDecode(message);
 
       if (messageJson.containsKey("type")) {
         switch (messageJson["type"]) {
-          case MSG_TYPE_AUTH_REQUIRED:
-            socket.sendMessage(jsonEncode({
-              "type": "auth",
-              "access_token": _credentials.accessToken,
-            }));
+          case _authRequired:
+            socket.sendMessage(Messages.auth(_credentials.accessToken));
             break;
-          case MSG_TYPE_AUTH_INVALID:
-            completer.completeError(Exception("Invalid token"));
+          case _authInvalid:
+            completer.completeError(messageJson["message"]);
             break;
-          case MSG_TYPE_AUTH_OK:
-            print("Auth ok");
+          case _authOk:
+            print("Auth OK");
             socket.haVersion = messageJson["ha_version"];
-            // subscription?.cancel().then((v) => completer.complete(socket));
             subscription?.cancel();
             completer.complete(socket);
-
             break;
           default:
             print("Unknown message type: ${messageJson}");
@@ -153,14 +122,18 @@ class HAConnectionOption {
     }
 
     handleClose() {
-      print(
-          "Socket is closed. Code ${socket.closeCode} Reason: ${socket.closeReason}");
+      print("Auth closed");
+      subscription?.cancel();
+      completer.completeError(Exception(
+          "Socket is closed. Code ${socket.closeCode} Reason: ${socket.closeReason}"));
     }
 
     handleError(dynamic error) {
+      print("Auth error $error");
       completer.completeError(error);
     }
 
-    subscription = socket.stream.listen(handleOpen, onError: handleError);
+    subscription = socket.stream
+        .listen(handleOpen, onError: handleError, onDone: handleClose);
   }
 }

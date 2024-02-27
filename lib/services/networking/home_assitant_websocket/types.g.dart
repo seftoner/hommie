@@ -6,6 +6,71 @@ part of 'types.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$ContextImpl _$$ContextImplFromJson(Map<String, dynamic> json) =>
+    _$ContextImpl(
+      id: json['id'] as String,
+      user_id: json['user_id'] as String?,
+      parent_id: json['parent_id'] as String?,
+    );
+
+Map<String, dynamic> _$$ContextImplToJson(_$ContextImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'user_id': instance.user_id,
+      'parent_id': instance.parent_id,
+    };
+
+_$HassEntityAttributeBaseImpl _$$HassEntityAttributeBaseImplFromJson(
+        Map<String, dynamic> json) =>
+    _$HassEntityAttributeBaseImpl(
+      friendly_name: json['friendly_name'] as String?,
+      unit_of_measurement: json['unit_of_measurement'] as String?,
+      icon: json['icon'] as String?,
+      entity_picture: json['entity_picture'] as String?,
+      supported_features: json['supported_features'] as num?,
+      hidden: json['hidden'] as bool?,
+      assumed_state: json['assumed_state'] as bool?,
+      device_class: json['device_class'] as String?,
+      state_class: json['state_class'] as String?,
+      restored: json['restored'] as bool?,
+    );
+
+Map<String, dynamic> _$$HassEntityAttributeBaseImplToJson(
+        _$HassEntityAttributeBaseImpl instance) =>
+    <String, dynamic>{
+      'friendly_name': instance.friendly_name,
+      'unit_of_measurement': instance.unit_of_measurement,
+      'icon': instance.icon,
+      'entity_picture': instance.entity_picture,
+      'supported_features': instance.supported_features,
+      'hidden': instance.hidden,
+      'assumed_state': instance.assumed_state,
+      'device_class': instance.device_class,
+      'state_class': instance.state_class,
+      'restored': instance.restored,
+    };
+
+_$HassEntityImpl _$$HassEntityImplFromJson(Map<String, dynamic> json) =>
+    _$HassEntityImpl(
+      entity_id: json['entity_id'] as String,
+      state: json['state'] as String,
+      last_changed: json['last_changed'] as String,
+      last_updated: json['last_updated'] as String,
+      attributes: HassEntityAttributeBase.fromJson(
+          json['attributes'] as Map<String, dynamic>),
+      context: Context.fromJson(json['context'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$HassEntityImplToJson(_$HassEntityImpl instance) =>
+    <String, dynamic>{
+      'entity_id': instance.entity_id,
+      'state': instance.state,
+      'last_changed': instance.last_changed,
+      'last_updated': instance.last_updated,
+      'attributes': instance.attributes,
+      'context': instance.context,
+    };
+
 _$AreaEntityImpl _$$AreaEntityImplFromJson(Map<String, dynamic> json) =>
     _$AreaEntityImpl(
       area_id: json['area_id'] as String,
