@@ -23,11 +23,19 @@ class HomePage extends HookConsumerWidget {
                   ref.read(authControllerProvider.notifier).signOut();
                 },
                 child: const Text('Sign out')),
-            // ListView(
-            //   children: [
-            //     for (final areaname in ["test", "sdsdsd"]) Text(areaname)
-            //   ],
-            // ),
+            SizedBox(
+              height: 300,
+              child: areas.when(
+                data: (data) => ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) => ListTile(
+                          title: Text(data[index].name),
+                        )),
+                error: (error, stack) =>
+                    Text('Oops, something unexpected happened'),
+                loading: () => CircularProgressIndicator(),
+              ),
+            )
           ],
         ),
       ),
