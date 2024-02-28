@@ -22,13 +22,15 @@ class HAConnection {
   final Map<int, Completer> _commands = {};
   Map<int, Object> _eventListeners = {};
   bool _closeRequested = false;
-  int get _getCommndID => ++_commndID;
+  int get _getCommndID => _commndID++;
 
   HAConnection(HASocket socket, this.haConnectionOption) {
     _setSocket(socket);
   }
 
   Future<dynamic> sendMessage(Map<String, dynamic> message) async {
+    print("HAConnection.sendMessage: (RAW data)  $message");
+
     assert(!_socket.isClosed(), "Connections is closed");
 
     var completer = Completer<dynamic>();
@@ -45,7 +47,7 @@ class HAConnection {
   }
 
   void _messageListener(dynamic message) {
-    print("Server response:  $message");
+    print("HAConnection.messageListener: Server response:  $message");
 
     Map<String, dynamic> messageJson = jsonDecode(message);
 
@@ -68,14 +70,15 @@ class HAConnection {
         _commands.remove(response.id);
         break;
       default:
-        print("Unknown message type: ${messageJson}");
+        print(
+            "HAConnection.messageListener: Unknown message type: ${messageJson}");
     }
   }
 
   void _handleClose() {
     _commndID = 1;
     _commands.forEach((key, value) {
-      value.completeError("Connection lost");
+      value.completeError("HAConnection.handleClose: Connection lost");
     });
     _commands.clear();
     _subscription.cancel();

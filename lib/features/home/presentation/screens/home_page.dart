@@ -32,7 +32,7 @@ class HomePage extends HookConsumerWidget {
                           title: Text(data[index].name),
                         )),
                 error: (error, stack) =>
-                    Text('Oops, something unexpected happened'),
+                    Text('Oops, something unexpected happened \n ${error}'),
                 loading: () => CircularProgressIndicator(),
               ),
             )

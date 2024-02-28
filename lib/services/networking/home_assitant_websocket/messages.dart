@@ -46,49 +46,35 @@ class Messages {
     };
   }
 
-  static Map<String, dynamic> supportedFeatures() {
-    return {
-      'type': 'supported_features',
-      'id': 1, // Always the first message after auth
-      'features': {'coalesce_messages': 1},
-    };
-  }
+  final supportedFeatures = {
+    'type': 'supported_features',
+    'id': 1, // Always the first message after auth
+    'features': {'coalesce_messages': 1},
+  };
 
-  static Map<String, dynamic> areas() {
-    return {
-      'type': 'config/area_registry/list',
-    };
-  }
+  static final areas = <String, dynamic>{
+    'type': 'config/area_registry/list',
+  };
 
-  static Map<String, dynamic> states() {
-    return {
-      'type': 'get_states',
-    };
-  }
+  static final states = <String, dynamic>{
+    'type': 'get_states',
+  };
 
-  static Map<String, dynamic> config() {
-    return {
-      'type': "get_config",
-    };
-  }
+  static final config = <String, dynamic>{
+    'type': "get_config",
+  };
 
-  static Map<String, dynamic> services() {
-    return {
-      'type': "get_services",
-    };
-  }
+  static final services = <String, dynamic>{
+    'type': "get_services",
+  };
 
-  static Map<String, dynamic> user() {
-    return {
-      'type': "auth/current_user",
-    };
-  }
+  static final user = <String, dynamic>{
+    'type': "auth/current_user",
+  };
 
-  static Map<String, dynamic> ping() {
-    return {
-      'type': "ping",
-    };
-  }
+  static final ping = <String, dynamic>{
+    'type': "ping",
+  };
 
   static Map<String, dynamic> error(Error code, String message) {
     return {
@@ -101,75 +87,3 @@ class Messages {
     };
   }
 }
-
-
-
-/* 
-  class HassServiceTarget {
-  // Add the properties of HassServiceTarget according to your TypeScript definition
-}
-
-class ServiceCallMessage {
-  String type;
-  String domain;
-  String service;
-  Map<String, dynamic>? serviceData;
-  HassServiceTarget? target;
-
-  ServiceCallMessage({
-    required this.type,
-    required this.domain,
-    required this.service,
-    this.serviceData,
-    this.target,
-  });
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {
-      'type': type,
-      'domain': domain,
-      'service': service,
-    };
-    if (serviceData != null) {
-      data['service_data'] = serviceData;
-    }
-    if (target != null) {
-      // Assuming HassServiceTarget has a toJson method
-      data['target'] = target!.toJson();
-    }
-    return data;
-  }
-}
-
-ServiceCallMessage callService(
-  String domain,
-  String service, {
-  Map<String, dynamic>? serviceData,
-  HassServiceTarget? target,
-}) {
-  return ServiceCallMessage(
-    type: "call_service",
-    domain: domain,
-    service: service,
-    serviceData: serviceData,
-    target: target,
-  );
-}
-
-class SubscribeEventMessage {
-  String type = "subscribe_events";
-  String? eventType;
-
-  SubscribeEventMessage({this.eventType});
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {'type': type};
-    if (eventType != null) {
-      data['event_type'] = eventType;
-    }
-    return data;
-  }
-}
-
-
-*/
