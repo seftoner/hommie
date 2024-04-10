@@ -76,6 +76,24 @@ class Messages {
     'type': "ping",
   };
 
+  static final subscribeEntities = <String, dynamic>{
+    'type': "subscribe_entities",
+  };
+
+  static Map<String, dynamic> subscribeEvents(String? eventType) {
+    return {
+      'type': "subscribe_events",
+      if (eventType != null) 'event_type': eventType,
+    };
+  }
+
+  static Map<String, dynamic> unsubscribeEvents(int subscriptionId) {
+    return <String, dynamic>{
+      'type': "subscribe_events",
+      'subscription': subscriptionId
+    };
+  }
+
   static Map<String, dynamic> error(Error code, String message) {
     return {
       'type': "result",

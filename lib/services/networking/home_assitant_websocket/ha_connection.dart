@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/web_socket_response.dart';
 
 class AuthOption {
@@ -12,15 +13,33 @@ class AuthOption {
   Uri get serverUri => _serverUri;
 }
 
+class HassSubscription {
+  late final StreamController<dynamic> _streamController;
+
+  final Function() unsubscribe;
+  Stream<dynamic> get stream => _streamController.stream;
+
+  HassSubscription({required this.unsubscribe}) {
+    _streamController = StreamController.broadcast();
+    _streamController.onListen = () {
+      print('New listener added to subscribtion stream!');
+    };
+    _streamController.onCancel = () {
+      print('Listener unsubscribed from subscribtion stream!');
+    };
+  }
+}
+
 class HAConnection {
   late HASocket _socket;
-  late StreamSubscription<dynamic> _subscription;
+  late StreamSubscription<dynamic> _socketSubscription;
   final HAConnectionOption haConnectionOption;
 
   //Wonder why 2? this part from official code: socket may send 1 at the start to enable features
   int _commndID = 2;
   final Map<int, Completer> _commands = {};
-  Map<int, Object> _eventListeners = {};
+  final Map<int, HassSubscription> _subscriptions = {};
+  // Map<int, Object> _eventListeners = {};
   bool _closeRequested = false;
   int get _getCommndID => _commndID++;
 
@@ -46,27 +65,59 @@ class HAConnection {
     _socket.close();
   }
 
+  HassSubscription subscribeMessage(Map<String, dynamic> subscribeMessage) {
+    print("HAConnection.sendMessage: (RAW data)  $subscribeMessage");
+
+    assert(!_socket.isClosed(), "Connections is closed");
+
+    var id = _getCommndID;
+
+    var hassSubscribtion = HassSubscription(unsubscribe: () async {
+      if (!_socket.isClosed()) {
+        await sendMessage(Messages.unsubscribeEvents(id));
+      }
+      _subscriptions.remove(id);
+    });
+
+    _subscriptions[id] = hassSubscribtion;
+
+    subscribeMessage["id"] = id;
+    _socket.sendMessage(subscribeMessage);
+    return hassSubscribtion;
+  }
+
   void _messageListener(dynamic message) {
     print("HAConnection.messageListener: Server response:  $message");
 
     Map<String, dynamic> messageJson = jsonDecode(message);
 
     final response = WebSocketResponse.fromJson(messageJson);
-    var completer = _commands[response.id];
+    var msgCompleter = _commands[response.id];
 
     switch (response) {
       case WebSocketPongResponse():
-        completer?.complete();
+        msgCompleter?.complete();
         _commands.remove(response.id);
         break;
-      case WebSocketEventResponse():
+      case WebSocketEventResponse(event: var event):
+        var subscribtion = _subscriptions[response.id];
+        if (subscribtion != null) {
+          subscribtion._streamController.add(event);
+        } else {
+          print(
+              "HAConnection.messageListener: Unknown subscribtion ${response.id}. Unsubscribing");
+
+          sendMessage(Messages.unsubscribeEvents(response.id)).catchError(() {
+            print("Error unsubsribing from unknown subscription ${message.id}");
+          });
+        }
         break;
       case WebSocketResultResponseSuccess(result: var result):
-        completer?.complete(result);
+        msgCompleter?.complete(result);
         _commands.remove(response.id);
         break;
       case WebSocketResultResponseError(error: var result):
-        completer?.completeError(result);
+        msgCompleter?.completeError(result);
         _commands.remove(response.id);
         break;
       default:
@@ -81,7 +132,7 @@ class HAConnection {
       value.completeError("HAConnection.handleClose: Connection lost");
     });
     _commands.clear();
-    _subscription.cancel();
+    _socketSubscription.cancel();
     if (!_closeRequested) {
       //BUG: HERE CAN BE INFINITIVE LOOP
       _reconnect();
@@ -96,7 +147,7 @@ class HAConnection {
 
   void _setSocket(HASocket socket) {
     _socket = socket;
-    _subscription = _socket.stream
+    _socketSubscription = _socket.stream
         .listen(_messageListener, onDone: _handleClose, onError: _handleError);
     print("HAConnection.setSocket: connection established");
   }

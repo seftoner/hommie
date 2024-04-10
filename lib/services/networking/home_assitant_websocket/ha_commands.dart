@@ -22,6 +22,11 @@ class HACommands {
     return connection.sendMessage(Messages.config).mapItem(HassConfig.fromJson);
   }
 
+  static HassSubscription subscribeEntities(
+      HAConnection connection, String? eventType) {
+    return connection.subscribeMessage(Messages.subscribeEntities);
+  }
+
   // static Future<HassServices> getServices(HAConnection connection) {
   //   return connection.sendMessage(Messages.config()).mapItem(HassServices.????);
   // }
