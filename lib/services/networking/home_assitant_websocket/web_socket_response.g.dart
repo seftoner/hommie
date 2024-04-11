@@ -35,7 +35,7 @@ _$WebSocketEventResponseImpl _$$WebSocketEventResponseImplFromJson(
         Map<String, dynamic> json) =>
     _$WebSocketEventResponseImpl(
       id: json['id'] as int,
-      event: HassEvent.fromJson(json['event'] as Map<String, dynamic>),
+      event: StatesUpdates.fromJson(json['event'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
 

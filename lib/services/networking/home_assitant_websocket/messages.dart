@@ -80,12 +80,16 @@ class Messages {
     'type': "subscribe_entities",
   };
 
+  /// This message is old approach to receiev event updates.
+  ///  New modern way is to use [subscribeEntities] message.
+/*
   static Map<String, dynamic> subscribeEvents(String? eventType) {
     return {
       'type': "subscribe_events",
       if (eventType != null) 'event_type': eventType,
     };
   }
+*/
 
   static Map<String, dynamic> unsubscribeEvents(int subscriptionId) {
     return <String, dynamic>{

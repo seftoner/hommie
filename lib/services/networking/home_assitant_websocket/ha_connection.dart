@@ -86,43 +86,50 @@ class HAConnection {
     return hassSubscribtion;
   }
 
-  void _messageListener(dynamic message) {
-    print("HAConnection.messageListener: Server response:  $message");
+  void _messageListener(dynamic incomingMessage) {
+    print("HAConnection.messageListener: Server response:  $incomingMessage");
 
-    Map<String, dynamic> messageJson = jsonDecode(message);
+    final decodedJson = jsonDecode(incomingMessage);
 
-    final response = WebSocketResponse.fromJson(messageJson);
-    var msgCompleter = _commands[response.id];
+    List<dynamic> jsonMessages = [
+      if (decodedJson is List<dynamic>) ...decodedJson,
+      if (decodedJson is! List<dynamic>) decodedJson,
+    ];
 
-    switch (response) {
-      case WebSocketPongResponse():
-        msgCompleter?.complete();
-        _commands.remove(response.id);
-        break;
-      case WebSocketEventResponse(event: var event):
-        var subscribtion = _subscriptions[response.id];
-        if (subscribtion != null) {
-          subscribtion._streamController.add(event);
-        } else {
-          print(
-              "HAConnection.messageListener: Unknown subscribtion ${response.id}. Unsubscribing");
+    for (final json in jsonMessages) {
+      final response = WebSocketResponse.fromJson(json);
+      var msgCompleter = _commands[response.id];
 
-          sendMessage(Messages.unsubscribeEvents(response.id)).catchError(() {
-            print("Error unsubsribing from unknown subscription ${message.id}");
-          });
-        }
-        break;
-      case WebSocketResultResponseSuccess(result: var result):
-        msgCompleter?.complete(result);
-        _commands.remove(response.id);
-        break;
-      case WebSocketResultResponseError(error: var result):
-        msgCompleter?.completeError(result);
-        _commands.remove(response.id);
-        break;
-      default:
-        print(
-            "HAConnection.messageListener: Unknown message type: ${messageJson}");
+      switch (response) {
+        case WebSocketPongResponse():
+          msgCompleter?.complete();
+          _commands.remove(response.id);
+          break;
+        case WebSocketEventResponse(event: var event):
+          var subscribtion = _subscriptions[response.id];
+          if (subscribtion != null) {
+            subscribtion._streamController.add(event);
+          } else {
+            print(
+                "HAConnection.messageListener: Unknown subscribtion ${response.id}. Unsubscribing");
+
+            sendMessage(Messages.unsubscribeEvents(response.id)).catchError(() {
+              print(
+                  "Error unsubsribing from unknown subscription ${incomingMessage.id}");
+            });
+          }
+          break;
+        case WebSocketResultResponseSuccess(result: var result):
+          msgCompleter?.complete(result);
+          _commands.remove(response.id);
+          break;
+        case WebSocketResultResponseError(error: var result):
+          msgCompleter?.completeError(result);
+          _commands.remove(response.id);
+          break;
+        default:
+          print("HAConnection.messageListener: Unknown message type: ${json}");
+      }
     }
   }
 
