@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/web_socket_response.dart';
 
 class AuthOption {
@@ -47,7 +47,7 @@ class HAConnection {
     _setSocket(socket);
   }
 
-  Future<dynamic> sendMessage(Map<String, dynamic> message) async {
+  Future<dynamic> sendMessage(HABaseMessgae message) async {
     print("HAConnection.sendMessage: (RAW data)  $message");
 
     assert(!_socket.isClosed(), "Connections is closed");
@@ -55,8 +55,9 @@ class HAConnection {
     var completer = Completer<dynamic>();
     var id = _getCommndID;
     _commands[id] = completer;
-    message["id"] = id;
+    message.id = id;
     _socket.sendMessage(message);
+
     return completer.future;
   }
 
@@ -65,7 +66,7 @@ class HAConnection {
     _socket.close();
   }
 
-  HassSubscription subscribeMessage(Map<String, dynamic> subscribeMessage) {
+  HassSubscription subscribeMessage(HABaseMessgae subscribeMessage) {
     print("HAConnection.sendMessage: (RAW data)  $subscribeMessage");
 
     assert(!_socket.isClosed(), "Connections is closed");
@@ -74,14 +75,14 @@ class HAConnection {
 
     var hassSubscribtion = HassSubscription(unsubscribe: () async {
       if (!_socket.isClosed()) {
-        await sendMessage(Messages.unsubscribeEvents(id));
+        await sendMessage(UnsubscribeEventsMessage(subsctibtionID: id));
       }
       _subscriptions.remove(id);
     });
 
     _subscriptions[id] = hassSubscribtion;
 
-    subscribeMessage["id"] = id;
+    subscribeMessage.id = id;
     _socket.sendMessage(subscribeMessage);
     return hassSubscribtion;
   }
@@ -113,7 +114,8 @@ class HAConnection {
             print(
                 "HAConnection.messageListener: Unknown subscribtion ${response.id}. Unsubscribing");
 
-            sendMessage(Messages.unsubscribeEvents(response.id)).catchError(() {
+            sendMessage(UnsubscribeEventsMessage(subsctibtionID: response.id))
+                .catchError(() {
               print(
                   "Error unsubsribing from unknown subscription ${incomingMessage.id}");
             });
