@@ -22,12 +22,15 @@ jobs:
       # You may pin to the exact commit or the version.
       # uses: flutter-actions/setup-flutter@4fd02585c76876e31a810dcc631864fe1c96c3bf
       - uses: flutter-actions/setup-flutter@v2.3
+        with:
+          versions: 3.19.5
+          cache: true
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
-      # - uses: dart-lang/setup-dart@v1
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      - uses: dart-lang/setup-dart@v1.6.4
+      # - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
       
       - name: Install dependencies
         run: flutter pub get
