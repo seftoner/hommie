@@ -6,18 +6,96 @@ part of 'types.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ContextImpl _$$ContextImplFromJson(Map<String, dynamic> json) =>
-    _$ContextImpl(
+_$EntityStateRemoveImpl _$$EntityStateRemoveImplFromJson(
+        Map<String, dynamic> json) =>
+    _$EntityStateRemoveImpl(
+      (json['a'] as List<dynamic>).map((e) => e as String).toList(),
+    );
+
+Map<String, dynamic> _$$EntityStateRemoveImplToJson(
+        _$EntityStateRemoveImpl instance) =>
+    <String, dynamic>{
+      'a': instance.a,
+    };
+
+_$EntityStateImpl _$$EntityStateImplFromJson(Map<String, dynamic> json) =>
+    _$EntityStateImpl(
+      state: json['s'] as String?,
+      attributes: json['a'] as Map<String, dynamic>?,
+      context: json['c'] == null ? null : Context.fromJson(json['c']),
+      last_changed: (json['ls'] as num?)?.toDouble(),
+      last_updated: (json['lu'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$$EntityStateImplToJson(_$EntityStateImpl instance) =>
+    <String, dynamic>{
+      's': instance.state,
+      'a': instance.attributes,
+      'c': instance.context,
+      'ls': instance.last_changed,
+      'lu': instance.last_updated,
+    };
+
+_$EntityDiffImpl _$$EntityDiffImplFromJson(Map<String, dynamic> json) =>
+    _$EntityDiffImpl(
+      add: json['+'] == null
+          ? null
+          : EntityState.fromJson(json['+'] as Map<String, dynamic>),
+      remove: json['-'] == null
+          ? null
+          : EntityStateRemove.fromJson(json['-'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$EntityDiffImplToJson(_$EntityDiffImpl instance) =>
+    <String, dynamic>{
+      '+': instance.add,
+      '-': instance.remove,
+    };
+
+_$StatesUpdatesImpl _$$StatesUpdatesImplFromJson(Map<String, dynamic> json) =>
+    _$StatesUpdatesImpl(
+      add: (json['a'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, EntityState.fromJson(e as Map<String, dynamic>)),
+      ),
+      remove: (json['r'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      change: (json['c'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, EntityDiff.fromJson(e as Map<String, dynamic>)),
+      ),
+    );
+
+Map<String, dynamic> _$$StatesUpdatesImplToJson(_$StatesUpdatesImpl instance) =>
+    <String, dynamic>{
+      'a': instance.add,
+      'r': instance.remove,
+      'c': instance.change,
+    };
+
+_$ContextIdImpl _$$ContextIdImplFromJson(Map<String, dynamic> json) =>
+    _$ContextIdImpl(
+      json['id'] as String?,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$ContextIdImplToJson(_$ContextIdImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'runtimeType': instance.$type,
+    };
+
+_$ContextFullImpl _$$ContextFullImplFromJson(Map<String, dynamic> json) =>
+    _$ContextFullImpl(
       id: json['id'] as String,
       user_id: json['user_id'] as String?,
       parent_id: json['parent_id'] as String?,
+      $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$ContextImplToJson(_$ContextImpl instance) =>
+Map<String, dynamic> _$$ContextFullImplToJson(_$ContextFullImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'user_id': instance.user_id,
       'parent_id': instance.parent_id,
+      'runtimeType': instance.$type,
     };
 
 _$HassEntityAttributeBaseImpl _$$HassEntityAttributeBaseImplFromJson(
@@ -58,7 +136,7 @@ _$HassEntityImpl _$$HassEntityImplFromJson(Map<String, dynamic> json) =>
       last_updated: json['last_updated'] as String,
       attributes: HassEntityAttributeBase.fromJson(
           json['attributes'] as Map<String, dynamic>),
-      context: Context.fromJson(json['context'] as Map<String, dynamic>),
+      context: Context.fromJson(json['context']),
     );
 
 Map<String, dynamic> _$$HassEntityImplToJson(_$HassEntityImpl instance) =>

@@ -12,7 +12,7 @@ part of 'web_socket_response.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Error _$ErrorFromJson(Map<String, dynamic> json) {
   return _Error.fromJson(json);
@@ -187,7 +187,7 @@ mixin _$WebSocketResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int id) pong,
-    required TResult Function(int id, HassEvent event) event,
+    required TResult Function(int id, StatesUpdates event) event,
     required TResult Function(int id, dynamic result, bool success)
         resultSuccess,
     required TResult Function(int id, bool success, Error error) resultError,
@@ -196,7 +196,7 @@ mixin _$WebSocketResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int id)? pong,
-    TResult? Function(int id, HassEvent event)? event,
+    TResult? Function(int id, StatesUpdates event)? event,
     TResult? Function(int id, dynamic result, bool success)? resultSuccess,
     TResult? Function(int id, bool success, Error error)? resultError,
   }) =>
@@ -204,7 +204,7 @@ mixin _$WebSocketResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int id)? pong,
-    TResult Function(int id, HassEvent event)? event,
+    TResult Function(int id, StatesUpdates event)? event,
     TResult Function(int id, dynamic result, bool success)? resultSuccess,
     TResult Function(int id, bool success, Error error)? resultError,
     required TResult orElse(),
@@ -352,7 +352,7 @@ class _$WebSocketPongResponseImpl implements WebSocketPongResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int id) pong,
-    required TResult Function(int id, HassEvent event) event,
+    required TResult Function(int id, StatesUpdates event) event,
     required TResult Function(int id, dynamic result, bool success)
         resultSuccess,
     required TResult Function(int id, bool success, Error error) resultError,
@@ -364,7 +364,7 @@ class _$WebSocketPongResponseImpl implements WebSocketPongResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int id)? pong,
-    TResult? Function(int id, HassEvent event)? event,
+    TResult? Function(int id, StatesUpdates event)? event,
     TResult? Function(int id, dynamic result, bool success)? resultSuccess,
     TResult? Function(int id, bool success, Error error)? resultError,
   }) {
@@ -375,7 +375,7 @@ class _$WebSocketPongResponseImpl implements WebSocketPongResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int id)? pong,
-    TResult Function(int id, HassEvent event)? event,
+    TResult Function(int id, StatesUpdates event)? event,
     TResult Function(int id, dynamic result, bool success)? resultSuccess,
     TResult Function(int id, bool success, Error error)? resultError,
     required TResult orElse(),
@@ -456,9 +456,9 @@ abstract class _$$WebSocketEventResponseImplCopyWith<$Res>
       __$$WebSocketEventResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, HassEvent event});
+  $Res call({int id, StatesUpdates event});
 
-  $HassEventCopyWith<$Res> get event;
+  $StatesUpdatesCopyWith<$Res> get event;
 }
 
 /// @nodoc
@@ -484,14 +484,14 @@ class __$$WebSocketEventResponseImplCopyWithImpl<$Res>
       event: null == event
           ? _value.event
           : event // ignore: cast_nullable_to_non_nullable
-              as HassEvent,
+              as StatesUpdates,
     ));
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $HassEventCopyWith<$Res> get event {
-    return $HassEventCopyWith<$Res>(_value.event, (value) {
+  $StatesUpdatesCopyWith<$Res> get event {
+    return $StatesUpdatesCopyWith<$Res>(_value.event, (value) {
       return _then(_value.copyWith(event: value));
     });
   }
@@ -510,7 +510,7 @@ class _$WebSocketEventResponseImpl implements WebSocketEventResponse {
   @override
   final int id;
   @override
-  final HassEvent event;
+  final StatesUpdates event;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -544,7 +544,7 @@ class _$WebSocketEventResponseImpl implements WebSocketEventResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int id) pong,
-    required TResult Function(int id, HassEvent event) event,
+    required TResult Function(int id, StatesUpdates event) event,
     required TResult Function(int id, dynamic result, bool success)
         resultSuccess,
     required TResult Function(int id, bool success, Error error) resultError,
@@ -556,7 +556,7 @@ class _$WebSocketEventResponseImpl implements WebSocketEventResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int id)? pong,
-    TResult? Function(int id, HassEvent event)? event,
+    TResult? Function(int id, StatesUpdates event)? event,
     TResult? Function(int id, dynamic result, bool success)? resultSuccess,
     TResult? Function(int id, bool success, Error error)? resultError,
   }) {
@@ -567,7 +567,7 @@ class _$WebSocketEventResponseImpl implements WebSocketEventResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int id)? pong,
-    TResult Function(int id, HassEvent event)? event,
+    TResult Function(int id, StatesUpdates event)? event,
     TResult Function(int id, dynamic result, bool success)? resultSuccess,
     TResult Function(int id, bool success, Error error)? resultError,
     required TResult orElse(),
@@ -627,14 +627,14 @@ class _$WebSocketEventResponseImpl implements WebSocketEventResponse {
 abstract class WebSocketEventResponse implements WebSocketResponse {
   const factory WebSocketEventResponse(
       {required final int id,
-      required final HassEvent event}) = _$WebSocketEventResponseImpl;
+      required final StatesUpdates event}) = _$WebSocketEventResponseImpl;
 
   factory WebSocketEventResponse.fromJson(Map<String, dynamic> json) =
       _$WebSocketEventResponseImpl.fromJson;
 
   @override
   int get id;
-  HassEvent get event;
+  StatesUpdates get event;
   @override
   @JsonKey(ignore: true)
   _$$WebSocketEventResponseImplCopyWith<_$WebSocketEventResponseImpl>
@@ -745,7 +745,7 @@ class _$WebSocketResultResponseSuccessImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int id) pong,
-    required TResult Function(int id, HassEvent event) event,
+    required TResult Function(int id, StatesUpdates event) event,
     required TResult Function(int id, dynamic result, bool success)
         resultSuccess,
     required TResult Function(int id, bool success, Error error) resultError,
@@ -757,7 +757,7 @@ class _$WebSocketResultResponseSuccessImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int id)? pong,
-    TResult? Function(int id, HassEvent event)? event,
+    TResult? Function(int id, StatesUpdates event)? event,
     TResult? Function(int id, dynamic result, bool success)? resultSuccess,
     TResult? Function(int id, bool success, Error error)? resultError,
   }) {
@@ -768,7 +768,7 @@ class _$WebSocketResultResponseSuccessImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int id)? pong,
-    TResult Function(int id, HassEvent event)? event,
+    TResult Function(int id, StatesUpdates event)? event,
     TResult Function(int id, dynamic result, bool success)? resultSuccess,
     TResult Function(int id, bool success, Error error)? resultError,
     required TResult orElse(),
@@ -958,7 +958,7 @@ class _$WebSocketResultResponseErrorImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int id) pong,
-    required TResult Function(int id, HassEvent event) event,
+    required TResult Function(int id, StatesUpdates event) event,
     required TResult Function(int id, dynamic result, bool success)
         resultSuccess,
     required TResult Function(int id, bool success, Error error) resultError,
@@ -970,7 +970,7 @@ class _$WebSocketResultResponseErrorImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(int id)? pong,
-    TResult? Function(int id, HassEvent event)? event,
+    TResult? Function(int id, StatesUpdates event)? event,
     TResult? Function(int id, dynamic result, bool success)? resultSuccess,
     TResult? Function(int id, bool success, Error error)? resultError,
   }) {
@@ -981,7 +981,7 @@ class _$WebSocketResultResponseErrorImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int id)? pong,
-    TResult Function(int id, HassEvent event)? event,
+    TResult Function(int id, StatesUpdates event)? event,
     TResult Function(int id, dynamic result, bool success)? resultSuccess,
     TResult Function(int id, bool success, Error error)? resultError,
     required TResult orElse(),

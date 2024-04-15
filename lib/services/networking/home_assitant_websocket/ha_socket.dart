@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:hommie/services/networking/home_assitant_websocket/messages.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/utils.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -49,8 +49,8 @@ class HASocket {
     );
   }
 
-  void sendMessage(Map<String, dynamic> data) {
-    final encodedData = jsonEncode(data);
+  void sendMessage(HABaseMessgae message) {
+    final encodedData = message.toJson();
     print("Sending message: $encodedData");
 
     _innerchanel.sink.add(encodedData);
@@ -112,7 +112,8 @@ class HAConnectionOption {
         switch (messageJson["type"]) {
           case _authRequired:
             print("Auth REQUIRED");
-            socket.sendMessage(Messages.auth(_credentials.accessToken));
+            socket.sendMessage(
+                AuthMessage(accessToken: _credentials.accessToken));
             break;
           case _authInvalid:
             print("Auth INVALID");
@@ -123,7 +124,7 @@ class HAConnectionOption {
             socket.haVersion = messageJson["ha_version"];
             subscription?.cancel();
             if (atLeastHaVersion(socket.haVersion, 2022, 9)) {
-              socket.sendMessage(Messages().supportedFeatures);
+              socket.sendMessage(SupportedFeaturesMessage());
             }
             completer.complete(socket);
             break;

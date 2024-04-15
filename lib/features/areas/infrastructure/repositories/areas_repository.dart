@@ -13,6 +13,7 @@ class AreasRepository implements IAreasRepository {
   Future<Either<Exception, List<AreaEntity>>> getAreas() async {
     try {
       final result = await HACommands.getAreas(_haWebsocketsConnection);
+
       return Right(result);
     } catch (e) {
       return Left(Exception(e));

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/hass_event.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/types.dart';
 
 part 'web_socket_response.freezed.dart';
 part 'web_socket_response.g.dart';
@@ -21,7 +21,7 @@ sealed class WebSocketResponse with _$WebSocketResponse {
 
   const factory WebSocketResponse.event({
     required int id,
-    required HassEvent event,
+    required StatesUpdates event,
   }) = WebSocketEventResponse;
 
   const factory WebSocketResponse.resultSuccess({
@@ -48,7 +48,7 @@ class WebSocketResponseConverter
   WebSocketResponse fromJson(Map<String, dynamic> json) {
     final type = json['type'] as String;
     final id = json['id'] as int;
-    final success = json['success'] as bool;
+    final success = json['success'] as bool?;
     final result = json['result'];
 
     switch (type) {
@@ -56,14 +56,16 @@ class WebSocketResponseConverter
         return WebSocketResponse.pong(id: id);
       case 'event':
         return WebSocketResponse.event(
-            id: id, event: HassEvent.fromJson(result as Map<String, dynamic>));
-      case 'result' when success:
+            id: id,
+            event:
+                StatesUpdates.fromJson(json['event'] as Map<String, dynamic>));
+      case 'result' when success! == true:
         return WebSocketResponse.resultSuccess(
           id: id,
           result: result,
           success: true,
         );
-      case 'result' when !success:
+      case 'result' when success! == false:
         return WebSocketResponse.resultError(
           id: id,
           success: false,

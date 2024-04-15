@@ -30,6 +30,8 @@ class SecureCredentialStorage implements CredentialStorage {
   @override
   Future<void> save(Credentials credentials) {
     _cachedCredentials = credentials;
+    //BUG: apply force delete, cause write is not re-writing a new value
+    _storage.delete(key: _key);
     return _storage.write(key: _key, value: credentials.toJson());
   }
 

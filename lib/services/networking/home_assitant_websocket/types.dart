@@ -3,12 +3,79 @@ part 'types.freezed.dart';
 part 'types.g.dart';
 
 @freezed
-class Context with _$Context {
-  const factory Context(
-      {required String id, String? user_id, String? parent_id}) = _Context;
+class EntityStateRemove with _$EntityStateRemove {
+  factory EntityStateRemove(List<String> a) = _EntityStateRemove;
 
-  factory Context.fromJson(Map<String, dynamic> json) =>
-      _$ContextFromJson(json);
+  factory EntityStateRemove.fromJson(Map<String, dynamic> json) =>
+      _$EntityStateRemoveFromJson(json);
+}
+
+@freezed
+class EntityState with _$EntityState {
+  factory EntityState(
+      {@JsonKey(name: 's') String? state,
+      @JsonKey(name: 'a') Map<String, dynamic>? attributes,
+      @JsonKey(name: 'c') Context? context,
+      @JsonKey(name: 'ls') double? last_changed,
+      @JsonKey(name: 'lu') double? last_updated}) = _EntityState;
+
+  factory EntityState.fromJson(Map<String, dynamic> json) =>
+      _$EntityStateFromJson(json);
+}
+
+@freezed
+class EntityDiff with _$EntityDiff {
+  factory EntityDiff({
+    @JsonKey(name: '+') EntityState? add,
+    @JsonKey(name: '-') EntityStateRemove? remove,
+  }) = _EntityDiff;
+
+  factory EntityDiff.fromJson(Map<String, dynamic> json) =>
+      _$EntityDiffFromJson(json);
+}
+
+@freezed
+class StatesUpdates with _$StatesUpdates {
+  const factory StatesUpdates(
+      {@JsonKey(name: 'a') Map<String, EntityState>? add,
+      @JsonKey(name: 'r') List<String>? remove,
+      @JsonKey(name: 'c') Map<String, EntityDiff>? change}) = _StatesUpdates;
+
+  factory StatesUpdates.fromJson(Map<String, dynamic> json) =>
+      _$StatesUpdatesFromJson(json);
+}
+
+@freezed
+class Context with _$Context {
+  const factory Context(String? id) = ContextId;
+  const factory Context.full(
+      {required String id, String? user_id, String? parent_id}) = ContextFull;
+
+  factory Context.fromJson(dynamic json) =>
+      const ContextConverter().fromJson(json);
+}
+
+class ContextConverter implements JsonConverter<Context, Map<String, dynamic>> {
+  const ContextConverter();
+
+  @override
+  Context fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      return Context.full(
+          id: json["id"],
+          parent_id: json["parent_id"],
+          user_id: json["user_id"]);
+    } else if (json is String) {
+      return Context(json);
+    } else {
+      throw Error();
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson(Context object) {
+    return object.toJson();
+  }
 }
 
 sealed class HassEventBase {

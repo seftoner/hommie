@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 class AuthRepository implements IAuthRepository {
   final CredentialStorage _credentialStorage;
 
-  final String _clientID = "http://192.168.0.108";
+  final String _clientID = "https://seftoner.github.io";
 
   AuthRepository(this._credentialStorage);
 
