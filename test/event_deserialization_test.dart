@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/web_socket_response.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/types/web_socket_response.dart';
 
-//Unhandled Exception: type '_Map<String, dynamic>' is not a subtype of type 'String' in type cast
 const String jsonRaw = '''
  {
         "id": 3,
@@ -1011,7 +1010,13 @@ void main() {
   test("Event deserialization 2", () {
     final json = jsonDecode(jsonRaw2);
     final reponse = WebSocketResponse.fromJson(json);
-    final state = reponse.maybeWhen(event: (i, s) => s, orElse: () => null)!;
+
+    final state = reponse.maybeWhen(
+      event: (_, s) => s,
+      orElse: () {
+        throw AssertionError("Response parsed incorrectly!");
+      },
+    );
 
     expect(state.change!["fan.philips_purifier"]?.remove, isNull);
     expect(state.change!["fan.philips_purifier"]?.add, isNotNull);

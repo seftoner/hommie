@@ -6,17 +6,6 @@ part of 'web_socket_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ErrorImpl _$$ErrorImplFromJson(Map<String, dynamic> json) => _$ErrorImpl(
-      code: json['code'] as String,
-      message: json['message'] as String,
-    );
-
-Map<String, dynamic> _$$ErrorImplToJson(_$ErrorImpl instance) =>
-    <String, dynamic>{
-      'code': instance.code,
-      'message': instance.message,
-    };
-
 _$WebSocketPongResponseImpl _$$WebSocketPongResponseImplFromJson(
         Map<String, dynamic> json) =>
     _$WebSocketPongResponseImpl(
@@ -70,7 +59,7 @@ _$WebSocketResultResponseErrorImpl _$$WebSocketResultResponseErrorImplFromJson(
     _$WebSocketResultResponseErrorImpl(
       id: json['id'] as int,
       success: json['success'] as bool? ?? false,
-      error: Error.fromJson(json['error'] as Map<String, dynamic>),
+      error: HassError.fromJson(json['error'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
 

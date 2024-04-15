@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/types.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/types/types.dart';
 
 const String jsonRaw = '''
 {"a": {
@@ -998,7 +998,7 @@ void main() {
   test("Desrialize big amout of data and not crash", () {
     final json = jsonDecode(jsonRaw);
 
-    expect(StatesUpdates.fromJson(json), isNotNull);
+    expect(() => StatesUpdates.fromJson(json), returnsNormally);
   });
 
   test("Deserialize updates - added", () {

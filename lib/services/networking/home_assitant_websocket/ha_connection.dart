@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/web_socket_response.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/types/web_socket_response.dart';
 
 class AuthOption {
   late Uri _serverUri;

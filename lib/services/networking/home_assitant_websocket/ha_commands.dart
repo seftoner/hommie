@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:hommie/services/networking/home_assitant_websocket/future_mapping_extension.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/types.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/types/types.dart';
 
 class HACommands {
   static Future<List<HassEntity>> getStates(HAConnection connection) {
@@ -29,6 +29,24 @@ class HACommands {
   static HassSubscription subscribeEntities(HAConnection connection,
       [String? eventType]) {
     return connection.subscribeMessage(SubscribeEntitiesMessage());
+  }
+
+  static Future<HassServices> getServices(HAConnection connection) {
+    return connection
+        .sendMessage(GetServicesMessage())
+        .mapItem(HassServices.fromJson);
+  }
+
+  static Future<void> callService(HAConnection connection,
+      {required String domain,
+      required String service,
+      String? target,
+      Map<String, dynamic>? serviceData}) {
+    return connection.sendMessage(ServiceCallMessage(
+        domain: domain,
+        service: service,
+        target: target,
+        serviceData: serviceData));
   }
 
   // static Future<HassServices> getServices(HAConnection connection) {
