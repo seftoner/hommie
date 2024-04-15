@@ -23,7 +23,7 @@ jobs:
         # uses: flutter-actions/setup-flutter@4fd02585c76876e31a810dcc631864fe1c96c3bf
         uses: flutter-actions/setup-flutter@v2.3
         with:
-          version: "latest"
+          version: 3.19.5
           cache: true
           channel: stable
 
