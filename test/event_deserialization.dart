@@ -15,9 +15,10 @@ const String jsonRaw = '''
                     "a": {
                         "editable": true,
                         "id": "seftoner",
-                        "latitude": 48.9295654296875,
-                        "longitude": 24.708282754938345,
+                        "latitude": 47.0,
+                        "longitude": 25.0,
                         "gps_accuracy": 18.350165176516935,
+                        "altitude": 100,
                         "source": "device_tracker.slnt",
                         "user_id": "cc4e3e7bd8304aa48c316a47f9a8bb66",
                         "device_trackers": [
@@ -160,8 +161,8 @@ const String jsonRaw = '''
                 "zone.home": {
                     "s": "0",
                     "a": {
-                        "latitude": 48.7481718,
-                        "longitude": 24.5207477,
+                        "latitude": 47.0,
+                        "longitude": 25.0,
                         "radius": 100,
                         "passive": false,
                         "persons": [],
@@ -488,10 +489,10 @@ const String jsonRaw = '''
                     "a": {
                         "source_type": "gps",
                         "battery_level": 80,
-                        "latitude": 48.9295654296875,
-                        "longitude": 24.708282754938345,
+                        "latitude": 47.0,
+                        "longitude": 25.0,
                         "gps_accuracy": 18.350165176516935,
-                        "altitude": 244.6654510498047,
+                        "altitude": 100,
                         "vertical_accuracy": 6.166649341583252,
                         "friendly_name": "SLNT👁"
                     },
@@ -995,7 +996,7 @@ const String jsonRaw2 = '''
 ''';
 
 void main() {
-  test("Event deserialization", () {
+  test("Deserialization of event reposne ", () {
     final json = jsonDecode(jsonRaw);
     final reponse = WebSocketResponse.fromJson(json);
     final state =
