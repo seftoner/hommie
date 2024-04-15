@@ -115,9 +115,9 @@ class HAConnection {
                 "HAConnection.messageListener: Unknown subscribtion ${response.id}. Unsubscribing");
 
             sendMessage(UnsubscribeEventsMessage(subsctibtionID: response.id))
-                .catchError(() {
+                .catchError((e) {
               print(
-                  "Error unsubsribing from unknown subscription ${incomingMessage.id}");
+                  "Error unsubsribing from unknown subscription ${incomingMessage.id}. Error: $e");
             });
           }
           break;

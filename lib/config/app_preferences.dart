@@ -34,6 +34,7 @@ class AppPreferences implements AppConfig {
       if (value is String) {
         completer.complete(value);
       } else {
+        // ignore: null_argument_to_non_null_type
         completer.complete(null);
       }
     });

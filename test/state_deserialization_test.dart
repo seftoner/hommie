@@ -997,7 +997,8 @@ const String jsonRaw2 = '''
 void main() {
   test("Desrialize big amout of data and not crash", () {
     final json = jsonDecode(jsonRaw);
-    final state = StatesUpdates.fromJson(json);
+
+    expect(StatesUpdates.fromJson(json), isNotNull);
   });
 
   test("Deserialize updates - added", () {

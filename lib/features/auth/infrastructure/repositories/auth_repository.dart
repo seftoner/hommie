@@ -80,6 +80,8 @@ class AuthRepository implements IAuthRepository {
     } on PlatformException {
       return null;
     }
+
+    return null;
   }
 
   Future<Either<AuthFailure, Credentials>> _refreshToken(
