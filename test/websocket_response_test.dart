@@ -38,7 +38,7 @@ void main() {
     expect(state.change!["fan.philips_purifier"]?.add?.last_updated,
         1712828878.514165);
     expect(state.change!["fan.philips_purifier"]?.add?.context,
-        const Context("01HV68X3NJDK579CYJNST1VA72"));
+        const Context(id: "01HV68X3NJDK579CYJNST1VA72"));
   });
 
   test("Hass servcies deserialization - short", () async {
@@ -53,7 +53,7 @@ void main() {
       _ => throw AssertionError("Response parsed incorrectly!")
     };
 
-    expect(responseResult.domains.length, 2);
+    expect(responseResult.domains, hasLength(2));
     expect(responseResult.domains.keys,
         ["persistent_notification", "homeassistant"]);
     expect(responseResult.domains["homeassistant"]!.services.keys,
@@ -74,6 +74,60 @@ void main() {
       _ => throw AssertionError("Response parsed incorrectly!")
     };
 
-    expect(responseResult.domains.length, 43);
+    expect(responseResult.domains, hasLength(43));
+  });
+
+  test("Error response deserialization", () async {
+    final testJson =
+        await readJsonTestDataFromFile('test/data_samples/error_response.json');
+
+    final response = WebSocketResponse.fromJson(testJson);
+
+    final responseResult = switch (response) {
+      WebSocketResultResponseError(:final error) => error,
+      _ => throw AssertionError("Response parsed incorrectly!")
+    };
+
+    expect(responseResult.code, equals("invalid_format"));
+    expect(
+        responseResult.message,
+        equals(
+            "Message incorrectly formatted: expected str for dictionary value @ data['event_type']. Got 100"));
+  });
+
+  test("callService response parsing", () async {
+    final testJson = await readJsonTestDataFromFile(
+        'test/data_samples/call_service_response.json');
+
+    final response = WebSocketResponse.fromJson(testJson);
+
+    final responseResult = switch (response) {
+      WebSocketResultResponseSuccess(:final result) =>
+        CallServiceResponse.fromJson(result),
+      _ => throw AssertionError("Response parsed incorrectly!")
+    };
+
+    expect(
+        responseResult.context.id, equals("326ef27d19415c60c492fe330945f954"));
+    expect(responseResult.context.parent_id, isNull);
+    expect(responseResult.context.user_id,
+        equals("31ddb597e03147118cf8d2f8fbea5553"));
+
+    expect(responseResult.response, isNull);
+  });
+
+  test("pong response parsing", () {
+    const testJsonString = '''{ "id": 19,
+                          "type": "pong"
+                        }''';
+    final testJson = jsonDecode(testJsonString);
+    final response = WebSocketResponse.fromJson(testJson);
+
+    final responseResult = switch (response) {
+      WebSocketPongResponse(:final id) => id,
+      _ => throw AssertionError("Response parsed incorrectly!")
+    };
+
+    expect(responseResult, equals(19));
   });
 }

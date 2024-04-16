@@ -37,19 +37,19 @@ class HACommands {
         .mapItem(HassServices.fromJson);
   }
 
-  static Future<void> callService(HAConnection connection,
-      {required String domain,
-      required String service,
-      String? target,
-      Map<String, dynamic>? serviceData}) {
-    return connection.sendMessage(ServiceCallMessage(
-        domain: domain,
-        service: service,
-        target: target,
-        serviceData: serviceData));
+  static Future<CallServiceResponse> callService(
+    HAConnection connection, {
+    required String domain,
+    required String service,
+    String? target,
+    Map<String, dynamic>? serviceData,
+  }) {
+    return connection
+        .sendMessage(ServiceCallMessage(
+            domain: domain,
+            service: service,
+            target: target,
+            serviceData: serviceData))
+        .mapItem(CallServiceResponse.fromJson);
   }
-
-  // static Future<HassServices> getServices(HAConnection connection) {
-  //   return connection.sendMessage(Messages.config()).mapItem(HassServices.????);
-  // }
 }

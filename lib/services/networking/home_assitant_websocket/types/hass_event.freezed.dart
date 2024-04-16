@@ -844,61 +844,185 @@ abstract class _StatesUpdates implements StatesUpdates {
       throw _privateConstructorUsedError;
 }
 
-Context _$ContextFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType']) {
-    case 'default':
-      return ContextId.fromJson(json);
-    case 'full':
-      return ContextFull.fromJson(json);
+CallServiceResponse _$CallServiceResponseFromJson(Map<String, dynamic> json) {
+  return _CallServiceResponse.fromJson(json);
+}
 
-    default:
-      throw CheckedFromJsonException(json, 'runtimeType', 'Context',
-          'Invalid union type "${json['runtimeType']}"!');
+/// @nodoc
+mixin _$CallServiceResponse {
+  Context get context => throw _privateConstructorUsedError;
+  dynamic get response => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $CallServiceResponseCopyWith<CallServiceResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CallServiceResponseCopyWith<$Res> {
+  factory $CallServiceResponseCopyWith(
+          CallServiceResponse value, $Res Function(CallServiceResponse) then) =
+      _$CallServiceResponseCopyWithImpl<$Res, CallServiceResponse>;
+  @useResult
+  $Res call({Context context, dynamic response});
+
+  $ContextCopyWith<$Res> get context;
+}
+
+/// @nodoc
+class _$CallServiceResponseCopyWithImpl<$Res, $Val extends CallServiceResponse>
+    implements $CallServiceResponseCopyWith<$Res> {
+  _$CallServiceResponseCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? context = null,
+    Object? response = freezed,
+  }) {
+    return _then(_value.copyWith(
+      context: null == context
+          ? _value.context
+          : context // ignore: cast_nullable_to_non_nullable
+              as Context,
+      response: freezed == response
+          ? _value.response
+          : response // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ContextCopyWith<$Res> get context {
+    return $ContextCopyWith<$Res>(_value.context, (value) {
+      return _then(_value.copyWith(context: value) as $Val);
+    });
   }
 }
 
 /// @nodoc
+abstract class _$$CallServiceResponseImplCopyWith<$Res>
+    implements $CallServiceResponseCopyWith<$Res> {
+  factory _$$CallServiceResponseImplCopyWith(_$CallServiceResponseImpl value,
+          $Res Function(_$CallServiceResponseImpl) then) =
+      __$$CallServiceResponseImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({Context context, dynamic response});
+
+  @override
+  $ContextCopyWith<$Res> get context;
+}
+
+/// @nodoc
+class __$$CallServiceResponseImplCopyWithImpl<$Res>
+    extends _$CallServiceResponseCopyWithImpl<$Res, _$CallServiceResponseImpl>
+    implements _$$CallServiceResponseImplCopyWith<$Res> {
+  __$$CallServiceResponseImplCopyWithImpl(_$CallServiceResponseImpl _value,
+      $Res Function(_$CallServiceResponseImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? context = null,
+    Object? response = freezed,
+  }) {
+    return _then(_$CallServiceResponseImpl(
+      context: null == context
+          ? _value.context
+          : context // ignore: cast_nullable_to_non_nullable
+              as Context,
+      response: freezed == response
+          ? _value.response
+          : response // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$CallServiceResponseImpl implements _CallServiceResponse {
+  _$CallServiceResponseImpl({required this.context, this.response});
+
+  factory _$CallServiceResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CallServiceResponseImplFromJson(json);
+
+  @override
+  final Context context;
+  @override
+  final dynamic response;
+
+  @override
+  String toString() {
+    return 'CallServiceResponse(context: $context, response: $response)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CallServiceResponseImpl &&
+            (identical(other.context, context) || other.context == context) &&
+            const DeepCollectionEquality().equals(other.response, response));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, context, const DeepCollectionEquality().hash(response));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CallServiceResponseImplCopyWith<_$CallServiceResponseImpl> get copyWith =>
+      __$$CallServiceResponseImplCopyWithImpl<_$CallServiceResponseImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CallServiceResponseImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CallServiceResponse implements CallServiceResponse {
+  factory _CallServiceResponse(
+      {required final Context context,
+      final dynamic response}) = _$CallServiceResponseImpl;
+
+  factory _CallServiceResponse.fromJson(Map<String, dynamic> json) =
+      _$CallServiceResponseImpl.fromJson;
+
+  @override
+  Context get context;
+  @override
+  dynamic get response;
+  @override
+  @JsonKey(ignore: true)
+  _$$CallServiceResponseImplCopyWith<_$CallServiceResponseImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Context _$ContextFromJson(Map<String, dynamic> json) {
+  return _Context.fromJson(json);
+}
+
+/// @nodoc
 mixin _$Context {
-  String? get id => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(String? id) $default, {
-    required TResult Function(String id, String? user_id, String? parent_id)
-        full,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String? id)? $default, {
-    TResult? Function(String id, String? user_id, String? parent_id)? full,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String? id)? $default, {
-    TResult Function(String id, String? user_id, String? parent_id)? full,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(ContextId value) $default, {
-    required TResult Function(ContextFull value) full,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(ContextId value)? $default, {
-    TResult? Function(ContextFull value)? full,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(ContextId value)? $default, {
-    TResult Function(ContextFull value)? full,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
+  String? get user_id => throw _privateConstructorUsedError;
+  String? get parent_id => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $ContextCopyWith<Context> get copyWith => throw _privateConstructorUsedError;
@@ -909,7 +1033,7 @@ abstract class $ContextCopyWith<$Res> {
   factory $ContextCopyWith(Context value, $Res Function(Context) then) =
       _$ContextCopyWithImpl<$Res, Context>;
   @useResult
-  $Res call({String id});
+  $Res call({String id, String? user_id, String? parent_id});
 }
 
 /// @nodoc
@@ -926,189 +1050,42 @@ class _$ContextCopyWithImpl<$Res, $Val extends Context>
   @override
   $Res call({
     Object? id = null,
+    Object? user_id = freezed,
+    Object? parent_id = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
-          ? _value.id!
+          ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      user_id: freezed == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      parent_id: freezed == parent_id
+          ? _value.parent_id
+          : parent_id // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$ContextIdImplCopyWith<$Res>
-    implements $ContextCopyWith<$Res> {
-  factory _$$ContextIdImplCopyWith(
-          _$ContextIdImpl value, $Res Function(_$ContextIdImpl) then) =
-      __$$ContextIdImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String? id});
-}
-
-/// @nodoc
-class __$$ContextIdImplCopyWithImpl<$Res>
-    extends _$ContextCopyWithImpl<$Res, _$ContextIdImpl>
-    implements _$$ContextIdImplCopyWith<$Res> {
-  __$$ContextIdImplCopyWithImpl(
-      _$ContextIdImpl _value, $Res Function(_$ContextIdImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-  }) {
-    return _then(_$ContextIdImpl(
-      freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$ContextIdImpl implements ContextId {
-  const _$ContextIdImpl(this.id, {final String? $type})
-      : $type = $type ?? 'default';
-
-  factory _$ContextIdImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ContextIdImplFromJson(json);
-
-  @override
-  final String? id;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
-
-  @override
-  String toString() {
-    return 'Context(id: $id)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ContextIdImpl &&
-            (identical(other.id, id) || other.id == id));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, id);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ContextIdImplCopyWith<_$ContextIdImpl> get copyWith =>
-      __$$ContextIdImplCopyWithImpl<_$ContextIdImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(String? id) $default, {
-    required TResult Function(String id, String? user_id, String? parent_id)
-        full,
-  }) {
-    return $default(id);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String? id)? $default, {
-    TResult? Function(String id, String? user_id, String? parent_id)? full,
-  }) {
-    return $default?.call(id);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String? id)? $default, {
-    TResult Function(String id, String? user_id, String? parent_id)? full,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(id);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(ContextId value) $default, {
-    required TResult Function(ContextFull value) full,
-  }) {
-    return $default(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(ContextId value)? $default, {
-    TResult? Function(ContextFull value)? full,
-  }) {
-    return $default?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(ContextId value)? $default, {
-    TResult Function(ContextFull value)? full,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(this);
-    }
-    return orElse();
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ContextIdImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class ContextId implements Context {
-  const factory ContextId(final String? id) = _$ContextIdImpl;
-
-  factory ContextId.fromJson(Map<String, dynamic> json) =
-      _$ContextIdImpl.fromJson;
-
-  @override
-  String? get id;
-  @override
-  @JsonKey(ignore: true)
-  _$$ContextIdImplCopyWith<_$ContextIdImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$ContextFullImplCopyWith<$Res>
-    implements $ContextCopyWith<$Res> {
-  factory _$$ContextFullImplCopyWith(
-          _$ContextFullImpl value, $Res Function(_$ContextFullImpl) then) =
-      __$$ContextFullImplCopyWithImpl<$Res>;
+abstract class _$$ContextImplCopyWith<$Res> implements $ContextCopyWith<$Res> {
+  factory _$$ContextImplCopyWith(
+          _$ContextImpl value, $Res Function(_$ContextImpl) then) =
+      __$$ContextImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String id, String? user_id, String? parent_id});
 }
 
 /// @nodoc
-class __$$ContextFullImplCopyWithImpl<$Res>
-    extends _$ContextCopyWithImpl<$Res, _$ContextFullImpl>
-    implements _$$ContextFullImplCopyWith<$Res> {
-  __$$ContextFullImplCopyWithImpl(
-      _$ContextFullImpl _value, $Res Function(_$ContextFullImpl) _then)
+class __$$ContextImplCopyWithImpl<$Res>
+    extends _$ContextCopyWithImpl<$Res, _$ContextImpl>
+    implements _$$ContextImplCopyWith<$Res> {
+  __$$ContextImplCopyWithImpl(
+      _$ContextImpl _value, $Res Function(_$ContextImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1118,7 +1095,7 @@ class __$$ContextFullImplCopyWithImpl<$Res>
     Object? user_id = freezed,
     Object? parent_id = freezed,
   }) {
-    return _then(_$ContextFullImpl(
+    return _then(_$ContextImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -1137,13 +1114,11 @@ class __$$ContextFullImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ContextFullImpl implements ContextFull {
-  const _$ContextFullImpl(
-      {required this.id, this.user_id, this.parent_id, final String? $type})
-      : $type = $type ?? 'full';
+class _$ContextImpl implements _Context {
+  const _$ContextImpl({required this.id, this.user_id, this.parent_id});
 
-  factory _$ContextFullImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ContextFullImplFromJson(json);
+  factory _$ContextImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ContextImplFromJson(json);
 
   @override
   final String id;
@@ -1152,19 +1127,16 @@ class _$ContextFullImpl implements ContextFull {
   @override
   final String? parent_id;
 
-  @JsonKey(name: 'runtimeType')
-  final String $type;
-
   @override
   String toString() {
-    return 'Context.full(id: $id, user_id: $user_id, parent_id: $parent_id)';
+    return 'Context(id: $id, user_id: $user_id, parent_id: $parent_id)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ContextFullImpl &&
+            other is _$ContextImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.user_id, user_id) || other.user_id == user_id) &&
             (identical(other.parent_id, parent_id) ||
@@ -1178,96 +1150,34 @@ class _$ContextFullImpl implements ContextFull {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ContextFullImplCopyWith<_$ContextFullImpl> get copyWith =>
-      __$$ContextFullImplCopyWithImpl<_$ContextFullImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(String? id) $default, {
-    required TResult Function(String id, String? user_id, String? parent_id)
-        full,
-  }) {
-    return full(id, user_id, parent_id);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String? id)? $default, {
-    TResult? Function(String id, String? user_id, String? parent_id)? full,
-  }) {
-    return full?.call(id, user_id, parent_id);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String? id)? $default, {
-    TResult Function(String id, String? user_id, String? parent_id)? full,
-    required TResult orElse(),
-  }) {
-    if (full != null) {
-      return full(id, user_id, parent_id);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(ContextId value) $default, {
-    required TResult Function(ContextFull value) full,
-  }) {
-    return full(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(ContextId value)? $default, {
-    TResult? Function(ContextFull value)? full,
-  }) {
-    return full?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(ContextId value)? $default, {
-    TResult Function(ContextFull value)? full,
-    required TResult orElse(),
-  }) {
-    if (full != null) {
-      return full(this);
-    }
-    return orElse();
-  }
+  _$$ContextImplCopyWith<_$ContextImpl> get copyWith =>
+      __$$ContextImplCopyWithImpl<_$ContextImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ContextFullImplToJson(
+    return _$$ContextImplToJson(
       this,
     );
   }
 }
 
-abstract class ContextFull implements Context {
-  const factory ContextFull(
+abstract class _Context implements Context {
+  const factory _Context(
       {required final String id,
       final String? user_id,
-      final String? parent_id}) = _$ContextFullImpl;
+      final String? parent_id}) = _$ContextImpl;
 
-  factory ContextFull.fromJson(Map<String, dynamic> json) =
-      _$ContextFullImpl.fromJson;
+  factory _Context.fromJson(Map<String, dynamic> json) = _$ContextImpl.fromJson;
 
   @override
   String get id;
+  @override
   String? get user_id;
+  @override
   String? get parent_id;
   @override
   @JsonKey(ignore: true)
-  _$$ContextFullImplCopyWith<_$ContextFullImpl> get copyWith =>
+  _$$ContextImplCopyWith<_$ContextImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

@@ -70,32 +70,32 @@ Map<String, dynamic> _$$StatesUpdatesImplToJson(_$StatesUpdatesImpl instance) =>
       'c': instance.change,
     };
 
-_$ContextIdImpl _$$ContextIdImplFromJson(Map<String, dynamic> json) =>
-    _$ContextIdImpl(
-      json['id'] as String?,
-      $type: json['runtimeType'] as String?,
+_$CallServiceResponseImpl _$$CallServiceResponseImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CallServiceResponseImpl(
+      context: Context.fromJson(json['context']),
+      response: json['response'],
     );
 
-Map<String, dynamic> _$$ContextIdImplToJson(_$ContextIdImpl instance) =>
+Map<String, dynamic> _$$CallServiceResponseImplToJson(
+        _$CallServiceResponseImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'runtimeType': instance.$type,
+      'context': instance.context,
+      'response': instance.response,
     };
 
-_$ContextFullImpl _$$ContextFullImplFromJson(Map<String, dynamic> json) =>
-    _$ContextFullImpl(
+_$ContextImpl _$$ContextImplFromJson(Map<String, dynamic> json) =>
+    _$ContextImpl(
       id: json['id'] as String,
       user_id: json['user_id'] as String?,
       parent_id: json['parent_id'] as String?,
-      $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$ContextFullImplToJson(_$ContextFullImpl instance) =>
+Map<String, dynamic> _$$ContextImplToJson(_$ContextImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'user_id': instance.user_id,
       'parent_id': instance.parent_id,
-      'runtimeType': instance.$type,
     };
 
 _$HassEventImpl _$$HassEventImplFromJson(Map<String, dynamic> json) =>

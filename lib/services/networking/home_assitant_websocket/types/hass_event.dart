@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_annotation_target
+// ignore_for_file: invalid_annotation_target, non_constant_identifier_names
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -50,10 +50,23 @@ class StatesUpdates with _$StatesUpdates {
 }
 
 @freezed
-sealed class Context with _$Context {
-  const factory Context(String? id) = ContextId;
-  const factory Context.full(
-      {required String id, String? user_id, String? parent_id}) = ContextFull;
+class CallServiceResponse with _$CallServiceResponse {
+  factory CallServiceResponse({
+    required Context context,
+    dynamic response,
+  }) = _CallServiceResponse;
+
+  factory CallServiceResponse.fromJson(Map<String, dynamic> json) =>
+      _$CallServiceResponseFromJson(json);
+}
+
+@freezed
+class Context with _$Context {
+  const factory Context({
+    required String id,
+    String? user_id,
+    String? parent_id,
+  }) = _Context;
 
   factory Context.fromJson(dynamic json) =>
       const ContextConverter().fromJson(json);
@@ -65,12 +78,12 @@ class ContextConverter implements JsonConverter<Context, Map<String, dynamic>> {
   @override
   Context fromJson(dynamic json) {
     if (json is Map<String, dynamic>) {
-      return Context.full(
+      return Context(
           id: json["id"],
           parent_id: json["parent_id"],
           user_id: json["user_id"]);
     } else if (json is String) {
-      return Context(json);
+      return Context(id: json);
     } else {
       throw const FormatException('Invalid JSON format for Context');
     }
