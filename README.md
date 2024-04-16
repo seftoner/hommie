@@ -24,4 +24,4 @@ Not so many by now.
 Contributions to this project are welcome! If you'd like to contribute, please fork the repository, make your changes, and submit a pull request. You can also open an issue to report bugs or suggest new features.
 
 ## License
-This project is licensed under the [MIT License](LICENSE)
+This project is licensed under the [MIT License](LICENSE.txt)
