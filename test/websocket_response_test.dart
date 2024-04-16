@@ -41,9 +41,9 @@ void main() {
         const Context("01HV68X3NJDK579CYJNST1VA72"));
   });
 
-  test("Hass servcies deserialization", () async {
+  test("Hass servcies deserialization - short", () async {
     final testJson = await readJsonTestDataFromFile(
-        'test/data_samples/services_list_response.json');
+        'test/data_samples/services_response_short.json');
 
     final response = WebSocketResponse.fromJson(testJson);
 
@@ -58,5 +58,22 @@ void main() {
         ["persistent_notification", "homeassistant"]);
     expect(responseResult.domains["homeassistant"]!.services.keys,
         ["turn_off", "turn_on"]);
+  });
+
+  test(
+      "Hass servcies deserialization. Output from my HA. Check if deserialization works correct",
+      () async {
+    final testJson = await readJsonTestDataFromFile(
+        'test/data_samples/services_response.json');
+
+    final response = WebSocketResponse.fromJson(testJson);
+
+    final responseResult = switch (response) {
+      WebSocketResultResponseSuccess(:final result) =>
+        HassServices.fromJson(result),
+      _ => throw AssertionError("Response parsed incorrectly!")
+    };
+
+    expect(responseResult.domains.length, 43);
   });
 }
