@@ -61,6 +61,33 @@ class GetStatesMessage extends HABaseMessgae {
       };
 }
 
+class GetServicesMessage extends HABaseMessgae {
+  @override
+  get _basePayload => <String, dynamic>{
+        'type': 'get_services',
+      };
+}
+
+class ServiceCallMessage extends HABaseMessgae {
+  @override
+  get _basePayload => <String, dynamic>{
+        'type': 'call_service',
+      };
+
+  ServiceCallMessage(
+      {required String domain,
+      required String service,
+      String? target,
+      Map<String, dynamic>? serviceData}) {
+    _payload.addAll({
+      'domain': domain,
+      'service': service,
+      if (target != null) 'target': target,
+      if (serviceData != null) 'service_data': serviceData,
+    });
+  }
+}
+
 class SubscribeEntitiesMessage extends HABaseMessgae {
   @override
   get _basePayload => <String, dynamic>{

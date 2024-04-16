@@ -14,156 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-Error _$ErrorFromJson(Map<String, dynamic> json) {
-  return _Error.fromJson(json);
-}
-
-/// @nodoc
-mixin _$Error {
-  String get code => throw _privateConstructorUsedError;
-  String get message => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $ErrorCopyWith<Error> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ErrorCopyWith<$Res> {
-  factory $ErrorCopyWith(Error value, $Res Function(Error) then) =
-      _$ErrorCopyWithImpl<$Res, Error>;
-  @useResult
-  $Res call({String code, String message});
-}
-
-/// @nodoc
-class _$ErrorCopyWithImpl<$Res, $Val extends Error>
-    implements $ErrorCopyWith<$Res> {
-  _$ErrorCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? code = null,
-    Object? message = null,
-  }) {
-    return _then(_value.copyWith(
-      code: null == code
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String,
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$ErrorImplCopyWith<$Res> implements $ErrorCopyWith<$Res> {
-  factory _$$ErrorImplCopyWith(
-          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
-      __$$ErrorImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String code, String message});
-}
-
-/// @nodoc
-class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$ErrorCopyWithImpl<$Res, _$ErrorImpl>
-    implements _$$ErrorImplCopyWith<$Res> {
-  __$$ErrorImplCopyWithImpl(
-      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? code = null,
-    Object? message = null,
-  }) {
-    return _then(_$ErrorImpl(
-      code: null == code
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String,
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$ErrorImpl implements _Error {
-  const _$ErrorImpl({required this.code, required this.message});
-
-  factory _$ErrorImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ErrorImplFromJson(json);
-
-  @override
-  final String code;
-  @override
-  final String message;
-
-  @override
-  String toString() {
-    return 'Error(code: $code, message: $message)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ErrorImpl &&
-            (identical(other.code, code) || other.code == code) &&
-            (identical(other.message, message) || other.message == message));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, code, message);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ErrorImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _Error implements Error {
-  const factory _Error(
-      {required final String code,
-      required final String message}) = _$ErrorImpl;
-
-  factory _Error.fromJson(Map<String, dynamic> json) = _$ErrorImpl.fromJson;
-
-  @override
-  String get code;
-  @override
-  String get message;
-  @override
-  @JsonKey(ignore: true)
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
 WebSocketResponse _$WebSocketResponseFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType']) {
     case 'pong':
@@ -190,7 +40,8 @@ mixin _$WebSocketResponse {
     required TResult Function(int id, StatesUpdates event) event,
     required TResult Function(int id, dynamic result, bool success)
         resultSuccess,
-    required TResult Function(int id, bool success, Error error) resultError,
+    required TResult Function(int id, bool success, HassError error)
+        resultError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -198,7 +49,7 @@ mixin _$WebSocketResponse {
     TResult? Function(int id)? pong,
     TResult? Function(int id, StatesUpdates event)? event,
     TResult? Function(int id, dynamic result, bool success)? resultSuccess,
-    TResult? Function(int id, bool success, Error error)? resultError,
+    TResult? Function(int id, bool success, HassError error)? resultError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -206,7 +57,7 @@ mixin _$WebSocketResponse {
     TResult Function(int id)? pong,
     TResult Function(int id, StatesUpdates event)? event,
     TResult Function(int id, dynamic result, bool success)? resultSuccess,
-    TResult Function(int id, bool success, Error error)? resultError,
+    TResult Function(int id, bool success, HassError error)? resultError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -355,7 +206,8 @@ class _$WebSocketPongResponseImpl implements WebSocketPongResponse {
     required TResult Function(int id, StatesUpdates event) event,
     required TResult Function(int id, dynamic result, bool success)
         resultSuccess,
-    required TResult Function(int id, bool success, Error error) resultError,
+    required TResult Function(int id, bool success, HassError error)
+        resultError,
   }) {
     return pong(id);
   }
@@ -366,7 +218,7 @@ class _$WebSocketPongResponseImpl implements WebSocketPongResponse {
     TResult? Function(int id)? pong,
     TResult? Function(int id, StatesUpdates event)? event,
     TResult? Function(int id, dynamic result, bool success)? resultSuccess,
-    TResult? Function(int id, bool success, Error error)? resultError,
+    TResult? Function(int id, bool success, HassError error)? resultError,
   }) {
     return pong?.call(id);
   }
@@ -377,7 +229,7 @@ class _$WebSocketPongResponseImpl implements WebSocketPongResponse {
     TResult Function(int id)? pong,
     TResult Function(int id, StatesUpdates event)? event,
     TResult Function(int id, dynamic result, bool success)? resultSuccess,
-    TResult Function(int id, bool success, Error error)? resultError,
+    TResult Function(int id, bool success, HassError error)? resultError,
     required TResult orElse(),
   }) {
     if (pong != null) {
@@ -547,7 +399,8 @@ class _$WebSocketEventResponseImpl implements WebSocketEventResponse {
     required TResult Function(int id, StatesUpdates event) event,
     required TResult Function(int id, dynamic result, bool success)
         resultSuccess,
-    required TResult Function(int id, bool success, Error error) resultError,
+    required TResult Function(int id, bool success, HassError error)
+        resultError,
   }) {
     return event(id, this.event);
   }
@@ -558,7 +411,7 @@ class _$WebSocketEventResponseImpl implements WebSocketEventResponse {
     TResult? Function(int id)? pong,
     TResult? Function(int id, StatesUpdates event)? event,
     TResult? Function(int id, dynamic result, bool success)? resultSuccess,
-    TResult? Function(int id, bool success, Error error)? resultError,
+    TResult? Function(int id, bool success, HassError error)? resultError,
   }) {
     return event?.call(id, this.event);
   }
@@ -569,7 +422,7 @@ class _$WebSocketEventResponseImpl implements WebSocketEventResponse {
     TResult Function(int id)? pong,
     TResult Function(int id, StatesUpdates event)? event,
     TResult Function(int id, dynamic result, bool success)? resultSuccess,
-    TResult Function(int id, bool success, Error error)? resultError,
+    TResult Function(int id, bool success, HassError error)? resultError,
     required TResult orElse(),
   }) {
     if (event != null) {
@@ -748,7 +601,8 @@ class _$WebSocketResultResponseSuccessImpl
     required TResult Function(int id, StatesUpdates event) event,
     required TResult Function(int id, dynamic result, bool success)
         resultSuccess,
-    required TResult Function(int id, bool success, Error error) resultError,
+    required TResult Function(int id, bool success, HassError error)
+        resultError,
   }) {
     return resultSuccess(id, result, success);
   }
@@ -759,7 +613,7 @@ class _$WebSocketResultResponseSuccessImpl
     TResult? Function(int id)? pong,
     TResult? Function(int id, StatesUpdates event)? event,
     TResult? Function(int id, dynamic result, bool success)? resultSuccess,
-    TResult? Function(int id, bool success, Error error)? resultError,
+    TResult? Function(int id, bool success, HassError error)? resultError,
   }) {
     return resultSuccess?.call(id, result, success);
   }
@@ -770,7 +624,7 @@ class _$WebSocketResultResponseSuccessImpl
     TResult Function(int id)? pong,
     TResult Function(int id, StatesUpdates event)? event,
     TResult Function(int id, dynamic result, bool success)? resultSuccess,
-    TResult Function(int id, bool success, Error error)? resultError,
+    TResult Function(int id, bool success, HassError error)? resultError,
     required TResult orElse(),
   }) {
     if (resultSuccess != null) {
@@ -854,9 +708,9 @@ abstract class _$$WebSocketResultResponseErrorImplCopyWith<$Res>
       __$$WebSocketResultResponseErrorImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, bool success, Error error});
+  $Res call({int id, bool success, HassError error});
 
-  $ErrorCopyWith<$Res> get error;
+  $HassErrorCopyWith<$Res> get error;
 }
 
 /// @nodoc
@@ -888,14 +742,14 @@ class __$$WebSocketResultResponseErrorImplCopyWithImpl<$Res>
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
-              as Error,
+              as HassError,
     ));
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $ErrorCopyWith<$Res> get error {
-    return $ErrorCopyWith<$Res>(_value.error, (value) {
+  $HassErrorCopyWith<$Res> get error {
+    return $HassErrorCopyWith<$Res>(_value.error, (value) {
       return _then(_value.copyWith(error: value));
     });
   }
@@ -922,7 +776,7 @@ class _$WebSocketResultResponseErrorImpl
   @JsonKey()
   final bool success;
   @override
-  final Error error;
+  final HassError error;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -961,7 +815,8 @@ class _$WebSocketResultResponseErrorImpl
     required TResult Function(int id, StatesUpdates event) event,
     required TResult Function(int id, dynamic result, bool success)
         resultSuccess,
-    required TResult Function(int id, bool success, Error error) resultError,
+    required TResult Function(int id, bool success, HassError error)
+        resultError,
   }) {
     return resultError(id, success, error);
   }
@@ -972,7 +827,7 @@ class _$WebSocketResultResponseErrorImpl
     TResult? Function(int id)? pong,
     TResult? Function(int id, StatesUpdates event)? event,
     TResult? Function(int id, dynamic result, bool success)? resultSuccess,
-    TResult? Function(int id, bool success, Error error)? resultError,
+    TResult? Function(int id, bool success, HassError error)? resultError,
   }) {
     return resultError?.call(id, success, error);
   }
@@ -983,7 +838,7 @@ class _$WebSocketResultResponseErrorImpl
     TResult Function(int id)? pong,
     TResult Function(int id, StatesUpdates event)? event,
     TResult Function(int id, dynamic result, bool success)? resultSuccess,
-    TResult Function(int id, bool success, Error error)? resultError,
+    TResult Function(int id, bool success, HassError error)? resultError,
     required TResult orElse(),
   }) {
     if (resultError != null) {
@@ -1042,7 +897,7 @@ abstract class WebSocketResultResponseError implements WebSocketResponse {
   const factory WebSocketResultResponseError(
       {required final int id,
       final bool success,
-      required final Error error}) = _$WebSocketResultResponseErrorImpl;
+      required final HassError error}) = _$WebSocketResultResponseErrorImpl;
 
   factory WebSocketResultResponseError.fromJson(Map<String, dynamic> json) =
       _$WebSocketResultResponseErrorImpl.fromJson;
@@ -1050,7 +905,7 @@ abstract class WebSocketResultResponseError implements WebSocketResponse {
   @override
   int get id;
   bool get success;
-  Error get error;
+  HassError get error;
   @override
   @JsonKey(ignore: true)
   _$$WebSocketResultResponseErrorImplCopyWith<

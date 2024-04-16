@@ -1,0 +1,18 @@
+{
+    "type": "event",
+    "event": {
+        "c": {
+            "fan.philips_purifier": {
+                "+": {
+                    "s": "5",
+                    "lu": 1712828878.514165,
+                    "c": "01HV68X3NJDK579CYJNST1VA72",
+                    "a": {
+                        "runtime": "2 days, 19:50:20"
+                    }
+                }
+            }
+        }
+    },
+    "id": 3
+}
