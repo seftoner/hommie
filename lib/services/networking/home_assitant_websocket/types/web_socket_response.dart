@@ -47,10 +47,10 @@ class WebSocketResponseConverter
       case 'pong':
         return WebSocketResponse.pong(id: id);
       case 'event':
-      // return WebSocketResponse.event(
-      //     id: id,
-      //     event:
-      //         StatesUpdates.fromJson(json['event'] as Map<String, dynamic>));
+        return WebSocketResponse.event(
+            id: id,
+            event:
+                StatesUpdates.fromJson(json['event'] as Map<String, dynamic>));
       case 'result' when success! == true:
         return WebSocketResponse.resultSuccess(
           id: id,

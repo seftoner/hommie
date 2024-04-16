@@ -573,7 +573,7 @@ Field _$FieldFromJson(Map<String, dynamic> json) {
 mixin _$Field {
   String? get name => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
-  dynamic? get example => throw _privateConstructorUsedError;
+  dynamic get example => throw _privateConstructorUsedError;
   Map<String, dynamic>? get selector => throw _privateConstructorUsedError;
   FieldFilter? get filter => throw _privateConstructorUsedError;
 
@@ -590,7 +590,7 @@ abstract class $FieldCopyWith<$Res> {
   $Res call(
       {String? name,
       String? description,
-      dynamic? example,
+      dynamic example,
       Map<String, dynamic>? selector,
       FieldFilter? filter});
 
@@ -628,7 +628,7 @@ class _$FieldCopyWithImpl<$Res, $Val extends Field>
       example: freezed == example
           ? _value.example
           : example // ignore: cast_nullable_to_non_nullable
-              as dynamic?,
+              as dynamic,
       selector: freezed == selector
           ? _value.selector
           : selector // ignore: cast_nullable_to_non_nullable
@@ -663,7 +663,7 @@ abstract class _$$FieldImplCopyWith<$Res> implements $FieldCopyWith<$Res> {
   $Res call(
       {String? name,
       String? description,
-      dynamic? example,
+      dynamic example,
       Map<String, dynamic>? selector,
       FieldFilter? filter});
 
@@ -700,7 +700,7 @@ class __$$FieldImplCopyWithImpl<$Res>
       example: freezed == example
           ? _value.example
           : example // ignore: cast_nullable_to_non_nullable
-              as dynamic?,
+              as dynamic,
       selector: freezed == selector
           ? _value._selector
           : selector // ignore: cast_nullable_to_non_nullable
@@ -734,7 +734,7 @@ class _$FieldImpl implements _Field {
   @JsonKey()
   final String? description;
   @override
-  final dynamic? example;
+  final dynamic example;
   final Map<String, dynamic>? _selector;
   @override
   Map<String, dynamic>? get selector {
@@ -794,7 +794,7 @@ abstract class _Field implements Field {
   const factory _Field(
       {final String? name,
       final String? description,
-      final dynamic? example,
+      final dynamic example,
       final Map<String, dynamic>? selector,
       final FieldFilter? filter}) = _$FieldImpl;
 
@@ -805,7 +805,7 @@ abstract class _Field implements Field {
   @override
   String? get description;
   @override
-  dynamic? get example;
+  dynamic get example;
   @override
   Map<String, dynamic>? get selector;
   @override

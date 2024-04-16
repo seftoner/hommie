@@ -9,8 +9,6 @@ class HassDomainServices with _$HassDomainServices {
 
   factory HassDomainServices.fromJson(Map<String, dynamic> json) =>
       const HassDomainServicesConverter().fromJson(json);
-  // _$HassDomainServicesFromJson(json);
-  // Map<String, dynamic> toJson() => _$HassDomainServicesToJson(this);
 }
 
 class HassDomainServicesConverter
@@ -80,12 +78,13 @@ class HassService with _$HassService {
 
 @freezed
 class Field with _$Field {
-  const factory Field(
-      {@Default("") String? name,
-      @Default("") String? description,
-      dynamic? example,
-      Map<String, dynamic>? selector,
-      FieldFilter? filter}) = _Field;
+  const factory Field({
+    @Default("") String? name,
+    @Default("") String? description,
+    dynamic example,
+    Map<String, dynamic>? selector,
+    FieldFilter? filter,
+  }) = _Field;
 
   factory Field.fromJson(Map<String, dynamic> json) => _$FieldFromJson(json);
 }

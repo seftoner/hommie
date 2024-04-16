@@ -72,8 +72,7 @@ class ContextConverter implements JsonConverter<Context, Map<String, dynamic>> {
     } else if (json is String) {
       return Context(json);
     } else {
-      ///TODO: Throw better error with description.
-      throw Error();
+      throw const FormatException('Invalid JSON format for Context');
     }
   }
 
