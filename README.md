@@ -5,9 +5,12 @@ This project aims to create a beautiful client app for Home Assistant (HA) using
 The motivation behind this project is to create a visually appealing and user-friendly client app for Home Assistant that can run on various platforms.
 
 ## Featueres
-Not so many by now.
+Currently, there are not many of them. I want to design a good architecture (skeleton), so I can easily add new features (muscles).
+I want to add 'Companion App' functionality in the near future.
+
 - **Authentication**: Users can authenticate and log out securely.
-- **Areas** list of areas
+- **Areas**: List of areas
+- **Companion App**: (In Progress): This feature will allow the app to register on the Home Assistant server and send location and other sensor data.
 
 ### Platforms
 1. iOS - ✅
