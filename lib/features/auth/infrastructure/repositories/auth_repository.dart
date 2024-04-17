@@ -98,6 +98,8 @@ class AuthRepository implements IAuthRepository {
     } on AuthorizationException catch (e) {
       print('Error refreshing token: $e');
       return left(AuthFailure.server("${e.error}:${e.description}"));
+    } on SocketException catch (e) {
+      return left(AuthFailure.server("$e"));
     } on PlatformException {
       return left(const AuthFailure.storage());
     }

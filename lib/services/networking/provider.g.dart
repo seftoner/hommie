@@ -23,5 +23,19 @@ final hAServerConnectionProvider =
 );
 
 typedef HAServerConnectionRef = AutoDisposeFutureProviderRef<HAConnection>;
+String _$haProviderHash() => r'9f9ca4d7dd7189468503127856dcb2eac0e3e549';
+
+/// See also [haProvider].
+@ProviderFor(haProvider)
+final haProviderProvider = AutoDisposeProvider<HAConnection>.internal(
+  haProvider,
+  name: r'haProviderProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$haProviderHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef HaProviderRef = AutoDisposeProviderRef<HAConnection>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

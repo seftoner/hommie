@@ -6,11 +6,9 @@ part of 'auth_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authControllerHash() => r'f4967e07687a42ed078866f0a7d993c136562890';
+String _$authControllerHash() => r'05da12b7c1e08a0d770fba5cf38350e83c8caca1';
 
-/// This controller is an [AsyncNotifier] that holds and handles our authentication state
-///
-/// Copied from [AuthController].
+/// See also [AuthController].
 @ProviderFor(AuthController)
 final authControllerProvider =
     AutoDisposeAsyncNotifierProvider<AuthController, AuthState>.internal(

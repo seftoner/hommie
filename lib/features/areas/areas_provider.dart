@@ -6,6 +6,6 @@ part 'areas_provider.g.dart';
 
 @riverpod
 AreasRepository areasRepository(AreasRepositoryRef ref) {
-  final connection = ref.watch(hAServerConnectionProvider);
-  return AreasRepository(connection.value!);
+  final connection = ref.watch(hAServerConnectionProvider).value;
+  return AreasRepository(connection!);
 }

@@ -20,3 +20,8 @@ Future<HAConnection> HAServerConnection(HAServerConnectionRef ref) async {
 
   return connection;
 }
+
+@riverpod
+HAConnection haProvider(HaProviderRef ref) {
+  throw UnimplementedError();
+}

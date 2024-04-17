@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/utils.dart';
+import 'package:hommie/utils/logger.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
@@ -21,10 +22,10 @@ class HASocket {
   HASocket.connect(this._wsUri) {
     _streamController = StreamController.broadcast();
     _streamController.onListen = () {
-      print('New listener added!');
+      logger.d('New listener added!');
     };
     _streamController.onCancel = () {
-      print('Listener unsubscribed!');
+      logger.d('Listener unsubscribed!');
     };
 
     _startConnection();
@@ -51,7 +52,7 @@ class HASocket {
 
   void sendMessage(HABaseMessgae message) {
     final encodedData = message.toJson();
-    print("Sending message: $encodedData");
+    logger.t("Sending message: $encodedData");
 
     _innerchanel.sink.add(encodedData);
   }
@@ -61,7 +62,7 @@ class HASocket {
   }
 
   void close() {
-    print("Going to close socket");
+    logger.t("Going to close socket");
     _innerchanel.sink.close(status.goingAway);
     _streamController.close();
   }
@@ -94,8 +95,7 @@ class HAConnectionOption {
     serverUrl += ":${_credentials.tokenEndpoint?.port}/api/websocket";
     Completer<HASocket> completer = Completer();
     _connect(Uri.parse(serverUrl), completer);
-    print(
-        "HAConnectionOption.createSocket: Trying to establish a new connection to $serverUrl");
+    logger.d("Trying to establish a new connection to $serverUrl");
 
     return completer.future;
   }
@@ -111,16 +111,16 @@ class HAConnectionOption {
       if (messageJson.containsKey("type")) {
         switch (messageJson["type"]) {
           case _authRequired:
-            print("Auth REQUIRED");
+            logger.i("Auth REQUIRED");
             socket.sendMessage(
                 AuthMessage(accessToken: _credentials.accessToken));
             break;
           case _authInvalid:
-            print("Auth INVALID");
+            logger.f("Auth INVALID");
             completer.completeError(messageJson["message"]);
             break;
           case _authOk:
-            print("Auth OK");
+            logger.i("Auth OK");
             socket.haVersion = messageJson["ha_version"];
             subscription?.cancel();
             if (atLeastHaVersion(socket.haVersion, 2022, 9)) {
@@ -135,7 +135,7 @@ class HAConnectionOption {
     }
 
     handleClose() {
-      print("Auth closed");
+      logger.d("Auth closed");
       subscription?.cancel();
       if (!completer.isCompleted) {
         completer.completeError(Exception(
@@ -144,7 +144,7 @@ class HAConnectionOption {
     }
 
     handleError(dynamic error) {
-      print("Auth error $error");
+      logger.e("Auth error $error");
       if (!completer.isCompleted) {
         completer.completeError(error);
       }

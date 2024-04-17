@@ -10,6 +10,9 @@ class AreasController extends _$AreasController {
   Future<List<AreaEntity>> build() async {
     final repository = ref.watch(areasRepositoryProvider);
     final resultOrError = await repository.getAreas();
-    return resultOrError.fold((l) => throw l, (r) => r);
+    return resultOrError.fold(
+      (l) => throw l,
+      (r) => r,
+    );
   }
 }

@@ -13,5 +13,13 @@ AuthRepository authRepository(AuthRepositoryRef ref) {
   return AuthRepository(securityCredentialStorage);
 }
 
+sealed class LoginState {}
+
+class Init extends LoginState {}
+
+class Unautenticated extends LoginState {}
+
+class LoggedIn extends LoginState {}
+
 /// Provides a [ValueNotifier] to the app router to redirect on auth state change
-final authStateListenable = ValueNotifier<bool>(false);
+final authStateListenable = ValueNotifier<LoginState>(Init());

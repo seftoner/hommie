@@ -8,8 +8,8 @@ part 'auth_state.freezed.dart';
 @freezed
 sealed class AuthState with _$AuthState {
   const AuthState._();
-  const factory AuthState.initial() = _Initial;
-  const factory AuthState.authenticated() = _SignedIn;
-  const factory AuthState.unauthenticated() = _Unauthicated;
-  const factory AuthState.failure(AuthFailure failure) = _Failure;
+  const factory AuthState.initial() = Initial;
+  const factory AuthState.authenticated() = Autenticated;
+  const factory AuthState.unauthenticated() = Unauthicated;
+  const factory AuthState.failure(AuthFailure failure) = Failure;
 }

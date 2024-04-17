@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/login_page.dart';
 import 'package:hommie/ui/screens/splash_page.dart';
+import 'package:hommie/ui/screens/welcome_page.dart';
 
 part 'routes.g.dart';
 
@@ -23,6 +24,16 @@ class LoginRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const LoginPage();
+  }
+}
+
+@TypedGoRoute<WelcomeRoute>(path: '/welcome')
+class WelcomeRoute extends GoRouteData {
+  const WelcomeRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const WelcomePage();
   }
 }
 

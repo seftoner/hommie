@@ -6,7 +6,7 @@ part of 'areas_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$areasRepositoryHash() => r'4fe4ac2f5c1e83f9ccee8a4fd1f74e6a00119a45';
+String _$areasRepositoryHash() => r'2cc8b8e67e593321736ef379921646612cf05d75';
 
 /// See also [areasRepository].
 @ProviderFor(areasRepository)

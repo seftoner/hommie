@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/types/web_socket_response.dart';
+import 'package:hommie/utils/logger.dart';
 
 class AuthOption {
   late Uri _serverUri;
@@ -22,10 +23,10 @@ class HassSubscription {
   HassSubscription({required this.unsubscribe}) {
     _streamController = StreamController.broadcast();
     _streamController.onListen = () {
-      print('New listener added to subscribtion stream!');
+      logger.d('New listener added to subscribtion stream!');
     };
     _streamController.onCancel = () {
-      print('Listener unsubscribed from subscribtion stream!');
+      logger.d('Listener unsubscribed from subscribtion stream!');
     };
   }
 }
@@ -48,8 +49,6 @@ class HAConnection {
   }
 
   Future<dynamic> sendMessage(HABaseMessgae message) async {
-    print("HAConnection.sendMessage: (RAW data)  $message");
-
     assert(!_socket.isClosed(), "Connections is closed");
 
     var completer = Completer<dynamic>();
@@ -67,8 +66,6 @@ class HAConnection {
   }
 
   HassSubscription subscribeMessage(HABaseMessgae subscribeMessage) {
-    print("HAConnection.sendMessage: (RAW data)  $subscribeMessage");
-
     assert(!_socket.isClosed(), "Connections is closed");
 
     var id = _getCommndID;
@@ -88,7 +85,7 @@ class HAConnection {
   }
 
   void _messageListener(dynamic incomingMessage) {
-    print("HAConnection.messageListener: Server response:  $incomingMessage");
+    logger.d("Server response:  $incomingMessage");
 
     final decodedJson = jsonDecode(incomingMessage);
 
@@ -111,12 +108,11 @@ class HAConnection {
           if (subscribtion != null) {
             subscribtion._streamController.add(event);
           } else {
-            print(
-                "HAConnection.messageListener: Unknown subscribtion ${response.id}. Unsubscribing");
+            logger.e("Unknown subscribtion ${response.id}. Unsubscribing");
 
             sendMessage(UnsubscribeEventsMessage(subsctibtionID: response.id))
                 .catchError((e) {
-              print(
+              logger.e(
                   "Error unsubsribing from unknown subscription ${incomingMessage.id}. Error: $e");
             });
           }
@@ -130,7 +126,7 @@ class HAConnection {
           _commands.remove(response.id);
           break;
         default:
-          print("HAConnection.messageListener: Unknown message type: ${json}");
+          logger.e("Unknown message type: ${json}");
       }
     }
   }
@@ -138,7 +134,7 @@ class HAConnection {
   void _handleClose() {
     _commndID = 1;
     _commands.forEach((key, value) {
-      value.completeError("HAConnection.handleClose: Connection lost");
+      value.completeError("Connection lost");
     });
     _commands.clear();
     _socketSubscription.cancel();
@@ -147,28 +143,28 @@ class HAConnection {
       _reconnect();
     }
 
-    print("HAConnection.handleClose: Closed");
+    logger.d("Closed");
   }
 
   void _handleError(dynamic error) {
-    print("HAConnection.handleError: $error");
+    logger.e(error);
   }
 
   void _setSocket(HASocket socket) {
     _socket = socket;
     _socketSubscription = _socket.stream
         .listen(_messageListener, onDone: _handleClose, onError: _handleError);
-    print("HAConnection.setSocket: connection established");
+    logger.d("connection established");
   }
 
   void _reconnect() {
     Future.delayed(const Duration(seconds: 1), () {
-      print("HAConnection.reconnect: trying to reconnect");
+      logger.d("trying to reconnect");
 
       haConnectionOption
           .createSocket()
           .then((socket) => _setSocket(socket))
-          .catchError((e) => {print("Error reconnect: ${e}")});
+          .catchError((e) => {logger.e("Error reconnect: ${e}")});
     });
   }
 }
