@@ -5,7 +5,8 @@ part 'auth_failure.freezed.dart';
 @freezed
 class AuthFailure with _$AuthFailure {
   const AuthFailure._();
-  const factory AuthFailure.server([String? message]) = _Server;
-  const factory AuthFailure.userBrake([String? message]) = _UserBrake;
-  const factory AuthFailure.storage() = _Storage;
+  const factory AuthFailure.server([String? message]) = Server;
+  const factory AuthFailure.userBrake([String? message]) = UserBrake;
+  const factory AuthFailure.storage() = Storage;
+  const factory AuthFailure.missingCredentials() = MissingCredentials;
 }

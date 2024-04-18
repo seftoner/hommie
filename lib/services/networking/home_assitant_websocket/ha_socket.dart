@@ -22,10 +22,10 @@ class HASocket {
   HASocket.connect(this._wsUri) {
     _streamController = StreamController.broadcast();
     _streamController.onListen = () {
-      logger.d('New listener added!');
+      logger.t('New listener added!');
     };
     _streamController.onCancel = () {
-      logger.d('Listener unsubscribed!');
+      logger.t('Listener unsubscribed!');
     };
 
     _startConnection();
@@ -39,11 +39,11 @@ class HASocket {
         _streamController.add(event);
       },
       onError: (error) {
-        print("Inner socket error: $error");
+        logger.t("Inner socket error: $error");
         _streamController.addError(error);
       },
       onDone: () {
-        print(
+        logger.t(
             "Inner socket is closed. Code ${_innerchanel.closeCode} Reason: ${_innerchanel.closeReason}");
         _streamController.close();
       },
@@ -95,7 +95,7 @@ class HAConnectionOption {
     serverUrl += ":${_credentials.tokenEndpoint?.port}/api/websocket";
     Completer<HASocket> completer = Completer();
     _connect(Uri.parse(serverUrl), completer);
-    logger.d("Trying to establish a new connection to $serverUrl");
+    logger.i("Trying to establish a new connection to $serverUrl");
 
     return completer.future;
   }

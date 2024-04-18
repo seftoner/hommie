@@ -8,9 +8,10 @@ class HommieApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(goRouterProvider);
     return MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        routerConfig: ref.watch(goRouterProvider),
+        routerConfig: router,
         theme: HommieMaterialTheme(
                 Typography.material2021(platform: TargetPlatform.iOS).black)
             .light(),

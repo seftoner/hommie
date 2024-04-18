@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:hommie/features/auth/auth_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
-import 'package:hommie/services/networking/provider.dart';
+import 'package:hommie/utils/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/features/auth/application/auth_state.dart';
@@ -16,15 +16,14 @@ class AuthController extends _$AuthController {
   @override
   Future<AuthState> build() async {
     final repository = ref.watch(authRepositoryProvider);
-    final credentials = await repository.getCredentials();
+    final credentialsOrError = await repository.getCredentials();
 
-    if (credentials != null) {
-      /// Init WebSocket conection after succesfull login
-      await ref.watch(hAServerConnectionProvider.future);
-      return const AuthState.authenticated();
-    }
-
-    return const AuthState.unauthenticated();
+    return credentialsOrError.fold(
+        (failure) => switch (failure) {
+              MissingCredentials() => const AuthState.unauthenticated(),
+              _ => AuthState.failure(failure)
+            },
+        (credentials) => const AuthState.authenticated());
   }
 
   Future<void> signOut() async {
@@ -59,8 +58,8 @@ class AuthController extends _$AuthController {
     } on PlatformException catch (e) {
       //BUG: Not sure that 'CANCELED' message will be return on all platforms
       if (e.code == 'CANCELED') {
-        print(e.message);
-        AsyncData(AuthState.failure(AuthFailure.userBrake(e.message)));
+        logger.e(e.message);
+        state = AsyncData(AuthState.failure(AuthFailure.userBrake(e.message)));
       }
     }
   }

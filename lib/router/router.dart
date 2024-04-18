@@ -11,7 +11,6 @@ part 'router.g.dart';
 
 @riverpod
 GoRouter goRouter(GoRouterRef ref) {
-  // final authState = ref.watch(authControllerProvider);
   final authStateNotifier = ValueNotifier<AuthState>(const AuthState.initial());
   ref
     ..onDispose(authStateNotifier.dispose)
@@ -26,11 +25,12 @@ GoRouter goRouter(GoRouterRef ref) {
   final router = GoRouter(
     navigatorKey: routerKey,
     refreshListenable: authStateNotifier,
-    initialLocation: const WelcomeRoute().location,
+    initialLocation: const StartupRoute().location,
     debugLogDiagnostics: kDebugMode,
     routes: $appRoutes,
     redirect: (context, state) {
-      logger.d("Try to redirect ${authStateNotifier.value}");
+      logger.d(
+          "Try to redirect. Router listanable state: ${authStateNotifier.value}");
 
       final currentAuthState = authStateNotifier.value;
       return switch (currentAuthState) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+class StartupPage extends StatelessWidget {
+  const StartupPage({super.key});
 
   @override
   Widget build(BuildContext context) {

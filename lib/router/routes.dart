@@ -27,13 +27,13 @@ class LoginRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<WelcomeRoute>(path: '/welcome')
-class WelcomeRoute extends GoRouteData {
-  const WelcomeRoute();
+@TypedGoRoute<StartupRoute>(path: '/startup')
+class StartupRoute extends GoRouteData {
+  const StartupRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const WelcomePage();
+    return const StartupPage();
   }
 }
 

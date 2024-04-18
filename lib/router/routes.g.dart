@@ -9,7 +9,7 @@ part of 'routes.dart';
 List<RouteBase> get $appRoutes => [
       $homeRoute,
       $loginRoute,
-      $welcomeRoute,
+      $startupRoute,
       $splashRoute,
     ];
 
@@ -57,16 +57,16 @@ extension $LoginRouteExtension on LoginRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $welcomeRoute => GoRouteData.$route(
-      path: '/welcome',
-      factory: $WelcomeRouteExtension._fromState,
+RouteBase get $startupRoute => GoRouteData.$route(
+      path: '/startup',
+      factory: $StartupRouteExtension._fromState,
     );
 
-extension $WelcomeRouteExtension on WelcomeRoute {
-  static WelcomeRoute _fromState(GoRouterState state) => const WelcomeRoute();
+extension $StartupRouteExtension on StartupRoute {
+  static StartupRoute _fromState(GoRouterState state) => const StartupRoute();
 
   String get location => GoRouteData.$location(
-        '/welcome',
+        '/startup',
       );
 
   void go(BuildContext context) => context.go(location);

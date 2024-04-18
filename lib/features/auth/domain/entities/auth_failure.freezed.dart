@@ -21,6 +21,7 @@ mixin _$AuthFailure {
     required TResult Function(String? message) server,
     required TResult Function(String? message) userBrake,
     required TResult Function() storage,
+    required TResult Function() missingCredentials,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -28,6 +29,7 @@ mixin _$AuthFailure {
     TResult? Function(String? message)? server,
     TResult? Function(String? message)? userBrake,
     TResult? Function()? storage,
+    TResult? Function()? missingCredentials,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -35,28 +37,32 @@ mixin _$AuthFailure {
     TResult Function(String? message)? server,
     TResult Function(String? message)? userBrake,
     TResult Function()? storage,
+    TResult Function()? missingCredentials,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Server value) server,
-    required TResult Function(_UserBrake value) userBrake,
-    required TResult Function(_Storage value) storage,
+    required TResult Function(Server value) server,
+    required TResult Function(UserBrake value) userBrake,
+    required TResult Function(Storage value) storage,
+    required TResult Function(MissingCredentials value) missingCredentials,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Server value)? server,
-    TResult? Function(_UserBrake value)? userBrake,
-    TResult? Function(_Storage value)? storage,
+    TResult? Function(Server value)? server,
+    TResult? Function(UserBrake value)? userBrake,
+    TResult? Function(Storage value)? storage,
+    TResult? Function(MissingCredentials value)? missingCredentials,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Server value)? server,
-    TResult Function(_UserBrake value)? userBrake,
-    TResult Function(_Storage value)? storage,
+    TResult Function(Server value)? server,
+    TResult Function(UserBrake value)? userBrake,
+    TResult Function(Storage value)? storage,
+    TResult Function(MissingCredentials value)? missingCredentials,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -113,7 +119,7 @@ class __$$ServerImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ServerImpl extends _Server {
+class _$ServerImpl extends Server {
   const _$ServerImpl([this.message]) : super._();
 
   @override
@@ -147,6 +153,7 @@ class _$ServerImpl extends _Server {
     required TResult Function(String? message) server,
     required TResult Function(String? message) userBrake,
     required TResult Function() storage,
+    required TResult Function() missingCredentials,
   }) {
     return server(message);
   }
@@ -157,6 +164,7 @@ class _$ServerImpl extends _Server {
     TResult? Function(String? message)? server,
     TResult? Function(String? message)? userBrake,
     TResult? Function()? storage,
+    TResult? Function()? missingCredentials,
   }) {
     return server?.call(message);
   }
@@ -167,6 +175,7 @@ class _$ServerImpl extends _Server {
     TResult Function(String? message)? server,
     TResult Function(String? message)? userBrake,
     TResult Function()? storage,
+    TResult Function()? missingCredentials,
     required TResult orElse(),
   }) {
     if (server != null) {
@@ -178,9 +187,10 @@ class _$ServerImpl extends _Server {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Server value) server,
-    required TResult Function(_UserBrake value) userBrake,
-    required TResult Function(_Storage value) storage,
+    required TResult Function(Server value) server,
+    required TResult Function(UserBrake value) userBrake,
+    required TResult Function(Storage value) storage,
+    required TResult Function(MissingCredentials value) missingCredentials,
   }) {
     return server(this);
   }
@@ -188,9 +198,10 @@ class _$ServerImpl extends _Server {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Server value)? server,
-    TResult? Function(_UserBrake value)? userBrake,
-    TResult? Function(_Storage value)? storage,
+    TResult? Function(Server value)? server,
+    TResult? Function(UserBrake value)? userBrake,
+    TResult? Function(Storage value)? storage,
+    TResult? Function(MissingCredentials value)? missingCredentials,
   }) {
     return server?.call(this);
   }
@@ -198,9 +209,10 @@ class _$ServerImpl extends _Server {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Server value)? server,
-    TResult Function(_UserBrake value)? userBrake,
-    TResult Function(_Storage value)? storage,
+    TResult Function(Server value)? server,
+    TResult Function(UserBrake value)? userBrake,
+    TResult Function(Storage value)? storage,
+    TResult Function(MissingCredentials value)? missingCredentials,
     required TResult orElse(),
   }) {
     if (server != null) {
@@ -210,9 +222,9 @@ class _$ServerImpl extends _Server {
   }
 }
 
-abstract class _Server extends AuthFailure {
-  const factory _Server([final String? message]) = _$ServerImpl;
-  const _Server._() : super._();
+abstract class Server extends AuthFailure {
+  const factory Server([final String? message]) = _$ServerImpl;
+  const Server._() : super._();
 
   String? get message;
   @JsonKey(ignore: true)
@@ -253,7 +265,7 @@ class __$$UserBrakeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UserBrakeImpl extends _UserBrake {
+class _$UserBrakeImpl extends UserBrake {
   const _$UserBrakeImpl([this.message]) : super._();
 
   @override
@@ -287,6 +299,7 @@ class _$UserBrakeImpl extends _UserBrake {
     required TResult Function(String? message) server,
     required TResult Function(String? message) userBrake,
     required TResult Function() storage,
+    required TResult Function() missingCredentials,
   }) {
     return userBrake(message);
   }
@@ -297,6 +310,7 @@ class _$UserBrakeImpl extends _UserBrake {
     TResult? Function(String? message)? server,
     TResult? Function(String? message)? userBrake,
     TResult? Function()? storage,
+    TResult? Function()? missingCredentials,
   }) {
     return userBrake?.call(message);
   }
@@ -307,6 +321,7 @@ class _$UserBrakeImpl extends _UserBrake {
     TResult Function(String? message)? server,
     TResult Function(String? message)? userBrake,
     TResult Function()? storage,
+    TResult Function()? missingCredentials,
     required TResult orElse(),
   }) {
     if (userBrake != null) {
@@ -318,9 +333,10 @@ class _$UserBrakeImpl extends _UserBrake {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Server value) server,
-    required TResult Function(_UserBrake value) userBrake,
-    required TResult Function(_Storage value) storage,
+    required TResult Function(Server value) server,
+    required TResult Function(UserBrake value) userBrake,
+    required TResult Function(Storage value) storage,
+    required TResult Function(MissingCredentials value) missingCredentials,
   }) {
     return userBrake(this);
   }
@@ -328,9 +344,10 @@ class _$UserBrakeImpl extends _UserBrake {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Server value)? server,
-    TResult? Function(_UserBrake value)? userBrake,
-    TResult? Function(_Storage value)? storage,
+    TResult? Function(Server value)? server,
+    TResult? Function(UserBrake value)? userBrake,
+    TResult? Function(Storage value)? storage,
+    TResult? Function(MissingCredentials value)? missingCredentials,
   }) {
     return userBrake?.call(this);
   }
@@ -338,9 +355,10 @@ class _$UserBrakeImpl extends _UserBrake {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Server value)? server,
-    TResult Function(_UserBrake value)? userBrake,
-    TResult Function(_Storage value)? storage,
+    TResult Function(Server value)? server,
+    TResult Function(UserBrake value)? userBrake,
+    TResult Function(Storage value)? storage,
+    TResult Function(MissingCredentials value)? missingCredentials,
     required TResult orElse(),
   }) {
     if (userBrake != null) {
@@ -350,9 +368,9 @@ class _$UserBrakeImpl extends _UserBrake {
   }
 }
 
-abstract class _UserBrake extends AuthFailure {
-  const factory _UserBrake([final String? message]) = _$UserBrakeImpl;
-  const _UserBrake._() : super._();
+abstract class UserBrake extends AuthFailure {
+  const factory UserBrake([final String? message]) = _$UserBrakeImpl;
+  const UserBrake._() : super._();
 
   String? get message;
   @JsonKey(ignore: true)
@@ -378,7 +396,7 @@ class __$$StorageImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$StorageImpl extends _Storage {
+class _$StorageImpl extends Storage {
   const _$StorageImpl() : super._();
 
   @override
@@ -401,6 +419,7 @@ class _$StorageImpl extends _Storage {
     required TResult Function(String? message) server,
     required TResult Function(String? message) userBrake,
     required TResult Function() storage,
+    required TResult Function() missingCredentials,
   }) {
     return storage();
   }
@@ -411,6 +430,7 @@ class _$StorageImpl extends _Storage {
     TResult? Function(String? message)? server,
     TResult? Function(String? message)? userBrake,
     TResult? Function()? storage,
+    TResult? Function()? missingCredentials,
   }) {
     return storage?.call();
   }
@@ -421,6 +441,7 @@ class _$StorageImpl extends _Storage {
     TResult Function(String? message)? server,
     TResult Function(String? message)? userBrake,
     TResult Function()? storage,
+    TResult Function()? missingCredentials,
     required TResult orElse(),
   }) {
     if (storage != null) {
@@ -432,9 +453,10 @@ class _$StorageImpl extends _Storage {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Server value) server,
-    required TResult Function(_UserBrake value) userBrake,
-    required TResult Function(_Storage value) storage,
+    required TResult Function(Server value) server,
+    required TResult Function(UserBrake value) userBrake,
+    required TResult Function(Storage value) storage,
+    required TResult Function(MissingCredentials value) missingCredentials,
   }) {
     return storage(this);
   }
@@ -442,9 +464,10 @@ class _$StorageImpl extends _Storage {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Server value)? server,
-    TResult? Function(_UserBrake value)? userBrake,
-    TResult? Function(_Storage value)? storage,
+    TResult? Function(Server value)? server,
+    TResult? Function(UserBrake value)? userBrake,
+    TResult? Function(Storage value)? storage,
+    TResult? Function(MissingCredentials value)? missingCredentials,
   }) {
     return storage?.call(this);
   }
@@ -452,9 +475,10 @@ class _$StorageImpl extends _Storage {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Server value)? server,
-    TResult Function(_UserBrake value)? userBrake,
-    TResult Function(_Storage value)? storage,
+    TResult Function(Server value)? server,
+    TResult Function(UserBrake value)? userBrake,
+    TResult Function(Storage value)? storage,
+    TResult Function(MissingCredentials value)? missingCredentials,
     required TResult orElse(),
   }) {
     if (storage != null) {
@@ -464,7 +488,122 @@ class _$StorageImpl extends _Storage {
   }
 }
 
-abstract class _Storage extends AuthFailure {
-  const factory _Storage() = _$StorageImpl;
-  const _Storage._() : super._();
+abstract class Storage extends AuthFailure {
+  const factory Storage() = _$StorageImpl;
+  const Storage._() : super._();
+}
+
+/// @nodoc
+abstract class _$$MissingCredentialsImplCopyWith<$Res> {
+  factory _$$MissingCredentialsImplCopyWith(_$MissingCredentialsImpl value,
+          $Res Function(_$MissingCredentialsImpl) then) =
+      __$$MissingCredentialsImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$MissingCredentialsImplCopyWithImpl<$Res>
+    extends _$AuthFailureCopyWithImpl<$Res, _$MissingCredentialsImpl>
+    implements _$$MissingCredentialsImplCopyWith<$Res> {
+  __$$MissingCredentialsImplCopyWithImpl(_$MissingCredentialsImpl _value,
+      $Res Function(_$MissingCredentialsImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$MissingCredentialsImpl extends MissingCredentials {
+  const _$MissingCredentialsImpl() : super._();
+
+  @override
+  String toString() {
+    return 'AuthFailure.missingCredentials()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$MissingCredentialsImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String? message) server,
+    required TResult Function(String? message) userBrake,
+    required TResult Function() storage,
+    required TResult Function() missingCredentials,
+  }) {
+    return missingCredentials();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String? message)? server,
+    TResult? Function(String? message)? userBrake,
+    TResult? Function()? storage,
+    TResult? Function()? missingCredentials,
+  }) {
+    return missingCredentials?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String? message)? server,
+    TResult Function(String? message)? userBrake,
+    TResult Function()? storage,
+    TResult Function()? missingCredentials,
+    required TResult orElse(),
+  }) {
+    if (missingCredentials != null) {
+      return missingCredentials();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Server value) server,
+    required TResult Function(UserBrake value) userBrake,
+    required TResult Function(Storage value) storage,
+    required TResult Function(MissingCredentials value) missingCredentials,
+  }) {
+    return missingCredentials(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Server value)? server,
+    TResult? Function(UserBrake value)? userBrake,
+    TResult? Function(Storage value)? storage,
+    TResult? Function(MissingCredentials value)? missingCredentials,
+  }) {
+    return missingCredentials?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Server value)? server,
+    TResult Function(UserBrake value)? userBrake,
+    TResult Function(Storage value)? storage,
+    TResult Function(MissingCredentials value)? missingCredentials,
+    required TResult orElse(),
+  }) {
+    if (missingCredentials != null) {
+      return missingCredentials(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class MissingCredentials extends AuthFailure {
+  const factory MissingCredentials() = _$MissingCredentialsImpl;
+  const MissingCredentials._() : super._();
 }
