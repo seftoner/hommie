@@ -5,11 +5,16 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'provider.g.dart';
 
-@riverpod
-Future<HAConnection> HAServerConnection(HAServerConnectionRef ref) async {
-  final credentials = await ref.watch(authRepositoryProvider).getCredentials();
+@Riverpod(keepAlive: true, dependencies: [authRepository])
+Future<HAConnection> serverConnection(ServerConnectionRef ref) async {
+  final credOrError = await ref.watch(authRepositoryProvider).getCredentials();
 
-  final haConnectionOption = HAConnectionOption(credentials!);
+  final credentials = credOrError.fold(
+    (error) => throw Error(),
+    (credentials) => credentials,
+  );
+
+  final haConnectionOption = HAConnectionOption(credentials);
   final socket = await haConnectionOption.createSocket();
 
   final connection = HAConnection(socket, haConnectionOption);

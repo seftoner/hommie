@@ -8,8 +8,11 @@ part 'areas_controller.g.dart';
 class AreasController extends _$AreasController {
   @override
   Future<List<AreaEntity>> build() async {
-    final repository = ref.watch(areasRepositoryProvider);
+    final repository = await ref.watch(areasRepositoryProvider.future);
     final resultOrError = await repository.getAreas();
-    return resultOrError.fold((l) => throw l, (r) => r);
+    return resultOrError.fold(
+      (l) => throw l,
+      (r) => r,
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:hommie/utils/logger.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// A class that observes the state changes in a Provider.
@@ -10,12 +11,12 @@ class StateLogger extends ProviderObserver {
     Object? newValue,
     ProviderContainer container,
   ) {
-    print('''
-{
-  provider: ${provider.name ?? provider.runtimeType},
-  oldValue: $previousValue,
-  newValue: $newValue
-}
+    logger.t('''
+            {
+              provider: ${provider.name ?? provider.runtimeType},
+              oldValue: $previousValue,
+              newValue: $newValue
+            }
 ''');
   }
 }

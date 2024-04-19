@@ -6,12 +6,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 AuthRepository authRepository(AuthRepositoryRef ref) {
   final securityCredentialStorage =
       SecureCredentialStorage(const FlutterSecureStorage());
   return AuthRepository(securityCredentialStorage);
 }
-
-/// Provides a [ValueNotifier] to the app router to redirect on auth state change
-final authStateListenable = ValueNotifier<bool>(false);

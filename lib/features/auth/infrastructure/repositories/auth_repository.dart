@@ -5,6 +5,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/services/networking/credential_storage.dart';
+import 'package:hommie/utils/logger.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,8 +23,8 @@ class AuthRepository implements IAuthRepository {
       required AuthResponseHandler handler}) async {
     final grant = AuthorizationCodeGrant(
         _clientID,
-        Uri.parse(serverUrl + "/auth/authorize"),
-        Uri.parse(serverUrl + "/auth/token"));
+        Uri.parse("$serverUrl/auth/authorize"),
+        Uri.parse("$serverUrl/auth/token"));
 
     try {
       final responseCode =
@@ -54,7 +55,7 @@ class AuthRepository implements IAuthRepository {
           'action': 'revoke',
         });
       } on SocketException catch (e) {
-        print('Token revocation failed: $e');
+        logger.e('Token revocation failed: $e');
       } finally {
         client.close();
       }
@@ -67,21 +68,21 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Credentials?> getCredentials() async {
+  Future<Either<AuthFailure, Credentials>> getCredentials() async {
     try {
       final storedCredentials = await _credentialStorage.read();
       if (storedCredentials != null) {
         if (storedCredentials.canRefresh && storedCredentials.isExpired) {
           final failureOrCredentials = await _refreshToken(storedCredentials);
-          return failureOrCredentials.fold((l) => null, (r) => r);
+          return failureOrCredentials;
         }
-        return storedCredentials;
+        return right(storedCredentials);
       }
-    } on PlatformException {
-      return null;
+    } on PlatformException catch (e) {
+      return left(AuthFailure.server(e.message));
     }
 
-    return null;
+    return left(const AuthFailure.missingCredentials());
   }
 
   Future<Either<AuthFailure, Credentials>> _refreshToken(
@@ -93,11 +94,13 @@ class AuthRepository implements IAuthRepository {
       await _credentialStorage.save(refreshedCredentials);
       return right(refreshedCredentials);
     } on FormatException catch (e) {
-      print('Error parsing credentials: $e');
+      logger.e('Error parsing credentials: $e');
       return left(const AuthFailure.server());
     } on AuthorizationException catch (e) {
-      print('Error refreshing token: $e');
+      logger.e('Error refreshing token: $e');
       return left(AuthFailure.server("${e.error}:${e.description}"));
+    } on SocketException catch (e) {
+      return left(AuthFailure.server("$e"));
     } on PlatformException {
       return left(const AuthFailure.storage());
     }

@@ -43,26 +43,26 @@ mixin _$AuthState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedIn value) authenticated,
-    required TResult Function(_Unauthicated value) unauthenticated,
-    required TResult Function(_Failure value) failure,
+    required TResult Function(Initial value) initial,
+    required TResult Function(Autenticated value) authenticated,
+    required TResult Function(Unauthicated value) unauthenticated,
+    required TResult Function(Failure value) failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedIn value)? authenticated,
-    TResult? Function(_Unauthicated value)? unauthenticated,
-    TResult? Function(_Failure value)? failure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Autenticated value)? authenticated,
+    TResult? Function(Unauthicated value)? unauthenticated,
+    TResult? Function(Failure value)? failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_SignedIn value)? authenticated,
-    TResult Function(_Unauthicated value)? unauthenticated,
-    TResult Function(_Failure value)? failure,
+    TResult Function(Initial value)? initial,
+    TResult Function(Autenticated value)? authenticated,
+    TResult Function(Unauthicated value)? unauthenticated,
+    TResult Function(Failure value)? failure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -103,7 +103,7 @@ class __$$InitialImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$InitialImpl extends _Initial {
+class _$InitialImpl extends Initial {
   const _$InitialImpl() : super._();
 
   @override
@@ -160,10 +160,10 @@ class _$InitialImpl extends _Initial {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedIn value) authenticated,
-    required TResult Function(_Unauthicated value) unauthenticated,
-    required TResult Function(_Failure value) failure,
+    required TResult Function(Initial value) initial,
+    required TResult Function(Autenticated value) authenticated,
+    required TResult Function(Unauthicated value) unauthenticated,
+    required TResult Function(Failure value) failure,
   }) {
     return initial(this);
   }
@@ -171,10 +171,10 @@ class _$InitialImpl extends _Initial {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedIn value)? authenticated,
-    TResult? Function(_Unauthicated value)? unauthenticated,
-    TResult? Function(_Failure value)? failure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Autenticated value)? authenticated,
+    TResult? Function(Unauthicated value)? unauthenticated,
+    TResult? Function(Failure value)? failure,
   }) {
     return initial?.call(this);
   }
@@ -182,10 +182,10 @@ class _$InitialImpl extends _Initial {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_SignedIn value)? authenticated,
-    TResult Function(_Unauthicated value)? unauthenticated,
-    TResult Function(_Failure value)? failure,
+    TResult Function(Initial value)? initial,
+    TResult Function(Autenticated value)? authenticated,
+    TResult Function(Unauthicated value)? unauthenticated,
+    TResult Function(Failure value)? failure,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -195,31 +195,31 @@ class _$InitialImpl extends _Initial {
   }
 }
 
-abstract class _Initial extends AuthState {
-  const factory _Initial() = _$InitialImpl;
-  const _Initial._() : super._();
+abstract class Initial extends AuthState {
+  const factory Initial() = _$InitialImpl;
+  const Initial._() : super._();
 }
 
 /// @nodoc
-abstract class _$$SignedInImplCopyWith<$Res> {
-  factory _$$SignedInImplCopyWith(
-          _$SignedInImpl value, $Res Function(_$SignedInImpl) then) =
-      __$$SignedInImplCopyWithImpl<$Res>;
+abstract class _$$AutenticatedImplCopyWith<$Res> {
+  factory _$$AutenticatedImplCopyWith(
+          _$AutenticatedImpl value, $Res Function(_$AutenticatedImpl) then) =
+      __$$AutenticatedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$SignedInImplCopyWithImpl<$Res>
-    extends _$AuthStateCopyWithImpl<$Res, _$SignedInImpl>
-    implements _$$SignedInImplCopyWith<$Res> {
-  __$$SignedInImplCopyWithImpl(
-      _$SignedInImpl _value, $Res Function(_$SignedInImpl) _then)
+class __$$AutenticatedImplCopyWithImpl<$Res>
+    extends _$AuthStateCopyWithImpl<$Res, _$AutenticatedImpl>
+    implements _$$AutenticatedImplCopyWith<$Res> {
+  __$$AutenticatedImplCopyWithImpl(
+      _$AutenticatedImpl _value, $Res Function(_$AutenticatedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$SignedInImpl extends _SignedIn {
-  const _$SignedInImpl() : super._();
+class _$AutenticatedImpl extends Autenticated {
+  const _$AutenticatedImpl() : super._();
 
   @override
   String toString() {
@@ -229,7 +229,7 @@ class _$SignedInImpl extends _SignedIn {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$SignedInImpl);
+        (other.runtimeType == runtimeType && other is _$AutenticatedImpl);
   }
 
   @override
@@ -275,10 +275,10 @@ class _$SignedInImpl extends _SignedIn {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedIn value) authenticated,
-    required TResult Function(_Unauthicated value) unauthenticated,
-    required TResult Function(_Failure value) failure,
+    required TResult Function(Initial value) initial,
+    required TResult Function(Autenticated value) authenticated,
+    required TResult Function(Unauthicated value) unauthenticated,
+    required TResult Function(Failure value) failure,
   }) {
     return authenticated(this);
   }
@@ -286,10 +286,10 @@ class _$SignedInImpl extends _SignedIn {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedIn value)? authenticated,
-    TResult? Function(_Unauthicated value)? unauthenticated,
-    TResult? Function(_Failure value)? failure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Autenticated value)? authenticated,
+    TResult? Function(Unauthicated value)? unauthenticated,
+    TResult? Function(Failure value)? failure,
   }) {
     return authenticated?.call(this);
   }
@@ -297,10 +297,10 @@ class _$SignedInImpl extends _SignedIn {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_SignedIn value)? authenticated,
-    TResult Function(_Unauthicated value)? unauthenticated,
-    TResult Function(_Failure value)? failure,
+    TResult Function(Initial value)? initial,
+    TResult Function(Autenticated value)? authenticated,
+    TResult Function(Unauthicated value)? unauthenticated,
+    TResult Function(Failure value)? failure,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
@@ -310,9 +310,9 @@ class _$SignedInImpl extends _SignedIn {
   }
 }
 
-abstract class _SignedIn extends AuthState {
-  const factory _SignedIn() = _$SignedInImpl;
-  const _SignedIn._() : super._();
+abstract class Autenticated extends AuthState {
+  const factory Autenticated() = _$AutenticatedImpl;
+  const Autenticated._() : super._();
 }
 
 /// @nodoc
@@ -333,7 +333,7 @@ class __$$UnauthicatedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UnauthicatedImpl extends _Unauthicated {
+class _$UnauthicatedImpl extends Unauthicated {
   const _$UnauthicatedImpl() : super._();
 
   @override
@@ -390,10 +390,10 @@ class _$UnauthicatedImpl extends _Unauthicated {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedIn value) authenticated,
-    required TResult Function(_Unauthicated value) unauthenticated,
-    required TResult Function(_Failure value) failure,
+    required TResult Function(Initial value) initial,
+    required TResult Function(Autenticated value) authenticated,
+    required TResult Function(Unauthicated value) unauthenticated,
+    required TResult Function(Failure value) failure,
   }) {
     return unauthenticated(this);
   }
@@ -401,10 +401,10 @@ class _$UnauthicatedImpl extends _Unauthicated {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedIn value)? authenticated,
-    TResult? Function(_Unauthicated value)? unauthenticated,
-    TResult? Function(_Failure value)? failure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Autenticated value)? authenticated,
+    TResult? Function(Unauthicated value)? unauthenticated,
+    TResult? Function(Failure value)? failure,
   }) {
     return unauthenticated?.call(this);
   }
@@ -412,10 +412,10 @@ class _$UnauthicatedImpl extends _Unauthicated {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_SignedIn value)? authenticated,
-    TResult Function(_Unauthicated value)? unauthenticated,
-    TResult Function(_Failure value)? failure,
+    TResult Function(Initial value)? initial,
+    TResult Function(Autenticated value)? authenticated,
+    TResult Function(Unauthicated value)? unauthenticated,
+    TResult Function(Failure value)? failure,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -425,9 +425,9 @@ class _$UnauthicatedImpl extends _Unauthicated {
   }
 }
 
-abstract class _Unauthicated extends AuthState {
-  const factory _Unauthicated() = _$UnauthicatedImpl;
-  const _Unauthicated._() : super._();
+abstract class Unauthicated extends AuthState {
+  const factory Unauthicated() = _$UnauthicatedImpl;
+  const Unauthicated._() : super._();
 }
 
 /// @nodoc
@@ -473,7 +473,7 @@ class __$$FailureImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FailureImpl extends _Failure {
+class _$FailureImpl extends Failure {
   const _$FailureImpl(this.failure) : super._();
 
   @override
@@ -541,10 +541,10 @@ class _$FailureImpl extends _Failure {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_SignedIn value) authenticated,
-    required TResult Function(_Unauthicated value) unauthenticated,
-    required TResult Function(_Failure value) failure,
+    required TResult Function(Initial value) initial,
+    required TResult Function(Autenticated value) authenticated,
+    required TResult Function(Unauthicated value) unauthenticated,
+    required TResult Function(Failure value) failure,
   }) {
     return failure(this);
   }
@@ -552,10 +552,10 @@ class _$FailureImpl extends _Failure {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Initial value)? initial,
-    TResult? Function(_SignedIn value)? authenticated,
-    TResult? Function(_Unauthicated value)? unauthenticated,
-    TResult? Function(_Failure value)? failure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Autenticated value)? authenticated,
+    TResult? Function(Unauthicated value)? unauthenticated,
+    TResult? Function(Failure value)? failure,
   }) {
     return failure?.call(this);
   }
@@ -563,10 +563,10 @@ class _$FailureImpl extends _Failure {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_SignedIn value)? authenticated,
-    TResult Function(_Unauthicated value)? unauthenticated,
-    TResult Function(_Failure value)? failure,
+    TResult Function(Initial value)? initial,
+    TResult Function(Autenticated value)? authenticated,
+    TResult Function(Unauthicated value)? unauthenticated,
+    TResult Function(Failure value)? failure,
     required TResult orElse(),
   }) {
     if (failure != null) {
@@ -576,9 +576,9 @@ class _$FailureImpl extends _Failure {
   }
 }
 
-abstract class _Failure extends AuthState {
-  const factory _Failure(final AuthFailure failure) = _$FailureImpl;
-  const _Failure._() : super._();
+abstract class Failure extends AuthState {
+  const factory Failure(final AuthFailure failure) = _$FailureImpl;
+  const Failure._() : super._();
 
   AuthFailure get failure;
   @JsonKey(ignore: true)

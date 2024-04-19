@@ -4,8 +4,8 @@ import 'package:hommie/features/areas/infrastructure/repositories/areas_reposito
 
 part 'areas_provider.g.dart';
 
-@riverpod
-AreasRepository areasRepository(AreasRepositoryRef ref) {
-  final connection = ref.watch(hAServerConnectionProvider);
-  return AreasRepository(connection.value!);
+@Riverpod(dependencies: [serverConnection])
+Future<AreasRepository> areasRepository(AreasRepositoryRef ref) async {
+  final connection = await ref.watch(serverConnectionProvider.future);
+  return AreasRepository(connection);
 }
