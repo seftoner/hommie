@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/login_page.dart';
 import 'package:hommie/ui/screens/splash_page.dart';
-import 'package:hommie/ui/screens/welcome_page.dart';
+import 'package:hommie/ui/screens/startup_page.dart';
 
 part 'routes.g.dart';
 
