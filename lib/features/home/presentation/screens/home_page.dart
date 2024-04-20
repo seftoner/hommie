@@ -11,7 +11,7 @@ class HomePage extends HookConsumerWidget {
     var areas = ref.watch(areasControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Your phenomenal app')),
+      appBar: AppBar(title: const Text('Hommie')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

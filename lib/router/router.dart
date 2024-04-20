@@ -22,6 +22,7 @@ GoRouter goRouter(GoRouterRef ref) {
     );
 
   final routerKey = GlobalKey<NavigatorState>(debugLabel: 'routerKey');
+
   final router = GoRouter(
     navigatorKey: routerKey,
     refreshListenable: authStateNotifier,
@@ -33,11 +34,18 @@ GoRouter goRouter(GoRouterRef ref) {
           "Try to redirect. Router listanable state: ${authStateNotifier.value}");
 
       final currentAuthState = authStateNotifier.value;
-      return switch (currentAuthState) {
-        Autenticated() => const HomeRoute().location,
-        Unauthicated() => const LoginRoute().location,
-        _ => null
-      };
+      switch (currentAuthState) {
+        case Autenticated()
+            when (state.matchedLocation == const StartupRoute().location) ||
+                (state.matchedLocation == const LoginRoute().location):
+          return const HomeRouteData().location;
+        case Unauthicated():
+          return const LoginRoute().location;
+        case Initial():
+          return null;
+        default:
+          return null;
+      }
     },
   );
 
