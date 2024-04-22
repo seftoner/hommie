@@ -18,11 +18,6 @@ class HomePage extends HookConsumerWidget {
           children: [
             const Text('Home Page'),
             const Text("There's nothing much you can do, here"),
-            TextButton(
-                onPressed: () {
-                  ref.read(authControllerProvider.notifier).signOut();
-                },
-                child: const Text('Sign out')),
             SizedBox(
               height: 300,
               child: areas.when(
