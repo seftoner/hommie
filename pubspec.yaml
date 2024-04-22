@@ -32,8 +32,6 @@ dependencies:
       ref: main
       path: workmanager/
 
-    # path: /Users/Roman.Tolstokorov/Downloads/flutter_workmanager-main/workmanager
-
 dev_dependencies:
   build_runner:
   flutter_test:
