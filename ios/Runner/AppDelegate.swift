@@ -18,11 +18,14 @@ import workmanager
             // DOC: https://github.com/fluttercommunity/flutter_workmanager/blob/d7e6ba5ef3796fafe54d9739e481f01058751b4d/IOS_SETUP.md
             GeneratedPluginRegistrant.register(with: registry)
         }
-    // In AppDelegate.application method
-    WorkmanagerPlugin.registerBGProcessingTask(withIdentifier: "com.hommie.workmanager.task-identifier")
-
-    // Register a periodic task in iOS 13+
-    WorkmanagerPlugin.registerPeriodicTask(withIdentifier: "com.hommie.workmanager.iOSBackgroundAppRefresh", frequency: NSNumber(value: 10))
+      
+    /// FOR TASKS DEBUG:
+    /// Go to file `SwiftWorkmanagerPlugin` -> set brakepoint inside of `schedulePeriodicTask` method
+    /// right after `try BGTaskScheduler.shared.submit(request)` line.
+    /// Run this command in debugger:
+    /// `e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.hommie.workmanager.iOSBackgroundAppRefresh"]`
+    
+    WorkmanagerPlugin.registerPeriodicTask(withIdentifier: "com.hommie.workmanager.sendSensorData", frequency: NSNumber(value: 60*10))
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

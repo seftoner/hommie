@@ -9,58 +9,37 @@ import 'package:hommie/utils/logger.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
-// import 'package:workmanager_workspace/workmanager.dart';
 
 @pragma('vm:entry-point')
 void callbackDispatcher() {
-  Workmanager().executeTask((taskName, inputData) async {
-    int? totalExecutions;
-    final sharedPreference =
-        await SharedPreferences.getInstance(); //Initialize dependency
+  Workmanager().executeTask((task, inputData) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
 
-    print("Native called background task: $taskName, data: $inputData");
-    try {
-      //add code execution
-      totalExecutions = sharedPreference.getInt("totalExecutions");
-      sharedPreference.setInt(
-          "totalExecutions", totalExecutions == null ? 1 : totalExecutions + 1);
-    } catch (err) {
-      logger.e(err.toString());
-      throw Exception(err);
+    print("$task started. inputData = $inputData");
+    await prefs.setString(task, 'Last ran at: ${DateTime.now().toString()}');
+
+    switch (task) {
+      case simplePeriodicTask:
+        logger.d("$simplePeriodicTask was executed(Android)");
+        break;
+      case iOSBackgroundAppRefresh:
+        logger.d("$iOSBackgroundAppRefresh was executed(iOS)");
+        // To test, follow the instructions on https://developer.apple.com/documentation/backgroundtasks/starting_and_terminating_tasks_during_development
+        // and https://github.com/fluttercommunity/flutter_workmanager/blob/main/IOS_SETUP.md
+        break;
+      default:
+        return Future.value(false);
     }
-
     return Future.value(true);
   });
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await scheduleBackgroundTask();
-
   runApp(
     UncontrolledProviderScope(
-      container: await bootstrap(),
+      container: await bootstrap(callbackDispatcher),
       child: const HommieApp(),
     ),
   );
-}
-
-Future<void> scheduleBackgroundTask() async {
-  if (Platform.isAndroid || Platform.isIOS) {
-    Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
-
-    Workmanager().registerPeriodicTask(
-      "com.hommie.workmanager.task-identifier",
-      "simpleTask",
-      initialDelay: const Duration(seconds: 10),
-      frequency: const Duration(seconds: 4),
-      constraints: Constraints(
-        // connected or metered mark the task as requiring internet
-        networkType: NetworkType.connected,
-        // require external power
-        requiresCharging: true,
-      ),
-      inputData: {"test": "me"},
-    );
-  }
 }
