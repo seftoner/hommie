@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:hommie/main.dart';
+import 'package:hommie/features/background_task/background_task.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
@@ -29,6 +29,7 @@ final List<String> allTasks = [
   iOSBackgroundProcessingTask,
 ];
 
+///FOR DEBUGGIN PURPOSE ONLY
 class BGTaskDebugginPage extends StatefulWidget {
   const BGTaskDebugginPage({super.key});
 

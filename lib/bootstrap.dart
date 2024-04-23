@@ -3,15 +3,16 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hommie/features/background_task/background_task.dart';
 import 'package:hommie/utils/logger.dart';
 import 'package:hommie/utils/state_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:workmanager/workmanager.dart';
 
-Future<ProviderContainer> bootstrap(Function callbackDispatcher) async {
+Future<ProviderContainer> bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
   _registerErrorHandlers();
-  _registerBackgroundTasks(callbackDispatcher);
+  _registerBackgroundTasks();
 
   final container = ProviderContainer(
     overrides: [],
@@ -21,14 +22,8 @@ Future<ProviderContainer> bootstrap(Function callbackDispatcher) async {
   return container;
 }
 
-const simpleTaskKey = "com.hommie.workmanager.forTestingTask";
-const simplePeriodicTask = "com.hommie.workmanager.simplePeriodicTask";
-const simplePeriodic1HourTask =
-    "com.hommie.workmanager.simplePeriodic1HourTask";
-const iOSBackgroundAppRefresh = "com.hommie.workmanager.sendSensorData";
-
 /// Background tasks currently supported only on iOS and Android.
-Future<void> _registerBackgroundTasks(Function callbackDispatcher) async {
+Future<void> _registerBackgroundTasks() async {
   if (Platform.isLinux ||
       Platform.isMacOS ||
       Platform.isWindows ||
@@ -53,7 +48,7 @@ Future<void> _registerBackgroundTasks(Function callbackDispatcher) async {
     await Workmanager().registerPeriodicTask(
       simplePeriodicTask,
       simplePeriodicTask,
-      initialDelay: Duration(seconds: 10),
+      initialDelay: const Duration(minutes: 15),
     );
   }
 
