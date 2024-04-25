@@ -41,6 +41,11 @@ GoRouter goRouter(GoRouterRef ref) {
           return const HomeRouteData().location;
         case Unauthicated():
           return const LoginRoute().location;
+
+        /// FIXME: Make it better. A lot of failures might occured, Need to handle
+        /// propperly each of them. For example: refresh token is invalid, no connections, etc
+        case Failure():
+          return const LoginRoute().location;
         case Initial():
           return null;
         default:
