@@ -5,6 +5,7 @@ import 'package:hommie/features/auth/presentation/screens/login_page.dart';
 import 'package:hommie/features/home/presentation/screens/root_page.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
 import 'package:hommie/features/settings/presentation/screens/hub_page.dart';
+import 'package:hommie/features/settings/presentation/screens/sensors_page.dart';
 import 'package:hommie/features/settings/presentation/screens/settings_page.dart';
 import 'package:hommie/ui/screens/startup_page.dart';
 
@@ -71,6 +72,16 @@ class AboutRouteData extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const AboutPage();
+  }
+}
+
+@TypedGoRoute<SensorsRouteData>(path: '/settings/sensors')
+class SensorsRouteData extends GoRouteData {
+  const SensorsRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const SensorsPage();
   }
 }
 

@@ -23,6 +23,7 @@ Future<ProviderContainer> bootstrap() async {
 }
 
 /// Background tasks currently supported only on iOS and Android.
+/// TODO: Here will bi implemented sensing sensors to HomeAssistant
 Future<void> _registerBackgroundTasks() async {
   if (Platform.isLinux ||
       Platform.isMacOS ||

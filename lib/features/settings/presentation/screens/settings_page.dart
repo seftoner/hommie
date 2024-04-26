@@ -23,7 +23,7 @@ class SettingsPage extends HookConsumerWidget {
             leading: const Icon(Icons.sensors),
             title: const Text('Sensors'),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () => {/* Handle  tap */},
+            onTap: () => {const SensorsRouteData().push(context)},
           ),
           const Divider(),
           ListTile(

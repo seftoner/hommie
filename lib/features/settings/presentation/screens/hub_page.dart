@@ -14,7 +14,10 @@ class HubPage extends HookConsumerWidget {
       ),
       body: ListView(
         children: [
-          Text("Status", style: Theme.of(context).textTheme.titleSmall),
+          ListTile(
+            title:
+                Text("Status", style: Theme.of(context).textTheme.titleSmall),
+          ),
           const ListTile(
             title: Text('WebSocket'),
             trailing: Text('{websocket.isConnected}'),
@@ -31,7 +34,10 @@ class HubPage extends HookConsumerWidget {
           ),
           const Divider(),
           $h24,
-          Text("Details", style: Theme.of(context).textTheme.titleSmall),
+          ListTile(
+            title:
+                Text("Details", style: Theme.of(context).textTheme.titleSmall),
+          ),
           ListTile(
             title: const Text('Hub name'),
             trailing: const Text('{Hubname}'),

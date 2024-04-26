@@ -6,6 +6,20 @@
 	<array>
 		<string>com.hommie.workmanager.sendSensorData</string>
 	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Locate and communicate with your Home Assistant instance.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We suggest selecting "Always Allow" for the best location experience.
+			Selecting "Only While Using the App" will disable iBeacons, geofences,
+			background location updates and accurate reporting.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>When enabled, your device location is sent to your Home Assistant server as a device
+			tracker.
+	</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Only allowing location access while app is in use will disable iBeacons, geofences,
+			background location updates and accurate reporting.
+	</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

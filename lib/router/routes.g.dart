@@ -9,6 +9,7 @@ part of 'routes.dart';
 List<RouteBase> get $appRoutes => [
       $mainShellRouteData,
       $aboutRouteData,
+      $sensorsRouteData,
       $hubRouteData,
       $loginRoute,
       $startupRoute,
@@ -87,6 +88,29 @@ extension $AboutRouteDataExtension on AboutRouteData {
 
   String get location => GoRouteData.$location(
         '/settings/about',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sensorsRouteData => GoRouteData.$route(
+      path: '/settings/sensors',
+      factory: $SensorsRouteDataExtension._fromState,
+    );
+
+extension $SensorsRouteDataExtension on SensorsRouteData {
+  static SensorsRouteData _fromState(GoRouterState state) =>
+      const SensorsRouteData();
+
+  String get location => GoRouteData.$location(
+        '/settings/sensors',
       );
 
   void go(BuildContext context) => context.go(location);
