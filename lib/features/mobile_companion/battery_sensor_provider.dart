@@ -1,9 +1,11 @@
+import 'package:flutter/services.dart';
+import 'package:hommie/core/core.dart';
 import 'package:hommie/features/mobile_companion/i_sensor_provider.dart';
 import 'package:hommie/features/mobile_companion/sensors/battery_level.dart';
 import 'package:hommie/features/mobile_companion/sensors/battery_state.dart';
 import 'package:hommie/features/mobile_companion/sensors/sensor.dart';
-// ignore: library_prefixes
 import 'package:battery_plus/battery_plus.dart' as BatteryPlus;
+import 'package:hommie/utils/logger.dart';
 
 class BatterySensorProvider implements ISensorProvider {
   late final BatteryPlus.Battery _battery;
@@ -12,11 +14,17 @@ class BatterySensorProvider implements ISensorProvider {
 
   @override
   Future<List<Sensor>> provideSensorsState() async {
-    final batteryLevel = await _battery.batteryLevel;
+    final List<Sensor> results = [];
+
+    try {
+      final batteryLevel = await _battery.batteryLevel;
+      results.add(BatteryLevel()..state = batteryLevel);
+    } on PlatformException catch (e) {
+      logger.d(e);
+    }
+
     final batteryState = await _battery.batteryState;
     final isInBatterySaveMode = await _battery.isInBatterySaveMode;
-
-    var batteryLevelSensor = BatteryLevel()..state = batteryLevel;
 
     var batteryStatelSensor = BatteryState()
       ..state = _entepretuerBatteryState(batteryState)
@@ -25,8 +33,9 @@ class BatterySensorProvider implements ISensorProvider {
     if (batteryState == BatteryPlus.BatteryState.charging) {
       batteryStatelSensor.icon = "mdi:battery-charging";
     }
+    results.add(batteryStatelSensor);
 
-    return [batteryLevelSensor, batteryStatelSensor];
+    return results;
   }
 
   String _entepretuerBatteryState(BatteryPlus.BatteryState state) {
@@ -38,5 +47,12 @@ class BatterySensorProvider implements ISensorProvider {
         "Connected, but not charging",
       BatteryPlus.BatteryState.unknown => "Unknown",
     };
+  }
+
+  @override
+  void onChange(VoidCallback callback) {
+    _battery.onBatteryStateChanged.listen((event) {
+      callback();
+    });
   }
 }

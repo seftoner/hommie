@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:hommie/core/core.dart';
 import 'package:hommie/features/mobile_companion/i_sensor_provider.dart';
 import 'package:hommie/features/mobile_companion/sensors/connection_type.dart';
 import 'package:hommie/features/mobile_companion/sensors/sensor.dart';
@@ -42,5 +43,12 @@ class ConnectionStateProvider implements ISensorProvider {
     }
 
     return [connectionState, ssid];
+  }
+
+  @override
+  void onChange(VoidCallback callback) {
+    _connectivity.onConnectivityChanged.listen((event) {
+      callback();
+    });
   }
 }

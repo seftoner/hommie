@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sensors_provide.dart';
+part of 'sensors_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sensorsListHash() => r'e3dfc564313f46e97f11ea1281fab1987db10748';
+String _$sensorsListHash() => r'4d003445c8e67876bba60964339d6007b4519a8c';
 
 /// See also [sensorsList].
 @ProviderFor(sensorsList)
