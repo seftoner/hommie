@@ -88,6 +88,7 @@ void main() {
       _ => throw AssertionError("Response parsed incorrectly!")
     };
 
+    expect(response.id, equals(12));
     expect(responseResult.code, equals("invalid_format"));
     expect(
         responseResult.message,
@@ -129,5 +130,14 @@ void main() {
     };
 
     expect(responseResult, equals(19));
+  });
+
+  test("unsupported type response parsing", () {
+    const testJsonString = '''{ "id": 19,
+                          "type": "custom_reponse"
+                        }''';
+    final testJson = jsonDecode(testJsonString);
+
+    expect(() => WebSocketResponse.fromJson(testJson), throwsUnsupportedError);
   });
 }

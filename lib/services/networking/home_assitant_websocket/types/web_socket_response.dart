@@ -38,34 +38,43 @@ class WebSocketResponseConverter
 
   @override
   WebSocketResponse fromJson(Map<String, dynamic> json) {
-    final type = json['type'] as String;
-    final id = json['id'] as int;
-    final success = json['success'] as bool?;
-    final result = json['result'];
-
-    switch (type) {
-      case 'pong':
-        return WebSocketResponse.pong(id: id);
-      case 'event':
-        return WebSocketResponse.event(
-            id: id,
-            event:
-                StatesUpdates.fromJson(json['event'] as Map<String, dynamic>));
-      case 'result' when success! == true:
-        return WebSocketResponse.resultSuccess(
+    return switch (json) {
+      {
+        'id': int id,
+        'type': 'pong',
+      } =>
+        WebSocketResponse.pong(id: id),
+      {
+        'id': int id,
+        'type': 'event',
+        'event': Map<String, dynamic> event,
+      } =>
+        WebSocketResponse.event(id: id, event: StatesUpdates.fromJson(event)),
+      {
+        'id': int id,
+        'type': 'result',
+        'result': dynamic result,
+        'success': true,
+      } =>
+        WebSocketResponse.resultSuccess(
           id: id,
           result: result,
           success: true,
-        );
-      case 'result' when success! == false:
-        return WebSocketResponse.resultError(
+        ),
+      {
+        'id': int id,
+        'type': 'result',
+        'error': Map<String, dynamic> error,
+        'success': false,
+      } =>
+        WebSocketResponse.resultError(
           id: id,
-          success: false,
-          error: HassError.fromJson(json['error'] as Map<String, dynamic>),
-        );
-      default:
-        throw UnsupportedError('Unsupported response type: $type');
-    }
+          error: HassError.fromJson(error),
+          success: true,
+        ),
+      _ => throw UnsupportedError(
+          'Unsupported response type: ${json['type'] as String}')
+    };
   }
 
   @override
