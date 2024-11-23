@@ -77,7 +77,7 @@ Map<String, dynamic> _$$FieldImplToJson(_$FieldImpl instance) =>
 _$FieldFilterImpl _$$FieldFilterImplFromJson(Map<String, dynamic> json) =>
     _$FieldFilterImpl(
       (json['supported_features'] as List<dynamic>?)
-          ?.map((e) => e as int)
+          ?.map((e) => (e as num).toInt())
           .toList(),
       json['attribute'] as Map<String, dynamic>?,
     );

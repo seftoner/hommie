@@ -87,8 +87,13 @@ mixin _$WebSocketResponse {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  /// Serializes this WebSocketResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $WebSocketResponseCopyWith<WebSocketResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -112,6 +117,8 @@ class _$WebSocketResponseCopyWithImpl<$Res, $Val extends WebSocketResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -146,6 +153,8 @@ class __$$WebSocketPongResponseImplCopyWithImpl<$Res>
       $Res Function(_$WebSocketPongResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -188,11 +197,13 @@ class _$WebSocketPongResponseImpl implements WebSocketPongResponse {
             (identical(other.id, id) || other.id == id));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WebSocketPongResponseImplCopyWith<_$WebSocketPongResponseImpl>
@@ -293,8 +304,11 @@ abstract class WebSocketPongResponse implements WebSocketResponse {
 
   @override
   int get id;
+
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WebSocketPongResponseImplCopyWith<_$WebSocketPongResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -322,6 +336,8 @@ class __$$WebSocketEventResponseImplCopyWithImpl<$Res>
       $Res Function(_$WebSocketEventResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -340,6 +356,8 @@ class __$$WebSocketEventResponseImplCopyWithImpl<$Res>
     ));
   }
 
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $StatesUpdatesCopyWith<$Res> get event {
@@ -381,11 +399,13 @@ class _$WebSocketEventResponseImpl implements WebSocketEventResponse {
             (identical(other.event, event) || other.event == event));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, event);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WebSocketEventResponseImplCopyWith<_$WebSocketEventResponseImpl>
@@ -488,8 +508,11 @@ abstract class WebSocketEventResponse implements WebSocketResponse {
   @override
   int get id;
   StatesUpdates get event;
+
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WebSocketEventResponseImplCopyWith<_$WebSocketEventResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -516,6 +539,8 @@ class __$$WebSocketResultResponseSuccessImplCopyWithImpl<$Res>
       $Res Function(_$WebSocketResultResponseSuccessImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -581,12 +606,14 @@ class _$WebSocketResultResponseSuccessImpl
             (identical(other.success, success) || other.success == success));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, id, const DeepCollectionEquality().hash(result), success);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WebSocketResultResponseSuccessImplCopyWith<
@@ -692,8 +719,11 @@ abstract class WebSocketResultResponseSuccess implements WebSocketResponse {
   int get id;
   dynamic get result;
   bool get success;
+
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WebSocketResultResponseSuccessImplCopyWith<
           _$WebSocketResultResponseSuccessImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -723,6 +753,8 @@ class __$$WebSocketResultResponseErrorImplCopyWithImpl<$Res>
       $Res Function(_$WebSocketResultResponseErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -746,6 +778,8 @@ class __$$WebSocketResultResponseErrorImplCopyWithImpl<$Res>
     ));
   }
 
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $HassErrorCopyWith<$Res> get error {
@@ -796,11 +830,13 @@ class _$WebSocketResultResponseErrorImpl
             (identical(other.error, error) || other.error == error));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, success, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WebSocketResultResponseErrorImplCopyWith<
@@ -906,8 +942,11 @@ abstract class WebSocketResultResponseError implements WebSocketResponse {
   int get id;
   bool get success;
   HassError get error;
+
+  /// Create a copy of WebSocketResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WebSocketResultResponseErrorImplCopyWith<
           _$WebSocketResultResponseErrorImpl>
       get copyWith => throw _privateConstructorUsedError;

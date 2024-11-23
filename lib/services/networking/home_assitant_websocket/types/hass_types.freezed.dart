@@ -23,8 +23,12 @@ mixin _$HassError {
   String get code => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
 
+  /// Serializes this HassError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of HassError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $HassErrorCopyWith<HassError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -47,6 +51,8 @@ class _$HassErrorCopyWithImpl<$Res, $Val extends HassError>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of HassError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -84,6 +90,8 @@ class __$$ErrorImplCopyWithImpl<$Res>
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HassError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -130,11 +138,13 @@ class _$ErrorImpl implements _Error {
             (identical(other.message, message) || other.message == message));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, code, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HassError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
@@ -159,8 +169,11 @@ abstract class _Error implements HassError {
   String get code;
   @override
   String get message;
+
+  /// Create a copy of HassError
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -176,8 +189,12 @@ mixin _$AreaEntity {
   String? get picture => throw _privateConstructorUsedError;
   List<String>? get aliases => throw _privateConstructorUsedError;
 
+  /// Serializes this AreaEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AreaEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AreaEntityCopyWith<AreaEntity> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -202,6 +219,8 @@ class _$AreaEntityCopyWithImpl<$Res, $Val extends AreaEntity>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AreaEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -251,6 +270,8 @@ class __$$AreaEntityImplCopyWithImpl<$Res>
       _$AreaEntityImpl _value, $Res Function(_$AreaEntityImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AreaEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -325,12 +346,14 @@ class _$AreaEntityImpl implements _AreaEntity {
             const DeepCollectionEquality().equals(other._aliases, _aliases));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, area_id, name, picture,
       const DeepCollectionEquality().hash(_aliases));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AreaEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AreaEntityImplCopyWith<_$AreaEntityImpl> get copyWith =>
@@ -362,8 +385,11 @@ abstract class _AreaEntity implements AreaEntity {
   String? get picture;
   @override
   List<String>? get aliases;
+
+  /// Create a copy of AreaEntity
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AreaEntityImplCopyWith<_$AreaEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -376,8 +402,12 @@ AreaEntityList _$AreaEntityListFromJson(Map<String, dynamic> json) {
 mixin _$AreaEntityList {
   List<AreaEntity> get areasList => throw _privateConstructorUsedError;
 
+  /// Serializes this AreaEntityList to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AreaEntityList
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AreaEntityListCopyWith<AreaEntityList> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -401,6 +431,8 @@ class _$AreaEntityListCopyWithImpl<$Res, $Val extends AreaEntityList>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AreaEntityList
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -434,6 +466,8 @@ class __$$AreaEntityListImplCopyWithImpl<$Res>
       _$AreaEntityListImpl _value, $Res Function(_$AreaEntityListImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AreaEntityList
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -479,12 +513,14 @@ class _$AreaEntityListImpl implements _AreaEntityList {
                 .equals(other._areasList, _areasList));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_areasList));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AreaEntityList
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AreaEntityListImplCopyWith<_$AreaEntityListImpl> get copyWith =>
@@ -508,8 +544,11 @@ abstract class _AreaEntityList implements AreaEntityList {
 
   @override
   List<AreaEntity> get areasList;
+
+  /// Create a copy of AreaEntityList
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AreaEntityListImplCopyWith<_$AreaEntityListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -525,8 +564,12 @@ mixin _$HassUser {
   bool get is_owner => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
 
+  /// Serializes this HassUser to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of HassUser
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $HassUserCopyWith<HassUser> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -549,6 +592,8 @@ class _$HassUserCopyWithImpl<$Res, $Val extends HassUser>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of HassUser
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -597,6 +642,8 @@ class __$$HassUserImplCopyWithImpl<$Res>
       _$HassUserImpl _value, $Res Function(_$HassUserImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HassUser
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -665,11 +712,13 @@ class _$HassUserImpl implements _HassUser {
             (identical(other.name, name) || other.name == name));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, is_admin, is_owner, name);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HassUser
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HassUserImplCopyWith<_$HassUserImpl> get copyWith =>
@@ -701,8 +750,11 @@ abstract class _HassUser implements HassUser {
   bool get is_owner;
   @override
   String get name;
+
+  /// Create a copy of HassUser
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HassUserImplCopyWith<_$HassUserImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -735,8 +787,12 @@ mixin _$HassConfig {
   String? get country => throw _privateConstructorUsedError;
   String get language => throw _privateConstructorUsedError;
 
+  /// Serializes this HassConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of HassConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $HassConfigCopyWith<HassConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -782,6 +838,8 @@ class _$HassConfigCopyWithImpl<$Res, $Val extends HassConfig>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of HassConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -890,6 +948,8 @@ class _$HassConfigCopyWithImpl<$Res, $Val extends HassConfig>
     ) as $Val);
   }
 
+  /// Create a copy of HassConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UnitSystemCopyWith<$Res> get unitSystem {
@@ -941,6 +1001,8 @@ class __$$HassConfigImplCopyWithImpl<$Res>
       _$HassConfigImpl _value, $Res Function(_$HassConfigImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HassConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1192,7 +1254,7 @@ class _$HassConfigImpl implements _HassConfig {
                 other.language == language));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -1218,7 +1280,9 @@ class _$HassConfigImpl implements _HassConfig {
         language
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HassConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HassConfigImplCopyWith<_$HassConfigImpl> get copyWith =>
@@ -1285,8 +1349,9 @@ abstract class _HassConfig implements HassConfig {
   @override
   bool get recoveryMode;
   @override
-  bool get safeMode;
-  @override // @StringEnum('NOT_RUNNING', 'STARTING', 'RUNNING', 'STOPPING', 'FINAL_WRITE')
+  bool
+      get safeMode; // @StringEnum('NOT_RUNNING', 'STARTING', 'RUNNING', 'STOPPING', 'FINAL_WRITE')
+  @override
   State get state;
   @override
   String? get externalUrl;
@@ -1298,8 +1363,11 @@ abstract class _HassConfig implements HassConfig {
   String? get country;
   @override
   String get language;
+
+  /// Create a copy of HassConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HassConfigImplCopyWith<_$HassConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1318,8 +1386,12 @@ mixin _$UnitSystem {
   String get windSpeed => throw _privateConstructorUsedError;
   String get accumulatedPrecipitation => throw _privateConstructorUsedError;
 
+  /// Serializes this UnitSystem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UnitSystem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UnitSystemCopyWith<UnitSystem> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1350,6 +1422,8 @@ class _$UnitSystemCopyWithImpl<$Res, $Val extends UnitSystem>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UnitSystem
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1420,6 +1494,8 @@ class __$$UnitSystemImplCopyWithImpl<$Res>
       _$UnitSystemImpl _value, $Res Function(_$UnitSystemImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UnitSystem
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1518,12 +1594,14 @@ class _$UnitSystemImpl implements _UnitSystem {
                 other.accumulatedPrecipitation == accumulatedPrecipitation));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, length, mass, volume,
       temperature, pressure, windSpeed, accumulatedPrecipitation);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UnitSystem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UnitSystemImplCopyWith<_$UnitSystemImpl> get copyWith =>
@@ -1564,8 +1642,11 @@ abstract class _UnitSystem implements UnitSystem {
   String get windSpeed;
   @override
   String get accumulatedPrecipitation;
+
+  /// Create a copy of UnitSystem
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UnitSystemImplCopyWith<_$UnitSystemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

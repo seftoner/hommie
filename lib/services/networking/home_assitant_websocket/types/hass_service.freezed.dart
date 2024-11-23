@@ -22,8 +22,12 @@ HassDomainServices _$HassDomainServicesFromJson(Map<String, dynamic> json) {
 mixin _$HassDomainServices {
   Map<String, HassService> get services => throw _privateConstructorUsedError;
 
+  /// Serializes this HassDomainServices to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of HassDomainServices
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $HassDomainServicesCopyWith<HassDomainServices> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -47,6 +51,8 @@ class _$HassDomainServicesCopyWithImpl<$Res, $Val extends HassDomainServices>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of HassDomainServices
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +86,8 @@ class __$$HassDomainServicesImplCopyWithImpl<$Res>
       $Res Function(_$HassDomainServicesImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HassDomainServices
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -124,12 +132,14 @@ class _$HassDomainServicesImpl implements _HassDomainServices {
             const DeepCollectionEquality().equals(other._services, _services));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_services));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HassDomainServices
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HassDomainServicesImplCopyWith<_$HassDomainServicesImpl> get copyWith =>
@@ -153,8 +163,11 @@ abstract class _HassDomainServices implements HassDomainServices {
 
   @override
   Map<String, HassService> get services;
+
+  /// Create a copy of HassDomainServices
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HassDomainServicesImplCopyWith<_$HassDomainServicesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -168,8 +181,12 @@ mixin _$HassServices {
   Map<String, HassDomainServices> get domains =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this HassServices to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of HassServices
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $HassServicesCopyWith<HassServices> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -193,6 +210,8 @@ class _$HassServicesCopyWithImpl<$Res, $Val extends HassServices>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of HassServices
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -226,6 +245,8 @@ class __$$HassServicesImplCopyWithImpl<$Res>
       _$HassServicesImpl _value, $Res Function(_$HassServicesImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HassServices
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -270,12 +291,14 @@ class _$HassServicesImpl implements _HassServices {
             const DeepCollectionEquality().equals(other._domains, _domains));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_domains));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HassServices
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HassServicesImplCopyWith<_$HassServicesImpl> get copyWith =>
@@ -298,8 +321,11 @@ abstract class _HassServices implements HassServices {
 
   @override
   Map<String, HassDomainServices> get domains;
+
+  /// Create a copy of HassServices
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HassServicesImplCopyWith<_$HassServicesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -316,8 +342,12 @@ mixin _$HassService {
   Map<String, Field> get fields => throw _privateConstructorUsedError;
   Response? get response => throw _privateConstructorUsedError;
 
+  /// Serializes this HassService to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of HassService
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $HassServiceCopyWith<HassService> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -348,6 +378,8 @@ class _$HassServiceCopyWithImpl<$Res, $Val extends HassService>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of HassService
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -381,6 +413,8 @@ class _$HassServiceCopyWithImpl<$Res, $Val extends HassService>
     ) as $Val);
   }
 
+  /// Create a copy of HassService
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ResponseCopyWith<$Res>? get response {
@@ -421,6 +455,8 @@ class __$$HassServiceImplCopyWithImpl<$Res>
       _$HassServiceImpl _value, $Res Function(_$HassServiceImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HassService
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -514,7 +550,7 @@ class _$HassServiceImpl implements _HassService {
                 other.response == response));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -524,7 +560,9 @@ class _$HassServiceImpl implements _HassService {
       const DeepCollectionEquality().hash(_fields),
       response);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HassService
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HassServiceImplCopyWith<_$HassServiceImpl> get copyWith =>
@@ -559,8 +597,11 @@ abstract class _HassService implements HassService {
   Map<String, Field> get fields;
   @override
   Response? get response;
+
+  /// Create a copy of HassService
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HassServiceImplCopyWith<_$HassServiceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -577,8 +618,12 @@ mixin _$Field {
   Map<String, dynamic>? get selector => throw _privateConstructorUsedError;
   FieldFilter? get filter => throw _privateConstructorUsedError;
 
+  /// Serializes this Field to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Field
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FieldCopyWith<Field> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -607,6 +652,8 @@ class _$FieldCopyWithImpl<$Res, $Val extends Field>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Field
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -640,6 +687,8 @@ class _$FieldCopyWithImpl<$Res, $Val extends Field>
     ) as $Val);
   }
 
+  /// Create a copy of Field
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $FieldFilterCopyWith<$Res>? get filter {
@@ -679,6 +728,8 @@ class __$$FieldImplCopyWithImpl<$Res>
       _$FieldImpl _value, $Res Function(_$FieldImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Field
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -766,7 +817,7 @@ class _$FieldImpl implements _Field {
             (identical(other.filter, filter) || other.filter == filter));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -776,7 +827,9 @@ class _$FieldImpl implements _Field {
       const DeepCollectionEquality().hash(_selector),
       filter);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Field
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FieldImplCopyWith<_$FieldImpl> get copyWith =>
@@ -810,8 +863,11 @@ abstract class _Field implements Field {
   Map<String, dynamic>? get selector;
   @override
   FieldFilter? get filter;
+
+  /// Create a copy of Field
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FieldImplCopyWith<_$FieldImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -826,8 +882,12 @@ mixin _$FieldFilter {
   List<int>? get supported_features => throw _privateConstructorUsedError;
   Map<String, dynamic>? get attribute => throw _privateConstructorUsedError;
 
+  /// Serializes this FieldFilter to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FieldFilter
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FieldFilterCopyWith<FieldFilter> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -851,6 +911,8 @@ class _$FieldFilterCopyWithImpl<$Res, $Val extends FieldFilter>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FieldFilter
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -889,6 +951,8 @@ class __$$FieldFilterImplCopyWithImpl<$Res>
       _$FieldFilterImpl _value, $Res Function(_$FieldFilterImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FieldFilter
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -958,14 +1022,16 @@ class _$FieldFilterImpl implements _FieldFilter {
                 .equals(other._attribute, _attribute));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_supported_features),
       const DeepCollectionEquality().hash(_attribute));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FieldFilter
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FieldFilterImplCopyWith<_$FieldFilterImpl> get copyWith =>
@@ -986,12 +1052,16 @@ abstract class _FieldFilter implements FieldFilter {
   factory _FieldFilter.fromJson(Map<String, dynamic> json) =
       _$FieldFilterImpl.fromJson;
 
-  @override // ignore: non_constant_identifier_names
+// ignore: non_constant_identifier_names
+  @override
   List<int>? get supported_features;
   @override
   Map<String, dynamic>? get attribute;
+
+  /// Create a copy of FieldFilter
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FieldFilterImplCopyWith<_$FieldFilterImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1004,8 +1074,12 @@ Response _$ResponseFromJson(Map<String, dynamic> json) {
 mixin _$Response {
   bool get optional => throw _privateConstructorUsedError;
 
+  /// Serializes this Response to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ResponseCopyWith<Response> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1028,6 +1102,8 @@ class _$ResponseCopyWithImpl<$Res, $Val extends Response>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1061,6 +1137,8 @@ class __$$ResponseImplCopyWithImpl<$Res>
       _$ResponseImpl _value, $Res Function(_$ResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1100,11 +1178,13 @@ class _$ResponseImpl implements _Response {
                 other.optional == optional));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, optional);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ResponseImplCopyWith<_$ResponseImpl> get copyWith =>
@@ -1126,8 +1206,11 @@ abstract class _Response implements Response {
 
   @override
   bool get optional;
+
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResponseImplCopyWith<_$ResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
