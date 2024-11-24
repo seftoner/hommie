@@ -64,7 +64,7 @@ void main() {
       "Hass servcies deserialization. Output from my HA. Check if deserialization works correct",
       () async {
     final testJson = await readJsonTestDataFromFile(
-        'test/data_samples/services_response.json');
+        'test/data_samples/get_services_response.json');
 
     final response = WebSocketResponse.fromJson(testJson);
 
@@ -74,7 +74,7 @@ void main() {
       _ => throw AssertionError("Response parsed incorrectly!")
     };
 
-    expect(responseResult.domains, hasLength(43));
+    expect(responseResult.domains, hasLength(44));
   });
 
   test("Error response deserialization", () async {
