@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:hommie/services/networking/home_assitant_websocket/future_mapping_extension.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';

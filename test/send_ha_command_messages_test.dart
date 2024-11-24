@@ -10,21 +10,36 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:oauth2/oauth2.dart';
 
-import 'send_messages_test.mocks.dart';
+import 'send_ha_command_messages_test.mocks.dart';
+import 'tests_helpers.dart';
 
 @GenerateMocks([HASocket])
 void main() {
-  test("Call service message ", () async {
-    final mockSocket = MockHASocket();
-    final streamController = StreamController<dynamic>();
+  late MockHASocket mockSocket;
+  late StreamController<dynamic> streamController;
+  late HAConnection connection;
+
+  setUp(() {
+    // Initialize shared objects before each test
+    mockSocket = MockHASocket();
+    streamController = StreamController<dynamic>();
 
     when(mockSocket.isClosed()).thenAnswer((_) => false);
     when(mockSocket.stream).thenAnswer((_) => streamController.stream);
 
     final credentials = Credentials("test-token");
     final haConnectionOption = HAConnectionOption(credentials);
-    final connection = HAConnection(mockSocket, haConnectionOption);
 
+    connection = HAConnection(mockSocket, haConnectionOption);
+  });
+
+  tearDown(() async {
+    // Clean up shared objects after each test
+    await streamController.close();
+    connection.close();
+  });
+
+  test("Call 'call_service' message ", () async {
     // Mock response to simulate WebSocket stream
     Future.delayed(Duration.zero, () {
       streamController.add(jsonEncode({
@@ -58,7 +73,6 @@ void main() {
     final sentMessage = capturedMessage as HABaseMessgae;
 
     // Perform more specific assertions about the message content
-
     expect(
         sentMessage.payload,
         equals({
@@ -73,9 +87,35 @@ void main() {
 
     // Assert on the result returned from the command
     expect(result, isNotNull);
+  });
 
-    // Clean up
-    connection.close();
-    streamController.close();
+  test("Call 'getAreas' message", () async {
+    // Mock response to simulate WebSocket stream
+    final testJson = await readJsonTestDataFromFile(
+        'test/data_samples/get_areas_reponse.json');
+    Future.delayed(Duration.zero, () {
+      streamController.add(jsonEncode(testJson));
+    });
+
+    // Act
+    final result = await HACommands.getAreas(connection);
+
+    // Assert on the sent message
+    final capturedMessage =
+        verify(mockSocket.sendMessage(captureAny)).captured.single;
+
+    expect(capturedMessage, isA<HABaseMessgae>());
+    final sentMessage = capturedMessage as HABaseMessgae;
+
+    // Perform more specific assertions about the message content
+    expect(
+        sentMessage.payload,
+        equals({
+          "id": 2,
+          "type": "config/area_registry/list",
+        }));
+
+    // Assert on the result returned from the command
+    expect(result, isNotNull);
   });
 }

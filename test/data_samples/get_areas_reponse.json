@@ -1,0 +1,44 @@
+{
+    "id": 2,
+    "type": "result",
+    "success": true,
+    "result": [
+        {
+            "aliases": [],
+            "area_id": "kitchen",
+            "floor_id": null,
+            "icon": null,
+            "labels": [],
+            "name": "Kitchen",
+            "picture": "/api/image/serve/3666b5b62f07ca7047709df39e4862f1/512x512",
+            "created_at": 0.0,
+            "modified_at": 0.0
+        },
+        {
+            "aliases": [
+                "My room",
+                "Living room",
+                "Bedroom"
+            ],
+            "area_id": "bedroom",
+            "floor_id": null,
+            "icon": null,
+            "labels": [],
+            "name": "Main room",
+            "picture": "/api/image/serve/924698c409a89dbe974ce9f7387e3001/512x512",
+            "created_at": 0.0,
+            "modified_at": 0.0
+        },
+        {
+            "aliases": [],
+            "area_id": "test_room",
+            "floor_id": null,
+            "icon": null,
+            "labels": [],
+            "name": "Test room",
+            "picture": null,
+            "created_at": 0.0,
+            "modified_at": 0.0
+        }
+    ]
+}
