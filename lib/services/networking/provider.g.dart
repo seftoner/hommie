@@ -6,7 +6,7 @@ part of 'provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverConnectionHash() => r'b1ab808a771cbabfb080256660f29debdbad60a1';
+String _$serverConnectionHash() => r'ee6b51ac396b5fa51a02066d065557015cbba1e7';
 
 /// See also [serverConnection].
 @ProviderFor(serverConnection)
@@ -23,6 +23,8 @@ final serverConnectionProvider = FutureProvider<HAConnection>.internal(
   },
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ServerConnectionRef = FutureProviderRef<HAConnection>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

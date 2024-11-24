@@ -84,6 +84,9 @@ class _$AuthFailureCopyWithImpl<$Res, $Val extends AuthFailure>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -103,6 +106,8 @@ class __$$ServerImplCopyWithImpl<$Res>
       _$ServerImpl _value, $Res Function(_$ServerImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -141,7 +146,9 @@ class _$ServerImpl extends Server {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ServerImplCopyWith<_$ServerImpl> get copyWith =>
@@ -227,7 +234,10 @@ abstract class Server extends AuthFailure {
   const Server._() : super._();
 
   String? get message;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ServerImplCopyWith<_$ServerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -249,6 +259,8 @@ class __$$UserBrakeImplCopyWithImpl<$Res>
       _$UserBrakeImpl _value, $Res Function(_$UserBrakeImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -287,7 +299,9 @@ class _$UserBrakeImpl extends UserBrake {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserBrakeImplCopyWith<_$UserBrakeImpl> get copyWith =>
@@ -373,7 +387,10 @@ abstract class UserBrake extends AuthFailure {
   const UserBrake._() : super._();
 
   String? get message;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserBrakeImplCopyWith<_$UserBrakeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -392,6 +409,9 @@ class __$$StorageImplCopyWithImpl<$Res>
   __$$StorageImplCopyWithImpl(
       _$StorageImpl _value, $Res Function(_$StorageImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -507,6 +527,9 @@ class __$$MissingCredentialsImplCopyWithImpl<$Res>
   __$$MissingCredentialsImplCopyWithImpl(_$MissingCredentialsImpl _value,
       $Res Function(_$MissingCredentialsImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
@@ -10,7 +11,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'router.g.dart';
 
 @riverpod
-GoRouter goRouter(GoRouterRef ref) {
+GoRouter goRouter(Ref ref) {
   final authStateNotifier = ValueNotifier<AuthState>(const AuthState.initial());
   ref
     ..onDispose(authStateNotifier.dispose)
