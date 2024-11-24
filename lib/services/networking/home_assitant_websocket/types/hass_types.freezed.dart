@@ -768,21 +768,25 @@ mixin _$HassConfig {
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
   double get elevation => throw _privateConstructorUsedError;
-  UnitSystem get unitSystem => throw _privateConstructorUsedError;
-  String get locationName => throw _privateConstructorUsedError;
-  String get timeZone => throw _privateConstructorUsedError;
+  UnitSystem get unit_system => throw _privateConstructorUsedError;
+  String get location_name => throw _privateConstructorUsedError;
+  String get time_zone => throw _privateConstructorUsedError;
   List<String> get components => throw _privateConstructorUsedError;
-  String get configDir => throw _privateConstructorUsedError;
-  List<String> get allowlistExternalDirs => throw _privateConstructorUsedError;
-  List<String> get allowlistExternalUrls => throw _privateConstructorUsedError;
+  String get config_dir => throw _privateConstructorUsedError;
+  List<String> get allowlist_external_dirs =>
+      throw _privateConstructorUsedError;
+  List<String> get allowlist_external_urls =>
+      throw _privateConstructorUsedError;
   String get version => throw _privateConstructorUsedError;
-  String get configSource => throw _privateConstructorUsedError;
-  bool get recoveryMode => throw _privateConstructorUsedError;
-  bool get safeMode =>
+  String get config_source => throw _privateConstructorUsedError;
+  bool get recovery_mode => throw _privateConstructorUsedError;
+  bool get safe_mode =>
       throw _privateConstructorUsedError; // @StringEnum('NOT_RUNNING', 'STARTING', 'RUNNING', 'STOPPING', 'FINAL_WRITE')
   State get state => throw _privateConstructorUsedError;
-  String? get externalUrl => throw _privateConstructorUsedError;
-  String? get internalUrl => throw _privateConstructorUsedError;
+  String? get external_url => throw _privateConstructorUsedError;
+  String? get internal_url => throw _privateConstructorUsedError;
+  List<String>? get whitelist_external_dirs =>
+      throw _privateConstructorUsedError;
   String get currency => throw _privateConstructorUsedError;
   String? get country => throw _privateConstructorUsedError;
   String get language => throw _privateConstructorUsedError;
@@ -807,25 +811,26 @@ abstract class $HassConfigCopyWith<$Res> {
       {double latitude,
       double longitude,
       double elevation,
-      UnitSystem unitSystem,
-      String locationName,
-      String timeZone,
+      UnitSystem unit_system,
+      String location_name,
+      String time_zone,
       List<String> components,
-      String configDir,
-      List<String> allowlistExternalDirs,
-      List<String> allowlistExternalUrls,
+      String config_dir,
+      List<String> allowlist_external_dirs,
+      List<String> allowlist_external_urls,
       String version,
-      String configSource,
-      bool recoveryMode,
-      bool safeMode,
+      String config_source,
+      bool recovery_mode,
+      bool safe_mode,
       State state,
-      String? externalUrl,
-      String? internalUrl,
+      String? external_url,
+      String? internal_url,
+      List<String>? whitelist_external_dirs,
       String currency,
       String? country,
       String language});
 
-  $UnitSystemCopyWith<$Res> get unitSystem;
+  $UnitSystemCopyWith<$Res> get unit_system;
 }
 
 /// @nodoc
@@ -846,20 +851,21 @@ class _$HassConfigCopyWithImpl<$Res, $Val extends HassConfig>
     Object? latitude = null,
     Object? longitude = null,
     Object? elevation = null,
-    Object? unitSystem = null,
-    Object? locationName = null,
-    Object? timeZone = null,
+    Object? unit_system = null,
+    Object? location_name = null,
+    Object? time_zone = null,
     Object? components = null,
-    Object? configDir = null,
-    Object? allowlistExternalDirs = null,
-    Object? allowlistExternalUrls = null,
+    Object? config_dir = null,
+    Object? allowlist_external_dirs = null,
+    Object? allowlist_external_urls = null,
     Object? version = null,
-    Object? configSource = null,
-    Object? recoveryMode = null,
-    Object? safeMode = null,
+    Object? config_source = null,
+    Object? recovery_mode = null,
+    Object? safe_mode = null,
     Object? state = null,
-    Object? externalUrl = freezed,
-    Object? internalUrl = freezed,
+    Object? external_url = freezed,
+    Object? internal_url = freezed,
+    Object? whitelist_external_dirs = freezed,
     Object? currency = null,
     Object? country = freezed,
     Object? language = null,
@@ -877,62 +883,66 @@ class _$HassConfigCopyWithImpl<$Res, $Val extends HassConfig>
           ? _value.elevation
           : elevation // ignore: cast_nullable_to_non_nullable
               as double,
-      unitSystem: null == unitSystem
-          ? _value.unitSystem
-          : unitSystem // ignore: cast_nullable_to_non_nullable
+      unit_system: null == unit_system
+          ? _value.unit_system
+          : unit_system // ignore: cast_nullable_to_non_nullable
               as UnitSystem,
-      locationName: null == locationName
-          ? _value.locationName
-          : locationName // ignore: cast_nullable_to_non_nullable
+      location_name: null == location_name
+          ? _value.location_name
+          : location_name // ignore: cast_nullable_to_non_nullable
               as String,
-      timeZone: null == timeZone
-          ? _value.timeZone
-          : timeZone // ignore: cast_nullable_to_non_nullable
+      time_zone: null == time_zone
+          ? _value.time_zone
+          : time_zone // ignore: cast_nullable_to_non_nullable
               as String,
       components: null == components
           ? _value.components
           : components // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      configDir: null == configDir
-          ? _value.configDir
-          : configDir // ignore: cast_nullable_to_non_nullable
+      config_dir: null == config_dir
+          ? _value.config_dir
+          : config_dir // ignore: cast_nullable_to_non_nullable
               as String,
-      allowlistExternalDirs: null == allowlistExternalDirs
-          ? _value.allowlistExternalDirs
-          : allowlistExternalDirs // ignore: cast_nullable_to_non_nullable
+      allowlist_external_dirs: null == allowlist_external_dirs
+          ? _value.allowlist_external_dirs
+          : allowlist_external_dirs // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      allowlistExternalUrls: null == allowlistExternalUrls
-          ? _value.allowlistExternalUrls
-          : allowlistExternalUrls // ignore: cast_nullable_to_non_nullable
+      allowlist_external_urls: null == allowlist_external_urls
+          ? _value.allowlist_external_urls
+          : allowlist_external_urls // ignore: cast_nullable_to_non_nullable
               as List<String>,
       version: null == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as String,
-      configSource: null == configSource
-          ? _value.configSource
-          : configSource // ignore: cast_nullable_to_non_nullable
+      config_source: null == config_source
+          ? _value.config_source
+          : config_source // ignore: cast_nullable_to_non_nullable
               as String,
-      recoveryMode: null == recoveryMode
-          ? _value.recoveryMode
-          : recoveryMode // ignore: cast_nullable_to_non_nullable
+      recovery_mode: null == recovery_mode
+          ? _value.recovery_mode
+          : recovery_mode // ignore: cast_nullable_to_non_nullable
               as bool,
-      safeMode: null == safeMode
-          ? _value.safeMode
-          : safeMode // ignore: cast_nullable_to_non_nullable
+      safe_mode: null == safe_mode
+          ? _value.safe_mode
+          : safe_mode // ignore: cast_nullable_to_non_nullable
               as bool,
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as State,
-      externalUrl: freezed == externalUrl
-          ? _value.externalUrl
-          : externalUrl // ignore: cast_nullable_to_non_nullable
+      external_url: freezed == external_url
+          ? _value.external_url
+          : external_url // ignore: cast_nullable_to_non_nullable
               as String?,
-      internalUrl: freezed == internalUrl
-          ? _value.internalUrl
-          : internalUrl // ignore: cast_nullable_to_non_nullable
+      internal_url: freezed == internal_url
+          ? _value.internal_url
+          : internal_url // ignore: cast_nullable_to_non_nullable
               as String?,
+      whitelist_external_dirs: freezed == whitelist_external_dirs
+          ? _value.whitelist_external_dirs
+          : whitelist_external_dirs // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       currency: null == currency
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
@@ -952,9 +962,9 @@ class _$HassConfigCopyWithImpl<$Res, $Val extends HassConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $UnitSystemCopyWith<$Res> get unitSystem {
-    return $UnitSystemCopyWith<$Res>(_value.unitSystem, (value) {
-      return _then(_value.copyWith(unitSystem: value) as $Val);
+  $UnitSystemCopyWith<$Res> get unit_system {
+    return $UnitSystemCopyWith<$Res>(_value.unit_system, (value) {
+      return _then(_value.copyWith(unit_system: value) as $Val);
     });
   }
 }
@@ -971,26 +981,27 @@ abstract class _$$HassConfigImplCopyWith<$Res>
       {double latitude,
       double longitude,
       double elevation,
-      UnitSystem unitSystem,
-      String locationName,
-      String timeZone,
+      UnitSystem unit_system,
+      String location_name,
+      String time_zone,
       List<String> components,
-      String configDir,
-      List<String> allowlistExternalDirs,
-      List<String> allowlistExternalUrls,
+      String config_dir,
+      List<String> allowlist_external_dirs,
+      List<String> allowlist_external_urls,
       String version,
-      String configSource,
-      bool recoveryMode,
-      bool safeMode,
+      String config_source,
+      bool recovery_mode,
+      bool safe_mode,
       State state,
-      String? externalUrl,
-      String? internalUrl,
+      String? external_url,
+      String? internal_url,
+      List<String>? whitelist_external_dirs,
       String currency,
       String? country,
       String language});
 
   @override
-  $UnitSystemCopyWith<$Res> get unitSystem;
+  $UnitSystemCopyWith<$Res> get unit_system;
 }
 
 /// @nodoc
@@ -1009,20 +1020,21 @@ class __$$HassConfigImplCopyWithImpl<$Res>
     Object? latitude = null,
     Object? longitude = null,
     Object? elevation = null,
-    Object? unitSystem = null,
-    Object? locationName = null,
-    Object? timeZone = null,
+    Object? unit_system = null,
+    Object? location_name = null,
+    Object? time_zone = null,
     Object? components = null,
-    Object? configDir = null,
-    Object? allowlistExternalDirs = null,
-    Object? allowlistExternalUrls = null,
+    Object? config_dir = null,
+    Object? allowlist_external_dirs = null,
+    Object? allowlist_external_urls = null,
     Object? version = null,
-    Object? configSource = null,
-    Object? recoveryMode = null,
-    Object? safeMode = null,
+    Object? config_source = null,
+    Object? recovery_mode = null,
+    Object? safe_mode = null,
     Object? state = null,
-    Object? externalUrl = freezed,
-    Object? internalUrl = freezed,
+    Object? external_url = freezed,
+    Object? internal_url = freezed,
+    Object? whitelist_external_dirs = freezed,
     Object? currency = null,
     Object? country = freezed,
     Object? language = null,
@@ -1040,62 +1052,66 @@ class __$$HassConfigImplCopyWithImpl<$Res>
           ? _value.elevation
           : elevation // ignore: cast_nullable_to_non_nullable
               as double,
-      unitSystem: null == unitSystem
-          ? _value.unitSystem
-          : unitSystem // ignore: cast_nullable_to_non_nullable
+      unit_system: null == unit_system
+          ? _value.unit_system
+          : unit_system // ignore: cast_nullable_to_non_nullable
               as UnitSystem,
-      locationName: null == locationName
-          ? _value.locationName
-          : locationName // ignore: cast_nullable_to_non_nullable
+      location_name: null == location_name
+          ? _value.location_name
+          : location_name // ignore: cast_nullable_to_non_nullable
               as String,
-      timeZone: null == timeZone
-          ? _value.timeZone
-          : timeZone // ignore: cast_nullable_to_non_nullable
+      time_zone: null == time_zone
+          ? _value.time_zone
+          : time_zone // ignore: cast_nullable_to_non_nullable
               as String,
       components: null == components
           ? _value._components
           : components // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      configDir: null == configDir
-          ? _value.configDir
-          : configDir // ignore: cast_nullable_to_non_nullable
+      config_dir: null == config_dir
+          ? _value.config_dir
+          : config_dir // ignore: cast_nullable_to_non_nullable
               as String,
-      allowlistExternalDirs: null == allowlistExternalDirs
-          ? _value._allowlistExternalDirs
-          : allowlistExternalDirs // ignore: cast_nullable_to_non_nullable
+      allowlist_external_dirs: null == allowlist_external_dirs
+          ? _value._allowlist_external_dirs
+          : allowlist_external_dirs // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      allowlistExternalUrls: null == allowlistExternalUrls
-          ? _value._allowlistExternalUrls
-          : allowlistExternalUrls // ignore: cast_nullable_to_non_nullable
+      allowlist_external_urls: null == allowlist_external_urls
+          ? _value._allowlist_external_urls
+          : allowlist_external_urls // ignore: cast_nullable_to_non_nullable
               as List<String>,
       version: null == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as String,
-      configSource: null == configSource
-          ? _value.configSource
-          : configSource // ignore: cast_nullable_to_non_nullable
+      config_source: null == config_source
+          ? _value.config_source
+          : config_source // ignore: cast_nullable_to_non_nullable
               as String,
-      recoveryMode: null == recoveryMode
-          ? _value.recoveryMode
-          : recoveryMode // ignore: cast_nullable_to_non_nullable
+      recovery_mode: null == recovery_mode
+          ? _value.recovery_mode
+          : recovery_mode // ignore: cast_nullable_to_non_nullable
               as bool,
-      safeMode: null == safeMode
-          ? _value.safeMode
-          : safeMode // ignore: cast_nullable_to_non_nullable
+      safe_mode: null == safe_mode
+          ? _value.safe_mode
+          : safe_mode // ignore: cast_nullable_to_non_nullable
               as bool,
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as State,
-      externalUrl: freezed == externalUrl
-          ? _value.externalUrl
-          : externalUrl // ignore: cast_nullable_to_non_nullable
+      external_url: freezed == external_url
+          ? _value.external_url
+          : external_url // ignore: cast_nullable_to_non_nullable
               as String?,
-      internalUrl: freezed == internalUrl
-          ? _value.internalUrl
-          : internalUrl // ignore: cast_nullable_to_non_nullable
+      internal_url: freezed == internal_url
+          ? _value.internal_url
+          : internal_url // ignore: cast_nullable_to_non_nullable
               as String?,
+      whitelist_external_dirs: freezed == whitelist_external_dirs
+          ? _value._whitelist_external_dirs
+          : whitelist_external_dirs // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       currency: null == currency
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
@@ -1119,26 +1135,28 @@ class _$HassConfigImpl implements _HassConfig {
       {required this.latitude,
       required this.longitude,
       required this.elevation,
-      required this.unitSystem,
-      required this.locationName,
-      required this.timeZone,
+      required this.unit_system,
+      required this.location_name,
+      required this.time_zone,
       required final List<String> components,
-      required this.configDir,
-      required final List<String> allowlistExternalDirs,
-      required final List<String> allowlistExternalUrls,
+      required this.config_dir,
+      required final List<String> allowlist_external_dirs,
+      required final List<String> allowlist_external_urls,
       required this.version,
-      required this.configSource,
-      required this.recoveryMode,
-      required this.safeMode,
+      required this.config_source,
+      required this.recovery_mode,
+      required this.safe_mode,
       required this.state,
-      this.externalUrl,
-      this.internalUrl,
+      this.external_url,
+      this.internal_url,
+      final List<String>? whitelist_external_dirs,
       required this.currency,
       this.country,
       required this.language})
       : _components = components,
-        _allowlistExternalDirs = allowlistExternalDirs,
-        _allowlistExternalUrls = allowlistExternalUrls;
+        _allowlist_external_dirs = allowlist_external_dirs,
+        _allowlist_external_urls = allowlist_external_urls,
+        _whitelist_external_dirs = whitelist_external_dirs;
 
   factory _$HassConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$HassConfigImplFromJson(json);
@@ -1150,11 +1168,11 @@ class _$HassConfigImpl implements _HassConfig {
   @override
   final double elevation;
   @override
-  final UnitSystem unitSystem;
+  final UnitSystem unit_system;
   @override
-  final String locationName;
+  final String location_name;
   @override
-  final String timeZone;
+  final String time_zone;
   final List<String> _components;
   @override
   List<String> get components {
@@ -1164,40 +1182,51 @@ class _$HassConfigImpl implements _HassConfig {
   }
 
   @override
-  final String configDir;
-  final List<String> _allowlistExternalDirs;
+  final String config_dir;
+  final List<String> _allowlist_external_dirs;
   @override
-  List<String> get allowlistExternalDirs {
-    if (_allowlistExternalDirs is EqualUnmodifiableListView)
-      return _allowlistExternalDirs;
+  List<String> get allowlist_external_dirs {
+    if (_allowlist_external_dirs is EqualUnmodifiableListView)
+      return _allowlist_external_dirs;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_allowlistExternalDirs);
+    return EqualUnmodifiableListView(_allowlist_external_dirs);
   }
 
-  final List<String> _allowlistExternalUrls;
+  final List<String> _allowlist_external_urls;
   @override
-  List<String> get allowlistExternalUrls {
-    if (_allowlistExternalUrls is EqualUnmodifiableListView)
-      return _allowlistExternalUrls;
+  List<String> get allowlist_external_urls {
+    if (_allowlist_external_urls is EqualUnmodifiableListView)
+      return _allowlist_external_urls;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_allowlistExternalUrls);
+    return EqualUnmodifiableListView(_allowlist_external_urls);
   }
 
   @override
   final String version;
   @override
-  final String configSource;
+  final String config_source;
   @override
-  final bool recoveryMode;
+  final bool recovery_mode;
   @override
-  final bool safeMode;
+  final bool safe_mode;
 // @StringEnum('NOT_RUNNING', 'STARTING', 'RUNNING', 'STOPPING', 'FINAL_WRITE')
   @override
   final State state;
   @override
-  final String? externalUrl;
+  final String? external_url;
   @override
-  final String? internalUrl;
+  final String? internal_url;
+  final List<String>? _whitelist_external_dirs;
+  @override
+  List<String>? get whitelist_external_dirs {
+    final value = _whitelist_external_dirs;
+    if (value == null) return null;
+    if (_whitelist_external_dirs is EqualUnmodifiableListView)
+      return _whitelist_external_dirs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final String currency;
   @override
@@ -1207,7 +1236,7 @@ class _$HassConfigImpl implements _HassConfig {
 
   @override
   String toString() {
-    return 'HassConfig(latitude: $latitude, longitude: $longitude, elevation: $elevation, unitSystem: $unitSystem, locationName: $locationName, timeZone: $timeZone, components: $components, configDir: $configDir, allowlistExternalDirs: $allowlistExternalDirs, allowlistExternalUrls: $allowlistExternalUrls, version: $version, configSource: $configSource, recoveryMode: $recoveryMode, safeMode: $safeMode, state: $state, externalUrl: $externalUrl, internalUrl: $internalUrl, currency: $currency, country: $country, language: $language)';
+    return 'HassConfig(latitude: $latitude, longitude: $longitude, elevation: $elevation, unit_system: $unit_system, location_name: $location_name, time_zone: $time_zone, components: $components, config_dir: $config_dir, allowlist_external_dirs: $allowlist_external_dirs, allowlist_external_urls: $allowlist_external_urls, version: $version, config_source: $config_source, recovery_mode: $recovery_mode, safe_mode: $safe_mode, state: $state, external_url: $external_url, internal_url: $internal_url, whitelist_external_dirs: $whitelist_external_dirs, currency: $currency, country: $country, language: $language)';
   }
 
   @override
@@ -1221,32 +1250,34 @@ class _$HassConfigImpl implements _HassConfig {
                 other.longitude == longitude) &&
             (identical(other.elevation, elevation) ||
                 other.elevation == elevation) &&
-            (identical(other.unitSystem, unitSystem) ||
-                other.unitSystem == unitSystem) &&
-            (identical(other.locationName, locationName) ||
-                other.locationName == locationName) &&
-            (identical(other.timeZone, timeZone) ||
-                other.timeZone == timeZone) &&
+            (identical(other.unit_system, unit_system) ||
+                other.unit_system == unit_system) &&
+            (identical(other.location_name, location_name) ||
+                other.location_name == location_name) &&
+            (identical(other.time_zone, time_zone) ||
+                other.time_zone == time_zone) &&
             const DeepCollectionEquality()
                 .equals(other._components, _components) &&
-            (identical(other.configDir, configDir) ||
-                other.configDir == configDir) &&
-            const DeepCollectionEquality()
-                .equals(other._allowlistExternalDirs, _allowlistExternalDirs) &&
-            const DeepCollectionEquality()
-                .equals(other._allowlistExternalUrls, _allowlistExternalUrls) &&
+            (identical(other.config_dir, config_dir) ||
+                other.config_dir == config_dir) &&
+            const DeepCollectionEquality().equals(
+                other._allowlist_external_dirs, _allowlist_external_dirs) &&
+            const DeepCollectionEquality().equals(
+                other._allowlist_external_urls, _allowlist_external_urls) &&
             (identical(other.version, version) || other.version == version) &&
-            (identical(other.configSource, configSource) ||
-                other.configSource == configSource) &&
-            (identical(other.recoveryMode, recoveryMode) ||
-                other.recoveryMode == recoveryMode) &&
-            (identical(other.safeMode, safeMode) ||
-                other.safeMode == safeMode) &&
+            (identical(other.config_source, config_source) ||
+                other.config_source == config_source) &&
+            (identical(other.recovery_mode, recovery_mode) ||
+                other.recovery_mode == recovery_mode) &&
+            (identical(other.safe_mode, safe_mode) ||
+                other.safe_mode == safe_mode) &&
             (identical(other.state, state) || other.state == state) &&
-            (identical(other.externalUrl, externalUrl) ||
-                other.externalUrl == externalUrl) &&
-            (identical(other.internalUrl, internalUrl) ||
-                other.internalUrl == internalUrl) &&
+            (identical(other.external_url, external_url) ||
+                other.external_url == external_url) &&
+            (identical(other.internal_url, internal_url) ||
+                other.internal_url == internal_url) &&
+            const DeepCollectionEquality().equals(
+                other._whitelist_external_dirs, _whitelist_external_dirs) &&
             (identical(other.currency, currency) ||
                 other.currency == currency) &&
             (identical(other.country, country) || other.country == country) &&
@@ -1261,20 +1292,21 @@ class _$HassConfigImpl implements _HassConfig {
         latitude,
         longitude,
         elevation,
-        unitSystem,
-        locationName,
-        timeZone,
+        unit_system,
+        location_name,
+        time_zone,
         const DeepCollectionEquality().hash(_components),
-        configDir,
-        const DeepCollectionEquality().hash(_allowlistExternalDirs),
-        const DeepCollectionEquality().hash(_allowlistExternalUrls),
+        config_dir,
+        const DeepCollectionEquality().hash(_allowlist_external_dirs),
+        const DeepCollectionEquality().hash(_allowlist_external_urls),
         version,
-        configSource,
-        recoveryMode,
-        safeMode,
+        config_source,
+        recovery_mode,
+        safe_mode,
         state,
-        externalUrl,
-        internalUrl,
+        external_url,
+        internal_url,
+        const DeepCollectionEquality().hash(_whitelist_external_dirs),
         currency,
         country,
         language
@@ -1301,20 +1333,21 @@ abstract class _HassConfig implements HassConfig {
       {required final double latitude,
       required final double longitude,
       required final double elevation,
-      required final UnitSystem unitSystem,
-      required final String locationName,
-      required final String timeZone,
+      required final UnitSystem unit_system,
+      required final String location_name,
+      required final String time_zone,
       required final List<String> components,
-      required final String configDir,
-      required final List<String> allowlistExternalDirs,
-      required final List<String> allowlistExternalUrls,
+      required final String config_dir,
+      required final List<String> allowlist_external_dirs,
+      required final List<String> allowlist_external_urls,
       required final String version,
-      required final String configSource,
-      required final bool recoveryMode,
-      required final bool safeMode,
+      required final String config_source,
+      required final bool recovery_mode,
+      required final bool safe_mode,
       required final State state,
-      final String? externalUrl,
-      final String? internalUrl,
+      final String? external_url,
+      final String? internal_url,
+      final List<String>? whitelist_external_dirs,
       required final String currency,
       final String? country,
       required final String language}) = _$HassConfigImpl;
@@ -1329,34 +1362,36 @@ abstract class _HassConfig implements HassConfig {
   @override
   double get elevation;
   @override
-  UnitSystem get unitSystem;
+  UnitSystem get unit_system;
   @override
-  String get locationName;
+  String get location_name;
   @override
-  String get timeZone;
+  String get time_zone;
   @override
   List<String> get components;
   @override
-  String get configDir;
+  String get config_dir;
   @override
-  List<String> get allowlistExternalDirs;
+  List<String> get allowlist_external_dirs;
   @override
-  List<String> get allowlistExternalUrls;
+  List<String> get allowlist_external_urls;
   @override
   String get version;
   @override
-  String get configSource;
+  String get config_source;
   @override
-  bool get recoveryMode;
+  bool get recovery_mode;
   @override
   bool
-      get safeMode; // @StringEnum('NOT_RUNNING', 'STARTING', 'RUNNING', 'STOPPING', 'FINAL_WRITE')
+      get safe_mode; // @StringEnum('NOT_RUNNING', 'STARTING', 'RUNNING', 'STOPPING', 'FINAL_WRITE')
   @override
   State get state;
   @override
-  String? get externalUrl;
+  String? get external_url;
   @override
-  String? get internalUrl;
+  String? get internal_url;
+  @override
+  List<String>? get whitelist_external_dirs;
   @override
   String get currency;
   @override
@@ -1383,8 +1418,8 @@ mixin _$UnitSystem {
   String get volume => throw _privateConstructorUsedError;
   String get temperature => throw _privateConstructorUsedError;
   String get pressure => throw _privateConstructorUsedError;
-  String get windSpeed => throw _privateConstructorUsedError;
-  String get accumulatedPrecipitation => throw _privateConstructorUsedError;
+  String get wind_speed => throw _privateConstructorUsedError;
+  String get accumulated_precipitation => throw _privateConstructorUsedError;
 
   /// Serializes this UnitSystem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1408,8 +1443,8 @@ abstract class $UnitSystemCopyWith<$Res> {
       String volume,
       String temperature,
       String pressure,
-      String windSpeed,
-      String accumulatedPrecipitation});
+      String wind_speed,
+      String accumulated_precipitation});
 }
 
 /// @nodoc
@@ -1432,8 +1467,8 @@ class _$UnitSystemCopyWithImpl<$Res, $Val extends UnitSystem>
     Object? volume = null,
     Object? temperature = null,
     Object? pressure = null,
-    Object? windSpeed = null,
-    Object? accumulatedPrecipitation = null,
+    Object? wind_speed = null,
+    Object? accumulated_precipitation = null,
   }) {
     return _then(_value.copyWith(
       length: null == length
@@ -1456,13 +1491,13 @@ class _$UnitSystemCopyWithImpl<$Res, $Val extends UnitSystem>
           ? _value.pressure
           : pressure // ignore: cast_nullable_to_non_nullable
               as String,
-      windSpeed: null == windSpeed
-          ? _value.windSpeed
-          : windSpeed // ignore: cast_nullable_to_non_nullable
+      wind_speed: null == wind_speed
+          ? _value.wind_speed
+          : wind_speed // ignore: cast_nullable_to_non_nullable
               as String,
-      accumulatedPrecipitation: null == accumulatedPrecipitation
-          ? _value.accumulatedPrecipitation
-          : accumulatedPrecipitation // ignore: cast_nullable_to_non_nullable
+      accumulated_precipitation: null == accumulated_precipitation
+          ? _value.accumulated_precipitation
+          : accumulated_precipitation // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -1482,8 +1517,8 @@ abstract class _$$UnitSystemImplCopyWith<$Res>
       String volume,
       String temperature,
       String pressure,
-      String windSpeed,
-      String accumulatedPrecipitation});
+      String wind_speed,
+      String accumulated_precipitation});
 }
 
 /// @nodoc
@@ -1504,8 +1539,8 @@ class __$$UnitSystemImplCopyWithImpl<$Res>
     Object? volume = null,
     Object? temperature = null,
     Object? pressure = null,
-    Object? windSpeed = null,
-    Object? accumulatedPrecipitation = null,
+    Object? wind_speed = null,
+    Object? accumulated_precipitation = null,
   }) {
     return _then(_$UnitSystemImpl(
       length: null == length
@@ -1528,13 +1563,13 @@ class __$$UnitSystemImplCopyWithImpl<$Res>
           ? _value.pressure
           : pressure // ignore: cast_nullable_to_non_nullable
               as String,
-      windSpeed: null == windSpeed
-          ? _value.windSpeed
-          : windSpeed // ignore: cast_nullable_to_non_nullable
+      wind_speed: null == wind_speed
+          ? _value.wind_speed
+          : wind_speed // ignore: cast_nullable_to_non_nullable
               as String,
-      accumulatedPrecipitation: null == accumulatedPrecipitation
-          ? _value.accumulatedPrecipitation
-          : accumulatedPrecipitation // ignore: cast_nullable_to_non_nullable
+      accumulated_precipitation: null == accumulated_precipitation
+          ? _value.accumulated_precipitation
+          : accumulated_precipitation // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -1549,8 +1584,8 @@ class _$UnitSystemImpl implements _UnitSystem {
       required this.volume,
       required this.temperature,
       required this.pressure,
-      required this.windSpeed,
-      required this.accumulatedPrecipitation});
+      required this.wind_speed,
+      required this.accumulated_precipitation});
 
   factory _$UnitSystemImpl.fromJson(Map<String, dynamic> json) =>
       _$$UnitSystemImplFromJson(json);
@@ -1566,13 +1601,13 @@ class _$UnitSystemImpl implements _UnitSystem {
   @override
   final String pressure;
   @override
-  final String windSpeed;
+  final String wind_speed;
   @override
-  final String accumulatedPrecipitation;
+  final String accumulated_precipitation;
 
   @override
   String toString() {
-    return 'UnitSystem(length: $length, mass: $mass, volume: $volume, temperature: $temperature, pressure: $pressure, windSpeed: $windSpeed, accumulatedPrecipitation: $accumulatedPrecipitation)';
+    return 'UnitSystem(length: $length, mass: $mass, volume: $volume, temperature: $temperature, pressure: $pressure, wind_speed: $wind_speed, accumulated_precipitation: $accumulated_precipitation)';
   }
 
   @override
@@ -1587,17 +1622,17 @@ class _$UnitSystemImpl implements _UnitSystem {
                 other.temperature == temperature) &&
             (identical(other.pressure, pressure) ||
                 other.pressure == pressure) &&
-            (identical(other.windSpeed, windSpeed) ||
-                other.windSpeed == windSpeed) &&
-            (identical(
-                    other.accumulatedPrecipitation, accumulatedPrecipitation) ||
-                other.accumulatedPrecipitation == accumulatedPrecipitation));
+            (identical(other.wind_speed, wind_speed) ||
+                other.wind_speed == wind_speed) &&
+            (identical(other.accumulated_precipitation,
+                    accumulated_precipitation) ||
+                other.accumulated_precipitation == accumulated_precipitation));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, length, mass, volume,
-      temperature, pressure, windSpeed, accumulatedPrecipitation);
+      temperature, pressure, wind_speed, accumulated_precipitation);
 
   /// Create a copy of UnitSystem
   /// with the given fields replaced by the non-null parameter values.
@@ -1622,8 +1657,8 @@ abstract class _UnitSystem implements UnitSystem {
       required final String volume,
       required final String temperature,
       required final String pressure,
-      required final String windSpeed,
-      required final String accumulatedPrecipitation}) = _$UnitSystemImpl;
+      required final String wind_speed,
+      required final String accumulated_precipitation}) = _$UnitSystemImpl;
 
   factory _UnitSystem.fromJson(Map<String, dynamic> json) =
       _$UnitSystemImpl.fromJson;
@@ -1639,9 +1674,9 @@ abstract class _UnitSystem implements UnitSystem {
   @override
   String get pressure;
   @override
-  String get windSpeed;
+  String get wind_speed;
   @override
-  String get accumulatedPrecipitation;
+  String get accumulated_precipitation;
 
   /// Create a copy of UnitSystem
   /// with the given fields replaced by the non-null parameter values.

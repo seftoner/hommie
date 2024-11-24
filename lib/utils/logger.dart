@@ -20,6 +20,7 @@ var logger = Logger(
   printer: PrettyPrinter(
       methodCount: 1,
       colors: false,
+      noBoxingByDefault: true,
       printEmojis: true), // Use the PrettyPrinter to format and print log
   // output: null, // Use the default LogOutput (-> send everything to console)
 );

@@ -6,20 +6,32 @@ import 'package:hommie/services/networking/home_assitant_websocket/ha_commands.d
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
+import 'package:hommie/utils/logger.dart';
+import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:oauth2/oauth2.dart';
 
 import 'send_ha_command_messages_test.mocks.dart';
 import 'tests_helpers.dart';
+import 'tests_logger.dart';
 
 @GenerateMocks([HASocket])
 void main() {
   late MockHASocket mockSocket;
   late StreamController<dynamic> streamController;
   late HAConnection connection;
+  late Logger originalLogger;
 
   setUp(() {
+    //Hide debug messages from logs
+    //Reason: If the test fails, VS Code will show the latest log from
+    //the console near the test method. The last message might not be the error,
+    //so I need to search for the error in the terminal instead of seeing
+    //it right above the method name in the code.
+    originalLogger = logger;
+    logger = testLogger;
+
     // Initialize shared objects before each test
     mockSocket = MockHASocket();
     streamController = StreamController<dynamic>();
@@ -37,6 +49,8 @@ void main() {
     // Clean up shared objects after each test
     await streamController.close();
     connection.close();
+
+    logger = originalLogger;
   });
 
   test("Call 'call_service' message ", () async {
@@ -92,7 +106,7 @@ void main() {
   test("Call 'getAreas' message", () async {
     // Mock response to simulate WebSocket stream
     final testJson = await readJsonTestDataFromFile(
-        'test/data_samples/get_areas_reponse.json');
+        'test/data_samples/get_areas_response.json');
     Future.delayed(Duration.zero, () {
       streamController.add(jsonEncode(testJson));
     });
@@ -113,6 +127,66 @@ void main() {
         equals({
           "id": 2,
           "type": "config/area_registry/list",
+        }));
+
+    // Assert on the result returned from the command
+    expect(result, isNotNull);
+  });
+
+  test("Call 'getUser' message", () async {
+    // Mock response to simulate WebSocket stream
+    final testJson = await readJsonTestDataFromFile(
+        'test/data_samples/get_user_response.json');
+    Future.delayed(Duration.zero, () {
+      streamController.add(jsonEncode(testJson));
+    });
+
+    // Act
+    final result = await HACommands.getUser(connection);
+
+    // Assert on the sent message
+    final capturedMessage =
+        verify(mockSocket.sendMessage(captureAny)).captured.single;
+
+    expect(capturedMessage, isA<HABaseMessgae>());
+    final sentMessage = capturedMessage as HABaseMessgae;
+
+    // Perform more specific assertions about the message content
+    expect(
+        sentMessage.payload,
+        equals({
+          "id": 2,
+          "type": "auth/current_user",
+        }));
+
+    // Assert on the result returned from the command
+    expect(result, isNotNull);
+  });
+
+  test("Call 'getConfig' message", () async {
+    // Mock response to simulate WebSocket stream
+    final testJson = await readJsonTestDataFromFile(
+        'test/data_samples/get_config_response.json');
+    Future.delayed(Duration.zero, () {
+      streamController.add(jsonEncode(testJson));
+    });
+
+    // Act
+    final result = await HACommands.getConfig(connection);
+
+    // Assert on the sent message
+    final capturedMessage =
+        verify(mockSocket.sendMessage(captureAny)).captured.single;
+
+    expect(capturedMessage, isA<HABaseMessgae>());
+    final sentMessage = capturedMessage as HABaseMessgae;
+
+    // Perform more specific assertions about the message content
+    expect(
+        sentMessage.payload,
+        equals({
+          "id": 2,
+          "type": "get_config",
         }));
 
     // Assert on the result returned from the command
