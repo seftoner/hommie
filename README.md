@@ -8,7 +8,7 @@ The motivation behind this project is to create a visually appealing and user-fr
 Currently, there are not many of them. I want to design a good architecture (skeleton), so I can easily add new features (muscles).
 I want to add 'Companion App' functionality in the near future.
 
-- **Authentication**: Users can authenticate and log out securely.
+- **Authentication**: Users can authenticate and log out securely. This feature has been tested only on a local network.
 - **Areas**: List of areas
 - **Companion App**: (In Progress): This feature will allow the app to register on the Home Assistant server and send location and other sensor data.
 
