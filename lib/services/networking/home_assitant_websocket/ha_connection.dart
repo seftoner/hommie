@@ -31,7 +31,13 @@ class HassSubscription {
   }
 }
 
-class HAConnection {
+abstract class IHAConnection {
+  Future<dynamic> sendMessage(HABaseMessgae message);
+  HassSubscription subscribeMessage(HABaseMessgae subscribeMessage);
+  void close();
+}
+
+class HAConnection implements IHAConnection {
   late HASocket _socket;
   late StreamSubscription<dynamic> _socketSubscription;
   final HAConnectionOption haConnectionOption;
@@ -48,6 +54,7 @@ class HAConnection {
     _setSocket(socket);
   }
 
+  @override
   Future<dynamic> sendMessage(HABaseMessgae message) async {
     assert(!_socket.isClosed(), "Connections is closed");
 
@@ -60,11 +67,13 @@ class HAConnection {
     return completer.future;
   }
 
+  @override
   void close() {
     _closeRequested = true;
     _socket.close();
   }
 
+  @override
   HassSubscription subscribeMessage(HABaseMessgae subscribeMessage) {
     assert(!_socket.isClosed(), "Connections is closed");
 

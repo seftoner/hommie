@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:hommie/services/networking/home_assitant_websocket/future_mapping_extension.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
@@ -38,18 +39,20 @@ class HACommands {
   }
 
   static Future<CallServiceResponse> callService(
-    HAConnection connection, {
+    IHAConnection connection, {
     required String domain,
     required String service,
     String? target,
     Map<String, dynamic>? serviceData,
+    bool? returnResponse,
   }) {
     return connection
         .sendMessage(ServiceCallMessage(
             domain: domain,
             service: service,
             target: target,
-            serviceData: serviceData))
+            serviceData: serviceData,
+            returnResponse: returnResponse))
         .mapItem(CallServiceResponse.fromJson);
   }
 }
