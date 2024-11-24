@@ -768,6 +768,7 @@ mixin _$HassConfig {
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
   double get elevation => throw _privateConstructorUsedError;
+  double get radius => throw _privateConstructorUsedError;
   UnitSystem get unit_system => throw _privateConstructorUsedError;
   String get location_name => throw _privateConstructorUsedError;
   String get time_zone => throw _privateConstructorUsedError;
@@ -811,6 +812,7 @@ abstract class $HassConfigCopyWith<$Res> {
       {double latitude,
       double longitude,
       double elevation,
+      double radius,
       UnitSystem unit_system,
       String location_name,
       String time_zone,
@@ -851,6 +853,7 @@ class _$HassConfigCopyWithImpl<$Res, $Val extends HassConfig>
     Object? latitude = null,
     Object? longitude = null,
     Object? elevation = null,
+    Object? radius = null,
     Object? unit_system = null,
     Object? location_name = null,
     Object? time_zone = null,
@@ -882,6 +885,10 @@ class _$HassConfigCopyWithImpl<$Res, $Val extends HassConfig>
       elevation: null == elevation
           ? _value.elevation
           : elevation // ignore: cast_nullable_to_non_nullable
+              as double,
+      radius: null == radius
+          ? _value.radius
+          : radius // ignore: cast_nullable_to_non_nullable
               as double,
       unit_system: null == unit_system
           ? _value.unit_system
@@ -981,6 +988,7 @@ abstract class _$$HassConfigImplCopyWith<$Res>
       {double latitude,
       double longitude,
       double elevation,
+      double radius,
       UnitSystem unit_system,
       String location_name,
       String time_zone,
@@ -1020,6 +1028,7 @@ class __$$HassConfigImplCopyWithImpl<$Res>
     Object? latitude = null,
     Object? longitude = null,
     Object? elevation = null,
+    Object? radius = null,
     Object? unit_system = null,
     Object? location_name = null,
     Object? time_zone = null,
@@ -1051,6 +1060,10 @@ class __$$HassConfigImplCopyWithImpl<$Res>
       elevation: null == elevation
           ? _value.elevation
           : elevation // ignore: cast_nullable_to_non_nullable
+              as double,
+      radius: null == radius
+          ? _value.radius
+          : radius // ignore: cast_nullable_to_non_nullable
               as double,
       unit_system: null == unit_system
           ? _value.unit_system
@@ -1135,6 +1148,7 @@ class _$HassConfigImpl implements _HassConfig {
       {required this.latitude,
       required this.longitude,
       required this.elevation,
+      required this.radius,
       required this.unit_system,
       required this.location_name,
       required this.time_zone,
@@ -1167,6 +1181,8 @@ class _$HassConfigImpl implements _HassConfig {
   final double longitude;
   @override
   final double elevation;
+  @override
+  final double radius;
   @override
   final UnitSystem unit_system;
   @override
@@ -1236,7 +1252,7 @@ class _$HassConfigImpl implements _HassConfig {
 
   @override
   String toString() {
-    return 'HassConfig(latitude: $latitude, longitude: $longitude, elevation: $elevation, unit_system: $unit_system, location_name: $location_name, time_zone: $time_zone, components: $components, config_dir: $config_dir, allowlist_external_dirs: $allowlist_external_dirs, allowlist_external_urls: $allowlist_external_urls, version: $version, config_source: $config_source, recovery_mode: $recovery_mode, safe_mode: $safe_mode, state: $state, external_url: $external_url, internal_url: $internal_url, whitelist_external_dirs: $whitelist_external_dirs, currency: $currency, country: $country, language: $language)';
+    return 'HassConfig(latitude: $latitude, longitude: $longitude, elevation: $elevation, radius: $radius, unit_system: $unit_system, location_name: $location_name, time_zone: $time_zone, components: $components, config_dir: $config_dir, allowlist_external_dirs: $allowlist_external_dirs, allowlist_external_urls: $allowlist_external_urls, version: $version, config_source: $config_source, recovery_mode: $recovery_mode, safe_mode: $safe_mode, state: $state, external_url: $external_url, internal_url: $internal_url, whitelist_external_dirs: $whitelist_external_dirs, currency: $currency, country: $country, language: $language)';
   }
 
   @override
@@ -1250,6 +1266,7 @@ class _$HassConfigImpl implements _HassConfig {
                 other.longitude == longitude) &&
             (identical(other.elevation, elevation) ||
                 other.elevation == elevation) &&
+            (identical(other.radius, radius) || other.radius == radius) &&
             (identical(other.unit_system, unit_system) ||
                 other.unit_system == unit_system) &&
             (identical(other.location_name, location_name) ||
@@ -1292,6 +1309,7 @@ class _$HassConfigImpl implements _HassConfig {
         latitude,
         longitude,
         elevation,
+        radius,
         unit_system,
         location_name,
         time_zone,
@@ -1333,6 +1351,7 @@ abstract class _HassConfig implements HassConfig {
       {required final double latitude,
       required final double longitude,
       required final double elevation,
+      required final double radius,
       required final UnitSystem unit_system,
       required final String location_name,
       required final String time_zone,
@@ -1361,6 +1380,8 @@ abstract class _HassConfig implements HassConfig {
   double get longitude;
   @override
   double get elevation;
+  @override
+  double get radius;
   @override
   UnitSystem get unit_system;
   @override

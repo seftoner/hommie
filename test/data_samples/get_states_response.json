@@ -1,0 +1,2185 @@
+{
+    "id": 2,
+    "type": "result",
+    "success": true,
+    "result": [
+        {
+            "entity_id": "person.seftoner",
+            "state": "not_home",
+            "attributes": {
+                "editable": true,
+                "id": "seftoner",
+                "device_trackers": [
+                    "device_tracker.slnt",
+                    "device_tracker.postman"
+                ],
+                "latitude": 41.917646926924,
+                "longitude": 22.701042769817082,
+                "gps_accuracy": 11.97675037116924,
+                "source": "device_tracker.slnt",
+                "user_id": "cc4e3e7bd8304aa48c316a47f9a8bb66",
+                "friendly_name": "seftoner"
+            },
+            "last_changed": "2024-11-24T07:41:31.738180+00:00",
+            "last_reported": "2024-11-24T07:41:39.931685+00:00",
+            "last_updated": "2024-11-24T07:41:39.931685+00:00",
+            "context": {
+                "id": "01JDEHWZPVNSDPB4HKWN0WD440",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.home_assistant_supervisor_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": true,
+                "display_precision": 0,
+                "installed_version": "2024.11.4",
+                "in_progress": false,
+                "latest_version": "2024.11.4",
+                "release_summary": null,
+                "release_url": "https://github.com/home-assistant/supervisor/releases/tag/2024.11.4",
+                "skipped_version": null,
+                "title": "Home Assistant Supervisor",
+                "update_percentage": null,
+                "entity_picture": "https://brands.home-assistant.io/hassio/icon.png",
+                "friendly_name": "Home Assistant Supervisor Update",
+                "supported_features": 1
+            },
+            "last_changed": "2024-11-24T07:41:31.861904+00:00",
+            "last_reported": "2024-11-24T07:41:31.861904+00:00",
+            "last_updated": "2024-11-24T07:41:31.861904+00:00",
+            "context": {
+                "id": "01JDEHWQTN4D6MYTM4F9QTZZ7P",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.home_assistant_core_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "2024.11.3",
+                "in_progress": false,
+                "latest_version": "2024.11.3",
+                "release_summary": null,
+                "release_url": "https://www.home-assistant.io/latest-release-notes/",
+                "skipped_version": null,
+                "title": "Home Assistant Core",
+                "update_percentage": null,
+                "entity_picture": "https://brands.home-assistant.io/homeassistant/icon.png",
+                "friendly_name": "Home Assistant Core Update",
+                "supported_features": 11
+            },
+            "last_changed": "2024-11-24T07:41:31.862220+00:00",
+            "last_reported": "2024-11-24T07:41:31.862220+00:00",
+            "last_updated": "2024-11-24T07:41:31.862220+00:00",
+            "context": {
+                "id": "01JDEHWQTPTRVRHMTNNA9821P0",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.terminal_ssh_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "9.15.0",
+                "in_progress": false,
+                "latest_version": "9.15.0",
+                "release_summary": "# Changelog\n\n## 9.15.0\n\n- Upgrade Home Assistant CLI to 4.36.0\n\n## 9.14.0\n\n- Upgrade Home Assistant CLI to 4.34.0\n\n## 9.13.0\n\n- Enable ha command completion for non-login shell (e.g. the web terminal)\n\n## 9.12.0\n\n- Install completions for ha commands\n- Fi",
+                "release_url": null,
+                "skipped_version": null,
+                "title": "Terminal & SSH",
+                "update_percentage": null,
+                "entity_picture": "/api/hassio/addons/core_ssh/icon",
+                "friendly_name": "Terminal & SSH Update",
+                "supported_features": 25
+            },
+            "last_changed": "2024-11-24T07:41:31.862422+00:00",
+            "last_reported": "2024-11-24T07:41:31.862422+00:00",
+            "last_updated": "2024-11-24T07:41:31.862422+00:00",
+            "context": {
+                "id": "01JDEHWQTPGK4JVX756KRP8WRS",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.aircast_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": true,
+                "display_precision": 0,
+                "installed_version": "4.2.2",
+                "in_progress": false,
+                "latest_version": "4.2.2",
+                "release_summary": "## What’s changed\n\n## ⬆️ Dependency updates\n\n- ⬆️ Update ghcr.io/hassio-addons/debian-base Docker tag to v7.3.4 @renovate ([#205](https://github.com/hassio-addons/addon-aircast/pull/205))\n- ⬆️ Update ghcr.io/hassio-addons/debian-base Docker tag to v7.3.5 ",
+                "release_url": null,
+                "skipped_version": null,
+                "title": "AirCast",
+                "update_percentage": null,
+                "entity_picture": "/api/hassio/addons/a0d7b954_aircast/icon",
+                "friendly_name": "AirCast Update",
+                "supported_features": 25
+            },
+            "last_changed": "2024-11-24T07:41:31.862591+00:00",
+            "last_reported": "2024-11-24T07:41:31.862591+00:00",
+            "last_updated": "2024-11-24T07:41:31.862591+00:00",
+            "context": {
+                "id": "01JDEHWQTPT31Y4R2GX873TQSG",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.tailscale_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": true,
+                "display_precision": 0,
+                "installed_version": "0.23.3",
+                "in_progress": false,
+                "latest_version": "0.23.3",
+                "release_summary": "## What’s changed\n\n## 🐛 Bug fixes\n\n- Fix subnet protection for non-full network states (eg. limited, etc.) @lmagyar ([#419](https://github.com/hassio-addons/addon-tailscale/pull/419))\n\n## ⬆️ Dependency updates\n\n- ⬆️ Update Add-on base image to v16.3.6 @re",
+                "release_url": null,
+                "skipped_version": null,
+                "title": "Tailscale",
+                "update_percentage": null,
+                "entity_picture": "/api/hassio/addons/a0d7b954_tailscale/icon",
+                "friendly_name": "Tailscale Update",
+                "supported_features": 25
+            },
+            "last_changed": "2024-11-24T07:41:31.862761+00:00",
+            "last_reported": "2024-11-24T07:41:31.862761+00:00",
+            "last_updated": "2024-11-24T07:41:31.862761+00:00",
+            "context": {
+                "id": "01JDEHWQTP40WVPF9X3FJTKJ4D",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.file_editor_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": true,
+                "display_precision": 0,
+                "installed_version": "5.8.0",
+                "in_progress": false,
+                "latest_version": "5.8.0",
+                "release_summary": "# Changelog\n\n## 5.8.0\n\n- Update base image to Alpine 3.19\n\n## 5.7.0\n\n- Use new location for accessing the Home Assistant configuration folder using `/homeassistant`\n- Add access to the new public configuration folders of add-ons\n- Upgrade to Alpine 3.18\n-",
+                "release_url": null,
+                "skipped_version": null,
+                "title": "File editor",
+                "update_percentage": null,
+                "entity_picture": "/api/hassio/addons/core_configurator/icon",
+                "friendly_name": "File editor Update",
+                "supported_features": 25
+            },
+            "last_changed": "2024-11-24T07:41:31.862919+00:00",
+            "last_reported": "2024-11-24T07:41:31.862919+00:00",
+            "last_updated": "2024-11-24T07:41:31.862919+00:00",
+            "context": {
+                "id": "01JDEHWQTPTADXEJRXN1PG675V",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.home_assistant_operating_system_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "13.2",
+                "in_progress": false,
+                "latest_version": "13.2",
+                "release_summary": null,
+                "release_url": "https://github.com/home-assistant/operating-system/releases/tag/13.2",
+                "skipped_version": null,
+                "title": "Home Assistant Operating System",
+                "update_percentage": null,
+                "entity_picture": "https://brands.home-assistant.io/homeassistant/icon.png",
+                "friendly_name": "Home Assistant Operating System Update",
+                "supported_features": 3
+            },
+            "last_changed": "2024-11-24T07:41:31.863161+00:00",
+            "last_reported": "2024-11-24T07:41:31.863161+00:00",
+            "last_updated": "2024-11-24T07:41:31.863161+00:00",
+            "context": {
+                "id": "01JDEHWQTQSTFC3SH3TQG429FF",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "zone.home",
+            "state": "0",
+            "attributes": {
+                "latitude": 48.7481718,
+                "longitude": 24.5207477,
+                "radius": 100,
+                "passive": false,
+                "persons": [],
+                "editable": true,
+                "icon": "mdi:home",
+                "friendly_name": "Home"
+            },
+            "last_changed": "2024-11-24T07:41:33.609232+00:00",
+            "last_reported": "2024-11-24T07:41:33.609232+00:00",
+            "last_updated": "2024-11-24T07:41:33.609232+00:00",
+            "context": {
+                "id": "01JDEHWSH979WKDB9CK1073W6W",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "timer.timer",
+            "state": "idle",
+            "attributes": {
+                "duration": "0:15:00",
+                "editable": true,
+                "icon": "mdi:timer",
+                "friendly_name": "Timer"
+            },
+            "last_changed": "2024-11-24T07:41:33.619526+00:00",
+            "last_reported": "2024-11-24T07:41:33.619526+00:00",
+            "last_updated": "2024-11-24T07:41:33.619526+00:00",
+            "context": {
+                "id": "01JDEHWSHKW3TMGG58M90B4AMC",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "conversation.home_assistant",
+            "state": "unknown",
+            "attributes": {
+                "friendly_name": "Home Assistant",
+                "supported_features": 1
+            },
+            "last_changed": "2024-11-24T07:41:34.134039+00:00",
+            "last_reported": "2024-11-24T07:41:34.134039+00:00",
+            "last_updated": "2024-11-24T07:41:34.134039+00:00",
+            "context": {
+                "id": "01JDEHWT1PYQCPA3WZ69Y9JSPD",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "tag.test_tag",
+            "state": "unknown",
+            "attributes": {
+                "tag_id": "0a69056c-2250-4571-9a10-077ad8744e59",
+                "last_scanned_by_device_id": null,
+                "friendly_name": "Test tag"
+            },
+            "last_changed": "2024-11-24T07:41:34.556511+00:00",
+            "last_reported": "2024-11-24T07:41:34.556511+00:00",
+            "last_updated": "2024-11-24T07:41:34.556511+00:00",
+            "context": {
+                "id": "01JDEHWTEWEY56ASGXA8PCE2S1",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sun.sun",
+            "state": "above_horizon",
+            "attributes": {
+                "next_dawn": "2024-11-25T05:09:54.412660+00:00",
+                "next_dusk": "2024-11-24T15:08:23.990464+00:00",
+                "next_midnight": "2024-11-24T22:09:02+00:00",
+                "next_noon": "2024-11-25T10:08:53+00:00",
+                "next_rising": "2024-11-25T05:46:13.888811+00:00",
+                "next_setting": "2024-11-24T14:32:12.223915+00:00",
+                "elevation": 10.78,
+                "azimuth": 220.44,
+                "rising": false,
+                "friendly_name": "Sun"
+            },
+            "last_changed": "2024-11-24T07:41:34.895114+00:00",
+            "last_reported": "2024-11-24T13:00:34.036958+00:00",
+            "last_updated": "2024-11-24T13:00:34.036958+00:00",
+            "context": {
+                "id": "01JDF44XBMG6WEXBH901F7VBXM",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.sun_next_dawn",
+            "state": "2024-11-25T05:09:54+00:00",
+            "attributes": {
+                "device_class": "timestamp",
+                "friendly_name": "Sun Next dawn"
+            },
+            "last_changed": "2024-11-24T07:41:34.895647+00:00",
+            "last_reported": "2024-11-24T07:41:34.895647+00:00",
+            "last_updated": "2024-11-24T07:41:34.895647+00:00",
+            "context": {
+                "id": "01JDEHWTSFD417XC4YJTG8QJWB",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.sun_next_dusk",
+            "state": "2024-11-24T15:08:23+00:00",
+            "attributes": {
+                "device_class": "timestamp",
+                "friendly_name": "Sun Next dusk"
+            },
+            "last_changed": "2024-11-24T07:41:34.895865+00:00",
+            "last_reported": "2024-11-24T07:41:34.895865+00:00",
+            "last_updated": "2024-11-24T07:41:34.895865+00:00",
+            "context": {
+                "id": "01JDEHWTSF5JFB7QZEZ8WYMRRP",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.sun_next_midnight",
+            "state": "2024-11-24T22:09:02+00:00",
+            "attributes": {
+                "device_class": "timestamp",
+                "friendly_name": "Sun Next midnight"
+            },
+            "last_changed": "2024-11-24T07:41:34.896014+00:00",
+            "last_reported": "2024-11-24T07:41:34.896014+00:00",
+            "last_updated": "2024-11-24T07:41:34.896014+00:00",
+            "context": {
+                "id": "01JDEHWTSG86ECWST8KYMJKHTD",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.sun_next_noon",
+            "state": "2024-11-25T10:08:53+00:00",
+            "attributes": {
+                "device_class": "timestamp",
+                "friendly_name": "Sun Next noon"
+            },
+            "last_changed": "2024-11-24T10:08:34.001761+00:00",
+            "last_reported": "2024-11-24T10:08:34.001761+00:00",
+            "last_updated": "2024-11-24T10:08:34.001761+00:00",
+            "context": {
+                "id": "01JDET9Z6HQE76M61HMGPCTFHA",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.sun_next_rising",
+            "state": "2024-11-25T05:46:13+00:00",
+            "attributes": {
+                "device_class": "timestamp",
+                "friendly_name": "Sun Next rising"
+            },
+            "last_changed": "2024-11-24T07:41:34.896374+00:00",
+            "last_reported": "2024-11-24T07:41:34.896374+00:00",
+            "last_updated": "2024-11-24T07:41:34.896374+00:00",
+            "context": {
+                "id": "01JDEHWTSGMFVN2K47D9ASA32P",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.sun_next_setting",
+            "state": "2024-11-24T14:32:12+00:00",
+            "attributes": {
+                "device_class": "timestamp",
+                "friendly_name": "Sun Next setting"
+            },
+            "last_changed": "2024-11-24T07:41:34.896511+00:00",
+            "last_reported": "2024-11-24T07:41:34.896511+00:00",
+            "last_updated": "2024-11-24T07:41:34.896511+00:00",
+            "context": {
+                "id": "01JDEHWTSGE2KKRRK2Q78AJ4WK",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "tts.google_en_com",
+            "state": "unknown",
+            "attributes": {
+                "friendly_name": "Google Translate en com"
+            },
+            "last_changed": "2024-11-24T07:41:35.137090+00:00",
+            "last_reported": "2024-11-24T07:41:35.137090+00:00",
+            "last_updated": "2024-11-24T07:41:35.137090+00:00",
+            "context": {
+                "id": "01JDEHWV11W34BP3R20RJ09CVZ",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "todo.shopping_list",
+            "state": "0",
+            "attributes": {
+                "friendly_name": "Shopping List",
+                "supported_features": 15
+            },
+            "last_changed": "2024-11-24T07:41:35.144287+00:00",
+            "last_reported": "2024-11-24T07:41:35.144287+00:00",
+            "last_updated": "2024-11-24T07:41:35.144287+00:00",
+            "context": {
+                "id": "01JDEHWV184834FD6F7MYG56BG",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "binary_sensor.ivano_frankivska_oblast_unknown",
+            "state": "off",
+            "attributes": {
+                "attribution": "Data provided by Ukraine Alarm",
+                "device_class": "safety",
+                "friendly_name": "Івано-Франківська область Unknown"
+            },
+            "last_changed": "2024-11-24T07:41:35.146402+00:00",
+            "last_reported": "2024-11-24T07:42:05.324638+00:00",
+            "last_updated": "2024-11-24T07:41:35.146402+00:00",
+            "context": {
+                "id": "01JDEHWV1AF25ESYKV9K0EFXXG",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "binary_sensor.ivano_frankivska_oblast_air",
+            "state": "off",
+            "attributes": {
+                "attribution": "Data provided by Ukraine Alarm",
+                "device_class": "safety",
+                "friendly_name": "Івано-Франківська область Air"
+            },
+            "last_changed": "2024-11-24T07:41:35.146574+00:00",
+            "last_reported": "2024-11-24T07:42:05.324667+00:00",
+            "last_updated": "2024-11-24T07:41:35.146574+00:00",
+            "context": {
+                "id": "01JDEHWV1ABNXC3KSBH487VZ35",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "binary_sensor.ivano_frankivska_oblast_urban_fights",
+            "state": "off",
+            "attributes": {
+                "attribution": "Data provided by Ukraine Alarm",
+                "device_class": "safety",
+                "friendly_name": "Івано-Франківська область Urban fights"
+            },
+            "last_changed": "2024-11-24T07:41:35.146711+00:00",
+            "last_reported": "2024-11-24T07:42:05.324679+00:00",
+            "last_updated": "2024-11-24T07:41:35.146711+00:00",
+            "context": {
+                "id": "01JDEHWV1AGWYEMND056P3VYKB",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "binary_sensor.ivano_frankivska_oblast_artillery",
+            "state": "off",
+            "attributes": {
+                "attribution": "Data provided by Ukraine Alarm",
+                "device_class": "safety",
+                "friendly_name": "Івано-Франківська область Artillery"
+            },
+            "last_changed": "2024-11-24T07:41:35.146861+00:00",
+            "last_reported": "2024-11-24T07:42:05.324690+00:00",
+            "last_updated": "2024-11-24T07:41:35.146861+00:00",
+            "context": {
+                "id": "01JDEHWV1A693ASD0ZR45W0RKK",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "binary_sensor.ivano_frankivska_oblast_chemical",
+            "state": "off",
+            "attributes": {
+                "attribution": "Data provided by Ukraine Alarm",
+                "device_class": "safety",
+                "friendly_name": "Івано-Франківська область Chemical"
+            },
+            "last_changed": "2024-11-24T07:41:35.146992+00:00",
+            "last_reported": "2024-11-24T07:42:05.324699+00:00",
+            "last_updated": "2024-11-24T07:41:35.146992+00:00",
+            "context": {
+                "id": "01JDEHWV1AH5DV00BCG21EE0V8",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "binary_sensor.ivano_frankivska_oblast_nuclear",
+            "state": "off",
+            "attributes": {
+                "attribution": "Data provided by Ukraine Alarm",
+                "device_class": "safety",
+                "friendly_name": "Івано-Франківська область Nuclear"
+            },
+            "last_changed": "2024-11-24T07:41:35.147136+00:00",
+            "last_reported": "2024-11-24T07:42:05.324708+00:00",
+            "last_updated": "2024-11-24T07:41:35.147136+00:00",
+            "context": {
+                "id": "01JDEHWV1BPAHW2THWYBHM1X8F",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "device_tracker.postman",
+            "state": "not_home",
+            "attributes": {
+                "source_type": "gps",
+                "battery_level": 45,
+                "latitude": 12.34,
+                "longitude": 56.78,
+                "gps_accuracy": 120,
+                "friendly_name": "Postman"
+            },
+            "last_changed": "2024-11-24T07:41:35.175082+00:00",
+            "last_reported": "2024-11-24T07:41:35.175082+00:00",
+            "last_updated": "2024-11-24T07:41:35.175082+00:00",
+            "context": {
+                "id": "01JDEHWV27NVGG2FGTF5AVGM57",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.postman_battery_state",
+            "state": "47",
+            "attributes": {
+                "Low power mode": false,
+                "unit_of_measurement": "%",
+                "device_class": "battery",
+                "icon": "mdi:battery",
+                "friendly_name": "Postman Battery State"
+            },
+            "last_changed": "2024-11-24T07:41:35.175531+00:00",
+            "last_reported": "2024-11-24T07:41:35.175531+00:00",
+            "last_updated": "2024-11-24T07:41:35.175531+00:00",
+            "context": {
+                "id": "01JDEHWV27F3BDJ4C529Y50Z8K",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "device_tracker.slnt",
+            "state": "not_home",
+            "attributes": {
+                "source_type": "gps",
+                "battery_level": 70,
+                "latitude": 48.917646926924,
+                "longitude": 24.701042769817082,
+                "gps_accuracy": 11.97675037116924,
+                "altitude": 264.6656494140625,
+                "vertical_accuracy": 27.681060791015625,
+                "friendly_name": "SLNT👁"
+            },
+            "last_changed": "2024-11-24T07:41:35.176076+00:00",
+            "last_reported": "2024-11-24T07:41:35.176076+00:00",
+            "last_updated": "2024-11-24T07:41:35.176076+00:00",
+            "context": {
+                "id": "01JDEHWV28N01XESP3SFVXM1KW",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.slnt_battery_state",
+            "state": "Charging",
+            "attributes": {
+                "Low Power Mode": false,
+                "icon": "mdi:battery-charging-80",
+                "friendly_name": "SLNT👁 Battery State"
+            },
+            "last_changed": "2024-11-24T07:41:35.176596+00:00",
+            "last_reported": "2024-11-24T07:41:35.176596+00:00",
+            "last_updated": "2024-11-24T07:41:35.176596+00:00",
+            "context": {
+                "id": "01JDEHWV280CZJDADQ6D6K07DB",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.slnt_storage",
+            "state": "unavailable",
+            "attributes": {
+                "unit_of_measurement": "% available",
+                "icon": "mdi:dots-square",
+                "friendly_name": "SLNT👁 Storage"
+            },
+            "last_changed": "2024-11-24T07:41:35.176748+00:00",
+            "last_reported": "2024-11-24T07:41:35.176748+00:00",
+            "last_updated": "2024-11-24T07:41:35.176748+00:00",
+            "context": {
+                "id": "01JDEHWV28BB7QQC1CSM6PAR36",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.slnt_battery_level",
+            "state": "80",
+            "attributes": {
+                "unit_of_measurement": "%",
+                "device_class": "battery",
+                "icon": "mdi:battery-charging-80",
+                "friendly_name": "SLNT👁 Battery Level"
+            },
+            "last_changed": "2024-11-24T07:41:35.176934+00:00",
+            "last_reported": "2024-11-24T07:41:35.176934+00:00",
+            "last_updated": "2024-11-24T07:41:35.176934+00:00",
+            "context": {
+                "id": "01JDEHWV28R25TZVWV1K2R5JYP",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.slnt_ssid",
+            "state": "Not Connected",
+            "attributes": {
+                "icon": "mdi:wifi-off",
+                "friendly_name": "SLNT👁 SSID"
+            },
+            "last_changed": "2024-11-24T07:41:35.177073+00:00",
+            "last_reported": "2024-11-24T07:41:35.177073+00:00",
+            "last_updated": "2024-11-24T07:41:35.177073+00:00",
+            "context": {
+                "id": "01JDEHWV29GZ44XSSKV71S5G00",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.slnt_sim_2",
+            "state": "unavailable",
+            "attributes": {
+                "icon": "mdi:dots-square",
+                "friendly_name": "SLNT👁 SIM 2"
+            },
+            "last_changed": "2024-11-24T07:41:35.177267+00:00",
+            "last_reported": "2024-11-24T07:41:35.177267+00:00",
+            "last_updated": "2024-11-24T07:41:35.177267+00:00",
+            "context": {
+                "id": "01JDEHWV297D14QE96K8JP81YB",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.slnt_sim_1",
+            "state": "unavailable",
+            "attributes": {
+                "icon": "mdi:dots-square",
+                "friendly_name": "SLNT👁 SIM 1"
+            },
+            "last_changed": "2024-11-24T07:41:35.177387+00:00",
+            "last_reported": "2024-11-24T07:41:35.177387+00:00",
+            "last_updated": "2024-11-24T07:41:35.177387+00:00",
+            "context": {
+                "id": "01JDEHWV2906277HRES2VDQCJY",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.slnt_bssid",
+            "state": "unavailable",
+            "attributes": {
+                "icon": "mdi:dots-square",
+                "friendly_name": "SLNT👁 BSSID"
+            },
+            "last_changed": "2024-11-24T07:41:35.177498+00:00",
+            "last_reported": "2024-11-24T07:41:35.177498+00:00",
+            "last_updated": "2024-11-24T07:41:35.177498+00:00",
+            "context": {
+                "id": "01JDEHWV2976D0PA0G28CXS7G5",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.slnt_connection_type",
+            "state": "Wi-Fi",
+            "attributes": {
+                "icon": "mdi:wifi",
+                "friendly_name": "SLNT👁 Connection Type"
+            },
+            "last_changed": "2024-11-24T07:41:35.177621+00:00",
+            "last_reported": "2024-11-24T07:41:35.177621+00:00",
+            "last_updated": "2024-11-24T07:41:35.177621+00:00",
+            "context": {
+                "id": "01JDEHWV29R3H3Y6D9BC60JEJX",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.slnt_geocoded_location",
+            "state": "Hetmana Mazepy Street, 72\nIvano-Frankivsk Ivano-Frankivsk Oblast\n76018\nUkraine",
+            "attributes": {
+                "Administrative Area": "Ivano-Frankivsk Oblast",
+                "Areas Of Interest": "N/A",
+                "Country": "Ukraine",
+                "Inland Water": "N/A",
+                "ISO Country Code": "UA",
+                "Locality": "Ivano-Frankivsk",
+                "Location": [
+                    48.917646926924,
+                    24.701042769817082
+                ],
+                "Name": "Hetmana Mazepy Street, 72",
+                "Ocean": "N/A",
+                "Postal Code": "76018",
+                "Sub Administrative Area": "N/A",
+                "Sub Locality": "N/A",
+                "Sub Thoroughfare": "72",
+                "Thoroughfare": "Hetmana Mazepy Street",
+                "Time Zone": "Europe/Kiev",
+                "Zones": [],
+                "icon": "mdi:map",
+                "friendly_name": "SLNT👁 Geocoded Location"
+            },
+            "last_changed": "2024-11-24T07:41:35.177762+00:00",
+            "last_reported": "2024-11-24T07:41:35.177762+00:00",
+            "last_updated": "2024-11-24T07:41:35.177762+00:00",
+            "context": {
+                "id": "01JDEHWV29KJXG1JETDP9QA7P4",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.slnt_last_update_trigger",
+            "state": "Signaled",
+            "attributes": {
+                "icon": "mdi:cellphone-wireless",
+                "friendly_name": "SLNT👁 Last Update Trigger"
+            },
+            "last_changed": "2024-11-24T07:41:35.177880+00:00",
+            "last_reported": "2024-11-24T07:41:35.177880+00:00",
+            "last_updated": "2024-11-24T07:41:35.177880+00:00",
+            "context": {
+                "id": "01JDEHWV298K3RC6TGMXVYGQ9Z",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.ios_themes_dark_mode_and_light_mode_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "v3.0.1",
+                "in_progress": false,
+                "latest_version": "v3.0.1",
+                "release_summary": null,
+                "release_url": "https://github.com/basnijholt/lovelace-ios-themes/releases/v3.0.1",
+                "skipped_version": null,
+                "title": null,
+                "update_percentage": null,
+                "friendly_name": "iOS Themes - Dark Mode and Light Mode update",
+                "supported_features": 23
+            },
+            "last_changed": "2024-11-24T07:41:35.184691+00:00",
+            "last_reported": "2024-11-24T07:41:35.184691+00:00",
+            "last_updated": "2024-11-24T07:41:35.184691+00:00",
+            "context": {
+                "id": "01JDEHWV2G5JRA8PMA0Y6DSNJT",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.auto_entities_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "v1.13.0",
+                "in_progress": false,
+                "latest_version": "v1.13.0",
+                "release_summary": null,
+                "release_url": "https://github.com/thomasloven/lovelace-auto-entities/releases/v1.13.0",
+                "skipped_version": null,
+                "title": null,
+                "update_percentage": null,
+                "friendly_name": "auto-entities update",
+                "supported_features": 23
+            },
+            "last_changed": "2024-11-24T07:41:35.184862+00:00",
+            "last_reported": "2024-11-24T07:41:35.184862+00:00",
+            "last_updated": "2024-11-24T07:41:35.184862+00:00",
+            "context": {
+                "id": "01JDEHWV2GEDQA03WAFHZXNDP0",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.philips_airpurifier_with_coap_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "v0.25.0",
+                "in_progress": false,
+                "latest_version": "v0.25.0",
+                "release_summary": null,
+                "release_url": "https://github.com/kongo09/philips-airpurifier-coap/releases/v0.25.0",
+                "skipped_version": null,
+                "title": null,
+                "update_percentage": null,
+                "entity_picture": "https://brands.home-assistant.io/_/philips_airpurifier_coap/icon.png",
+                "friendly_name": "Philips AirPurifier (with CoAP) update",
+                "supported_features": 23
+            },
+            "last_changed": "2024-11-24T07:41:35.184979+00:00",
+            "last_reported": "2024-11-24T07:41:35.184979+00:00",
+            "last_updated": "2024-11-24T07:41:35.184979+00:00",
+            "context": {
+                "id": "01JDEHWV2GNHQECQKWJBT6S75P",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.yeelight_bluetooth_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "v1.4.1",
+                "in_progress": false,
+                "latest_version": "v1.4.1",
+                "release_summary": null,
+                "release_url": "https://github.com/hcoohb/hass-yeelightbt/releases/v1.4.1",
+                "skipped_version": null,
+                "title": null,
+                "update_percentage": null,
+                "entity_picture": "https://brands.home-assistant.io/_/yeelight_bt/icon.png",
+                "friendly_name": "Yeelight bluetooth update",
+                "supported_features": 23
+            },
+            "last_changed": "2024-11-24T07:41:35.185099+00:00",
+            "last_reported": "2024-11-24T07:41:35.185099+00:00",
+            "last_updated": "2024-11-24T07:41:35.185099+00:00",
+            "context": {
+                "id": "01JDEHWV2HQM8D07E8FB4XW83N",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.simple_weather_card_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "v0.8.5",
+                "in_progress": false,
+                "latest_version": "v0.8.5",
+                "release_summary": null,
+                "release_url": "https://github.com/kalkih/simple-weather-card/releases/v0.8.5",
+                "skipped_version": null,
+                "title": null,
+                "update_percentage": null,
+                "friendly_name": "Simple Weather Card update",
+                "supported_features": 23
+            },
+            "last_changed": "2024-11-24T07:41:35.185231+00:00",
+            "last_reported": "2024-11-24T07:41:35.185231+00:00",
+            "last_updated": "2024-11-24T07:41:35.185231+00:00",
+            "context": {
+                "id": "01JDEHWV2HMBZ9YXKGCRQE27PX",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.hacs_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "2.0.1",
+                "in_progress": false,
+                "latest_version": "2.0.1",
+                "release_summary": null,
+                "release_url": "https://github.com/hacs/integration/releases/2.0.1",
+                "skipped_version": null,
+                "title": null,
+                "update_percentage": null,
+                "entity_picture": "https://brands.home-assistant.io/_/hacs/icon.png",
+                "friendly_name": "HACS update",
+                "supported_features": 23
+            },
+            "last_changed": "2024-11-24T07:41:35.185344+00:00",
+            "last_reported": "2024-11-24T07:41:35.185344+00:00",
+            "last_updated": "2024-11-24T07:41:35.185344+00:00",
+            "context": {
+                "id": "01JDEHWV2HW7CZNKS8QM88VYZ4",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.ui_lovelace_minimalist_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "v1.3.10",
+                "in_progress": false,
+                "latest_version": "v1.3.10",
+                "release_summary": null,
+                "release_url": "https://github.com/UI-Lovelace-Minimalist/UI/releases/v1.3.10",
+                "skipped_version": null,
+                "title": null,
+                "update_percentage": null,
+                "entity_picture": "https://brands.home-assistant.io/_/ui_lovelace_minimalist/icon.png",
+                "friendly_name": "UI Lovelace Minimalist update",
+                "supported_features": 23
+            },
+            "last_changed": "2024-11-24T07:41:35.185450+00:00",
+            "last_reported": "2024-11-24T07:41:35.185450+00:00",
+            "last_updated": "2024-11-24T07:41:35.185450+00:00",
+            "context": {
+                "id": "01JDEHWV2H4JM7ENS5GZPDX4FT",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.button_card_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "v4.1.2",
+                "in_progress": false,
+                "latest_version": "v4.1.2",
+                "release_summary": null,
+                "release_url": "https://github.com/custom-cards/button-card/releases/v4.1.2",
+                "skipped_version": null,
+                "title": null,
+                "update_percentage": null,
+                "friendly_name": "button-card update",
+                "supported_features": 23
+            },
+            "last_changed": "2024-11-24T07:41:35.185671+00:00",
+            "last_reported": "2024-11-24T07:41:35.185671+00:00",
+            "last_updated": "2024-11-24T07:41:35.185671+00:00",
+            "context": {
+                "id": "01JDEHWV2HE3BAY1TW8F81K1T1",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.weather_com_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "1.2.0",
+                "in_progress": false,
+                "latest_version": "1.2.0",
+                "release_summary": null,
+                "release_url": "https://github.com/jaydeethree/Home-Assistant-weatherdotcom/releases/1.2.0",
+                "skipped_version": null,
+                "title": null,
+                "update_percentage": null,
+                "entity_picture": "https://brands.home-assistant.io/_/weatherdotcom/icon.png",
+                "friendly_name": "Weather.com update",
+                "supported_features": 23
+            },
+            "last_changed": "2024-11-24T07:41:35.185802+00:00",
+            "last_reported": "2024-11-24T07:41:35.185802+00:00",
+            "last_updated": "2024-11-24T07:41:35.185802+00:00",
+            "context": {
+                "id": "01JDEHWV2H5XMF3YSR0BYSNFA0",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "update.mushroom_update",
+            "state": "off",
+            "attributes": {
+                "auto_update": false,
+                "display_precision": 0,
+                "installed_version": "v4.2.0",
+                "in_progress": false,
+                "latest_version": "v4.2.0",
+                "release_summary": null,
+                "release_url": "https://github.com/piitaya/lovelace-mushroom/releases/v4.2.0",
+                "skipped_version": null,
+                "title": null,
+                "update_percentage": null,
+                "friendly_name": "Mushroom update",
+                "supported_features": 23
+            },
+            "last_changed": "2024-11-24T07:41:35.185906+00:00",
+            "last_reported": "2024-11-24T07:41:35.185906+00:00",
+            "last_updated": "2024-11-24T07:41:35.185906+00:00",
+            "context": {
+                "id": "01JDEHWV2HBX9MVYHYN5KP8332",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "light.bedside_lamp",
+            "state": "off",
+            "attributes": {
+                "min_color_temp_kelvin": 1700,
+                "max_color_temp_kelvin": 6535,
+                "min_mireds": 153,
+                "max_mireds": 588,
+                "effect_list": null,
+                "supported_color_modes": [
+                    "color_temp",
+                    "hs"
+                ],
+                "effect": null,
+                "color_mode": null,
+                "brightness": null,
+                "color_temp_kelvin": null,
+                "color_temp": null,
+                "hs_color": null,
+                "rgb_color": null,
+                "xy_color": null,
+                "friendly_name": "Bedside lamp",
+                "supported_features": 36
+            },
+            "last_changed": "2024-11-24T07:41:37.671357+00:00",
+            "last_reported": "2024-11-24T07:42:05.756452+00:00",
+            "last_updated": "2024-11-24T07:41:37.671357+00:00",
+            "context": {
+                "id": "01JDEHWXG7CXV8P961E8W3JCZC",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "binary_sensor.archer_c80_ac1900_mu_mimo_wi_fi_router_wan_status",
+            "state": "on",
+            "attributes": {
+                "device_class": "connectivity",
+                "friendly_name": "Archer C80 AC1900 MU-MIMO Wi-Fi Router WAN status"
+            },
+            "last_changed": "2024-11-24T07:41:35.208526+00:00",
+            "last_reported": "2024-11-24T07:42:05.123427+00:00",
+            "last_updated": "2024-11-24T07:41:35.208526+00:00",
+            "context": {
+                "id": "01JDEHWV38RJXEAW856ZVDEFRF",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.archer_c80_ac1900_mu_mimo_wi_fi_router_external_ip",
+            "state": "100.101.47.154",
+            "attributes": {
+                "friendly_name": "Archer C80 AC1900 MU-MIMO Wi-Fi Router External IP"
+            },
+            "last_changed": "2024-11-24T07:41:35.209269+00:00",
+            "last_reported": "2024-11-24T07:42:05.123472+00:00",
+            "last_updated": "2024-11-24T07:41:35.209269+00:00",
+            "context": {
+                "id": "01JDEHWV390X2F1Q1EFCC0KVR3",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.archer_c80_ac1900_mu_mimo_wi_fi_router_download_speed",
+            "state": "1180.55800041911",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "KiB/s",
+                "device_class": "data_rate",
+                "friendly_name": "Archer C80 AC1900 MU-MIMO Wi-Fi Router Download speed"
+            },
+            "last_changed": "2024-11-24T13:02:05.123449+00:00",
+            "last_reported": "2024-11-24T13:02:05.123449+00:00",
+            "last_updated": "2024-11-24T13:02:05.123449+00:00",
+            "context": {
+                "id": "01JDF47PA3RDN8FWDQ0SVF03ND",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.archer_c80_ac1900_mu_mimo_wi_fi_router_upload_speed",
+            "state": "15.9720705391197",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "KiB/s",
+                "device_class": "data_rate",
+                "friendly_name": "Archer C80 AC1900 MU-MIMO Wi-Fi Router Upload speed"
+            },
+            "last_changed": "2024-11-24T13:02:05.123501+00:00",
+            "last_reported": "2024-11-24T13:02:05.123501+00:00",
+            "last_updated": "2024-11-24T13:02:05.123501+00:00",
+            "context": {
+                "id": "01JDF47PA3H2AMNRTD821WM557",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "weather.forecast_home",
+            "state": "rainy",
+            "attributes": {
+                "temperature": 4.8,
+                "dew_point": -2.7,
+                "temperature_unit": "°C",
+                "humidity": 59,
+                "cloud_coverage": 100.0,
+                "uv_index": 0.6,
+                "pressure": 1028.2,
+                "pressure_unit": "hPa",
+                "wind_bearing": 226.1,
+                "wind_speed": 29.5,
+                "wind_speed_unit": "km/h",
+                "visibility_unit": "km",
+                "precipitation_unit": "mm",
+                "attribution": "Weather forecast from met.no, delivered by the Norwegian Meteorological Institute.",
+                "friendly_name": "Forecast Home",
+                "supported_features": 3
+            },
+            "last_changed": "2024-11-24T12:31:35.487718+00:00",
+            "last_reported": "2024-11-24T12:31:35.487718+00:00",
+            "last_updated": "2024-11-24T12:31:35.487718+00:00",
+            "context": {
+                "id": "01JDF2FVHZ5RSNBNK4316ZG9R8",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "weather.home",
+            "state": "cloudy",
+            "attributes": {
+                "temperature": 3.0,
+                "apparent_temperature": 3.0,
+                "dew_point": -3.0,
+                "temperature_unit": "°C",
+                "humidity": 65,
+                "uv_index": 0,
+                "pressure": 1029.12,
+                "pressure_unit": "hPa",
+                "wind_bearing": 130,
+                "wind_speed": 5.0,
+                "wind_speed_unit": "km/h",
+                "visibility": 14.48,
+                "visibility_unit": "km",
+                "precipitation_unit": "mm",
+                "supported_features": 3
+            },
+            "last_changed": "2024-11-24T08:21:35.945428+00:00",
+            "last_reported": "2024-11-24T13:01:42.929459+00:00",
+            "last_updated": "2024-11-24T13:01:42.929459+00:00",
+            "context": {
+                "id": "01JDF470MHZRGMBNY37RXA6YVS",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_local_observation_time",
+            "state": "2024-11-24T14:59:15+0200",
+            "attributes": {
+                "attribution": "Data provided by the Weather.com weather service",
+                "icon": "mdi:clock",
+                "friendly_name": "Local Observation Time"
+            },
+            "last_changed": "2024-11-24T13:01:42.929560+00:00",
+            "last_reported": "2024-11-24T13:01:42.929560+00:00",
+            "last_updated": "2024-11-24T13:01:42.929560+00:00",
+            "context": {
+                "id": "01JDF470MHAXCN96HS3BBPCKR2",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_weather_description",
+            "state": "Cloudy",
+            "attributes": {
+                "attribution": "Data provided by the Weather.com weather service",
+                "icon": "mdi:note-text",
+                "friendly_name": "Weather Description"
+            },
+            "last_changed": "2024-11-24T10:21:37.873604+00:00",
+            "last_reported": "2024-11-24T10:21:37.873604+00:00",
+            "last_updated": "2024-11-24T10:21:37.873604+00:00",
+            "context": {
+                "id": "01JDEV1WPHWGYXNKPX9YP8C8PW",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_relative_humidity",
+            "state": "65",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "%",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "humidity",
+                "icon": "mdi:water-percent",
+                "friendly_name": "Relative Humidity"
+            },
+            "last_changed": "2024-11-24T13:01:42.929614+00:00",
+            "last_reported": "2024-11-24T13:01:42.929614+00:00",
+            "last_updated": "2024-11-24T13:01:42.929614+00:00",
+            "context": {
+                "id": "01JDF470MHZ4WMQKHD0DFXHPR2",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_uv_index",
+            "state": "0",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "UV index",
+                "attribution": "Data provided by the Weather.com weather service",
+                "icon": "mdi:sunglasses",
+                "friendly_name": "UV Index"
+            },
+            "last_changed": "2024-11-24T11:21:39.757306+00:00",
+            "last_reported": "2024-11-24T11:21:39.757306+00:00",
+            "last_updated": "2024-11-24T11:21:39.757306+00:00",
+            "context": {
+                "id": "01JDEYFT5D57S9GN89ADR5F7ZA",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_wind_direction_degrees",
+            "state": "130",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "°",
+                "attribution": "Data provided by the Weather.com weather service",
+                "icon": "mdi:weather-windy",
+                "friendly_name": "Wind Direction - Degrees"
+            },
+            "last_changed": "2024-11-24T12:41:41.914840+00:00",
+            "last_reported": "2024-11-24T12:41:41.914840+00:00",
+            "last_updated": "2024-11-24T12:41:41.914840+00:00",
+            "context": {
+                "id": "01JDF32BRTNPVSJ75DF8NC356R",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_wind_direction_cardinal",
+            "state": "SE",
+            "attributes": {
+                "attribution": "Data provided by the Weather.com weather service",
+                "icon": "mdi:weather-windy",
+                "friendly_name": "Wind Direction - Cardinal"
+            },
+            "last_changed": "2024-11-24T11:21:39.757347+00:00",
+            "last_reported": "2024-11-24T11:21:39.757347+00:00",
+            "last_updated": "2024-11-24T11:21:39.757347+00:00",
+            "context": {
+                "id": "01JDEYFT5DS7B7W5YNNCH7EE0H",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_dewpoint",
+            "state": "-3",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "°C",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "temperature",
+                "icon": "mdi:water",
+                "friendly_name": "Dewpoint"
+            },
+            "last_changed": "2024-11-24T10:41:38.788896+00:00",
+            "last_reported": "2024-11-24T10:41:38.788896+00:00",
+            "last_updated": "2024-11-24T10:41:38.788896+00:00",
+            "context": {
+                "id": "01JDEW6HF4BYNPA3A1S9TYRWHH",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_temperature_feels_like",
+            "state": "3",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "°C",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "temperature",
+                "icon": "mdi:thermometer",
+                "friendly_name": "Temperature - Feels Like"
+            },
+            "last_changed": "2024-11-24T12:41:41.914892+00:00",
+            "last_reported": "2024-11-24T12:41:41.914892+00:00",
+            "last_updated": "2024-11-24T12:41:41.914892+00:00",
+            "context": {
+                "id": "01JDF32BRT6SNHMZ53HFKKGAA2",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_temperature",
+            "state": "3",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "°C",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "temperature",
+                "icon": "mdi:thermometer",
+                "friendly_name": "Temperature"
+            },
+            "last_changed": "2024-11-24T12:21:41.750183+00:00",
+            "last_reported": "2024-11-24T12:21:41.750183+00:00",
+            "last_updated": "2024-11-24T12:21:41.750183+00:00",
+            "context": {
+                "id": "01JDF1XQQPGH32YZ7KJQJ4MDJJ",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_heat_index",
+            "state": "3",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "°C",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "temperature",
+                "icon": "mdi:thermometer",
+                "friendly_name": "Heat Index"
+            },
+            "last_changed": "2024-11-24T12:21:41.750203+00:00",
+            "last_reported": "2024-11-24T12:21:41.750203+00:00",
+            "last_updated": "2024-11-24T12:21:41.750203+00:00",
+            "context": {
+                "id": "01JDF1XQQPFF73E3PZ3S0E4Q0E",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_wind_chill",
+            "state": "3",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "°C",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "temperature",
+                "icon": "mdi:thermometer",
+                "friendly_name": "Wind Chill"
+            },
+            "last_changed": "2024-11-24T12:41:41.914943+00:00",
+            "last_reported": "2024-11-24T12:41:41.914943+00:00",
+            "last_updated": "2024-11-24T12:41:41.914943+00:00",
+            "context": {
+                "id": "01JDF32BRTDHWWP55599YVQ8C0",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_precipitation_last_hour",
+            "state": "0",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "mm",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "precipitation",
+                "icon": "mdi:umbrella",
+                "friendly_name": "Precipitation - Last hour"
+            },
+            "last_changed": "2024-11-24T07:41:35.219281+00:00",
+            "last_reported": "2024-11-24T07:41:35.219281+00:00",
+            "last_updated": "2024-11-24T07:41:35.219281+00:00",
+            "context": {
+                "id": "01JDEHWV3KTKVGEHECTBQHG21S",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_precipitation_last_6_hours",
+            "state": "0",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "mm",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "precipitation",
+                "icon": "mdi:umbrella",
+                "friendly_name": "Precipitation - Last 6 hours"
+            },
+            "last_changed": "2024-11-24T07:41:35.219369+00:00",
+            "last_reported": "2024-11-24T07:41:35.219369+00:00",
+            "last_updated": "2024-11-24T07:41:35.219369+00:00",
+            "context": {
+                "id": "01JDEHWV3K6HKQ6VATJ9G6JD9Y",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_precipitation_last_24_hours",
+            "state": "0",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "mm",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "precipitation",
+                "icon": "mdi:umbrella",
+                "friendly_name": "Precipitation - Last 24 hours"
+            },
+            "last_changed": "2024-11-24T07:41:35.219459+00:00",
+            "last_reported": "2024-11-24T07:41:35.219459+00:00",
+            "last_updated": "2024-11-24T07:41:35.219459+00:00",
+            "context": {
+                "id": "01JDEHWV3K17WW83TZHKX9VN3C",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_pressure",
+            "state": "1029.12",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "mbar",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "pressure",
+                "icon": "mdi:gauge",
+                "friendly_name": "Pressure"
+            },
+            "last_changed": "2024-11-24T12:41:41.915010+00:00",
+            "last_reported": "2024-11-24T12:41:41.915010+00:00",
+            "last_updated": "2024-11-24T12:41:41.915010+00:00",
+            "context": {
+                "id": "01JDF32BRVG7HDK4FPTDVPJ2BB",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_wind_gust",
+            "state": "5",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "km/h",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "wind_speed",
+                "icon": "mdi:weather-windy",
+                "friendly_name": "Wind Gust"
+            },
+            "last_changed": "2024-11-24T12:41:41.915040+00:00",
+            "last_reported": "2024-11-24T12:41:41.915040+00:00",
+            "last_updated": "2024-11-24T12:41:41.915040+00:00",
+            "context": {
+                "id": "01JDF32BRVKG3QJ0YZXQK6BGAP",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_wind_speed",
+            "state": "5",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "km/h",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "wind_speed",
+                "icon": "mdi:weather-windy",
+                "friendly_name": "Wind Speed"
+            },
+            "last_changed": "2024-11-24T12:41:41.915060+00:00",
+            "last_reported": "2024-11-24T12:41:41.915060+00:00",
+            "last_updated": "2024-11-24T12:41:41.915060+00:00",
+            "context": {
+                "id": "01JDF32BRVSDN3TWRGMNNW0KQK",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_cloud_ceiling",
+            "state": "8400",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "m",
+                "attribution": "Data provided by the Weather.com weather service",
+                "device_class": "distance",
+                "icon": "mdi:clouds",
+                "friendly_name": "Cloud Ceiling"
+            },
+            "last_changed": "2024-11-24T12:41:41.915079+00:00",
+            "last_reported": "2024-11-24T12:41:41.915079+00:00",
+            "last_updated": "2024-11-24T12:41:41.915079+00:00",
+            "context": {
+                "id": "01JDF32BRV5QBWXZ8VBQ2FDS9E",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_pressure_tendency_trend",
+            "state": "Falling",
+            "attributes": {
+                "attribution": "Data provided by the Weather.com weather service",
+                "icon": "mdi:gauge",
+                "friendly_name": "Pressure Tendency Trend"
+            },
+            "last_changed": "2024-11-24T08:41:36.709467+00:00",
+            "last_reported": "2024-11-24T08:41:36.709467+00:00",
+            "last_updated": "2024-11-24T08:41:36.709467+00:00",
+            "context": {
+                "id": "01JDENAR65Z2ATNNAE9HBGHJT5",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_cloud_cover_phrase",
+            "state": "Cloudy",
+            "attributes": {
+                "attribution": "Data provided by the Weather.com weather service",
+                "icon": "mdi:clouds",
+                "friendly_name": "Cloud Cover Phrase"
+            },
+            "last_changed": "2024-11-24T10:21:37.873954+00:00",
+            "last_reported": "2024-11-24T10:21:37.873954+00:00",
+            "last_updated": "2024-11-24T10:21:37.873954+00:00",
+            "context": {
+                "id": "01JDEV1WPH99BKHFMCB2V7P6QE",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_latitude",
+            "state": "48.919",
+            "attributes": {
+                "attribution": "Data provided by the Weather.com weather service",
+                "icon": "mdi:latitude",
+                "friendly_name": "Latitude"
+            },
+            "last_changed": "2024-11-24T07:41:35.220075+00:00",
+            "last_reported": "2024-11-24T07:41:35.220075+00:00",
+            "last_updated": "2024-11-24T07:41:35.220075+00:00",
+            "context": {
+                "id": "01JDEHWV3MA28PW4QPJZGF2M41",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.home_longitude",
+            "state": "24.715",
+            "attributes": {
+                "attribution": "Data provided by the Weather.com weather service",
+                "icon": "mdi:longitude",
+                "friendly_name": "Longitude"
+            },
+            "last_changed": "2024-11-24T07:41:35.220161+00:00",
+            "last_reported": "2024-11-24T07:41:35.220161+00:00",
+            "last_updated": "2024-11-24T07:41:35.220161+00:00",
+            "context": {
+                "id": "01JDEHWV3MQVZDN3AAABNS15GG",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "binary_sensor.my_device_water_tank",
+            "state": "off",
+            "attributes": {
+                "device_class": "moisture",
+                "icon": "mdi:water-off",
+                "friendly_name": "My Device Water Tank"
+            },
+            "last_changed": "2024-11-24T07:41:35.224988+00:00",
+            "last_reported": "2024-11-24T07:41:35.224988+00:00",
+            "last_updated": "2024-11-24T07:41:35.224988+00:00",
+            "context": {
+                "id": "01JDEHWV3RX5QMJGCF7JHSCSMH",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "fan.philips_purifier",
+            "state": "off",
+            "attributes": {
+                "preset_modes": [
+                    "auto",
+                    "allergen",
+                    "night",
+                    "speed 1",
+                    "speed 2",
+                    "speed 3",
+                    "turbo"
+                ],
+                "percentage": null,
+                "percentage_step": 20.0,
+                "preset_mode": null,
+                "name": "Living Room",
+                "type": "AC2729",
+                "model_id": "AC2729/10",
+                "product_id": "85bc26fae62611e8a1e3061302926720",
+                "device_id": "5481a560d49e11ed8cf93fd097c4fc9b",
+                "software_version": "0.3.4",
+                "wifi_version": "AWS_Philips_AIR@91.1",
+                "error_code": 49408,
+                "preferred_index": "PM2.5",
+                "runtime": "2 days, 2:19:38",
+                "icon": "pap:power_button",
+                "friendly_name": "philips purifier",
+                "supported_features": 57
+            },
+            "last_changed": "2024-11-24T07:44:59.507332+00:00",
+            "last_reported": "2024-11-24T08:15:59.852142+00:00",
+            "last_updated": "2024-11-24T08:15:59.852142+00:00",
+            "context": {
+                "id": "01JDEKVVBC53K8CC4BBXGRQDB7",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "humidifier.my_device_humidifier",
+            "state": "off",
+            "attributes": {
+                "min_humidity": 40,
+                "max_humidity": 70,
+                "action": "off",
+                "current_humidity": 44,
+                "humidity": 50,
+                "device_class": "humidifier",
+                "icon": "pap:humidity_button",
+                "friendly_name": "My Device Humidifier",
+                "supported_features": 0
+            },
+            "last_changed": "2024-11-24T07:41:35.229266+00:00",
+            "last_reported": "2024-11-24T08:13:57.881565+00:00",
+            "last_updated": "2024-11-24T08:13:57.881565+00:00",
+            "context": {
+                "id": "01JDEKR47S29SG743N3BTW85FT",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "light.philips_purifier_display_backlight",
+            "state": "on",
+            "attributes": {
+                "supported_color_modes": [
+                    "onoff"
+                ],
+                "color_mode": "onoff",
+                "icon": "pap:light_dimming_button",
+                "friendly_name": "philips purifier Display Backlight",
+                "supported_features": 0
+            },
+            "last_changed": "2024-11-24T07:41:35.229641+00:00",
+            "last_reported": "2024-11-24T07:41:35.229641+00:00",
+            "last_updated": "2024-11-24T07:41:35.229641+00:00",
+            "context": {
+                "id": "01JDEHWV3X1FF6CPNWX464WEWH",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "light.philips_purifier_light_brightness",
+            "state": "on",
+            "attributes": {
+                "supported_color_modes": [
+                    "brightness"
+                ],
+                "color_mode": "brightness",
+                "brightness": 255,
+                "icon": "mdi:circle-outline",
+                "friendly_name": "philips purifier Light Brightness",
+                "supported_features": 0
+            },
+            "last_changed": "2024-11-24T07:41:35.229910+00:00",
+            "last_reported": "2024-11-24T07:41:35.229910+00:00",
+            "last_updated": "2024-11-24T07:41:35.229910+00:00",
+            "context": {
+                "id": "01JDEHWV3XPEH6JW9XZCCBZ8TV",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "select.philips_purifier_preferred_index",
+            "state": "PM2.5",
+            "attributes": {
+                "options": [
+                    "Indoor Allergen Index",
+                    "PM2.5"
+                ],
+                "icon": "pap:pm25b",
+                "friendly_name": "philips purifier Preferred Index"
+            },
+            "last_changed": "2024-11-24T07:41:35.231552+00:00",
+            "last_reported": "2024-11-24T07:41:35.231552+00:00",
+            "last_updated": "2024-11-24T07:41:35.231552+00:00",
+            "context": {
+                "id": "01JDEHWV3ZRSBT79PSPYN88A2C",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_indoor_allergen_index",
+            "state": "4",
+            "attributes": {
+                "state_class": "measurement",
+                "icon": "pap:iai",
+                "friendly_name": "philips purifier Indoor Allergen Index"
+            },
+            "last_changed": "2024-11-24T08:12:30.321801+00:00",
+            "last_reported": "2024-11-24T08:12:41.780175+00:00",
+            "last_updated": "2024-11-24T08:12:30.321801+00:00",
+            "context": {
+                "id": "01JDEKNEQHPEEBTC46XXMBH1S7",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_pm2_5",
+            "state": "17",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "µg/m³",
+                "device_class": "pm25",
+                "icon": "pap:pm25b",
+                "friendly_name": "philips purifier Pm2.5"
+            },
+            "last_changed": "2024-11-24T08:15:59.852340+00:00",
+            "last_reported": "2024-11-24T08:15:59.852340+00:00",
+            "last_updated": "2024-11-24T08:15:59.852340+00:00",
+            "context": {
+                "id": "01JDEKVVBCFZNJ3ACY7EG5CPGF",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_humidity",
+            "state": "44",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "%",
+                "device_class": "humidity",
+                "icon": "mdi:water-percent",
+                "friendly_name": "philips purifier Humidity"
+            },
+            "last_changed": "2024-11-24T08:13:57.881726+00:00",
+            "last_reported": "2024-11-24T08:13:57.881726+00:00",
+            "last_updated": "2024-11-24T08:13:57.881726+00:00",
+            "context": {
+                "id": "01JDEKR47SVXZCP20CV3PZFP2T",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_temperature",
+            "state": "22",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "°C",
+                "device_class": "temperature",
+                "icon": "mdi:thermometer",
+                "friendly_name": "philips purifier Temperature"
+            },
+            "last_changed": "2024-11-24T07:41:35.232444+00:00",
+            "last_reported": "2024-11-24T07:41:35.232444+00:00",
+            "last_updated": "2024-11-24T07:41:35.232444+00:00",
+            "context": {
+                "id": "01JDEHWV40FQ7M888Q4C9YAR31",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_water_level",
+            "state": "0",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "%",
+                "icon": "pap:water_refill",
+                "friendly_name": "philips purifier Water Level"
+            },
+            "last_changed": "2024-11-24T07:41:35.232555+00:00",
+            "last_reported": "2024-11-24T07:41:35.232555+00:00",
+            "last_updated": "2024-11-24T07:41:35.232555+00:00",
+            "context": {
+                "id": "01JDEHWV40F959RQ7TNECYZ705",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_rssi",
+            "state": "-36",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "dBm",
+                "device_class": "signal_strength",
+                "icon": "mdi:wifi-strength-3",
+                "friendly_name": "philips purifier Rssi"
+            },
+            "last_changed": "2024-11-24T08:15:41.111859+00:00",
+            "last_reported": "2024-11-24T08:15:41.111859+00:00",
+            "last_updated": "2024-11-24T08:15:41.111859+00:00",
+            "context": {
+                "id": "01JDEKV91QRZ5VMN9GQEE3TB8M",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_pre_filter",
+            "state": "359",
+            "attributes": {
+                "unit_of_measurement": "h",
+                "icon": "mdi:dots-grid",
+                "friendly_name": "philips purifier Pre Filter"
+            },
+            "last_changed": "2024-11-24T07:41:35.232833+00:00",
+            "last_reported": "2024-11-24T07:41:35.232833+00:00",
+            "last_updated": "2024-11-24T07:41:35.232833+00:00",
+            "context": {
+                "id": "01JDEHWV40WCA6DPV7QN6B11R8",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_hepa_filter",
+            "state": "1178",
+            "attributes": {
+                "type": "A3",
+                "unit_of_measurement": "h",
+                "icon": "mdi:dots-grid",
+                "friendly_name": "philips purifier Hepa Filter"
+            },
+            "last_changed": "2024-11-24T07:41:35.232960+00:00",
+            "last_reported": "2024-11-24T07:41:35.232960+00:00",
+            "last_updated": "2024-11-24T07:41:35.232960+00:00",
+            "context": {
+                "id": "01JDEHWV40ZJRVTTCKH0F07K18",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_active_carbon_filter",
+            "state": "1178",
+            "attributes": {
+                "type": "C7",
+                "unit_of_measurement": "h",
+                "icon": "mdi:dots-grid",
+                "friendly_name": "philips purifier Active Carbon Filter"
+            },
+            "last_changed": "2024-11-24T07:41:35.233174+00:00",
+            "last_reported": "2024-11-24T07:41:35.233174+00:00",
+            "last_updated": "2024-11-24T07:41:35.233174+00:00",
+            "context": {
+                "id": "01JDEHWV41JKG1JDR5PN18C143",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_wick",
+            "state": "1178",
+            "attributes": {
+                "unit_of_measurement": "h",
+                "icon": "mdi:dots-grid",
+                "friendly_name": "philips purifier Wick"
+            },
+            "last_changed": "2024-11-24T07:41:35.233299+00:00",
+            "last_reported": "2024-11-24T07:41:35.233299+00:00",
+            "last_updated": "2024-11-24T07:41:35.233299+00:00",
+            "context": {
+                "id": "01JDEHWV417EQQY2H5BN27Y4SH",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "switch.philips_purifier_child_lock",
+            "state": "off",
+            "attributes": {
+                "icon": "pap:child_lock_button",
+                "friendly_name": "philips purifier Child Lock"
+            },
+            "last_changed": "2024-11-24T07:41:35.233575+00:00",
+            "last_reported": "2024-11-24T07:41:35.233575+00:00",
+            "last_updated": "2024-11-24T07:41:35.233575+00:00",
+            "context": {
+                "id": "01JDEHWV41EZQMGKTKDVG12NFE",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "remote.deep_dungeon",
+            "state": "off",
+            "attributes": {
+                "activity_list": [],
+                "current_activity": "com.megogo.application",
+                "friendly_name": "Deep Dungeon TV",
+                "supported_features": 4
+            },
+            "last_changed": "2024-11-24T11:55:52.253069+00:00",
+            "last_reported": "2024-11-24T11:55:52.253069+00:00",
+            "last_updated": "2024-11-24T11:55:52.253069+00:00",
+            "context": {
+                "id": "01JDF0EEHX8EPWZSB8V9H4NG36",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "media_player.deep_dungeon",
+            "state": "off",
+            "attributes": {
+                "friendly_name": "Deep Dungeon TV",
+                "supported_features": 152449
+            },
+            "last_changed": "2024-11-24T11:55:51.664886+00:00",
+            "last_reported": "2024-11-24T11:55:52.240615+00:00",
+            "last_updated": "2024-11-24T11:55:51.664886+00:00",
+            "context": {
+                "id": "01JDF0EDZGJDZF8EW743NV1RD5",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.temperature_humidity_sensor_d5a2_humidity",
+            "state": "56",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "%",
+                "device_class": "humidity",
+                "friendly_name": "Temperature/Humidity Sensor D5A2 Humidity"
+            },
+            "last_changed": "2024-11-24T12:54:06.121626+00:00",
+            "last_reported": "2024-11-24T12:54:06.121626+00:00",
+            "last_updated": "2024-11-24T12:54:06.121626+00:00",
+            "context": {
+                "id": "01JDF3S2H95HP1T4PZB1XAQT9A",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.temperature_humidity_sensor_d5a2_temperature",
+            "state": "22.5",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "°C",
+                "device_class": "temperature",
+                "friendly_name": "Temperature/Humidity Sensor D5A2 Temperature"
+            },
+            "last_changed": "2024-11-24T13:00:04.587135+00:00",
+            "last_reported": "2024-11-24T13:00:04.587135+00:00",
+            "last_updated": "2024-11-24T13:00:04.587135+00:00",
+            "context": {
+                "id": "01JDF440KB6T16YYYRQ36FAWB1",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.temperature_humidity_sensor_d5a2_battery",
+            "state": "10",
+            "attributes": {
+                "state_class": "measurement",
+                "unit_of_measurement": "%",
+                "device_class": "battery",
+                "friendly_name": "Temperature/Humidity Sensor D5A2 Battery"
+            },
+            "last_changed": "2024-11-24T07:41:35.306924+00:00",
+            "last_reported": "2024-11-24T07:41:35.307037+00:00",
+            "last_updated": "2024-11-24T07:41:35.306924+00:00",
+            "context": {
+                "id": "01JDEHWV6AZG7C1SZ55DRRK207",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "media_player.lg_webos_tv_lh590v",
+            "state": "off",
+            "attributes": {
+                "source_list": [
+                    "Live TV"
+                ],
+                "assumed_state": true,
+                "device_class": "tv",
+                "friendly_name": "[LG] webOS TV LH590V",
+                "supported_features": 24381
+            },
+            "last_changed": "2024-11-24T07:41:36.281267+00:00",
+            "last_reported": "2024-11-24T07:41:36.281267+00:00",
+            "last_updated": "2024-11-24T07:41:36.281267+00:00",
+            "context": {
+                "id": "01JDEHWW4S4Q6RZ5K0Q81WT363",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "automation.new_automation",
+            "state": "off",
+            "attributes": {
+                "id": "0127025623633",
+                "last_triggered": "2024-01-23T15:04:29.387293+00:00",
+                "mode": "single",
+                "current": 0,
+                "friendly_name": "New Automation"
+            },
+            "last_changed": "2024-11-24T07:41:36.286582+00:00",
+            "last_reported": "2024-11-24T07:41:36.286582+00:00",
+            "last_updated": "2024-11-24T07:41:36.286582+00:00",
+            "context": {
+                "id": "01JDEHWW4Y4XWHKP2AJZQRR817",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "automation.new_automation_2",
+            "state": "off",
+            "attributes": {
+                "id": "5680425163025",
+                "last_triggered": "2024-02-27T14:04:25.278400+00:00",
+                "mode": "single",
+                "current": 0,
+                "friendly_name": "New Automation"
+            },
+            "last_changed": "2024-11-24T07:41:36.286689+00:00",
+            "last_reported": "2024-11-24T07:41:36.286689+00:00",
+            "last_updated": "2024-11-24T07:41:36.286689+00:00",
+            "context": {
+                "id": "01JDEHWW4YRSX0G8XY1EQPRR00",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "sensor.philips_purifier_air_quality_index",
+            "state": "unavailable",
+            "attributes": {
+                "restored": true,
+                "state_class": "measurement",
+                "device_class": "aqi",
+                "icon": "mdi:blur",
+                "friendly_name": "philips purifier Air Quality Index",
+                "supported_features": 0
+            },
+            "last_changed": "2024-11-24T07:41:39.930943+00:00",
+            "last_reported": "2024-11-24T07:41:39.930943+00:00",
+            "last_updated": "2024-11-24T07:41:39.930943+00:00",
+            "context": {
+                "id": "01JDEHWZPTAG06DS90AHK5XJZY",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "select.philips_purifier_function",
+            "state": "unavailable",
+            "attributes": {
+                "restored": true,
+                "options": [
+                    "Purification",
+                    "Purification and Humidification"
+                ],
+                "icon": "pap:purification_only_mode",
+                "friendly_name": "philips purifier Function",
+                "supported_features": 0
+            },
+            "last_changed": "2024-11-24T07:41:39.930977+00:00",
+            "last_reported": "2024-11-24T07:41:39.930977+00:00",
+            "last_updated": "2024-11-24T07:41:39.930977+00:00",
+            "context": {
+                "id": "01JDEHWZPTDKA7CH1TXAGY02JS",
+                "parent_id": null,
+                "user_id": null
+            }
+        },
+        {
+            "entity_id": "select.philips_purifier_humidity_target",
+            "state": "unavailable",
+            "attributes": {
+                "restored": true,
+                "options": [
+                    "40%",
+                    "50%",
+                    "60%",
+                    "max"
+                ],
+                "icon": "pap:humidity_button",
+                "friendly_name": "philips purifier Humidity Target",
+                "supported_features": 0
+            },
+            "last_changed": "2024-11-24T07:41:39.930993+00:00",
+            "last_reported": "2024-11-24T07:41:39.930993+00:00",
+            "last_updated": "2024-11-24T07:41:39.930993+00:00",
+            "context": {
+                "id": "01JDEHWZPT7AHZSSG3GDD6YH3Q",
+                "parent_id": null,
+                "user_id": null
+            }
+        }
+    ]
+}

@@ -68,6 +68,7 @@ _$HassConfigImpl _$$HassConfigImplFromJson(Map<String, dynamic> json) =>
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
       elevation: (json['elevation'] as num).toDouble(),
+      radius: (json['radius'] as num).toDouble(),
       unit_system:
           UnitSystem.fromJson(json['unit_system'] as Map<String, dynamic>),
       location_name: json['location_name'] as String,
@@ -105,6 +106,7 @@ Map<String, dynamic> _$$HassConfigImplToJson(_$HassConfigImpl instance) =>
       'latitude': instance.latitude,
       'longitude': instance.longitude,
       'elevation': instance.elevation,
+      'radius': instance.radius,
       'unit_system': instance.unit_system,
       'location_name': instance.location_name,
       'time_zone': instance.time_zone,

@@ -222,4 +222,34 @@ void main() {
     // Assert on the result returned from the command
     expect(result, isNotNull);
   });
+
+  test("Call 'getStates' message", () async {
+    // Mock response to simulate WebSocket stream
+    final testJson = await readJsonTestDataFromFile(
+        'test/data_samples/get_states_response.json');
+    Future.delayed(Duration.zero, () {
+      streamController.add(jsonEncode(testJson));
+    });
+
+    // Act
+    final result = await HACommands.getStates(connection);
+
+    // Assert on the sent message
+    final capturedMessage =
+        verify(mockSocket.sendMessage(captureAny)).captured.single;
+
+    expect(capturedMessage, isA<HABaseMessgae>());
+    final sentMessage = capturedMessage as HABaseMessgae;
+
+    // Perform more specific assertions about the message content
+    expect(
+        sentMessage.payload,
+        equals({
+          "id": 2,
+          "type": "get_states",
+        }));
+
+    // Assert on the result returned from the command
+    expect(result, isNotNull);
+  });
 }

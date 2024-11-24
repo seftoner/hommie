@@ -72,6 +72,7 @@ class HassConfig with _$HassConfig {
     required double latitude,
     required double longitude,
     required double elevation,
+    required double radius,
     required UnitSystem unit_system,
     required String location_name,
     required String time_zone,
