@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/types/types.dart';
 
-import 'tests_helpers.dart';
+import 'utils/tests_helpers.dart';
 
 void main() {
   test("Deserialization of event reposne ", () async {
@@ -64,7 +64,7 @@ void main() {
       "Hass servcies deserialization. Output from my HA. Check if deserialization works correct",
       () async {
     final testJson = await readJsonTestDataFromFile(
-        'test/data_samples/services_response.json');
+        'test/data_samples/get_services_response.json');
 
     final response = WebSocketResponse.fromJson(testJson);
 
@@ -74,7 +74,7 @@ void main() {
       _ => throw AssertionError("Response parsed incorrectly!")
     };
 
-    expect(responseResult.domains, hasLength(43));
+    expect(responseResult.domains, hasLength(44));
   });
 
   test("Error response deserialization", () async {
@@ -88,6 +88,7 @@ void main() {
       _ => throw AssertionError("Response parsed incorrectly!")
     };
 
+    expect(response.id, equals(12));
     expect(responseResult.code, equals("invalid_format"));
     expect(
         responseResult.message,
@@ -129,5 +130,14 @@ void main() {
     };
 
     expect(responseResult, equals(19));
+  });
+
+  test("unsupported type response parsing", () {
+    const testJsonString = '''{ "id": 19,
+                          "type": "custom_reponse"
+                        }''';
+    final testJson = jsonDecode(testJsonString);
+
+    expect(() => WebSocketResponse.fromJson(testJson), throwsUnsupportedError);
   });
 }

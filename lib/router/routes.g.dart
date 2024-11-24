@@ -7,22 +7,132 @@ part of 'routes.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $homeRoute,
+      $mainShellRouteData,
+      $aboutRouteData,
+      $sensorsRouteData,
+      $hubRouteData,
       $loginRoute,
       $startupRoute,
-      $splashRoute,
     ];
 
-RouteBase get $homeRoute => GoRouteData.$route(
-      path: '/home',
-      factory: $HomeRouteExtension._fromState,
+RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
+      factory: $MainShellRouteDataExtension._fromState,
+      branches: [
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/home',
+              factory: $HomeRouteDataExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/settings',
+              factory: $SettingsRouteDataExtension._fromState,
+            ),
+          ],
+        ),
+      ],
     );
 
-extension $HomeRouteExtension on HomeRoute {
-  static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
+extension $MainShellRouteDataExtension on MainShellRouteData {
+  static MainShellRouteData _fromState(GoRouterState state) =>
+      const MainShellRouteData();
+}
+
+extension $HomeRouteDataExtension on HomeRouteData {
+  static HomeRouteData _fromState(GoRouterState state) => const HomeRouteData();
 
   String get location => GoRouteData.$location(
         '/home',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SettingsRouteDataExtension on SettingsRouteData {
+  static SettingsRouteData _fromState(GoRouterState state) =>
+      const SettingsRouteData();
+
+  String get location => GoRouteData.$location(
+        '/settings',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $aboutRouteData => GoRouteData.$route(
+      path: '/settings/about',
+      factory: $AboutRouteDataExtension._fromState,
+    );
+
+extension $AboutRouteDataExtension on AboutRouteData {
+  static AboutRouteData _fromState(GoRouterState state) =>
+      const AboutRouteData();
+
+  String get location => GoRouteData.$location(
+        '/settings/about',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sensorsRouteData => GoRouteData.$route(
+      path: '/settings/sensors',
+      factory: $SensorsRouteDataExtension._fromState,
+    );
+
+extension $SensorsRouteDataExtension on SensorsRouteData {
+  static SensorsRouteData _fromState(GoRouterState state) =>
+      const SensorsRouteData();
+
+  String get location => GoRouteData.$location(
+        '/settings/sensors',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $hubRouteData => GoRouteData.$route(
+      path: '/settings/hub',
+      factory: $HubRouteDataExtension._fromState,
+    );
+
+extension $HubRouteDataExtension on HubRouteData {
+  static HubRouteData _fromState(GoRouterState state) => const HubRouteData();
+
+  String get location => GoRouteData.$location(
+        '/settings/hub',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -67,28 +177,6 @@ extension $StartupRouteExtension on StartupRoute {
 
   String get location => GoRouteData.$location(
         '/startup',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $splashRoute => GoRouteData.$route(
-      path: '/splash',
-      factory: $SplashRouteExtension._fromState,
-    );
-
-extension $SplashRouteExtension on SplashRoute {
-  static SplashRoute _fromState(GoRouterState state) => const SplashRoute();
-
-  String get location => GoRouteData.$location(
-        '/splash',
       );
 
   void go(BuildContext context) => context.go(location);

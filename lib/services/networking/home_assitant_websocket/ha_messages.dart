@@ -78,12 +78,14 @@ class ServiceCallMessage extends HABaseMessgae {
       {required String domain,
       required String service,
       String? target,
-      Map<String, dynamic>? serviceData}) {
+      Map<String, dynamic>? serviceData,
+      bool? returnResponse}) {
     _payload.addAll({
       'domain': domain,
       'service': service,
       if (target != null) 'target': target,
       if (serviceData != null) 'service_data': serviceData,
+      if (returnResponse != null) 'return_response': returnResponse,
     });
   }
 }

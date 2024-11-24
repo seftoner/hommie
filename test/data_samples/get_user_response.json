@@ -1,0 +1,24 @@
+{
+    "id": 2,
+    "type": "result",
+    "success": true,
+    "result": {
+        "id": "cc4e3e7bd8304aa48c316a47f9a8bb66",
+        "name": "seftoner",
+        "is_owner": true,
+        "is_admin": true,
+        "credentials": [
+            {
+                "auth_provider_type": "homeassistant",
+                "auth_provider_id": null
+            }
+        ],
+        "mfa_modules": [
+            {
+                "id": "totp",
+                "name": "Authenticator app",
+                "enabled": false
+            }
+        ]
+    }
+}

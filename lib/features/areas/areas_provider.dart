@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/services/networking/provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hommie/features/areas/infrastructure/repositories/areas_repository.dart';
@@ -5,7 +6,7 @@ import 'package:hommie/features/areas/infrastructure/repositories/areas_reposito
 part 'areas_provider.g.dart';
 
 @Riverpod(dependencies: [serverConnection])
-Future<AreasRepository> areasRepository(AreasRepositoryRef ref) async {
+Future<AreasRepository> areasRepository(Ref ref) async {
   final connection = await ref.watch(serverConnectionProvider.future);
   return AreasRepository(connection);
 }

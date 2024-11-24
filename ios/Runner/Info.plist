@@ -2,10 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationQueriesSchemes</key>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>hommie</string>
+		<string>com.hommie.workmanager.sendSensorData</string>
 	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Locate and communicate with your Home Assistant instance.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We suggest selecting "Always Allow" for the best location experience.
+			Selecting "Only While Using the App" will disable iBeacons, geofences,
+			background location updates and accurate reporting.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>When enabled, your device location is sent to your Home Assistant server as a device
+			tracker.
+	</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Only allowing location access while app is in use will disable iBeacons, geofences,
+			background location updates and accurate reporting.
+	</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -26,8 +42,19 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>hommie</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -45,9 +72,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 </dict>
 </plist>

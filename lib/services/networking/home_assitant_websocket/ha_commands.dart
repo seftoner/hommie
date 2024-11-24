@@ -38,18 +38,20 @@ class HACommands {
   }
 
   static Future<CallServiceResponse> callService(
-    HAConnection connection, {
+    IHAConnection connection, {
     required String domain,
     required String service,
     String? target,
     Map<String, dynamic>? serviceData,
+    bool? returnResponse,
   }) {
     return connection
         .sendMessage(ServiceCallMessage(
             domain: domain,
             service: service,
             target: target,
-            serviceData: serviceData))
+            serviceData: serviceData,
+            returnResponse: returnResponse))
         .mapItem(CallServiceResponse.fromJson);
   }
 }

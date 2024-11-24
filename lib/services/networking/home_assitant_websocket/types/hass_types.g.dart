@@ -68,27 +68,34 @@ _$HassConfigImpl _$$HassConfigImplFromJson(Map<String, dynamic> json) =>
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
       elevation: (json['elevation'] as num).toDouble(),
-      unitSystem:
-          UnitSystem.fromJson(json['unitSystem'] as Map<String, dynamic>),
-      locationName: json['locationName'] as String,
-      timeZone: json['timeZone'] as String,
+      radius: (json['radius'] as num).toDouble(),
+      unit_system:
+          UnitSystem.fromJson(json['unit_system'] as Map<String, dynamic>),
+      location_name: json['location_name'] as String,
+      time_zone: json['time_zone'] as String,
       components: (json['components'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      configDir: json['configDir'] as String,
-      allowlistExternalDirs: (json['allowlistExternalDirs'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
-      allowlistExternalUrls: (json['allowlistExternalUrls'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      config_dir: json['config_dir'] as String,
+      allowlist_external_dirs:
+          (json['allowlist_external_dirs'] as List<dynamic>)
+              .map((e) => e as String)
+              .toList(),
+      allowlist_external_urls:
+          (json['allowlist_external_urls'] as List<dynamic>)
+              .map((e) => e as String)
+              .toList(),
       version: json['version'] as String,
-      configSource: json['configSource'] as String,
-      recoveryMode: json['recoveryMode'] as bool,
-      safeMode: json['safeMode'] as bool,
+      config_source: json['config_source'] as String,
+      recovery_mode: json['recovery_mode'] as bool,
+      safe_mode: json['safe_mode'] as bool,
       state: $enumDecode(_$StateEnumMap, json['state']),
-      externalUrl: json['externalUrl'] as String?,
-      internalUrl: json['internalUrl'] as String?,
+      external_url: json['external_url'] as String?,
+      internal_url: json['internal_url'] as String?,
+      whitelist_external_dirs:
+          (json['whitelist_external_dirs'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
       currency: json['currency'] as String,
       country: json['country'] as String?,
       language: json['language'] as String,
@@ -99,20 +106,22 @@ Map<String, dynamic> _$$HassConfigImplToJson(_$HassConfigImpl instance) =>
       'latitude': instance.latitude,
       'longitude': instance.longitude,
       'elevation': instance.elevation,
-      'unitSystem': instance.unitSystem,
-      'locationName': instance.locationName,
-      'timeZone': instance.timeZone,
+      'radius': instance.radius,
+      'unit_system': instance.unit_system,
+      'location_name': instance.location_name,
+      'time_zone': instance.time_zone,
       'components': instance.components,
-      'configDir': instance.configDir,
-      'allowlistExternalDirs': instance.allowlistExternalDirs,
-      'allowlistExternalUrls': instance.allowlistExternalUrls,
+      'config_dir': instance.config_dir,
+      'allowlist_external_dirs': instance.allowlist_external_dirs,
+      'allowlist_external_urls': instance.allowlist_external_urls,
       'version': instance.version,
-      'configSource': instance.configSource,
-      'recoveryMode': instance.recoveryMode,
-      'safeMode': instance.safeMode,
+      'config_source': instance.config_source,
+      'recovery_mode': instance.recovery_mode,
+      'safe_mode': instance.safe_mode,
       'state': _$StateEnumMap[instance.state]!,
-      'externalUrl': instance.externalUrl,
-      'internalUrl': instance.internalUrl,
+      'external_url': instance.external_url,
+      'internal_url': instance.internal_url,
+      'whitelist_external_dirs': instance.whitelist_external_dirs,
       'currency': instance.currency,
       'country': instance.country,
       'language': instance.language,
@@ -133,8 +142,8 @@ _$UnitSystemImpl _$$UnitSystemImplFromJson(Map<String, dynamic> json) =>
       volume: json['volume'] as String,
       temperature: json['temperature'] as String,
       pressure: json['pressure'] as String,
-      windSpeed: json['windSpeed'] as String,
-      accumulatedPrecipitation: json['accumulatedPrecipitation'] as String,
+      wind_speed: json['wind_speed'] as String,
+      accumulated_precipitation: json['accumulated_precipitation'] as String,
     );
 
 Map<String, dynamic> _$$UnitSystemImplToJson(_$UnitSystemImpl instance) =>
@@ -144,6 +153,6 @@ Map<String, dynamic> _$$UnitSystemImplToJson(_$UnitSystemImpl instance) =>
       'volume': instance.volume,
       'temperature': instance.temperature,
       'pressure': instance.pressure,
-      'windSpeed': instance.windSpeed,
-      'accumulatedPrecipitation': instance.accumulatedPrecipitation,
+      'wind_speed': instance.wind_speed,
+      'accumulated_precipitation': instance.accumulated_precipitation,
     };

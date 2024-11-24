@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/features/auth/auth_provider.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
@@ -6,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'provider.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [authRepository])
-Future<HAConnection> serverConnection(ServerConnectionRef ref) async {
+Future<HAConnection> serverConnection(Ref ref) async {
   final credOrError = await ref.watch(authRepositoryProvider).getCredentials();
 
   final credentials = credOrError.fold(
