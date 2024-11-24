@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/areas/application/areas_controller.dart';
-import 'package:hommie/features/auth/application/auth_controller.dart';
+import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends HookConsumerWidget {
@@ -18,6 +18,8 @@ class HomePage extends HookConsumerWidget {
           children: [
             const Text('Home Page'),
             const Text("There's nothing much you can do, here"),
+            $h24,
+            const Text('List of areas:'),
             SizedBox(
               height: 300,
               child: areas.when(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hommie/ui/styles/spacings.dart';
 
 class StartupPage extends StatelessWidget {
   const StartupPage({super.key});
@@ -11,6 +12,9 @@ class StartupPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Welcome to Hommie!'),
+            $h24,
+            Text(
+                'If you see this page, you may have lost connection to your Home Assistant server.'),
           ],
         ),
       ),

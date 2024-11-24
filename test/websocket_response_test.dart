@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/types/types.dart';
 
-import 'tests_helpers.dart';
+import 'utils/tests_helpers.dart';
 
 void main() {
   test("Deserialization of event reposne ", () async {

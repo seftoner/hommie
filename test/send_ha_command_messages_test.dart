@@ -13,8 +13,8 @@ import 'package:mockito/mockito.dart';
 import 'package:oauth2/oauth2.dart';
 
 import 'send_ha_command_messages_test.mocks.dart';
-import 'tests_helpers.dart';
-import 'tests_logger.dart';
+import 'utils/tests_helpers.dart';
+import 'utils/tests_logger.dart';
 
 @GenerateMocks([HASocket])
 void main() {
