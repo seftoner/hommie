@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hommie/features/auth/presentation/screens/discovery_servers_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
-import 'package:hommie/features/auth/presentation/screens/login_page.dart';
+import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/home/presentation/screens/root_page.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
 import 'package:hommie/features/settings/presentation/screens/hub_page.dart';
@@ -108,13 +109,23 @@ class HomeRouteData extends GoRouteData {
   }
 }
 
-@TypedGoRoute<LoginRoute>(path: '/login')
-class LoginRoute extends GoRouteData {
-  const LoginRoute();
+@TypedGoRoute<DicoveryRoute>(path: '/discovery')
+class DicoveryRoute extends GoRouteData {
+  const DicoveryRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const LoginPage();
+    return const DiscoveryServersPage();
+  }
+}
+
+@TypedGoRoute<EnterAddressRoute>(path: '/manualAddres')
+class EnterAddressRoute extends GoRouteData {
+  const EnterAddressRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const EnterAddressPage();
   }
 }
 

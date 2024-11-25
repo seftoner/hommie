@@ -35,22 +35,32 @@ GoRouter goRouter(Ref ref) {
           "Try to redirect. Router listanable state: ${authStateNotifier.value}");
 
       final currentAuthState = authStateNotifier.value;
-      switch (currentAuthState) {
-        case Autenticated()
-            when (state.matchedLocation == const StartupRoute().location) ||
-                (state.matchedLocation == const LoginRoute().location):
-          return const HomeRouteData().location;
-        case Unauthicated():
-          return const LoginRoute().location;
+      final currentLocation = state.matchedLocation;
 
-        /// FIXME: Make it better. A lot of failures might occured, Need to handle
-        /// propperly each of them. For example: refresh token is invalid, no connections, etc
+      switch (currentAuthState) {
+        case Autenticated():
+          if (currentLocation == const StartupRoute().location ||
+              currentLocation == const EnterAddressRoute().location ||
+              currentLocation == const DicoveryRoute().location) {
+            return const HomeRouteData().location;
+          }
+          return null; // Allow navigation if already authenticated
+        case Unauthicated():
+          if (currentLocation != const DicoveryRoute().location &&
+              currentLocation != const EnterAddressRoute().location) {
+            return const DicoveryRoute().location;
+          }
+          return null; // Stay on Discovery or EnterAddress
         case Failure():
-          return const LoginRoute().location;
+          if (currentLocation != const DicoveryRoute().location &&
+              currentLocation != const EnterAddressRoute().location) {
+            return const DicoveryRoute().location;
+          }
+          return null; // Stay on Discovery or EnterAddress
         case Initial():
-          return null;
+          return null; // No redirection needed during initialization
         default:
-          return null;
+          return null; // Handle any other undefined states gracefully
       }
     },
   );

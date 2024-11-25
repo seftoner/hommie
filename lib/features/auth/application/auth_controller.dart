@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
-import 'package:hommie/features/auth/auth_provider.dart';
+import 'package:hommie/features/auth/auth_repository_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/utils/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
