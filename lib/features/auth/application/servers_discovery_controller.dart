@@ -12,16 +12,16 @@ class ServersDiscoveryController extends _$ServersDiscoveryController {
 
   @override
   Future<List<HaServer>> build() async {
+    final repository = ref.watch(haServersRepositoryProvider);
+    final servers = await repository.getAvailableServers();
     _startPeriodicDiscovery();
 
-    final repository = ref.watch(haServersRepositoryProvider);
-
     ref.onDispose(() {
-      _timer?.cancel(); // Cancel the timer if it exists
+      _timer?.cancel();
       _timer = null;
     });
 
-    return repository.getAvailableServers();
+    return servers;
   }
 
   void _startPeriodicDiscovery() {

@@ -58,8 +58,11 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) =>
-                    const Center(child: Text("Error discovering servers.")),
+                error: (e, _) => EmptyState(
+                  text: "Error discovering servers.",
+                  onRefresh: () =>
+                      ref.invalidate(serversDiscoveryControllerProvider),
+                ),
               ),
             ),
             const SizedBox(height: 16),
