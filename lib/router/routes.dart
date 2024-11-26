@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hommie/features/auth/presentation/screens/discovery_servers_page.dart';
+import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/home/presentation/screens/root_page.dart';
@@ -115,7 +115,7 @@ class DicoveryRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const DiscoveryServersPage();
+    return const ServerDiscoveryPage();
   }
 }
 

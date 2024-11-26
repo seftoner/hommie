@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/application/servers_discovery_controller.dart';
+import 'package:hommie/features/auth/presentation/widgets/w_empty_state.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DiscoveryServersPage extends HookConsumerWidget {
-  const DiscoveryServersPage({super.key});
+class ServerDiscoveryPage extends HookConsumerWidget {
+  const ServerDiscoveryPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final discoveredServers = ref.watch(serversDiscoveryControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Discover Servers")),
+      appBar: AppBar(
+        title: const Text("Server Discovery"),
+        // toolbarHeight: 112,
+        centerTitle: false,
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.refresh_rounded),
+              tooltip: 'Show Snackbar',
+              onPressed: () =>
+                  ref.invalidate(serversDiscoveryControllerProvider))
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -23,21 +35,10 @@ class DiscoveryServersPage extends HookConsumerWidget {
               child: discoveredServers.when(
                 data: (servers) {
                   if (servers.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("No servers found."),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () {
-                              ref.refresh(
-                                  serversDiscoveryControllerProvider.future);
-                            },
-                            child: const Text("Refresh"),
-                          ),
-                        ],
-                      ),
+                    return EmptyState(
+                      text: "No servers found.",
+                      onRefresh: () =>
+                          ref.invalidate(serversDiscoveryControllerProvider),
                     );
                   }
                   return ListView.builder(
@@ -57,7 +58,7 @@ class DiscoveryServersPage extends HookConsumerWidget {
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, stack) =>
+                error: (e, _) =>
                     const Center(child: Text("Error discovering servers.")),
               ),
             ),
