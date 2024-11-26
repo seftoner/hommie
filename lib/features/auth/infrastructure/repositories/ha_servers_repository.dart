@@ -29,7 +29,7 @@ class HAServersRepository implements IHAServersRepository {
     try {
       await Future.any([
         _performDiscovery(client, results),
-        Future.delayed(Duration(seconds: 10),
+        Future.delayed(Duration(seconds: 30),
             () => throw TimeoutException("Discovery timed out")),
       ]);
     } catch (e, _) {

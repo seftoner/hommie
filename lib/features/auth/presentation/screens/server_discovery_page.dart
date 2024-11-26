@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/application/servers_discovery_controller.dart';
+import 'package:hommie/features/auth/presentation/widgets/w_available_severs_list_title.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_empty_state.dart';
 import 'package:hommie/router/routes.dart';
+import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ServerDiscoveryPage extends HookConsumerWidget {
@@ -14,23 +16,16 @@ class ServerDiscoveryPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Server Discovery"),
-        // toolbarHeight: 112,
+        title: const Text("Servers Discovery"),
         centerTitle: false,
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.refresh_rounded),
-              tooltip: 'Show Snackbar',
-              onPressed: () =>
-                  ref.invalidate(serversDiscoveryControllerProvider))
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 16),
+            AvailableSeversListTitle(),
+            $h16,
             Expanded(
               child: discoveredServers.when(
                 data: (servers) {
@@ -44,15 +39,20 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                   return ListView.builder(
                     itemCount: servers.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(servers[index].name),
-                        subtitle: Text(servers[index].uri.toString()),
-                        trailing: Icon(Icons.chevron_right),
-                        onTap: () {
-                          ref
-                              .read(authControllerProvider.notifier)
-                              .login(servers[index].uri.toString());
-                        },
+                      return Column(
+                        children: [
+                          ListTile(
+                            title: Text(servers[index].name),
+                            subtitle: Text(servers[index].uri.toString()),
+                            trailing: Icon(Icons.chevron_right),
+                            onTap: () {
+                              ref
+                                  .read(authControllerProvider.notifier)
+                                  .login(servers[index].uri.toString());
+                            },
+                          ),
+                          Divider(),
+                        ],
                       );
                     },
                   );
@@ -65,7 +65,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
             const SizedBox(height: 16),
             FilledButton.tonal(
               onPressed: () => {const EnterAddressRoute().push(context)},
-              child: const Text("Enter Manually"),
+              child: const Text("Enter addres manually"),
             ),
           ],
         ),
