@@ -6,7 +6,7 @@ import 'package:hommie/utils/logger.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 
 class HAServersRepository implements IHAServersRepository {
-  static const String _serviceName = '_home-assistant._tcp.local';
+  static const String _serviceName = '_home-assistant._tcp';
 
   @override
   Future<List<HaServer>> getAvailableServers() async {
