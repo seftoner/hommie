@@ -65,6 +65,13 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                 ),
               ),
             ),
+            Text(
+              "Not finding your screen?",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+            ),
             const SizedBox(height: 16),
             FilledButton.tonal(
               onPressed: () => {const EnterAddressRoute().push(context)},
