@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:hommie/features/auth/domain/entities/ha_server.dart';
+import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:hommie/features/auth/domain/repository/i_ha_servers_repository.dart';
 import 'package:hommie/utils/logger.dart';
 import 'package:multicast_dns/multicast_dns.dart';
@@ -41,8 +42,16 @@ class HAServersRepository implements IHAServersRepository {
   Future<void> _performDiscovery(
       MDnsClient client, Set<HaServer> results) async {
     await for (final ptr in _lookupPtrRecords(client)) {
-      await for (final srv in _lookupSrvRecords(client, ptr)) {
-        await _lookupIpRecords(client, srv, ptr, results);
+      await for (final TxtResourceRecord txt
+          in client.lookup<TxtResourceRecord>(
+              ResourceRecordQuery.text(ptr.domainName))) {
+        final server = _fromTxtRecord(txt);
+
+        logger.i(
+          'HomeAssistant instance found at ${server.uri} for "${server.name}".',
+        );
+
+        results.add(server);
       }
     }
   }
@@ -53,33 +62,40 @@ class HAServersRepository implements IHAServersRepository {
     );
   }
 
-  Stream<SrvResourceRecord> _lookupSrvRecords(
-      MDnsClient client, PtrResourceRecord ptr) {
-    return client.lookup<SrvResourceRecord>(
-      ResourceRecordQuery.service(ptr.domainName),
-    );
-  }
+  HaServer _fromTxtRecord(TxtResourceRecord txtRec) {
+    final txtPairs = txtRec.text.split(RegExp(r'\n'));
+    Map<String, String> resultMap = {};
 
-  Future<void> _lookupIpRecords(
-    MDnsClient client,
-    SrvResourceRecord srv,
-    PtrResourceRecord ptr,
-    Set<HaServer> results,
-  ) async {
-    await for (final ip in client.lookup<IPAddressResourceRecord>(
-        ResourceRecordQuery.addressIPv4(srv.target))) {
-      final serverName = ptr.domainName.split('.').first;
-
-      final server = HaServer(
-        name: serverName,
-        uri: Uri.http('${ip.address.address}:${srv.port}'),
-      );
-
-      logger.i(
-        'HomeAssistant instance found at ${server.uri} for "$serverName".',
-      );
-
-      results.add(server);
+    // Iterate over the pairs and split them by '=' to separate keys and values
+    for (var pair in txtPairs) {
+      var keyValue = pair.split('=');
+      if (keyValue.length == 2) {
+        resultMap[keyValue[0]] = keyValue[1];
+      }
     }
+
+    final uuid = resultMap['uuid'];
+    final versionStr = resultMap['version'] ?? '0.0';
+    final name = resultMap['location_name'] ?? 'Home';
+    final internalUrl = resultMap['internal_url'];
+    final externalUrl = resultMap['external_url'];
+    final baseUrl = resultMap['base_url'];
+
+    // Use `base_url` for compatibility if `internal_url` and `external_url` are absent
+    final effectiveInternalOrExternalUrl =
+        internalUrl ?? externalUrl ?? baseUrl;
+
+    if (effectiveInternalOrExternalUrl == null) {
+      throw FormatException('No valid URL found in TXT record.');
+    }
+
+    return HaServer(
+      uuid: uuid,
+      name: name,
+      uri: Uri.parse(effectiveInternalOrExternalUrl),
+      version: HaVersion.fromString(versionStr),
+      internalUrl: internalUrl != null ? Uri.parse(internalUrl) : null,
+      externalUrl: externalUrl != null ? Uri.parse(externalUrl) : null,
+    );
   }
 }
