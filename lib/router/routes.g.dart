@@ -11,7 +11,8 @@ List<RouteBase> get $appRoutes => [
       $aboutRouteData,
       $sensorsRouteData,
       $hubRouteData,
-      $loginRoute,
+      $dicoveryRoute,
+      $enterAddressRoute,
       $startupRoute,
     ];
 
@@ -145,16 +146,39 @@ extension $HubRouteDataExtension on HubRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $loginRoute => GoRouteData.$route(
-      path: '/login',
-      factory: $LoginRouteExtension._fromState,
+RouteBase get $dicoveryRoute => GoRouteData.$route(
+      path: '/discovery',
+      factory: $DicoveryRouteExtension._fromState,
     );
 
-extension $LoginRouteExtension on LoginRoute {
-  static LoginRoute _fromState(GoRouterState state) => const LoginRoute();
+extension $DicoveryRouteExtension on DicoveryRoute {
+  static DicoveryRoute _fromState(GoRouterState state) => const DicoveryRoute();
 
   String get location => GoRouteData.$location(
-        '/login',
+        '/discovery',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $enterAddressRoute => GoRouteData.$route(
+      path: '/manualAddres',
+      factory: $EnterAddressRouteExtension._fromState,
+    );
+
+extension $EnterAddressRouteExtension on EnterAddressRoute {
+  static EnterAddressRoute _fromState(GoRouterState state) =>
+      const EnterAddressRoute();
+
+  String get location => GoRouteData.$location(
+        '/manualAddres',
       );
 
   void go(BuildContext context) => context.go(location);
