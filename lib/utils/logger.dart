@@ -14,6 +14,24 @@ class LoggerFilter extends LogFilter {
   }
 }
 
+class HLoggerOutput extends LogOutput {
+  final LogOutput _consoleOutput;
+  final LogOutput _fileOutput;
+
+  HLoggerOutput(String filePath)
+      : _consoleOutput = ConsoleOutput(),
+        _fileOutput = AdvancedFileOutput(path: filePath, maxFileSizeKB: 10240);
+
+  @override
+  void output(OutputEvent event) {
+    // Print to console
+    _consoleOutput.output(event);
+
+    // Save to file
+    _fileOutput.output(event);
+  }
+}
+
 var logger = Logger(
   filter:
       LoggerFilter(), // Use the default LogFilter (-> only log in debug mode)
@@ -22,5 +40,5 @@ var logger = Logger(
       colors: false,
       noBoxingByDefault: true,
       printEmojis: true), // Use the PrettyPrinter to format and print log
-  // output: null, // Use the default LogOutput (-> send everything to console)
+  output: HLoggerOutput("./"),
 );
