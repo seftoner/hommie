@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:logger/logger.dart';
 
 class LoggerFilter extends LogFilter {
