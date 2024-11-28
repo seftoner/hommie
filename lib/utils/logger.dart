@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:logger/logger.dart';
 
 class LoggerFilter extends LogFilter {
@@ -14,31 +17,27 @@ class LoggerFilter extends LogFilter {
   }
 }
 
-class HLoggerOutput extends LogOutput {
-  final LogOutput _consoleOutput;
-  final LogOutput _fileOutput;
+late final Logger logger;
 
-  HLoggerOutput(String filePath)
-      : _consoleOutput = ConsoleOutput(),
-        _fileOutput = AdvancedFileOutput(path: filePath, maxFileSizeKB: 10240);
-
+class HLogfmtPrinter extends LogPrinter {
+  final logfmtPrinter = LogfmtPrinter();
   @override
-  void output(OutputEvent event) {
-    // Print to console
-    _consoleOutput.output(event);
-
-    // Save to file
-    _fileOutput.output(event);
+  List<String> log(LogEvent event) {
+    final timestamp = DateTime.now().toIso8601String();
+    var realLogs = logfmtPrinter.log(event);
+    return realLogs.map((line) => "time=$timestamp $line").toList();
   }
 }
 
-var logger = Logger(
-  filter:
-      LoggerFilter(), // Use the default LogFilter (-> only log in debug mode)
-  printer: PrettyPrinter(
-      methodCount: 1,
-      colors: false,
-      noBoxingByDefault: true,
-      printEmojis: true), // Use the PrettyPrinter to format and print log
-  output: HLoggerOutput("./"),
-);
+Logger createLogger(String logsPath) {
+  return Logger(
+    printer: HLogfmtPrinter(),
+    output: MultiOutput([
+      ConsoleOutput(),
+      AdvancedFileOutput(
+        path: logsPath,
+        maxFileSizeKB: -1,
+      )
+    ]),
+  );
+}

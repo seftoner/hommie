@@ -27,6 +27,7 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> signOut() async {
+    logger.i("Sign out");
     final failureOrSuccess = await ref.watch(authRepositoryProvider).signOut();
     failureOrSuccess.fold(
       (l) => state = AsyncData(AuthState.failure(l)),

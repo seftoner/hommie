@@ -48,7 +48,7 @@ class HAServersRepository implements IHAServersRepository {
         final server = _fromTxtRecord(txt);
 
         logger.i(
-          'HomeAssistant instance found at ${server.uri} for "${server.name}".',
+          'HomeAssistant instance found at ${server.uri} with name ${server.name}.',
         );
 
         results.add(server);

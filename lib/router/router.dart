@@ -31,8 +31,7 @@ GoRouter goRouter(Ref ref) {
     debugLogDiagnostics: kDebugMode,
     routes: $appRoutes,
     redirect: (context, state) {
-      logger.d(
-          "Try to redirect. Router listanable state: ${authStateNotifier.value}");
+      logger.t("Trying to redirect to: ${state.fullPath}");
 
       final currentAuthState = authStateNotifier.value;
       final currentLocation = state.matchedLocation;
