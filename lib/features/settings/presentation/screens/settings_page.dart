@@ -34,6 +34,13 @@ class SettingsPage extends HookConsumerWidget {
           ),
           const Divider(),
           ListTile(
+            leading: const Icon(Icons.bug_report_outlined),
+            title: const Text('Logs'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => {const LogsRouteData().push(context)},
+          ),
+          const Divider(),
+          ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text('About'),
             trailing: const Icon(Icons.chevron_right),

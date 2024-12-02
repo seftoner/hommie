@@ -39,6 +39,10 @@ dependencies:
   multicast_dns: ^0.3.2+7
   path_provider: ^2.1.5
   path: ^1.9.0
+  computer:
+    git:
+      url: https://github.com/seftoner/computer.git
+  share_plus: ^10.1.2
 
 dev_dependencies:
   build_runner:

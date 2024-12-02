@@ -6,6 +6,7 @@ import 'package:hommie/features/auth/presentation/screens/enter_address_page.dar
 import 'package:hommie/features/home/presentation/screens/root_page.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
 import 'package:hommie/features/settings/presentation/screens/hub_page.dart';
+import 'package:hommie/features/settings/presentation/screens/logs_page.dart';
 import 'package:hommie/features/settings/presentation/screens/sensors_page.dart';
 import 'package:hommie/features/settings/presentation/screens/settings_page.dart';
 import 'package:hommie/ui/screens/startup_page.dart';
@@ -63,6 +64,16 @@ class SettingsRouteData extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const SettingsPage();
+  }
+}
+
+@TypedGoRoute<LogsRouteData>(path: '/settings/logs')
+class LogsRouteData extends GoRouteData {
+  const LogsRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const LogsPage();
   }
 }
 

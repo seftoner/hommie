@@ -6,7 +6,7 @@ import 'package:hommie/services/networking/home_assitant_websocket/ha_commands.d
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
-import 'package:hommie/utils/logger.dart';
+import 'package:hommie/core/utils/logger.dart';
 import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

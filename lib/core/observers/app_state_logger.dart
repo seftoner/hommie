@@ -1,4 +1,4 @@
-import 'package:hommie/utils/logger.dart';
+import 'package:hommie/core/utils/logger.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// A class that observes the state changes in a Provider.
