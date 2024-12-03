@@ -21,14 +21,14 @@ void main() {
   late StreamController<dynamic> streamController;
   late HAConnection connection;
 
-  setUp(() {
-    //Hide debug messages from logs
-    //Reason: If the test fails, VS Code will show the latest log from
-    //the console near the test method. The last message might not be the error,
-    //so I need to search for the error in the terminal instead of seeing
-    //it right above the method name in the code.
-    logger = testLogger;
+//Hide debug messages from logs
+  //Reason: If the test fails, VS Code will show the latest log from
+  //the console near the test method. The last message might not be the error,
+  //so I need to search for the error in the terminal instead of seeing
+  //it right above the method name in the code.
+  logger = testLogger;
 
+  setUp(() {
     // Initialize shared objects before each test
     mockSocket = MockHASocket();
     streamController = StreamController<dynamic>();
