@@ -10,9 +10,9 @@ Future<void> main() async {
   runZonedGuarded<Future<void>>(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      initLogger();
+      await initLogger();
 
-      logger.i("start the application");
+      logger.i("Start the application 🚀");
 
       runApp(
         UncontrolledProviderScope(
