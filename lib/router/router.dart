@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
 import 'package:hommie/router/routes.dart';
-import 'package:hommie/utils/logger.dart';
+import 'package:hommie/core/utils/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
@@ -31,8 +31,7 @@ GoRouter goRouter(Ref ref) {
     debugLogDiagnostics: kDebugMode,
     routes: $appRoutes,
     redirect: (context, state) {
-      logger.d(
-          "Try to redirect. Router listanable state: ${authStateNotifier.value}");
+      logger.t("Trying to redirect to: ${state.fullPath}");
 
       final currentAuthState = authStateNotifier.value;
       final currentLocation = state.matchedLocation;

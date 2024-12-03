@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/utils.dart';
-import 'package:hommie/utils/logger.dart';
+import 'package:hommie/core/utils/logger.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
@@ -129,7 +129,7 @@ class HAConnectionOption {
             completer.complete(socket);
             break;
           default:
-            print("Unknown message type: ${messageJson}");
+            logger.i("Unknown message type: $messageJson");
         }
       }
     }

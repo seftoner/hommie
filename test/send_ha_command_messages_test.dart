@@ -6,8 +6,7 @@ import 'package:hommie/services/networking/home_assitant_websocket/ha_commands.d
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
-import 'package:hommie/utils/logger.dart';
-import 'package:logger/logger.dart';
+import 'package:hommie/core/utils/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:oauth2/oauth2.dart';
@@ -21,17 +20,15 @@ void main() {
   late MockHASocket mockSocket;
   late StreamController<dynamic> streamController;
   late HAConnection connection;
-  late Logger originalLogger;
+
+//Hide debug messages from logs
+  //Reason: If the test fails, VS Code will show the latest log from
+  //the console near the test method. The last message might not be the error,
+  //so I need to search for the error in the terminal instead of seeing
+  //it right above the method name in the code.
+  logger = testLogger;
 
   setUp(() {
-    //Hide debug messages from logs
-    //Reason: If the test fails, VS Code will show the latest log from
-    //the console near the test method. The last message might not be the error,
-    //so I need to search for the error in the terminal instead of seeing
-    //it right above the method name in the code.
-    originalLogger = logger;
-    logger = testLogger;
-
     // Initialize shared objects before each test
     mockSocket = MockHASocket();
     streamController = StreamController<dynamic>();
@@ -49,8 +46,6 @@ void main() {
     // Clean up shared objects after each test
     await streamController.close();
     connection.close();
-
-    logger = originalLogger;
   });
 
   test("Call 'call_service' message ", () async {

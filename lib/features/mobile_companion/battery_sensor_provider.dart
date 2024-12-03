@@ -5,7 +5,7 @@ import 'package:hommie/features/mobile_companion/sensors/battery_level.dart';
 import 'package:hommie/features/mobile_companion/sensors/battery_state.dart';
 import 'package:hommie/features/mobile_companion/sensors/sensor.dart';
 import 'package:battery_plus/battery_plus.dart' as BatteryPlus;
-import 'package:hommie/utils/logger.dart';
+import 'package:hommie/core/utils/logger.dart';
 
 class BatterySensorProvider implements ISensorProvider {
   late final BatteryPlus.Battery _battery;

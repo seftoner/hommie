@@ -142,35 +142,36 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                 //It will wait at least 10 seconds before its first launch
                 //Since we have not provided a frequency it will be the default 15 minutes
                 ElevatedButton(
-                    child: Text("Register Periodic Task (Android)"),
-                    onPressed: Platform.isAndroid
-                        ? () {
-                            Workmanager().registerPeriodicTask(
-                              simplePeriodicTask,
-                              simplePeriodicTask,
-                              initialDelay: Duration(seconds: 10),
-                            );
-                          }
-                        : null),
+                  onPressed: Platform.isAndroid
+                      ? () {
+                          Workmanager().registerPeriodicTask(
+                            simplePeriodicTask,
+                            simplePeriodicTask,
+                            initialDelay: Duration(seconds: 10),
+                          );
+                        }
+                      : null,
+                  child: Text("Register Periodic Task (Android)"),
+                ),
                 //This task runs periodically
                 //It will run about every hour
                 ElevatedButton(
-                    child: Text("Register 1 hour Periodic Task (Android)"),
-                    onPressed: Platform.isAndroid
-                        ? () {
-                            Workmanager().registerPeriodicTask(
-                              simplePeriodic1HourTask,
-                              simplePeriodic1HourTask,
-                              flexInterval: Duration(minutes: 15),
-                              frequency: Duration(hours: 1),
-                            );
-                          }
-                        : null),
+                  onPressed: Platform.isAndroid
+                      ? () {
+                          Workmanager().registerPeriodicTask(
+                            simplePeriodic1HourTask,
+                            simplePeriodic1HourTask,
+                            flexInterval: Duration(minutes: 15),
+                            frequency: Duration(hours: 1),
+                          );
+                        }
+                      : null,
+                  child: Text("Register 1 hour Periodic Task (Android)"),
+                ),
 
                 // Currently we cannot provide frequency for iOS, hence it will be
                 // minimum 15 minutes after which iOS will reschedule
                 ElevatedButton(
-                  child: Text('Register Periodic Background App Refresh (iOS)'),
                   onPressed: Platform.isIOS
                       ? () async {
                           if (!workmanagerInitialized) {
@@ -185,6 +186,7 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                           );
                         }
                       : null,
+                  child: Text('Register Periodic Background App Refresh (iOS)'),
                 ),
 
                 // This task runs only once, to perform a time consuming task at
@@ -194,7 +196,6 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                 // user starts using the device.
                 /// MARK: Register BackgroundProcessingTask (iOS)
                 ElevatedButton(
-                  child: Text('Register BackgroundProcessingTask (iOS)'),
                   onPressed: Platform.isIOS
                       ? () async {
                           if (!workmanagerInitialized) {
@@ -208,19 +209,21 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                           );
                         }
                       : null,
+                  child: Text('Register BackgroundProcessingTask (iOS)'),
                 ),
                 SizedBox(height: 16),
                 ElevatedButton(
-                    child: Text("isscheduled (Android)"),
-                    onPressed: Platform.isAndroid
-                        ? () async {
-                            final workInfo =
-                                await Workmanager().isScheduledByUniqueName(
-                              simplePeriodicTask,
-                            );
-                            print('isscheduled = $workInfo');
-                          }
-                        : null),
+                  onPressed: Platform.isAndroid
+                      ? () async {
+                          final workInfo =
+                              await Workmanager().isScheduledByUniqueName(
+                            simplePeriodicTask,
+                          );
+                          print('isscheduled = $workInfo');
+                        }
+                      : null,
+                  child: Text("isscheduled (Android)"),
+                ),
                 SizedBox(height: 8),
                 Text(
                   "Task cancellation",
@@ -235,8 +238,8 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                 ),
                 SizedBox(height: 15),
                 ElevatedButton(
-                  child: Text('Refresh stats'),
                   onPressed: _refreshStats,
+                  child: Text('Refresh stats'),
                 ),
                 SizedBox(height: 10),
                 SingleChildScrollView(

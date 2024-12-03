@@ -5,7 +5,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/services/networking/credential_storage.dart';
-import 'package:hommie/utils/logger.dart';
+import 'package:hommie/core/utils/logger.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:http/http.dart' as http;
 
@@ -49,7 +49,7 @@ class AuthRepository implements IAuthRepository {
       final credentials = await _credentialStorage.read();
       var client = http.Client();
       try {
-        //TODO handle internet connection error
+        //TODO: handle internet connection error
         await client.post(credentials!.tokenEndpoint!, body: {
           'token': credentials.accessToken,
           'action': 'revoke',
@@ -73,6 +73,7 @@ class AuthRepository implements IAuthRepository {
       final storedCredentials = await _credentialStorage.read();
       if (storedCredentials != null) {
         if (storedCredentials.canRefresh && storedCredentials.isExpired) {
+          logger.i("Access token is expired");
           final failureOrCredentials = await _refreshToken(storedCredentials);
           return failureOrCredentials;
         }
@@ -88,6 +89,7 @@ class AuthRepository implements IAuthRepository {
   Future<Either<AuthFailure, Credentials>> _refreshToken(
       Credentials storedCredentials) async {
     try {
+      logger.i("Try to refresh token");
       final refreshedCredentials = await storedCredentials.refresh(
           identifier: _clientID, basicAuth: false);
 

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/types/web_socket_response.dart';
-import 'package:hommie/utils/logger.dart';
+import 'package:hommie/core/utils/logger.dart';
 
 class AuthOption {
   late Uri _serverUri;
@@ -94,7 +94,7 @@ class HAConnection implements IHAConnection {
   }
 
   void _messageListener(dynamic incomingMessage) {
-    logger.d("Server response:  $incomingMessage");
+    logger.t("Server response:  $incomingMessage");
 
     final decodedJson = jsonDecode(incomingMessage);
 
@@ -135,7 +135,7 @@ class HAConnection implements IHAConnection {
           _commands.remove(response.id);
           break;
         default:
-          logger.e("Unknown message type: ${json}");
+          logger.e("Unknown message type: $json");
       }
     }
   }
@@ -152,7 +152,7 @@ class HAConnection implements IHAConnection {
       _reconnect();
     }
 
-    logger.d("Closed");
+    logger.d("Connection closed");
   }
 
   void _handleError(dynamic error) {
@@ -163,17 +163,17 @@ class HAConnection implements IHAConnection {
     _socket = socket;
     _socketSubscription = _socket.stream
         .listen(_messageListener, onDone: _handleClose, onError: _handleError);
-    logger.d("connection established");
+    logger.i("Connection established");
   }
 
   void _reconnect() {
     Future.delayed(const Duration(seconds: 1), () {
-      logger.d("trying to reconnect");
+      logger.i("Trying to reconnect");
 
       haConnectionOption
           .createSocket()
           .then((socket) => _setSocket(socket))
-          .catchError((e) => {logger.e("Error reconnect: ${e}")});
+          .catchError((e) => {logger.e("Reconnection error", error: e)});
     });
   }
 }

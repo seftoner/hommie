@@ -1,30 +1,13 @@
 import 'dart:io';
-import 'dart:ui';
 
-import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/background_task/background_task.dart';
-import 'package:hommie/utils/logger.dart';
-import 'package:hommie/utils/state_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:workmanager/workmanager.dart';
 
-Future<ProviderContainer> bootstrap() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  _registerErrorHandlers();
-  _registerBackgroundTasks();
-
-  final container = ProviderContainer(
-    overrides: [],
-    observers: [const StateLogger()],
-  );
-
-  return container;
-}
-
 /// Background tasks currently supported only on iOS and Android.
 /// TODO: Here will bi implemented sensing sensors to HomeAssistant
-Future<void> _registerBackgroundTasks() async {
+Future<void> registerBackgroundTasks() async {
   if (Platform.isLinux ||
       Platform.isMacOS ||
       Platform.isWindows ||
@@ -61,21 +44,4 @@ Future<void> _registerBackgroundTasks() async {
       inputData: <String, dynamic>{}, //ignored on iOS
     );
   }
-}
-
-void _registerErrorHandlers() {
-  // * Show some error UI if any uncaught exception happens
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-    debugPrint(details.toString());
-  };
-  // * Handle errors from the underlying platform/OS
-  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    debugPrint(error.toString());
-    return true;
-  };
-  // * Show some error UI when any widget in the app fails to build
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    return Center(child: Text(details.toString()));
-  };
 }

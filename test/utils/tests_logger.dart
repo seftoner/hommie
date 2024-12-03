@@ -6,7 +6,7 @@ class TestsLoggerFilter extends LogFilter {
     return [
       Level.error,
       Level.fatal,
-      Level.trace,
+      // Level.trace,
     ].contains(event.level);
   }
 }

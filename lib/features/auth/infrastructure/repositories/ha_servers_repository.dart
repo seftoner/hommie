@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:hommie/features/auth/domain/entities/ha_server.dart';
 import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:hommie/features/auth/domain/repository/i_ha_servers_repository.dart';
-import 'package:hommie/utils/logger.dart';
+import 'package:hommie/core/utils/logger.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 
 class HAServersRepository implements IHAServersRepository {
@@ -48,7 +48,7 @@ class HAServersRepository implements IHAServersRepository {
         final server = _fromTxtRecord(txt);
 
         logger.i(
-          'HomeAssistant instance found at ${server.uri} for "${server.name}".',
+          'HomeAssistant instance found at ${server.uri} with name ${server.name}.',
         );
 
         results.add(server);
