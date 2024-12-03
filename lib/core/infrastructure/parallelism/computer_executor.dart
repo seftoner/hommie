@@ -1,37 +1,41 @@
 import 'package:computer/computer.dart';
 import 'package:hommie/core/infrastructure/parallelism/i_parallel_executor.dart';
+import 'package:hommie/core/utils/logger.dart';
 
 class ComputerExecutor implements IParallelExecutor {
   final Computer _computer;
 
   ComputerExecutor(this._computer);
 
-//TODO: Add error handliung
-/* @override
+  @override
   Future<R> execute<P, R>(Function task, {P? param}) async {
     try {
       return await _computer.compute<P, R>(task, param: param);
-    } catch (e, stack) {
+    } catch (e, _) {
       // Add logging or error handling here if needed
+      logger.e('Error during task execution: $e');
       rethrow;
     }
-  } */
-
-  @override
-  Future<R> execute<P, R>(Function task, {P? param}) {
-    return _computer.compute<P, R>(task, param: param);
   }
 
   @override
   Future<Stream<R>> executeStream<P, R>(Stream<R> Function(P param) task,
-      {P? param}) {
-    return _computer.computeStream<P, R>(task, param: param);
+      {P? param}) async {
+    try {
+      return await _computer.computeStream<P, R>(task, param: param);
+    } catch (e, _) {
+      logger.e('Error during stream task execution: $e');
+      rethrow;
+    }
   }
 
   @override
-  Future<Stream<R>> executeStreamNoArgs<R>(Stream<R> Function() task) {
-    return _computer.computeStream<void, R>((void _) {
-      return task();
-    });
+  Future<Stream<R>> executeStreamNoArgs<R>(Stream<R> Function() task) async {
+    try {
+      return await _computer.computeStream<void, R>((_) => task());
+    } catch (e, _) {
+      logger.e('Error during no-args stream task execution: $e');
+      rethrow;
+    }
   }
 }

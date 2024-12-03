@@ -20,6 +20,7 @@ class _LoggerFilter extends LogFilter {
   @override
   bool shouldLog(LogEvent event) => switch (event.level) {
         Level.debug ||
+        // Level.trace ||
         Level.error ||
         Level.info ||
         Level.fatal ||

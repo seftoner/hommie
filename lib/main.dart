@@ -12,11 +12,11 @@ Future<void> main() async {
       WidgetsFlutterBinding.ensureInitialized();
       initLogger();
 
-      final container = await bootstrap();
-      logger.d("Current zone: ${Zone.current}");
+      logger.i("start the application");
+
       runApp(
         UncontrolledProviderScope(
-          container: container,
+          container: await bootstrap(),
           child: const HommieApp(),
         ),
       );

@@ -7,6 +7,14 @@ import 'package:hommie/features/settings/domain/entities/logs.dart';
 import 'package:hommie/features/settings/domain/repository/i_logs_repository.dart';
 import 'package:hommie/core/utils/logger.dart';
 
+class FetchLogsParams {
+  final int offset;
+  final int limit;
+  final String filePath;
+
+  FetchLogsParams(this.offset, this.limit, this.filePath);
+}
+
 class LogsRepository extends BaseRepository implements ILogsRepository {
   final String _logsPath;
 
@@ -16,6 +24,16 @@ class LogsRepository extends BaseRepository implements ILogsRepository {
   Stream<Log> streamLogs() async* {
     final stream = await executor.executeStreamNoArgs<Log>(_streamLogsTask);
     yield* stream;
+  }
+
+  @override
+  Future<List<Log>> fetchLogs(int offset, int limit) {
+    // The fetchLogsTask method should ideally be executed using Computer to run
+    // in a separate thread. However, it must be a top-level or static method,
+    // which is currently not the case. For now, this logic remains within the
+    // repository. In the future, consider restructuring to enable multi-threaded
+    // log fetching for better performance.
+    return fetchLogsTask(FetchLogsParams(offset, limit, _logsPath));
   }
 
   Stream<Log> _streamLogsTask() async* {
@@ -82,4 +100,34 @@ class LogsRepository extends BaseRepository implements ILogsRepository {
         'fatal' => LogLevel.fatal,
         _ => throw Exception('Unknown log level: $level'),
       };
+
+  Future<List<Log>> fetchLogsTask(FetchLogsParams params) async {
+    final file = File(params.filePath);
+    final result = <Log>[];
+
+    if (!await file.exists()) {
+      throw Exception("Log file does not exist: ${params.filePath}");
+    }
+
+    int currentLineIndex = 0;
+
+    final stream =
+        file.openRead().transform(utf8.decoder).transform(LineSplitter());
+
+    await for (final line in stream) {
+      if (currentLineIndex >= params.offset &&
+          currentLineIndex < params.offset + params.limit) {
+        final log = _parseLog(line);
+        if (log != null) result.add(log);
+      }
+
+      if (currentLineIndex >= params.offset + params.limit) {
+        break; // Stop reading once we've collected enough lines
+      }
+
+      currentLineIndex++;
+    }
+
+    return result;
+  }
 }
