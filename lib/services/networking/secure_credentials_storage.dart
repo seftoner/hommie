@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/credential_storage.dart';
 import 'package:oauth2/oauth2.dart';
 
@@ -22,7 +23,7 @@ class SecureCredentialStorage implements CredentialStorage {
     try {
       return _cachedCredentials = Credentials.fromJson(json);
     } on FormatException catch (e) {
-      print('Error parsing credentials: $e');
+      logger.e('Error parsing credentials: $e');
       return null;
     }
   }

@@ -135,7 +135,7 @@ class HAConnection implements IHAConnection {
           _commands.remove(response.id);
           break;
         default:
-          logger.e("Unknown message type: ${json}");
+          logger.e("Unknown message type: $json");
       }
     }
   }

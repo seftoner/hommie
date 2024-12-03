@@ -129,7 +129,7 @@ class HAConnectionOption {
             completer.complete(socket);
             break;
           default:
-            print("Unknown message type: ${messageJson}");
+            logger.i("Unknown message type: $messageJson");
         }
       }
     }
