@@ -21,7 +21,6 @@ void main() {
   late MockHASocket mockSocket;
   late StreamController<dynamic> streamController;
   late HAConnection connection;
-  late Logger originalLogger;
 
   setUp(() {
     //Hide debug messages from logs
@@ -29,7 +28,6 @@ void main() {
     //the console near the test method. The last message might not be the error,
     //so I need to search for the error in the terminal instead of seeing
     //it right above the method name in the code.
-    originalLogger = logger;
     logger = testLogger;
 
     // Initialize shared objects before each test
@@ -49,8 +47,6 @@ void main() {
     // Clean up shared objects after each test
     await streamController.close();
     connection.close();
-
-    logger = originalLogger;
   });
 
   test("Call 'call_service' message ", () async {
