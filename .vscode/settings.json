@@ -9,6 +9,7 @@
         "**/Thumbs.db": true,
         "**/*.freezed.dart": true,
         "**/*.g.dart": true,
+        "**/*.mocks.dart": true,
         "**/*.flutter-plugins*": true,
     }
 }

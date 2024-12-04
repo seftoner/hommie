@@ -75,7 +75,9 @@ class LogsPage extends HookConsumerWidget {
             },
           ),
         AsyncError(:final error) => Text(error.toString()),
-        _ => const CircularProgressIndicator(),
+        _ => const Center(
+            child: CircularProgressIndicator(),
+          ),
       },
     );
   }
