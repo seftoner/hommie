@@ -3,8 +3,8 @@ import 'package:hommie/features/settings/infrastructure/tasks/fetch_logs_task.da
 
 void main() {
   test("Test FetchLogsTask logs parsing", () async {
-    final fetchTask =
-        FetchLogsTask(FetchLogsParams(0, 100, "test/data_samples/logs.log"));
+    final fetchTask = FetchLogsTask(
+        FetchLogsParams(0, 100, "test/data_samples/test_logs.log"));
     final result = await fetchTask.run();
 
     expect(result, isNotEmpty);
@@ -20,7 +20,7 @@ void main() {
       FetchLogsParams(
         offset,
         limit,
-        "test/data_samples/logs.log",
+        "test/data_samples/test_logs.log",
       ),
     );
 
