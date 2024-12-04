@@ -17,7 +17,7 @@ class LogsListState with _$LogsListState {
 @riverpod
 class LogsListController extends _$LogsListController {
   int _offset = 0;
-  final int _limit = 1050;
+  final int _limit = 1000;
 
   @override
   Future<LogsListState> build() async {

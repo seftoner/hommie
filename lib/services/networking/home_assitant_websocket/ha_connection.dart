@@ -143,7 +143,7 @@ class HAConnection implements IHAConnection {
   void _handleClose() {
     _commndID = 1;
     _commands.forEach((key, value) {
-      value.completeError("Connection lost");
+      value.completeError("Connection lost 📡");
     });
     _commands.clear();
     _socketSubscription.cancel();
@@ -163,7 +163,7 @@ class HAConnection implements IHAConnection {
     _socket = socket;
     _socketSubscription = _socket.stream
         .listen(_messageListener, onDone: _handleClose, onError: _handleError);
-    logger.i("Connection established");
+    logger.i("Connection established 🤝");
   }
 
   void _reconnect() {
@@ -173,7 +173,7 @@ class HAConnection implements IHAConnection {
       haConnectionOption
           .createSocket()
           .then((socket) => _setSocket(socket))
-          .catchError((e) => {logger.e("Reconnection error", error: e)});
+          .catchError((e) => {logger.e("Reconnection error ❌", error: e)});
     });
   }
 }
