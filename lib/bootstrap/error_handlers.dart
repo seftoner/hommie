@@ -24,5 +24,5 @@ void registerErrorHandlers() {
     );
   };
 
-  logger.d("application error handlers initialized");
+  logger.d("Application error handlers initialized");
 }
