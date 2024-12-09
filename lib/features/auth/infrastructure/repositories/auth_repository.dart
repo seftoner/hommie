@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -11,10 +12,11 @@ import 'package:http/http.dart' as http;
 
 class AuthRepository implements IAuthRepository {
   final CredentialStorage _credentialStorage;
+  final http.Client _httpClient;
 
   final String _clientID = "https://seftoner.github.io";
 
-  AuthRepository(this._credentialStorage);
+  AuthRepository(this._credentialStorage, this._httpClient);
 
   @override
   Future<Either<AuthFailure, Credentials>> login(
@@ -73,9 +75,19 @@ class AuthRepository implements IAuthRepository {
       final storedCredentials = await _credentialStorage.read();
       if (storedCredentials != null) {
         if (storedCredentials.canRefresh && storedCredentials.isExpired) {
-          logger.i("Access token is expired");
+          logger.i("Access token is expired 🌚");
           final failureOrCredentials = await _refreshToken(storedCredentials);
-          return failureOrCredentials;
+
+          return failureOrCredentials.fold(
+            (failure) {
+              logger.e("Token refresh failed: $failure");
+              return left(AuthFailure.refreshToken());
+            },
+            (newCredentials) {
+              logger.i("Token refreshed successfully");
+              return right(newCredentials);
+            },
+          );
         }
         return right(storedCredentials);
       }
@@ -89,12 +101,19 @@ class AuthRepository implements IAuthRepository {
   Future<Either<AuthFailure, Credentials>> _refreshToken(
       Credentials storedCredentials) async {
     try {
-      logger.i("Try to refresh token");
+      logger.i("Try to refresh token 🔄");
       final refreshedCredentials = await storedCredentials.refresh(
-          identifier: _clientID, basicAuth: false);
+        identifier: _clientID,
+        basicAuth: false,
+        httpClient: _httpClient,
+      );
 
       await _credentialStorage.save(refreshedCredentials);
       return right(refreshedCredentials);
+    } on TimeoutException catch (e) {
+      logger.e(
+          'Timeout error. Refresh takes more than: ${e.duration!.inSeconds.toString()}');
+      return left(const AuthFailure.server());
     } on FormatException catch (e) {
       logger.e('Error parsing credentials: $e');
       return left(const AuthFailure.server());
@@ -102,6 +121,7 @@ class AuthRepository implements IAuthRepository {
       logger.e('Error refreshing token: $e');
       return left(AuthFailure.server("${e.error}:${e.description}"));
     } on SocketException catch (e) {
+      logger.e('Token refresh failed: $e');
       return left(AuthFailure.server("$e"));
     } on PlatformException {
       return left(const AuthFailure.storage());

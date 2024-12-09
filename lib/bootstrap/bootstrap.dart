@@ -10,7 +10,7 @@ import 'package:hommie/core/observers/app_state_logger.dart';
 Future<ProviderContainer> bootstrap() async {
   final computer = Computer.shared();
   await computer.turnOn(
-    workersCount: 4,
+    workersCount: 2,
     verbose: true,
   );
 

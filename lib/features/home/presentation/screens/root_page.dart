@@ -10,26 +10,32 @@ class MainPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: navigationShell,
+      body: Column(
+        children: [
+          /* if (isOffline) {
+                return const OfflineBanner(
+                    message: "Offline. Trying to reconnect...");
+              } */
+          Expanded(
+            child: navigationShell,
+          ),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
-          // ref.read(navBarControllerProvider.notifier).navigateTo(index);
           navigationShell.goBranch(
             index,
             initialLocation: index == navigationShell.currentIndex,
           );
         },
-        // selectedIndex: ref.watch(navBarControllerProvider),
         selectedIndex: navigationShell.currentIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home_rounded),
-            icon: Icon(Icons.home_outlined),
+            icon: Icon(Icons.home_rounded),
             label: 'Home',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.settings_rounded),
-            icon: Icon(Icons.settings_outlined),
+            icon: Icon(Icons.settings_rounded),
             label: 'Settings',
           ),
         ],

@@ -22,6 +22,7 @@ mixin _$AuthFailure {
     required TResult Function(String? message) userBrake,
     required TResult Function() storage,
     required TResult Function() missingCredentials,
+    required TResult Function() refreshToken,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -30,6 +31,7 @@ mixin _$AuthFailure {
     TResult? Function(String? message)? userBrake,
     TResult? Function()? storage,
     TResult? Function()? missingCredentials,
+    TResult? Function()? refreshToken,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -38,6 +40,7 @@ mixin _$AuthFailure {
     TResult Function(String? message)? userBrake,
     TResult Function()? storage,
     TResult Function()? missingCredentials,
+    TResult Function()? refreshToken,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -47,6 +50,7 @@ mixin _$AuthFailure {
     required TResult Function(UserBrake value) userBrake,
     required TResult Function(Storage value) storage,
     required TResult Function(MissingCredentials value) missingCredentials,
+    required TResult Function(RefreshTokenFailure value) refreshToken,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -55,6 +59,7 @@ mixin _$AuthFailure {
     TResult? Function(UserBrake value)? userBrake,
     TResult? Function(Storage value)? storage,
     TResult? Function(MissingCredentials value)? missingCredentials,
+    TResult? Function(RefreshTokenFailure value)? refreshToken,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -63,6 +68,7 @@ mixin _$AuthFailure {
     TResult Function(UserBrake value)? userBrake,
     TResult Function(Storage value)? storage,
     TResult Function(MissingCredentials value)? missingCredentials,
+    TResult Function(RefreshTokenFailure value)? refreshToken,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -161,6 +167,7 @@ class _$ServerImpl extends Server {
     required TResult Function(String? message) userBrake,
     required TResult Function() storage,
     required TResult Function() missingCredentials,
+    required TResult Function() refreshToken,
   }) {
     return server(message);
   }
@@ -172,6 +179,7 @@ class _$ServerImpl extends Server {
     TResult? Function(String? message)? userBrake,
     TResult? Function()? storage,
     TResult? Function()? missingCredentials,
+    TResult? Function()? refreshToken,
   }) {
     return server?.call(message);
   }
@@ -183,6 +191,7 @@ class _$ServerImpl extends Server {
     TResult Function(String? message)? userBrake,
     TResult Function()? storage,
     TResult Function()? missingCredentials,
+    TResult Function()? refreshToken,
     required TResult orElse(),
   }) {
     if (server != null) {
@@ -198,6 +207,7 @@ class _$ServerImpl extends Server {
     required TResult Function(UserBrake value) userBrake,
     required TResult Function(Storage value) storage,
     required TResult Function(MissingCredentials value) missingCredentials,
+    required TResult Function(RefreshTokenFailure value) refreshToken,
   }) {
     return server(this);
   }
@@ -209,6 +219,7 @@ class _$ServerImpl extends Server {
     TResult? Function(UserBrake value)? userBrake,
     TResult? Function(Storage value)? storage,
     TResult? Function(MissingCredentials value)? missingCredentials,
+    TResult? Function(RefreshTokenFailure value)? refreshToken,
   }) {
     return server?.call(this);
   }
@@ -220,6 +231,7 @@ class _$ServerImpl extends Server {
     TResult Function(UserBrake value)? userBrake,
     TResult Function(Storage value)? storage,
     TResult Function(MissingCredentials value)? missingCredentials,
+    TResult Function(RefreshTokenFailure value)? refreshToken,
     required TResult orElse(),
   }) {
     if (server != null) {
@@ -314,6 +326,7 @@ class _$UserBrakeImpl extends UserBrake {
     required TResult Function(String? message) userBrake,
     required TResult Function() storage,
     required TResult Function() missingCredentials,
+    required TResult Function() refreshToken,
   }) {
     return userBrake(message);
   }
@@ -325,6 +338,7 @@ class _$UserBrakeImpl extends UserBrake {
     TResult? Function(String? message)? userBrake,
     TResult? Function()? storage,
     TResult? Function()? missingCredentials,
+    TResult? Function()? refreshToken,
   }) {
     return userBrake?.call(message);
   }
@@ -336,6 +350,7 @@ class _$UserBrakeImpl extends UserBrake {
     TResult Function(String? message)? userBrake,
     TResult Function()? storage,
     TResult Function()? missingCredentials,
+    TResult Function()? refreshToken,
     required TResult orElse(),
   }) {
     if (userBrake != null) {
@@ -351,6 +366,7 @@ class _$UserBrakeImpl extends UserBrake {
     required TResult Function(UserBrake value) userBrake,
     required TResult Function(Storage value) storage,
     required TResult Function(MissingCredentials value) missingCredentials,
+    required TResult Function(RefreshTokenFailure value) refreshToken,
   }) {
     return userBrake(this);
   }
@@ -362,6 +378,7 @@ class _$UserBrakeImpl extends UserBrake {
     TResult? Function(UserBrake value)? userBrake,
     TResult? Function(Storage value)? storage,
     TResult? Function(MissingCredentials value)? missingCredentials,
+    TResult? Function(RefreshTokenFailure value)? refreshToken,
   }) {
     return userBrake?.call(this);
   }
@@ -373,6 +390,7 @@ class _$UserBrakeImpl extends UserBrake {
     TResult Function(UserBrake value)? userBrake,
     TResult Function(Storage value)? storage,
     TResult Function(MissingCredentials value)? missingCredentials,
+    TResult Function(RefreshTokenFailure value)? refreshToken,
     required TResult orElse(),
   }) {
     if (userBrake != null) {
@@ -440,6 +458,7 @@ class _$StorageImpl extends Storage {
     required TResult Function(String? message) userBrake,
     required TResult Function() storage,
     required TResult Function() missingCredentials,
+    required TResult Function() refreshToken,
   }) {
     return storage();
   }
@@ -451,6 +470,7 @@ class _$StorageImpl extends Storage {
     TResult? Function(String? message)? userBrake,
     TResult? Function()? storage,
     TResult? Function()? missingCredentials,
+    TResult? Function()? refreshToken,
   }) {
     return storage?.call();
   }
@@ -462,6 +482,7 @@ class _$StorageImpl extends Storage {
     TResult Function(String? message)? userBrake,
     TResult Function()? storage,
     TResult Function()? missingCredentials,
+    TResult Function()? refreshToken,
     required TResult orElse(),
   }) {
     if (storage != null) {
@@ -477,6 +498,7 @@ class _$StorageImpl extends Storage {
     required TResult Function(UserBrake value) userBrake,
     required TResult Function(Storage value) storage,
     required TResult Function(MissingCredentials value) missingCredentials,
+    required TResult Function(RefreshTokenFailure value) refreshToken,
   }) {
     return storage(this);
   }
@@ -488,6 +510,7 @@ class _$StorageImpl extends Storage {
     TResult? Function(UserBrake value)? userBrake,
     TResult? Function(Storage value)? storage,
     TResult? Function(MissingCredentials value)? missingCredentials,
+    TResult? Function(RefreshTokenFailure value)? refreshToken,
   }) {
     return storage?.call(this);
   }
@@ -499,6 +522,7 @@ class _$StorageImpl extends Storage {
     TResult Function(UserBrake value)? userBrake,
     TResult Function(Storage value)? storage,
     TResult Function(MissingCredentials value)? missingCredentials,
+    TResult Function(RefreshTokenFailure value)? refreshToken,
     required TResult orElse(),
   }) {
     if (storage != null) {
@@ -558,6 +582,7 @@ class _$MissingCredentialsImpl extends MissingCredentials {
     required TResult Function(String? message) userBrake,
     required TResult Function() storage,
     required TResult Function() missingCredentials,
+    required TResult Function() refreshToken,
   }) {
     return missingCredentials();
   }
@@ -569,6 +594,7 @@ class _$MissingCredentialsImpl extends MissingCredentials {
     TResult? Function(String? message)? userBrake,
     TResult? Function()? storage,
     TResult? Function()? missingCredentials,
+    TResult? Function()? refreshToken,
   }) {
     return missingCredentials?.call();
   }
@@ -580,6 +606,7 @@ class _$MissingCredentialsImpl extends MissingCredentials {
     TResult Function(String? message)? userBrake,
     TResult Function()? storage,
     TResult Function()? missingCredentials,
+    TResult Function()? refreshToken,
     required TResult orElse(),
   }) {
     if (missingCredentials != null) {
@@ -595,6 +622,7 @@ class _$MissingCredentialsImpl extends MissingCredentials {
     required TResult Function(UserBrake value) userBrake,
     required TResult Function(Storage value) storage,
     required TResult Function(MissingCredentials value) missingCredentials,
+    required TResult Function(RefreshTokenFailure value) refreshToken,
   }) {
     return missingCredentials(this);
   }
@@ -606,6 +634,7 @@ class _$MissingCredentialsImpl extends MissingCredentials {
     TResult? Function(UserBrake value)? userBrake,
     TResult? Function(Storage value)? storage,
     TResult? Function(MissingCredentials value)? missingCredentials,
+    TResult? Function(RefreshTokenFailure value)? refreshToken,
   }) {
     return missingCredentials?.call(this);
   }
@@ -617,6 +646,7 @@ class _$MissingCredentialsImpl extends MissingCredentials {
     TResult Function(UserBrake value)? userBrake,
     TResult Function(Storage value)? storage,
     TResult Function(MissingCredentials value)? missingCredentials,
+    TResult Function(RefreshTokenFailure value)? refreshToken,
     required TResult orElse(),
   }) {
     if (missingCredentials != null) {
@@ -629,4 +659,129 @@ class _$MissingCredentialsImpl extends MissingCredentials {
 abstract class MissingCredentials extends AuthFailure {
   const factory MissingCredentials() = _$MissingCredentialsImpl;
   const MissingCredentials._() : super._();
+}
+
+/// @nodoc
+abstract class _$$RefreshTokenFailureImplCopyWith<$Res> {
+  factory _$$RefreshTokenFailureImplCopyWith(_$RefreshTokenFailureImpl value,
+          $Res Function(_$RefreshTokenFailureImpl) then) =
+      __$$RefreshTokenFailureImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$RefreshTokenFailureImplCopyWithImpl<$Res>
+    extends _$AuthFailureCopyWithImpl<$Res, _$RefreshTokenFailureImpl>
+    implements _$$RefreshTokenFailureImplCopyWith<$Res> {
+  __$$RefreshTokenFailureImplCopyWithImpl(_$RefreshTokenFailureImpl _value,
+      $Res Function(_$RefreshTokenFailureImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$RefreshTokenFailureImpl extends RefreshTokenFailure {
+  const _$RefreshTokenFailureImpl() : super._();
+
+  @override
+  String toString() {
+    return 'AuthFailure.refreshToken()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RefreshTokenFailureImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String? message) server,
+    required TResult Function(String? message) userBrake,
+    required TResult Function() storage,
+    required TResult Function() missingCredentials,
+    required TResult Function() refreshToken,
+  }) {
+    return refreshToken();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String? message)? server,
+    TResult? Function(String? message)? userBrake,
+    TResult? Function()? storage,
+    TResult? Function()? missingCredentials,
+    TResult? Function()? refreshToken,
+  }) {
+    return refreshToken?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String? message)? server,
+    TResult Function(String? message)? userBrake,
+    TResult Function()? storage,
+    TResult Function()? missingCredentials,
+    TResult Function()? refreshToken,
+    required TResult orElse(),
+  }) {
+    if (refreshToken != null) {
+      return refreshToken();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Server value) server,
+    required TResult Function(UserBrake value) userBrake,
+    required TResult Function(Storage value) storage,
+    required TResult Function(MissingCredentials value) missingCredentials,
+    required TResult Function(RefreshTokenFailure value) refreshToken,
+  }) {
+    return refreshToken(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Server value)? server,
+    TResult? Function(UserBrake value)? userBrake,
+    TResult? Function(Storage value)? storage,
+    TResult? Function(MissingCredentials value)? missingCredentials,
+    TResult? Function(RefreshTokenFailure value)? refreshToken,
+  }) {
+    return refreshToken?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Server value)? server,
+    TResult Function(UserBrake value)? userBrake,
+    TResult Function(Storage value)? storage,
+    TResult Function(MissingCredentials value)? missingCredentials,
+    TResult Function(RefreshTokenFailure value)? refreshToken,
+    required TResult orElse(),
+  }) {
+    if (refreshToken != null) {
+      return refreshToken(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class RefreshTokenFailure extends AuthFailure {
+  const factory RefreshTokenFailure() = _$RefreshTokenFailureImpl;
+  const RefreshTokenFailure._() : super._();
 }

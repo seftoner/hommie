@@ -7,7 +7,7 @@ part of 'logs_list_controller.dart';
 // **************************************************************************
 
 String _$logsListControllerHash() =>
-    r'32e68f718fe77db4c4a3a30adf954f285827ac0b';
+    r'4af748e52aaaa1cc1ad030cbe6e4c77ae568e41b';
 
 /// See also [LogsListController].
 @ProviderFor(LogsListController)

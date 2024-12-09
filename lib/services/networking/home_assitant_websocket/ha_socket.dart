@@ -31,23 +31,37 @@ class HASocket {
     _startConnection();
   }
 
-  void _startConnection() {
-    _innerchanel = WebSocketChannel.connect(_wsUri);
+  void _startConnection() async {
+    try {
+      _innerchanel = WebSocketChannel.connect(_wsUri);
 
-    _innerchanel.stream.listen(
-      (event) {
-        _streamController.add(event);
-      },
-      onError: (error) {
-        logger.t("Inner socket error: $error");
-        _streamController.addError(error);
-      },
-      onDone: () {
-        logger.t(
-            "Inner socket is closed. Code ${_innerchanel.closeCode} Reason: ${_innerchanel.closeReason}");
-        _streamController.close();
-      },
-    );
+      _innerchanel.stream.listen(
+        (event) => _streamController.add(event),
+        onError: (error) {
+          logger.t("Inner socket error: $error");
+          _streamController.addError(error);
+        },
+        onDone: () {
+          logger.t(
+              "Inner socket is closed. Code ${_innerchanel.closeCode} Reason: ${_innerchanel.closeReason}");
+          if (!_streamController.isClosed) {
+            _reconnect(); // Attempt to reconnect
+          } else {
+            _streamController.close();
+          }
+        },
+      );
+    } catch (e) {
+      logger.e("Failed to start connection: $e");
+      _streamController.addError(e);
+    }
+  }
+
+  void _reconnect() {
+    Future.delayed(const Duration(seconds: 5), () {
+      logger.i("Attempting to reconnect...");
+      _startConnection();
+    });
   }
 
   void sendMessage(HABaseMessgae message) {
@@ -62,9 +76,11 @@ class HASocket {
   }
 
   void close() {
-    logger.t("Going to close socket");
+    logger.t("Closing socket");
     _innerchanel.sink.close(status.goingAway);
-    _streamController.close();
+    if (!_streamController.isClosed) {
+      _streamController.close();
+    }
   }
 }
 
@@ -78,79 +94,106 @@ class HAConnectionOption {
   HAConnectionOption(this._credentials);
 
   Future<HASocket> createSocket() async {
-    var serverUrl = _credentials.tokenEndpoint != null
-        ? (() {
-            //TODO: rewrite this
-            switch (_credentials.tokenEndpoint!.scheme) {
-              case "http":
-                return "ws://${_credentials.tokenEndpoint!.host}";
-              case "https":
-                return "wss://${_credentials.tokenEndpoint!.host}";
-              default:
-                throw Exception("Invalid scheme");
-            }
-          })()
-        : throw Exception("Token endpoint is null");
+    final tokenEndpoint = _credentials.tokenEndpoint;
+    if (tokenEndpoint == null) {
+      throw Exception("Token endpoint is null");
+    }
 
-    serverUrl += ":${_credentials.tokenEndpoint?.port}/api/websocket";
-    Completer<HASocket> completer = Completer();
-    _connect(Uri.parse(serverUrl), completer);
+    final serverUrl = _buildWebSocketUrl(tokenEndpoint);
+
     logger.i("Trying to establish a new connection to $serverUrl");
+
+    final completer = Completer<HASocket>();
+    _connect(Uri.parse(serverUrl), completer);
 
     return completer.future;
   }
 
-  void _connect(Uri uri, Completer completer) {
+  String _buildWebSocketUrl(Uri tokenEndpoint) {
+    final scheme = switch (tokenEndpoint.scheme) {
+      "http" => "ws",
+      "https" => "wss",
+      _ => throw Exception("Unsupported scheme: ${tokenEndpoint.scheme}"),
+    };
+
+    final host = tokenEndpoint.host;
+    final port = tokenEndpoint.port;
+
+    return "$scheme://$host:$port/api/websocket";
+  }
+
+  void _connect(Uri uri, Completer<HASocket> completer) {
     final socket = HASocket.connect(uri);
 
     StreamSubscription<dynamic>? subscription;
 
-    handleOpen(dynamic message) {
-      Map<String, dynamic> messageJson = jsonDecode(message);
-
-      if (messageJson.containsKey("type")) {
-        switch (messageJson["type"]) {
-          case _authRequired:
-            logger.i("Auth REQUIRED");
-            socket.sendMessage(
-                AuthMessage(accessToken: _credentials.accessToken));
-            break;
-          case _authInvalid:
-            logger.f("Auth INVALID");
-            completer.completeError(messageJson["message"]);
-            break;
-          case _authOk:
-            logger.i("Auth OK");
-            socket.haVersion = messageJson["ha_version"];
-            subscription?.cancel();
-            if (atLeastHaVersion(socket.haVersion, 2022, 9)) {
-              socket.sendMessage(SupportedFeaturesMessage());
-            }
-            completer.complete(socket);
-            break;
-          default:
-            logger.i("Unknown message type: $messageJson");
+    void handleOpen(dynamic message) {
+      try {
+        final messageJson = jsonDecode(message);
+        if (messageJson.containsKey("type")) {
+          switch (messageJson["type"]) {
+            case _authRequired:
+              logger.i("Auth REQUIRED");
+              socket.sendMessage(
+                AuthMessage(accessToken: _credentials.accessToken),
+              );
+              break;
+            case _authInvalid:
+              logger.f("Auth INVALID: ${messageJson["message"]}");
+              _completeWithError(completer, Exception(messageJson["message"]));
+              break;
+            case _authOk:
+              logger.i("Auth OK");
+              socket.haVersion = messageJson["ha_version"];
+              subscription?.cancel();
+              if (atLeastHaVersion(socket.haVersion, 2022, 9)) {
+                socket.sendMessage(SupportedFeaturesMessage());
+              }
+              _completeSuccessfully(completer, socket);
+              break;
+            default:
+              logger.i("Unknown message type: $messageJson");
+          }
         }
+      } catch (e) {
+        _completeWithError(completer, e);
       }
     }
 
-    handleClose() {
-      logger.d("Auth closed");
+    void handleClose() {
+      logger.d("Socket closed");
       subscription?.cancel();
       if (!completer.isCompleted) {
-        completer.completeError(Exception(
-            "Socket is closed. Code ${socket.closeCode} Reason: ${socket.closeReason}"));
+        _completeWithError(
+          completer,
+          Exception(
+            "Socket is closed. Code ${socket.closeCode} Reason: ${socket.closeReason}",
+          ),
+        );
       }
     }
 
-    handleError(dynamic error) {
-      logger.e("Auth error $error");
-      if (!completer.isCompleted) {
-        completer.completeError(error);
-      }
+    void handleError(dynamic error) {
+      logger.e("Socket error: $error");
+      _completeWithError(completer, error);
     }
 
-    subscription = socket.stream
-        .listen(handleOpen, onError: handleError, onDone: handleClose);
+    subscription = socket.stream.listen(
+      handleOpen,
+      onError: handleError,
+      onDone: handleClose,
+    );
+  }
+
+  void _completeSuccessfully(Completer<HASocket> completer, HASocket socket) {
+    if (!completer.isCompleted) {
+      completer.complete(socket);
+    }
+  }
+
+  void _completeWithError(Completer completer, Object error) {
+    if (!completer.isCompleted) {
+      completer.completeError(error);
+    }
   }
 }

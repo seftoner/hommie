@@ -43,6 +43,7 @@ dependencies:
     git:
       url: https://github.com/seftoner/computer.git
   share_plus: ^10.1.2
+  http: ^1.2.2
 
 dev_dependencies:
   build_runner:

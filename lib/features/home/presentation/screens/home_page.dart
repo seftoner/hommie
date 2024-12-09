@@ -20,8 +20,7 @@ class HomePage extends HookConsumerWidget {
             const Text("There's nothing much you can do, here"),
             $h24,
             const Text('List of areas:'),
-            SizedBox(
-              height: 300,
+            Expanded(
               child: areas.when(
                 data: (data) => ListView.builder(
                     itemCount: data.length,
@@ -30,7 +29,9 @@ class HomePage extends HookConsumerWidget {
                         )),
                 error: (error, stack) =>
                     Text('Oops, something unexpected happened \n $error'),
-                loading: () => CircularProgressIndicator(),
+                loading: () => Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
             )
           ],

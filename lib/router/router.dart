@@ -33,36 +33,34 @@ GoRouter goRouter(Ref ref) {
     redirect: (context, state) {
       logger.t("Trying to redirect to: ${state.fullPath}");
 
-      final currentAuthState = authStateNotifier.value;
+      final authState = authStateNotifier.value;
       final currentLocation = state.matchedLocation;
 
-      switch (currentAuthState) {
-        case Autenticated():
-          if (currentLocation == const StartupRoute().location ||
-              currentLocation == const EnterAddressRoute().location ||
-              currentLocation == const DicoveryRoute().location) {
-            return const HomeRouteData().location;
-          }
-          return null; // Allow navigation if already authenticated
-        case Unauthicated():
-          if (currentLocation != const DicoveryRoute().location &&
-              currentLocation != const EnterAddressRoute().location) {
-            return const DicoveryRoute().location;
-          }
-          return null; // Stay on Discovery or EnterAddress
-        case Failure():
-          if (currentLocation != const DicoveryRoute().location &&
-              currentLocation != const EnterAddressRoute().location) {
-            return const DicoveryRoute().location;
-          }
-          return null; // Stay on Discovery or EnterAddress
-        case Initial():
-          return null; // No redirection needed during initialization
-        default:
-          return null; // Handle any other undefined states gracefully
+      if (_isUnauthenticated(authState) && !_isLoginFlow(currentLocation)) {
+        return const DicoveryRoute().location;
       }
+
+      if (_isAuthenticated(authState) &&
+          _isInSplashOrLoginFlow(currentLocation)) {
+        return const HomeRouteData().location;
+      }
+      return null;
     },
   );
 
   return router;
 }
+
+bool _isUnauthenticated(AuthState state) =>
+    state is Unauthenticated || state is Failure;
+
+bool _isAuthenticated(AuthState state) => state is Authenticated;
+
+bool _isLoginFlow(String currentLocation) =>
+    currentLocation == const DicoveryRoute().location ||
+    currentLocation == const EnterAddressRoute().location;
+
+bool _isInSplashOrLoginFlow(String currentLocation) =>
+    currentLocation == const StartupRoute().location ||
+    currentLocation == const DicoveryRoute().location ||
+    currentLocation == const EnterAddressRoute().location;

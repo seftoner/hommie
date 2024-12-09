@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/services/networking/provider.dart';
+import 'package:hommie/services/networking/server_connection_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hommie/features/areas/infrastructure/repositories/areas_repository.dart';
 

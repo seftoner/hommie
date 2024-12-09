@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
-import 'package:hommie/features/auth/auth_repository_provider.dart';
+import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,11 +19,20 @@ class AuthController extends _$AuthController {
     final credentialsOrError = await repository.getCredentials();
 
     return credentialsOrError.fold(
-        (failure) => switch (failure) {
-              MissingCredentials() => const AuthState.unauthenticated(),
-              _ => AuthState.failure(failure)
-            },
-        (credentials) => const AuthState.authenticated());
+      (failure) {
+        switch (failure) {
+          case MissingCredentials():
+            return const AuthState.unauthenticated();
+          default:
+            logger.e("Authentication failure: $failure");
+            return AuthState.failure(failure);
+        }
+      },
+      (credentials) {
+        logger.i("User authenticated successfully");
+        return AuthState.authenticated();
+      },
+    );
   }
 
   Future<void> signOut() async {

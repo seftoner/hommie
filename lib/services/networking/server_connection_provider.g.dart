@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'provider.dart';
+part of 'server_connection_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverConnectionHash() => r'ee6b51ac396b5fa51a02066d065557015cbba1e7';
+String _$serverConnectionHash() => r'db64f35df3e1b96befebc4ff212fdb7d68235366';
 
 /// See also [serverConnection].
 @ProviderFor(serverConnection)
