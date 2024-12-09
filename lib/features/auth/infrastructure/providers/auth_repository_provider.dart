@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 IAuthRepository authRepository(Ref ref) {
   final securityCredentialStorage =
       SecureCredentialStorage(const FlutterSecureStorage());

@@ -1,28 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'areas_provider.dart';
+part of 'reconnection_service.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$areasRepositoryHash() => r'635f09422ed9671af17ae46264ffd559cd8453fe';
+String _$reconnectionServiceHash() =>
+    r'e8a15fc4177f0ad948c209e7ffb6ab44de154bed';
 
-/// See also [areasRepository].
-@ProviderFor(areasRepository)
-final areasRepositoryProvider =
-    AutoDisposeFutureProvider<AreasRepository>.internal(
-  areasRepository,
-  name: r'areasRepositoryProvider',
+/// See also [ReconnectionService].
+@ProviderFor(ReconnectionService)
+final reconnectionServiceProvider =
+    NotifierProvider<ReconnectionService, void>.internal(
+  ReconnectionService.new,
+  name: r'reconnectionServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$areasRepositoryHash,
+      : _$reconnectionServiceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AreasRepositoryRef = AutoDisposeFutureProviderRef<AreasRepository>;
+typedef _$ReconnectionService = Notifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

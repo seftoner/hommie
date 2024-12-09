@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hommie/ui/styles/spacings.dart';
 
 class OfflineBanner extends StatelessWidget {
   final String message;
@@ -13,25 +14,19 @@ class OfflineBanner extends StatelessWidget {
       child: Row(
         children: [
           Icon(
-            Icons.warning_rounded,
+            Icons.wifi_off_rounded,
             size: 24,
             color: Theme.of(context).textTheme.bodyMedium!.color,
           ),
-          SizedBox(width: 8.0),
-          Text(
-            message,
-            style: Theme.of(context).textTheme.bodyMedium,
+          $w8,
+          Expanded(
+            child: Text(
+              message,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
         ],
       ),
     );
   }
 }
-
-  /* Text(
-              "Not finding your screen?",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-            ), */
