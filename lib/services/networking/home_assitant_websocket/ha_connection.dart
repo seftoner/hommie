@@ -5,7 +5,9 @@ import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.d
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/types/web_socket_response.dart';
 import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/backoff.dart';
 
+/// Configuration options for Home Assistant connection.
 class AuthOption {
   late Uri _serverUri;
   AuthOption({required String serverAddress}) {
@@ -14,6 +16,8 @@ class AuthOption {
   Uri get serverUri => _serverUri;
 }
 
+/// Represents a subscription to Home Assistant events.
+/// Provides a stream of events and a way to unsubscribe.
 class HassSubscription {
   late final StreamController<dynamic> _streamController;
 
@@ -31,20 +35,38 @@ class HassSubscription {
   }
 }
 
+/// Interface for Home Assistant websocket connection.
 abstract class IHAConnection {
+  /// Sends a message to Home Assistant and returns the response.
   Future<dynamic> sendMessage(HABaseMessgae message);
+
+  /// Subscribes to Home Assistant events.
+  /// Returns a [HassSubscription] that can be used to receive events and unsubscribe.
   HassSubscription subscribeMessage(HABaseMessgae subscribeMessage);
+
+  /// Closes the connection.
   void close();
 }
 
+/// Implementation of Home Assistant websocket connection.
+/// Handles connection management, message sending, and event subscriptions.
 class HAConnection implements IHAConnection {
   HASocket? _socket;
   StreamSubscription<dynamic>? _socketSubscription;
   StreamSubscription<HASocketState>? _socketStateSubscription;
   final HAConnectionOption haConnectionOption;
+  final Backoff _backoff;
   final _stateController = StreamController<HASocketState>.broadcast();
 
+  static const _defaultBackoff = ConstantBackoff(Duration(seconds: 1));
+
+  HAConnection(this.haConnectionOption, [Backoff? backoff])
+      : _backoff = backoff ?? _defaultBackoff;
+
+  /// Stream of connection state changes.
   Stream<HASocketState> get state => _stateController.stream;
+
+  /// Current connection state.
   HASocketState get currentState =>
       _socket?.state ?? HASocketState.disconnected;
 
@@ -56,8 +78,8 @@ class HAConnection implements IHAConnection {
   bool _closeRequested = false;
   int get _getCommndID => _commndID++;
 
-  HAConnection(this.haConnectionOption);
-
+  /// Establishes connection to Home Assistant.
+  /// Throws an exception if connection fails.
   Future<void> connect() async {
     if (_socket != null) {
       logger.w("Connection already exists");
@@ -89,6 +111,7 @@ class HAConnection implements IHAConnection {
   @override
   void close() {
     _closeRequested = true;
+    _backoff.reset();
     _socketSubscription?.cancel();
     _socketStateSubscription?.cancel();
     _socket?.close();
@@ -202,7 +225,10 @@ class HAConnection implements IHAConnection {
     _socket = null;
 
     if (!_closeRequested) {
-      connect().catchError((e) => logger.e("Reconnection error ❌", error: e));
+      final delay = _backoff.next;
+      Future.delayed(delay, () {
+        connect().catchError((e) => logger.e("Reconnection error ❌", error: e));
+      });
     }
   }
 }
