@@ -3,7 +3,6 @@ import 'package:hommie/features/auth/infrastructure/providers/auth_repository_pr
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
-import 'package:hommie/services/networking/reconnection_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_connection_provider.g.dart';
@@ -18,7 +17,6 @@ class ServerConnection extends _$ServerConnection {
   Future<HAConnection> _createConnection() async {
     final authRepository = ref.watch(authRepositoryProvider);
     final connectionStateNotifier = ref.watch(connectionStateProvider.notifier);
-    final reconnectionService = ref.watch(reconnectionServiceProvider.notifier);
 
     final credOrError = await authRepository.getCredentials();
 
@@ -30,40 +28,46 @@ class ServerConnection extends _$ServerConnection {
       (credentials) => credentials,
     );
 
-    final haConnectionOption = HAConnectionOption(credentials);
-    return _attemptConnection(
-      haConnectionOption,
-      connectionStateNotifier,
-      reconnectionService,
-    );
-  }
+    final connection = HAConnection(HAConnectionOption(credentials));
 
-  Future<HAConnection> _attemptConnection(
-    HAConnectionOption options,
-    ConnectionState connectionStateNotifier,
-    ReconnectionService reconnectionService,
-  ) async {
-    connectionStateNotifier.setConnecting();
+    // Listen to connection state changes
+    connection.state.listen((state) {
+      switch (state) {
+        case HASocketState.connecting:
+          connectionStateNotifier.setConnecting();
+          break;
+        case HASocketState.authenticated:
+          connectionStateNotifier.setConnected();
+          break;
+        case HASocketState.disconnected:
+          connectionStateNotifier.setDisconnected();
+          break;
+        default:
+          break;
+      }
+    });
+
+    ref.onDispose(() {
+      logger.i("Disposing HAConnection");
+      connection.close();
+    });
+
     try {
-      final socket = await options.createSocket();
-      final connection = HAConnection(socket, options);
-      connectionStateNotifier.setConnected();
-      reconnectionService.stopReconnection();
-
-      ref.onDispose(() {
-        logger.i("Disposing HAConnection");
-        connectionStateNotifier.setDisconnected();
-        reconnectionService.stopReconnection();
-        connection.close();
-      });
-
+      await connection.connect();
+      // Wait for authentication to complete before returning the connection
+      await connection.state
+          .firstWhere(
+            (state) => state == HASocketState.authenticated,
+            orElse: () => throw Exception('Connection authentication timeout'),
+          )
+          .timeout(
+            const Duration(seconds: 30),
+            onTimeout: () =>
+                throw Exception('Connection authentication timeout'),
+          );
       return connection;
     } catch (e) {
-      connectionStateNotifier.setDisconnected();
-      logger.e('Initial connection failed: $e');
-      reconnectionService.startPeriodicReconnection(() {
-        ref.invalidateSelf();
-      });
+      logger.e('Connection failed: $e');
       rethrow;
     }
   }

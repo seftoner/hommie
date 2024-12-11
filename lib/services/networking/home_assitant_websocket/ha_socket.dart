@@ -8,12 +8,26 @@ import 'package:oauth2/oauth2.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
+enum HASocketState {
+  connecting,
+  connected,
+  authenticated,
+  disconnected,
+  reconnecting,
+}
+
 class HASocket {
   late final String haVersion;
   final Uri _wsUri;
 
   late WebSocketChannel _innerchanel;
   late final StreamController<dynamic> _streamController;
+
+  final _stateController = StreamController<HASocketState>.broadcast();
+  HASocketState _state = HASocketState.disconnected;
+
+  Stream<HASocketState> get stateStream => _stateController.stream;
+  HASocketState get state => _state;
 
   Stream<dynamic> get stream => _streamController.stream;
   int? get closeCode => _innerchanel.closeCode;
@@ -31,17 +45,28 @@ class HASocket {
     _startConnection();
   }
 
+  void _setState(HASocketState newState) {
+    _state = newState;
+    _stateController.add(newState);
+    logger.d('Socket state changed to: $newState');
+  }
+
   void _startConnection() async {
     try {
+      _setState(HASocketState.connecting);
       _innerchanel = WebSocketChannel.connect(_wsUri);
 
       _innerchanel.stream.listen(
-        (event) => _streamController.add(event),
+        (event) {
+          _streamController.add(event);
+        },
         onError: (error) {
+          _setState(HASocketState.disconnected);
           logger.t("Inner socket error: $error");
           _streamController.addError(error);
         },
         onDone: () {
+          _setState(HASocketState.disconnected);
           logger.t(
               "Inner socket is closed. Code ${_innerchanel.closeCode} Reason: ${_innerchanel.closeReason}");
           if (!_streamController.isClosed) {
@@ -52,12 +77,14 @@ class HASocket {
         },
       );
     } catch (e) {
+      _setState(HASocketState.disconnected);
       logger.e("Failed to start connection: $e");
       _streamController.addError(e);
     }
   }
 
   void _reconnect() {
+    _setState(HASocketState.reconnecting);
     Future.delayed(const Duration(seconds: 5), () {
       logger.i("Attempting to reconnect...");
       _startConnection();
@@ -76,11 +103,13 @@ class HASocket {
   }
 
   void close() {
+    _setState(HASocketState.disconnected);
     logger.t("Closing socket");
     _innerchanel.sink.close(status.goingAway);
     if (!_streamController.isClosed) {
       _streamController.close();
     }
+    _stateController.close();
   }
 }
 
@@ -134,6 +163,7 @@ class HAConnectionOption {
           switch (messageJson["type"]) {
             case _authRequired:
               logger.i("Auth REQUIRED");
+              socket._setState(HASocketState.connected);
               socket.sendMessage(
                 AuthMessage(accessToken: _credentials.accessToken),
               );
@@ -144,6 +174,7 @@ class HAConnectionOption {
               break;
             case _authOk:
               logger.i("Auth OK");
+              socket._setState(HASocketState.authenticated);
               socket.haVersion = messageJson["ha_version"];
               subscription?.cancel();
               if (atLeastHaVersion(socket.haVersion, 2022, 9)) {

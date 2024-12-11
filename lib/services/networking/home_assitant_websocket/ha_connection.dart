@@ -38,9 +38,15 @@ abstract class IHAConnection {
 }
 
 class HAConnection implements IHAConnection {
-  late HASocket _socket;
-  late StreamSubscription<dynamic> _socketSubscription;
+  HASocket? _socket;
+  StreamSubscription<dynamic>? _socketSubscription;
+  StreamSubscription<HASocketState>? _socketStateSubscription;
   final HAConnectionOption haConnectionOption;
+  final _stateController = StreamController<HASocketState>.broadcast();
+
+  Stream<HASocketState> get state => _stateController.stream;
+  HASocketState get currentState =>
+      _socket?.state ?? HASocketState.disconnected;
 
   //Wonder why 2? this part from official code: socket may send 1 at the start to enable features
   int _commndID = 2;
@@ -50,19 +56,32 @@ class HAConnection implements IHAConnection {
   bool _closeRequested = false;
   int get _getCommndID => _commndID++;
 
-  HAConnection(HASocket socket, this.haConnectionOption) {
-    _setSocket(socket);
+  HAConnection(this.haConnectionOption);
+
+  Future<void> connect() async {
+    if (_socket != null) {
+      logger.w("Connection already exists");
+      return;
+    }
+
+    try {
+      final socket = await haConnectionOption.createSocket();
+      _setSocket(socket);
+    } catch (e) {
+      logger.e("Connection failed: $e");
+      rethrow;
+    }
   }
 
   @override
   Future<dynamic> sendMessage(HABaseMessgae message) async {
-    assert(!_socket.isClosed(), "Connections is closed");
+    assert(!_socket!.isClosed(), "Connections is closed");
 
     var completer = Completer<dynamic>();
     var id = _getCommndID;
     _commands[id] = completer;
     message.id = id;
-    _socket.sendMessage(message);
+    _socket!.sendMessage(message);
 
     return completer.future;
   }
@@ -70,17 +89,21 @@ class HAConnection implements IHAConnection {
   @override
   void close() {
     _closeRequested = true;
-    _socket.close();
+    _socketSubscription?.cancel();
+    _socketStateSubscription?.cancel();
+    _socket?.close();
+    _socket = null;
+    _stateController.close();
   }
 
   @override
   HassSubscription subscribeMessage(HABaseMessgae subscribeMessage) {
-    assert(!_socket.isClosed(), "Connections is closed");
+    assert(!_socket!.isClosed(), "Connections is closed");
 
     var id = _getCommndID;
 
     var hassSubscribtion = HassSubscription(unsubscribe: () async {
-      if (!_socket.isClosed()) {
+      if (!_socket!.isClosed()) {
         await sendMessage(UnsubscribeEventsMessage(subsctibtionID: id));
       }
       _subscriptions.remove(id);
@@ -89,7 +112,7 @@ class HAConnection implements IHAConnection {
     _subscriptions[id] = hassSubscribtion;
 
     subscribeMessage.id = id;
-    _socket.sendMessage(subscribeMessage);
+    _socket!.sendMessage(subscribeMessage);
     return hassSubscribtion;
   }
 
@@ -146,7 +169,9 @@ class HAConnection implements IHAConnection {
       value.completeError("Connection lost 📡");
     });
     _commands.clear();
-    _socketSubscription.cancel();
+    _socketSubscription?.cancel();
+    _socketStateSubscription?.cancel();
+    _socket = null;
     if (!_closeRequested) {
       //BUG: HERE CAN BE INFINITIVE LOOP
       _reconnect();
@@ -161,19 +186,23 @@ class HAConnection implements IHAConnection {
 
   void _setSocket(HASocket socket) {
     _socket = socket;
-    _socketSubscription = _socket.stream
+    _socketSubscription = socket.stream
         .listen(_messageListener, onDone: _handleClose, onError: _handleError);
+
+    _socketStateSubscription = socket.stateStream.listen((state) {
+      _stateController.add(state);
+    });
+
     logger.i("Connection established 🤝");
   }
 
   void _reconnect() {
-    Future.delayed(const Duration(seconds: 1), () {
-      logger.i("Trying to reconnect");
+    _socketSubscription?.cancel();
+    _socketStateSubscription?.cancel();
+    _socket = null;
 
-      haConnectionOption
-          .createSocket()
-          .then((socket) => _setSocket(socket))
-          .catchError((e) => {logger.e("Reconnection error ❌", error: e)});
-    });
+    if (!_closeRequested) {
+      connect().catchError((e) => logger.e("Reconnection error ❌", error: e));
+    }
   }
 }

@@ -25,6 +25,16 @@ import 'package:mockito/src/dummies.dart' as _i3;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeHASocket_0 extends _i1.SmartFake implements _i2.HASocket {
+  _FakeHASocket_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [HASocket].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -50,6 +60,18 @@ class MockHASocket extends _i1.Mock implements _i2.HASocket {
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  _i4.Stream<_i2.HASocketState> get stateStream => (super.noSuchMethod(
+        Invocation.getter(#stateStream),
+        returnValue: _i4.Stream<_i2.HASocketState>.empty(),
+      ) as _i4.Stream<_i2.HASocketState>);
+
+  @override
+  _i2.HASocketState get state => (super.noSuchMethod(
+        Invocation.getter(#state),
+        returnValue: _i2.HASocketState.connecting,
+      ) as _i2.HASocketState);
 
   @override
   _i4.Stream<dynamic> get stream => (super.noSuchMethod(
@@ -83,4 +105,29 @@ class MockHASocket extends _i1.Mock implements _i2.HASocket {
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [HAConnectionOption].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockHAConnectionOption extends _i1.Mock
+    implements _i2.HAConnectionOption {
+  MockHAConnectionOption() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<_i2.HASocket> createSocket() => (super.noSuchMethod(
+        Invocation.method(
+          #createSocket,
+          [],
+        ),
+        returnValue: _i4.Future<_i2.HASocket>.value(_FakeHASocket_0(
+          this,
+          Invocation.method(
+            #createSocket,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.HASocket>);
 }
