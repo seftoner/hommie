@@ -127,4 +127,10 @@ class AuthRepository implements IAuthRepository {
       return left(const AuthFailure.storage());
     }
   }
+
+  @override
+  Future<bool> isLoggedIn() async {
+    final storedCredentials = await _credentialStorage.read();
+    return storedCredentials != null;
+  }
 }

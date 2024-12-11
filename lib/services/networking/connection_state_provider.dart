@@ -7,7 +7,11 @@ part 'connection_state_provider.g.dart';
 /// [connected] - Device has active network connection
 /// [disconnected] - Device has no network connection
 /// [connecting] - Device is attempting to establish network connection
-enum NetworkConnectionState {
+/// [unknown] - Initial state when app launches, before any connection attempt is made.
+/// This state indicates that the connection status to the home assistant server
+/// has not been determined yet.
+enum HAServerConnectionState {
+  unknown,
   connected,
   disconnected,
   connecting,
@@ -22,24 +26,24 @@ enum NetworkConnectionState {
 class ConnectionState extends _$ConnectionState {
   /// Initializes the connection state as disconnected.
   ///
-  /// Returns [NetworkConnectionState.disconnected] as the initial state.
+  /// Returns [HAServerConnectionState.disconnected] as the initial state.
   @override
-  NetworkConnectionState build() {
-    return NetworkConnectionState.disconnected;
+  HAServerConnectionState build() {
+    return HAServerConnectionState.unknown;
   }
 
   /// Updates the connection state to connected.
   void setConnected() {
-    state = NetworkConnectionState.connected;
+    state = HAServerConnectionState.connected;
   }
 
   /// Updates the connection state to disconnected.
   void setDisconnected() {
-    state = NetworkConnectionState.disconnected;
+    state = HAServerConnectionState.disconnected;
   }
 
   /// Updates the connection state to connecting.
   void setConnecting() {
-    state = NetworkConnectionState.connecting;
+    state = HAServerConnectionState.connecting;
   }
 }
