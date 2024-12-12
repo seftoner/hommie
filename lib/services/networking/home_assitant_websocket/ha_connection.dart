@@ -55,13 +55,12 @@ class HAConnection implements IHAConnection {
   StreamSubscription<dynamic>? _socketSubscription;
   StreamSubscription<HASocketState>? _socketStateSubscription;
   final HAConnectionOption haConnectionOption;
-  final Backoff _backoff;
   final _stateController = StreamController<HASocketState>.broadcast();
-
-  static const _defaultBackoff = ConstantBackoff(Duration(seconds: 1));
+  final Backoff _backoff;
+  bool _closeRequested = false;
 
   HAConnection(this.haConnectionOption, [Backoff? backoff])
-      : _backoff = backoff ?? _defaultBackoff;
+      : _backoff = backoff ?? const ConstantBackoff(Duration(seconds: 5));
 
   /// Stream of connection state changes.
   Stream<HASocketState> get state => _stateController.stream;
@@ -74,8 +73,6 @@ class HAConnection implements IHAConnection {
   int _commndID = 2;
   final Map<int, Completer> _commands = {};
   final Map<int, HassSubscription> _subscriptions = {};
-  // Map<int, Object> _eventListeners = {};
-  bool _closeRequested = false;
   int get _getCommndID => _commndID++;
 
   /// Establishes connection to Home Assistant.
@@ -195,12 +192,28 @@ class HAConnection implements IHAConnection {
     _socketSubscription?.cancel();
     _socketStateSubscription?.cancel();
     _socket = null;
+
     if (!_closeRequested) {
-      //BUG: HERE CAN BE INFINITIVE LOOP
       _reconnect();
     }
 
+    _stateController.add(HASocketState.disconnected);
     logger.d("Connection closed");
+  }
+
+  void _reconnect() {
+    final delay = _backoff.next;
+    logger.i("Scheduling reconnection in ${delay.inSeconds} seconds");
+
+    Future.delayed(delay, () {
+      if (!_closeRequested) {
+        _stateController.add(HASocketState.reconnecting);
+        connect().catchError((e) {
+          logger.e("Reconnection failed", error: e);
+          _reconnect(); // Try again if failed
+        });
+      }
+    });
   }
 
   void _handleError(dynamic error) {
@@ -209,6 +222,10 @@ class HAConnection implements IHAConnection {
 
   void _setSocket(HASocket socket) {
     _socket = socket;
+
+    _socketSubscription?.cancel();
+    _socketStateSubscription?.cancel();
+
     _socketSubscription = socket.stream
         .listen(_messageListener, onDone: _handleClose, onError: _handleError);
 
@@ -217,18 +234,5 @@ class HAConnection implements IHAConnection {
     });
 
     logger.i("Connection established 🤝");
-  }
-
-  void _reconnect() {
-    _socketSubscription?.cancel();
-    _socketStateSubscription?.cancel();
-    _socket = null;
-
-    if (!_closeRequested) {
-      final delay = _backoff.next;
-      Future.delayed(delay, () {
-        connect().catchError((e) => logger.e("Reconnection error ❌", error: e));
-      });
-    }
   }
 }

@@ -15,18 +15,23 @@ class OfflineContainer extends ConsumerWidget {
     return Scaffold(
       body: Stack(
         children: [
-          _buildChildContainer(connectionState),
-          if (connectionState == HAServerConnectionState.disconnected)
+          _buildMainContent(connectionState),
+          if (_isConnectionDisrupted(connectionState))
             _buildDisconnectedBanner(context, connectionState),
         ],
       ),
     );
   }
 
-  Widget _buildChildContainer(HAServerConnectionState connectionState) {
+  bool _isConnectionDisrupted(HAServerConnectionState state) {
+    return state == HAServerConnectionState.disconnected ||
+        state == HAServerConnectionState.reconnecting;
+  }
+
+  Widget _buildMainContent(HAServerConnectionState connectionState) {
     return Container(
       padding: EdgeInsets.only(
-        top: connectionState == HAServerConnectionState.disconnected ? 20 : 0,
+        top: _isConnectionDisrupted(connectionState) ? 20 : 0,
       ),
       child: child,
     );
@@ -42,10 +47,12 @@ class OfflineContainer extends ConsumerWidget {
         padding: EdgeInsets.only(
           top: MediaQuery.paddingOf(context).top + 2,
           bottom: 2,
+          left: 16,
+          right: 16,
         ),
         color: Theme.of(context).colorScheme.errorContainer,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(
               Icons.wifi_off_rounded,
@@ -53,23 +60,12 @@ class OfflineContainer extends ConsumerWidget {
             ),
             $w8,
             Text(
-              _getConnectionStateMessage(connectionState),
+              "Connection lost. Retrying in 5 seconds...",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
       ),
     );
-  }
-
-  String _getConnectionStateMessage(HAServerConnectionState connectionState) {
-    switch (connectionState) {
-      case HAServerConnectionState.connecting:
-        return "Trying to reconnect...";
-      case HAServerConnectionState.disconnected:
-        return "Connection lost. Retrying in 5 seconds...";
-      default:
-        return "";
-    }
   }
 }

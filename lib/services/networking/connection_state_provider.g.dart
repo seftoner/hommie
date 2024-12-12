@@ -6,7 +6,7 @@ part of 'connection_state_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$connectionStateHash() => r'0ce84db92be61dea17cc10f205780e2b7472af22';
+String _$connectionStateHash() => r'eac3ceb4f5248901cb510224141431139616980c';
 
 /// A Riverpod provider that manages the network connection state of the application.
 ///

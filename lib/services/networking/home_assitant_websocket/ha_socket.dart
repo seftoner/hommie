@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:hommie/services/networking/home_assitant_websocket/backoff.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/utils.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:oauth2/oauth2.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 enum HASocketState {
   connecting,
@@ -33,7 +36,13 @@ class HASocket {
   int? get closeCode => _innerchanel.closeCode;
   String? get closeReason => _innerchanel.closeReason;
 
-  HASocket.connect(this._wsUri) {
+  final Backoff _backoff;
+
+  static const Duration _pingInterval = Duration(seconds: 5);
+  static const Duration _connectionTimeout = Duration(seconds: 10);
+
+  HASocket.connect(this._wsUri, [Backoff? backoff])
+      : _backoff = backoff ?? const ConstantBackoff(Duration(seconds: 3)) {
     _streamController = StreamController.broadcast();
     _streamController.onListen = () {
       logger.t('New listener added!');
@@ -54,42 +63,60 @@ class HASocket {
   void _startConnection() async {
     try {
       _setState(HASocketState.connecting);
-      _innerchanel = WebSocketChannel.connect(_wsUri);
 
+      // Use IOWebSocketChannel for better control over the connection
+      _innerchanel = IOWebSocketChannel.connect(
+        _wsUri,
+        pingInterval: _pingInterval,
+        connectTimeout: _connectionTimeout,
+      );
+
+      try {
+        await _innerchanel.ready;
+      } on SocketException catch (e) {
+        _handleConnectionError('Socket connection failed: $e');
+        return;
+      } on TimeoutException catch (e) {
+        _handleConnectionError('Connection timed out: $e');
+        return;
+      } on WebSocketChannelException catch (e) {
+        _handleConnectionError('WebSocket error: $e');
+        return;
+      }
+
+      // Configure socket stream
       _innerchanel.stream.listen(
         (event) {
           _streamController.add(event);
         },
         onError: (error) {
-          _setState(HASocketState.disconnected);
-          logger.t("Inner socket error: $error");
-          _streamController.addError(error);
+          _handleConnectionError('Socket error: $error');
         },
         onDone: () {
           _setState(HASocketState.disconnected);
           logger.t(
               "Inner socket is closed. Code ${_innerchanel.closeCode} Reason: ${_innerchanel.closeReason}");
           if (!_streamController.isClosed) {
-            _reconnect(); // Attempt to reconnect
-          } else {
             _streamController.close();
           }
         },
+        cancelOnError: true,
       );
     } catch (e) {
-      _setState(HASocketState.disconnected);
-      logger.e("Failed to start connection: $e");
-      _streamController.addError(e);
+      _handleConnectionError('Failed to start connection: $e');
     }
   }
 
-  void _reconnect() {
-    _setState(HASocketState.reconnecting);
-    Future.delayed(const Duration(seconds: 5), () {
-      logger.i("Attempting to reconnect...");
-      _startConnection();
-    });
+  void _handleConnectionError(String message) {
+    logger.e(message);
+    _setState(HASocketState.disconnected);
+    if (!_streamController.isClosed) {
+      _streamController.addError(message);
+      _streamController.close();
+    }
   }
+
+  // Remove _reconnect() method as it's now handled by HAConnection
 
   void sendMessage(HABaseMessgae message) {
     final encodedData = message.toJson();
@@ -103,9 +130,10 @@ class HASocket {
   }
 
   void close() {
+    _backoff.reset();
     _setState(HASocketState.disconnected);
     logger.t("Closing socket");
-    _innerchanel.sink.close(status.goingAway);
+    _innerchanel.sink.close();
     if (!_streamController.isClosed) {
       _streamController.close();
     }
@@ -113,16 +141,34 @@ class HASocket {
   }
 }
 
+typedef TokenRefreshCallback = Future<Credentials> Function();
+
 class HAConnectionOption {
-  final Credentials _credentials;
+  Credentials _credentials;
+  final TokenRefreshCallback? _onTokenRefresh;
+
+  HAConnectionOption(this._credentials, {TokenRefreshCallback? onTokenRefresh})
+      : _onTokenRefresh = onTokenRefresh;
+
+  Future<void> refreshTokenIfNeeded() async {
+    if (_credentials.isExpired && _onTokenRefresh != null) {
+      try {
+        _credentials = await _onTokenRefresh();
+        logger.i("Token refreshed successfully");
+      } catch (e) {
+        logger.e("Failed to refresh token", error: e);
+        rethrow;
+      }
+    }
+  }
 
   static const _authRequired = "auth_required";
   static const _authInvalid = "auth_invalid";
   static const _authOk = "auth_ok";
 
-  HAConnectionOption(this._credentials);
-
   Future<HASocket> createSocket() async {
+    refreshTokenIfNeeded();
+
     final tokenEndpoint = _credentials.tokenEndpoint;
     if (tokenEndpoint == null) {
       throw Exception("Token endpoint is null");

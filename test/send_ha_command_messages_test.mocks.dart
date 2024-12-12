@@ -117,6 +117,16 @@ class MockHAConnectionOption extends _i1.Mock
   }
 
   @override
+  _i4.Future<void> refreshTokenIfNeeded() => (super.noSuchMethod(
+        Invocation.method(
+          #refreshTokenIfNeeded,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
   _i4.Future<_i2.HASocket> createSocket() => (super.noSuchMethod(
         Invocation.method(
           #createSocket,

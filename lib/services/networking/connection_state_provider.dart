@@ -5,8 +5,15 @@ part 'connection_state_provider.g.dart';
 /// Represents different states of network connectivity.
 ///
 /// [connected] - Device has active network connection
+///
+/// [reconnecting] - Connection lost, attempting to re-establish connection automatically.
+/// This state indicates that the previous connection was lost and the client
+/// is actively trying to restore the connection with the home assistant server.
+///
 /// [disconnected] - Device has no network connection
+///
 /// [connecting] - Device is attempting to establish network connection
+///
 /// [unknown] - Initial state when app launches, before any connection attempt is made.
 /// This state indicates that the connection status to the home assistant server
 /// has not been determined yet.
@@ -15,6 +22,7 @@ enum HAServerConnectionState {
   connected,
   disconnected,
   connecting,
+  reconnecting,
 }
 
 /// A Riverpod provider that manages the network connection state of the application.
@@ -45,5 +53,9 @@ class ConnectionState extends _$ConnectionState {
   /// Updates the connection state to connecting.
   void setConnecting() {
     state = HAServerConnectionState.connecting;
+  }
+
+  void setReconnecting() {
+    state = HAServerConnectionState.reconnecting;
   }
 }

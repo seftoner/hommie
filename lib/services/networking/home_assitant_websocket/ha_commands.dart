@@ -6,6 +6,10 @@ import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.d
 import 'package:hommie/services/networking/home_assitant_websocket/types/types.dart';
 
 class HACommands {
+  static Future<void> pingServer(HAConnection connection) {
+    return connection.sendMessage(PingMessage());
+  }
+
   static Future<List<HassEntity>> getStates(HAConnection connection) {
     return connection
         .sendMessage(GetStatesMessage())
