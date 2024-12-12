@@ -8,7 +8,6 @@ import 'package:hommie/services/networking/home_assitant_websocket/utils.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 enum HASocketState {
