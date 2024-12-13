@@ -45,6 +45,7 @@ void main() {
     socketStateController = StreamController<HASocketState>();
 
     when(mockSocket.isClosed()).thenAnswer((_) => false);
+    when(mockSocket.state).thenAnswer((_) => HASocketState.connected);
     when(mockSocket.stream).thenAnswer((_) => socketStreamController.stream);
     when(mockSocket.stateStream)
         .thenAnswer((_) => socketStateController.stream);
