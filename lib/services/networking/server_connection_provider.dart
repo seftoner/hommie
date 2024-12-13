@@ -1,6 +1,7 @@
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
+import 'package:hommie/services/networking/ha_oauth2_token.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_commands.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
@@ -32,21 +33,22 @@ class ServerConnection extends _$ServerConnection {
 
     final credOrError = await authRepository.getCredentials();
 
-    final credentials = credOrError.fold(
+    final authToken = credOrError.fold(
       (error) {
         logger.e("Failed to fetch credentials: $error");
         throw Exception("Failed to fetch credentials: $error");
       },
-      (credentials) => credentials,
+      (credentials) => HAOAuth2Token(credentials), // Convert to our abstraction
     );
 
     final connOption = HAConnectionOption(
-      credentials,
+      authToken,
       onTokenRefresh: () async {
         final refreshResult = await authRepository.getCredentials();
         return refreshResult.fold(
           (error) => throw Exception("Failed to refresh token: $error"),
-          (newCredentials) => newCredentials,
+          (credentials) =>
+              HAOAuth2Token(credentials), // Convert to our abstraction
         );
       },
     );

@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:oauth2/oauth2.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_handler.dart';
@@ -70,14 +70,14 @@ class HASocket {
 
   HASocket.connect({
     required Uri wsUri,
-    required Credentials credentials,
+    required HAAuthToken authToken,
   })  : _config = HASocketConfig(
           wsUri: wsUri,
           pingInterval: const Duration(seconds: 5),
           connectionTimeout: const Duration(seconds: 10),
         ),
         _authHandler = HAAuthHandler(
-          credentials: credentials,
+          authToken: authToken,
           onAuthResult: null,
           sendMessage: null,
         ) {
@@ -207,10 +207,10 @@ class HASocket {
   }
 }
 
-typedef TokenRefreshCallback = Future<Credentials> Function();
+typedef TokenRefreshCallback = Future<HAAuthToken> Function();
 
 class HAConnectionOption {
-  Credentials _credentials;
+  HAAuthToken _credentials;
   final TokenRefreshCallback? _onTokenRefresh;
 
   HAConnectionOption(this._credentials, {TokenRefreshCallback? onTokenRefresh})
@@ -231,12 +231,12 @@ class HAConnectionOption {
   Future<HASocket> createSocket() async {
     await refreshTokenIfNeeded();
 
-    final tokenEndpoint = _credentials.tokenEndpoint;
-    if (tokenEndpoint == null) {
+    final serverUri = _credentials.serverUri;
+    if (serverUri == null) {
       throw Exception("Token endpoint is null");
     }
 
-    final serverUrl = _buildWebSocketUrl(tokenEndpoint);
+    final serverUrl = _buildWebSocketUrl(serverUri);
     logger.i("Trying to establish a new connection to $serverUrl");
 
     final completer = Completer<HASocket>();
@@ -261,7 +261,7 @@ class HAConnectionOption {
   void _connect(Uri uri, Completer<HASocket> completer) {
     final socket = HASocket.connect(
       wsUri: uri,
-      credentials: _credentials,
+      authToken: _credentials,
     );
 
     StreamSubscription<HASocketState>? stateSubscription;

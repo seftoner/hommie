@@ -1,4 +1,4 @@
-import 'package:oauth2/oauth2.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 
@@ -7,12 +7,12 @@ class HAAuthHandler {
   static const _authInvalid = "auth_invalid";
   static const _authOk = "auth_ok";
 
-  final Credentials credentials;
+  final HAAuthToken authToken;
   void Function(AuthResult)? onAuthResult;
   void Function(HABaseMessgae)? sendMessage;
 
   HAAuthHandler({
-    required this.credentials,
+    required this.authToken,
     this.onAuthResult,
     this.sendMessage,
   });
@@ -39,7 +39,9 @@ class HAAuthHandler {
 
   AuthResult _handleAuthRequired() {
     logger.i("Auth required, sending credentials");
-    sendMessage!(AuthMessage(accessToken: credentials.accessToken));
+    sendMessage!(AuthMessage(
+        accessToken:
+            authToken.accessToken)); // Changed from credentials.accessToken
     return AuthResult.pending();
   }
 
