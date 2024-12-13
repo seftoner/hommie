@@ -32,8 +32,9 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                   if (servers.isEmpty) {
                     return EmptyState(
                       text: "No servers found.",
-                      onRefresh: () =>
-                          ref.invalidate(serversDiscoveryControllerProvider),
+                      onRefresh: () => ref
+                          .read(serversDiscoveryControllerProvider.notifier)
+                          .refresh(),
                     );
                   }
                   return ListView.builder(
@@ -57,11 +58,12 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                     },
                   );
                 },
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: () => const SizedBox.shrink(),
                 error: (e, _) => EmptyState(
                   text: "Error discovering servers.",
-                  onRefresh: () =>
-                      ref.invalidate(serversDiscoveryControllerProvider),
+                  onRefresh: () => ref
+                      .read(serversDiscoveryControllerProvider.notifier)
+                      .refresh(),
                 ),
               ),
             ),

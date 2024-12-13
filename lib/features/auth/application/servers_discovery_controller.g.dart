@@ -7,7 +7,7 @@ part of 'servers_discovery_controller.dart';
 // **************************************************************************
 
 String _$serversDiscoveryControllerHash() =>
-    r'597da0a97661c1bb5f508e30a50b4fddc17d9401';
+    r'ea706587f7a292f2abed6c3ca1a9f07756064661';
 
 /// See also [ServersDiscoveryController].
 @ProviderFor(ServersDiscoveryController)

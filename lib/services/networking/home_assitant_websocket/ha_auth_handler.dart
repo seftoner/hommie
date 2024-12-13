@@ -56,40 +56,32 @@ class HAAuthHandler {
   }
 }
 
-class AuthResult {
-  final AuthStatus status;
-  final String? message;
-  final String? haVersion;
+sealed class AuthResult {
+  const AuthResult();
 
-  const AuthResult._({
-    required this.status,
-    this.message,
-    this.haVersion,
-  });
-
-  factory AuthResult.pending() => AuthResult._(status: AuthStatus.pending);
-
-  factory AuthResult.success(String version) => AuthResult._(
-        status: AuthStatus.success,
-        haVersion: version,
-      );
-
-  factory AuthResult.invalid(String message) => AuthResult._(
-        status: AuthStatus.invalid,
-        message: message,
-      );
-
-  factory AuthResult.error(String message) => AuthResult._(
-        status: AuthStatus.error,
-        message: message,
-      );
+  factory AuthResult.pending() => const AuthResultPending();
+  factory AuthResult.success(String version) => AuthResultSuccess(version);
+  factory AuthResult.invalid(String message) => AuthResultInvalid(message);
+  factory AuthResult.error(String message) => AuthResultError(message);
 }
 
-enum AuthStatus {
-  pending,
-  success,
-  invalid,
-  error,
+final class AuthResultPending extends AuthResult {
+  const AuthResultPending();
+}
+
+final class AuthResultSuccess extends AuthResult {
+  final String haVersion;
+  const AuthResultSuccess(this.haVersion);
+}
+
+final class AuthResultInvalid extends AuthResult {
+  final String message;
+  const AuthResultInvalid(this.message);
+}
+
+final class AuthResultError extends AuthResult {
+  final String message;
+  const AuthResultError(this.message);
 }
 
 class UnknownAuthMessageException implements Exception {

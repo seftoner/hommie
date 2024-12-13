@@ -22,7 +22,7 @@ class EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           TextButton(
-            onPressed: onRefresh,
+            onPressed: () => onRefresh(),
             child: const Text('Refresh'),
           ),
         ],

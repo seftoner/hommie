@@ -91,17 +91,19 @@ class HASocket {
   void _initializeAuthHandler() {
     _authHandler!
       ..onAuthResult = (result) {
-        switch (result.status) {
-          case AuthStatus.success:
-            haVersion = result.haVersion!;
+        switch (result) {
+          case AuthResultSuccess(haVersion: final version):
+            haVersion = version;
             _setState(HASocketState.authenticated);
             break;
-          case AuthStatus.invalid:
-          case AuthStatus.error:
-            _handleConnectionError(result.message ?? 'Authentication failed');
+          case AuthResultError(message: final message):
+            _handleConnectionError(message);
             break;
-          case AuthStatus.pending:
+          case AuthResultPending():
             _setState(HASocketState.connecting);
+            break;
+          case AuthResultInvalid(message: final message):
+            _handleConnectionError(message);
             break;
         }
       }
