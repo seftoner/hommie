@@ -62,16 +62,16 @@ class MockHASocket extends _i1.Mock implements _i2.HASocket {
       );
 
   @override
-  _i4.Stream<_i2.HAConnectionState> get stateStream => (super.noSuchMethod(
+  _i4.Stream<_i2.HASocketState> get stateStream => (super.noSuchMethod(
         Invocation.getter(#stateStream),
-        returnValue: _i4.Stream<_i2.HAConnectionState>.empty(),
-      ) as _i4.Stream<_i2.HAConnectionState>);
+        returnValue: _i4.Stream<_i2.HASocketState>.empty(),
+      ) as _i4.Stream<_i2.HASocketState>);
 
   @override
-  _i2.HAConnectionState get state => (super.noSuchMethod(
+  _i2.HASocketState get state => (super.noSuchMethod(
         Invocation.getter(#state),
-        returnValue: _i2.HAConnectionState.connecting,
-      ) as _i2.HAConnectionState);
+        returnValue: _i2.HASocketState.connecting,
+      ) as _i2.HASocketState);
 
   @override
   _i4.Stream<dynamic> get stream => (super.noSuchMethod(
