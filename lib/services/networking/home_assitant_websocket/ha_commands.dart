@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:hommie/services/networking/home_assitant_websocket/future_mapping_extension.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/hass_subscription.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/types/types.dart';
 
 class HACommands {

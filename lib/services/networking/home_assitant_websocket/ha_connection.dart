@@ -1,39 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/hass_subscription.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/types/web_socket_response.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/backoff.dart';
-
-/// Configuration options for Home Assistant connection.
-class AuthOption {
-  late Uri _serverUri;
-  AuthOption({required String serverAddress}) {
-    _serverUri = Uri.parse(serverAddress.replaceFirst("http", "ws"));
-  }
-  Uri get serverUri => _serverUri;
-}
-
-/// Represents a subscription to Home Assistant events.
-/// Provides a stream of events and a way to unsubscribe.
-class HassSubscription {
-  late final StreamController<dynamic> _streamController;
-
-  final Function() unsubscribe;
-  Stream<dynamic> get stream => _streamController.stream;
-
-  HassSubscription({required this.unsubscribe}) {
-    _streamController = StreamController.broadcast();
-    _streamController.onListen = () {
-      logger.d('New listener added to subscribtion stream!');
-    };
-    _streamController.onCancel = () {
-      logger.d('Listener unsubscribed from subscribtion stream!');
-    };
-  }
-}
+import 'package:hommie/services/networking/home_assitant_websocket/message_handler.dart';
 
 /// Interface for Home Assistant websocket connection.
 abstract class IHAConnection {
@@ -53,17 +26,20 @@ abstract class IHAConnection {
 class HAConnection implements IHAConnection {
   HASocket? _socket;
   StreamSubscription<dynamic>? _socketSubscription;
-  StreamSubscription<HASocketState>? _socketStateSubscription;
-  final HAConnectionOption haConnectionOption;
-  final _stateController = StreamController<HASocketState>.broadcast();
+
+  final HAConnectionOption _haConnectionOption;
   final Backoff _backoff;
   bool _closeRequested = false;
+  final HAMessageHandler _messageHandler;
+  final HAConnectionState _connectionState;
 
-  HAConnection(this.haConnectionOption, [Backoff? backoff])
-      : _backoff = backoff ?? const ConstantBackoff(Duration(seconds: 5));
+  HAConnection(this._haConnectionOption, [Backoff? backoff])
+      : _backoff = backoff ?? const ConstantBackoff(Duration(seconds: 5)),
+        _messageHandler = HAMessageHandler(),
+        _connectionState = HAConnectionState();
 
   /// Stream of connection state changes.
-  Stream<HASocketState> get state => _stateController.stream;
+  Stream<HASocketState> get state => _connectionState.stateStream;
 
   /// Current connection state.
   HASocketState get currentState =>
@@ -83,11 +59,15 @@ class HAConnection implements IHAConnection {
       return;
     }
 
+    _closeRequested = false;
     try {
-      final socket = await haConnectionOption.createSocket();
+      final socket = await _haConnectionOption.createSocket();
       _setSocket(socket);
     } catch (e) {
       logger.e("Connection failed: $e");
+      if (!_closeRequested) {
+        _reconnect();
+      }
       rethrow;
     }
   }
@@ -110,10 +90,10 @@ class HAConnection implements IHAConnection {
     _closeRequested = true;
     _backoff.reset();
     _socketSubscription?.cancel();
-    _socketStateSubscription?.cancel();
+    // _socketStateSubscription?.cancel();
     _socket?.close();
     _socket = null;
-    _stateController.close();
+    _connectionState.dispose();
   }
 
   @override
@@ -126,7 +106,8 @@ class HAConnection implements IHAConnection {
       if (!_socket!.isClosed()) {
         await sendMessage(UnsubscribeEventsMessage(subsctibtionID: id));
       }
-      _subscriptions.remove(id);
+      final removedSubscribtion = _subscriptions.remove(id);
+      removedSubscribtion?.dispose();
     });
 
     _subscriptions[id] = hassSubscribtion;
@@ -137,50 +118,54 @@ class HAConnection implements IHAConnection {
   }
 
   void _messageListener(dynamic incomingMessage) {
-    logger.t("Server response:  $incomingMessage");
+    logger.t("Server response: $incomingMessage");
 
-    final decodedJson = jsonDecode(incomingMessage);
-
-    List<dynamic> jsonMessages = [
-      if (decodedJson is List<dynamic>) ...decodedJson,
-      if (decodedJson is! List<dynamic>) decodedJson,
-    ];
-
-    for (final json in jsonMessages) {
-      final response = WebSocketResponse.fromJson(json);
-      var msgCompleter = _commands[response.id];
-
-      switch (response) {
-        case WebSocketPongResponse():
-          msgCompleter?.complete();
-          _commands.remove(response.id);
-          break;
-        case WebSocketEventResponse(event: var event):
-          var subscribtion = _subscriptions[response.id];
-          if (subscribtion != null) {
-            subscribtion._streamController.add(event);
-          } else {
-            logger.e("Unknown subscribtion ${response.id}. Unsubscribing");
-
-            sendMessage(UnsubscribeEventsMessage(subsctibtionID: response.id))
-                .catchError((e) {
-              logger.e(
-                  "Error unsubsribing from unknown subscription ${incomingMessage.id}. Error: $e");
-            });
-          }
-          break;
-        case WebSocketResultResponseSuccess(result: var result):
-          msgCompleter?.complete(result);
-          _commands.remove(response.id);
-          break;
-        case WebSocketResultResponseError(error: var result):
-          msgCompleter?.completeError(result);
-          _commands.remove(response.id);
-          break;
-        default:
-          logger.e("Unknown message type: $json");
+    try {
+      final messages = _messageHandler.parseMessages(incomingMessage);
+      for (final response in messages) {
+        _handleResponse(response);
       }
+    } catch (e) {
+      logger.e("Failed to handle message", error: e);
+      _handleError(e);
     }
+  }
+
+  void _handleResponse(WebSocketResponse response) {
+    _messageHandler.handleResponse(
+      response,
+      onPong: () => _handlePongResponse(response.id),
+      onEvent: (event) => _handleEventResponse(response.id, event),
+      onSuccess: (result) => _handleSuccessResponse(response.id, result),
+      onError: (error) => _handleErrorResponse(response.id, error),
+    );
+  }
+
+  void _handlePongResponse(int id) {
+    logger.d("Receive pong");
+    final completer = _commands.remove(id);
+    completer?.complete();
+  }
+
+  void _handleEventResponse(int id, dynamic event) {
+    final subscription = _subscriptions[id];
+    if (subscription != null) {
+      subscription.emit(event);
+    } else {
+      logger.e("Unknown subscription $id, unsubscribing");
+      sendMessage(UnsubscribeEventsMessage(subsctibtionID: id))
+          .catchError((e) => logger.e("Error unsubscribing: $e"));
+    }
+  }
+
+  void _handleSuccessResponse(int id, dynamic result) {
+    final completer = _commands.remove(id);
+    completer?.complete(result);
+  }
+
+  void _handleErrorResponse(int id, dynamic error) {
+    final completer = _commands.remove(id);
+    completer?.completeError(error);
   }
 
   void _handleClose() {
@@ -190,14 +175,14 @@ class HAConnection implements IHAConnection {
     });
     _commands.clear();
     _socketSubscription?.cancel();
-    _socketStateSubscription?.cancel();
+
     _socket = null;
 
     if (!_closeRequested) {
       _reconnect();
     }
 
-    _stateController.add(HASocketState.disconnected);
+    _connectionState.setState(HASocketState.disconnected);
     logger.d("Connection closed");
   }
 
@@ -207,7 +192,7 @@ class HAConnection implements IHAConnection {
 
     Future.delayed(delay, () {
       if (!_closeRequested) {
-        _stateController.add(HASocketState.reconnecting);
+        _connectionState.setState(HASocketState.reconnecting);
         connect().catchError((e) {
           logger.e("Reconnection failed", error: e);
           _reconnect(); // Try again if failed
@@ -224,15 +209,52 @@ class HAConnection implements IHAConnection {
     _socket = socket;
 
     _socketSubscription?.cancel();
-    _socketStateSubscription?.cancel();
-
     _socketSubscription = socket.stream
         .listen(_messageListener, onDone: _handleClose, onError: _handleError);
 
-    _socketStateSubscription = socket.stateStream.listen((state) {
-      _stateController.add(state);
-    });
-
+    _connectionState.connectToSocket(socket);
     logger.i("Connection established 🤝");
+  }
+}
+
+class HAConnectionState {
+  final StreamController<HASocketState> _controller;
+  HASocketState _currentState;
+  StreamSubscription<HASocketState>? _socketSubscription;
+
+  Stream<HASocketState> get stateStream => _controller.stream;
+  HASocketState get currentState => _currentState;
+
+  HAConnectionState()
+      : _controller = StreamController<HASocketState>.broadcast(),
+        _currentState = HASocketState.disconnected;
+
+  void connectToSocket(HASocket socket) {
+    _socketSubscription?.cancel();
+    _socketSubscription = socket.stateStream.listen(
+      (newState) {
+        setState(newState);
+      },
+      onError: (error) {
+        logger.e("Socket state error: $error");
+      },
+    );
+
+    setState(socket.state);
+  }
+
+  void setState(HASocketState newState) {
+    if (_currentState != newState) {
+      _currentState = newState;
+      _controller.add(newState);
+      logger.d('Connection state changed to: $newState');
+    }
+  }
+
+  void dispose() {
+    _socketSubscription?.cancel();
+    if (!_controller.isClosed) {
+      _controller.close();
+    }
   }
 }

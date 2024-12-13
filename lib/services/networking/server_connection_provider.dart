@@ -53,11 +53,7 @@ class ServerConnection extends _$ServerConnection {
 
     final connection = HAConnection(connOption);
 
-    // Listen to connection state changes
-    _connectionStateSubscription?.cancel();
-    _connectionStateSubscription = connection.state.listen((state) {
-      _handleStateChange(state, connection, connectionStateNotifier);
-    });
+    _setupConnectionListeners(connection, connectionStateNotifier);
 
     try {
       await connection.connect();
@@ -66,6 +62,16 @@ class ServerConnection extends _$ServerConnection {
       logger.e('Connection failed: $e');
       rethrow;
     }
+  }
+
+  void _setupConnectionListeners(
+    HAConnection connection,
+    ConnectionState connectionStateNotifier,
+  ) {
+    _connectionStateSubscription?.cancel();
+    _connectionStateSubscription = connection.state.listen((state) {
+      _handleStateChange(state, connection, connectionStateNotifier);
+    });
   }
 
   void _handleStateChange(
