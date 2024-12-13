@@ -1,8 +1,8 @@
 import 'package:computer/computer.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/bootstrap/background_tasks.dart';
-import 'package:hommie/bootstrap/error_handlers.dart';
+import 'package:hommie/core/bootstrap/background_tasks.dart';
+import 'package:hommie/core/bootstrap/error_handlers.dart';
 import 'package:hommie/core/utils/log_file.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/core/observers/app_state_logger.dart';

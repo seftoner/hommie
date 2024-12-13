@@ -30,6 +30,7 @@ class HAConnection implements IHAConnection {
   final HAConnectionOption _haConnectionOption;
   final Backoff _backoff;
   bool _closeRequested = false;
+  bool _reconnectScheduled = false;
   final HAMessageHandler _messageHandler;
   final HAConnectionState _connectionState;
 
@@ -88,9 +89,9 @@ class HAConnection implements IHAConnection {
   @override
   void close() {
     _closeRequested = true;
+    _reconnectScheduled = false;
     _backoff.reset();
     _socketSubscription?.cancel();
-    // _socketStateSubscription?.cancel();
     _socket?.close();
     _socket = null;
     _connectionState.dispose();
@@ -187,10 +188,14 @@ class HAConnection implements IHAConnection {
   }
 
   void _reconnect() {
+    if (_reconnectScheduled) return;
+    _reconnectScheduled = true;
+
     final delay = _backoff.next;
     logger.i("Scheduling reconnection in ${delay.inSeconds} seconds");
 
     Future.delayed(delay, () {
+      _reconnectScheduled = false;
       if (!_closeRequested) {
         _connectionState.setState(HASocketState.reconnecting);
         connect().catchError((e) {

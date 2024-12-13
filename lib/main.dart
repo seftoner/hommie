@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/app.dart';
-import 'package:hommie/bootstrap/bootstrap.dart';
+import 'package:hommie/core/bootstrap/bootstrap.dart';
 import 'package:hommie/core/utils/logger.dart';
 
 Future<void> main() async {

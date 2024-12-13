@@ -10,4 +10,5 @@ class AuthFailure with _$AuthFailure {
   const factory AuthFailure.storage() = Storage;
   const factory AuthFailure.missingCredentials() = MissingCredentials;
   const factory AuthFailure.refreshToken() = RefreshTokenFailure;
+  const factory AuthFailure.connection() = Connection;
 }

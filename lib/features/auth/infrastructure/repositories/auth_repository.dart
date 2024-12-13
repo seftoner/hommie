@@ -81,6 +81,11 @@ class AuthRepository implements IAuthRepository {
           return failureOrCredentials.fold(
             (failure) {
               logger.e("Token refresh failed: $failure");
+              // Return the stored credentials even if refresh failed
+              if (failure is Connection) {
+                logger.i("Using stored credentials for offline access");
+                return right(storedCredentials);
+              }
               return left(AuthFailure.refreshToken());
             },
             (newCredentials) {
@@ -113,7 +118,7 @@ class AuthRepository implements IAuthRepository {
     } on TimeoutException catch (e) {
       logger.e(
           'Timeout error. Refresh takes more than: ${e.duration!.inSeconds.toString()}');
-      return left(const AuthFailure.server());
+      return left(const AuthFailure.connection());
     } on FormatException catch (e) {
       logger.e('Error parsing credentials: $e');
       return left(const AuthFailure.server());

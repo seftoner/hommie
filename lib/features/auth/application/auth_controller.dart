@@ -13,24 +13,39 @@ part 'auth_controller.g.dart';
 
 @riverpod
 class AuthController extends _$AuthController {
+  Timer? _connectionCheckTimer;
+
   @override
   Future<AuthState> build() async {
-    final repository = ref.watch(authRepositoryProvider);
-    final credentialsOrError = await repository.getCredentials();
+    ref.onDispose(() {
+      _connectionCheckTimer?.cancel();
+    });
+    return const AuthState.initial();
+  }
 
-    return credentialsOrError.fold(
-      (failure) {
+  Future<void> initialize() async {
+    final repository = ref.read(authRepositoryProvider);
+    final credentialsOrFailure = await repository.getCredentials();
+
+    state = await credentialsOrFailure.fold(
+      (failure) async {
         switch (failure) {
           case MissingCredentials():
-            return const AuthState.unauthenticated();
+            return const AsyncData(AuthState.unauthenticated());
+          case Connection():
+            // Allow access if we have stored credentials
+            final isLoggedIn = await repository.isLoggedIn();
+            if (isLoggedIn) {
+              return const AsyncData(AuthState.authenticated());
+            }
+            return AsyncData(AuthState.failure(failure));
           default:
             logger.e("Authentication failure: $failure");
-            return AuthState.failure(failure);
+            return AsyncData(AuthState.failure(failure));
         }
       },
-      (credentials) {
-        logger.i("User authenticated successfully");
-        return AuthState.authenticated();
+      (credentials) async {
+        return const AsyncData(AuthState.authenticated());
       },
     );
   }
