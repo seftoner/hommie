@@ -52,6 +52,7 @@ class AuthRepository implements IAuthRepository {
       var client = http.Client();
       try {
         //TODO: handle internet connection error
+        // In this case token will be alive
         await client.post(credentials!.tokenEndpoint!, body: {
           'token': credentials.refreshToken,
           'action': 'revoke',

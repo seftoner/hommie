@@ -81,7 +81,7 @@ class HASocket {
           onAuthResult: null,
           sendMessage: null,
         ) {
-    _initializeStreamController();
+    _outerStreamController = StreamController.broadcast();
 
     _initializeAuthHandler();
 
@@ -108,12 +108,6 @@ class HASocket {
         }
       }
       ..sendMessage = sendMessage;
-  }
-
-  void _initializeStreamController() {
-    _outerStreamController = StreamController.broadcast();
-    _outerStreamController.onListen = () => logger.t('New listener added!');
-    _outerStreamController.onCancel = () => logger.t('Listener unsubscribed!');
   }
 
   void _setState(HASocketState newState) {
@@ -180,6 +174,8 @@ class HASocket {
 
   void _handleConnectionError(String message) {
     logger.e(message);
+    logger.t(
+        "Inner socket error. Code ${_innerChanel.closeCode} Reason: ${_innerChanel.closeReason}");
     _setState(HASocketState.disconnected);
     if (!_outerStreamController.isClosed) {
       _outerStreamController.addError(message);

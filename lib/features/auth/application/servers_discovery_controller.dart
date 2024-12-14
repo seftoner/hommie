@@ -12,6 +12,10 @@ class ServersDiscoveryController extends _$ServersDiscoveryController {
 
   @override
   Future<List<HaServer>> build() async {
+    ref.onDispose(() {
+      _timer?.cancel();
+      _timer = null;
+    });
     _startPeriodicDiscovery();
     return _fetchServers();
   }

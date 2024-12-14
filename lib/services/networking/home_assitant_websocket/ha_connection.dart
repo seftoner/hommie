@@ -199,8 +199,9 @@ class HAConnection implements IHAConnection {
       if (!_closeRequested) {
         _connectionState.setState(HASocketState.reconnecting);
         connect().catchError((e) {
+          //flutter: time=2024-12-14T14:07:32.813550 level=debug msg="Socket state changed to: HASocketState.disconnected"
           logger.e("Reconnection failed", error: e);
-          _reconnect(); // Try again if failed
+          _reconnect();
         });
       }
     });

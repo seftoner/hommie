@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'server_connection_provider.dart';
+part of 'server_connection_manager.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverConnectionHash() => r'301fa8378dd9a65f3874f0f1755d1e469e493fe4';
+String _$serverConnectionManagerHash() =>
+    r'9cbe1657d5ef1698b1fba14cf9ffcea3fb92e1e0';
 
-/// See also [serverConnection].
-@ProviderFor(serverConnection)
-final serverConnectionProvider = FutureProvider<HAConnection>.internal(
-  serverConnection,
-  name: r'serverConnectionProvider',
+/// See also [ServerConnectionManager].
+@ProviderFor(ServerConnectionManager)
+final serverConnectionManagerProvider =
+    AsyncNotifierProvider<ServerConnectionManager, void>.internal(
+  ServerConnectionManager.new,
+  name: r'serverConnectionManagerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$serverConnectionHash,
+      : _$serverConnectionManagerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ServerConnectionRef = FutureProviderRef<HAConnection>;
+typedef _$ServerConnectionManager = AsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

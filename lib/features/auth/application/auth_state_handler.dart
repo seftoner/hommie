@@ -25,7 +25,6 @@ class AuthStateHandler extends _$AuthStateHandler {
           router.go(DicoveryRoute().location);
           break;
         case Failure():
-          // _handleFailure(next.value as Failure);
           break;
         default:
           break;
@@ -34,10 +33,4 @@ class AuthStateHandler extends _$AuthStateHandler {
 
     await ref.read(authControllerProvider.notifier).initialize();
   }
-
-  // Future<void> _handleFailure(Failure failure) async {
-  //   if (failure.failure.isTokenExpired) {
-  //     await ref.read(authControllerProvider.notifier).signOut();
-  //   }
-  // }
 }
