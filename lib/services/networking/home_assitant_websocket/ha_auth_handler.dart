@@ -46,6 +46,8 @@ class HAAuthHandler {
   }
 
   AuthResult _handleAuthInvalid(String message) {
+    // message = Invalid access token or password
+    // need handle this reponse properly -> log out from app
     logger.e("Authentication invalid: $message");
     return AuthResult.invalid(message);
   }

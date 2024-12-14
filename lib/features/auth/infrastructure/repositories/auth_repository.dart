@@ -53,7 +53,7 @@ class AuthRepository implements IAuthRepository {
       try {
         //TODO: handle internet connection error
         await client.post(credentials!.tokenEndpoint!, body: {
-          'token': credentials.accessToken,
+          'token': credentials.refreshToken,
           'action': 'revoke',
         });
       } on SocketException catch (e) {
