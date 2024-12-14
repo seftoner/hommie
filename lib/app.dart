@@ -4,6 +4,7 @@ import 'package:hommie/ui/screens/widgets/offline_container.dart';
 import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hommie/features/auth/application/auth_state_handler.dart';
 
 class HommieApp extends ConsumerWidget {
   const HommieApp({super.key});
@@ -11,6 +12,8 @@ class HommieApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
+    ref.watch(authStateHandlerProvider);
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: router,
