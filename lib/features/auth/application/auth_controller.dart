@@ -32,6 +32,9 @@ class AuthController extends _$AuthController {
         switch (failure) {
           case MissingCredentials():
             return const AsyncData(AuthState.unauthenticated());
+          case InvalidToken():
+            signOut();
+            return AsyncData(AuthState.failure(failure));
           case Connection():
             // Allow access if we have stored credentials
             final isLoggedIn = await repository.isLoggedIn();

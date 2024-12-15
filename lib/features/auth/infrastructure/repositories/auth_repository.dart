@@ -87,7 +87,7 @@ class AuthRepository implements IAuthRepository {
                 logger.i("Using stored credentials for offline access");
                 return right(storedCredentials);
               }
-              return left(AuthFailure.refreshToken());
+              return left(failure);
             },
             (newCredentials) {
               logger.i("Token refreshed successfully");
@@ -125,7 +125,7 @@ class AuthRepository implements IAuthRepository {
       return left(const AuthFailure.server());
     } on AuthorizationException catch (e) {
       logger.e('Error refreshing token: $e');
-      return left(AuthFailure.server("${e.error}:${e.description}"));
+      return left(AuthFailure.invalidToken(e.error));
     } on SocketException catch (e) {
       logger.e('Token refresh failed: $e');
       return left(AuthFailure.server("$e"));
