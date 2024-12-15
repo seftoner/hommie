@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_handler.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/src/ha_auth_handler.dart';
+
+import 'ha_messages.dart';
 
 class HASocketConfig {
   final Uri wsUri;

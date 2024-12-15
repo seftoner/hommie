@@ -5,13 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
-import 'package:hommie/services/networking/credential_storage.dart';
+import 'package:hommie/features/auth/domain/repository/i_credential_repository.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRepository implements IAuthRepository {
-  final CredentialStorage _credentialStorage;
+  final ICredentialRepository _credentialStorage;
   final http.Client _httpClient;
 
   final String _clientID = "https://seftoner.github.io";

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/features/auth/application/auth_controller.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/home_assistant_wsocket.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/ha_oauth2_token.dart';

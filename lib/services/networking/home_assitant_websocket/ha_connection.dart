@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection_option.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_connection_state.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/src/ha_connection_state.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/src/ha_messages.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/src/ha_socket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/hass_subscription.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/types/web_socket_response.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/src/types/web_socket_response.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/backoff.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/message_handler.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/src/backoff.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/src/message_handler.dart';
 
 /// Interface for Home Assistant websocket connection.
 abstract class IHAConnection {

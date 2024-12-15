@@ -1,4 +1,4 @@
-import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/home_assistant_websocket.dart';
 import 'package:oauth2/oauth2.dart';
 
 class HAOAuth2Token implements HAAuthToken {

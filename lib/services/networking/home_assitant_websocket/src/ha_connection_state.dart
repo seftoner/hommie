@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/src/ha_socket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
 
 class HAConnectionState {
