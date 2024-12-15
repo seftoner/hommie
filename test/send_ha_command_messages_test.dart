@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_commands.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
+
+import 'package:hommie/services/networking/home_assitant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/src/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/src/ha_socket.dart';
 import 'package:hommie/core/utils/logger.dart';
@@ -38,14 +38,18 @@ void main() {
     expect(capturedMessage.payload, equals(expectedPayload));
   }
 
+  setUpAll(() {
+    provideDummy<HASocketState>(HASocketState.disconnected());
+  });
+
   setUp(() async {
     // Initialize shared objects before each test
     mockSocket = MockHASocket();
     socketStreamController = StreamController<dynamic>();
     socketStateController = StreamController<HASocketState>();
 
-    when(mockSocket.isClosed()).thenAnswer((_) => false);
-    when(mockSocket.state).thenAnswer((_) => HASocketState.connected);
+    when(mockSocket.isClosed).thenAnswer((_) => false);
+    when(mockSocket.state).thenAnswer((_) => HASocketState.authenticated());
     when(mockSocket.stream).thenAnswer((_) => socketStreamController.stream);
     when(mockSocket.stateStream)
         .thenAnswer((_) => socketStateController.stream);

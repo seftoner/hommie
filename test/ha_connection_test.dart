@@ -3,10 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/src/ha_socket.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_commands.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/hass_subscription.dart';
+
 import 'package:hommie/services/networking/home_assitant_websocket/src/types/hass_event.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
@@ -40,6 +39,10 @@ void main() {
         delay, () => socketStreamController.add(jsonEncode(message)));
   }
 
+  setUpAll(() {
+    provideDummy<HASocketState>(HASocketState.disconnected());
+  });
+
   setUp(() {
     mockSocket = MockHASocket();
     mockOptions = MockHAConnectionOption();
@@ -48,7 +51,7 @@ void main() {
     socketStreamController = StreamController<String>.broadcast();
 
     // Setup default mock behavior
-    when(mockSocket.state).thenReturn(HASocketState.disconnected);
+    when(mockSocket.state).thenReturn(HASocketState.disconnected());
     when(mockSocket.stateStream).thenAnswer((_) => stateController.stream);
     when(mockSocket.stream).thenAnswer((_) => socketStreamController.stream);
     when(mockOptions.createSocket()).thenAnswer((_) async => mockSocket);
@@ -68,14 +71,14 @@ void main() {
   group('Connection lifecycle', () {
     test('connect should create new socket if none exists', () async {
       // Arrange
-      when(mockSocket.state).thenReturn(HASocketState.authenticated);
+      when(mockSocket.state).thenReturn(HASocketState.authenticated());
 
       // Act
       await connection.connect();
 
       // Assert
       verify(mockOptions.createSocket()).called(1);
-      expect(connection.currentState, HASocketState.authenticated);
+      expect(connection.currentState, isA<Authenticated>());
     });
 
     test('connect should not create new socket if one already exists',
@@ -100,7 +103,7 @@ void main() {
 
       // Assert
       verify(mockSocket.close()).called(1);
-      expect(connection.currentState, equals(HASocketState.disconnected));
+      expect(connection.currentState, isA<Disconnected>());
     });
   });
 
@@ -108,7 +111,7 @@ void main() {
     test('sendCommand should successfully send and receive response', () async {
       // Arrange
       await connection.connect();
-      when(mockSocket.isClosed()).thenReturn(false);
+      when(mockSocket.isClosed).thenReturn(false);
 
       emitSocketMessage({
         'id': 2,
@@ -149,7 +152,7 @@ void main() {
     test('subscribeMessage should register subscription and handle events',
         () async {
       // Arrange
-      when(mockSocket.isClosed()).thenReturn(false);
+      when(mockSocket.isClosed).thenReturn(false);
       await connection.connect();
 
       emitSocketMessage({
