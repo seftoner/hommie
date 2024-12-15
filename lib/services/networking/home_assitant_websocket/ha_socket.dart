@@ -5,17 +5,10 @@ import 'dart:io';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_handler.dart';
-
-enum HASocketState {
-  connecting,
-  connected,
-  authenticated,
-  disconnected,
-  reconnecting,
-}
 
 class HASocketConfig {
   final Uri wsUri;
@@ -35,10 +28,11 @@ class HASocket {
 
   late final String haVersion;
   late WebSocketChannel _innerChanel;
+  bool _invalidAuth = false;
   late final StreamController<dynamic> _outerStreamController;
 
   final _stateController = StreamController<HASocketState>.broadcast();
-  HASocketState _state = HASocketState.disconnected;
+  HASocketState _state = HASocketState.disconnected();
 
   /// A stream of [HASocketState] changes for the Home Assistant WebSocket connection.
   ///
@@ -65,8 +59,15 @@ class HASocket {
   /// from the Home Assistant server.
   Stream<dynamic> get stream => _outerStreamController.stream;
 
+  /// Returns `true` if the underlying WebSocket connection is closed.
+  ///
+  /// This getter checks the state of the outer stream controller to determine
+  /// if the connection has been terminated.
+  bool get isClosed => _outerStreamController.isClosed;
+
   int? get closeCode => _innerChanel.closeCode;
   String? get closeReason => _innerChanel.closeReason;
+  bool get isAuthInvalid => _invalidAuth;
 
   HASocket.connect({
     required Uri wsUri,
@@ -94,16 +95,25 @@ class HASocket {
         switch (result) {
           case AuthResultSuccess(haVersion: final version):
             haVersion = version;
-            _setState(HASocketState.authenticated);
+            _setState(HASocketState.authenticated());
             break;
           case AuthResultError(message: final message):
-            _handleConnectionError(message);
+            _setState(HASocketState.disconnected(
+              reason: 'Authentication error: $message',
+              type: DisconnectionType.error,
+            ));
+            logger.e('Authentication error: $message');
             break;
           case AuthResultPending():
-            _setState(HASocketState.connecting);
+            _setState(HASocketState.connecting());
             break;
           case AuthResultInvalid(message: final message):
-            _handleConnectionError(message);
+            _invalidAuth = true;
+            _setState(HASocketState.disconnected(
+              reason: 'Invalid authentication: $message',
+              type: DisconnectionType.authFailure,
+            ));
+            logger.e('Invalid authentication: $message');
             break;
         }
       }
@@ -113,18 +123,37 @@ class HASocket {
   void _setState(HASocketState newState) {
     _state = newState;
     _stateController.add(newState);
-    logger.d('Socket state changed to: $newState');
+    logger.d('Socket state changed to: ${newState.runtimeType}');
   }
 
   void _startConnection() async {
     try {
-      _setState(HASocketState.connecting);
+      _setState(HASocketState.connecting());
       _innerChanel = _createWebSocketChannel();
-      await _waitForConnection();
+      await _innerChanel.ready;
       _configureSocketStream();
     } catch (e) {
-      _handleConnectionError('Failed to start connection: $e');
+      _handleConnectionError(e);
     }
+  }
+
+  void _handleConnectionError(dynamic error) {
+    final String reason;
+    if (error is SocketException) {
+      reason = 'Socket connection failed';
+    } else if (error is TimeoutException) {
+      reason = 'Connection timed out';
+    } else if (error is WebSocketChannelException) {
+      reason = 'WebSocket error';
+    } else {
+      reason = 'Failed to start connection';
+    }
+
+    _setState(HASocketState.disconnected(
+      reason: '$reason: $error',
+      type: DisconnectionType.error,
+    ));
+    logger.e('$reason: $error');
   }
 
   WebSocketChannel _createWebSocketChannel() {
@@ -135,50 +164,44 @@ class HASocket {
     );
   }
 
-  Future<void> _waitForConnection() async {
-    try {
-      await _innerChanel.ready;
-    } on SocketException catch (e) {
-      _handleConnectionError('Socket connection failed: $e');
-    } on TimeoutException catch (e) {
-      _handleConnectionError('Connection timed out: $e');
-    } on WebSocketChannelException catch (e) {
-      _handleConnectionError('WebSocket error: $e');
-    }
-  }
-
   void _configureSocketStream() {
     _innerChanel.stream.listen(
       (event) {
-        if (_state != HASocketState.authenticated) {
+        if (_state is! Authenticated) {
           final messageJson = jsonDecode(event);
           _authHandler!.handleAuthMessage(messageJson);
         }
-
         _outerStreamController.add(event);
       },
-      onError: (error) => _handleConnectionError('Socket error: $error'),
       onDone: _handleSocketClosure,
       cancelOnError: true,
     );
   }
 
   void _handleSocketClosure() {
-    _setState(HASocketState.disconnected);
-    logger.t(
-        "Inner socket is closed. Code ${_innerChanel.closeCode} Reason: ${_innerChanel.closeReason}");
-    if (!_outerStreamController.isClosed) {
-      _outerStreamController.close();
-    }
-  }
+    final reason =
+        "Inner socket is closed. Code ${_innerChanel.closeCode} Reason: ${_innerChanel.closeReason}";
+    logger.t(reason);
 
-  void _handleConnectionError(String message) {
-    logger.e(message);
-    logger.t(
-        "Inner socket error. Code ${_innerChanel.closeCode} Reason: ${_innerChanel.closeReason}");
-    _setState(HASocketState.disconnected);
+    if (_invalidAuth) {
+      logger.e("Authentication is invalid - token might be revoked");
+      _setState(HASocketState.disconnected(
+        reason: reason,
+        type: DisconnectionType.authFailure,
+      ));
+    } else {
+      _setState(HASocketState.disconnected(
+        reason: reason,
+        type: _innerChanel.closeCode == 1000
+            ? DisconnectionType.normal
+            : DisconnectionType.error,
+      ));
+    }
+
     if (!_outerStreamController.isClosed) {
-      _outerStreamController.addError(message);
+      if (_invalidAuth) {
+        _outerStreamController.addError("Authentication failed");
+      }
       _outerStreamController.close();
     }
   }
@@ -190,120 +213,13 @@ class HASocket {
     _innerChanel.sink.add(encodedData);
   }
 
-  bool isClosed() {
-    return _outerStreamController.isClosed;
-  }
-
   void close() {
-    _setState(HASocketState.disconnected);
+    _setState(HASocketState.disconnected());
     logger.t("Closing socket");
     _innerChanel.sink.close();
     if (!_outerStreamController.isClosed) {
       _outerStreamController.close();
     }
     _stateController.close();
-  }
-}
-
-typedef TokenRefreshCallback = Future<HAAuthToken> Function();
-
-class HAConnectionOption {
-  HAAuthToken _credentials;
-  final TokenRefreshCallback? _onTokenRefresh;
-
-  HAConnectionOption(this._credentials, {TokenRefreshCallback? onTokenRefresh})
-      : _onTokenRefresh = onTokenRefresh;
-
-  Future<void> refreshTokenIfNeeded() async {
-    if (_credentials.isExpired && _onTokenRefresh != null) {
-      try {
-        _credentials = await _onTokenRefresh();
-        logger.i("Token refreshed successfully");
-      } catch (e) {
-        logger.e("Failed to refresh token", error: e);
-        rethrow;
-      }
-    }
-  }
-
-  Future<HASocket> createSocket() async {
-    await refreshTokenIfNeeded();
-
-    final serverUri = _credentials.serverUri;
-    if (serverUri == null) {
-      throw Exception("Token endpoint is null");
-    }
-
-    final serverUrl = _buildWebSocketUrl(serverUri);
-    logger.i("Trying to establish a new connection to $serverUrl");
-
-    final completer = Completer<HASocket>();
-    _connect(Uri.parse(serverUrl), completer);
-
-    return completer.future;
-  }
-
-  String _buildWebSocketUrl(Uri baseUrl) {
-    final scheme = switch (baseUrl.scheme) {
-      "http" => "ws",
-      "https" => "wss",
-      _ => throw Exception("Unsupported scheme: ${baseUrl.scheme}"),
-    };
-
-    final host = baseUrl.host;
-    final port = baseUrl.port;
-
-    return "$scheme://$host:$port/api/websocket";
-  }
-
-  void _connect(Uri uri, Completer<HASocket> completer) {
-    final socket = HASocket.connect(
-      wsUri: uri,
-      authToken: _credentials,
-    );
-
-    StreamSubscription<HASocketState>? stateSubscription;
-    StreamSubscription<dynamic>? messageSubscription;
-
-    void cleanup() {
-      stateSubscription?.cancel();
-      messageSubscription?.cancel();
-    }
-
-    stateSubscription = socket.stateStream.listen(
-      (state) {
-        if (state == HASocketState.authenticated) {
-          cleanup();
-          completer.complete(socket);
-        }
-      },
-      onError: (error) {
-        cleanup();
-        _completeWithError(completer, error);
-      },
-    );
-
-    messageSubscription = socket.stream.listen(
-      null, // We don't need to handle messages here as auth is handled by HASocket
-      onError: (error) {
-        cleanup();
-        _completeWithError(completer, error);
-      },
-      onDone: () {
-        if (!completer.isCompleted) {
-          cleanup();
-          _completeWithError(
-            completer,
-            Exception("Socket closed before authentication"),
-          );
-        }
-      },
-    );
-  }
-
-  void _completeWithError(Completer completer, Object error) {
-    if (!completer.isCompleted) {
-      completer.completeError(error);
-    }
   }
 }

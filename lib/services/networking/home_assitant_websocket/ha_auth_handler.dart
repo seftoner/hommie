@@ -39,9 +39,7 @@ class HAAuthHandler {
 
   AuthResult _handleAuthRequired() {
     logger.i("Auth required, sending credentials");
-    sendMessage!(AuthMessage(
-        accessToken:
-            authToken.accessToken)); // Changed from credentials.accessToken
+    sendMessage!(AuthMessage(accessToken: authToken.accessToken));
     return AuthResult.pending();
   }
 

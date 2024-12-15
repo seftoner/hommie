@@ -1,14 +1,12 @@
 import 'dart:async';
-import 'package:hommie/features/auth/application/auth_controller.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_commands.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
-import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/features/auth/application/auth_state.dart';
+
+import 'package:hommie/features/auth/application/auth_controller.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/home_assistant_wsocket.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/ha_oauth2_token.dart';
+import 'package:hommie/core/utils/logger.dart';
 
 part 'server_connection_manager.g.dart';
 
@@ -25,14 +23,12 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       disconnectAndCleanup();
     });
 
-    // Listen to auth state changes
-    ref.listen(authControllerProvider, (_, next) {
-      if (next.value is Unauthenticated) {
-        disconnectAndCleanup();
-      }
-    });
-
     return;
+  }
+
+  Future<void> reconnect() async {
+    disconnectAndCleanup();
+    await _createNewConnection();
   }
 
   Future<HAConnection> getConnection() async {
@@ -48,7 +44,6 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     }
 
     final authRepository = ref.read(authRepositoryProvider);
-    final connectionStateNotifier = ref.read(connectionStateProvider.notifier);
 
     final credOrError = await authRepository.getCredentials();
 
@@ -74,7 +69,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     final connection = HAConnection(connOption);
 
     connection.state.listen((state) {
-      _handleConnectionState(state, connectionStateNotifier);
+      _handleConnectionState(state);
     });
 
     try {
@@ -87,28 +82,26 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     }
   }
 
-  void _handleConnectionState(
-    HASocketState state,
-    ConnectionState connectionStateNotifier,
-  ) {
+  void _handleConnectionState(HASocketState state) {
     switch (state) {
-      case HASocketState.connecting:
-        connectionStateNotifier.setConnecting();
+      case Connecting():
+        ref.read(connectionStateProvider.notifier).setConnecting();
         _stopHeartbeat();
         break;
-      case HASocketState.authenticated:
-        connectionStateNotifier.setConnected();
+      case Authenticated():
+        ref.read(connectionStateProvider.notifier).setConnected();
         _startHeartbeat();
         break;
-      case HASocketState.disconnected:
-        connectionStateNotifier.setDisconnected();
+      case Reconnecting():
+        ref.read(connectionStateProvider.notifier).setReconnecting();
         _stopHeartbeat();
         break;
-      case HASocketState.reconnecting:
-        connectionStateNotifier.setReconnecting();
-        _stopHeartbeat();
+      case Disconnected(type: DisconnectionType.authFailure):
+        ref.read(authControllerProvider.notifier).signOut();
         break;
-      default:
+      case Disconnected():
+        ref.read(connectionStateProvider.notifier).setDisconnected();
+        _stopHeartbeat();
         break;
     }
   }
@@ -131,6 +124,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   }
 
   void disconnectAndCleanup() {
+    ref.read(connectionStateProvider.notifier).reset();
     _stopHeartbeat();
     _connection?.close();
     _connection = null;

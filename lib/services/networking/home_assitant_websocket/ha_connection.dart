@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:hommie/services/networking/home_assitant_websocket/ha_connection_option.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/ha_connection_state.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_messages.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/hass_subscription.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/types/web_socket_response.dart';
 import 'package:hommie/core/utils/logger.dart';
@@ -43,8 +46,7 @@ class HAConnection implements IHAConnection {
   Stream<HASocketState> get state => _connectionState.stateStream;
 
   /// Current connection state.
-  HASocketState get currentState =>
-      _socket?.state ?? HASocketState.disconnected;
+  HASocketState get currentState => _connectionState.currentState;
 
   //Wonder why 2? this part from official code: socket may send 1 at the start to enable features
   int _commndID = 2;
@@ -64,6 +66,13 @@ class HAConnection implements IHAConnection {
     try {
       final socket = await _haConnectionOption.createSocket();
       _setSocket(socket);
+    } on AuthenticationError catch (e) {
+      logger.e("Connection failed: $e");
+      _closeRequested = true;
+      _connectionState.setState(HASocketState.disconnected(
+        type: DisconnectionType.authFailure,
+        reason: e.toString(),
+      ));
     } catch (e) {
       logger.e("Connection failed: $e");
       if (!_closeRequested) {
@@ -75,7 +84,7 @@ class HAConnection implements IHAConnection {
 
   @override
   Future<dynamic> sendMessage(HABaseMessgae message) async {
-    assert(!_socket!.isClosed(), "Connections is closed");
+    assert(!_socket!.isClosed, "Connections is closed");
 
     var completer = Completer<dynamic>();
     var id = _getCommndID;
@@ -99,12 +108,12 @@ class HAConnection implements IHAConnection {
 
   @override
   HassSubscription subscribeMessage(HABaseMessgae subscribeMessage) {
-    assert(!_socket!.isClosed(), "Connections is closed");
+    assert(!_socket!.isClosed, "Connections is closed");
 
     var id = _getCommndID;
 
     var hassSubscribtion = HassSubscription(unsubscribe: () async {
-      if (!_socket!.isClosed()) {
+      if (!_socket!.isClosed) {
         await sendMessage(UnsubscribeEventsMessage(subsctibtionID: id));
       }
       final removedSubscribtion = _subscriptions.remove(id);
@@ -116,6 +125,17 @@ class HAConnection implements IHAConnection {
     subscribeMessage.id = id;
     _socket!.sendMessage(subscribeMessage);
     return hassSubscribtion;
+  }
+
+  void _setSocket(HASocket socket) {
+    _socket = socket;
+
+    _socketSubscription?.cancel();
+    _socketSubscription = socket.stream
+        .listen(_messageListener, onDone: _handleClose, onError: _handleError);
+
+    _connectionState.monitorSocket(socket);
+    logger.i("Connection established 🤝");
   }
 
   void _messageListener(dynamic incomingMessage) {
@@ -171,20 +191,31 @@ class HAConnection implements IHAConnection {
 
   void _handleClose() {
     _commndID = 1;
-    _commands.forEach((key, value) {
-      value.completeError("Connection lost 📡");
-    });
-    _commands.clear();
     _socketSubscription?.cancel();
 
+    _handlePendingCommands();
+
+    final lastState = _socket?.state;
     _socket = null;
 
-    if (!_closeRequested) {
+    if (lastState case Disconnected(type: DisconnectionType.authFailure)) {
+      _closeRequested = true;
+      _connectionState.setState(lastState);
+      logger.e("Authentication failed - stopping reconnection attempts");
+    } else if (!_closeRequested) {
       _reconnect();
     }
+  }
 
-    _connectionState.setState(HASocketState.disconnected);
-    logger.d("Connection closed");
+  void _handleError(dynamic error) {
+    logger.e(error);
+
+    // Check if the socket indicates auth failure
+    if (_socket?.state case Disconnected(type: DisconnectionType.authFailure)) {
+      _closeRequested = true; // Prevent reconnection attempts
+      _connectionState.setState(_socket!.state);
+      close(); // Clean up everything
+    }
   }
 
   void _reconnect() {
@@ -197,9 +228,8 @@ class HAConnection implements IHAConnection {
     Future.delayed(delay, () {
       _reconnectScheduled = false;
       if (!_closeRequested) {
-        _connectionState.setState(HASocketState.reconnecting);
+        _connectionState.setState(HASocketState.reconnecting());
         connect().catchError((e) {
-          //flutter: time=2024-12-14T14:07:32.813550 level=debug msg="Socket state changed to: HASocketState.disconnected"
           logger.e("Reconnection failed", error: e);
           _reconnect();
         });
@@ -207,60 +237,10 @@ class HAConnection implements IHAConnection {
     });
   }
 
-  void _handleError(dynamic error) {
-    logger.e(error);
-  }
-
-  void _setSocket(HASocket socket) {
-    _socket = socket;
-
-    _socketSubscription?.cancel();
-    _socketSubscription = socket.stream
-        .listen(_messageListener, onDone: _handleClose, onError: _handleError);
-
-    _connectionState.connectToSocket(socket);
-    logger.i("Connection established 🤝");
-  }
-}
-
-class HAConnectionState {
-  final StreamController<HASocketState> _controller;
-  HASocketState _currentState;
-  StreamSubscription<HASocketState>? _socketSubscription;
-
-  Stream<HASocketState> get stateStream => _controller.stream;
-  HASocketState get currentState => _currentState;
-
-  HAConnectionState()
-      : _controller = StreamController<HASocketState>.broadcast(),
-        _currentState = HASocketState.disconnected;
-
-  void connectToSocket(HASocket socket) {
-    _socketSubscription?.cancel();
-    _socketSubscription = socket.stateStream.listen(
-      (newState) {
-        setState(newState);
-      },
-      onError: (error) {
-        logger.e("Socket state error: $error");
-      },
-    );
-
-    setState(socket.state);
-  }
-
-  void setState(HASocketState newState) {
-    if (_currentState != newState) {
-      _currentState = newState;
-      _controller.add(newState);
-      logger.d('Connection state changed to: $newState');
-    }
-  }
-
-  void dispose() {
-    _socketSubscription?.cancel();
-    if (!_controller.isClosed) {
-      _controller.close();
-    }
+  void _handlePendingCommands() {
+    _commands.forEach((_, completer) {
+      completer.completeError("Connection lost 📡");
+    });
+    _commands.clear();
   }
 }

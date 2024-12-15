@@ -40,6 +40,15 @@ class ConnectionState extends _$ConnectionState {
     return HAServerConnectionState.unknown;
   }
 
+  /// Resets the state of the connection to its initial value (unknown).
+  ///
+  /// This method sets the internal connection state back to [HAServerConnectionState.unknown],
+  /// which represents an undefined connection status. This can be useful when
+  /// cleaning up resources or preparing for a new connection attempt.
+  void reset() {
+    state = HAServerConnectionState.unknown;
+  }
+
   /// Updates the connection state to connected.
   void setConnected() {
     state = HAServerConnectionState.connected;
