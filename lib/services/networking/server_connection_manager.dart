@@ -97,6 +97,10 @@ class ServerConnectionManager extends _$ServerConnectionManager {
         _stopHeartbeat();
         break;
       case Disconnected(type: DisconnectionType.authFailure):
+        // This might execute at a time which could lead to a crash.
+        // Assume that signOut() might be called from two places:
+        // First, here when the connection is broken,
+        // and second, on the Server settings page.
         ref.read(authControllerProvider.notifier).signOut();
         break;
       case Disconnected():
