@@ -219,7 +219,9 @@ class HAConnection implements IHAConnection {
   }
 
   void _reconnect() {
-    if (_reconnectScheduled) return;
+    if (_reconnectScheduled) {
+      return;
+    }
     _reconnectScheduled = true;
 
     final delay = _backoff.next;

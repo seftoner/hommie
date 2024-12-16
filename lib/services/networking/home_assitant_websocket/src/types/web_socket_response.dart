@@ -51,7 +51,7 @@ class WebSocketResponseConverter
       } =>
         WebSocketResponse.event(id: id, event: StatesUpdates.fromJson(event)),
       {
-        'id': int id,
+        'id': final int id,
         'type': 'result',
         'result': final dynamic result,
         'success': true,

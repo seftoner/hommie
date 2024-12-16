@@ -12,8 +12,9 @@ class AuthStateHandler extends _$AuthStateHandler {
   @override
   FutureOr<void> build() async {
     ref.listen(authControllerProvider, (previous, next) {
-      if (previous == next) return;
-      if (next.value == null) return;
+      if (previous == next || next.value == null) {
+        return;
+      }
 
       final router = ref.read(goRouterProvider);
       final connectionManager =
