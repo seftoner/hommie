@@ -9,10 +9,10 @@ class EnterAddressPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final haServerURLController =
-        useTextEditingController(text: "http://192.168.0.");
+        useTextEditingController(text: 'http://192.168.0.');
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Enter your hub address")),
+      appBar: AppBar(title: const Text('Enter your hub address')),
       body: Padding(
         padding: EdgeInsets.only(
             bottom: 16,
@@ -32,7 +32,7 @@ class EnterAddressPage extends HookConsumerWidget {
                 labelText: 'Hub address',
               ),
             ),
-            Spacer(),
+            const Spacer(),
             FilledButton(
                 style: FilledButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor),

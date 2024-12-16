@@ -16,7 +16,7 @@ class TestsLoggerFilter extends LogFilter {
 //the console near the test method. The last message might not be the error,
 //so I need to search for the error in the terminal instead of seeing
 //it right above the method name in the code.
-var testLogger = Logger(
+Logger testLogger = Logger(
   filter: TestsLoggerFilter(),
   printer: PrettyPrinter(
     colors: false,

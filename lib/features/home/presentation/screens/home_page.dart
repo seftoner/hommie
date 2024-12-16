@@ -8,7 +8,7 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var areas = ref.watch(areasControllerProvider);
+    final areas = ref.watch(areasControllerProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Hommie')),
@@ -29,7 +29,7 @@ class HomePage extends HookConsumerWidget {
                         )),
                 error: (error, stack) =>
                     Text('Oops, something unexpected happened \n $error'),
-                loading: () => Center(
+                loading: () => const Center(
                   child: CircularProgressIndicator(),
                 ),
               ),

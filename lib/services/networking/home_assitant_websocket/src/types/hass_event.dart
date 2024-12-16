@@ -79,9 +79,9 @@ class ContextConverter implements JsonConverter<Context, Map<String, dynamic>> {
   Context fromJson(dynamic json) {
     if (json is Map<String, dynamic>) {
       return Context(
-          id: json["id"],
-          parent_id: json["parent_id"],
-          user_id: json["user_id"]);
+          id: json['id'],
+          parent_id: json['parent_id'],
+          user_id: json['user_id']);
     } else if (json is String) {
       return Context(id: json);
     } else {

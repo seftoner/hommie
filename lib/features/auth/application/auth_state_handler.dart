@@ -24,11 +24,11 @@ class AuthStateHandler extends _$AuthStateHandler {
           break;
         case Authenticated():
           connectionManager.reconnect();
-          router.go(HomeRouteData().location);
+          router.go(const HomeRouteData().location);
           break;
         case Unauthenticated():
           connectionManager.disconnectAndCleanup();
-          router.go(DicoveryRoute().location);
+          router.go(const DicoveryRoute().location);
           break;
         case Failure():
           break;

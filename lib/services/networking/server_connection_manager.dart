@@ -49,8 +49,8 @@ class ServerConnectionManager extends _$ServerConnectionManager {
 
     final authToken = credOrError.fold(
       (error) {
-        logger.e("Failed to fetch credentials: $error");
-        throw Exception("Failed to fetch credentials: $error");
+        logger.e('Failed to fetch credentials: $error');
+        throw Exception('Failed to fetch credentials: $error');
       },
       (credentials) => HAOAuth2Token(credentials),
     );
@@ -60,7 +60,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       onTokenRefresh: () async {
         final refreshResult = await authRepository.getCredentials();
         return refreshResult.fold(
-          (error) => throw Exception("Failed to refresh token: $error"),
+          (error) => throw Exception('Failed to refresh token: $error'),
           (credentials) => HAOAuth2Token(credentials),
         );
       },
@@ -113,10 +113,10 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   void _startHeartbeat() {
     _stopHeartbeat();
     _heartbeatTimer = Timer.periodic(const Duration(seconds: 10), (_) {
-      logger.d("Ping server");
+      logger.d('Ping server');
       if (_connection != null) {
         HACommands.pingServer(_connection!).catchError((e) {
-          logger.e("Ping failed: $e");
+          logger.e('Ping failed: $e');
         });
       }
     });

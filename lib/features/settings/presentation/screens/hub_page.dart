@@ -16,7 +16,7 @@ class HubPage extends HookConsumerWidget {
         children: [
           ListTile(
             title:
-                Text("Status", style: Theme.of(context).textTheme.titleSmall),
+                Text('Status', style: Theme.of(context).textTheme.titleSmall),
           ),
           const ListTile(
             title: Text('WebSocket'),
@@ -36,7 +36,7 @@ class HubPage extends HookConsumerWidget {
           $h24,
           ListTile(
             title:
-                Text("Details", style: Theme.of(context).textTheme.titleSmall),
+                Text('Details', style: Theme.of(context).textTheme.titleSmall),
           ),
           ListTile(
             title: const Text('Hub name'),

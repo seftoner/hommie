@@ -30,11 +30,11 @@ class HAServersRepository implements IHAServersRepository {
     try {
       await Future.any([
         _performDiscovery(client, results),
-        Future.delayed(Duration(seconds: 30),
-            () => throw TimeoutException("Discovery timed out")),
+        Future.delayed(const Duration(seconds: 30),
+            () => throw TimeoutException('Discovery timed out')),
       ]);
     } catch (e, _) {
-      logger.e("Error during discovery: $e");
+      logger.e('Error during discovery: $e');
       rethrow; // Re-throw to propagate the error if needed
     }
   }
@@ -64,11 +64,11 @@ class HAServersRepository implements IHAServersRepository {
 
   HaServer _fromTxtRecord(TxtResourceRecord txtRec) {
     final txtPairs = txtRec.text.split(RegExp(r'\n'));
-    Map<String, String> resultMap = {};
+    final Map<String, String> resultMap = {};
 
     // Iterate over the pairs and split them by '=' to separate keys and values
     for (var pair in txtPairs) {
-      var keyValue = pair.split('=');
+      final keyValue = pair.split('=');
       if (keyValue.length == 2) {
         resultMap[keyValue[0]] = keyValue[1];
       }
@@ -86,7 +86,7 @@ class HAServersRepository implements IHAServersRepository {
         internalUrl ?? externalUrl ?? baseUrl;
 
     if (effectiveInternalOrExternalUrl == null) {
-      throw FormatException('No valid URL found in TXT record.');
+      throw const FormatException('No valid URL found in TXT record.');
     }
 
     return HaServer(

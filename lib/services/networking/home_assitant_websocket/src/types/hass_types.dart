@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_annotation_target, non_constant_identifier_names
+// ignore_for_file: invalid_annotation_target, non_constant_identifier_names, constant_identifier_names
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'hass_types.freezed.dart';
@@ -55,11 +55,11 @@ abstract class HassUser with _$HassUser {
 
 @JsonEnum(valueField: 'state')
 enum State {
-  NOT_RUNNING("NOT_RUNNING"),
-  STARTING("STARTING"),
-  RUNNING("RUNNING"),
-  STOPPING("STOPPING"),
-  FINAL_WRITE("FINAL_WRITE"),
+  NOT_RUNNING('NOT_RUNNING'),
+  STARTING('STARTING'),
+  RUNNING('RUNNING'),
+  STOPPING('STOPPING'),
+  FINAL_WRITE('FINAL_WRITE'),
   ;
 
   const State(this.state);

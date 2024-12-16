@@ -60,7 +60,7 @@ class OfflineContainer extends ConsumerWidget {
             ),
             $w8,
             Text(
-              "Connection lost. Retrying in 5 seconds...",
+              'Connection lost. Retrying in 5 seconds...',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],

@@ -12,7 +12,7 @@ class SensorsPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: switch (sensors) {
-        AsyncData(value: var data) => ListView.builder(
+        AsyncData(value: final data) => ListView.builder(
             itemCount: data.length,
             itemBuilder: (context, index) {
               return ListTile(
@@ -23,7 +23,7 @@ class SensorsPage extends HookConsumerWidget {
           ),
         AsyncError() => const Text('Oops, something unexpected happened'),
         AsyncLoading() => const CircularProgressIndicator(),
-        _ => const Text("Whoops!"),
+        _ => const Text('Whoops!'),
       },
     );
   }

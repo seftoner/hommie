@@ -38,11 +38,11 @@ class HAMessageHandler {
     switch (response) {
       case WebSocketPongResponse():
         onPong();
-      case WebSocketEventResponse(event: var event):
+      case WebSocketEventResponse(event: final event):
         onEvent(event);
-      case WebSocketResultResponseSuccess(result: var result):
+      case WebSocketResultResponseSuccess(result: final result):
         onSuccess(result);
-      case WebSocketResultResponseError(error: var error):
+      case WebSocketResultResponseError(error: final error):
         onError(error);
     }
   }

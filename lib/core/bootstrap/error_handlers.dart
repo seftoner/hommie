@@ -19,10 +19,10 @@ void registerErrorHandlers() {
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return Center(
       child: Text(
-        "Something went wrong.\n${details.exception}",
+        'Something went wrong.\n${details.exception}',
       ),
     );
   };
 
-  logger.d("Application error handlers initialized");
+  logger.d('Application error handlers initialized');
 }

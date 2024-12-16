@@ -7,7 +7,7 @@ class SecureCredentialRepository implements ICredentialRepository {
   final FlutterSecureStorage _storage;
   SecureCredentialRepository(this._storage);
 
-  static const String _key = "oauthCredentials";
+  static const String _key = 'oauthCredentials';
   Credentials? _cachedCredentials;
 
   @override

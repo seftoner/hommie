@@ -181,11 +181,11 @@ class HASocket {
 
   void _handleSocketClosure() {
     final reason =
-        "Inner socket is closed. Code ${_innerChanel.closeCode} Reason: ${_innerChanel.closeReason}";
+        'Inner socket is closed. Code ${_innerChanel.closeCode} Reason: ${_innerChanel.closeReason}';
     logger.t(reason);
 
     if (_invalidAuth) {
-      logger.e("Authentication is invalid - token might be revoked");
+      logger.e('Authentication is invalid - token might be revoked');
       _setState(HASocketState.disconnected(
         reason: reason,
         type: DisconnectionType.authFailure,
@@ -201,7 +201,7 @@ class HASocket {
 
     if (!_outerStreamController.isClosed) {
       if (_invalidAuth) {
-        _outerStreamController.addError("Authentication failed");
+        _outerStreamController.addError('Authentication failed');
       }
       _outerStreamController.close();
     }
@@ -209,14 +209,14 @@ class HASocket {
 
   void sendMessage(HABaseMessgae message) {
     final encodedData = message.toJson();
-    logger.t("Sending message: $encodedData");
+    logger.t('Sending message: $encodedData');
 
     _innerChanel.sink.add(encodedData);
   }
 
   void close() {
     _setState(HASocketState.disconnected());
-    logger.t("Closing socket");
+    logger.t('Closing socket');
     _innerChanel.sink.close();
     if (!_outerStreamController.isClosed) {
       _outerStreamController.close();

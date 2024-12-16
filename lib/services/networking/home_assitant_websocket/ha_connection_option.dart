@@ -19,11 +19,11 @@ class HAConnectionOption {
 
     final serverUri = _credentials.serverUri;
     if (serverUri == null) {
-      throw Exception("Token endpoint is null");
+      throw Exception('Token endpoint is null');
     }
 
     final serverUrl = _buildWebSocketUrl(serverUri);
-    logger.i("Trying to establish a new connection to $serverUrl");
+    logger.i('Trying to establish a new connection to $serverUrl');
 
     final completer = Completer<HASocket>();
     _connect(Uri.parse(serverUrl), completer);
@@ -35,9 +35,9 @@ class HAConnectionOption {
     if (_credentials.isExpired && _onTokenRefresh != null) {
       try {
         _credentials = await _onTokenRefresh();
-        logger.i("Token refreshed successfully");
+        logger.i('Token refreshed successfully');
       } catch (e) {
-        logger.e("Failed to refresh token", error: e);
+        logger.e('Failed to refresh token', error: e);
         rethrow;
       }
     }
@@ -45,15 +45,15 @@ class HAConnectionOption {
 
   String _buildWebSocketUrl(Uri baseUrl) {
     final scheme = switch (baseUrl.scheme) {
-      "http" => "ws",
-      "https" => "wss",
-      _ => throw Exception("Unsupported scheme: ${baseUrl.scheme}"),
+      'http' => 'ws',
+      'https' => 'wss',
+      _ => throw Exception('Unsupported scheme: ${baseUrl.scheme}'),
     };
 
     final host = baseUrl.host;
     final port = baseUrl.port;
 
-    return "$scheme://$host:$port/api/websocket";
+    return '$scheme://$host:$port/api/websocket';
   }
 
   void _connect(Uri uri, Completer<HASocket> completer) {
@@ -86,12 +86,12 @@ class HAConnectionOption {
 
           case Disconnected(:final type)
               when type == DisconnectionType.authFailure:
-            handleError(AuthenticationError("Authentication failed"));
+            handleError(AuthenticationError('Authentication failed'));
 
           case Disconnected() when !completer.isCompleted:
             // Only handle non-auth disconnections if we haven't completed yet
             handleError(
-                ConnectionError("Connection closed before authentication"));
+                ConnectionError('Connection closed before authentication'));
 
           default:
             // Wait for other states

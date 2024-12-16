@@ -12,7 +12,7 @@ Future<void> main() async {
       WidgetsFlutterBinding.ensureInitialized();
       await initLogger();
 
-      logger.i("Start the application 🚀");
+      logger.i('Start the application 🚀');
 
       runApp(
         UncontrolledProviderScope(
@@ -23,7 +23,7 @@ Future<void> main() async {
     },
     (error, stack) {
       // Log the unhandled error
-      logger.e("Unhandled exception: $error", error: error, stackTrace: stack);
+      logger.e('Unhandled exception: $error', error: error, stackTrace: stack);
     },
   );
 }

@@ -7,16 +7,16 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
-const simplePeriodicTask = "com.hommie.workmanager.simplePeriodicTask";
+const simplePeriodicTask = 'com.hommie.workmanager.simplePeriodicTask';
 const simplePeriodic1HourTask =
-    "com.hommie.workmanager.simplePeriodic1HourTask";
-const iOSBackgroundAppRefresh = "com.hommie.workmanager.sendSensorData";
-const simpleTaskKey = "be.tramckrijte.workmanagerExample.simpleTask";
-const rescheduledTaskKey = "be.tramckrijte.workmanagerExample.rescheduledTask";
-const failedTaskKey = "be.tramckrijte.workmanagerExample.failedTask";
-const simpleDelayedTask = "be.tramckrijte.workmanagerExample.simpleDelayedTask";
+    'com.hommie.workmanager.simplePeriodic1HourTask';
+const iOSBackgroundAppRefresh = 'com.hommie.workmanager.sendSensorData';
+const simpleTaskKey = 'be.tramckrijte.workmanagerExample.simpleTask';
+const rescheduledTaskKey = 'be.tramckrijte.workmanagerExample.rescheduledTask';
+const failedTaskKey = 'be.tramckrijte.workmanagerExample.failedTask';
+const simpleDelayedTask = 'be.tramckrijte.workmanagerExample.simpleDelayedTask';
 const iOSBackgroundProcessingTask =
-    "be.tramckrijte.workmanagerExample.iOSBackgroundProcessingTask";
+    'be.tramckrijte.workmanagerExample.iOSBackgroundProcessingTask';
 
 final List<String> allTasks = [
   simpleTaskKey,
@@ -39,14 +39,14 @@ class BGTaskDebugginPage extends StatefulWidget {
 
 class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
   bool workmanagerInitialized = false;
-  String _prefsString = "empty";
+  String _prefsString = 'empty';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Flutter WorkManager Example"),
+          title: const Text('Flutter WorkManager Example'),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -55,11 +55,11 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  "Plugin initialization",
+                  'Plugin initialization',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 ElevatedButton(
-                  child: Text("Start the Flutter background service"),
+                  child: const Text('Start the Flutter background service'),
                   onPressed: () async {
                     if (Platform.isIOS) {
                       final status = await Permission.backgroundRefresh.status;
@@ -77,16 +77,16 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                     }
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  "Register task",
+                  'Register task',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
 
                 //This task runs once.
                 //Most likely this will trigger immediately
                 ElevatedButton(
-                  child: Text("Register OneOff Task"),
+                  child: const Text('Register OneOff Task'),
                   onPressed: () {
                     Workmanager().registerOneOffTask(
                       simpleTaskKey,
@@ -102,7 +102,7 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text("Register rescheduled Task"),
+                  child: const Text('Register rescheduled Task'),
                   onPressed: () {
                     Workmanager().registerOneOffTask(
                       rescheduledTaskKey,
@@ -114,7 +114,7 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text("Register failed Task"),
+                  child: const Text('Register failed Task'),
                   onPressed: () {
                     Workmanager().registerOneOffTask(
                       failedTaskKey,
@@ -125,17 +125,17 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                 //This task runs once
                 //This wait at least 10 seconds before running
                 ElevatedButton(
-                    child: Text("Register Delayed OneOff Task"),
+                    child: const Text('Register Delayed OneOff Task'),
                     onPressed: () {
                       Workmanager().registerOneOffTask(
                         simpleDelayedTask,
                         simpleDelayedTask,
-                        initialDelay: Duration(seconds: 10),
+                        initialDelay: const Duration(seconds: 10),
                       );
                     }),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  "Register periodic task (android only)",
+                  'Register periodic task (android only)',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 //This task runs periodically
@@ -147,11 +147,11 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                           Workmanager().registerPeriodicTask(
                             simplePeriodicTask,
                             simplePeriodicTask,
-                            initialDelay: Duration(seconds: 10),
+                            initialDelay: const Duration(seconds: 10),
                           );
                         }
                       : null,
-                  child: Text("Register Periodic Task (Android)"),
+                  child: const Text('Register Periodic Task (Android)'),
                 ),
                 //This task runs periodically
                 //It will run about every hour
@@ -161,12 +161,12 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                           Workmanager().registerPeriodicTask(
                             simplePeriodic1HourTask,
                             simplePeriodic1HourTask,
-                            flexInterval: Duration(minutes: 15),
-                            frequency: Duration(hours: 1),
+                            flexInterval: const Duration(minutes: 15),
+                            frequency: const Duration(hours: 1),
                           );
                         }
                       : null,
-                  child: Text("Register 1 hour Periodic Task (Android)"),
+                  child: const Text('Register 1 hour Periodic Task (Android)'),
                 ),
 
                 // Currently we cannot provide frequency for iOS, hence it will be
@@ -181,12 +181,13 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                           await Workmanager().registerPeriodicTask(
                             iOSBackgroundAppRefresh,
                             iOSBackgroundAppRefresh,
-                            initialDelay: Duration(seconds: 10),
+                            initialDelay: const Duration(seconds: 10),
                             inputData: <String, dynamic>{}, //ignored on iOS
                           );
                         }
                       : null,
-                  child: Text('Register Periodic Background App Refresh (iOS)'),
+                  child: const Text(
+                      'Register Periodic Background App Refresh (iOS)'),
                 ),
 
                 // This task runs only once, to perform a time consuming task at
@@ -205,13 +206,13 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                           await Workmanager().registerProcessingTask(
                             iOSBackgroundProcessingTask,
                             iOSBackgroundProcessingTask,
-                            initialDelay: Duration(seconds: 20),
+                            initialDelay: const Duration(seconds: 20),
                           );
                         }
                       : null,
-                  child: Text('Register BackgroundProcessingTask (iOS)'),
+                  child: const Text('Register BackgroundProcessingTask (iOS)'),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: Platform.isAndroid
                       ? () async {
@@ -222,26 +223,26 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                           print('isscheduled = $workInfo');
                         }
                       : null,
-                  child: Text("isscheduled (Android)"),
+                  child: const Text('isscheduled (Android)'),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  "Task cancellation",
+                  'Task cancellation',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 ElevatedButton(
-                  child: Text("Cancel All"),
+                  child: const Text('Cancel All'),
                   onPressed: () async {
                     await Workmanager().cancelAll();
                     print('Cancel all tasks completed');
                   },
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: _refreshStats,
-                  child: Text('Refresh stats'),
+                  child: const Text('Refresh stats'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 SingleChildScrollView(
                   child: Text(
                     'Task run stats:\n'
@@ -279,11 +280,12 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Workmanager not initialized'),
-          content: Text('Workmanager is not initialized, please initialize'),
+          title: const Text('Workmanager not initialized'),
+          content:
+              const Text('Workmanager is not initialized, please initialize'),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
@@ -297,12 +299,12 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('No permission'),
+          title: const Text('No permission'),
           content: Text('Background app refresh is disabled, please enable in '
               'App settings. Status ${hasPermission.name}'),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],

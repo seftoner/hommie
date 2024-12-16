@@ -16,7 +16,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Servers Discovery"),
+        title: const Text('Servers Discovery'),
         centerTitle: false,
       ),
       body: Padding(
@@ -24,14 +24,14 @@ class ServerDiscoveryPage extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            AvailableSeversListTitle(),
+            const AvailableSeversListTitle(),
             $h16,
             Expanded(
               child: discoveredServers.when(
                 data: (servers) {
                   if (servers.isEmpty) {
                     return EmptyState(
-                      text: "No servers found.",
+                      text: 'No servers found.',
                       onRefresh: () => ref
                           .read(serversDiscoveryControllerProvider.notifier)
                           .refresh(),
@@ -45,14 +45,14 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                           ListTile(
                             title: Text(servers[index].name),
                             subtitle: Text(servers[index].uri.toString()),
-                            trailing: Icon(Icons.chevron_right),
+                            trailing: const Icon(Icons.chevron_right),
                             onTap: () {
                               ref
                                   .read(authControllerProvider.notifier)
                                   .login(servers[index].uri.toString());
                             },
                           ),
-                          Divider(),
+                          const Divider(),
                         ],
                       );
                     },
@@ -60,7 +60,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                 },
                 loading: () => const SizedBox.shrink(),
                 error: (e, _) => EmptyState(
-                  text: "Error discovering servers.",
+                  text: 'Error discovering servers.',
                   onRefresh: () => ref
                       .read(serversDiscoveryControllerProvider.notifier)
                       .refresh(),
@@ -68,7 +68,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
               ),
             ),
             Text(
-              "Not finding your screen?",
+              'Not finding your screen?',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
@@ -77,7 +77,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
             const SizedBox(height: 16),
             FilledButton.tonal(
               onPressed: () => {const EnterAddressRoute().push(context)},
-              child: const Text("Enter addres manually"),
+              child: const Text('Enter addres manually'),
             ),
           ],
         ),

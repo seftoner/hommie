@@ -58,7 +58,7 @@ class HAConnection implements IHAConnection {
   /// Throws an exception if connection fails.
   Future<void> connect() async {
     if (_socket != null) {
-      logger.w("Connection already exists");
+      logger.w('Connection already exists');
       return;
     }
 
@@ -67,14 +67,14 @@ class HAConnection implements IHAConnection {
       final socket = await _haConnectionOption.createSocket();
       _setSocket(socket);
     } on AuthenticationError catch (e) {
-      logger.e("Connection failed: $e");
+      logger.e('Connection failed: $e');
       _closeRequested = true;
       _connectionState.setState(HASocketState.disconnected(
         type: DisconnectionType.authFailure,
         reason: e.toString(),
       ));
     } catch (e) {
-      logger.e("Connection failed: $e");
+      logger.e('Connection failed: $e');
       if (!_closeRequested) {
         _reconnect();
       }
@@ -84,10 +84,10 @@ class HAConnection implements IHAConnection {
 
   @override
   Future<dynamic> sendMessage(HABaseMessgae message) async {
-    assert(!_socket!.isClosed, "Connections is closed");
+    assert(!_socket!.isClosed, 'Connections is closed');
 
-    var completer = Completer<dynamic>();
-    var id = _getCommndID;
+    final completer = Completer<dynamic>();
+    final id = _getCommndID;
     _commands[id] = completer;
     message.id = id;
     _socket!.sendMessage(message);
@@ -108,11 +108,11 @@ class HAConnection implements IHAConnection {
 
   @override
   HassSubscription subscribeMessage(HABaseMessgae subscribeMessage) {
-    assert(!_socket!.isClosed, "Connections is closed");
+    assert(!_socket!.isClosed, 'Connections is closed');
 
-    var id = _getCommndID;
+    final id = _getCommndID;
 
-    var hassSubscribtion = HassSubscription(unsubscribe: () async {
+    final hassSubscribtion = HassSubscription(unsubscribe: () async {
       if (!_socket!.isClosed) {
         await sendMessage(UnsubscribeEventsMessage(subsctibtionID: id));
       }
@@ -135,11 +135,11 @@ class HAConnection implements IHAConnection {
         .listen(_messageListener, onDone: _handleClose, onError: _handleError);
 
     _connectionState.monitorSocket(socket);
-    logger.i("Connection established 🤝");
+    logger.i('Connection established 🤝');
   }
 
   void _messageListener(dynamic incomingMessage) {
-    logger.t("Server response: $incomingMessage");
+    logger.t('Server response: $incomingMessage');
 
     try {
       final messages = _messageHandler.parseMessages(incomingMessage);
@@ -147,7 +147,7 @@ class HAConnection implements IHAConnection {
         _handleResponse(response);
       }
     } catch (e) {
-      logger.e("Failed to handle message", error: e);
+      logger.e('Failed to handle message', error: e);
       _handleError(e);
     }
   }
@@ -163,7 +163,7 @@ class HAConnection implements IHAConnection {
   }
 
   void _handlePongResponse(int id) {
-    logger.d("Receive pong");
+    logger.d('Receive pong');
     final completer = _commands.remove(id);
     completer?.complete();
   }
@@ -173,9 +173,9 @@ class HAConnection implements IHAConnection {
     if (subscription != null) {
       subscription.emit(event);
     } else {
-      logger.e("Unknown subscription $id, unsubscribing");
+      logger.e('Unknown subscription $id, unsubscribing');
       sendMessage(UnsubscribeEventsMessage(subsctibtionID: id))
-          .catchError((e) => logger.e("Error unsubscribing: $e"));
+          .catchError((e) => logger.e('Error unsubscribing: $e'));
     }
   }
 
@@ -201,7 +201,7 @@ class HAConnection implements IHAConnection {
     if (lastState case Disconnected(type: DisconnectionType.authFailure)) {
       _closeRequested = true;
       _connectionState.setState(lastState);
-      logger.e("Authentication failed - stopping reconnection attempts");
+      logger.e('Authentication failed - stopping reconnection attempts');
     } else if (!_closeRequested) {
       _reconnect();
     }
@@ -223,14 +223,14 @@ class HAConnection implements IHAConnection {
     _reconnectScheduled = true;
 
     final delay = _backoff.next;
-    logger.i("Scheduling reconnection in ${delay.inSeconds} seconds");
+    logger.i('Scheduling reconnection in ${delay.inSeconds} seconds');
 
     Future.delayed(delay, () {
       _reconnectScheduled = false;
       if (!_closeRequested) {
         _connectionState.setState(HASocketState.reconnecting());
         connect().catchError((e) {
-          logger.e("Reconnection failed", error: e);
+          logger.e('Reconnection failed', error: e);
           _reconnect();
         });
       }
@@ -239,7 +239,7 @@ class HAConnection implements IHAConnection {
 
   void _handlePendingCommands() {
     _commands.forEach((_, completer) {
-      completer.completeError("Connection lost 📡");
+      completer.completeError('Connection lost 📡');
     });
     _commands.clear();
   }

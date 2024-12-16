@@ -29,10 +29,12 @@ class LogsListController extends _$LogsListController {
     return LogsListState(false, logs);
   }
 
-  loadMoreLogs() async {
+  Future<void> loadMoreLogs() async {
     final currentState = await future;
 
-    if (currentState.isLoadingMore) return;
+    if (currentState.isLoadingMore) {
+      return;
+    }
 
     state = AsyncValue.data(currentState.copyWith(isLoadingMore: true));
 

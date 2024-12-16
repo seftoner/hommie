@@ -23,7 +23,7 @@ class HAConnectionState {
         setState(newState);
       },
       onError: (error) {
-        logger.e("Socket state error: $error");
+        logger.e('Socket state error: $error');
       },
     );
 

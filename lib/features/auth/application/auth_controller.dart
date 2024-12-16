@@ -43,7 +43,7 @@ class AuthController extends _$AuthController {
             }
             return AsyncData(AuthState.failure(failure));
           default:
-            logger.e("Authentication failure: $failure");
+            logger.e('Authentication failure: $failure');
             return AsyncData(AuthState.failure(failure));
         }
       },
@@ -54,7 +54,7 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> signOut() async {
-    logger.i("Sign out");
+    logger.i('Sign out');
     final failureOrSuccess = await ref.watch(authRepositoryProvider).signOut();
     failureOrSuccess.fold(
       (l) => state = AsyncData(AuthState.failure(l)),
@@ -65,7 +65,7 @@ class AuthController extends _$AuthController {
   Future<void> login(String haServerURL) async {
     final authRepository = ref.watch(authRepositoryProvider);
 
-    Uri redirectUrl = Uri.parse("hommie://");
+    final Uri redirectUrl = Uri.parse('hommie://');
 
     try {
       final authResult = await authRepository.login(

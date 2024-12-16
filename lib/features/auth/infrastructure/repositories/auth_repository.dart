@@ -14,7 +14,7 @@ class AuthRepository implements IAuthRepository {
   final ICredentialRepository _credentialStorage;
   final http.Client _httpClient;
 
-  final String _clientID = "https://seftoner.github.io";
+  final String _clientID = 'https://seftoner.github.io';
 
   AuthRepository(this._credentialStorage, this._httpClient);
 
@@ -25,8 +25,8 @@ class AuthRepository implements IAuthRepository {
       required AuthResponseHandler handler}) async {
     final grant = AuthorizationCodeGrant(
         _clientID,
-        Uri.parse("$serverUrl/auth/authorize"),
-        Uri.parse("$serverUrl/auth/token"));
+        Uri.parse('$serverUrl/auth/authorize'),
+        Uri.parse('$serverUrl/auth/token'));
 
     try {
       final responseCode =
@@ -49,7 +49,7 @@ class AuthRepository implements IAuthRepository {
   Future<Either<AuthFailure, Unit>> signOut() async {
     try {
       final credentials = await _credentialStorage.read();
-      var client = http.Client();
+      final client = http.Client();
       try {
         //TODO: handle internet connection error
         // In this case token will be alive
@@ -76,21 +76,21 @@ class AuthRepository implements IAuthRepository {
       final storedCredentials = await _credentialStorage.read();
       if (storedCredentials != null) {
         if (storedCredentials.canRefresh && storedCredentials.isExpired) {
-          logger.i("Access token is expired 🌚");
+          logger.i('Access token is expired 🌚');
           final failureOrCredentials = await _refreshToken(storedCredentials);
 
           return failureOrCredentials.fold(
             (failure) {
-              logger.e("Token refresh failed: $failure");
+              logger.e('Token refresh failed: $failure');
               // Return the stored credentials even if refresh failed
               if (failure is Connection) {
-                logger.i("Using stored credentials for offline access");
+                logger.i('Using stored credentials for offline access');
                 return right(storedCredentials);
               }
               return left(failure);
             },
             (newCredentials) {
-              logger.i("Token refreshed successfully");
+              logger.i('Token refreshed successfully');
               return right(newCredentials);
             },
           );
@@ -107,7 +107,7 @@ class AuthRepository implements IAuthRepository {
   Future<Either<AuthFailure, Credentials>> _refreshToken(
       Credentials storedCredentials) async {
     try {
-      logger.i("Try to refresh token 🔄");
+      logger.i('Try to refresh token 🔄');
       final refreshedCredentials = await storedCredentials.refresh(
         identifier: _clientID,
         basicAuth: false,
@@ -128,7 +128,7 @@ class AuthRepository implements IAuthRepository {
       return left(AuthFailure.invalidToken(e.error));
     } on SocketException catch (e) {
       logger.e('Token refresh failed: $e');
-      return left(AuthFailure.server("$e"));
+      return left(AuthFailure.server('$e'));
     } on PlatformException {
       return left(const AuthFailure.storage());
     }

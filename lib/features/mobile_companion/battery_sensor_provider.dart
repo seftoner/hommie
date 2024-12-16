@@ -26,12 +26,12 @@ class BatterySensorProvider implements ISensorProvider {
     final batteryState = await _battery.batteryState;
     final isInBatterySaveMode = await _battery.isInBatterySaveMode;
 
-    var batteryStatelSensor = BatteryState()
+    final batteryStatelSensor = BatteryState()
       ..state = _entepretuerBatteryState(batteryState)
-      ..attributes = {"Low Power Mode": isInBatterySaveMode};
+      ..attributes = {'Low Power Mode': isInBatterySaveMode};
 
     if (batteryState == BatteryPlus.BatteryState.charging) {
-      batteryStatelSensor.icon = "mdi:battery-charging";
+      batteryStatelSensor.icon = 'mdi:battery-charging';
     }
     results.add(batteryStatelSensor);
 
@@ -40,12 +40,12 @@ class BatterySensorProvider implements ISensorProvider {
 
   String _entepretuerBatteryState(BatteryPlus.BatteryState state) {
     return switch (state) {
-      BatteryPlus.BatteryState.full => "Fully charged",
-      BatteryPlus.BatteryState.charging => "Charging",
-      BatteryPlus.BatteryState.discharging => "Not charging",
+      BatteryPlus.BatteryState.full => 'Fully charged',
+      BatteryPlus.BatteryState.charging => 'Charging',
+      BatteryPlus.BatteryState.discharging => 'Not charging',
       BatteryPlus.BatteryState.connectedNotCharging =>
-        "Connected, but not charging",
-      BatteryPlus.BatteryState.unknown => "Unknown",
+        'Connected, but not charging',
+      BatteryPlus.BatteryState.unknown => 'Unknown',
     };
   }
 

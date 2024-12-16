@@ -19,9 +19,9 @@ class SensorObserver {
 
   Future<List<Sensor>> observe() async {
     if (_providers.isEmpty) {
-      throw AssertionError("Providers list is empty");
+      throw AssertionError('Providers list is empty');
     }
-    List<Sensor> resultList = [];
+    final List<Sensor> resultList = [];
     for (var provider in _providers) {
       resultList.addAll(await provider.provideSensorsState());
     }

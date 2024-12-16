@@ -24,7 +24,7 @@ void main() {
   logger = testLogger;
 
   // Helper method to simulate HA response
-  void simulateHAResponse(dynamic response) {
+  void simulateHAResponse(response) {
     Future.delayed(Duration.zero, () {
       socketStreamController.add(jsonEncode(response));
     });
@@ -72,34 +72,34 @@ void main() {
     group('Service calls', () {
       test('successfully calls light service with parameters', () async {
         simulateHAResponse({
-          "id": 2,
-          "type": "result",
-          "success": true,
-          "result": {
-            "context": {
-              "id": "326ef27d19415c60c492fe330945f954",
-              "parent_id": null,
-              "user_id": "31ddb597e03147118cf8d2f8fbea5553"
+          'id': 2,
+          'type': 'result',
+          'success': true,
+          'result': {
+            'context': {
+              'id': '326ef27d19415c60c492fe330945f954',
+              'parent_id': null,
+              'user_id': '31ddb597e03147118cf8d2f8fbea5553'
             },
-            "response": null
+            'response': null
           }
         });
 
         final result = await HACommands.callService(connection,
-            domain: "light",
-            service: "turn_on",
-            serviceData: {"color_name": "beige", "brightness": "101"},
-            target: "{\"entity_id\": \"light.kitchen\"}",
+            domain: 'light',
+            service: 'turn_on',
+            serviceData: {'color_name': 'beige', 'brightness': '101'},
+            target: '{"entity_id": "light.kitchen"}',
             returnResponse: true);
 
         verifyHAMessage({
-          "id": 2,
-          "type": "call_service",
-          "domain": "light",
-          "service": "turn_on",
-          "service_data": {"color_name": "beige", "brightness": "101"},
-          "target": "{\"entity_id\": \"light.kitchen\"}",
-          "return_response": true
+          'id': 2,
+          'type': 'call_service',
+          'domain': 'light',
+          'service': 'turn_on',
+          'service_data': {'color_name': 'beige', 'brightness': '101'},
+          'target': '{"entity_id": "light.kitchen"}',
+          'return_response': true
         });
 
         expect(result, isNotNull);
@@ -149,8 +149,8 @@ void main() {
           final result = await testCase.method(connection);
 
           verifyHAMessage({
-            "id": 2,
-            "type": testCase.type,
+            'id': 2,
+            'type': testCase.type,
           });
 
           expect(result, isNotNull);

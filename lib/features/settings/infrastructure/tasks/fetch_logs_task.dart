@@ -29,19 +29,21 @@ class FetchLogsTask extends BaseTask<FetchLogsParams, List<Log>> {
     final result = <Log>[];
 
     if (!await file.exists()) {
-      throw Exception("Log file does not exist: ${params.filePath}");
+      throw Exception('Log file does not exist: ${params.filePath}');
     }
 
     int currentLineIndex = 0;
 
     final stream =
-        file.openRead().transform(utf8.decoder).transform(LineSplitter());
+        file.openRead().transform(utf8.decoder).transform(const LineSplitter());
 
     await for (final line in stream) {
       if (currentLineIndex >= params.offset &&
           currentLineIndex < params.offset + params.limit) {
         final log = _parseLog(line);
-        if (log != null) result.add(log);
+        if (log != null) {
+          result.add(log);
+        }
       }
 
       if (currentLineIndex >= params.offset + params.limit) {

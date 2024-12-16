@@ -56,8 +56,8 @@ Map<String, dynamic> _$$HassServiceImplToJson(_$HassServiceImpl instance) =>
     };
 
 _$FieldImpl _$$FieldImplFromJson(Map<String, dynamic> json) => _$FieldImpl(
-      name: json['name'] as String? ?? "",
-      description: json['description'] as String? ?? "",
+      name: json['name'] as String? ?? '',
+      description: json['description'] as String? ?? '',
       example: json['example'],
       selector: json['selector'] as Map<String, dynamic>?,
       filter: json['filter'] == null
