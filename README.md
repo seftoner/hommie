@@ -27,6 +27,19 @@ I want to add 'Companion App' functionality in the near future.
 1. Get dependencies `flutter pub get` 
 2. Run build_runer `dart run build_runner watch`
 
+## Running Home Assistant for Testing
+To test the app with Home Assistant, you can use the provided Docker configuration:
+
+1. Navigate to the docker directory
+2. Run `docker-compose up`
+3. Access Home Assistant at `http://localhost:8123`
+
+Default credentials:
+- Username: `admin`
+- Password: `yourpassword`
+
+Note: Make sure you have Docker installed on your system before running these commands.
+
 ## Contribution
 Contributions to this project are welcome! If you'd like to contribute, please fork the repository, make your changes, and submit a pull request. You can also open an issue to report bugs or suggest new features.
 

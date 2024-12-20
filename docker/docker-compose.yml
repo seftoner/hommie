@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  homeassistant:
+    image: homeassistant/home-assistant
+    container_name: homeassistant_debug
+    environment:
+      - TZ=UTC
+      - USERNAME=admin
+      - PASSWORD=yourpassword
+    ports:
+      - "8123:8123"
+    volumes:
+      - ./data:/data
+      - ./scripts:/scripts
+    command: ["/bin/bash", "/scripts/docker-entrypoint.sh"]
+   
+    # Optional: Add healthcheck
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8123"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
