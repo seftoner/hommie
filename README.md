@@ -27,6 +27,31 @@ I want to add 'Companion App' functionality in the near future.
 1. Get dependencies `flutter pub get` 
 2. Run build_runer `dart run build_runner watch`
 
+## Integration Tests
+To run integration tests, you'll need to:
+
+1. Install Patrol CLI:
+```bash
+dart pub global activate patrol_cli
+```
+
+2. Install platform-specific dependencies:
+```bash
+patrol doctor
+```
+
+3. Run the tests:
+```bash
+patrol test
+```
+
+For developing tests:
+```bash
+patrol develop -d "<your device name>" -t  --watch integration_test/your_test.dart
+```
+
+Note: Make sure your Home Assistant instance is running before executing integration tests.
+
 ## Running Home Assistant for Testing
 To test the app with Home Assistant, you can use the provided Docker configuration:
 
