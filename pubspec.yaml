@@ -1,69 +1,69 @@
 name: hommie
 description: "Will be added in the future"
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.5.4 <4.0.0'
-  flutter: ^3.24.5
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ^3.27.1
 
 dependencies:
-  flutter:
-    sdk: flutter
-  flutter_riverpod: ^2.6.1
-  riverpod_annotation: ^2.6.1
-  flutter_localizations:
-    sdk: flutter
-  go_router: ^14.6.1
-  hooks_riverpod: ^2.4.9
-  flutter_hooks: ^0.20.4
-  json_annotation: ^4.8.1
-  freezed_annotation: ^2.4.4
-  flutter_animate: ^4.4.0
-  shared_preferences: ^2.3.3
-  oauth2: ^2.0.3
-  flutter_secure_storage: ^9.0.0
-  flutter_web_auth_2: ^4.0.2
-  fpdart: ^1.1.0
-  web_socket_channel: ^3.0.1
-  logger: ^2.2.0
-  workmanager:
-    git: 
-      url: https://github.com/fluttercommunity/flutter_workmanager.git
-      ref: main
-      path: workmanager/
-  permission_handler: ^11.3.1
-  battery_plus: ^6.2.0
-  connectivity_plus: ^6.1.0
-  network_info_plus: ^6.1.1
-  multicast_dns: ^0.3.2+7
-  path_provider: ^2.1.5
-  path: ^1.9.0
+  battery_plus: ^6.2.1
   computer:
     git:
       url: https://github.com/seftoner/computer.git
-  share_plus: ^10.1.2
+  connectivity_plus: ^6.1.0
+  flutter:
+    sdk: flutter
+  flutter_animate: ^4.4.0
+  flutter_hooks: ^0.20.4
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^2.6.1
+  flutter_secure_storage: ^9.0.0
+  flutter_web_auth_2: ^4.0.2
+  fpdart: ^1.1.0
+  freezed_annotation: ^2.4.4
+  go_router: ^14.6.2
+  hooks_riverpod: ^2.4.9
   http: ^1.2.2
+  json_annotation: ^4.8.1
+  logger: ^2.2.0
+  multicast_dns: ^0.3.2+7
+  network_info_plus: ^6.1.2
+  oauth2: ^2.0.3
+  path: ^1.9.0
+  path_provider: ^2.1.5
+  permission_handler: ^11.3.1
+  riverpod_annotation: ^2.6.1
+  share_plus: ^10.1.2
+  shared_preferences: ^2.3.4
+  web_socket_channel: ^3.0.1
+  workmanager:
+    git:
+      url: https://github.com/fluttercommunity/flutter_workmanager.git
+      ref: main
+      path: workmanager/
 
 dev_dependencies:
+  bdd_widget_test: ^1.7.4
   build_runner:
-  
-  flutter_lints: ^5.0.0
-  freezed: ^2.5.7
-  riverpod_generator: ^2.6.3
-  riverpod_lint: ^2.6.3
-  go_router_builder: ^2.7.1
-  json_serializable: ^6.9.0
   custom_lint: ^0.7.0
-  
+
+  flutter_lints: ^5.0.0
+
   flutter_test:
     sdk: flutter
+  freezed: ^2.5.7
+  go_router_builder: ^2.7.1
   integration_test:
     sdk: flutter
-  mockito: ^5.4.4
-  bdd_widget_test: ^1.7.4
+  json_serializable: ^6.9.0
+  mockito: ^5.4.5
   patrol: ^3.13.1
   patrol_finders: ^2.5.1
+  riverpod_generator: ^2.6.3
+  riverpod_lint: ^2.6.3
 
 flutter:
   uses-material-design: true
