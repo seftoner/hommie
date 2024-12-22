@@ -47,8 +47,7 @@ dependencies:
 
 dev_dependencies:
   build_runner:
-  flutter_test:
-    sdk: flutter
+  
   flutter_lints: ^5.0.0
   freezed: ^2.5.7
   riverpod_generator: ^2.6.3
@@ -56,7 +55,24 @@ dev_dependencies:
   go_router_builder: ^2.7.1
   json_serializable: ^6.9.0
   custom_lint: ^0.7.0
+  
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
   mockito: ^5.4.4
+  bdd_widget_test: ^1.7.4
+  patrol: ^3.13.1
+  patrol_finders: ^2.5.1
 
 flutter:
   uses-material-design: true
+
+patrol:
+  app_name: hommie
+  android:
+    package_name: com.seftoner.hommie
+  ios:
+    bundle_id: com.seftoner.hommie
+  macos:
+    bundle_id: com.seftoner.hommie

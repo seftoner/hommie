@@ -10,20 +10,18 @@ import 'package:hommie/core/utils/logger.dart';
 
 part 'server_connection_manager.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [ConnectionState])
 class ServerConnectionManager extends _$ServerConnectionManager {
   HAConnection? _connection;
   bool _isDisposed = false;
   Timer? _heartbeatTimer;
 
   @override
-  Future<void> build() async {
+  void build() async {
     ref.onDispose(() {
       _isDisposed = true;
       disconnectAndCleanup();
     });
-
-    return;
   }
 
   Future<void> reconnect() async {
@@ -128,7 +126,9 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   }
 
   void disconnectAndCleanup() {
-    ref.read(connectionStateProvider.notifier).reset();
+    if (_isDisposed != true) {
+      ref.read(connectionStateProvider.notifier).reset();
+    }
     _stopHeartbeat();
     _connection?.close();
     _connection = null;

@@ -6,7 +6,7 @@ part of 'connection_state_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$connectionStateHash() => r'32803f60749ca4ba56434ca1a39c3053855ff52f';
+String _$connectionStateHash() => r'92e7bfba12a6d58ff68f957c406f5137f2adde6e';
 
 /// A Riverpod provider that manages the network connection state of the application.
 ///
@@ -23,8 +23,8 @@ final connectionStateProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$connectionStateHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: const <ProviderOrFamily>[],
+  allTransitiveDependencies: const <ProviderOrFamily>{},
 );
 
 typedef _$ConnectionState = Notifier<HAServerConnectionState>;

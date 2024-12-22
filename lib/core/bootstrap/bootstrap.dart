@@ -14,8 +14,6 @@ Future<ProviderContainer> bootstrap() async {
     verbose: true,
   );
 
-  // await _initLogger();
-
   registerErrorHandlers();
   registerBackgroundTasks();
 

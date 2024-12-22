@@ -1,31 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/router/router.dart';
+import 'package:hommie/services/networking/connection_state_provider.dart';
+import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
 import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hommie/features/auth/application/auth_state_handler.dart';
 
-class HommieApp extends ConsumerWidget {
+class HommieApp extends StatelessWidget {
   const HommieApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(goRouterProvider);
-    ref.watch(authStateHandlerProvider);
+  Widget build(BuildContext context) {
+    return const _ServiceInitializer(
+      child: _RootAppWidget(),
+    );
+  }
+}
 
+class _RootAppWidget extends ConsumerWidget {
+  const _RootAppWidget();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      routerConfig: router,
+      routerConfig: ref.read(goRouterProvider),
       theme: HommieMaterialTheme(
               Typography.material2021(platform: defaultTargetPlatform).black)
           .light(),
       supportedLocales: const [
-        Locale('en', ''), // English, no country code
+        Locale('en', ''),
       ],
-      builder: (context, child) {
-        return OfflineContainer(child: child);
-      },
+      builder: (context, child) => OfflineContainer(child: child),
     );
+  }
+}
+
+class _ServiceInitializer extends ConsumerWidget {
+  const _ServiceInitializer({required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(connectionStateProvider);
+    ref.watch(serverConnectionManagerProvider);
+    ref.watch(authStateHandlerProvider);
+    return child;
   }
 }

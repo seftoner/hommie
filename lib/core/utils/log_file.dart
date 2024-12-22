@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart';
 
 Future<File> getLogsPath() async {
   final String dir = switch (Platform.operatingSystem) {
-    'android' => (await getExternalStorageDirectory())?.path ?? '',
+    'android' => (await getApplicationSupportDirectory()).path,
     'macos' => join((await getLibraryDirectory()).path, 'Logs'),
     'linux' => join(_getXdgStateHome(), 'hommie'),
     _ => (await getApplicationDocumentsDirectory()).path,

@@ -13,13 +13,8 @@ part 'auth_controller.g.dart';
 
 @riverpod
 class AuthController extends _$AuthController {
-  Timer? _connectionCheckTimer;
-
   @override
   Future<AuthState> build() async {
-    ref.onDispose(() {
-      _connectionCheckTimer?.cancel();
-    });
     return const AuthState.initial();
   }
 

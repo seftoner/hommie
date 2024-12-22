@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 GoRouter goRouter(Ref ref) {
   final routerKey = GlobalKey<NavigatorState>(debugLabel: 'routerKey');
 
