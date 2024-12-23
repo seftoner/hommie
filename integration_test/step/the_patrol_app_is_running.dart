@@ -5,6 +5,7 @@ import 'package:patrol/patrol.dart';
 import 'package:hommie/core/bootstrap/bootstrap.dart';
 import 'package:hommie/core/observers/app_state_logger.dart';
 import 'package:hommie/core/utils/logger.dart';
+import '../utils/test_provider_overrides.dart';
 
 //TODO: Unify app initialization in tests and main build
 Future<void> thePatrolAppIsRunning(PatrolIntegrationTester $) async {
@@ -18,9 +19,10 @@ Future<void> thePatrolAppIsRunning(PatrolIntegrationTester $) async {
   );
 
   await $.pumpWidget(
-    const ProviderScope(
-      observers: [AppStateLoggerObserver()],
-      child: HommieApp(),
+    ProviderScope(
+      observers: const [AppStateLoggerObserver()],
+      overrides: TestProviderOverrides.instance().overrides,
+      child: const HommieApp(),
     ),
   );
 }
