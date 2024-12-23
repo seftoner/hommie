@@ -5,6 +5,11 @@ import 'package:oauth2/src/credentials.dart';
 import 'package:patrol/patrol.dart';
 import '../utils/test_provider_overrides.dart';
 
+// TODO: Implement secure token management:
+// 1. Read authentication token from environment variables or secure configuration
+// 2. Use flutter_dotenv or similar package for environment management
+// 3. Remove any hardcoded tokens/credentials
+// 4. Add documentation for required environment variables
 Future<void> iLoggedIn(PatrolIntegrationTester $) async {
   TestProviderOverrides.instance().setOverrides([
     credentialsRepositoryProvider
