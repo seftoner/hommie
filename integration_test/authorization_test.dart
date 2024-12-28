@@ -33,16 +33,17 @@ void main() {
     patrol('''Enter address manually and sign in''', ($) async {
       try {
         await theAppIsRunning($);
-        await iSeePage($, K.serversDiscoveryPage);
-        await iSeeButton($, K.enterAddresManuallyButton);
-        await iTapOnButton($, K.enterAddresManuallyButton);
-        await iSeePage($, K.enterAddresManuallyPage);
-        await iEnterIntoField($, 'http://10.0.2.2:8123', K.hubAddressTextField);
-        await iTapOnButton($, K.connectButton);
+        await iSeePage($, K.serversDiscovery.page);
+        await iSeeButton($, K.serversDiscovery.enterManuallyButton);
+        await iTapOnButton($, K.serversDiscovery.enterManuallyButton);
+        await iSeePage($, K.manualAddress.page);
+        await iEnterIntoField(
+            $, 'http://10.0.2.2:8123', K.manualAddress.addressField);
+        await iTapOnButton($, K.manualAddress.connectButton);
         await iSeeCredentialsWebViewForm($);
         await iEnterCredentials($, 'admin', 'yourpassword');
         await iTapOnLoginButton($);
-        await iSeePage($, K.hommiePage);
+        await iSeePage($, K.home.page);
       } finally {
         await bddTearDown($);
       }
@@ -52,14 +53,14 @@ void main() {
         await homeAssistantAccessIsConfigured($);
         await iLoggedIn($);
         await theAppIsRunning($);
-        await iTapOnButton($, K.settingsButton);
-        await iSeePage($, K.settingsPage);
-        await iTapOnListItem($, K.hubListItem);
-        await iSeePage($, K.hubPage);
-        await iTapOnButton($, K.signOutButton);
-        await iSeeAlert($, K.signOutAlert);
-        await iTapOnButton($, K.signOutButton);
-        await iSeePage($, K.serversDiscoveryPage);
+        await iTapOnButton($, K.appScaffold.settingsButton);
+        await iSeePage($, K.settings.page);
+        await iTapOnListItem($, K.settings.hubItem);
+        await iSeePage($, K.hub.page);
+        await iTapOnButton($, K.hub.signOutButton);
+        await iSeeAlert($, K.hub.signOutAlert);
+        await iTapOnButton($, K.hub.signOutButton);
+        await iSeePage($, K.serversDiscovery.page);
       } finally {
         await bddTearDown($);
       }
@@ -70,7 +71,7 @@ void main() {
         await iLoggedIn($);
         await theAppIsRunning($);
         await homeAssistantRevokesAccess($);
-        await iSeePage($, K.serversDiscoveryPage);
+        await iSeePage($, K.serversDiscovery.page);
       } finally {
         await bddTearDown($);
       }

@@ -10,7 +10,7 @@ class HubPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      key: K.hubPage,
+      key: K.hub.page,
       appBar: AppBar(
         title: const Text('{Hubname}'),
       ),
@@ -60,7 +60,7 @@ class HubPage extends HookConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
-                key: K.signOutButton,
+                key: K.hub.signOutButton,
                 style: TextButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.error,
                 ),
@@ -78,7 +78,7 @@ class HubPage extends HookConsumerWidget {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        key: K.signOutAlert,
+        key: K.hub.signOutAlert,
         title: const Text('Sign Out'),
         content: const Text(
           'Are you sure you want to sign out? You will need to authenticate again to access your Home Assistant.',
@@ -89,7 +89,7 @@ class HubPage extends HookConsumerWidget {
             child: const Text('Cancel'),
           ),
           TextButton(
-            key: K.signOutButton,
+            key: K.hub.signOutButton,
             style: TextButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,
             ),

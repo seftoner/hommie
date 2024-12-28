@@ -3,10 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MainPage extends HookConsumerWidget {
+class AppScaffoldPage extends HookConsumerWidget {
   final StatefulNavigationShell navigationShell;
 
-  const MainPage({required this.navigationShell, super.key});
+  const AppScaffoldPage({required this.navigationShell, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,15 +20,15 @@ class MainPage extends HookConsumerWidget {
           );
         },
         selectedIndex: navigationShell.currentIndex,
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
-            key: K.homeButton,
-            icon: Icon(Icons.home_rounded),
+            key: K.appScaffold.homeButton,
+            icon: const Icon(Icons.home_rounded),
             label: 'Home',
           ),
           NavigationDestination(
-            key: K.settingsButton,
-            icon: Icon(Icons.settings_rounded),
+            key: K.appScaffold.settingsButton,
+            icon: const Icon(Icons.settings_rounded),
             label: 'Settings',
           ),
         ],

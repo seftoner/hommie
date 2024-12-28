@@ -13,7 +13,7 @@ class EnterAddressPage extends HookConsumerWidget {
         useTextEditingController(text: 'http://192.168.0.');
 
     return Scaffold(
-      key: K.enterAddresManuallyPage,
+      key: K.manualAddress.page,
       appBar: AppBar(title: const Text('Enter your hub address')),
       body: Padding(
         padding: EdgeInsets.only(
@@ -26,7 +26,7 @@ class EnterAddressPage extends HookConsumerWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             TextField(
-              key: K.hubAddressTextField,
+              key: K.manualAddress.addressField,
               controller: haServerURLController,
               decoration: const InputDecoration(
                 labelText: 'Hub address',
@@ -34,7 +34,7 @@ class EnterAddressPage extends HookConsumerWidget {
             ),
             const Spacer(),
             FilledButton(
-              key: K.connectButton,
+              key: K.manualAddress.connectButton,
               style: FilledButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor),
               onPressed: () {

@@ -5,30 +5,57 @@ typedef K = Keys;
 class Keys {
   const Keys();
 
-  /// PAGE: Servers Discovery
-  static const serversDiscoveryPage = Key('serversDiscoveryPage');
-  static const enterAddresManuallyButton = Key('enterAddresManuallyButton');
+  static const serversDiscovery = ServersDiscoveryKeys();
+  static const manualAddress = ManualAddressKeys();
+  static const appScaffold = AppScaffoldKeys();
+  static const home = HomeKeys();
+  static const settings = SettingsKeys();
+  static const hub = HubKeys();
+}
 
-  /// PAGE: Enter Addres Manually
-  static const enterAddresManuallyPage = Key('enterAddresManuallyPage');
-  static const hubAddressTextField = Key('hubAddressTextField');
-  static const connectButton = Key('connectButton');
+class ServersDiscoveryKeys {
+  const ServersDiscoveryKeys();
 
-  /// PAGE: Hommie
-  static const hommiePage = Key('hommiePage');
-  static const homeButton = Key('homeButton');
-  static const settingsButton = Key('settingsButton');
+  final page = const Key('serversDiscoveryPage');
+  final enterManuallyButton = const Key('enterAddresManuallyButton');
+}
 
-  /// PAGE: Settings
-  static const settingsPage = Key('settingsPage');
-  static const hubListItem = Key('hubListItem');
-  static const sensorsListItem = Key('sensorsListItem');
-  static const nfsListItem = Key('nfsListItem');
-  static const logsListItem = Key('logsListItem');
-  static const aboutListItem = Key('aboutListItem');
+class ManualAddressKeys {
+  const ManualAddressKeys();
 
-  /// PAGE: Hub
-  static const hubPage = Key('hubPage');
-  static const signOutButton = Key('signOutButton');
-  static const signOutAlert = Key('signOutDialog');
+  final page = const Key('enterAddresManuallyPage');
+  final addressField = const Key('hubAddressTextField');
+  final connectButton = const Key('connectButton');
+}
+
+class HomeKeys {
+  const HomeKeys();
+
+  final page = const Key('hommiePage');
+}
+
+class AppScaffoldKeys {
+  const AppScaffoldKeys();
+
+  final homeButton = const Key('homeButton');
+  final settingsButton = const Key('settingsButton');
+}
+
+class SettingsKeys {
+  const SettingsKeys();
+
+  final page = const Key('settingsPage');
+  final hubItem = const Key('hubListItem');
+  final sensorsItem = const Key('sensorsListItem');
+  final nfsItem = const Key('nfsListItem');
+  final logsItem = const Key('logsListItem');
+  final aboutItem = const Key('aboutListItem');
+}
+
+class HubKeys {
+  const HubKeys();
+
+  final page = const Key('hubPage');
+  final signOutButton = const Key('signOutButton');
+  final signOutAlert = const Key('signOutDialog');
 }

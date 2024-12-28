@@ -16,7 +16,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
     final discoveredServers = ref.watch(serversDiscoveryControllerProvider);
 
     return Scaffold(
-      key: K.serversDiscoveryPage,
+      key: K.serversDiscovery.page,
       appBar: AppBar(
         title: const Text('Servers Discovery'),
         centerTitle: false,
@@ -78,7 +78,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
             ),
             const SizedBox(height: 16),
             FilledButton.tonal(
-              key: K.enterAddresManuallyButton,
+              key: K.serversDiscovery.enterManuallyButton,
               onPressed: () => {const EnterAddressRoute().push(context)},
               child: const Text('Enter addres manually'),
             ),

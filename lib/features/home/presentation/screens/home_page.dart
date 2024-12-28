@@ -12,7 +12,7 @@ class HomePage extends HookConsumerWidget {
     final areas = ref.watch(areasControllerProvider);
 
     return Scaffold(
-      key: K.hommiePage,
+      key: K.home.page,
       appBar: AppBar(title: const Text('Hommie')),
       body: Center(
         child: Column(
