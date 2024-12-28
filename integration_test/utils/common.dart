@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 
-final _patrolTesterConfig = const PatrolTesterConfig();
+final _patrolTesterConfig = const PatrolTesterConfig(printLogs: true);
 final _nativeAutomatorConfig = const NativeAutomatorConfig(
   findTimeout: Duration(seconds: 20), // 10 seconds is too short for some CIs
 );

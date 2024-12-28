@@ -43,5 +43,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-docker/data/.initialized
 integration_test/test_bundle.dart
+docker/hass_init_conf/.initialized

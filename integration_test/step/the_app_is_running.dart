@@ -7,8 +7,7 @@ import 'package:hommie/core/observers/app_state_logger.dart';
 import 'package:hommie/core/utils/logger.dart';
 import '../utils/test_provider_overrides.dart';
 
-//TODO: Unify app initialization in tests and main build
-Future<void> thePatrolAppIsRunning(PatrolIntegrationTester $) async {
+Future<void> theAppIsRunning(PatrolIntegrationTester $) async {
   await initLogger();
   logger.i('Start the test integration tests 🚀👷');
 

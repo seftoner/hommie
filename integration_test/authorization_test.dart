@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import './step/clean_up_after_the_test.dart';
-import './step/the_patrol_app_is_running.dart';
+import './step/the_app_is_running.dart';
 import './step/i_see_page.dart';
 import './step/i_see_button.dart';
 import './step/i_tap_on_button.dart';
@@ -18,9 +18,11 @@ import './step/i_enter_into_field.dart';
 import './step/i_see_credentials_web_view_form.dart';
 import './step/i_enter_credentials.dart';
 import './step/i_tap_on_login_button.dart';
+import './step/home_assistant_access_is_configured.dart';
 import './step/i_logged_in.dart';
 import './step/i_tap_on_list_item.dart';
 import './step/i_see_alert.dart';
+import './step/home_assistant_revokes_access.dart';
 
 void main() {
   group('''Sign In''', () {
@@ -30,7 +32,7 @@ void main() {
 
     patrol('''Enter address manually and sign in''', ($) async {
       try {
-        await thePatrolAppIsRunning($);
+        await theAppIsRunning($);
         await iSeePage($, K.serversDiscoveryPage);
         await iSeeButton($, K.enterAddresManuallyButton);
         await iTapOnButton($, K.enterAddresManuallyButton);
@@ -47,8 +49,9 @@ void main() {
     });
     patrol('''Sign out''', ($) async {
       try {
+        await homeAssistantAccessIsConfigured($);
         await iLoggedIn($);
-        await thePatrolAppIsRunning($);
+        await theAppIsRunning($);
         await iTapOnButton($, K.settingsButton);
         await iSeePage($, K.settingsPage);
         await iTapOnListItem($, K.hubListItem);
@@ -56,6 +59,17 @@ void main() {
         await iTapOnButton($, K.signOutButton);
         await iSeeAlert($, K.signOutAlert);
         await iTapOnButton($, K.signOutButton);
+        await iSeePage($, K.serversDiscoveryPage);
+      } finally {
+        await bddTearDown($);
+      }
+    });
+    patrol('''Logged out on server side''', ($) async {
+      try {
+        await homeAssistantAccessIsConfigured($);
+        await iLoggedIn($);
+        await theAppIsRunning($);
+        await homeAssistantRevokesAccess($);
         await iSeePage($, K.serversDiscoveryPage);
       } finally {
         await bddTearDown($);

@@ -3,24 +3,26 @@ import 'package:hommie/features/auth/domain/repository/i_credential_repository.d
 import 'package:hommie/features/auth/infrastructure/providers/credential_repository_provider.dart';
 import 'package:oauth2/src/credentials.dart';
 import 'package:patrol/patrol.dart';
+import '../utils/test_context.dart';
 import '../utils/test_provider_overrides.dart';
 
-// TODO: Implement secure token management:
-// 1. Read authentication token from environment variables or secure configuration
-// 2. Use flutter_dotenv or similar package for environment management
-// 3. Remove any hardcoded tokens/credentials
-// 4. Add documentation for required environment variables
 Future<void> iLoggedIn(PatrolIntegrationTester $) async {
+  final token = TestContext.instance().authToken;
+  if (token == null) {
+    throw Exception('Auth token not found in TestContext');
+  }
+
   TestProviderOverrides.instance().setOverrides([
     credentialsRepositoryProvider
-        .overrideWith((ref) => _CredentialsRepositoryMock()),
+        .overrideWith((ref) => _CredentialsRepositoryMock(token)),
   ]);
 }
 
 class _CredentialsRepositoryMock implements ICredentialRepository {
+  _CredentialsRepositoryMock(this.token);
+
+  final String token;
   bool _isSigned = true;
-  String token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2MzI3Mzc3OGNjYWU0ZmM4OTRhZjhjZDgxM2IyM2JiNSIsImlhdCI6MTczNDk1OTI2MCwiZXhwIjoyMDUwMzE5MjYwfQ.Ix-n_ErzSoOqEH87AOsf-1bPDBN62woy8hXmPWc5WWI';
 
   @override
   Future<void> clear() {
