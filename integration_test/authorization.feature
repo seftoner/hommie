@@ -6,12 +6,15 @@ import './utils/common.dart';
 @testerName: $
 @testerType: PatrolIntegrationTester
 Feature: Sign In
+  As a user
+  I want to sign in to my Home Assistant server
+  So that I can control my devices
 
   After:
     Then clean up after the test
   
   Scenario: Enter address manually and sign in
-    Given the app is running    
+    Given the application is running in the foreground
     And I see {K.serversDiscovery.page} page
     And I see {K.serversDiscovery.enterManuallyButton} button
     When I tap on {K.serversDiscovery.enterManuallyButton} button
@@ -27,8 +30,8 @@ Feature: Sign In
 
   Scenario: Sign out
     Given home assistant access is configured    
-    And I logged in    
-    And the app is running
+    And I have successfully logged in   
+    And the application is running in the foreground
     
     When I tap on {K.appScaffold.settingsButton} button  
     Then I see {K.settings.page} page  
@@ -41,9 +44,10 @@ Feature: Sign In
 
   Scenario: Logged out on server side
     Given home assistant access is configured    
-    And I logged in    
-    And the app is running    
+    And I have successfully logged in   
+    And the application is running in the foreground
+    And I see {K.home.page} page
     
     When home assistant revokes access
-    Then I see offlineBanner
+    Then I should see the offline banner
     And I see {K.serversDiscovery.page} page

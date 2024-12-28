@@ -6,7 +6,7 @@ import 'package:patrol/patrol.dart';
 import '../utils/test_context.dart';
 import '../utils/test_provider_overrides.dart';
 
-Future<void> iLoggedIn(PatrolIntegrationTester $) async {
+Future<void> iHaveSuccessfullyLoggedIn(PatrolIntegrationTester $) async {
   final token = TestContext.instance().authToken;
   if (token == null) {
     throw Exception('Auth token not found in TestContext');

@@ -7,7 +7,8 @@ import 'package:hommie/core/observers/app_state_logger.dart';
 import 'package:hommie/core/utils/logger.dart';
 import '../utils/test_provider_overrides.dart';
 
-Future<void> theAppIsRunning(PatrolIntegrationTester $) async {
+Future<void> theApplicationIsRunningInTheForeground(
+    PatrolIntegrationTester $) async {
   await initLogger();
   logger.i('Start the test integration tests 🚀👷');
 

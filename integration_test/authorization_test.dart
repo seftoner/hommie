@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import './step/clean_up_after_the_test.dart';
-import './step/the_app_is_running.dart';
+import './step/the_application_is_running_in_the_foreground.dart';
 import './step/i_see_page.dart';
 import './step/i_see_button.dart';
 import './step/i_tap_on_button.dart';
@@ -19,11 +19,11 @@ import './step/i_see_credentials_web_view_form.dart';
 import './step/i_enter_credentials.dart';
 import './step/i_tap_on_login_button.dart';
 import './step/home_assistant_access_is_configured.dart';
-import './step/i_logged_in.dart';
+import './step/i_have_successfully_logged_in.dart';
 import './step/i_tap_on_list_item.dart';
 import './step/i_see_alert.dart';
 import './step/home_assistant_revokes_access.dart';
-import './step/i_see_offlinebanner.dart';
+import './step/i_should_see_the_offline_banner.dart';
 
 void main() {
   group('''Sign In''', () {
@@ -33,7 +33,7 @@ void main() {
 
     patrol('''Enter address manually and sign in''', ($) async {
       try {
-        await theAppIsRunning($);
+        await theApplicationIsRunningInTheForeground($);
         await iSeePage($, K.serversDiscovery.page);
         await iSeeButton($, K.serversDiscovery.enterManuallyButton);
         await iTapOnButton($, K.serversDiscovery.enterManuallyButton);
@@ -52,8 +52,8 @@ void main() {
     patrol('''Sign out''', ($) async {
       try {
         await homeAssistantAccessIsConfigured($);
-        await iLoggedIn($);
-        await theAppIsRunning($);
+        await iHaveSuccessfullyLoggedIn($);
+        await theApplicationIsRunningInTheForeground($);
         await iTapOnButton($, K.appScaffold.settingsButton);
         await iSeePage($, K.settings.page);
         await iTapOnListItem($, K.settings.hubItem);
@@ -69,10 +69,11 @@ void main() {
     patrol('''Logged out on server side''', ($) async {
       try {
         await homeAssistantAccessIsConfigured($);
-        await iLoggedIn($);
-        await theAppIsRunning($);
+        await iHaveSuccessfullyLoggedIn($);
+        await theApplicationIsRunningInTheForeground($);
+        await iSeePage($, K.home.page);
         await homeAssistantRevokesAccess($);
-        await iSeeOfflinebanner($);
+        await iShouldSeeTheOfflineBanner($);
         await iSeePage($, K.serversDiscovery.page);
       } finally {
         await bddTearDown($);

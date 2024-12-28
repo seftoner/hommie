@@ -35,7 +35,8 @@ class HassTokenManager {
     final result = await _cli.execute(listTokens);
 
     final tokenId = result.fold(
-      (error) => throw Exception('Failed to list tokens: ${error.message}'),
+      (error) => throw Exception(
+          'Failed to list tokens: ${error.message}. ${error.error}'),
       (success) {
         if (!success.isSuccess) {
           throw Exception('Failed to list tokens: ${success.stderr}');
