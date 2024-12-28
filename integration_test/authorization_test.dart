@@ -23,6 +23,7 @@ import './step/i_logged_in.dart';
 import './step/i_tap_on_list_item.dart';
 import './step/i_see_alert.dart';
 import './step/home_assistant_revokes_access.dart';
+import './step/i_see_offlinebanner.dart';
 
 void main() {
   group('''Sign In''', () {
@@ -71,6 +72,7 @@ void main() {
         await iLoggedIn($);
         await theAppIsRunning($);
         await homeAssistantRevokesAccess($);
+        await iSeeOfflinebanner($);
         await iSeePage($, K.serversDiscovery.page);
       } finally {
         await bddTearDown($);

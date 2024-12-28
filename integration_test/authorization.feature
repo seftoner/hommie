@@ -45,4 +45,5 @@ Feature: Sign In
     And the app is running    
     
     When home assistant revokes access
-    Then I see {K.serversDiscovery.page} page
+    Then I see offlineBanner
+    And I see {K.serversDiscovery.page} page

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
-import 'package:hommie/ui/styles/spacings.dart';
+import 'package:hommie/ui/keys.dart';
+import 'package:hommie/ui/screens/widgets/offline_banner.dart';
 
 class OfflineContainer extends ConsumerWidget {
   final Widget? child;
@@ -17,7 +18,7 @@ class OfflineContainer extends ConsumerWidget {
         children: [
           _buildMainContent(connectionState),
           if (_isConnectionDisrupted(connectionState))
-            _buildDisconnectedBanner(context, connectionState),
+            _buildDisconnectedBanner(context),
         ],
       ),
     );
@@ -37,34 +38,13 @@ class OfflineContainer extends ConsumerWidget {
     );
   }
 
-  Widget _buildDisconnectedBanner(
-      BuildContext context, HAServerConnectionState connectionState) {
+  Widget _buildDisconnectedBanner(BuildContext context) {
     return Positioned(
       top: 0,
       left: 0,
       right: 0,
-      child: Container(
-        padding: EdgeInsets.only(
-          top: MediaQuery.paddingOf(context).top + 2,
-          bottom: 2,
-          left: 16,
-          right: 16,
-        ),
-        color: Theme.of(context).colorScheme.errorContainer,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Icon(
-              Icons.wifi_off_rounded,
-              size: 16,
-            ),
-            $w8,
-            Text(
-              'Connection lost. Retrying in 5 seconds...',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
+      child: OfflineBanner(
+        key: K.common.offlineBanner,
       ),
     );
   }

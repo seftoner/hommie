@@ -9,6 +9,7 @@ class Keys {
   static const manualAddress = ManualAddressKeys();
   static const appScaffold = AppScaffoldKeys();
   static const home = HomeKeys();
+  static const common = CommonKeys();
   static const settings = SettingsKeys();
   static const hub = HubKeys();
 }
@@ -26,6 +27,12 @@ class ManualAddressKeys {
   final page = const Key('enterAddresManuallyPage');
   final addressField = const Key('hubAddressTextField');
   final connectButton = const Key('connectButton');
+}
+
+class CommonKeys {
+  const CommonKeys();
+
+  final offlineBanner = const Key('offlineBanner');
 }
 
 class HomeKeys {
