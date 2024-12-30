@@ -55,7 +55,6 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
   int get _getCommndID => _commndID++;
 
   /// Establishes connection to Home Assistant.
-  /// Throws an exception if connection fails.
   Future<void> connect() async {
     if (_socket != null) {
       logger.w('Connection already exists');
