@@ -74,10 +74,13 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
         reason: e.toString(),
       ));
       _reconnectionManager.didDisconnectPermanently();
-    } catch (e) {
+    } on ConnectionError catch (e) {
       logger.e('Connection failed: $e');
+      _connectionState.setState(HASocketState.disconnected(
+        type: DisconnectionType.error,
+        reason: e.toString(),
+      ));
       _reconnectionManager.didDisconnectTemporarily(e);
-      rethrow;
     }
   }
 
