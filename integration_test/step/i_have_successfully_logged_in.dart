@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hommie/features/auth/domain/repository/i_credential_repository.dart';
 import 'package:hommie/features/auth/infrastructure/providers/credential_repository_provider.dart';
+import 'package:hommie/features/settings/domain/repository/i_server_settings_repository.dart';
+import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
 import 'package:oauth2/src/credentials.dart';
 import 'package:patrol/patrol.dart';
 import '../utils/test_context.dart';
@@ -15,7 +17,23 @@ Future<void> iHaveSuccessfullyLoggedIn(PatrolIntegrationTester $) async {
   TestProviderOverrides.instance().setOverrides([
     credentialsRepositoryProvider
         .overrideWith((ref) => _CredentialsRepositoryMock(token)),
+    serverSettingsProvider.overrideWith((ref) => _ServerSettingRepositoryMock())
   ]);
+}
+
+const _serverUrl = 'http://10.0.2.2:8123';
+
+class _ServerSettingRepositoryMock implements IServerSettingsRepository {
+  @override
+  Future<void> clear() async {}
+
+  @override
+  Future<Uri?> getServerUrl() async {
+    return Uri.parse(_serverUrl);
+  }
+
+  @override
+  Future<void> saveServerUrl(String url) async {}
 }
 
 class _CredentialsRepositoryMock implements ICredentialRepository {
@@ -40,7 +58,7 @@ class _CredentialsRepositoryMock implements ICredentialRepository {
       token,
       refreshToken: token,
       expiration: DateTime.now().add(const Duration(days: 365)),
-      tokenEndpoint: Uri.parse('http://10.0.2.2:8123/auth/token'),
+      tokenEndpoint: Uri.parse('$_serverUrl/auth/token'),
     ));
   }
 

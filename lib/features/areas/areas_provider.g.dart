@@ -6,7 +6,7 @@ part of 'areas_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$areasRepositoryHash() => r'635f09422ed9671af17ae46264ffd559cd8453fe';
+String _$areasRepositoryHash() => r'18c599a132f229951377d8810fad9e25a4554179';
 
 /// See also [areasRepository].
 @ProviderFor(areasRepository)
@@ -17,8 +17,11 @@ final areasRepositoryProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$areasRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[serverConnectionProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    serverConnectionProvider,
+    ...?serverConnectionProvider.allTransitiveDependencies
+  },
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')

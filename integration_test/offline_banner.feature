@@ -15,7 +15,6 @@ Feature: Connection Status Banner
     And I wait {3} seconds
     And clean up after the test
     
-
   Background:
     Given home assistant access is configured    
     And I have successfully logged in

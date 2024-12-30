@@ -194,9 +194,10 @@ class HASocket {
     } else {
       _setState(HASocketState.disconnected(
         reason: reason,
-        type: _innerChanel.closeCode == 1000
-            ? DisconnectionType.normal
-            : DisconnectionType.error,
+        type: switch (_innerChanel.closeCode) {
+          status.normalClosure || status.goingAway => DisconnectionType.normal,
+          _ => DisconnectionType.error,
+        },
       ));
     }
 
@@ -206,6 +207,7 @@ class HASocket {
       }
       _outerStreamController.close();
     }
+    _stateController.close();
   }
 
   void sendMessage(HABaseMessgae message) {
@@ -216,12 +218,7 @@ class HASocket {
   }
 
   void close() {
-    _setState(HASocketState.disconnected());
-    logger.t('Closing socket');
+    logger.t('Inner socket is going to close');
     _innerChanel.sink.close(status.normalClosure);
-    if (!_outerStreamController.isClosed) {
-      _outerStreamController.close();
-    }
-    _stateController.close();
   }
 }

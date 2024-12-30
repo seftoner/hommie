@@ -31,17 +31,17 @@ class EnterAddressPage extends HookConsumerWidget {
               decoration: const InputDecoration(
                 labelText: 'Hub address',
               ),
+              onSubmitted: (value) =>
+                  ref.read(authControllerProvider.notifier).login(value),
             ),
             const Spacer(),
             FilledButton(
               key: K.manualAddress.connectButton,
               style: FilledButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor),
-              onPressed: () {
-                ref
-                    .read(authControllerProvider.notifier)
-                    .login(haServerURLController.text);
-              },
+              onPressed: () => ref
+                  .read(authControllerProvider.notifier)
+                  .login(haServerURLController.text),
               child: const Text('Connect'),
             ),
           ],

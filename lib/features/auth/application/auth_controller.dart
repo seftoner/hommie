@@ -6,6 +6,7 @@ import 'package:hommie/features/auth/infrastructure/providers/auth_repository_pr
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
+import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/features/auth/application/auth_state.dart';
@@ -51,6 +52,9 @@ class AuthController extends _$AuthController {
 
   Future<void> signOut() async {
     logger.i('Sign out');
+    final connectionManager =
+        ref.read(serverConnectionManagerProvider.notifier);
+    connectionManager.disconnectAndCleanup();
 
     final serverSettings = ref.read(serverSettingsProvider);
     await serverSettings.clear();
