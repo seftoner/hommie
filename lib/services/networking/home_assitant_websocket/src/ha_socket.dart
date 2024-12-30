@@ -7,6 +7,7 @@ import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as status;
 import 'package:hommie/services/networking/home_assitant_websocket/src/ha_auth_handler.dart';
 
 import 'ha_messages.dart';
@@ -217,7 +218,7 @@ class HASocket {
   void close() {
     _setState(HASocketState.disconnected());
     logger.t('Closing socket');
-    _innerChanel.sink.close();
+    _innerChanel.sink.close(status.normalClosure);
     if (!_outerStreamController.isClosed) {
       _outerStreamController.close();
     }

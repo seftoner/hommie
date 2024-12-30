@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/features/auth/application/auth_controller.dart';
@@ -43,21 +44,16 @@ class ServerConnectionManager extends _$ServerConnectionManager {
 
     final authRepository = ref.read(authRepositoryProvider);
 
-    final credOrError = await authRepository.getCredentials();
-
-    final authToken = credOrError.fold(
-      (error) {
-        logger.e('Failed to fetch credentials: $error');
-        throw Exception('Failed to fetch credentials: $error');
-      },
-      (credentials) => HAOAuth2Token(credentials),
-    );
+    final serverUrl = await ref.read(serverSettingsProvider).getServerUrl();
+    if (serverUrl == null) {
+      throw Exception('Server URL is not configured');
+    }
 
     final connOption = HAConnectionOption(
-      authToken,
-      onTokenRefresh: () async {
-        final refreshResult = await authRepository.getCredentials();
-        return refreshResult.fold(
+      serverUrl: serverUrl,
+      fetchAuthToken: () async {
+        final fetchedCredentials = await authRepository.getCredentials();
+        return fetchedCredentials.fold(
           (error) => throw Exception('Failed to refresh token: $error'),
           (credentials) => HAOAuth2Token(credentials),
         );
@@ -95,10 +91,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
         _stopHeartbeat();
         break;
       case Disconnected(type: DisconnectionType.authFailure):
-        // This might execute at a time which could lead to a crash.
-        // Assume that signOut() might be called from two places:
-        // First, here when the connection is broken,
-        // and second, on the Server settings page.
+        disconnectAndCleanup();
         ref.read(authControllerProvider.notifier).signOut();
         break;
       case Disconnected():

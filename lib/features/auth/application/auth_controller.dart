@@ -5,6 +5,7 @@ import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/features/auth/application/auth_state.dart';
@@ -50,7 +51,11 @@ class AuthController extends _$AuthController {
 
   Future<void> signOut() async {
     logger.i('Sign out');
-    final failureOrSuccess = await ref.watch(authRepositoryProvider).signOut();
+
+    final serverSettings = ref.read(serverSettingsProvider);
+    await serverSettings.clear();
+
+    final failureOrSuccess = await ref.read(authRepositoryProvider).signOut();
     failureOrSuccess.fold(
       (l) => state = AsyncData(AuthState.failure(l)),
       (r) => {state = const AsyncData(AuthState.unauthenticated())},
@@ -58,7 +63,8 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> login(String haServerURL) async {
-    final authRepository = ref.watch(authRepositoryProvider);
+    final authRepository = ref.read(authRepositoryProvider);
+    final serverSettings = ref.read(serverSettingsProvider);
 
     final Uri redirectUrl = Uri.parse('hommie://');
 
@@ -76,7 +82,10 @@ class AuthController extends _$AuthController {
 
       authResult.fold(
         (l) => {state = AsyncData(AuthState.failure(l))},
-        (r) => {state = const AsyncData(AuthState.authenticated())},
+        (r) async {
+          await serverSettings.saveServerUrl(haServerURL);
+          state = const AsyncData(AuthState.authenticated());
+        },
       );
     } on PlatformException catch (e) {
       //BUG: Not sure that 'CANCELED' message will be return on all platforms
