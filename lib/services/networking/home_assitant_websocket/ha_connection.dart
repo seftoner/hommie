@@ -22,7 +22,7 @@ abstract class IHAConnection {
   HassSubscription subscribeMessage(HABaseMessgae subscribeMessage);
 
   /// Closes the connection.
-  void close();
+  Future<void> close();
 }
 
 /// Implementation of Home Assistant websocket connection.
@@ -79,7 +79,7 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
         type: DisconnectionType.error,
         reason: e.toString(),
       ));
-      _reconnectionManager.didDisconnectTemporarily(e);
+      _reconnectionManager.reconnect();
     }
   }
 
@@ -97,12 +97,13 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
   }
 
   @override
-  void close() {
+  Future<void> close() async {
     _reconnectionManager.didDisconnectPermanently();
     _socketSubscription?.cancel();
-    _socket?.close();
-    _socket = null;
+    await _socket?.close();
+
     _connectionState.dispose();
+    _socket = null;
   }
 
   @override
@@ -202,7 +203,7 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
       _connectionState.setState(lastState);
       _reconnectionManager.didDisconnectPermanently();
     } else {
-      _reconnectionManager.didDisconnectTemporarily(null);
+      _reconnectionManager.reconnect();
     }
   }
 
@@ -221,12 +222,12 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
     _connectionState.setState(HASocketState.reconnecting());
     connect().catchError((e) {
       logger.e('Reconnection failed', error: e);
-      _reconnectionManager.didDisconnectTemporarily(e);
+      _reconnectionManager.reconnect();
     });
   }
 
   @override
-  void reconnectionManagerWantsDisconnect(error) {
+  void reconnectionManagerWantsDisconnect(dynamic error) {
     _connectionState.setState(HASocketState.disconnected(
       type: DisconnectionType.error,
       reason: error.toString(),

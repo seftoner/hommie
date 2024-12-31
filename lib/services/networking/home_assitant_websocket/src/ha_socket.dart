@@ -115,7 +115,6 @@ class HASocket {
               reason: 'Invalid authentication: $message',
               type: DisconnectionType.authFailure,
             ));
-            logger.e('Invalid authentication: $message');
             break;
         }
       }
@@ -125,7 +124,7 @@ class HASocket {
   void _setState(HASocketState newState) {
     _state = newState;
     _stateController.add(newState);
-    logger.d('Socket state changed to: ${newState.runtimeType}');
+    logger.d('Inner socket state changed to: ${newState.runtimeType}');
   }
 
   void _startConnection() async {
@@ -217,8 +216,8 @@ class HASocket {
     _innerChanel.sink.add(encodedData);
   }
 
-  void close() {
+  Future<void> close() async {
     logger.t('Inner socket is going to close');
-    _innerChanel.sink.close(status.normalClosure);
+    await _innerChanel.sink.close(status.normalClosure);
   }
 }

@@ -42,7 +42,7 @@ Feature: Connection Status Banner
     Given the device loses network connectivity
     And I wait {2} seconds
     
-    # Launch app and verify
+    # Launch app and verify 
     When the application is running in the foreground
     And I see {K.home.page} page
     Then I should see the offline banner

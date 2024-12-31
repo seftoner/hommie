@@ -16,6 +16,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   HAConnection? _connection;
   bool _isDisposed = false;
   Timer? _heartbeatTimer;
+  Completer<HAConnection>? _connectionCompleter;
 
   @override
   void build() async {
@@ -34,50 +35,65 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     if (_connection != null) {
       return _connection!;
     }
-    return await _createNewConnection();
+    return _createNewConnection();
   }
 
   Future<HAConnection> _createNewConnection() async {
-    if (_isDisposed) {
-      throw Exception('ServerConnectionManager is disposed');
+    // If there's already a connection being created, wait for it
+    if (_connectionCompleter != null) {
+      logger.d('Lock by completer');
+      return _connectionCompleter!.future;
     }
 
-    final authRepository = ref.read(authRepositoryProvider);
-
-    final serverUrl = await ref.read(serverSettingsProvider).getServerUrl();
-    if (serverUrl == null) {
-      throw Exception('Server URL is not configured');
-    }
-
-    final connOption = HAConnectionOption(
-      serverUrl: serverUrl,
-      fetchAuthToken: () async {
-        final fetchedCredentials = await authRepository.getCredentials();
-        return fetchedCredentials.fold(
-          (error) => throw Exception('Failed to refresh token: $error'),
-          (credentials) => HAOAuth2Token(credentials),
-        );
-      },
-    );
-
-    final connection = HAConnection(connOption);
-
-    connection.state.listen((state) {
-      _handleConnectionState(state);
-    });
+    _connectionCompleter = Completer<HAConnection>();
 
     try {
+      if (_isDisposed) {
+        throw Exception('ServerConnectionManager is disposed');
+      }
+
+      final serverUrl = await ref.read(serverSettingsProvider).getServerUrl();
+      if (serverUrl == null) {
+        throw Exception('Server URL is not configured');
+      }
+
+      final connOption = HAConnectionOption(
+        serverUrl: serverUrl,
+        fetchAuthToken: () async {
+          final authRepository = ref.read(authRepositoryProvider);
+          final fetchedCredentials = await authRepository.getCredentials();
+          return fetchedCredentials.fold(
+            (error) => throw Exception('Failed to refresh token: $error'),
+            (credentials) => HAOAuth2Token(credentials),
+          );
+        },
+      );
+
+      final connection = HAConnection(connOption);
+
+      connection.state.listen((state) {
+        _handleConnectionState(state);
+      });
+
       await connection.connect();
       _connection = connection;
+      _connectionCompleter!.complete(connection);
       return connection;
     } catch (e) {
+      _connectionCompleter!.completeError(e);
       logger.e('Connection failed: $e');
       rethrow;
+    } finally {
+      _connectionCompleter = null;
     }
   }
 
   void _handleConnectionState(HASocketState state) {
     switch (state) {
+      case Disconnected(type: DisconnectionType.authFailure):
+        disconnectAndCleanup();
+        ref.read(authControllerProvider.notifier).signOut();
+        break;
       case Connecting():
         ref.read(connectionStateProvider.notifier).setConnecting();
         _stopHeartbeat();
@@ -89,10 +105,6 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       case Reconnecting():
         ref.read(connectionStateProvider.notifier).setReconnecting();
         _stopHeartbeat();
-        break;
-      case Disconnected(type: DisconnectionType.authFailure):
-        disconnectAndCleanup();
-        ref.read(authControllerProvider.notifier).signOut();
         break;
       case Disconnected():
         ref.read(connectionStateProvider.notifier).setDisconnected();
@@ -125,5 +137,6 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     _stopHeartbeat();
     _connection?.close();
     _connection = null;
+    _connectionCompleter = null;
   }
 }

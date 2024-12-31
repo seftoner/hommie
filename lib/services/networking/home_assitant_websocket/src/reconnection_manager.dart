@@ -23,6 +23,7 @@ class ReconnectionManager {
 
   void didFinishConnect() {
     _reconnectScheduled = false;
+    _closeRequested = false;
     _backoff.reset();
   }
 
@@ -32,10 +33,11 @@ class ReconnectionManager {
     _backoff.reset();
   }
 
-  void didDisconnectTemporarily(dynamic error) {
-    if (_closeRequested) {
+  void reconnect() {
+    if (_closeRequested || _reconnectScheduled) {
       return;
     }
+
     _scheduleReconnect();
   }
 
