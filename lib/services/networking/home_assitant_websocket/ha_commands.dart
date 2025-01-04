@@ -7,6 +7,9 @@ import 'package:hommie/services/networking/home_assitant_websocket/hass_subscrip
 import 'package:hommie/services/networking/home_assitant_websocket/src/types/types.dart';
 
 class HACommands {
+  /// Returns a value indicating whether the operation was successful.
+  ///
+  /// TODO: Consider changing the return type to `bool` to explicitly indicate success/failure.
   static Future<void> pingServer(HAConnection connection) {
     return connection.sendMessage(PingMessage());
   }
