@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import './step/clean_up_after_the_test.dart';
+import './step/perform_cleanup.dart';
 import './step/the_application_is_running_in_the_foreground.dart';
 import './step/i_see_page.dart';
 import './step/i_see_button.dart';
@@ -28,7 +28,7 @@ import './step/i_should_see_the_offline_banner.dart';
 void main() {
   group('''Sign In''', () {
     Future<void> bddTearDown(PatrolIntegrationTester $) async {
-      await cleanUpAfterTheTest($);
+      await performCleanup($);
     }
 
     patrol('''Enter address manually and sign in''', ($) async {
@@ -48,7 +48,7 @@ void main() {
       } finally {
         await bddTearDown($);
       }
-    });
+    }, tags: ['quick']);
     patrol('''Sign out''', ($) async {
       try {
         await homeAssistantAccessIsConfigured($);

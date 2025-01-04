@@ -7,7 +7,7 @@ part of 'server_connection_manager.dart';
 // **************************************************************************
 
 String _$serverConnectionManagerHash() =>
-    r'800794f6289bf191f78450ec5d0030aecd0c2d85';
+    r'bb56f829bf878f854a524937897dd32ca5008a04';
 
 /// See also [ServerConnectionManager].
 @ProviderFor(ServerConnectionManager)

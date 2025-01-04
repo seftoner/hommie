@@ -11,7 +11,7 @@ import 'package:integration_test/integration_test.dart';
 
 import './step/the_device_regains_network_connectivity.dart';
 import './step/i_wait_seconds.dart';
-import './step/clean_up_after_the_test.dart';
+import './step/perform_cleanup.dart';
 import './step/home_assistant_access_is_configured.dart';
 import './step/i_have_successfully_logged_in.dart';
 import './step/the_application_is_running_in_the_foreground.dart';
@@ -30,7 +30,7 @@ void main() {
     Future<void> bddTearDown(PatrolIntegrationTester $) async {
       await theDeviceRegainsNetworkConnectivity($);
       await iWaitSeconds($, 3);
-      await cleanUpAfterTheTest($);
+      await performCleanup($);
     }
 
     patrol('''Banner visibility when connection is lost and restored''',

@@ -8,6 +8,10 @@ import '../utils/test_context.dart';
 Future<void> homeAssistantAccessIsConfigured(PatrolIntegrationTester $) async {
   final tokenManager = HassTokenManager();
 
-  final token = await tokenManager.createToken();
+  final token = await tokenManager.createLongLivedToken();
+  addTearDown(() async {
+    await tokenManager.deleteLongLivedToken();
+  });
+
   TestContext.instance().setAuthToken(token);
 }

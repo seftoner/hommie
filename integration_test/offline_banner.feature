@@ -13,13 +13,12 @@ Feature: Connection Status Banner
   After:
     Then the device regains network connectivity
     And I wait {3} seconds
-    And clean up after the test
+    And perform cleanup
     
   Background:
     Given home assistant access is configured    
     And I have successfully logged in
     
-
   Scenario: Banner visibility when connection is lost and restored
     And the application is running in the foreground
     And I see {K.home.page} page

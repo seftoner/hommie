@@ -10,6 +10,7 @@ void patrol(
   String description,
   Future<void> Function(PatrolIntegrationTester) callback, {
   bool? skip,
+  dynamic tags,
   NativeAutomatorConfig? nativeAutomatorConfig,
   LiveTestWidgetsFlutterBindingFramePolicy framePolicy =
       LiveTestWidgetsFlutterBindingFramePolicy.fadePointers,
@@ -20,6 +21,7 @@ void patrol(
     nativeAutomatorConfig: nativeAutomatorConfig ?? _nativeAutomatorConfig,
     framePolicy: framePolicy,
     skip: skip,
+    tags: tags,
     callback,
   );
 }

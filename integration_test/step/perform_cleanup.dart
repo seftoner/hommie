@@ -6,10 +6,10 @@ import '../utils/test_provider_overrides.dart';
 import '../utils/hass_token_manager.dart';
 
 /// Usage: clean up after the test
-Future<void> cleanUpAfterTheTest(PatrolIntegrationTester $) async {
+Future<void> performCleanup(PatrolIntegrationTester $) async {
   TestProviderOverrides.instance().clear();
   TestContext.instance().clear();
 
   final tokenManager = HassTokenManager();
-  await tokenManager.cleanupToken();
+  await tokenManager.deleteHommieToken();
 }

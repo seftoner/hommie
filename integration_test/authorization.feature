@@ -11,8 +11,9 @@ Feature: Sign In
   So that I can control my devices
 
   After:
-    Then clean up after the test
+    Then perform cleanup
   
+  @quick
   Scenario: Enter address manually and sign in
     Given the application is running in the foreground
     And I see {K.serversDiscovery.page} page

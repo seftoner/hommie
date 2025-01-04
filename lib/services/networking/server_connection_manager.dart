@@ -21,9 +21,12 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   @override
   void build() async {
     ref.onDispose(() {
+      print('ServerConnectionManager:onDispose()');
       _isDisposed = true;
       disconnectAndCleanup();
     });
+
+    _isDisposed = false;
   }
 
   Future<void> reconnect() async {
@@ -89,6 +92,10 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   }
 
   void _handleConnectionState(HASocketState state) {
+    if (_isDisposed) {
+      return;
+    }
+
     switch (state) {
       case Disconnected(type: DisconnectionType.authFailure):
         disconnectAndCleanup();
@@ -131,7 +138,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   }
 
   void disconnectAndCleanup() {
-    if (_isDisposed != true) {
+    if (!_isDisposed) {
       ref.read(connectionStateProvider.notifier).reset();
     }
     _stopHeartbeat();

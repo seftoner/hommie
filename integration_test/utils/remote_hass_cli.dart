@@ -45,6 +45,8 @@ class RemoteHassCli {
     }
 
     _token = const String.fromEnvironment('HASS_TOKEN');
+    assert(_token?.isNotEmpty == true,
+        'HASS_TOKEN environment variable is not set');
 
     _isInitialized = true;
   }
