@@ -10,6 +10,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:hommie/services/networking/home_assitant_websocket/src/ha_auth_handler.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/src/http_config.dart';
 
 import 'ha_messages.dart';
 
@@ -162,9 +163,7 @@ class HASocket {
   WebSocketChannel _createWebSocketChannel() {
     return IOWebSocketChannel.connect(
       _config.wsUri,
-
-      /// TODO: Extract this logic to an appropriate external location
-      headers: {'User-Agent': 'Hommie: ${Platform.operatingSystem}'},
+      headers: HttpConfig.defaultHeaders,
       pingInterval: _config.pingInterval,
       connectTimeout: _config.connectionTimeout,
     );
