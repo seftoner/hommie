@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
@@ -28,7 +29,7 @@ class HASocket {
   final HASocketConfig _config;
   final HAAuthHandler? _authHandler;
 
-  late final String haVersion;
+  late final HaVersion haVersion;
   late WebSocketChannel _innerChanel;
   bool _invalidAuth = false;
   late final StreamController<dynamic> _outerStreamController;
@@ -95,8 +96,9 @@ class HASocket {
     _authHandler!
       ..onAuthResult = (result) {
         switch (result) {
-          case AuthResultSuccess(haVersion: final version):
-            haVersion = version;
+          case AuthResultSuccess(:final haVersion):
+            this.haVersion = HaVersion.fromString(haVersion);
+            //send supported_features if HaVersion.isAtLeast(2022, 9) == true
             _setState(HASocketState.authenticated());
             break;
           case AuthResultError(message: final message):
@@ -160,6 +162,9 @@ class HASocket {
   WebSocketChannel _createWebSocketChannel() {
     return IOWebSocketChannel.connect(
       _config.wsUri,
+
+      /// TODO: Extract this logic to an appropriate external location
+      headers: {'User-Agent': 'Hommie: ${Platform.operatingSystem}'},
       pingInterval: _config.pingInterval,
       connectTimeout: _config.connectionTimeout,
     );

@@ -118,8 +118,9 @@ class __$$HaVersionImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$HaVersionImpl implements _HaVersion {
-  _$HaVersionImpl({required this.major, required this.minor, this.patch});
+class _$HaVersionImpl extends _HaVersion {
+  _$HaVersionImpl({required this.major, required this.minor, this.patch})
+      : super._();
 
   @override
   final int major;
@@ -155,11 +156,12 @@ class _$HaVersionImpl implements _HaVersion {
       __$$HaVersionImplCopyWithImpl<_$HaVersionImpl>(this, _$identity);
 }
 
-abstract class _HaVersion implements HaVersion {
+abstract class _HaVersion extends HaVersion {
   factory _HaVersion(
       {required final int major,
       required final int minor,
       final int? patch}) = _$HaVersionImpl;
+  _HaVersion._() : super._();
 
   @override
   int get major;

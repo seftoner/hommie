@@ -85,6 +85,14 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
 
   @override
   Future<dynamic> sendMessage(HABaseMessgae message) async {
+    ///TODO: Consider error handling options:
+    /// 1. Current: Using assertion which throws an error
+    /// 2. Alternative: Returning null for graceful degradation
+    ///
+    /// Decision needed: Balance between:
+    /// - Strict/fail-fast (assertion) vs
+    /// - Graceful degradation (null return)
+    /// TODO: Setup and handle timeout
     assert(!_socket!.isClosed, 'Connections is closed');
 
     final completer = Completer<dynamic>();
