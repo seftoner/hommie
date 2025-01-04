@@ -29,7 +29,7 @@ class HASocket {
   final HASocketConfig _config;
   final HAAuthHandler? _authHandler;
 
-  late final HaVersion haVersion;
+  late final HaVersion _haVersion;
   late WebSocketChannel _innerChanel;
   bool _invalidAuth = false;
   late final StreamController<dynamic> _outerStreamController;
@@ -97,7 +97,7 @@ class HASocket {
       ..onAuthResult = (result) {
         switch (result) {
           case AuthResultSuccess(:final haVersion):
-            this.haVersion = HaVersion.fromString(haVersion);
+            _haVersion = HaVersion.fromString(haVersion);
             //send supported_features if HaVersion.isAtLeast(2022, 9) == true
             _setState(HASocketState.authenticated());
             break;
@@ -187,7 +187,7 @@ class HASocket {
   void _handleSocketClosure() {
     final reason =
         'Inner socket is closed. Code ${_innerChanel.closeCode} Reason: ${_innerChanel.closeReason}';
-    logger.t(reason);
+    logger.d(reason);
 
     if (_invalidAuth) {
       logger.e('Authentication is invalid - token might be revoked');
@@ -223,6 +223,7 @@ class HASocket {
 
   Future<void> close() async {
     logger.t('Inner socket is going to close');
-    await _innerChanel.sink.close(status.normalClosure);
+    await _innerChanel.sink
+        .close(status.normalClosure, 'Session removed from app.');
   }
 }

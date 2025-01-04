@@ -3,19 +3,18 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i3;
 
-import 'package:hommie/features/auth/domain/entities/ha_version.dart' as _i2;
 import 'package:hommie/services/networking/home_assitant_websocket/ha_connection_option.dart'
-    as _i8;
-import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart'
-    as _i5;
-import 'package:hommie/services/networking/home_assitant_websocket/src/ha_messages.dart'
     as _i7;
+import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart'
+    as _i4;
+import 'package:hommie/services/networking/home_assitant_websocket/src/ha_messages.dart'
+    as _i6;
 import 'package:hommie/services/networking/home_assitant_websocket/src/ha_socket.dart'
-    as _i3;
+    as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:mockito/src/dummies.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -31,8 +30,8 @@ import 'package:mockito/src/dummies.dart' as _i6;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeHaVersion_0 extends _i1.SmartFake implements _i2.HaVersion {
-  _FakeHaVersion_0(
+class _FakeHASocket_0 extends _i1.SmartFake implements _i2.HASocket {
+  _FakeHASocket_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -41,8 +40,8 @@ class _FakeHaVersion_0 extends _i1.SmartFake implements _i2.HaVersion {
         );
 }
 
-class _FakeHASocket_1 extends _i1.SmartFake implements _i3.HASocket {
-  _FakeHASocket_1(
+class _FakeStreamSink_1<S> extends _i1.SmartFake implements _i3.StreamSink<S> {
+  _FakeStreamSink_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -51,18 +50,8 @@ class _FakeHASocket_1 extends _i1.SmartFake implements _i3.HASocket {
         );
 }
 
-class _FakeStreamSink_2<S> extends _i1.SmartFake implements _i4.StreamSink<S> {
-  _FakeStreamSink_2(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeFuture_3<T1> extends _i1.SmartFake implements _i4.Future<T1> {
-  _FakeFuture_3(
+class _FakeFuture_2<T1> extends _i1.SmartFake implements _i3.Future<T1> {
+  _FakeFuture_2(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -74,49 +63,31 @@ class _FakeFuture_3<T1> extends _i1.SmartFake implements _i4.Future<T1> {
 /// A class which mocks [HASocket].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockHASocket extends _i1.Mock implements _i3.HASocket {
+class MockHASocket extends _i1.Mock implements _i2.HASocket {
   MockHASocket() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.HaVersion get haVersion => (super.noSuchMethod(
-        Invocation.getter(#haVersion),
-        returnValue: _FakeHaVersion_0(
-          this,
-          Invocation.getter(#haVersion),
-        ),
-      ) as _i2.HaVersion);
-
-  @override
-  set haVersion(_i2.HaVersion? _haVersion) => super.noSuchMethod(
-        Invocation.setter(
-          #haVersion,
-          _haVersion,
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  _i4.Stream<_i5.HASocketState> get stateStream => (super.noSuchMethod(
+  _i3.Stream<_i4.HASocketState> get stateStream => (super.noSuchMethod(
         Invocation.getter(#stateStream),
-        returnValue: _i4.Stream<_i5.HASocketState>.empty(),
-      ) as _i4.Stream<_i5.HASocketState>);
+        returnValue: _i3.Stream<_i4.HASocketState>.empty(),
+      ) as _i3.Stream<_i4.HASocketState>);
 
   @override
-  _i5.HASocketState get state => (super.noSuchMethod(
+  _i4.HASocketState get state => (super.noSuchMethod(
         Invocation.getter(#state),
-        returnValue: _i6.dummyValue<_i5.HASocketState>(
+        returnValue: _i5.dummyValue<_i4.HASocketState>(
           this,
           Invocation.getter(#state),
         ),
-      ) as _i5.HASocketState);
+      ) as _i4.HASocketState);
 
   @override
-  _i4.Stream<dynamic> get stream => (super.noSuchMethod(
+  _i3.Stream<dynamic> get stream => (super.noSuchMethod(
         Invocation.getter(#stream),
-        returnValue: _i4.Stream<dynamic>.empty(),
-      ) as _i4.Stream<dynamic>);
+        returnValue: _i3.Stream<dynamic>.empty(),
+      ) as _i3.Stream<dynamic>);
 
   @override
   bool get isClosed => (super.noSuchMethod(
@@ -131,7 +102,7 @@ class MockHASocket extends _i1.Mock implements _i3.HASocket {
       ) as bool);
 
   @override
-  void sendMessage(_i7.HABaseMessgae? message) => super.noSuchMethod(
+  void sendMessage(_i6.HABaseMessgae? message) => super.noSuchMethod(
         Invocation.method(
           #sendMessage,
           [message],
@@ -140,45 +111,46 @@ class MockHASocket extends _i1.Mock implements _i3.HASocket {
       );
 
   @override
-  void close() => super.noSuchMethod(
+  _i3.Future<void> close() => (super.noSuchMethod(
         Invocation.method(
           #close,
           [],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 }
 
 /// A class which mocks [HAConnectionOption].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockHAConnectionOption extends _i1.Mock
-    implements _i8.HAConnectionOption {
+    implements _i7.HAConnectionOption {
   MockHAConnectionOption() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i3.HASocket> createSocket() => (super.noSuchMethod(
+  _i3.Future<_i2.HASocket> createSocket() => (super.noSuchMethod(
         Invocation.method(
           #createSocket,
           [],
         ),
-        returnValue: _i4.Future<_i3.HASocket>.value(_FakeHASocket_1(
+        returnValue: _i3.Future<_i2.HASocket>.value(_FakeHASocket_0(
           this,
           Invocation.method(
             #createSocket,
             [],
           ),
         )),
-      ) as _i4.Future<_i3.HASocket>);
+      ) as _i3.Future<_i2.HASocket>);
 }
 
 /// A class which mocks [StreamController].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockStreamController<T> extends _i1.Mock
-    implements _i4.StreamController<T> {
+    implements _i3.StreamController<T> {
   MockStreamController() {
     _i1.throwOnMissingStub(this);
   }
@@ -211,7 +183,7 @@ class MockStreamController<T> extends _i1.Mock
       );
 
   @override
-  set onCancel(_i4.FutureOr<void> Function()? _onCancel) => super.noSuchMethod(
+  set onCancel(_i3.FutureOr<void> Function()? _onCancel) => super.noSuchMethod(
         Invocation.setter(
           #onCancel,
           _onCancel,
@@ -220,19 +192,19 @@ class MockStreamController<T> extends _i1.Mock
       );
 
   @override
-  _i4.Stream<T> get stream => (super.noSuchMethod(
+  _i3.Stream<T> get stream => (super.noSuchMethod(
         Invocation.getter(#stream),
-        returnValue: _i4.Stream<T>.empty(),
-      ) as _i4.Stream<T>);
+        returnValue: _i3.Stream<T>.empty(),
+      ) as _i3.Stream<T>);
 
   @override
-  _i4.StreamSink<T> get sink => (super.noSuchMethod(
+  _i3.StreamSink<T> get sink => (super.noSuchMethod(
         Invocation.getter(#sink),
-        returnValue: _FakeStreamSink_2<T>(
+        returnValue: _FakeStreamSink_1<T>(
           this,
           Invocation.getter(#sink),
         ),
-      ) as _i4.StreamSink<T>);
+      ) as _i3.StreamSink<T>);
 
   @override
   bool get isClosed => (super.noSuchMethod(
@@ -253,10 +225,10 @@ class MockStreamController<T> extends _i1.Mock
       ) as bool);
 
   @override
-  _i4.Future<dynamic> get done => (super.noSuchMethod(
+  _i3.Future<dynamic> get done => (super.noSuchMethod(
         Invocation.getter(#done),
-        returnValue: _i4.Future<dynamic>.value(),
-      ) as _i4.Future<dynamic>);
+        returnValue: _i3.Future<dynamic>.value(),
+      ) as _i3.Future<dynamic>);
 
   @override
   void add(T? event) => super.noSuchMethod(
@@ -284,17 +256,17 @@ class MockStreamController<T> extends _i1.Mock
       );
 
   @override
-  _i4.Future<dynamic> close() => (super.noSuchMethod(
+  _i3.Future<dynamic> close() => (super.noSuchMethod(
         Invocation.method(
           #close,
           [],
         ),
-        returnValue: _i4.Future<dynamic>.value(),
-      ) as _i4.Future<dynamic>);
+        returnValue: _i3.Future<dynamic>.value(),
+      ) as _i3.Future<dynamic>);
 
   @override
-  _i4.Future<dynamic> addStream(
-    _i4.Stream<T>? source, {
+  _i3.Future<dynamic> addStream(
+    _i3.Stream<T>? source, {
     bool? cancelOnError,
   }) =>
       (super.noSuchMethod(
@@ -303,15 +275,15 @@ class MockStreamController<T> extends _i1.Mock
           [source],
           {#cancelOnError: cancelOnError},
         ),
-        returnValue: _i4.Future<dynamic>.value(),
-      ) as _i4.Future<dynamic>);
+        returnValue: _i3.Future<dynamic>.value(),
+      ) as _i3.Future<dynamic>);
 }
 
 /// A class which mocks [StreamSubscription].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockStreamSubscription<T> extends _i1.Mock
-    implements _i4.StreamSubscription<T> {
+    implements _i3.StreamSubscription<T> {
   MockStreamSubscription() {
     _i1.throwOnMissingStub(this);
   }
@@ -323,14 +295,14 @@ class MockStreamSubscription<T> extends _i1.Mock
       ) as bool);
 
   @override
-  _i4.Future<void> cancel() => (super.noSuchMethod(
+  _i3.Future<void> cancel() => (super.noSuchMethod(
         Invocation.method(
           #cancel,
           [],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 
   @override
   void onData(void Function(T)? handleData) => super.noSuchMethod(
@@ -360,7 +332,7 @@ class MockStreamSubscription<T> extends _i1.Mock
       );
 
   @override
-  void pause([_i4.Future<void>? resumeSignal]) => super.noSuchMethod(
+  void pause([_i3.Future<void>? resumeSignal]) => super.noSuchMethod(
         Invocation.method(
           #pause,
           [resumeSignal],
@@ -378,27 +350,27 @@ class MockStreamSubscription<T> extends _i1.Mock
       );
 
   @override
-  _i4.Future<E> asFuture<E>([E? futureValue]) => (super.noSuchMethod(
+  _i3.Future<E> asFuture<E>([E? futureValue]) => (super.noSuchMethod(
         Invocation.method(
           #asFuture,
           [futureValue],
         ),
-        returnValue: _i6.ifNotNull(
-              _i6.dummyValueOrNull<E>(
+        returnValue: _i5.ifNotNull(
+              _i5.dummyValueOrNull<E>(
                 this,
                 Invocation.method(
                   #asFuture,
                   [futureValue],
                 ),
               ),
-              (E v) => _i4.Future<E>.value(v),
+              (E v) => _i3.Future<E>.value(v),
             ) ??
-            _FakeFuture_3<E>(
+            _FakeFuture_2<E>(
               this,
               Invocation.method(
                 #asFuture,
                 [futureValue],
               ),
             ),
-      ) as _i4.Future<E>);
+      ) as _i3.Future<E>);
 }

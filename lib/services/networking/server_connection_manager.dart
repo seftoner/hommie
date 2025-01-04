@@ -115,7 +115,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
 
   void _startHeartbeat() {
     _stopHeartbeat();
-    _heartbeatTimer = Timer.periodic(const Duration(seconds: 10), (_) {
+    _heartbeatTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       logger.d('Ping server');
       if (_connection != null) {
         HACommands.pingServer(_connection!).catchError((e) {
