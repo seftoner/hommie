@@ -98,6 +98,7 @@ class HASocket {
         switch (result) {
           case AuthResultSuccess(:final haVersion):
             this.haVersion = HaVersion.fromString(haVersion);
+            //send supported_features if HaVersion.isAtLeast(2022, 9) == true
             _setState(HASocketState.authenticated());
             break;
           case AuthResultError(message: final message):
@@ -162,6 +163,9 @@ class HASocket {
   WebSocketChannel _createWebSocketChannel() {
     return IOWebSocketChannel.connect(
       _config.wsUri,
+
+      /// TODO: Extract this logic to an appropriate external location
+      headers: {'User-Agent': 'Hommie: ${Platform.operatingSystem}'},
       pingInterval: _config.pingInterval,
       connectTimeout: _config.connectionTimeout,
     );
