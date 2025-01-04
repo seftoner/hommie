@@ -21,7 +21,6 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   @override
   void build() async {
     ref.onDispose(() {
-      print('ServerConnectionManager:onDispose()');
       _isDisposed = true;
       disconnectAndCleanup();
     });
