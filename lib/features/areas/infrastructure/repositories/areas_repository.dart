@@ -13,7 +13,7 @@ class AreasRepository implements IAreasRepository {
   @override
   Future<Either<Exception, List<AreaEntity>>> getAreas() async {
     try {
-      logger.i("Get list of areas");
+      logger.i('Get list of areas');
       final result = await HACommands.getAreas(_haWebsocketsConnection);
 
       return Right(result);

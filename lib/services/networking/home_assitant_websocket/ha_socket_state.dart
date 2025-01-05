@@ -13,7 +13,9 @@ sealed class HASocketState {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
     return other is HASocketState && runtimeType == other.runtimeType;
   }
 
@@ -52,7 +54,10 @@ class Disconnected extends HASocketState {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
+
     return other is Disconnected &&
         other.reason == reason &&
         other.error == error &&

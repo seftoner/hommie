@@ -79,8 +79,8 @@ class HassService with _$HassService {
 @freezed
 class Field with _$Field {
   const factory Field({
-    @Default("") String? name,
-    @Default("") String? description,
+    @Default('') String? name,
+    @Default('') String? description,
     dynamic example,
     Map<String, dynamic>? selector,
     FieldFilter? filter,

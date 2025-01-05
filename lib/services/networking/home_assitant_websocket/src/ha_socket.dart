@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as status;
 import 'package:hommie/services/networking/home_assitant_websocket/src/ha_auth_handler.dart';
+import 'package:hommie/services/networking/home_assitant_websocket/src/http_config.dart';
 
 import 'ha_messages.dart';
 
@@ -27,7 +30,6 @@ class HASocket {
   final HASocketConfig _config;
   final HAAuthHandler? _authHandler;
 
-  late final String haVersion;
   late WebSocketChannel _innerChanel;
   bool _invalidAuth = false;
   late final StreamController<dynamic> _outerStreamController;
@@ -94,8 +96,9 @@ class HASocket {
     _authHandler!
       ..onAuthResult = (result) {
         switch (result) {
-          case AuthResultSuccess(haVersion: final version):
-            haVersion = version;
+          case AuthResultSuccess(:final haVersion):
+            HaVersion.fromString(haVersion);
+            //TODO: send supported_features if HaVersion.isAtLeast(2022, 9) == true
             _setState(HASocketState.authenticated());
             break;
           case AuthResultError(message: final message):
@@ -114,7 +117,6 @@ class HASocket {
               reason: 'Invalid authentication: $message',
               type: DisconnectionType.authFailure,
             ));
-            logger.e('Invalid authentication: $message');
             break;
         }
       }
@@ -124,7 +126,7 @@ class HASocket {
   void _setState(HASocketState newState) {
     _state = newState;
     _stateController.add(newState);
-    logger.d('Socket state changed to: ${newState.runtimeType}');
+    logger.d('Inner socket state changed to: ${newState.runtimeType}');
   }
 
   void _startConnection() async {
@@ -160,6 +162,7 @@ class HASocket {
   WebSocketChannel _createWebSocketChannel() {
     return IOWebSocketChannel.connect(
       _config.wsUri,
+      headers: HttpConfig.defaultHeaders,
       pingInterval: _config.pingInterval,
       connectTimeout: _config.connectionTimeout,
     );
@@ -181,11 +184,11 @@ class HASocket {
 
   void _handleSocketClosure() {
     final reason =
-        "Inner socket is closed. Code ${_innerChanel.closeCode} Reason: ${_innerChanel.closeReason}";
-    logger.t(reason);
+        'Inner socket is closed. Code ${_innerChanel.closeCode} Reason: ${_innerChanel.closeReason}';
+    logger.d(reason);
 
     if (_invalidAuth) {
-      logger.e("Authentication is invalid - token might be revoked");
+      logger.e('Authentication is invalid - token might be revoked');
       _setState(HASocketState.disconnected(
         reason: reason,
         type: DisconnectionType.authFailure,
@@ -193,34 +196,32 @@ class HASocket {
     } else {
       _setState(HASocketState.disconnected(
         reason: reason,
-        type: _innerChanel.closeCode == 1000
-            ? DisconnectionType.normal
-            : DisconnectionType.error,
+        type: switch (_innerChanel.closeCode) {
+          status.normalClosure || status.goingAway => DisconnectionType.normal,
+          _ => DisconnectionType.error,
+        },
       ));
     }
 
     if (!_outerStreamController.isClosed) {
       if (_invalidAuth) {
-        _outerStreamController.addError("Authentication failed");
+        _outerStreamController.addError('Authentication failed');
       }
       _outerStreamController.close();
     }
+    _stateController.close();
   }
 
   void sendMessage(HABaseMessgae message) {
     final encodedData = message.toJson();
-    logger.t("Sending message: $encodedData");
+    logger.t('Sending message: $encodedData');
 
     _innerChanel.sink.add(encodedData);
   }
 
-  void close() {
-    _setState(HASocketState.disconnected());
-    logger.t("Closing socket");
-    _innerChanel.sink.close();
-    if (!_outerStreamController.isClosed) {
-      _outerStreamController.close();
-    }
-    _stateController.close();
+  Future<void> close() async {
+    logger.t('Inner socket is going to close');
+    await _innerChanel.sink
+        .close(status.normalClosure, 'Session removed from app.');
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
+import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -9,6 +10,7 @@ class HubPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      key: K.hub.page,
       appBar: AppBar(
         title: const Text('{Hubname}'),
       ),
@@ -16,7 +18,7 @@ class HubPage extends HookConsumerWidget {
         children: [
           ListTile(
             title:
-                Text("Status", style: Theme.of(context).textTheme.titleSmall),
+                Text('Status', style: Theme.of(context).textTheme.titleSmall),
           ),
           const ListTile(
             title: Text('WebSocket'),
@@ -36,7 +38,7 @@ class HubPage extends HookConsumerWidget {
           $h24,
           ListTile(
             title:
-                Text("Details", style: Theme.of(context).textTheme.titleSmall),
+                Text('Details', style: Theme.of(context).textTheme.titleSmall),
           ),
           ListTile(
             title: const Text('Hub name'),
@@ -58,16 +60,45 @@ class HubPage extends HookConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
+                key: K.hub.signOutButton,
                 style: TextButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.error,
                 ),
-                onPressed: () {
-                  ref.read(authControllerProvider.notifier).signOut();
-                },
+                onPressed: () => _showSignOutDialog(context, ref),
                 child: const Text('Sign out'),
               ),
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showSignOutDialog(BuildContext context, WidgetRef ref) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        key: K.hub.signOutAlert,
+        title: const Text('Sign Out'),
+        content: const Text(
+          'Are you sure you want to sign out? You will need to authenticate again to access your Home Assistant.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            key: K.hub.signOutButton,
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.error,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              ref.read(authControllerProvider.notifier).signOut();
+            },
+            child: const Text('Sign Out'),
+          ),
         ],
       ),
     );

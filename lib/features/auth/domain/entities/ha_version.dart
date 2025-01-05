@@ -4,6 +4,8 @@ part 'ha_version.freezed.dart';
 
 @freezed
 class HaVersion with _$HaVersion {
+  const HaVersion._();
+
   factory HaVersion({
     required int major,
     required int minor,
@@ -28,5 +30,12 @@ class HaVersion with _$HaVersion {
     }
 
     return HaVersion(major: major, minor: minor, patch: patch);
+  }
+
+  bool isAtLeast(int minMajor, int minMinor, [int minPatch = 0]) {
+    return major > minMajor ||
+        (major == minMajor &&
+            (minor > minMinor ||
+                (minor == minMinor && (patch ?? 0) >= minPatch)));
   }
 }

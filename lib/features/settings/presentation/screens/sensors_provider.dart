@@ -11,7 +11,7 @@ part 'sensors_provider.g.dart';
 
 @riverpod
 Future<List<Sensor>> sensorsList(Ref ref) {
-  var sensorObserver = SensorObserver(
+  final sensorObserver = SensorObserver(
     providers: [
       BatterySensorProvider(),
       ConnectionStateProvider(),

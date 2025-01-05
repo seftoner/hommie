@@ -4,13 +4,13 @@ import 'package:path_provider/path_provider.dart';
 
 Future<File> getLogsPath() async {
   final String dir = switch (Platform.operatingSystem) {
-    'android' => (await getExternalStorageDirectory())?.path ?? "",
-    'macos' => join((await getLibraryDirectory()).path, "Logs"),
-    'linux' => join(_getXdgStateHome(), "hommie"),
+    'android' => (await getApplicationSupportDirectory()).path,
+    'macos' => join((await getLibraryDirectory()).path, 'Logs'),
+    'linux' => join(_getXdgStateHome(), 'hommie'),
     _ => (await getApplicationDocumentsDirectory()).path,
   };
 
-  final file = File(join(dir, "hommie_logs.log"));
+  final file = File(join(dir, 'hommie_logs.log'));
   if (!await file.exists()) {
     await file.create(recursive: true);
   }
@@ -18,11 +18,11 @@ Future<File> getLogsPath() async {
 }
 
 String _getXdgStateHome() {
-  if (const bool.hasEnvironment("XDG_STATE_HOME")) {
-    String xdgStateHomeRaw = Platform.environment["XDG_STATE_HOME"] ?? "";
+  if (const bool.hasEnvironment('XDG_STATE_HOME')) {
+    final String xdgStateHomeRaw = Platform.environment['XDG_STATE_HOME'] ?? '';
     if (xdgStateHomeRaw.isNotEmpty) {
       return xdgStateHomeRaw;
     }
   }
-  return join(Platform.environment["HOME"] ?? "", ".local", "state");
+  return join(Platform.environment['HOME'] ?? '', '.local', 'state');
 }

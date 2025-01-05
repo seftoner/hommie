@@ -96,8 +96,6 @@ class LogsPage extends HookConsumerWidget {
         return Colors.red;
       case LogLevel.fatal:
         return Colors.purple;
-      default:
-        return Colors.grey;
     }
   }
 }

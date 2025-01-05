@@ -1,4 +1,4 @@
-package com.example.hommie
+package com.seftoner.hommie
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -4,13 +4,13 @@ import 'package:hommie/features/mobile_companion/i_sensor_provider.dart';
 import 'package:hommie/features/mobile_companion/sensors/battery_level.dart';
 import 'package:hommie/features/mobile_companion/sensors/battery_state.dart';
 import 'package:hommie/features/mobile_companion/sensors/sensor.dart';
-import 'package:battery_plus/battery_plus.dart' as BatteryPlus;
+import 'package:battery_plus/battery_plus.dart' as battery_plus;
 import 'package:hommie/core/utils/logger.dart';
 
 class BatterySensorProvider implements ISensorProvider {
-  late final BatteryPlus.Battery _battery;
+  late final battery_plus.Battery _battery;
 
-  BatterySensorProvider() : _battery = BatteryPlus.Battery();
+  BatterySensorProvider() : _battery = battery_plus.Battery();
 
   @override
   Future<List<Sensor>> provideSensorsState() async {
@@ -26,26 +26,26 @@ class BatterySensorProvider implements ISensorProvider {
     final batteryState = await _battery.batteryState;
     final isInBatterySaveMode = await _battery.isInBatterySaveMode;
 
-    var batteryStatelSensor = BatteryState()
+    final batteryStatelSensor = BatteryState()
       ..state = _entepretuerBatteryState(batteryState)
-      ..attributes = {"Low Power Mode": isInBatterySaveMode};
+      ..attributes = {'Low Power Mode': isInBatterySaveMode};
 
-    if (batteryState == BatteryPlus.BatteryState.charging) {
-      batteryStatelSensor.icon = "mdi:battery-charging";
+    if (batteryState == battery_plus.BatteryState.charging) {
+      batteryStatelSensor.icon = 'mdi:battery-charging';
     }
     results.add(batteryStatelSensor);
 
     return results;
   }
 
-  String _entepretuerBatteryState(BatteryPlus.BatteryState state) {
+  String _entepretuerBatteryState(battery_plus.BatteryState state) {
     return switch (state) {
-      BatteryPlus.BatteryState.full => "Fully charged",
-      BatteryPlus.BatteryState.charging => "Charging",
-      BatteryPlus.BatteryState.discharging => "Not charging",
-      BatteryPlus.BatteryState.connectedNotCharging =>
-        "Connected, but not charging",
-      BatteryPlus.BatteryState.unknown => "Unknown",
+      battery_plus.BatteryState.full => 'Fully charged',
+      battery_plus.BatteryState.charging => 'Charging',
+      battery_plus.BatteryState.discharging => 'Not charging',
+      battery_plus.BatteryState.connectedNotCharging =>
+        'Connected, but not charging',
+      battery_plus.BatteryState.unknown => 'Unknown',
     };
   }
 

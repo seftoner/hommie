@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/areas/application/areas_controller.dart';
+import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -8,9 +9,10 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var areas = ref.watch(areasControllerProvider);
+    final areas = ref.watch(areasControllerProvider);
 
     return Scaffold(
+      key: K.home.page,
       appBar: AppBar(title: const Text('Hommie')),
       body: Center(
         child: Column(
@@ -29,7 +31,7 @@ class HomePage extends HookConsumerWidget {
                         )),
                 error: (error, stack) =>
                     Text('Oops, something unexpected happened \n $error'),
-                loading: () => Center(
+                loading: () => const Center(
                   child: CircularProgressIndicator(),
                 ),
               ),

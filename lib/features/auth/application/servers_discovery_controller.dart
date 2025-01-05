@@ -32,7 +32,9 @@ class ServersDiscoveryController extends _$ServersDiscoveryController {
   }
 
   void _startPeriodicDiscovery() {
-    if (_timer != null) return;
+    if (_timer != null) {
+      return;
+    }
 
     _timer = Timer.periodic(const Duration(seconds: 10), (_) {
       refresh();

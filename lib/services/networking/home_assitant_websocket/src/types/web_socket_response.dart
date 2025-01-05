@@ -40,20 +40,20 @@ class WebSocketResponseConverter
   WebSocketResponse fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
-        'id': int id,
+        'id': final int id,
         'type': 'pong',
       } =>
         WebSocketResponse.pong(id: id),
       {
-        'id': int id,
+        'id': final int id,
         'type': 'event',
-        'event': Map<String, dynamic> event,
+        'event': final Map<String, dynamic> event,
       } =>
         WebSocketResponse.event(id: id, event: StatesUpdates.fromJson(event)),
       {
-        'id': int id,
+        'id': final int id,
         'type': 'result',
-        'result': dynamic result,
+        'result': final dynamic result,
         'success': true,
       } =>
         WebSocketResponse.resultSuccess(
@@ -62,9 +62,9 @@ class WebSocketResponseConverter
           success: true,
         ),
       {
-        'id': int id,
+        'id': final int id,
         'type': 'result',
-        'error': Map<String, dynamic> error,
+        'error': final Map<String, dynamic> error,
         'success': false,
       } =>
         WebSocketResponse.resultError(
@@ -79,6 +79,6 @@ class WebSocketResponseConverter
 
   @override
   Map<String, dynamic> toJson(WebSocketResponse object) {
-    throw UnimplementedError("To json is not implemented");
+    throw UnimplementedError('To json is not implemented');
   }
 }

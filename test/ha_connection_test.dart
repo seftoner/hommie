@@ -159,7 +159,7 @@ void main() {
         'id': 2,
         'type': 'result',
         'success': true,
-        "result": null,
+        'result': null,
       });
 
       emitSocketMessage({

@@ -7,21 +7,24 @@ part of 'server_connection_manager.dart';
 // **************************************************************************
 
 String _$serverConnectionManagerHash() =>
-    r'4ed8c1b8c199b972964cca0eb6563541dc4690e4';
+    r'1a16ec04ec82c5658ac8068c8adf76395d0948ff';
 
 /// See also [ServerConnectionManager].
 @ProviderFor(ServerConnectionManager)
 final serverConnectionManagerProvider =
-    AsyncNotifierProvider<ServerConnectionManager, void>.internal(
+    NotifierProvider<ServerConnectionManager, void>.internal(
   ServerConnectionManager.new,
   name: r'serverConnectionManagerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$serverConnectionManagerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[connectionStateProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    connectionStateProvider,
+    ...?connectionStateProvider.allTransitiveDependencies
+  },
 );
 
-typedef _$ServerConnectionManager = AsyncNotifier<void>;
+typedef _$ServerConnectionManager = Notifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

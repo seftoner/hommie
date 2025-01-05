@@ -36,7 +36,7 @@ class _HLogfmtPrinter extends LogPrinter {
   @override
   List<String> log(LogEvent event) {
     final timestamp = DateTime.now().toIso8601String();
-    var realLogs = logfmtPrinter.log(event);
-    return realLogs.map((line) => "time=$timestamp $line").toList();
+    final realLogs = logfmtPrinter.log(event);
+    return realLogs.map((line) => 'time=$timestamp $line').toList();
   }
 }

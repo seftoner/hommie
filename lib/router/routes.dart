@@ -4,7 +4,7 @@ import 'package:hommie/core/bootstrap/app_startup.dart';
 import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
-import 'package:hommie/features/home/presentation/screens/root_page.dart';
+import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
 import 'package:hommie/features/settings/presentation/screens/hub_page.dart';
 import 'package:hommie/features/settings/presentation/screens/logs_page.dart';
@@ -48,7 +48,7 @@ class MainShellRouteData extends StatefulShellRouteData {
     GoRouterState state,
     StatefulNavigationShell navigationShell,
   ) {
-    return MainPage(
+    return AppScaffoldPage(
       navigationShell: navigationShell,
     );
   }

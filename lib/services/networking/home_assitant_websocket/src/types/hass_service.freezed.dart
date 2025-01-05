@@ -768,8 +768,8 @@ class __$$FieldImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FieldImpl implements _Field {
   const _$FieldImpl(
-      {this.name = "",
-      this.description = "",
+      {this.name = '',
+      this.description = '',
       this.example,
       final Map<String, dynamic>? selector,
       this.filter})

@@ -3,9 +3,9 @@ import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/src/ha_messages.dart';
 
 class HAAuthHandler {
-  static const _authRequired = "auth_required";
-  static const _authInvalid = "auth_invalid";
-  static const _authOk = "auth_ok";
+  static const _authRequired = 'auth_required';
+  static const _authInvalid = 'auth_invalid';
+  static const _authOk = 'auth_ok';
 
   final HAAuthToken authToken;
   void Function(AuthResult)? onAuthResult;
@@ -22,23 +22,23 @@ class HAAuthHandler {
         'Auth handler not properly initialized');
 
     try {
-      final messageType = message["type"] as String;
+      final messageType = message['type'] as String;
       final authResult = switch (messageType) {
         _authRequired => _handleAuthRequired(),
-        _authInvalid => _handleAuthInvalid(message["message"] as String),
-        _authOk => _handleAuthOk(message["ha_version"] as String),
+        _authInvalid => _handleAuthInvalid(message['message'] as String),
+        _authOk => _handleAuthOk(message['ha_version'] as String),
         _ => throw UnknownAuthMessageException(messageType),
       };
 
       onAuthResult!(authResult);
     } catch (e) {
-      logger.e("Authentication error", error: e);
+      logger.e('Authentication error', error: e);
       onAuthResult!(AuthResult.error(e.toString()));
     }
   }
 
   AuthResult _handleAuthRequired() {
-    logger.i("Auth required, sending credentials");
+    logger.i('Auth required, sending credentials');
     sendMessage!(AuthMessage(accessToken: authToken.accessToken));
     return AuthResult.pending();
   }
@@ -46,12 +46,12 @@ class HAAuthHandler {
   AuthResult _handleAuthInvalid(String message) {
     // message = Invalid access token or password
     // need handle this reponse properly -> log out from app
-    logger.e("Authentication invalid: $message");
+    logger.e('Authentication invalid: $message');
     return AuthResult.invalid(message);
   }
 
   AuthResult _handleAuthOk(String version) {
-    logger.i("Authentication successful. HA version: $version");
+    logger.i('Authentication successful. HA version: $version');
     return AuthResult.success(version);
   }
 }

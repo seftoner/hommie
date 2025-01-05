@@ -20,19 +20,19 @@ class LogsControler extends _$LogsControler {
       if (await logFile.exists()) {
         final sharingResult = await Share.shareXFiles(
           [XFile(logFile.path)],
-          text: "Share logs",
+          text: 'Share logs',
           sharePositionOrigin: sharePositionOrigin,
         );
 
         switch (sharingResult.status) {
           case ShareResultStatus.success:
-            logger.i("Logs shared successfully");
+            logger.i('Logs shared successfully');
             break;
           case ShareResultStatus.dismissed:
-            logger.w("Logs sharing was dismissed by the user");
+            logger.w('Logs sharing was dismissed by the user');
             break;
           default:
-            logger.w("Unhandled sharing result: $sharingResult");
+            logger.w('Unhandled sharing result: $sharingResult');
         }
       } else {
         throw Exception('Log file not found');

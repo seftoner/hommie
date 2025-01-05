@@ -42,8 +42,8 @@ class SharedPrefsStorageService implements StorageService {
   }
 
   @override
-  Future<bool> set(String key, data) async {
+  Future<bool> set(String key, String data) async {
     sharedPreferences = await initCompleter.future;
-    return await sharedPreferences!.setString(key, data.toString());
+    return await sharedPreferences!.setString(key, data);
   }
 }

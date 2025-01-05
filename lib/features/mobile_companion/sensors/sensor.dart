@@ -1,13 +1,13 @@
 enum SensorType {
-  binarySensor("binary_sensor"),
-  sensor("sensor");
+  binarySensor('binary_sensor'),
+  sensor('sensor');
 
   final String type;
 
   const SensorType(this.type);
 
   @override
-  toString() => type;
+  String toString() => type;
 }
 
 abstract class Sensor {
@@ -29,7 +29,7 @@ abstract class Sensor {
   ///The unit of measurement for the sensor. Example: '%', ''
   late String unitOfMeasurement;
 
-  late String stateClass = "measurement";
+  late String stateClass = 'measurement';
 
   ///Must be prefixed mdi:. If not provided, default value is `mdi:cellphone`
   late String icon;

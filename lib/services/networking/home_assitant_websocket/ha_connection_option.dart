@@ -5,61 +5,47 @@ import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token
 import 'package:hommie/services/networking/home_assitant_websocket/src/ha_socket.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
 
-typedef TokenRefreshCallback = Future<HAAuthToken> Function();
+typedef FetchAuthTokenCallback = Future<HAAuthToken> Function();
 
 class HAConnectionOption {
-  HAAuthToken _credentials;
-  final TokenRefreshCallback? _onTokenRefresh;
+  final Uri _serverUrl;
+  final FetchAuthTokenCallback _fetchAuthToken;
 
-  HAConnectionOption(this._credentials, {TokenRefreshCallback? onTokenRefresh})
-      : _onTokenRefresh = onTokenRefresh;
+  HAConnectionOption(
+      {required Uri serverUrl, required FetchAuthTokenCallback fetchAuthToken})
+      : _serverUrl = serverUrl,
+        _fetchAuthToken = fetchAuthToken;
 
   Future<HASocket> createSocket() async {
-    await _refreshTokenIfNeeded();
+    final credentials = await _fetchAuthToken();
 
-    final serverUri = _credentials.serverUri;
-    if (serverUri == null) {
-      throw Exception("Token endpoint is null");
-    }
-
-    final serverUrl = _buildWebSocketUrl(serverUri);
-    logger.i("Trying to establish a new connection to $serverUrl");
+    final serverWebSocketUrl = _buildWebSocketUrl(_serverUrl);
+    logger.i('Trying to establish a new connection to $serverWebSocketUrl');
 
     final completer = Completer<HASocket>();
-    _connect(Uri.parse(serverUrl), completer);
+    _connect(serverWebSocketUrl, credentials, completer);
 
     return completer.future;
   }
 
-  Future<void> _refreshTokenIfNeeded() async {
-    if (_credentials.isExpired && _onTokenRefresh != null) {
-      try {
-        _credentials = await _onTokenRefresh();
-        logger.i("Token refreshed successfully");
-      } catch (e) {
-        logger.e("Failed to refresh token", error: e);
-        rethrow;
-      }
-    }
-  }
-
-  String _buildWebSocketUrl(Uri baseUrl) {
+  Uri _buildWebSocketUrl(Uri baseUrl) {
     final scheme = switch (baseUrl.scheme) {
-      "http" => "ws",
-      "https" => "wss",
-      _ => throw Exception("Unsupported scheme: ${baseUrl.scheme}"),
+      'http' => 'ws',
+      'https' => 'wss',
+      _ => throw Exception('Unsupported scheme: ${baseUrl.scheme}'),
     };
 
     final host = baseUrl.host;
     final port = baseUrl.port;
 
-    return "$scheme://$host:$port/api/websocket";
+    return Uri.parse('$scheme://$host:$port/api/websocket');
   }
 
-  void _connect(Uri uri, Completer<HASocket> completer) {
+  void _connect(
+      Uri uri, HAAuthToken credentials, Completer<HASocket> completer) {
     final socket = HASocket.connect(
       wsUri: uri,
-      authToken: _credentials,
+      authToken: credentials,
     );
 
     StreamSubscription<HASocketState>? stateSubscription;
@@ -86,12 +72,12 @@ class HAConnectionOption {
 
           case Disconnected(:final type)
               when type == DisconnectionType.authFailure:
-            handleError(AuthenticationError("Authentication failed"));
+            handleError(AuthenticationError('Authentication failed'));
 
           case Disconnected() when !completer.isCompleted:
             // Only handle non-auth disconnections if we haven't completed yet
             handleError(
-                ConnectionError("Connection closed before authentication"));
+                ConnectionError('Connection closed before authentication'));
 
           default:
             // Wait for other states

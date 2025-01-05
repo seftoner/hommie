@@ -16,8 +16,8 @@ class AppStateLoggerObserver extends ProviderObserver {
       {
         'msg':
             "Provider '${provider.name ?? provider.runtimeType}' change state",
-        "old": previousValue,
-        "new": newValue
+        'old': previousValue,
+        'new': newValue
       },
     );
 

@@ -1,6 +1,7 @@
 PODS:
   - battery_plus (0.0.1):
     - FlutterMacOS
+  - CocoaAsyncSocket (7.6.5)
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -14,6 +15,10 @@ PODS:
   - network_info_plus (0.0.1):
     - FlutterMacOS
   - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - patrol (0.0.1):
+    - CocoaAsyncSocket (~> 7.6)
     - Flutter
     - FlutterMacOS
   - share_plus (0.0.1):
@@ -35,10 +40,15 @@ DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
   - network_info_plus (from `Flutter/ephemeral/.symlinks/plugins/network_info_plus/macos`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - patrol (from `Flutter/ephemeral/.symlinks/plugins/patrol/darwin`)
   - share_plus (from `Flutter/ephemeral/.symlinks/plugins/share_plus/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
   - window_to_front (from `Flutter/ephemeral/.symlinks/plugins/window_to_front/macos`)
+
+SPEC REPOS:
+  trunk:
+    - CocoaAsyncSocket
 
 EXTERNAL SOURCES:
   battery_plus:
@@ -57,6 +67,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/network_info_plus/macos
   path_provider_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
+  patrol:
+    :path: Flutter/ephemeral/.symlinks/plugins/patrol/darwin
   share_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/share_plus/macos
   shared_preferences_foundation:
@@ -68,6 +80,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   battery_plus: 0ed4cf1e771b535a89ac7323e0855ec734cf745f
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   connectivity_plus: 4c41c08fc6d7c91f63bc7aec70ffe3730b04f563
   desktop_webview_window: d4365e71bcd4e1aa0c14cf0377aa24db0c16a7e2
   flutter_secure_storage_macos: 59459653abe1adb92abbc8ea747d79f8d19866c9
@@ -75,6 +88,7 @@ SPEC CHECKSUMS:
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   network_info_plus: 2cb02d8435635eae13b3b79279681985121cf30c
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  patrol: 0564cee315ff6c86fb802b3647db05cc2d3d0624
   share_plus: 1fa619de8392a4398bfaf176d441853922614e89
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   url_launcher_macos: c82c93949963e55b228a30115bd219499a6fe404

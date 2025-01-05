@@ -28,7 +28,7 @@ class AppPreferences implements AppConfig {
 
   @override
   Future<String?> getRemoteHomeAssistantServerUri() async {
-    Completer<String> completer = Completer<String>();
+    final completer = Completer<String>();
 
     await sharedPreferences.get(serverUriKey).then((value) {
       if (value is String) {

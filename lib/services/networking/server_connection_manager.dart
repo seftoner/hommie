@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
@@ -10,20 +10,21 @@ import 'package:hommie/core/utils/logger.dart';
 
 part 'server_connection_manager.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [ConnectionState])
 class ServerConnectionManager extends _$ServerConnectionManager {
   HAConnection? _connection;
   bool _isDisposed = false;
   Timer? _heartbeatTimer;
+  Completer<HAConnection>? _connectionCompleter;
 
   @override
-  Future<void> build() async {
+  void build() async {
     ref.onDispose(() {
       _isDisposed = true;
       disconnectAndCleanup();
     });
 
-    return;
+    _isDisposed = false;
   }
 
   Future<void> reconnect() async {
@@ -35,55 +36,69 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     if (_connection != null) {
       return _connection!;
     }
-    return await _createNewConnection();
+    return _createNewConnection();
   }
 
   Future<HAConnection> _createNewConnection() async {
-    if (_isDisposed) {
-      throw Exception('ServerConnectionManager is disposed');
+    // If there's already a connection being created, wait for it
+    if (_connectionCompleter != null) {
+      logger.d('Lock by completer');
+      return _connectionCompleter!.future;
     }
 
-    final authRepository = ref.read(authRepositoryProvider);
-
-    final credOrError = await authRepository.getCredentials();
-
-    final authToken = credOrError.fold(
-      (error) {
-        logger.e("Failed to fetch credentials: $error");
-        throw Exception("Failed to fetch credentials: $error");
-      },
-      (credentials) => HAOAuth2Token(credentials),
-    );
-
-    final connOption = HAConnectionOption(
-      authToken,
-      onTokenRefresh: () async {
-        final refreshResult = await authRepository.getCredentials();
-        return refreshResult.fold(
-          (error) => throw Exception("Failed to refresh token: $error"),
-          (credentials) => HAOAuth2Token(credentials),
-        );
-      },
-    );
-
-    final connection = HAConnection(connOption);
-
-    connection.state.listen((state) {
-      _handleConnectionState(state);
-    });
+    _connectionCompleter = Completer<HAConnection>();
 
     try {
+      if (_isDisposed) {
+        throw Exception('ServerConnectionManager is disposed');
+      }
+
+      final serverUrl = await ref.read(serverSettingsProvider).getServerUrl();
+      if (serverUrl == null) {
+        throw Exception('Server URL is not configured');
+      }
+
+      final connOption = HAConnectionOption(
+        serverUrl: serverUrl,
+        fetchAuthToken: () async {
+          final authRepository = ref.read(authRepositoryProvider);
+          final fetchedCredentials = await authRepository.getCredentials();
+          return fetchedCredentials.fold(
+            (error) => throw Exception('Failed to refresh token: $error'),
+            (credentials) => HAOAuth2Token(credentials),
+          );
+        },
+      );
+
+      final connection = HAConnection(connOption);
+
+      connection.state.listen((state) {
+        _handleConnectionState(state);
+      });
+
       await connection.connect();
       _connection = connection;
+      _connectionCompleter!.complete(connection);
       return connection;
     } catch (e) {
+      _connectionCompleter!.completeError(e);
       logger.e('Connection failed: $e');
       rethrow;
+    } finally {
+      _connectionCompleter = null;
     }
   }
 
   void _handleConnectionState(HASocketState state) {
+    if (_isDisposed) {
+      return;
+    }
+
     switch (state) {
+      case Disconnected(type: DisconnectionType.authFailure):
+        disconnectAndCleanup();
+        ref.read(connectionStateProvider.notifier).setAuthFailure();
+        break;
       case Connecting():
         ref.read(connectionStateProvider.notifier).setConnecting();
         _stopHeartbeat();
@@ -96,9 +111,6 @@ class ServerConnectionManager extends _$ServerConnectionManager {
         ref.read(connectionStateProvider.notifier).setReconnecting();
         _stopHeartbeat();
         break;
-      case Disconnected(type: DisconnectionType.authFailure):
-        ref.read(authControllerProvider.notifier).signOut();
-        break;
       case Disconnected():
         ref.read(connectionStateProvider.notifier).setDisconnected();
         _stopHeartbeat();
@@ -108,11 +120,11 @@ class ServerConnectionManager extends _$ServerConnectionManager {
 
   void _startHeartbeat() {
     _stopHeartbeat();
-    _heartbeatTimer = Timer.periodic(const Duration(seconds: 10), (_) {
-      logger.d("Ping server");
+    _heartbeatTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      logger.d('Ping server');
       if (_connection != null) {
         HACommands.pingServer(_connection!).catchError((e) {
-          logger.e("Ping failed: $e");
+          logger.e('Ping failed: $e');
         });
       }
     });
@@ -124,9 +136,12 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   }
 
   void disconnectAndCleanup() {
-    ref.read(connectionStateProvider.notifier).reset();
+    if (!_isDisposed) {
+      ref.read(connectionStateProvider.notifier).reset();
+    }
     _stopHeartbeat();
     _connection?.close();
     _connection = null;
+    _connectionCompleter = null;
   }
 }

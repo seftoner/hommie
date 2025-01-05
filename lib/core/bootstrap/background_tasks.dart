@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:workmanager/workmanager.dart';
 
 /// Background tasks currently supported only on iOS and Android.
-/// TODO: Here will bi implemented sensing sensors to HomeAssistant
+/// TODO: Here will bi implemented sending sensors info to HomeAssistant
 Future<void> registerBackgroundTasks() async {
   if (Platform.isLinux ||
       Platform.isMacOS ||
@@ -44,4 +44,5 @@ Future<void> registerBackgroundTasks() async {
       inputData: <String, dynamic>{}, //ignored on iOS
     );
   }
+  logger.d('Init background task');
 }
