@@ -32,8 +32,12 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+
+# Integration tests
 docker/hass_init_conf/.initialized
+docker/hass_init_conf/.env
 integration_test/test_bundle.dart
+.patrol.env
 
 # Symbolication related
 app.*.symbols

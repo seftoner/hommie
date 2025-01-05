@@ -36,76 +36,10 @@ I want to add 'Companion App' functionality in the near future.
 
 ## Testing Setup & Execution
 
-### 1. Setup Home Assistant Test Instance
-Before running tests, you need a Home Assistant instance:
-
-1. Navigate to the docker directory
-2. Run `docker compose up`
-3. Access Home Assistant at `http://localhost:8123`
-
-Default credentials:
-- Username: `admin`
-- Password: `yourpassword`
-
-> [!NOTE]
-> Make sure you have Docker installed on your system.
-
-#### Docker Instance Details
-After first startup:
-- A `.initialized` file will be created in `docker/hass_init_conf/` directory
-  - This file prevents reconfiguration of HA server on subsequent runs
-- An `.env` file will be created with two important variables:
-  ```properties
-  HASS_SERVER=http://localhost:8123
-  HASS_TOKEN=your_long_lived_access_token
-  ```
-
-#### Configure Patrol Tests
-Before running integration tests:
-1. Copy the `HASS_TOKEN` value from `docker/hass_init_conf/.env`
-2. Create or edit `.patrol.env` in project root:
-   ```properties
-   HASS_TOKEN=your_long_lived_access_token
-   ```
-
-> [!IMPORTANT]
-> Integration tests will fail without proper token configuration in `.patrol.env`
-
-### 2. Setup Patrol CLI
-1. Install Patrol CLI:
-```bash
-dart pub global activate patrol_cli
-```
-
-2. Install platform-specific dependencies:
-```bash
-patrol doctor
-```
-
-### 3. Run Integration Tests
-
-You can run tests in two ways:
-
-#### Using VS Code
-You can run tests in two ways:
-- Open Command Palette (`Cmd/Ctrl + Shift + P`), type "Tasks: Run Test Task", and select `patrol: run tests`
-
-#### Using Command Line
-Regular test run:
-```bash
-patrol test
-```
-
-Development mode:
-```bash
-patrol develop -d "<your device name>" -t --watch integration_test/your_test.dart
-```
-
-> [!IMPORTANT]
-> Always ensure Home Assistant docker container is running before executing tests.
+For detailed information about setting up and running integration tests, please refer to our [Testing Guide](docs/testing.md).
 
 ## Contribution
 Contributions to this project are welcome! If you'd like to contribute, please fork the repository, make your changes, and submit a pull request. You can also open an issue to report bugs or suggest new features.
 
 ## License
-This project is licensed under the [MIT License](LICENSE.txt)
+This project is licensed under the [GPL-3.0 License](LICENSE)
