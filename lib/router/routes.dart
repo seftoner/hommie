@@ -31,7 +31,10 @@ final rootKey = GlobalKey<NavigatorState>(debugLabel: 'routerKey');
         TypedGoRoute<SettingsRouteData>(
           path: '/settings',
           routes: [
-            // TypedGoRoute<AboutRouteData>(path: 'about'),
+            TypedGoRoute<HubRouteData>(path: 'hub'),
+            TypedGoRoute<LogsRouteData>(path: 'logs'),
+            TypedGoRoute<AboutRouteData>(path: 'about'),
+            TypedGoRoute<SensorsRouteData>(path: 'sensors'),
           ],
         ),
       ],
@@ -40,7 +43,6 @@ final rootKey = GlobalKey<NavigatorState>(debugLabel: 'routerKey');
 )
 class MainShellRouteData extends StatefulShellRouteData {
   const MainShellRouteData();
-  // static final GlobalKey<NavigatorState> $navigatorKey = rootKey;
 
   @override
   Widget builder(
@@ -67,7 +69,6 @@ class SettingsRouteData extends GoRouteData {
   }
 }
 
-@TypedGoRoute<LogsRouteData>(path: '/settings/logs')
 class LogsRouteData extends GoRouteData {
   const LogsRouteData();
 
@@ -77,7 +78,6 @@ class LogsRouteData extends GoRouteData {
   }
 }
 
-@TypedGoRoute<AboutRouteData>(path: '/settings/about')
 class AboutRouteData extends GoRouteData {
   const AboutRouteData();
 
@@ -87,7 +87,6 @@ class AboutRouteData extends GoRouteData {
   }
 }
 
-@TypedGoRoute<SensorsRouteData>(path: '/settings/sensors')
 class SensorsRouteData extends GoRouteData {
   const SensorsRouteData();
 
@@ -97,7 +96,6 @@ class SensorsRouteData extends GoRouteData {
   }
 }
 
-@TypedGoRoute<HubRouteData>(path: '/settings/hub')
 class HubRouteData extends GoRouteData {
   const HubRouteData();
 

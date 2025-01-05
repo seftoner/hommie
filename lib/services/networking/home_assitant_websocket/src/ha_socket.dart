@@ -82,8 +82,6 @@ class HASocket {
         ),
         _authHandler = HAAuthHandler(
           authToken: authToken,
-          onAuthResult: null,
-          sendMessage: null,
         ) {
     _outerStreamController = StreamController.broadcast();
 

@@ -23,7 +23,6 @@ class EnterAddressPage extends HookConsumerWidget {
             top: MediaQuery.of(context).size.height * 0.2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.max,
           children: [
             TextField(
               key: K.manualAddress.addressField,

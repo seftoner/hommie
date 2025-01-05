@@ -15,12 +15,14 @@ linter:
     - prefer_const_constructors
     - prefer_const_literals_to_create_immutables
     - prefer_final_fields
+    - prefer_final_in_for_each
     - prefer_final_locals
     - prefer_is_empty
     - prefer_is_not_empty
     - unnecessary_null_aware_assignments
     - unnecessary_null_in_if_null_operators
     - unnecessary_this
+    - unnecessary_await_in_return
 
     # Style
     - always_declare_return_types
@@ -38,3 +40,6 @@ linter:
     - type_annotate_public_apis
     - unnecessary_const
     - unnecessary_new
+    - avoid_unnecessary_containers
+    - avoid_redundant_argument_values
+    - avoid_unused_constructor_parameters

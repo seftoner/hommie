@@ -51,7 +51,7 @@ class _CredentialsRepositoryMock implements ICredentialRepository {
   @override
   Future<Credentials?> read() {
     if (_isSigned != true) {
-      return Future.value(null);
+      return Future.value();
     }
 
     return Future.value(Credentials(

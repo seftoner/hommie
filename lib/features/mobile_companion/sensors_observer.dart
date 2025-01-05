@@ -9,7 +9,7 @@ class SensorObserver {
       {required List<ISensorProvider> providers, VoidCallback? onNewData})
       : _providers = providers {
     if (onNewData != null) {
-      for (var provider in _providers) {
+      for (final provider in _providers) {
         provider.onChange(() {
           onNewData();
         });
@@ -22,7 +22,7 @@ class SensorObserver {
       throw AssertionError('Providers list is empty');
     }
     final List<Sensor> resultList = [];
-    for (var provider in _providers) {
+    for (final provider in _providers) {
       resultList.addAll(await provider.provideSensorsState());
     }
     return resultList;

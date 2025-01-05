@@ -67,7 +67,7 @@ class HAServersRepository implements IHAServersRepository {
     final Map<String, String> resultMap = {};
 
     // Iterate over the pairs and split them by '=' to separate keys and values
-    for (var pair in txtPairs) {
+    for (final pair in txtPairs) {
       final keyValue = pair.split('=');
       if (keyValue.length == 2) {
         resultMap[keyValue[0]] = keyValue[1];

@@ -15,7 +15,6 @@ class OfflineBanner extends StatelessWidget {
       ),
       color: Theme.of(context).colorScheme.errorContainer,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Icon(
             Icons.wifi_off_rounded,

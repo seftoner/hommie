@@ -20,9 +20,7 @@ Logger testLogger = Logger(
   filter: TestsLoggerFilter(),
   printer: PrettyPrinter(
     colors: false,
-    dateTimeFormat: DateTimeFormat.none,
     noBoxingByDefault: true,
     printEmojis: false,
   ),
-  output: null,
 );

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_redundant_argument_values
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'hass_event.dart';
