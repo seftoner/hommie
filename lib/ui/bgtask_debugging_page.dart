@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, library_private_types_in_public_api
+// ignore_for_file: avoid_print, library_private_types_in_public_api, use_build_context_synchronously
 
 import 'dart:io';
 import 'dart:math';

@@ -100,7 +100,7 @@ class HassTokenManager {
     );
 
     if (token != null) {
-      return await _deleteToken(token['id']);
+      return _deleteToken(token['id']);
     }
 
     return false;
@@ -123,6 +123,6 @@ class HassTokenManager {
       return false;
     }
 
-    return await _deleteToken(token['id']);
+    return _deleteToken(token['id']);
   }
 }

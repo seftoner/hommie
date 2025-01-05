@@ -9,7 +9,6 @@ Future<void> bootstrap() async {
 
   final computer = Computer.shared();
   await computer.turnOn(
-    workersCount: 2,
     verbose: true,
   );
 

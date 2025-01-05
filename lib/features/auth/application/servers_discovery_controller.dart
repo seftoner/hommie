@@ -23,7 +23,7 @@ class ServersDiscoveryController extends _$ServersDiscoveryController {
   Future<List<HaServer>> _fetchServers() async {
     // state = const AsyncValue.loading();
     final repository = ref.watch(haServersRepositoryProvider);
-    return await repository.getAvailableServers();
+    return repository.getAvailableServers();
   }
 
   Future<void> refresh() async {
