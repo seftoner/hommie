@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v2.3
+        with:
+          version: 3.27.1
+          cache: true
+          channel: stable
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1.6.4
+        with:
+          sdk: 3.6.0
+      
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze project source
+        run: dart analyze
+
+      - name: Run tests
+        run: flutter test

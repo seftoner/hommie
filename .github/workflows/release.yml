@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Get Previous tag
+        id: previoustag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+        with:
+          fallback: 1.0.0
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release_branches: main
+          default_bump: patch
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v2.3
+        with:
+          version: 3.27.1
+          cache: true
+          channel: stable
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1.6.4
+        with:
+          sdk: 3.6.0
+      
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build
+        run: flutter build web
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          draft: false
+          prerelease: false
+          files: |
+            build/web/*

@@ -32,6 +32,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+docker/hass_init_conf/.initialized
+integration_test/test_bundle.dart
 
 # Symbolication related
 app.*.symbols
@@ -43,5 +45,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-integration_test/test_bundle.dart
-docker/hass_init_conf/.initialized
