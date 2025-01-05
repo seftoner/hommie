@@ -30,7 +30,6 @@ class HASocket {
   final HASocketConfig _config;
   final HAAuthHandler? _authHandler;
 
-  late final HaVersion _haVersion;
   late WebSocketChannel _innerChanel;
   bool _invalidAuth = false;
   late final StreamController<dynamic> _outerStreamController;
@@ -98,8 +97,8 @@ class HASocket {
       ..onAuthResult = (result) {
         switch (result) {
           case AuthResultSuccess(:final haVersion):
-            _haVersion = HaVersion.fromString(haVersion);
-            //send supported_features if HaVersion.isAtLeast(2022, 9) == true
+            HaVersion.fromString(haVersion);
+            //TODO: send supported_features if HaVersion.isAtLeast(2022, 9) == true
             _setState(HASocketState.authenticated());
             break;
           case AuthResultError(message: final message):

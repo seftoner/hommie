@@ -6,7 +6,7 @@ part of 'auth_state_handler.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authStateHandlerHash() => r'ee50103ab4e2001b134ec662365a3805a3a116f9';
+String _$authStateHandlerHash() => r'32a537de3e0c2ce54afdb770a2d701bf37f213a3';
 
 /// See also [authStateHandler].
 @ProviderFor(authStateHandler)
@@ -16,8 +16,16 @@ final authStateHandlerProvider = Provider<void>.internal(
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$authStateHandlerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[
+    authControllerProvider,
+    connectionStateProvider
+  ],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    authControllerProvider,
+    ...?authControllerProvider.allTransitiveDependencies,
+    connectionStateProvider,
+    ...?connectionStateProvider.allTransitiveDependencies
+  },
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')

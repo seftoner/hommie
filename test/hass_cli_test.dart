@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:flutter_test/flutter_test.dart';
 
 import '../integration_test/utils/hass_token_manager.dart';

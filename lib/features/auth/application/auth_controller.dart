@@ -13,7 +13,7 @@ import 'package:hommie/features/auth/application/auth_state.dart';
 
 part 'auth_controller.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [ServerConnectionManager])
 class AuthController extends _$AuthController {
   @override
   Future<AuthState> build() async {

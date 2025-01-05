@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
@@ -8,7 +9,7 @@ import 'package:hommie/services/networking/server_connection_manager.dart';
 
 part 'auth_state_handler.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [AuthController, ConnectionState])
 void authStateHandler(Ref ref) async {
   ref.listen(authControllerProvider, (previous, next) {
     if (previous == next || next.value == null) {
@@ -34,6 +35,12 @@ void authStateHandler(Ref ref) async {
         break;
       default:
         break;
+    }
+  });
+
+  ref.listen(connectionStateProvider, (_, next) {
+    if (next == HAServerConnectionState.authFailure) {
+      ref.read(authControllerProvider.notifier).signOut();
     }
   });
 

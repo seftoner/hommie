@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/services/networking/home_assitant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
@@ -98,7 +97,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     switch (state) {
       case Disconnected(type: DisconnectionType.authFailure):
         disconnectAndCleanup();
-        ref.read(authControllerProvider.notifier).signOut();
+        ref.read(connectionStateProvider.notifier).setAuthFailure();
         break;
       case Connecting():
         ref.read(connectionStateProvider.notifier).setConnecting();
