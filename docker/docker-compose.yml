@@ -1,0 +1,35 @@
+name: homeassistant-test
+
+services:
+  homeassistant:
+    image: homeassistant/home-assistant
+    container_name: homeassistant-test
+    environment:
+      - TZ=UTC
+      - USERNAME=admin
+      - PASSWORD=yourpassword
+    ports:
+      - "8123:8123"
+    volumes:
+      - ./hass_init_conf:/hass_init_conf
+      - ./scripts:/scripts
+    command: ["/bin/bash", "/scripts/hass-entrypoint.sh"]
+    restart: unless-stopped
+
+  # Web service wrapping hass-cli command line tool to allow execution via HTTP POST requests
+  # Used primarily for integration testing against Home Assistant instance
+  # Exposes hass-cli commands through REST API endpoints on port 3000
+  # Requires access to Home Assistant instance specified by HASS_URL environment variable
+  # Mounts configuration from ./hass_init_conf directory in read-only mode
+  hass-cli-web:
+    build:
+      context: .
+      dockerfile: Dockerfile.hass-cli-web
+    ports:
+      - "3000:3000"
+    environment:
+      - HASS_URL=http://homeassistant:8123
+    volumes:
+      - ./hass_init_conf:/hass_init_conf:ro
+    depends_on:
+      - homeassistant

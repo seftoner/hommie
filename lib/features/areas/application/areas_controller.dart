@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'areas_controller.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [areasRepository])
 class AreasController extends _$AreasController {
   @override
   Future<List<AreaEntity>> build() async {

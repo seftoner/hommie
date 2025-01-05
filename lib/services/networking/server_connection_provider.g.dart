@@ -6,7 +6,7 @@ part of 'server_connection_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverConnectionHash() => r'301fa8378dd9a65f3874f0f1755d1e469e493fe4';
+String _$serverConnectionHash() => r'38bf73f5d1451debf5374246b2c23b221f8c0d79';
 
 /// See also [serverConnection].
 @ProviderFor(serverConnection)
@@ -16,8 +16,11 @@ final serverConnectionProvider = FutureProvider<HAConnection>.internal(
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$serverConnectionHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[serverConnectionManagerProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    serverConnectionManagerProvider,
+    ...?serverConnectionManagerProvider.allTransitiveDependencies
+  },
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')

@@ -4,6 +4,7 @@ import 'package:hommie/features/auth/application/servers_discovery_controller.da
 import 'package:hommie/features/auth/presentation/widgets/w_available_severs_list_title.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_empty_state.dart';
 import 'package:hommie/router/routes.dart';
+import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -15,6 +16,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
     final discoveredServers = ref.watch(serversDiscoveryControllerProvider);
 
     return Scaffold(
+      key: K.serversDiscovery.page,
       appBar: AppBar(
         title: const Text('Servers Discovery'),
         centerTitle: false,
@@ -76,6 +78,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
             ),
             const SizedBox(height: 16),
             FilledButton.tonal(
+              key: K.serversDiscovery.enterManuallyButton,
               onPressed: () => {const EnterAddressRoute().push(context)},
               child: const Text('Enter addres manually'),
             ),
