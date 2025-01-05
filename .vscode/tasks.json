@@ -2,17 +2,31 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "dart",
+			"type": "shell",
 			"command": "dart",
 			"args": [
 				"run",
 				"build_runner",
-				"watch"
+				"watch",
+				"--delete-conflicting-outputs"
 			],
 			"group": "build",
+			"problemMatcher": [
+				"$dart-build_runner"
+			],
+			"label": "flutter: build_runner watch",
+			"detail": "Watch and build generated files"
+		},
+		{
+			"label": "patrol: run tests",
+			"type": "shell",
+			"command": "patrol",
+			"args": [
+				"test"
+			],
+			"group": "test",
 			"problemMatcher": [],
-			"label": "dart: build_runner watch",
-			"detail": ""
-		}
-	]
+			"detail": "Run patrol integration tests"
+		},
+	]	
 }

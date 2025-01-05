@@ -19,7 +19,7 @@ I want to add 'Companion App' functionality in the near future.
 ### Platforms
 1. iOS - ✅
 2. MacOS - ✅
-3. Android - ⚠️(Not tested)
+3. Android - ✅
 4. Windows - ⚠️(Not tested)
 5. Linux ⚠️(Not tested)
 
@@ -27,9 +27,51 @@ I want to add 'Companion App' functionality in the near future.
 1. Get dependencies `flutter pub get` 
 2. Run build_runer `dart run build_runner watch`
 
-## Integration Tests
-To run integration tests, you'll need to:
+> [!TIP]
+> VS Code users can use keyboard shortcut:
+> - macOS: `Cmd + Shift + P`, then type "Tasks: Run Build Task"
+> - Windows/Linux: `Ctrl + Shift + P`, then type "Tasks: Run Build Task"
+>   
+> Select `flutter: build_runner watch` from the task list.
 
+## Testing Setup & Execution
+
+### 1. Setup Home Assistant Test Instance
+Before running tests, you need a Home Assistant instance:
+
+1. Navigate to the docker directory
+2. Run `docker compose up`
+3. Access Home Assistant at `http://localhost:8123`
+
+Default credentials:
+- Username: `admin`
+- Password: `yourpassword`
+
+> [!NOTE]
+> Make sure you have Docker installed on your system.
+
+#### Docker Instance Details
+After first startup:
+- A `.initialized` file will be created in `docker/hass_init_conf/` directory
+  - This file prevents reconfiguration of HA server on subsequent runs
+- An `.env` file will be created with two important variables:
+  ```properties
+  HASS_SERVER=http://localhost:8123
+  HASS_TOKEN=your_long_lived_access_token
+  ```
+
+#### Configure Patrol Tests
+Before running integration tests:
+1. Copy the `HASS_TOKEN` value from `docker/hass_init_conf/.env`
+2. Create or edit `.patrol.env` in project root:
+   ```properties
+   HASS_TOKEN=your_long_lived_access_token
+   ```
+
+> [!IMPORTANT]
+> Integration tests will fail without proper token configuration in `.patrol.env`
+
+### 2. Setup Patrol CLI
 1. Install Patrol CLI:
 ```bash
 dart pub global activate patrol_cli
@@ -40,30 +82,27 @@ dart pub global activate patrol_cli
 patrol doctor
 ```
 
-3. Run the tests:
+### 3. Run Integration Tests
+
+You can run tests in two ways:
+
+#### Using VS Code
+You can run tests in two ways:
+- Open Command Palette (`Cmd/Ctrl + Shift + P`), type "Tasks: Run Test Task", and select `patrol: run tests`
+
+#### Using Command Line
+Regular test run:
 ```bash
 patrol test
 ```
 
-For developing tests:
+Development mode:
 ```bash
-patrol develop -d "<your device name>" -t  --watch integration_test/your_test.dart
+patrol develop -d "<your device name>" -t --watch integration_test/your_test.dart
 ```
 
-Note: Make sure your Home Assistant instance is running before executing integration tests.
-
-## Running Home Assistant for Testing
-To test the app with Home Assistant, you can use the provided Docker configuration:
-
-1. Navigate to the docker directory
-2. Run `docker-compose up`
-3. Access Home Assistant at `http://localhost:8123`
-
-Default credentials:
-- Username: `admin`
-- Password: `yourpassword`
-
-Note: Make sure you have Docker installed on your system before running these commands.
+> [!IMPORTANT]
+> Always ensure Home Assistant docker container is running before executing tests.
 
 ## Contribution
 Contributions to this project are welcome! If you'd like to contribute, please fork the repository, make your changes, and submit a pull request. You can also open an issue to report bugs or suggest new features.
