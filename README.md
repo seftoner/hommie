@@ -1,10 +1,10 @@
-# Hommie - Flutter Client for HomeAssistant
+# 🏠 Hommie - Flutter Client for HomeAssistant
 Welcome to Hommie! This project is all about crafting a stunning and user-friendly app for Home Assistant (HA) using Dart and Flutter. We chat with your Home Assistant via WebSocket API.
 
-## Why Hommie?
+## 💡 Why Hommie?
 Why not? We want a gorgeous, easy-to-use client for Home Assistant that works everywhere. Plus, it's a fun way to practice coding and dive into new tech!
 
-## Cool Features
+## ✨ Cool Features
 We're just getting started, but here's what's cooking:
 - **Authentication**: Secure login and logout. Tested on local networks.
   - Server Discovery: Finds Home Assistant servers on your local network and lists them for easy pickings.
@@ -12,14 +12,14 @@ We're just getting started, but here's what's cooking:
 - **Companion App**: (In Progress) Register the app on Home Assistant and send location and sensor data.
 - **Logs**: View and export app logs.
 
-### Platforms
+### 🖥️ Platforms
 1. iOS - ✅
 2. MacOS - ✅
 3. Android - ✅
 4. Windows - ⚠️ (Not tested)
 5. Linux - ⚠️ (Not tested)
 
-## Build & Run
+## 🚀 Build & Run
 1. Grab dependencies: `flutter pub get`
 2. Fire up build_runner: `dart run build_runner watch`
 
@@ -30,7 +30,7 @@ We're just getting started, but here's what's cooking:
 >   
 > Choose `flutter: build_runner watch` from the list.
 
-## Dev Workflow
+## 🛠️ Dev Workflow
 
 Before you dive in, check out our [Development Workflow Guide](docs/development_workflow.md). It covers:
 - Branching strategy
@@ -38,12 +38,12 @@ Before you dive in, check out our [Development Workflow Guide](docs/development_
 - Pull request process
 - Testing requirements
 
-## Testing Setup & Execution
+## 🧪 Testing Setup & Execution
 
 For all the deets on setting up and running tests, see our [Testing Guide](docs/testing.md).
 
-## Join the Fun
+## 🤝 Join the Fun
 We love contributions! Fork the repo, make your changes, and send a pull request. Or open an issue to report bugs or suggest features.
 
-## License
+## 📄 License
 This project rocks the [GPL-3.0 License](LICENSE).
