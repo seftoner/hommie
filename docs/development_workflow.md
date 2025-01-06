@@ -1,34 +1,34 @@
-# Development Workflow Guide
+# 🛠️ Development Workflow Guide
 
 This guide outlines our branching strategy, commit conventions, and development workflow.
 
-## Branching Strategy
+## 🌳 Branching Strategy
 
 We follow GitHub Flow - a lightweight, branch-based workflow that centers around the `main` branch.
 
-### Main Branch
+### 🎯 Main Branch
 - `main` - production-ready code that can be released at any time
 - Protected branch - requires pull request reviews
 - Direct commits are not allowed
 
-### Feature Branches
+### 🔨 Feature Branches
 - Branch from: `main`
 - Merge back into: `main`
 - Naming convention: `feature/ABC-123-short-description`
   - ABC-123: ticket/issue number
   - short-description: brief description using kebab-case
 
-### Bugfix Branches
+### 🐛 Bugfix Branches
 - Branch from: `main`
 - Merge back into: `main`
 - Naming convention: `fix/ABC-123-short-description`
 
-### Hotfix Branches
+### 🚑 Hotfix Branches
 - Branch from: `main`
 - Merge back into: `main`
 - Naming convention: `hotfix/ABC-123-short-description`
 
-## Development Process
+## 🔄 Development Process
 
 1. Create a new branch from `main`
 2. Implement changes
@@ -40,7 +40,7 @@ We follow GitHub Flow - a lightweight, branch-based workflow that centers around
 > [!IMPORTANT]
 > All new features **MUST** be covered by tests. Pull requests without proper test coverage will not be approved.
 
-## Commit Message Format
+## 📝 Commit Message Format
 
 We follow the Conventional Commits specification:
 
@@ -52,16 +52,16 @@ We follow the Conventional Commits specification:
 [optional footer(s)]
 ```
 
-### Types
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style changes (formatting, missing semi-colons, etc)
-- `refactor`: Code refactoring
-- `test`: Adding missing tests
-- `chore`: Changes to build process or auxiliary tools
+### 🏷️ Types
+- `feat`: ✨ New feature
+- `fix`: 🐛 Bug fix
+- `docs`: 📚 Documentation changes
+- `style`: 💅 Code style changes (formatting, missing semi-colons, etc)
+- `refactor`: ♻️ Code refactoring
+- `test`: ✅ Adding missing tests
+- `chore`: 🔧 Changes to build process or auxiliary tools
 
-### Scope
+### 🎯 Scope
 Optional scope for providing additional contextual information.
 
 Examples:
@@ -71,12 +71,12 @@ fix(ui): correct button alignment on iOS
 test(login): add integration tests for login flow
 ```
 
-### Description
+### ✍️ Description
 - Use imperative, present tense: "change" not "changed" nor "changes"
 - Don't capitalize first letter
 - No period (.) at the end
 
-## Pull Request Process
+## 🔍 Pull Request Process
 
 1. Ensure branch is up to date with `main`
 2. Write meaningful PR description
