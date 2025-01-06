@@ -17,4 +17,4 @@ docker compose down
 rm -f hass_init_conf/.initialized
 rm -f hass_init_conf/.env
 
-echo "Test environment cleanup complete!"
+echo "✅ Test environment cleanup complete!"
