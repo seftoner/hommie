@@ -38,7 +38,7 @@ We follow GitHub Flow - a lightweight, branch-based workflow that centers around
 6. Merge to `main`
 
 > [!IMPORTANT]
-> All new features MUST be covered by tests. Pull requests without proper test coverage will not be approved.
+> All new features **MUST** be covered by tests. Pull requests without proper test coverage will not be approved.
 
 ## Commit Message Format
 

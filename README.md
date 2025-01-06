@@ -34,6 +34,14 @@ I want to add 'Companion App' functionality in the near future.
 >   
 > Select `flutter: build_runner watch` from the task list.
 
+## Development Workflow
+
+Before contributing, please familiarize yourself with our [Development Workflow Guide](docs/development_workflow.md). This guide covers:
+- Branching strategy
+- Commit message format
+- Pull request process
+- Testing requirements
+
 ## Testing Setup & Execution
 
 For detailed information about setting up and running integration tests, please refer to our [Testing Guide](docs/testing.md).
