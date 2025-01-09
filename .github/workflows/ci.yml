@@ -10,17 +10,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v2.3
+        uses: flutter-actions/setup-flutter@v4.0
         with:
           version: 3.27.1
           cache: true
           channel: stable
 
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1.6.4
+        uses: dart-lang/setup-dart@v1.7.0
         with:
           sdk: 3.6.0
       
