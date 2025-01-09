@@ -1,4 +1,8 @@
 # 🏠 Hommie - Flutter Client for HomeAssistant
+
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)](LICENSE)
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-blue)](https://flutter.dev)
+
 Welcome to Hommie! This project is all about crafting a stunning and user-friendly app for Home Assistant (HA) using Dart and Flutter. We chat with your Home Assistant via WebSocket API.
 
 ## 💡 Why Hommie?
@@ -18,6 +22,12 @@ We're just getting started, but here's what's cooking:
 3. Android - ✅
 4. Windows - ⚠️ (Not tested)
 5. Linux - ⚠️ (Not tested)
+
+## 🛠️ Development Requirements
+- Flutter SDK 3.24 or higher
+- Dart SDK 3.6 or higher
+- Android Studio / VS Code with Flutter extensions
+- A running Home Assistant instance for testing
 
 ## 🚀 Build & Run
 1. Grab dependencies: `flutter pub get`
