@@ -66,10 +66,10 @@ packages:
     dependency: "direct dev"
     description:
       name: bdd_widget_test
-      sha256: "7cecee3535f80242c5b2c37a08bc7b5113f8e6369d5f436a166c2aa417d70bf9"
+      sha256: dbe1d5b2746662e6f8203d751b3fb7a4bb83d08b72c21e6d1ab6abe752b87ff4
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.4"
+    version: "1.7.6"
   boolean_selector:
     dependency: transitive
     description:
