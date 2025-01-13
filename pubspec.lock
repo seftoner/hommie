@@ -854,18 +854,18 @@ packages:
     dependency: "direct dev"
     description:
       name: patrol_finders
-      sha256: "6dfa07aa951f1d769f0a736f4fd4eb63d99ef32931aaaa39e0d24126ddfe9cd9"
+      sha256: "5a1e2b4c6636e89645fc596d68224cfe6cca28e11c855b98dd0df9bed0d80405"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.1"
+    version: "2.6.0"
   patrol_log:
     dependency: transitive
     description:
       name: patrol_log
-      sha256: fb67013a5305cfd30a374cce3c5ea5a99613335d8cf31c250ecb0dda75deec21
+      sha256: ad5d7b759d16071ca16aa9b27eb4f106ce23079792d4312941874dbc33e795cb
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1"
+    version: "0.2.2"
   permission_handler:
     dependency: "direct main"
     description:
