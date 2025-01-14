@@ -5,7 +5,6 @@ import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
 import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hommie/features/auth/application/auth_state_handler.dart';
 
 class HommieApp extends StatelessWidget {
