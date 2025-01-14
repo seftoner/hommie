@@ -27,9 +27,8 @@ class _RootAppWidget extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: ref.read(goRouterProvider),
-      theme: HommieMaterialTheme(
-              Typography.material2021(platform: defaultTargetPlatform).black)
-          .light(),
+      theme: HommieMaterialTheme.platform().light(),
+      darkTheme: HommieMaterialTheme.platformDark().dark(),
       supportedLocales: const [
         Locale('en', ''),
       ],

@@ -11,39 +11,50 @@ class EnterAddressPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final haServerURLController =
         useTextEditingController(text: 'http://192.168.0.');
-
     return Scaffold(
       key: K.manualAddress.page,
-      appBar: AppBar(title: const Text('Enter your hub address')),
-      body: Padding(
-        padding: EdgeInsets.only(
-            bottom: 16,
-            left: 16,
-            right: 16,
-            top: MediaQuery.of(context).size.height * 0.2),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              key: K.manualAddress.addressField,
-              controller: haServerURLController,
-              decoration: const InputDecoration(
-                labelText: 'Hub address',
+      appBar: AppBar(),
+      //title: const Text('Enter your hub address')
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 16.0,
+                  bottom: 24.0,
+                ),
+                child: Text(
+                  'Enter your hub address',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
               ),
-              onSubmitted: (value) =>
-                  ref.read(authControllerProvider.notifier).login(value),
-            ),
-            const Spacer(),
-            FilledButton(
-              key: K.manualAddress.connectButton,
-              style: FilledButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor),
-              onPressed: () => ref
-                  .read(authControllerProvider.notifier)
-                  .login(haServerURLController.text),
-              child: const Text('Connect'),
-            ),
-          ],
+              Expanded(
+                child: Center(
+                  child: TextField(
+                    key: K.manualAddress.addressField,
+                    controller: haServerURLController,
+                    decoration: const InputDecoration(
+                      labelText: 'Hub address',
+                      border: OutlineInputBorder(),
+                    ),
+                    onSubmitted: (value) =>
+                        ref.read(authControllerProvider.notifier).login(value),
+                  ),
+                ),
+              ),
+              const Spacer(),
+              FilledButton(
+                key: K.manualAddress.connectButton,
+                onPressed: () => ref
+                    .read(authControllerProvider.notifier)
+                    .login(haServerURLController.text),
+                child: const Text('Connect'),
+              ),
+            ],
+          ),
         ),
       ),
     );
