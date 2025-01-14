@@ -5,7 +5,6 @@ import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
 import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hommie/features/auth/application/auth_state_handler.dart';
 
 class HommieApp extends StatelessWidget {
@@ -27,9 +26,8 @@ class _RootAppWidget extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: ref.read(goRouterProvider),
-      theme: HommieMaterialTheme(
-              Typography.material2021(platform: defaultTargetPlatform).black)
-          .light(),
+      theme: HommieMaterialTheme.platform().light(),
+      darkTheme: HommieMaterialTheme.platformDark().dark(),
       supportedLocales: const [
         Locale('en', ''),
       ],
