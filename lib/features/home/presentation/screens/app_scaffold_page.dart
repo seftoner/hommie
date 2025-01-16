@@ -20,16 +20,16 @@ class AppScaffoldPage extends HookConsumerWidget {
           );
         },
         selectedIndex: navigationShell.currentIndex,
-        destinations: <Widget>[
+        destinations: [
           NavigationDestination(
             key: K.appScaffold.homeButton,
             icon: const Icon(Icons.home_rounded),
             label: 'Home',
           ),
           NavigationDestination(
-            key: K.appScaffold.settingsButton,
-            icon: const Icon(Icons.settings_rounded),
-            label: 'Settings',
+            key: K.appScaffold.automationButton,
+            icon: const Icon(Icons.bolt_rounded),
+            label: 'Automations',
           ),
         ],
       ),

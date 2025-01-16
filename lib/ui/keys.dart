@@ -39,13 +39,14 @@ class HomeKeys {
   const HomeKeys();
 
   final page = const Key('hommiePage');
+  final settingsButton = const Key('settingsButton');
 }
 
 class AppScaffoldKeys {
   const AppScaffoldKeys();
 
   final homeButton = const Key('homeButton');
-  final settingsButton = const Key('settingsButton');
+  final automationButton = const Key('automationButton');
 }
 
 class SettingsKeys {

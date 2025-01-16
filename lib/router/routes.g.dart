@@ -8,10 +8,7 @@ part of 'routes.dart';
 
 List<RouteBase> get $appRoutes => [
       $mainShellRouteData,
-      $logsRouteData,
-      $aboutRouteData,
-      $sensorsRouteData,
-      $hubRouteData,
+      $settingsRouteData,
       $dicoveryRoute,
       $enterAddressRoute,
       $startupRoute,
@@ -31,8 +28,8 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
-              path: '/settings',
-              factory: $SettingsRouteDataExtension._fromState,
+              path: '/automations',
+              factory: $AutomationsRouteDataExtension._fromState,
             ),
           ],
         ),
@@ -61,6 +58,47 @@ extension $HomeRouteDataExtension on HomeRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
+extension $AutomationsRouteDataExtension on AutomationsRouteData {
+  static AutomationsRouteData _fromState(GoRouterState state) =>
+      const AutomationsRouteData();
+
+  String get location => GoRouteData.$location(
+        '/automations',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $settingsRouteData => GoRouteData.$route(
+      path: '/settings',
+      factory: $SettingsRouteDataExtension._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: 'hub',
+          factory: $HubRouteDataExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'logs',
+          factory: $LogsRouteDataExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'about',
+          factory: $AboutRouteDataExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'sensors',
+          factory: $SensorsRouteDataExtension._fromState,
+        ),
+      ],
+    );
+
 extension $SettingsRouteDataExtension on SettingsRouteData {
   static SettingsRouteData _fromState(GoRouterState state) =>
       const SettingsRouteData();
@@ -79,10 +117,22 @@ extension $SettingsRouteDataExtension on SettingsRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $logsRouteData => GoRouteData.$route(
-      path: '/settings/logs',
-      factory: $LogsRouteDataExtension._fromState,
-    );
+extension $HubRouteDataExtension on HubRouteData {
+  static HubRouteData _fromState(GoRouterState state) => const HubRouteData();
+
+  String get location => GoRouteData.$location(
+        '/settings/hub',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
 
 extension $LogsRouteDataExtension on LogsRouteData {
   static LogsRouteData _fromState(GoRouterState state) => const LogsRouteData();
@@ -100,11 +150,6 @@ extension $LogsRouteDataExtension on LogsRouteData {
 
   void replace(BuildContext context) => context.replace(location);
 }
-
-RouteBase get $aboutRouteData => GoRouteData.$route(
-      path: '/settings/about',
-      factory: $AboutRouteDataExtension._fromState,
-    );
 
 extension $AboutRouteDataExtension on AboutRouteData {
   static AboutRouteData _fromState(GoRouterState state) =>
@@ -124,39 +169,12 @@ extension $AboutRouteDataExtension on AboutRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $sensorsRouteData => GoRouteData.$route(
-      path: '/settings/sensors',
-      factory: $SensorsRouteDataExtension._fromState,
-    );
-
 extension $SensorsRouteDataExtension on SensorsRouteData {
   static SensorsRouteData _fromState(GoRouterState state) =>
       const SensorsRouteData();
 
   String get location => GoRouteData.$location(
         '/settings/sensors',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $hubRouteData => GoRouteData.$route(
-      path: '/settings/hub',
-      factory: $HubRouteDataExtension._fromState,
-    );
-
-extension $HubRouteDataExtension on HubRouteData {
-  static HubRouteData _fromState(GoRouterState state) => const HubRouteData();
-
-  String get location => GoRouteData.$location(
-        '/settings/hub',
       );
 
   void go(BuildContext context) => context.go(location);

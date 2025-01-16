@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hommie/core/bootstrap/app_startup.dart';
 import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
+import 'package:hommie/features/automation/presentation/automations_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
@@ -26,16 +27,10 @@ final rootKey = GlobalKey<NavigatorState>(debugLabel: 'routerKey');
         ),
       ],
     ),
-    TypedStatefulShellBranch<SettingsShellBranchData>(
+    TypedStatefulShellBranch<AutomationsShellBranchData>(
       routes: [
-        TypedGoRoute<SettingsRouteData>(
-          path: '/settings',
-          routes: [
-            TypedGoRoute<HubRouteData>(path: 'hub'),
-            TypedGoRoute<LogsRouteData>(path: 'logs'),
-            TypedGoRoute<AboutRouteData>(path: 'about'),
-            TypedGoRoute<SensorsRouteData>(path: 'sensors'),
-          ],
+        TypedGoRoute<AutomationsRouteData>(
+          path: '/automations',
         ),
       ],
     ),
@@ -56,10 +51,28 @@ class MainShellRouteData extends StatefulShellRouteData {
   }
 }
 
-class SettingsShellBranchData extends StatefulShellBranchData {
-  const SettingsShellBranchData();
+class AutomationsShellBranchData extends StatefulShellBranchData {
+  const AutomationsShellBranchData();
 }
 
+class AutomationsRouteData extends GoRouteData {
+  const AutomationsRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const AutomationsPage();
+  }
+}
+
+@TypedGoRoute<SettingsRouteData>(
+  path: '/settings',
+  routes: [
+    TypedGoRoute<HubRouteData>(path: 'hub'),
+    TypedGoRoute<LogsRouteData>(path: 'logs'),
+    TypedGoRoute<AboutRouteData>(path: 'about'),
+    TypedGoRoute<SensorsRouteData>(path: 'sensors'),
+  ],
+)
 class SettingsRouteData extends GoRouteData {
   const SettingsRouteData();
 
@@ -114,7 +127,7 @@ class HomeRouteData extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const HomePage();
+    return HomePage();
   }
 }
 
