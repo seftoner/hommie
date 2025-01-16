@@ -537,6 +537,7 @@ extension MaterialSchemeUtils on MaterialScheme {
         errorContainer: errorContainer,
         onErrorContainer: onErrorContainer,
         surface: surface,
+        surfaceTint: surfaceTint,
         onSurface: onSurface,
         surfaceContainerHighest: surfaceVariant,
         onSurfaceVariant: onSurfaceVariant,
@@ -549,7 +550,10 @@ extension MaterialSchemeUtils on MaterialScheme {
         inversePrimary: inversePrimary,
         surfaceContainer: surfaceContainer,
         surfaceDim: surfaceDim,
-        surfaceBright: surfaceBright);
+        surfaceBright: surfaceBright,
+        surfaceContainerHigh: surfaceContainerHigh,
+        surfaceContainerLow: surfaceContainerLow,
+        surfaceContainerLowest: surfaceContainerLowest);
   }
 }
 

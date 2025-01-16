@@ -100,7 +100,7 @@ class EnterAddressManually extends StatelessWidget {
           'Not finding your screen?',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
         ),
         $h16,

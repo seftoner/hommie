@@ -44,6 +44,7 @@ dependencies:
       url: https://github.com/fluttercommunity/flutter_workmanager.git
       ref: main
       path: workmanager/
+  reorderable_staggered_scroll_view: ^0.0.2
 
 dev_dependencies:
   bdd_widget_test: ^1.7.6
