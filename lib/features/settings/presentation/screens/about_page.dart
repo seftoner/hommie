@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends HookConsumerWidget {
   const AboutPage({super.key});
+
+  Future<void> _launchGithub() async {
+    final Uri url = Uri.parse('https://github.com/seftoner/hommie');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,7 +24,7 @@ class AboutPage extends HookConsumerWidget {
             leading: const Icon(Icons.code),
             title: const Text('Git hub'),
             trailing: const Icon(Icons.open_in_new_rounded),
-            onTap: () => {/* Handle  tap */},
+            onTap: _launchGithub,
           ),
           const Divider(),
           ListTile(

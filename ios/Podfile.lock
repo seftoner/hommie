@@ -86,7 +86,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   battery_plus: 34f72fa2afeeea83bbae306c72a25828d3ec727a
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  connectivity_plus: 4c41c08fc6d7c91f63bc7aec70ffe3730b04f563
+  connectivity_plus: 18382e7311ba19efcaee94442b23b32507b20695
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
   flutter_web_auth_2: 06d500582775790a0d4c323222fcb6d7990f9603
