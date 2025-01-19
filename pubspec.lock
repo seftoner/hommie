@@ -319,6 +319,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  drag_arrange:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: e9e9ad8b55f6f758ffa3012ed642d445433ebfd2
+      url: "https://github.com/seftoner/drag_arrange.git"
+    source: git
+    version: "0.0.3"
   equatable:
     dependency: transitive
     description:
@@ -978,14 +987,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
-  reorderable_staggered_scroll_view:
-    dependency: "direct main"
-    description:
-      name: reorderable_staggered_scroll_view
-      sha256: "2d4d23be9e2bf833d765b256d2527e74e37957bc623ce13db7a7f507793ba6dc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
   riverpod:
     dependency: transitive
     description:

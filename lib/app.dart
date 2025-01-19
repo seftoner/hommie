@@ -25,6 +25,7 @@ class _RootAppWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      showPerformanceOverlay: false,
       routerConfig: ref.read(goRouterProvider),
       theme: HommieMaterialTheme.platform().light(),
       darkTheme: HommieMaterialTheme.platformDark().dark(),
