@@ -64,7 +64,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
           final authRepository = ref.read(authRepositoryProvider);
           final fetchedCredentials = await authRepository.getCredentials();
           return fetchedCredentials.fold(
-            (error) => throw Exception('Failed to refresh token: $error'),
+            (error) => throw ConnectionError('Failed to refresh token: $error'),
             (credentials) => HAOAuth2Token(credentials),
           );
         },
