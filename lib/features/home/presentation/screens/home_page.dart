@@ -23,13 +23,16 @@ class HomePage extends ConsumerWidget {
               centerTitle: false,
               actions: [
                 if (homeState.isEditing)
-                  FilledButton(
-                    onPressed: () {
-                      ref
-                          .read(homePageControllerProvider.notifier)
-                          .toggleEditMode();
-                    },
-                    child: const Text('Done'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: FilledButton(
+                      onPressed: () {
+                        ref
+                            .read(homePageControllerProvider.notifier)
+                            .toggleEditMode();
+                      },
+                      child: const Text('Done'),
+                    ),
                   )
                 else
                   MenuAnchor(
