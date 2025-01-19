@@ -5,7 +5,7 @@ import 'package:hommie/router/routes.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class HomePage extends HookConsumerWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
@@ -146,7 +146,7 @@ class RoomGroup extends StatelessWidget {
         print('Navigate to $roomName');
       },
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(4, 0, 0, 4),
+        padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Row(
           children: [
             Text(
