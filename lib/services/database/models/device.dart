@@ -1,5 +1,6 @@
 import 'package:isar/isar.dart';
 import 'area.dart';
+import 'ha_server.dart';
 
 part 'device.g.dart';
 
@@ -20,6 +21,9 @@ class Device {
   int position;
 
   final area = IsarLink<Area>();
+
+  @ignore
+  HaServer get server => area.value!.server;
 
   Device({
     required this.haId,
