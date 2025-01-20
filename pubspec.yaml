@@ -48,6 +48,12 @@ dependencies:
   drag_arrange:
     git:
       url: https://github.com/seftoner/drag_arrange.git
+  isar:
+    hosted: https://pub.isar-community.dev
+    version: ^3.1.8
+  isar_flutter_libs:
+    hosted: https://pub.isar-community.dev
+    version: ^3.1.8
 
 dev_dependencies:
   bdd_widget_test: ^1.7.6
@@ -62,6 +68,9 @@ dev_dependencies:
   go_router_builder: ^2.7.3
   integration_test:
     sdk: flutter
+  isar_generator:
+    hosted: https://pub.isar-community.dev
+    version: ^3.1.8
   json_serializable: ^6.9.0
   mockito: ^5.4.5
   patrol: ^3.13.2
