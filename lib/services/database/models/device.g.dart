@@ -22,23 +22,13 @@ const DeviceSchema = CollectionSchema(
       name: r'haId',
       type: IsarType.string,
     ),
-    r'isHidden': PropertySchema(
-      id: 1,
-      name: r'isHidden',
-      type: IsarType.bool,
-    ),
     r'name': PropertySchema(
-      id: 2,
+      id: 1,
       name: r'name',
       type: IsarType.string,
     ),
-    r'position': PropertySchema(
-      id: 3,
-      name: r'position',
-      type: IsarType.long,
-    ),
     r'type': PropertySchema(
-      id: 4,
+      id: 2,
       name: r'type',
       type: IsarType.string,
     )
@@ -59,32 +49,6 @@ const DeviceSchema = CollectionSchema(
           name: r'haId',
           type: IndexType.hash,
           caseSensitive: true,
-        )
-      ],
-    ),
-    r'isHidden': IndexSchema(
-      id: 1012074769999104596,
-      name: r'isHidden',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'isHidden',
-          type: IndexType.value,
-          caseSensitive: false,
-        )
-      ],
-    ),
-    r'position': IndexSchema(
-      id: 5117117876086213592,
-      name: r'position',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'position',
-          type: IndexType.value,
-          caseSensitive: false,
         )
       ],
     )
@@ -123,10 +87,8 @@ void _deviceSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.haId);
-  writer.writeBool(offsets[1], object.isHidden);
-  writer.writeString(offsets[2], object.name);
-  writer.writeLong(offsets[3], object.position);
-  writer.writeString(offsets[4], object.type);
+  writer.writeString(offsets[1], object.name);
+  writer.writeString(offsets[2], object.type);
 }
 
 Device _deviceDeserialize(
@@ -137,10 +99,8 @@ Device _deviceDeserialize(
 ) {
   final object = Device(
     haId: reader.readString(offsets[0]),
-    isHidden: reader.readBoolOrNull(offsets[1]) ?? false,
-    name: reader.readString(offsets[2]),
-    position: reader.readLong(offsets[3]),
-    type: reader.readString(offsets[4]),
+    name: reader.readString(offsets[1]),
+    type: reader.readString(offsets[2]),
   );
   object.id = id;
   return object;
@@ -156,12 +116,8 @@ P _deviceDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
-    case 2:
       return (reader.readString(offset)) as P;
-    case 3:
-      return (reader.readLong(offset)) as P;
-    case 4:
+    case 2:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -239,22 +195,6 @@ extension DeviceQueryWhereSort on QueryBuilder<Device, Device, QWhere> {
   QueryBuilder<Device, Device, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterWhere> anyIsHidden() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'isHidden'),
-      );
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterWhere> anyPosition() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'position'),
-      );
     });
   }
 }
@@ -365,141 +305,6 @@ extension DeviceQueryWhere on QueryBuilder<Device, Device, QWhereClause> {
               includeUpper: false,
             ));
       }
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterWhereClause> isHiddenEqualTo(
-      bool isHidden) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'isHidden',
-        value: [isHidden],
-      ));
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterWhereClause> isHiddenNotEqualTo(
-      bool isHidden) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'isHidden',
-              lower: [],
-              upper: [isHidden],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'isHidden',
-              lower: [isHidden],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'isHidden',
-              lower: [isHidden],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'isHidden',
-              lower: [],
-              upper: [isHidden],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterWhereClause> positionEqualTo(
-      int position) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'position',
-        value: [position],
-      ));
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterWhereClause> positionNotEqualTo(
-      int position) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [],
-              upper: [position],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [position],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [position],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [],
-              upper: [position],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterWhereClause> positionGreaterThan(
-    int position, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'position',
-        lower: [position],
-        includeLower: include,
-        upper: [],
-      ));
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterWhereClause> positionLessThan(
-    int position, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'position',
-        lower: [],
-        upper: [position],
-        includeUpper: include,
-      ));
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterWhereClause> positionBetween(
-    int lowerPosition,
-    int upperPosition, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'position',
-        lower: [lowerPosition],
-        includeLower: includeLower,
-        upper: [upperPosition],
-        includeUpper: includeUpper,
-      ));
     });
   }
 }
@@ -686,16 +491,6 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> isHiddenEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isHidden',
-        value: value,
-      ));
-    });
-  }
-
   QueryBuilder<Device, Device, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -821,59 +616,6 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'name',
         value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterFilterCondition> positionEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'position',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterFilterCondition> positionGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'position',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterFilterCondition> positionLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'position',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterFilterCondition> positionBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'position',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
       ));
     });
   }
@@ -1038,18 +780,6 @@ extension DeviceQuerySortBy on QueryBuilder<Device, Device, QSortBy> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> sortByIsHidden() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isHidden', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterSortBy> sortByIsHiddenDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isHidden', Sort.desc);
-    });
-  }
-
   QueryBuilder<Device, Device, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1059,18 +789,6 @@ extension DeviceQuerySortBy on QueryBuilder<Device, Device, QSortBy> {
   QueryBuilder<Device, Device, QAfterSortBy> sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterSortBy> sortByPosition() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'position', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterSortBy> sortByPositionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'position', Sort.desc);
     });
   }
 
@@ -1112,18 +830,6 @@ extension DeviceQuerySortThenBy on QueryBuilder<Device, Device, QSortThenBy> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> thenByIsHidden() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isHidden', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterSortBy> thenByIsHiddenDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isHidden', Sort.desc);
-    });
-  }
-
   QueryBuilder<Device, Device, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1133,18 +839,6 @@ extension DeviceQuerySortThenBy on QueryBuilder<Device, Device, QSortThenBy> {
   QueryBuilder<Device, Device, QAfterSortBy> thenByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterSortBy> thenByPosition() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'position', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Device, Device, QAfterSortBy> thenByPositionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'position', Sort.desc);
     });
   }
 
@@ -1169,22 +863,10 @@ extension DeviceQueryWhereDistinct on QueryBuilder<Device, Device, QDistinct> {
     });
   }
 
-  QueryBuilder<Device, Device, QDistinct> distinctByIsHidden() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'isHidden');
-    });
-  }
-
   QueryBuilder<Device, Device, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Device, Device, QDistinct> distinctByPosition() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'position');
     });
   }
 
@@ -1209,21 +891,9 @@ extension DeviceQueryProperty on QueryBuilder<Device, Device, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Device, bool, QQueryOperations> isHiddenProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isHidden');
-    });
-  }
-
   QueryBuilder<Device, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
-    });
-  }
-
-  QueryBuilder<Device, int, QQueryOperations> positionProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'position');
     });
   }
 

@@ -48,7 +48,15 @@ const HaServerSchema = CollectionSchema(
       ],
     )
   },
-  links: {},
+  links: {
+    r'homeConfig': LinkSchema(
+      id: -303462602275147907,
+      name: r'homeConfig',
+      target: r'HomeViewConfig',
+      single: true,
+      linkName: r'haServer',
+    )
+  },
   embeddedSchemas: {},
   getId: _haServerGetId,
   getLinks: _haServerGetLinks,
@@ -112,11 +120,13 @@ Id _haServerGetId(HaServer object) {
 }
 
 List<IsarLinkBase<dynamic>> _haServerGetLinks(HaServer object) {
-  return [];
+  return [object.homeConfig];
 }
 
 void _haServerAttach(IsarCollection<dynamic> col, Id id, HaServer object) {
   object.id = id;
+  object.homeConfig
+      .attach(col, col.isar.collection<HomeViewConfig>(), r'homeConfig', id);
 }
 
 extension HaServerByIndex on IsarCollection<HaServer> {
@@ -611,7 +621,20 @@ extension HaServerQueryObject
     on QueryBuilder<HaServer, HaServer, QFilterCondition> {}
 
 extension HaServerQueryLinks
-    on QueryBuilder<HaServer, HaServer, QFilterCondition> {}
+    on QueryBuilder<HaServer, HaServer, QFilterCondition> {
+  QueryBuilder<HaServer, HaServer, QAfterFilterCondition> homeConfig(
+      FilterQuery<HomeViewConfig> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'homeConfig');
+    });
+  }
+
+  QueryBuilder<HaServer, HaServer, QAfterFilterCondition> homeConfigIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'homeConfig', 0, true, 0, true);
+    });
+  }
+}
 
 extension HaServerQuerySortBy on QueryBuilder<HaServer, HaServer, QSortBy> {
   QueryBuilder<HaServer, HaServer, QAfterSortBy> sortByName() {

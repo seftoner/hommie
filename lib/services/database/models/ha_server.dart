@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import 'home_view.dart';
 
 part 'ha_server.g.dart';
 
@@ -10,6 +11,9 @@ class HaServer {
 
   @Index(unique: true)
   String uri;
+
+  @Backlink(to: 'haServer')
+  final homeConfig = IsarLink<HomeViewConfig>();
 
   HaServer({
     required this.name,

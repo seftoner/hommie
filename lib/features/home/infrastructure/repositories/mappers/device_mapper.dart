@@ -11,8 +11,6 @@ class DeviceMapper implements BaseMapper<Device, db.Device> {
         id: device.haId,
         name: device.name,
         type: device.type,
-        isHidden: device.isHidden,
-        position: device.position,
         areaId: device.area.value?.haId ?? '',
       );
 
@@ -21,7 +19,5 @@ class DeviceMapper implements BaseMapper<Device, db.Device> {
         haId: device.id,
         name: device.name,
         type: device.type,
-        isHidden: device.isHidden,
-        position: device.position,
       );
 }

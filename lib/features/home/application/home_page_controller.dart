@@ -1,3 +1,5 @@
+import 'package:hommie/features/home/domain/entities/area.dart';
+import 'package:hommie/features/home/infrastructure/providers/area_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_page_controller.g.dart';
@@ -5,32 +7,31 @@ part 'home_page_controller.g.dart';
 class HomePageState {
   final bool isEditing;
   final bool isReordering;
-  final Map<String, List<DeviceItem>> rooms;
+  final List<Area> areas;
 
-  const HomePageState({
-    this.isEditing = false,
-    this.isReordering = false,
-    this.rooms = const {},
-  });
+  const HomePageState(
+      {this.isEditing = false,
+      this.isReordering = false,
+      this.areas = const []});
 
   HomePageState copyWith({
     bool? isEditing,
     bool? isReordering,
-    Map<String, List<DeviceItem>>? rooms,
+    List<Area>? areas,
   }) =>
       HomePageState(
         isEditing: isEditing ?? this.isEditing,
         isReordering: isReordering ?? this.isReordering,
-        rooms: rooms ?? this.rooms,
+        areas: areas ?? this.areas,
       );
 }
 
 @riverpod
 class HomePageController extends _$HomePageController {
   @override
-  HomePageState build() {
-    return const HomePageState(
-      rooms: {
+  Future<HomePageState> build() async {
+    /*  return const HomePageState(
+      areas: {
         'Living Room': [
           DeviceItem(id: '1', name: 'Light', isBig: true),
           DeviceItem(id: '2', name: 'TV', isBig: false),
@@ -55,15 +56,24 @@ class HomePageController extends _$HomePageController {
           DeviceItem(id: '13', name: 'Desk Lamp', isBig: false),
         ],
       },
-    );
+    ); */
+
+    final repo = await ref.watch(areaRepositoryProvider.future);
+    final homeAreas = await repo.getAll();
+
+    return Future.value(HomePageState(areas: homeAreas));
   }
 
-  void toggleEditMode() {
-    state = state.copyWith(isEditing: !state.isEditing);
+  Future<void> toggleEditMode() async {
+    final previousState = await future;
+    state =
+        AsyncData(previousState.copyWith(isEditing: !previousState.isEditing));
   }
 
-  void toggleReorderMode() {
-    state = state.copyWith(isReordering: !state.isReordering);
+  Future<void> toggleReorderMode() async {
+    final previousState = await future;
+    state = AsyncData(
+        previousState.copyWith(isReordering: !previousState.isReordering));
   }
 }
 

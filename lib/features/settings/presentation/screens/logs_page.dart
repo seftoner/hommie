@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hommie/features/settings/application/logs_controller.dart';
 import 'package:hommie/features/settings/application/logs_list_controller.dart';
 import 'package:hommie/features/settings/domain/entities/logs.dart';
@@ -13,7 +14,7 @@ class LogsPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appLogsState = ref.watch(logsListControllerProvider);
 
-    final scrollController = ScrollController();
+    final scrollController = useScrollController();
 
     // Detect when the user scrolls near the end of the list
     scrollController.addListener(() {

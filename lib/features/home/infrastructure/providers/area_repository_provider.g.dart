@@ -1,27 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'home_page_controller.dart';
+part of 'area_repository_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homePageControllerHash() =>
-    r'55ad141a601be4a0c0f834ea66d7dd550f50e25e';
+String _$areaRepositoryHash() => r'709934e59a05025cff6048434a5b0e24ca0613fa';
 
-/// See also [HomePageController].
-@ProviderFor(HomePageController)
-final homePageControllerProvider = AutoDisposeAsyncNotifierProvider<
-    HomePageController, HomePageState>.internal(
-  HomePageController.new,
-  name: r'homePageControllerProvider',
+/// See also [areaRepository].
+@ProviderFor(areaRepository)
+final areaRepositoryProvider =
+    AutoDisposeFutureProvider<IAreaRepository>.internal(
+  areaRepository,
+  name: r'areaRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$homePageControllerHash,
+      : _$areaRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$HomePageController = AutoDisposeAsyncNotifier<HomePageState>;
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef AreaRepositoryRef = AutoDisposeFutureProviderRef<IAreaRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

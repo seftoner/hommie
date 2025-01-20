@@ -14,12 +14,6 @@ class Device {
   String name;
   String type;
 
-  @Index(type: IndexType.value)
-  bool isHidden;
-
-  @Index(type: IndexType.value)
-  int position;
-
   final area = IsarLink<Area>();
 
   @ignore
@@ -29,7 +23,5 @@ class Device {
     required this.haId,
     required this.name,
     required this.type,
-    this.isHidden = false,
-    required this.position,
   });
 }

@@ -46,26 +46,4 @@ class IsarDeviceRepository implements IDeviceRepository {
 
   @override
   Future<void> delete(int id) => _isar.writeTxn(() => _isar.devices.delete(id));
-
-  @override
-  Future<void> updatePosition(int id, int position) async {
-    await _isar.writeTxn(() async {
-      final device = await _isar.devices.get(id);
-      if (device != null) {
-        device.position = position;
-        await _isar.devices.put(device);
-      }
-    });
-  }
-
-  @override
-  Future<void> updateVisibility(int id, bool isHidden) async {
-    await _isar.writeTxn(() async {
-      final device = await _isar.devices.get(id);
-      if (device != null) {
-        device.isHidden = isHidden;
-        await _isar.devices.put(device);
-      }
-    });
-  }
 }
