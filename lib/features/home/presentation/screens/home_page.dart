@@ -172,13 +172,160 @@ class HomeDevicesGridView extends StatelessWidget {
             key: ValueKey(deviceConfig.device.id),
             mainAxisCellCount: _getMainAxisCellCount(deviceConfig.size),
             crossAxisCellCount: 2,
-            widget: Card(
-              child: Center(
-                child: Text(deviceConfig.device.name),
-              ),
-            ),
+            widget: DeviceWidget(deviceConfig: deviceConfig),
           ),
       ],
+    );
+  }
+}
+
+class OnOffToggleButton extends StatelessWidget {
+  const OnOffToggleButton({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return IconButton(
+      onPressed: () => onChanged(!value),
+      style: IconButton.styleFrom(
+        backgroundColor: value
+            ? colorScheme.secondaryContainer
+            : colorScheme.onSecondaryFixed,
+        padding: EdgeInsets.zero,
+        minimumSize: const Size(32, 32),
+        maximumSize: const Size(32, 32),
+        shape: const CircleBorder(),
+      ),
+      icon: Icon(
+        Icons.power_settings_new_rounded,
+        size: 24,
+        color: value ? colorScheme.onSecondaryContainer : Colors.grey[600],
+      ),
+    );
+  }
+}
+
+class DeviceWidget extends StatelessWidget {
+  const DeviceWidget({
+    super.key,
+    required this.deviceConfig,
+  });
+
+  final DeviceWidgetConf deviceConfig;
+
+  Widget _buildSmall(BuildContext context) {
+    Theme.of(context)
+        .textTheme
+        .labelSmall
+        ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.lightbulb_circle,
+                size: 32.0,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      deviceConfig.device.name,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface),
+                    ),
+                    Text(
+                      'On',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: OnOffToggleButton(
+            value: true,
+            onChanged: (value) {
+              // Handle toggle state change
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBig(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Icon(
+              Icons.lightbulb_circle,
+              size: 32.0,
+            ),
+            OnOffToggleButton(
+              value: true,
+              onChanged: (value) {
+                // Handle toggle state change
+              },
+            ),
+          ],
+        ),
+        const Spacer(),
+        Text(
+          deviceConfig.device.name,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 4),
+        const Text('On'),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      borderOnForeground: false,
+      elevation: 0,
+      color: Theme.of(context).colorScheme.surfaceContainerLowest,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+        child: switch (deviceConfig.size) {
+          DeviceDisplaySize.big => _buildBig(context),
+          DeviceDisplaySize.small => _buildSmall(context),
+        },
+      ),
     );
   }
 }
