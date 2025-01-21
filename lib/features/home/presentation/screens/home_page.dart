@@ -1,9 +1,12 @@
 import 'package:drag_arrange/drag_arrange.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 import 'package:hommie/features/home/application/home_page_controller.dart';
 import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:hommie/ui/keys.dart';
+import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends ConsumerWidget {
@@ -90,51 +93,14 @@ class HomePage extends ConsumerWidget {
                           final area = areaConfig.area;
                           final devices = areaConfig.devices;
 
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 24),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                RoomGroup(roomName: area.name),
-                                DragGridView(
-                                  enableReordering: state.isEditing,
-                                  enableShakeAnimation: state.isEditing,
-                                  isLongPressDraggable: state.isEditing,
-                                  crossAxisCount: 4,
-                                  mainAxisSpacing: 8,
-                                  crossAxisSpacing: 8,
-                                  dragChildBoxDecoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black
-                                            .withValues(alpha: 0.25),
-                                        spreadRadius: 0,
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  children: [
-                                    for (final deviceConfig in devices)
-                                      DragGridCountItem(
-                                        key: ValueKey(deviceConfig.device.id),
-                                        mainAxisCellCount: deviceConfig.size ==
-                                                DeviceDisplaySize.big
-                                            ? 2
-                                            : 1,
-                                        crossAxisCellCount: 2,
-                                        widget: Card(
-                                          child: Center(
-                                            child:
-                                                Text(deviceConfig.device.name),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              RoomGroup(roomName: area.name),
+                              HomeDevicesGridView(
+                                  state: state, devices: devices),
+                              $h24,
+                            ],
                           );
                         },
                         childCount: state.homeView?.areas.length ?? 0,
@@ -152,6 +118,63 @@ class HomePage extends ConsumerWidget {
   }
 }
 
+class HomeDevicesGridView extends StatelessWidget {
+  const HomeDevicesGridView({
+    super.key,
+    required this.state,
+    required this.devices,
+  });
+
+  final HomePageState state;
+  final List<DeviceWidgetConf> devices;
+
+  int _getMainAxisCellCount(DeviceDisplaySize size) {
+    return size == DeviceDisplaySize.big ? 2 : 1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final dragItemDecoration = BoxDecoration(
+      color: Colors.transparent,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.25),
+          blurRadius: 8,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    );
+
+    final canBeDraggedOnLongPress = switch (defaultTargetPlatform) {
+      TargetPlatform.iOS || TargetPlatform.android => true,
+      _ => false,
+    };
+
+    return DragGridView(
+      enableReordering: state.isEditing,
+      enableShakeAnimation: true,
+      isLongPressDraggable: canBeDraggedOnLongPress,
+      crossAxisCount: 4,
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
+      dragChildBoxDecoration: dragItemDecoration,
+      children: [
+        for (final deviceConfig in devices)
+          DragGridCountItem(
+            key: ValueKey(deviceConfig.device.id),
+            mainAxisCellCount: _getMainAxisCellCount(deviceConfig.size),
+            crossAxisCellCount: 2,
+            widget: Card(
+              child: Center(
+                child: Text(deviceConfig.device.name),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class RoomGroup extends StatelessWidget {
   const RoomGroup({
     super.key,
@@ -163,9 +186,7 @@ class RoomGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        print('Navigate to $roomName');
-      },
+      onTap: () {},
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Row(
