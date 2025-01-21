@@ -1,37 +1,44 @@
 import 'package:hommie/features/home/domain/entities/area.dart';
+import 'package:hommie/features/home/infrastructure/repositories/mappers/device_mapper.dart';
 import 'package:hommie/services/database/models/area.dart' as db;
-import 'package:hommie/services/networking/home_assitant_websocket/src/types/hass_types.dart';
-import 'base_mapper.dart';
 
-import 'device_mapper.dart';
+extension AreaMapper on db.Area {
+  Area toDomain() {
+    return Area(
+      id: haId,
+      name: name,
+      imageUrl: image,
+      backgroundUrl: background,
+      devices: devices.map((d) => d.toDomain()).toList(),
+    );
+  }
+}
 
-class AreaMapper implements BaseMapper<Area, db.Area> {
-  const AreaMapper._();
-  static final instance = const AreaMapper._();
+extension AreaDomainMapper on Area {
+  db.Area toDb() {
+    return db.Area(
+      haId: id,
+      name: name,
+      image: imageUrl,
+      background: backgroundUrl,
+    );
+  }
+}
 
-  @override
-  Area fromDatabase(db.Area area) => Area(
-        id: area.haId,
-        name: area.name,
-        imageUrl: area.image,
-        backgroundUrl: area.background,
-        position: area.position,
-        devices: area.devices.map(DeviceMapper.instance.fromDatabase).toList(),
-      );
+extension AreFutureaListMapper on Future<List<db.Area>> {
+  Future<List<Area>> mapToDomain() {
+    return then((list) => list.map((value) => value.toDomain()).toList());
+  }
+}
 
-  @override
-  db.Area toDatabase(Area area) => db.Area(
-        haId: area.id,
-        name: area.name,
-        image: area.imageUrl,
-        background: area.backgroundUrl,
-        position: area.position,
-      );
+extension AreFutureaMapper on Future<db.Area> {
+  Future<Area> mapToDomain() {
+    return then((value) => value.toDomain());
+  }
+}
 
-  Area fromHass(AreaEntity area, {int position = 0}) => Area(
-        id: area.area_id,
-        name: area.name,
-        imageUrl: area.picture,
-        position: position,
-      );
+extension AreFutureaNullableMapper on Future<db.Area?> {
+  Future<Area?> mapToDomain() {
+    return then((value) => value?.toDomain());
+  }
 }

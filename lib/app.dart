@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/router/router.dart';
+import 'package:hommie/services/database/database_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
@@ -43,6 +44,7 @@ class _ServiceInitializer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(databaseConnectionProvider);
     ref.watch(serverConnectionManagerProvider);
     ref.watch(authStateHandlerProvider);
     ref.watch(connectionStateProvider);

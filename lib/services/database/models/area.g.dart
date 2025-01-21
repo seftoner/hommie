@@ -36,11 +36,6 @@ const AreaSchema = CollectionSchema(
       id: 3,
       name: r'name',
       type: IsarType.string,
-    ),
-    r'position': PropertySchema(
-      id: 4,
-      name: r'position',
-      type: IsarType.long,
     )
   },
   estimateSize: _areaEstimateSize,
@@ -72,19 +67,6 @@ const AreaSchema = CollectionSchema(
           name: r'name',
           type: IndexType.value,
           caseSensitive: true,
-        )
-      ],
-    ),
-    r'position': IndexSchema(
-      id: 5117117876086213592,
-      name: r'position',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'position',
-          type: IndexType.value,
-          caseSensitive: false,
         )
       ],
     )
@@ -144,7 +126,6 @@ void _areaSerialize(
   writer.writeString(offsets[1], object.haId);
   writer.writeString(offsets[2], object.image);
   writer.writeString(offsets[3], object.name);
-  writer.writeLong(offsets[4], object.position);
 }
 
 Area _areaDeserialize(
@@ -158,7 +139,6 @@ Area _areaDeserialize(
     haId: reader.readString(offsets[1]),
     image: reader.readStringOrNull(offsets[2]),
     name: reader.readString(offsets[3]),
-    position: reader.readLong(offsets[4]),
   );
   object.id = id;
   return object;
@@ -179,8 +159,6 @@ P _areaDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 3:
       return (reader.readString(offset)) as P;
-    case 4:
-      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -265,14 +243,6 @@ extension AreaQueryWhereSort on QueryBuilder<Area, Area, QWhere> {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'name'),
-      );
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterWhere> anyPosition() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'position'),
       );
     });
   }
@@ -518,94 +488,6 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
               upper: [''],
             ));
       }
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterWhereClause> positionEqualTo(int position) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'position',
-        value: [position],
-      ));
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterWhereClause> positionNotEqualTo(int position) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [],
-              upper: [position],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [position],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [position],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [],
-              upper: [position],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterWhereClause> positionGreaterThan(
-    int position, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'position',
-        lower: [position],
-        includeLower: include,
-        upper: [],
-      ));
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterWhereClause> positionLessThan(
-    int position, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'position',
-        lower: [],
-        upper: [position],
-        includeUpper: include,
-      ));
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterWhereClause> positionBetween(
-    int lowerPosition,
-    int upperPosition, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'position',
-        lower: [lowerPosition],
-        includeLower: includeLower,
-        upper: [upperPosition],
-        includeUpper: includeUpper,
-      ));
     });
   }
 }
@@ -1208,58 +1090,6 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
       ));
     });
   }
-
-  QueryBuilder<Area, Area, QAfterFilterCondition> positionEqualTo(int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'position',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterFilterCondition> positionGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'position',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterFilterCondition> positionLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'position',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterFilterCondition> positionBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'position',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
 }
 
 extension AreaQueryObject on QueryBuilder<Area, Area, QFilterCondition> {}
@@ -1383,18 +1213,6 @@ extension AreaQuerySortBy on QueryBuilder<Area, Area, QSortBy> {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
-
-  QueryBuilder<Area, Area, QAfterSortBy> sortByPosition() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'position', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterSortBy> sortByPositionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'position', Sort.desc);
-    });
-  }
 }
 
 extension AreaQuerySortThenBy on QueryBuilder<Area, Area, QSortThenBy> {
@@ -1457,18 +1275,6 @@ extension AreaQuerySortThenBy on QueryBuilder<Area, Area, QSortThenBy> {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
-
-  QueryBuilder<Area, Area, QAfterSortBy> thenByPosition() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'position', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Area, Area, QAfterSortBy> thenByPositionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'position', Sort.desc);
-    });
-  }
 }
 
 extension AreaQueryWhereDistinct on QueryBuilder<Area, Area, QDistinct> {
@@ -1497,12 +1303,6 @@ extension AreaQueryWhereDistinct on QueryBuilder<Area, Area, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Area, Area, QDistinct> distinctByPosition() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'position');
     });
   }
 }
@@ -1535,12 +1335,6 @@ extension AreaQueryProperty on QueryBuilder<Area, Area, QQueryProperty> {
   QueryBuilder<Area, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
-    });
-  }
-
-  QueryBuilder<Area, int, QQueryOperations> positionProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'position');
     });
   }
 }

@@ -1,5 +1,9 @@
 import 'package:hommie/features/home/domain/entities/home_view.dart';
+import 'package:hommie/features/home/domain/entities/area.dart';
+import 'package:hommie/features/home/domain/entities/device.dart';
 import 'package:hommie/services/database/models/home_view.dart' as db;
+import 'package:hommie/features/home/infrastructure/repositories/mappers/area_mapper.dart';
+import 'package:hommie/features/home/infrastructure/repositories/mappers/device_mapper.dart';
 
 extension HomeViewConfigMapper on db.HomeViewConfig {
   HomeViewConf toDomain() {
@@ -14,7 +18,7 @@ extension HomeViewConfigMapper on db.HomeViewConfig {
 extension AreaHomeConfigMapper on db.AreaHomeConfig {
   AreaHomeConf toDomain() {
     return AreaHomeConf(
-      areaId: area.value!.haId,
+      area: area.value!.toDomain(),
       position: position,
       devices: deviceConfigs.map((d) => d.toDomain()).toList()
         ..sort((a, b) => a.position.compareTo(b.position)),
@@ -25,7 +29,7 @@ extension AreaHomeConfigMapper on db.AreaHomeConfig {
 extension DeviceHomeConfigMapper on db.DeviceHomeConfig {
   DeviceWidgetConf toDomain() {
     return DeviceWidgetConf(
-      deviceId: device.value!.haId,
+      device: device.value!.toDomain(),
       position: position,
       size: size as DeviceDisplaySize,
     );

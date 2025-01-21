@@ -1,3 +1,6 @@
+import 'package:hommie/features/home/domain/entities/area.dart';
+import 'package:hommie/features/home/domain/entities/device.dart';
+
 enum DeviceDisplaySize {
   small,
   big,
@@ -14,24 +17,24 @@ class HomeViewConf {
 }
 
 class AreaHomeConf {
-  final String areaId;
+  final Area area;
   final int position;
   final List<DeviceWidgetConf> devices;
 
   const AreaHomeConf({
-    required this.areaId,
+    required this.area,
     required this.position,
     required this.devices,
   });
 }
 
 class DeviceWidgetConf {
-  final String deviceId;
+  final Device device;
   final int position;
   final DeviceDisplaySize size;
 
   const DeviceWidgetConf({
-    required this.deviceId,
+    required this.device,
     required this.position,
     this.size = DeviceDisplaySize.small,
   });

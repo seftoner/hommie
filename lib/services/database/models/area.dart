@@ -17,9 +17,6 @@ class Area {
   String? background;
   String? image;
 
-  @Index(type: IndexType.value)
-  int position;
-
   @Backlink(to: 'area')
   final devices = IsarLinks<Device>();
 
@@ -31,7 +28,6 @@ class Area {
     required this.name,
     this.background,
     this.image,
-    required this.position,
   });
 
   @ignore
