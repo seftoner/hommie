@@ -96,7 +96,10 @@ class HomePage extends ConsumerWidget {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              RoomGroup(roomName: area.name),
+                              RoomGroup(
+                                roomName: area.name,
+                                enabled: !state.isEditing,
+                              ),
                               HomeDevicesGridView(
                                   state: state, devices: devices),
                               $h24,
@@ -138,8 +141,13 @@ class HomeDevicesGridView extends StatelessWidget {
       color: Colors.transparent,
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withValues(alpha: 0.25),
-          blurRadius: 8,
+          color: Colors.black.withValues(alpha: 0.02),
+          blurRadius: 3,
+        ),
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.15),
+          blurRadius: 10,
+          spreadRadius: 4,
           offset: const Offset(0, 4),
         ),
       ],
@@ -179,14 +187,16 @@ class RoomGroup extends StatelessWidget {
   const RoomGroup({
     super.key,
     required this.roomName,
+    required this.enabled,
   });
 
   final String roomName;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: enabled ? () {} : null,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Row(
@@ -197,10 +207,11 @@ class RoomGroup extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             const Spacer(),
-            Icon(
-              Icons.chevron_right,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+            if (enabled)
+              Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
           ],
         ),
       ),
