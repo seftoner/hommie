@@ -7,7 +7,7 @@ part of 'database_provider.dart';
 // **************************************************************************
 
 String _$databaseConnectionHash() =>
-    r'a8805513e733baa50b56d91a273b0b6f5a65d7a2';
+    r'2fef3f8d6f278aa1c0a72d2eff046c8c3b4f60f0';
 
 /// See also [DatabaseConnection].
 @ProviderFor(DatabaseConnection)

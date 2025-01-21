@@ -30,7 +30,6 @@ class AreaHomeConfig {
   final area = IsarLink<Area>();
   final homeConfig = IsarLink<HomeViewConfig>();
 
-  @Index(type: IndexType.value)
   int position;
 
   @Backlink(to: 'areaConfig')

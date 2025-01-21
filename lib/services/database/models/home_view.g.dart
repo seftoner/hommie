@@ -371,21 +371,7 @@ const AreaHomeConfigSchema = CollectionSchema(
   deserialize: _areaHomeConfigDeserialize,
   deserializeProp: _areaHomeConfigDeserializeProp,
   idName: r'id',
-  indexes: {
-    r'position': IndexSchema(
-      id: 5117117876086213592,
-      name: r'position',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'position',
-          type: IndexType.value,
-          caseSensitive: false,
-        )
-      ],
-    )
-  },
+  indexes: {},
   links: {
     r'area': LinkSchema(
       id: 226839567268489173,
@@ -484,14 +470,6 @@ extension AreaHomeConfigQueryWhereSort
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
-
-  QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterWhere> anyPosition() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'position'),
-      );
-    });
-  }
 }
 
 extension AreaHomeConfigQueryWhere
@@ -560,99 +538,6 @@ extension AreaHomeConfigQueryWhere
         lower: lowerId,
         includeLower: includeLower,
         upper: upperId,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterWhereClause>
-      positionEqualTo(int position) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'position',
-        value: [position],
-      ));
-    });
-  }
-
-  QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterWhereClause>
-      positionNotEqualTo(int position) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [],
-              upper: [position],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [position],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [position],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'position',
-              lower: [],
-              upper: [position],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterWhereClause>
-      positionGreaterThan(
-    int position, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'position',
-        lower: [position],
-        includeLower: include,
-        upper: [],
-      ));
-    });
-  }
-
-  QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterWhereClause>
-      positionLessThan(
-    int position, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'position',
-        lower: [],
-        upper: [position],
-        includeUpper: include,
-      ));
-    });
-  }
-
-  QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterWhereClause>
-      positionBetween(
-    int lowerPosition,
-    int upperPosition, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'position',
-        lower: [lowerPosition],
-        includeLower: includeLower,
-        upper: [upperPosition],
         includeUpper: includeUpper,
       ));
     });
