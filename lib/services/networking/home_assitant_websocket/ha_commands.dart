@@ -10,36 +10,36 @@ class HACommands {
   /// Returns a value indicating whether the operation was successful.
   ///
   /// TODO: Consider changing the return type to `bool` to explicitly indicate success/failure.
-  static Future<void> pingServer(HAConnection connection) {
+  static Future<void> pingServer(IHAConnection connection) {
     return connection.sendMessage(PingMessage());
   }
 
-  static Future<List<HassEntity>> getStates(HAConnection connection) {
+  static Future<List<HassEntity>> getStates(IHAConnection connection) {
     return connection
         .sendMessage(GetStatesMessage())
         .mapList(HassEntity.fromJson);
   }
 
-  static Future<List<AreaEntity>> getAreas(HAConnection connection) {
+  static Future<List<AreaEntity>> getAreas(IHAConnection connection) {
     return connection.sendMessage(AreasMessage()).mapList(AreaEntity.fromJson);
   }
 
-  static Future<HassUser> getUser(HAConnection connection) {
+  static Future<HassUser> getUser(IHAConnection connection) {
     return connection
         .sendMessage(CurrentUserMessage())
         .mapItem(HassUser.fromJson);
   }
 
-  static Future<HassConfig> getConfig(HAConnection connection) {
+  static Future<HassConfig> getConfig(IHAConnection connection) {
     return connection.sendMessage(ConfigMessage()).mapItem(HassConfig.fromJson);
   }
 
-  static HassSubscription subscribeEntities(HAConnection connection,
+  static HassSubscription subscribeEntities(IHAConnection connection,
       [String? eventType]) {
     return connection.subscribeMessage(SubscribeEntitiesMessage());
   }
 
-  static Future<HassServices> getServices(HAConnection connection) {
+  static Future<HassServices> getServices(IHAConnection connection) {
     return connection
         .sendMessage(GetServicesMessage())
         .mapItem(HassServices.fromJson);
