@@ -28,5 +28,26 @@
 			"problemMatcher": [],
 			"detail": "Run patrol integration tests"
 		},
-	]	
+		{
+			"label": "Create Feature Folder",
+			"type": "shell",
+			"command": "mkdir",
+			"args": [
+				"-p", // Enables creating nested directories.
+				"./lib/features/${input:featureName}/domain",
+				"./lib/features/${input:featureName}/application",
+				"./lib/features/${input:featureName}/infrastructure",
+				"./lib/features/${input:featureName}/presentation"
+			],
+			"problemMatcher": [],
+			"detail": "Creates a new feature folder structure under ./lib/features."
+		}
+	],
+	"inputs": [
+		{
+			"id": "featureName",
+			"type": "promptString",
+			"description": "Enter the name of the feature"
+		}
+	]
 }
