@@ -1,5 +1,4 @@
 import 'package:hommie/features/home/domain/entities/area.dart';
-import 'package:hommie/features/home/infrastructure/repositories/mappers/device_mapper.dart';
 import 'package:hommie/services/database/models/area.dart' as db;
 
 extension AreaMapper on db.Area {
@@ -9,7 +8,6 @@ extension AreaMapper on db.Area {
       name: name,
       imageUrl: image,
       backgroundUrl: background,
-      devices: devices.map((d) => d.toDomain()).toList(),
     );
   }
 }
