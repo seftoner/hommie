@@ -25,6 +25,7 @@ class _RootAppWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
+      title: 'Hommie',
       debugShowCheckedModeBanner: false,
       showPerformanceOverlay: false,
       routerConfig: ref.read(goRouterProvider),
