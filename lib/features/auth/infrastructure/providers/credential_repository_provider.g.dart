@@ -7,7 +7,7 @@ part of 'credential_repository_provider.dart';
 // **************************************************************************
 
 String _$credentialsRepositoryHash() =>
-    r'9240fd77962bbd870d064fac3d5a73b457096ef7';
+    r'51d146c4e9232afa3dcbfa7b6e9ee2a05be0c273';
 
 /// See also [credentialsRepository].
 @ProviderFor(credentialsRepository)

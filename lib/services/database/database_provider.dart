@@ -1,14 +1,18 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/services/database/models/models.dart';
 import 'package:isar/isar.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'database_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class DatabaseConnection extends _$DatabaseConnection {
-  @override
-  Future<Isar> build() async {
+Isar databaseConnection(Ref ref) {
+  throw UnimplementedError('You forgor to override it');
+}
+
+class DatabaseInitializer {
+  static Future<Isar> initialize() async {
     final dir = await getApplicationDocumentsDirectory();
     final isar = await Isar.open(
       [
@@ -30,7 +34,7 @@ class DatabaseConnection extends _$DatabaseConnection {
     return isar;
   }
 
-  Future<void> _populateTestData(Isar isar) async {
+  static Future<void> _populateTestData(Isar isar) async {
     await isar.writeTxn(() async {
       // Create server
       final server =

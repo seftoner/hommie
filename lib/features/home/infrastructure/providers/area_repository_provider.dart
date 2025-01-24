@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'area_repository_provider.g.dart';
 
 @riverpod
-Future<IAreaRepository> areaRepository(Ref ref) async {
-  final isar = await ref.read(databaseConnectionProvider.future);
+IAreaRepository areaRepository(Ref ref) {
+  final isar = ref.read(databaseConnectionProvider);
   return IsarAreaRepository(isar);
 }

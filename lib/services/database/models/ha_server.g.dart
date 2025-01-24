@@ -17,13 +17,18 @@ const HaServerSchema = CollectionSchema(
   name: r'HaServer',
   id: 6810984129324577594,
   properties: {
-    r'name': PropertySchema(
+    r'isActive': PropertySchema(
       id: 0,
+      name: r'isActive',
+      type: IsarType.bool,
+    ),
+    r'name': PropertySchema(
+      id: 1,
       name: r'name',
       type: IsarType.string,
     ),
     r'uri': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'uri',
       type: IsarType.string,
     )
@@ -81,8 +86,9 @@ void _haServerSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.name);
-  writer.writeString(offsets[1], object.uri);
+  writer.writeBool(offsets[0], object.isActive);
+  writer.writeString(offsets[1], object.name);
+  writer.writeString(offsets[2], object.uri);
 }
 
 HaServer _haServerDeserialize(
@@ -92,8 +98,9 @@ HaServer _haServerDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = HaServer(
-    name: reader.readString(offsets[0]),
-    uri: reader.readString(offsets[1]),
+    isActive: reader.readBoolOrNull(offsets[0]) ?? false,
+    name: reader.readString(offsets[1]),
+    uri: reader.readString(offsets[2]),
   );
   object.id = id;
   return object;
@@ -107,8 +114,10 @@ P _haServerDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 1:
+      return (reader.readString(offset)) as P;
+    case 2:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -352,6 +361,16 @@ extension HaServerQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<HaServer, HaServer, QAfterFilterCondition> isActiveEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isActive',
+        value: value,
       ));
     });
   }
@@ -637,6 +656,18 @@ extension HaServerQueryLinks
 }
 
 extension HaServerQuerySortBy on QueryBuilder<HaServer, HaServer, QSortBy> {
+  QueryBuilder<HaServer, HaServer, QAfterSortBy> sortByIsActive() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isActive', Sort.asc);
+    });
+  }
+
+  QueryBuilder<HaServer, HaServer, QAfterSortBy> sortByIsActiveDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isActive', Sort.desc);
+    });
+  }
+
   QueryBuilder<HaServer, HaServer, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -676,6 +707,18 @@ extension HaServerQuerySortThenBy
     });
   }
 
+  QueryBuilder<HaServer, HaServer, QAfterSortBy> thenByIsActive() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isActive', Sort.asc);
+    });
+  }
+
+  QueryBuilder<HaServer, HaServer, QAfterSortBy> thenByIsActiveDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isActive', Sort.desc);
+    });
+  }
+
   QueryBuilder<HaServer, HaServer, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -703,6 +746,12 @@ extension HaServerQuerySortThenBy
 
 extension HaServerQueryWhereDistinct
     on QueryBuilder<HaServer, HaServer, QDistinct> {
+  QueryBuilder<HaServer, HaServer, QDistinct> distinctByIsActive() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isActive');
+    });
+  }
+
   QueryBuilder<HaServer, HaServer, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -723,6 +772,12 @@ extension HaServerQueryProperty
   QueryBuilder<HaServer, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<HaServer, bool, QQueryOperations> isActiveProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isActive');
     });
   }
 

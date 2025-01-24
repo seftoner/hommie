@@ -6,8 +6,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'device_repository_provider.g.dart';
 
-@Riverpod(keepAlive: true)
-Future<IDeviceRepository> deviceRepository(Ref ref) async {
-  final isar = await ref.read(databaseConnectionProvider.future);
+@riverpod
+IDeviceRepository deviceRepository(Ref ref) {
+  final isar = ref.read(databaseConnectionProvider);
   return IsarDeviceRepository(isar);
 }

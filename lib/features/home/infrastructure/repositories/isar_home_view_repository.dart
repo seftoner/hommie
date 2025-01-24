@@ -1,5 +1,6 @@
 import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/features/home/domain/repositories/i_home_view_repository.dart';
+import 'package:hommie/features/server_manager/domain/models/server_config.dart';
 import 'package:hommie/services/database/models/area.dart';
 import 'package:hommie/services/database/models/device.dart';
 import 'package:hommie/services/database/models/ha_server.dart';
@@ -9,14 +10,15 @@ import 'mappers/home_view_mapper.dart';
 
 class IsarHomeViewRepository implements IHomeViewRepository {
   final Isar _isar;
+  final ServerConfig _serverConfig;
 
-  IsarHomeViewRepository(this._isar);
+  IsarHomeViewRepository(this._isar, this._serverConfig);
 
   @override
-  Future<HomeViewConf?> getByServerId(String serverId) async {
+  Future<HomeViewConf?> get() async {
     final config = await _isar.homeViewConfigs
         .filter()
-        .haServer((q) => q.idEqualTo(int.parse(serverId)))
+        .haServer((q) => q.idEqualTo(_serverConfig.id))
         .findFirst();
     return config?.toDomain();
   }
@@ -65,21 +67,15 @@ class IsarHomeViewRepository implements IHomeViewRepository {
   }
 
   @override
-  Future<void> delete(String serverId) async {
+  Future<void> delete() async {
     await _isar.writeTxn(() async {
       final config = await _isar.homeViewConfigs
           .filter()
-          .haServer((q) => q.idEqualTo(int.parse(serverId)))
+          .haServer((q) => q.idEqualTo(_serverConfig.id))
           .findFirst();
       if (config != null) {
         await _isar.homeViewConfigs.delete(config.id);
       }
     });
-  }
-
-  @override
-  Future<List<HomeViewConf>> getAll() async {
-    final configs = await _isar.homeViewConfigs.where().findAll();
-    return configs.map((c) => c.toDomain()).toList();
   }
 }

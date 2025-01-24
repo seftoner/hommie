@@ -5,10 +5,14 @@ import 'package:oauth2/oauth2.dart';
 
 class SecureCredentialRepository implements ICredentialRepository {
   final FlutterSecureStorage _storage;
-  SecureCredentialRepository(this._storage);
+  final int _serverId;
 
-  static const String _key = 'oauthCredentials';
+  SecureCredentialRepository(this._storage, this._serverId);
+
+  static const String _key = 'oauthCredentialsForServer:';
   Credentials? _cachedCredentials;
+
+  String get _credentialKey => '$_key${_serverId.toString()}';
 
   @override
   Future<Credentials?> read() async {
@@ -16,7 +20,7 @@ class SecureCredentialRepository implements ICredentialRepository {
       return _cachedCredentials!;
     }
 
-    final json = await _storage.read(key: _key);
+    final json = await _storage.read(key: _credentialKey);
     if (json == null) {
       return null;
     }
@@ -32,13 +36,13 @@ class SecureCredentialRepository implements ICredentialRepository {
   Future<void> save(Credentials credentials) {
     _cachedCredentials = credentials;
     //BUG: apply force delete, cause write is not re-writing a new value
-    _storage.delete(key: _key);
-    return _storage.write(key: _key, value: credentials.toJson());
+    _storage.delete(key: _credentialKey);
+    return _storage.write(key: _credentialKey, value: credentials.toJson());
   }
 
   @override
   Future<void> clear() {
     _cachedCredentials = null;
-    return _storage.delete(key: _key);
+    return _storage.delete(key: _credentialKey);
   }
 }

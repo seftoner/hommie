@@ -9,6 +9,8 @@ class HaServer {
 
   String name;
 
+  bool isActive;
+
   @Index(unique: true)
   String uri;
 
@@ -18,5 +20,6 @@ class HaServer {
   HaServer({
     required this.name,
     required this.uri,
+    this.isActive = false,
   });
 }

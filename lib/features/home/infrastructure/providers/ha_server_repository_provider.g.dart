@@ -7,12 +7,12 @@ part of 'ha_server_repository_provider.dart';
 // **************************************************************************
 
 String _$haServerRepositoryHash() =>
-    r'5a0d2fa36842397decda2af82fd869635cd955fe';
+    r'33967d6d6bfec59c7cb40b15be42177fe09bcdb9';
 
 /// See also [haServerRepository].
 @ProviderFor(haServerRepository)
 final haServerRepositoryProvider =
-    AutoDisposeFutureProvider<IHaServerRepository>.internal(
+    AutoDisposeProvider<IHaServerRepository>.internal(
   haServerRepository,
   name: r'haServerRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -24,7 +24,6 @@ final haServerRepositoryProvider =
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef HaServerRepositoryRef
-    = AutoDisposeFutureProviderRef<IHaServerRepository>;
+typedef HaServerRepositoryRef = AutoDisposeProviderRef<IHaServerRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,28 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'database_provider.dart';
+part of 'server_manager.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$databaseConnectionHash() =>
-    r'ee157ac6af5558c58e8681081f6dc6e41e892872';
+String _$serverManagerHash() => r'7cc75073f932a5e1eb91ddac58d9911a745db582';
 
-/// See also [databaseConnection].
-@ProviderFor(databaseConnection)
-final databaseConnectionProvider = Provider<Isar>.internal(
-  databaseConnection,
-  name: r'databaseConnectionProvider',
+/// See also [ServerManager].
+@ProviderFor(ServerManager)
+final serverManagerProvider =
+    AutoDisposeStreamNotifierProvider<ServerManager, ServerConfig?>.internal(
+  ServerManager.new,
+  name: r'serverManagerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$databaseConnectionHash,
+      : _$serverManagerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DatabaseConnectionRef = ProviderRef<Isar>;
+typedef _$ServerManager = AutoDisposeStreamNotifier<ServerConfig?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
