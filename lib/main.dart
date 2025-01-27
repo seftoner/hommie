@@ -17,7 +17,7 @@ Future<void> main() async {
 
       logger.i('Start the application 🚀');
 
-      final appOverrides = await _createProviderOverrides();
+      final appOverrides = await _initializeProviderOverrides();
 
       runApp(
         ProviderScope(
@@ -34,7 +34,7 @@ Future<void> main() async {
   );
 }
 
-Future<List<Override>> _createProviderOverrides() async {
+Future<List<Override>> _initializeProviderOverrides() async {
   final isar = await DatabaseInitializer.initialize();
 
   return [
