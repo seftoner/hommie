@@ -26,7 +26,7 @@ dependencies:
   freezed_annotation: ^2.4.4
   go_router: ^14.6.3
   hooks_riverpod: ^2.4.9
-  http: ^1.2.2
+  http: ^1.3.0
   json_annotation: ^4.8.1
   logger: ^2.2.0
   multicast_dns: ^0.3.2+7
