@@ -7,6 +7,7 @@ import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/spacings.dart';
+import 'package:hommie/ui/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends ConsumerWidget {
@@ -191,14 +192,12 @@ class OnOffToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return IconButton(
       onPressed: () => onChanged(!value),
       style: IconButton.styleFrom(
         backgroundColor: value
-            ? colorScheme.secondaryContainer
-            : colorScheme.onSecondaryFixed,
+            ? context.colors.secondaryContainer
+            : context.colors.onSecondaryFixed,
         padding: EdgeInsets.zero,
         minimumSize: const Size(32, 32),
         maximumSize: const Size(32, 32),
@@ -207,7 +206,7 @@ class OnOffToggleButton extends StatelessWidget {
       icon: Icon(
         Icons.power_settings_new_rounded,
         size: 24,
-        color: value ? colorScheme.onSecondaryContainer : Colors.grey[600],
+        color: value ? context.colors.onSecondaryContainer : Colors.grey[600],
       ),
     );
   }
@@ -222,10 +221,7 @@ class DeviceWidget extends StatelessWidget {
   final DeviceWidgetConf deviceConfig;
 
   Widget _buildSmall(BuildContext context) {
-    Theme.of(context)
-        .textTheme
-        .labelSmall
-        ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant);
+    context.fonts.labelSmall?.copyWith(color: context.colors.onSurfaceVariant);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -247,14 +243,13 @@ class DeviceWidget extends StatelessWidget {
                       deviceConfig.device.name,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface),
+                      style: context.fonts.labelLarge
+                          ?.copyWith(color: context.colors.onSurface),
                     ),
                     Text(
                       'On',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant),
+                      style: context.fonts.labelSmall
+                          ?.copyWith(color: context.colors.onSurfaceVariant),
                     ),
                   ],
                 ),
@@ -299,7 +294,7 @@ class DeviceWidget extends StatelessWidget {
           deviceConfig.device.name,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
-          style: Theme.of(context).textTheme.titleMedium,
+          style: context.fonts.titleMedium,
         ),
         const SizedBox(height: 4),
         const Text('On'),
@@ -312,11 +307,11 @@ class DeviceWidget extends StatelessWidget {
     return Card(
       borderOnForeground: false,
       elevation: 0,
-      color: Theme.of(context).colorScheme.surfaceContainerLowest,
+      color: context.colors.surfaceContainerLowest,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
         side: BorderSide(
-          color: Theme.of(context).colorScheme.outlineVariant,
+          color: context.colors.outlineVariant,
         ),
       ),
       child: Padding(
@@ -350,14 +345,14 @@ class RoomGroup extends StatelessWidget {
           children: [
             Text(
               roomName,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+              style: context.fonts.titleMedium
+                  ?.copyWith(color: context.colors.onSurfaceVariant),
             ),
             const Spacer(),
             if (enabled)
               Icon(
                 Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                color: context.colors.onSurfaceVariant,
               ),
           ],
         ),
