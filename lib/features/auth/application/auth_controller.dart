@@ -6,6 +6,7 @@ import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/attempt_oauth_login.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/create_server_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/get_config_task.dart';
+import 'package:hommie/features/auth/infrastructure/tasks/activate_server_task.dart';
 import 'package:hommie/features/server_manager/infrastructure/providers/server_manager_provider.dart';
 import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
 import 'package:hommie/features/shared/domain/models/task_chain.dart';
@@ -78,6 +79,7 @@ class AuthController extends _$AuthController {
         .addTask(CreateServerTask(serverManager))
         .addTask(AttemptOAuthLogin(serverManager))
         .addTask(GetConfigTask(serverManager))
+        .addTask(ActivateServerTask(serverManager))
         .onTaskError<AttemptOAuthLogin, AuthFailure>((error) {
           state = AsyncData(AuthState.failure(error));
         })

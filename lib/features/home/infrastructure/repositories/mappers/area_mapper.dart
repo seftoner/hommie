@@ -1,7 +1,7 @@
 import 'package:hommie/features/home/domain/entities/area.dart';
-import 'package:hommie/services/database/models/area.dart' as db;
+import 'package:hommie/services/database/models/area_entity.dart' as db;
 
-extension AreaMapper on db.Area {
+extension AreaMapper on db.AreaEntity {
   Area toDomain() {
     return Area(
       id: haId,
@@ -13,8 +13,8 @@ extension AreaMapper on db.Area {
 }
 
 extension AreaDomainMapper on Area {
-  db.Area toDb() {
-    return db.Area(
+  db.AreaEntity toDb() {
+    return db.AreaEntity(
       haId: id,
       name: name,
       image: imageUrl,
@@ -23,19 +23,19 @@ extension AreaDomainMapper on Area {
   }
 }
 
-extension AreFutureaListMapper on Future<List<db.Area>> {
+extension AreFutureaListMapper on Future<List<db.AreaEntity>> {
   Future<List<Area>> mapToDomain() {
     return then((list) => list.map((value) => value.toDomain()).toList());
   }
 }
 
-extension AreFutureaMapper on Future<db.Area> {
+extension AreFutureaMapper on Future<db.AreaEntity> {
   Future<Area> mapToDomain() {
     return then((value) => value.toDomain());
   }
 }
 
-extension AreFutureaNullableMapper on Future<db.Area?> {
+extension AreFutureaNullableMapper on Future<db.AreaEntity?> {
   Future<Area?> mapToDomain() {
     return then((value) => value?.toDomain());
   }

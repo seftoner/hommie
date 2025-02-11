@@ -7,12 +7,12 @@ part of 'home_view_repository_provider.dart';
 // **************************************************************************
 
 String _$homeViewRepositoryHash() =>
-    r'ceaa329bdc6df8c923ccd58b71b0d26dd4441802';
+    r'd85ca43dcf0c7d3d004e2fd6722d2a0f3d59333d';
 
 /// See also [homeViewRepository].
 @ProviderFor(homeViewRepository)
 final homeViewRepositoryProvider =
-    AutoDisposeProvider<IHomeViewRepository>.internal(
+    AutoDisposeFutureProvider<IHomeViewRepository>.internal(
   homeViewRepository,
   name: r'homeViewRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -24,6 +24,7 @@ final homeViewRepositoryProvider =
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef HomeViewRepositoryRef = AutoDisposeProviderRef<IHomeViewRepository>;
+typedef HomeViewRepositoryRef
+    = AutoDisposeFutureProviderRef<IHomeViewRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

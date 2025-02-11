@@ -4,7 +4,7 @@ import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/features/server_manager/domain/i_server_manager.dart';
-import 'package:hommie/features/server_manager/domain/models/ha_server_config.dart';
+import 'package:hommie/features/server_manager/domain/models/server.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
 import 'package:oauth2/oauth2.dart';
@@ -22,9 +22,9 @@ class AttemptOAuthLogin extends HTask<Credentials, AuthFailure> {
   @override
   Future<HTaskResult<Credentials, AuthFailure>> execute(
       TaskExecutionContext context) async {
-    final HaServerConfig server = context.get('server')!;
+    final Server server = context.get('server')!;
     final IAuthRepository authRepository =
-        await _serverManager.getAuthRepository(server.id);
+        await _serverManager.getAuthRepository(server.id!);
 
     try {
       final authResult = await authRepository.login(

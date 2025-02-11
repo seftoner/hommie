@@ -1,7 +1,7 @@
 import 'package:hommie/features/home/domain/entities/device.dart';
-import 'package:hommie/services/database/models/device.dart' as db;
+import 'package:hommie/services/database/models/device_entity.dart' as db;
 
-extension DeviceMapper on db.Device {
+extension DeviceMapper on db.DeviceEntity {
   Device toDomain() {
     return Device(
       id: haId,
@@ -13,8 +13,8 @@ extension DeviceMapper on db.Device {
 }
 
 extension DeviceDomainMapper on Device {
-  db.Device toDb() {
-    return db.Device(
+  db.DeviceEntity toDb() {
+    return db.DeviceEntity(
       haId: id,
       name: name,
       type: type,
@@ -22,19 +22,19 @@ extension DeviceDomainMapper on Device {
   }
 }
 
-extension DeviceFutureListMapper on Future<List<db.Device>> {
+extension DeviceFutureListMapper on Future<List<db.DeviceEntity>> {
   Future<List<Device>> mapToDomain() {
     return then((list) => list.map((value) => value.toDomain()).toList());
   }
 }
 
-extension DeviceFutureMapper on Future<db.Device> {
+extension DeviceFutureMapper on Future<db.DeviceEntity> {
   Future<Device> mapToDomain() {
     return then((value) => value.toDomain());
   }
 }
 
-extension DeviceFutureNullableMapper on Future<db.Device?> {
+extension DeviceFutureNullableMapper on Future<db.DeviceEntity?> {
   Future<Device?> mapToDomain() {
     return then((value) => value?.toDomain());
   }

@@ -16,9 +16,9 @@ class DatabaseInitializer {
     final dir = await getApplicationDocumentsDirectory();
     final isar = await Isar.open(
       [
-        AreaSchema,
-        DeviceSchema,
-        HaServerSchema,
+        AreaEntitySchema,
+        DeviceEntitySchema,
+        ServerEntitySchema,
         AreaHomeConfigSchema,
         HomeViewConfigSchema,
         DeviceHomeConfigSchema,
@@ -27,7 +27,7 @@ class DatabaseInitializer {
     );
 
     // Populate test data if database is empty
-    if ((await isar.haServers.count()) == 0) {
+    if ((await isar.serverEntitys.count()) == 0) {
       await _populateTestData(isar);
     }
 
@@ -38,63 +38,67 @@ class DatabaseInitializer {
     await isar.writeTxn(() async {
       // Create server
       final server =
-          HaServer(name: 'Test Server', uri: 'http://localhost:8123');
-      await isar.haServers.put(server);
+          ServerEntity(name: 'Test Server', url: 'http://localhost:8123');
+      await isar.serverEntitys.put(server);
 
       // Create areas with proper links
       final testAreas = [
-        Area(haId: 'living_room', name: 'Living Room'),
-        Area(haId: 'kitchen', name: 'Kitchen'),
-        Area(haId: 'bedroom', name: 'Bedroom')
+        AreaEntity(haId: 'living_room', name: 'Living Room'),
+        AreaEntity(haId: 'kitchen', name: 'Kitchen'),
+        AreaEntity(haId: 'bedroom', name: 'Bedroom')
       ];
-      await isar.areas.putAll(testAreas);
+      await isar.areaEntitys.putAll(testAreas);
 
       // Set up server-area links
       for (final area in testAreas) {
-        area.haServer.value = server;
-        await area.haServer.save();
+        area.server.value = server;
+        await area.server.save();
       }
 
       // Create devices with proper links
       final devices = [
-        Device(name: 'Main Light', haId: 'light.main', type: 'light')
+        DeviceEntity(name: 'Main Light', haId: 'light.main', type: 'light')
           ..area.value = testAreas[0],
-        Device(name: 'TV', haId: 'media_player.tv', type: 'media_player')
+        DeviceEntity(name: 'TV', haId: 'media_player.tv', type: 'media_player')
           ..area.value = testAreas[0],
-        Device(name: 'Floor Lamp', haId: 'light.floor', type: 'light')
+        DeviceEntity(name: 'Floor Lamp', haId: 'light.floor', type: 'light')
           ..area.value = testAreas[0],
-        Device(
+        DeviceEntity(
             name: 'Smart Speaker',
             haId: 'media_player.speaker',
             type: 'media_player')
           ..area.value = testAreas[0],
-        Device(name: 'Kitchen Light', haId: 'light.kitchen', type: 'light')
+        DeviceEntity(
+            name: 'Kitchen Light', haId: 'light.kitchen', type: 'light')
           ..area.value = testAreas[1],
-        Device(name: 'Coffee Maker', haId: 'switch.coffee', type: 'switch')
+        DeviceEntity(
+            name: 'Coffee Maker', haId: 'switch.coffee', type: 'switch')
           ..area.value = testAreas[1],
-        Device(name: 'Dishwasher', haId: 'switch.dishwasher', type: 'switch')
+        DeviceEntity(
+            name: 'Dishwasher', haId: 'switch.dishwasher', type: 'switch')
           ..area.value = testAreas[1],
-        Device(name: 'Kitchen Fan', haId: 'fan.kitchen', type: 'fan')
+        DeviceEntity(name: 'Kitchen Fan', haId: 'fan.kitchen', type: 'fan')
           ..area.value = testAreas[1],
-        Device(name: 'Bedroom Light', haId: 'light.bedroom', type: 'light')
+        DeviceEntity(
+            name: 'Bedroom Light', haId: 'light.bedroom', type: 'light')
           ..area.value = testAreas[2],
-        Device(name: 'AC', haId: 'climate.bedroom', type: 'climate')
+        DeviceEntity(name: 'AC', haId: 'climate.bedroom', type: 'climate')
           ..area.value = testAreas[2],
-        Device(name: 'Bedside Lamp', haId: 'light.bedside', type: 'light')
+        DeviceEntity(name: 'Bedside Lamp', haId: 'light.bedside', type: 'light')
           ..area.value = testAreas[2],
-        Device(name: 'Air Purifier', haId: 'fan.purifier', type: 'fan')
+        DeviceEntity(name: 'Air Purifier', haId: 'fan.purifier', type: 'fan')
           ..area.value = testAreas[2],
       ];
-      await isar.devices.putAll(devices);
+      await isar.deviceEntitys.putAll(devices);
 
       for (final device in devices) {
         await device.area.save();
       }
 
       // Create home view config with proper links
-      final homeConfig = HomeViewConfig()..haServer.value = server;
+      final homeConfig = HomeViewConfig()..server.value = server;
       await isar.homeViewConfigs.put(homeConfig);
-      await homeConfig.haServer.save();
+      await homeConfig.server.save();
 
       // Create area configs with proper links
       final areaConfigs = [

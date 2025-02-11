@@ -24,10 +24,10 @@ const HomeViewConfigSchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {
-    r'haServer': LinkSchema(
-      id: -3828495337796609846,
-      name: r'haServer',
-      target: r'HaServer',
+    r'server': LinkSchema(
+      id: 2202929073112333187,
+      name: r'server',
+      target: r'ServerEntity',
       single: true,
     ),
     r'areaConfigs': LinkSchema(
@@ -88,13 +88,13 @@ Id _homeViewConfigGetId(HomeViewConfig object) {
 }
 
 List<IsarLinkBase<dynamic>> _homeViewConfigGetLinks(HomeViewConfig object) {
-  return [object.haServer, object.areaConfigs];
+  return [object.server, object.areaConfigs];
 }
 
 void _homeViewConfigAttach(
     IsarCollection<dynamic> col, Id id, HomeViewConfig object) {
   object.id = id;
-  object.haServer.attach(col, col.isar.collection<HaServer>(), r'haServer', id);
+  object.server.attach(col, col.isar.collection<ServerEntity>(), r'server', id);
   object.areaConfigs
       .attach(col, col.isar.collection<AreaHomeConfig>(), r'areaConfigs', id);
 }
@@ -243,17 +243,17 @@ extension HomeViewConfigQueryObject
 
 extension HomeViewConfigQueryLinks
     on QueryBuilder<HomeViewConfig, HomeViewConfig, QFilterCondition> {
-  QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition> haServer(
-      FilterQuery<HaServer> q) {
+  QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition> server(
+      FilterQuery<ServerEntity> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'haServer');
+      return query.link(q, r'server');
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      haServerIsNull() {
+      serverIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'haServer', 0, true, 0, true);
+      return query.linkLength(r'server', 0, true, 0, true);
     });
   }
 
@@ -376,7 +376,7 @@ const AreaHomeConfigSchema = CollectionSchema(
     r'area': LinkSchema(
       id: 226839567268489173,
       name: r'area',
-      target: r'Area',
+      target: r'AreaEntity',
       single: true,
     ),
     r'homeConfig': LinkSchema(
@@ -456,7 +456,7 @@ List<IsarLinkBase<dynamic>> _areaHomeConfigGetLinks(AreaHomeConfig object) {
 void _areaHomeConfigAttach(
     IsarCollection<dynamic> col, Id id, AreaHomeConfig object) {
   object.id = id;
-  object.area.attach(col, col.isar.collection<Area>(), r'area', id);
+  object.area.attach(col, col.isar.collection<AreaEntity>(), r'area', id);
   object.homeConfig
       .attach(col, col.isar.collection<HomeViewConfig>(), r'homeConfig', id);
   object.deviceConfigs.attach(
@@ -664,7 +664,7 @@ extension AreaHomeConfigQueryObject
 extension AreaHomeConfigQueryLinks
     on QueryBuilder<AreaHomeConfig, AreaHomeConfig, QFilterCondition> {
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition> area(
-      FilterQuery<Area> q) {
+      FilterQuery<AreaEntity> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'area');
     });
@@ -854,7 +854,7 @@ const DeviceHomeConfigSchema = CollectionSchema(
     r'device': LinkSchema(
       id: 6235099333004358942,
       name: r'device',
-      target: r'Device',
+      target: r'DeviceEntity',
       single: true,
     ),
     r'areaConfig': LinkSchema(
@@ -944,7 +944,7 @@ List<IsarLinkBase<dynamic>> _deviceHomeConfigGetLinks(DeviceHomeConfig object) {
 void _deviceHomeConfigAttach(
     IsarCollection<dynamic> col, Id id, DeviceHomeConfig object) {
   object.id = id;
-  object.device.attach(col, col.isar.collection<Device>(), r'device', id);
+  object.device.attach(col, col.isar.collection<DeviceEntity>(), r'device', id);
   object.areaConfig
       .attach(col, col.isar.collection<AreaHomeConfig>(), r'areaConfig', id);
 }
@@ -1205,7 +1205,7 @@ extension DeviceHomeConfigQueryObject
 extension DeviceHomeConfigQueryLinks
     on QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QFilterCondition> {
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      device(FilterQuery<Device> q) {
+      device(FilterQuery<DeviceEntity> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'device');
     });

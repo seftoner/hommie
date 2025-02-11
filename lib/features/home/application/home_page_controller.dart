@@ -31,7 +31,7 @@ class HomePageState {
 class HomePageController extends _$HomePageController {
   @override
   Future<HomePageState> build() async {
-    final repo = ref.read(homeViewRepositoryProvider);
+    final repo = await ref.read(homeViewRepositoryProvider.future);
     // Assuming we're getting the first available HomeView for now
     final homeView = await repo.get();
     // final homeView = homeViews.isNotEmpty ? homeViews.first : null;

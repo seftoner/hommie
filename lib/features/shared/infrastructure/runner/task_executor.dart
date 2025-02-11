@@ -1,5 +1,6 @@
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/task_chain.dart';
+import 'package:hommie/core/utils/logger.dart';
 
 class UnknownError implements Exception {
   @override
@@ -22,23 +23,42 @@ class TaskExecutor {
 
   Future<void> execute() async {
     final completedTasks = <HTask>[];
+    logger.d('Starting task chain execution');
 
     try {
       for (final task in _chain.tasks) {
+        logger.d('Executing task: ${task.name}');
         final result = await task.execute(_chain.context);
 
         if (result.status == Status.failed) {
+          logger.e(
+            'Task ${task.name} failed',
+            error: result.error,
+          );
+
+          logger.d(
+              'Starting rollback for ${completedTasks.length} completed tasks');
           await _rollback(completedTasks);
+
           _handleError(task, result.error ?? UnknownError());
           return;
         }
 
+        logger.d('Task ${task.name} completed successfully');
         completedTasks.add(task);
       }
 
+      logger.d('Task chain completed successfully');
       _chain.onSuccess?.call();
-    } catch (e) {
+    } catch (e, stack) {
       final currentTask = _chain.tasks[completedTasks.length];
+      logger.e(
+        'Unexpected error in task ${currentTask.name}',
+        error: e,
+        stackTrace: stack,
+      );
+
+      logger.d('Starting rollback due to unexpected error');
       await _rollback(completedTasks);
       _handleError(currentTask, e);
     }

@@ -1,24 +1,24 @@
 import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/features/home/domain/repositories/i_home_view_repository.dart';
-import 'package:hommie/features/server_manager/domain/models/ha_server_config.dart';
-import 'package:hommie/services/database/models/area.dart';
-import 'package:hommie/services/database/models/device.dart';
-import 'package:hommie/services/database/models/ha_server.dart';
+import 'package:hommie/features/server_manager/domain/models/server.dart';
+import 'package:hommie/services/database/models/area_entity.dart';
+import 'package:hommie/services/database/models/device_entity.dart';
+import 'package:hommie/services/database/models/server_entity.dart';
 import 'package:hommie/services/database/models/home_view.dart';
 import 'package:isar/isar.dart';
 import 'mappers/home_view_mapper.dart';
 
 class IsarHomeViewRepository implements IHomeViewRepository {
   final Isar _isar;
-  final HaServerConfig _serverConfig;
+  final Server _server;
 
-  IsarHomeViewRepository(this._isar, this._serverConfig);
+  IsarHomeViewRepository(this._isar, this._server);
 
   @override
   Future<HomeViewConf?> get() async {
     final config = await _isar.homeViewConfigs
         .filter()
-        .haServer((q) => q.idEqualTo(_serverConfig.id))
+        .server((q) => q.idEqualTo(_server.id!))
         .findFirst();
     return config?.toDomain();
   }
@@ -29,19 +29,21 @@ class IsarHomeViewRepository implements IHomeViewRepository {
       final dbConf = conf.toDb();
 
       // Set server relationship
-      final server = await _isar.haServers
+      final server = await _isar.serverEntitys
           .filter()
           .idEqualTo(int.parse(conf.serverId))
           .findFirst();
-      dbConf.haServer.value = server;
+      dbConf.server.value = server;
 
       // Save areas
       for (final area in conf.areas) {
         final dbArea = area.toDb();
         dbArea.homeConfig.value = dbConf;
 
-        final areaEntity =
-            await _isar.areas.filter().haIdEqualTo(area.area.id).findFirst();
+        final areaEntity = await _isar.areaEntitys
+            .filter()
+            .haIdEqualTo(area.area.id)
+            .findFirst();
         dbArea.area.value = areaEntity;
 
         // Save devices
@@ -49,7 +51,7 @@ class IsarHomeViewRepository implements IHomeViewRepository {
           final dbDevice = deviceConf.toDb();
           dbDevice.areaConfig.value = dbArea;
 
-          final deviceEntity = await _isar.devices
+          final deviceEntity = await _isar.deviceEntitys
               .filter()
               .haIdEqualTo(deviceConf.device.id)
               .findFirst();
@@ -71,7 +73,7 @@ class IsarHomeViewRepository implements IHomeViewRepository {
     await _isar.writeTxn(() async {
       final config = await _isar.homeViewConfigs
           .filter()
-          .haServer((q) => q.idEqualTo(_serverConfig.id))
+          .server((q) => q.idEqualTo(_server.id!))
           .findFirst();
       if (config != null) {
         await _isar.homeViewConfigs.delete(config.id);

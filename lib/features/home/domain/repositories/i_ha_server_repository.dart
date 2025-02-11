@@ -1,9 +1,9 @@
-import 'package:hommie/services/database/models/ha_server.dart';
+import 'package:hommie/services/database/models/server_entity.dart';
 
-abstract interface class IHaServerRepository {
-  Future<List<HaServer>> getAll();
-  Future<HaServer?> getById(int id);
-  Future<HaServer?> getByUri(String uri);
-  Future<void> save(HaServer server);
+abstract interface class IServerEntityRepository {
+  Future<List<ServerEntity>> getAll();
+  Future<ServerEntity?> getById(int id);
+  Future<ServerEntity?> getByUri(String uri);
+  Future<void> save(ServerEntity server);
   Future<void> delete(int id);
 }

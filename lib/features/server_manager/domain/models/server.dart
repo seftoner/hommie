@@ -1,9 +1,9 @@
 import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 
-class HaServerConfig {
-  static String defaultName = 'My home';
+class Server {
+  static const String defaultName = 'My home';
 
-  final int id;
+  final int? id;
   final String? baseUrl;
   final String? internalUrl;
   final String? externalUrl;
@@ -11,8 +11,8 @@ class HaServerConfig {
   final bool isActive;
   final HaVersion? version;
 
-  const HaServerConfig({
-    required this.id,
+  const Server({
+    this.id,
     required this.name,
     this.isActive = false,
     this.version,
@@ -21,7 +21,16 @@ class HaServerConfig {
     this.externalUrl,
   });
 
-  //In future here will addition logic to properly resolve url base on settings.
+  const Server.temporary({
+    required this.baseUrl,
+  })  : id = null,
+        name = defaultName,
+        isActive = false,
+        version = null,
+        internalUrl = null,
+        externalUrl = null;
+
+  //In the future here will addition logic to properly resolve url base on settings.
   String get url {
     final effectiveInternalOrExternalUrl =
         internalUrl ?? externalUrl ?? baseUrl;
@@ -33,7 +42,7 @@ class HaServerConfig {
     return effectiveInternalOrExternalUrl;
   }
 
-  HaServerConfig copyWith({
+  Server copyWith({
     int? id,
     String? url,
     String? name,
@@ -43,7 +52,7 @@ class HaServerConfig {
     String? externalUrl,
     HaVersion? version,
   }) {
-    return HaServerConfig(
+    return Server(
       id: id ?? this.id,
       baseUrl: baseUrl,
       internalUrl: internalUrl,

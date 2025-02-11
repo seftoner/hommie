@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'device.dart';
+part of 'device_entity.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -9,13 +9,13 @@ part of 'device.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetDeviceCollection on Isar {
-  IsarCollection<Device> get devices => this.collection();
+extension GetDeviceEntityCollection on Isar {
+  IsarCollection<DeviceEntity> get deviceEntitys => this.collection();
 }
 
-const DeviceSchema = CollectionSchema(
-  name: r'Device',
-  id: 3491430514663294648,
+const DeviceEntitySchema = CollectionSchema(
+  name: r'DeviceEntity',
+  id: 6626679775157521336,
   properties: {
     r'haId': PropertySchema(
       id: 0,
@@ -33,10 +33,10 @@ const DeviceSchema = CollectionSchema(
       type: IsarType.string,
     )
   },
-  estimateSize: _deviceEstimateSize,
-  serialize: _deviceSerialize,
-  deserialize: _deviceDeserialize,
-  deserializeProp: _deviceDeserializeProp,
+  estimateSize: _deviceEntityEstimateSize,
+  serialize: _deviceEntitySerialize,
+  deserialize: _deviceEntityDeserialize,
+  deserializeProp: _deviceEntityDeserializeProp,
   idName: r'id',
   indexes: {
     r'haId': IndexSchema(
@@ -55,21 +55,21 @@ const DeviceSchema = CollectionSchema(
   },
   links: {
     r'area': LinkSchema(
-      id: -7626936781583367130,
+      id: -6778084918978566623,
       name: r'area',
-      target: r'Area',
+      target: r'AreaEntity',
       single: true,
     )
   },
   embeddedSchemas: {},
-  getId: _deviceGetId,
-  getLinks: _deviceGetLinks,
-  attach: _deviceAttach,
+  getId: _deviceEntityGetId,
+  getLinks: _deviceEntityGetLinks,
+  attach: _deviceEntityAttach,
   version: '3.1.8',
 );
 
-int _deviceEstimateSize(
-  Device object,
+int _deviceEntityEstimateSize(
+  DeviceEntity object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -80,8 +80,8 @@ int _deviceEstimateSize(
   return bytesCount;
 }
 
-void _deviceSerialize(
-  Device object,
+void _deviceEntitySerialize(
+  DeviceEntity object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -91,13 +91,13 @@ void _deviceSerialize(
   writer.writeString(offsets[2], object.type);
 }
 
-Device _deviceDeserialize(
+DeviceEntity _deviceEntityDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Device(
+  final object = DeviceEntity(
     haId: reader.readString(offsets[0]),
     name: reader.readString(offsets[1]),
     type: reader.readString(offsets[2]),
@@ -106,7 +106,7 @@ Device _deviceDeserialize(
   return object;
 }
 
-P _deviceDeserializeProp<P>(
+P _deviceEntityDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -124,25 +124,26 @@ P _deviceDeserializeProp<P>(
   }
 }
 
-Id _deviceGetId(Device object) {
+Id _deviceEntityGetId(DeviceEntity object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _deviceGetLinks(Device object) {
+List<IsarLinkBase<dynamic>> _deviceEntityGetLinks(DeviceEntity object) {
   return [object.area];
 }
 
-void _deviceAttach(IsarCollection<dynamic> col, Id id, Device object) {
+void _deviceEntityAttach(
+    IsarCollection<dynamic> col, Id id, DeviceEntity object) {
   object.id = id;
-  object.area.attach(col, col.isar.collection<Area>(), r'area', id);
+  object.area.attach(col, col.isar.collection<AreaEntity>(), r'area', id);
 }
 
-extension DeviceByIndex on IsarCollection<Device> {
-  Future<Device?> getByHaId(String haId) {
+extension DeviceEntityByIndex on IsarCollection<DeviceEntity> {
+  Future<DeviceEntity?> getByHaId(String haId) {
     return getByIndex(r'haId', [haId]);
   }
 
-  Device? getByHaIdSync(String haId) {
+  DeviceEntity? getByHaIdSync(String haId) {
     return getByIndexSync(r'haId', [haId]);
   }
 
@@ -154,12 +155,12 @@ extension DeviceByIndex on IsarCollection<Device> {
     return deleteByIndexSync(r'haId', [haId]);
   }
 
-  Future<List<Device?>> getAllByHaId(List<String> haIdValues) {
+  Future<List<DeviceEntity?>> getAllByHaId(List<String> haIdValues) {
     final values = haIdValues.map((e) => [e]).toList();
     return getAllByIndex(r'haId', values);
   }
 
-  List<Device?> getAllByHaIdSync(List<String> haIdValues) {
+  List<DeviceEntity?> getAllByHaIdSync(List<String> haIdValues) {
     final values = haIdValues.map((e) => [e]).toList();
     return getAllByIndexSync(r'haId', values);
   }
@@ -174,33 +175,36 @@ extension DeviceByIndex on IsarCollection<Device> {
     return deleteAllByIndexSync(r'haId', values);
   }
 
-  Future<Id> putByHaId(Device object) {
+  Future<Id> putByHaId(DeviceEntity object) {
     return putByIndex(r'haId', object);
   }
 
-  Id putByHaIdSync(Device object, {bool saveLinks = true}) {
+  Id putByHaIdSync(DeviceEntity object, {bool saveLinks = true}) {
     return putByIndexSync(r'haId', object, saveLinks: saveLinks);
   }
 
-  Future<List<Id>> putAllByHaId(List<Device> objects) {
+  Future<List<Id>> putAllByHaId(List<DeviceEntity> objects) {
     return putAllByIndex(r'haId', objects);
   }
 
-  List<Id> putAllByHaIdSync(List<Device> objects, {bool saveLinks = true}) {
+  List<Id> putAllByHaIdSync(List<DeviceEntity> objects,
+      {bool saveLinks = true}) {
     return putAllByIndexSync(r'haId', objects, saveLinks: saveLinks);
   }
 }
 
-extension DeviceQueryWhereSort on QueryBuilder<Device, Device, QWhere> {
-  QueryBuilder<Device, Device, QAfterWhere> anyId() {
+extension DeviceEntityQueryWhereSort
+    on QueryBuilder<DeviceEntity, DeviceEntity, QWhere> {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 }
 
-extension DeviceQueryWhere on QueryBuilder<Device, Device, QWhereClause> {
-  QueryBuilder<Device, Device, QAfterWhereClause> idEqualTo(Id id) {
+extension DeviceEntityQueryWhere
+    on QueryBuilder<DeviceEntity, DeviceEntity, QWhereClause> {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -209,7 +213,8 @@ extension DeviceQueryWhere on QueryBuilder<Device, Device, QWhereClause> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterWhereClause> idNotEqualTo(Id id) {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterWhereClause> idNotEqualTo(
+      Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -231,7 +236,8 @@ extension DeviceQueryWhere on QueryBuilder<Device, Device, QWhereClause> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterWhereClause> idGreaterThan(Id id,
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterWhereClause> idGreaterThan(
+      Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -240,7 +246,7 @@ extension DeviceQueryWhere on QueryBuilder<Device, Device, QWhereClause> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterWhereClause> idLessThan(Id id,
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterWhereClause> idLessThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -249,7 +255,7 @@ extension DeviceQueryWhere on QueryBuilder<Device, Device, QWhereClause> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterWhereClause> idBetween(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterWhereClause> idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -265,7 +271,8 @@ extension DeviceQueryWhere on QueryBuilder<Device, Device, QWhereClause> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterWhereClause> haIdEqualTo(String haId) {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterWhereClause> haIdEqualTo(
+      String haId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'haId',
@@ -274,7 +281,8 @@ extension DeviceQueryWhere on QueryBuilder<Device, Device, QWhereClause> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterWhereClause> haIdNotEqualTo(String haId) {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterWhereClause> haIdNotEqualTo(
+      String haId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -309,8 +317,9 @@ extension DeviceQueryWhere on QueryBuilder<Device, Device, QWhereClause> {
   }
 }
 
-extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
-  QueryBuilder<Device, Device, QAfterFilterCondition> haIdEqualTo(
+extension DeviceEntityQueryFilter
+    on QueryBuilder<DeviceEntity, DeviceEntity, QFilterCondition> {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> haIdEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -323,7 +332,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> haIdGreaterThan(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      haIdGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -338,7 +348,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> haIdLessThan(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> haIdLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -353,7 +363,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> haIdBetween(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> haIdBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -372,7 +382,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> haIdStartsWith(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      haIdStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -385,7 +396,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> haIdEndsWith(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> haIdEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -398,7 +409,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> haIdContains(String value,
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> haIdContains(
+      String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -409,7 +421,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> haIdMatches(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> haIdMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -421,7 +433,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> haIdIsEmpty() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      haIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'haId',
@@ -430,7 +443,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> haIdIsNotEmpty() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      haIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'haId',
@@ -439,7 +453,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> idEqualTo(
+      Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -448,7 +463,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> idGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -461,7 +476,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> idLessThan(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> idLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -474,7 +489,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> idBetween(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -491,7 +506,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> nameEqualTo(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -504,7 +519,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> nameGreaterThan(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      nameGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -519,7 +535,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> nameLessThan(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> nameLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -534,7 +550,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> nameBetween(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> nameBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -553,7 +569,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> nameStartsWith(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      nameStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -566,7 +583,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> nameEndsWith(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> nameEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -579,7 +596,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> nameContains(String value,
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> nameContains(
+      String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -590,7 +608,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> nameMatches(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> nameMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -602,7 +620,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> nameIsEmpty() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      nameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'name',
@@ -611,7 +630,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> nameIsNotEmpty() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      nameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'name',
@@ -620,7 +640,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> typeEqualTo(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> typeEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -633,7 +653,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> typeGreaterThan(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      typeGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -648,7 +669,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> typeLessThan(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> typeLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -663,7 +684,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> typeBetween(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> typeBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -682,7 +703,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> typeStartsWith(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      typeStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -695,7 +717,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> typeEndsWith(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> typeEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -708,7 +730,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> typeContains(String value,
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> typeContains(
+      String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -719,7 +742,7 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> typeMatches(
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> typeMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -731,7 +754,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> typeIsEmpty() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      typeIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'type',
@@ -740,7 +764,8 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> typeIsNotEmpty() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition>
+      typeIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'type',
@@ -750,127 +775,132 @@ extension DeviceQueryFilter on QueryBuilder<Device, Device, QFilterCondition> {
   }
 }
 
-extension DeviceQueryObject on QueryBuilder<Device, Device, QFilterCondition> {}
+extension DeviceEntityQueryObject
+    on QueryBuilder<DeviceEntity, DeviceEntity, QFilterCondition> {}
 
-extension DeviceQueryLinks on QueryBuilder<Device, Device, QFilterCondition> {
-  QueryBuilder<Device, Device, QAfterFilterCondition> area(
-      FilterQuery<Area> q) {
+extension DeviceEntityQueryLinks
+    on QueryBuilder<DeviceEntity, DeviceEntity, QFilterCondition> {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> area(
+      FilterQuery<AreaEntity> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'area');
     });
   }
 
-  QueryBuilder<Device, Device, QAfterFilterCondition> areaIsNull() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterFilterCondition> areaIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'area', 0, true, 0, true);
     });
   }
 }
 
-extension DeviceQuerySortBy on QueryBuilder<Device, Device, QSortBy> {
-  QueryBuilder<Device, Device, QAfterSortBy> sortByHaId() {
+extension DeviceEntityQuerySortBy
+    on QueryBuilder<DeviceEntity, DeviceEntity, QSortBy> {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> sortByHaId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'haId', Sort.asc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> sortByHaIdDesc() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> sortByHaIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'haId', Sort.desc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> sortByName() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> sortByNameDesc() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> sortByType() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> sortByType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.asc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> sortByTypeDesc() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> sortByTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.desc);
     });
   }
 }
 
-extension DeviceQuerySortThenBy on QueryBuilder<Device, Device, QSortThenBy> {
-  QueryBuilder<Device, Device, QAfterSortBy> thenByHaId() {
+extension DeviceEntityQuerySortThenBy
+    on QueryBuilder<DeviceEntity, DeviceEntity, QSortThenBy> {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> thenByHaId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'haId', Sort.asc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> thenByHaIdDesc() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> thenByHaIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'haId', Sort.desc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> thenById() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> thenByName() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> thenByNameDesc() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> thenByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> thenByType() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> thenByType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.asc);
     });
   }
 
-  QueryBuilder<Device, Device, QAfterSortBy> thenByTypeDesc() {
+  QueryBuilder<DeviceEntity, DeviceEntity, QAfterSortBy> thenByTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.desc);
     });
   }
 }
 
-extension DeviceQueryWhereDistinct on QueryBuilder<Device, Device, QDistinct> {
-  QueryBuilder<Device, Device, QDistinct> distinctByHaId(
+extension DeviceEntityQueryWhereDistinct
+    on QueryBuilder<DeviceEntity, DeviceEntity, QDistinct> {
+  QueryBuilder<DeviceEntity, DeviceEntity, QDistinct> distinctByHaId(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'haId', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Device, Device, QDistinct> distinctByName(
+  QueryBuilder<DeviceEntity, DeviceEntity, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Device, Device, QDistinct> distinctByType(
+  QueryBuilder<DeviceEntity, DeviceEntity, QDistinct> distinctByType(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'type', caseSensitive: caseSensitive);
@@ -878,26 +908,27 @@ extension DeviceQueryWhereDistinct on QueryBuilder<Device, Device, QDistinct> {
   }
 }
 
-extension DeviceQueryProperty on QueryBuilder<Device, Device, QQueryProperty> {
-  QueryBuilder<Device, int, QQueryOperations> idProperty() {
+extension DeviceEntityQueryProperty
+    on QueryBuilder<DeviceEntity, DeviceEntity, QQueryProperty> {
+  QueryBuilder<DeviceEntity, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<Device, String, QQueryOperations> haIdProperty() {
+  QueryBuilder<DeviceEntity, String, QQueryOperations> haIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'haId');
     });
   }
 
-  QueryBuilder<Device, String, QQueryOperations> nameProperty() {
+  QueryBuilder<DeviceEntity, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
     });
   }
 
-  QueryBuilder<Device, String, QQueryOperations> typeProperty() {
+  QueryBuilder<DeviceEntity, String, QQueryOperations> typeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'type');
     });

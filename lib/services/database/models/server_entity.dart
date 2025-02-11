@@ -1,25 +1,25 @@
 import 'package:isar/isar.dart';
 import 'home_view.dart';
 
-part 'ha_server.g.dart';
+part 'server_entity.g.dart';
 
 @collection
-class HaServer {
+class ServerEntity {
   Id id = Isar.autoIncrement;
 
   String name;
 
   bool isActive;
 
-  @Index(unique: true)
-  String uri;
+  // @Index(unique: true)
+  String url;
 
-  @Backlink(to: 'haServer')
+  @Backlink(to: 'server')
   final homeConfig = IsarLink<HomeViewConfig>();
 
-  HaServer({
+  ServerEntity({
     required this.name,
-    required this.uri,
+    required this.url,
     this.isActive = false,
   });
 }

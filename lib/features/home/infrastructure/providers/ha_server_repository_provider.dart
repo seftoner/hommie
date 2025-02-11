@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'ha_server_repository_provider.g.dart';
 
 @riverpod
-IHaServerRepository haServerRepository(Ref ref) {
+IServerEntityRepository haServerRepository(Ref ref) {
   final isar = ref.read(databaseConnectionProvider);
-  return IsarHaServerRepository(isar);
+  return IsarServerEntityRepository(isar);
 }

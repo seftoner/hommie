@@ -1,11 +1,11 @@
-import 'package:hommie/services/database/models/device.dart';
+import 'package:hommie/services/database/models/device_entity.dart';
 import 'package:isar/isar.dart';
-import 'ha_server.dart';
+import 'server_entity.dart';
 
-part 'area.g.dart';
+part 'area_entity.g.dart';
 
 @collection
-class Area {
+class AreaEntity {
   Id id = Isar.autoIncrement;
 
   @Index(unique: true)
@@ -18,18 +18,18 @@ class Area {
   String? image;
 
   @Backlink(to: 'area')
-  final devices = IsarLinks<Device>();
+  final devices = IsarLinks<DeviceEntity>();
 
   @Index(type: IndexType.value)
-  final haServer = IsarLink<HaServer>();
+  final server = IsarLink<ServerEntity>();
 
-  Area({
+  AreaEntity({
     required this.haId,
     required this.name,
     this.background,
     this.image,
   });
 
-  @ignore
-  HaServer get server => haServer.value!;
+  // @ignore
+  // ServerEntity get server => server.value!;
 }

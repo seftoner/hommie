@@ -1,7 +1,7 @@
 import 'package:isar/isar.dart';
-import 'ha_server.dart';
-import 'area.dart';
-import 'device.dart';
+import 'server_entity.dart';
+import 'area_entity.dart';
+import 'device_entity.dart';
 
 part 'home_view.g.dart';
 
@@ -15,7 +15,7 @@ class HomeViewConfig {
   Id id = Isar.autoIncrement;
 
   @Index(type: IndexType.value)
-  final haServer = IsarLink<HaServer>();
+  final server = IsarLink<ServerEntity>();
 
   @Backlink(to: 'homeConfig')
   final areaConfigs = IsarLinks<AreaHomeConfig>();
@@ -27,7 +27,7 @@ class HomeViewConfig {
 class AreaHomeConfig {
   Id id = Isar.autoIncrement;
 
-  final area = IsarLink<Area>();
+  final area = IsarLink<AreaEntity>();
   final homeConfig = IsarLink<HomeViewConfig>();
 
   int position;
@@ -44,7 +44,7 @@ class AreaHomeConfig {
 class DeviceHomeConfig {
   Id id = Isar.autoIncrement;
 
-  final device = IsarLink<Device>();
+  final device = IsarLink<DeviceEntity>();
   final areaConfig = IsarLink<AreaHomeConfig>();
 
   // @Index(type: IndexType.value)

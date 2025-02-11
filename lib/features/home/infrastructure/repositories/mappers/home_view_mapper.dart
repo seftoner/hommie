@@ -6,7 +6,7 @@ import 'package:hommie/features/home/infrastructure/repositories/mappers/device_
 extension HomeViewConfigMapper on db.HomeViewConfig {
   HomeViewConf toDomain() {
     return HomeViewConf(
-      serverId: haServer.value!.id.toString(),
+      serverId: server.value!.id.toString(),
       areas: areaConfigs.map((a) => a.toDomain()).toList()
         ..sort((a, b) => a.position.compareTo(b.position)),
     );

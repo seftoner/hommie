@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'area.dart';
+part of 'area_entity.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -9,13 +9,13 @@ part of 'area.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetAreaCollection on Isar {
-  IsarCollection<Area> get areas => this.collection();
+extension GetAreaEntityCollection on Isar {
+  IsarCollection<AreaEntity> get areaEntitys => this.collection();
 }
 
-const AreaSchema = CollectionSchema(
-  name: r'Area',
-  id: 8329722119685603417,
+const AreaEntitySchema = CollectionSchema(
+  name: r'AreaEntity',
+  id: 4784257270551015158,
   properties: {
     r'background': PropertySchema(
       id: 0,
@@ -38,10 +38,10 @@ const AreaSchema = CollectionSchema(
       type: IsarType.string,
     )
   },
-  estimateSize: _areaEstimateSize,
-  serialize: _areaSerialize,
-  deserialize: _areaDeserialize,
-  deserializeProp: _areaDeserializeProp,
+  estimateSize: _areaEntityEstimateSize,
+  serialize: _areaEntitySerialize,
+  deserialize: _areaEntityDeserialize,
+  deserializeProp: _areaEntityDeserializeProp,
   idName: r'id',
   indexes: {
     r'haId': IndexSchema(
@@ -73,28 +73,28 @@ const AreaSchema = CollectionSchema(
   },
   links: {
     r'devices': LinkSchema(
-      id: 4127597647611110641,
+      id: -1323198386073066508,
       name: r'devices',
-      target: r'Device',
+      target: r'DeviceEntity',
       single: false,
       linkName: r'area',
     ),
-    r'haServer': LinkSchema(
-      id: 4199997331135959325,
-      name: r'haServer',
-      target: r'HaServer',
+    r'server': LinkSchema(
+      id: -5582821276758252914,
+      name: r'server',
+      target: r'ServerEntity',
       single: true,
     )
   },
   embeddedSchemas: {},
-  getId: _areaGetId,
-  getLinks: _areaGetLinks,
-  attach: _areaAttach,
+  getId: _areaEntityGetId,
+  getLinks: _areaEntityGetLinks,
+  attach: _areaEntityAttach,
   version: '3.1.8',
 );
 
-int _areaEstimateSize(
-  Area object,
+int _areaEntityEstimateSize(
+  AreaEntity object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -116,8 +116,8 @@ int _areaEstimateSize(
   return bytesCount;
 }
 
-void _areaSerialize(
-  Area object,
+void _areaEntitySerialize(
+  AreaEntity object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -128,13 +128,13 @@ void _areaSerialize(
   writer.writeString(offsets[3], object.name);
 }
 
-Area _areaDeserialize(
+AreaEntity _areaEntityDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Area(
+  final object = AreaEntity(
     background: reader.readStringOrNull(offsets[0]),
     haId: reader.readString(offsets[1]),
     image: reader.readStringOrNull(offsets[2]),
@@ -144,7 +144,7 @@ Area _areaDeserialize(
   return object;
 }
 
-P _areaDeserializeProp<P>(
+P _areaEntityDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -164,26 +164,27 @@ P _areaDeserializeProp<P>(
   }
 }
 
-Id _areaGetId(Area object) {
+Id _areaEntityGetId(AreaEntity object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _areaGetLinks(Area object) {
-  return [object.devices, object.haServer];
+List<IsarLinkBase<dynamic>> _areaEntityGetLinks(AreaEntity object) {
+  return [object.devices, object.server];
 }
 
-void _areaAttach(IsarCollection<dynamic> col, Id id, Area object) {
+void _areaEntityAttach(IsarCollection<dynamic> col, Id id, AreaEntity object) {
   object.id = id;
-  object.devices.attach(col, col.isar.collection<Device>(), r'devices', id);
-  object.haServer.attach(col, col.isar.collection<HaServer>(), r'haServer', id);
+  object.devices
+      .attach(col, col.isar.collection<DeviceEntity>(), r'devices', id);
+  object.server.attach(col, col.isar.collection<ServerEntity>(), r'server', id);
 }
 
-extension AreaByIndex on IsarCollection<Area> {
-  Future<Area?> getByHaId(String haId) {
+extension AreaEntityByIndex on IsarCollection<AreaEntity> {
+  Future<AreaEntity?> getByHaId(String haId) {
     return getByIndex(r'haId', [haId]);
   }
 
-  Area? getByHaIdSync(String haId) {
+  AreaEntity? getByHaIdSync(String haId) {
     return getByIndexSync(r'haId', [haId]);
   }
 
@@ -195,12 +196,12 @@ extension AreaByIndex on IsarCollection<Area> {
     return deleteByIndexSync(r'haId', [haId]);
   }
 
-  Future<List<Area?>> getAllByHaId(List<String> haIdValues) {
+  Future<List<AreaEntity?>> getAllByHaId(List<String> haIdValues) {
     final values = haIdValues.map((e) => [e]).toList();
     return getAllByIndex(r'haId', values);
   }
 
-  List<Area?> getAllByHaIdSync(List<String> haIdValues) {
+  List<AreaEntity?> getAllByHaIdSync(List<String> haIdValues) {
     final values = haIdValues.map((e) => [e]).toList();
     return getAllByIndexSync(r'haId', values);
   }
@@ -215,31 +216,32 @@ extension AreaByIndex on IsarCollection<Area> {
     return deleteAllByIndexSync(r'haId', values);
   }
 
-  Future<Id> putByHaId(Area object) {
+  Future<Id> putByHaId(AreaEntity object) {
     return putByIndex(r'haId', object);
   }
 
-  Id putByHaIdSync(Area object, {bool saveLinks = true}) {
+  Id putByHaIdSync(AreaEntity object, {bool saveLinks = true}) {
     return putByIndexSync(r'haId', object, saveLinks: saveLinks);
   }
 
-  Future<List<Id>> putAllByHaId(List<Area> objects) {
+  Future<List<Id>> putAllByHaId(List<AreaEntity> objects) {
     return putAllByIndex(r'haId', objects);
   }
 
-  List<Id> putAllByHaIdSync(List<Area> objects, {bool saveLinks = true}) {
+  List<Id> putAllByHaIdSync(List<AreaEntity> objects, {bool saveLinks = true}) {
     return putAllByIndexSync(r'haId', objects, saveLinks: saveLinks);
   }
 }
 
-extension AreaQueryWhereSort on QueryBuilder<Area, Area, QWhere> {
-  QueryBuilder<Area, Area, QAfterWhere> anyId() {
+extension AreaEntityQueryWhereSort
+    on QueryBuilder<AreaEntity, AreaEntity, QWhere> {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhere> anyName() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhere> anyName() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'name'),
@@ -248,8 +250,9 @@ extension AreaQueryWhereSort on QueryBuilder<Area, Area, QWhere> {
   }
 }
 
-extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
-  QueryBuilder<Area, Area, QAfterWhereClause> idEqualTo(Id id) {
+extension AreaEntityQueryWhere
+    on QueryBuilder<AreaEntity, AreaEntity, QWhereClause> {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -258,7 +261,7 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> idNotEqualTo(Id id) {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -280,7 +283,7 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> idGreaterThan(Id id,
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> idGreaterThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -289,7 +292,7 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> idLessThan(Id id,
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> idLessThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -298,7 +301,7 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> idBetween(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -314,7 +317,8 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> haIdEqualTo(String haId) {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> haIdEqualTo(
+      String haId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'haId',
@@ -323,7 +327,8 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> haIdNotEqualTo(String haId) {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> haIdNotEqualTo(
+      String haId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -357,7 +362,8 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> nameEqualTo(String name) {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> nameEqualTo(
+      String name) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'name',
@@ -366,7 +372,8 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> nameNotEqualTo(String name) {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> nameNotEqualTo(
+      String name) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -400,7 +407,7 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> nameGreaterThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> nameGreaterThan(
     String name, {
     bool include = false,
   }) {
@@ -414,7 +421,7 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> nameLessThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> nameLessThan(
     String name, {
     bool include = false,
   }) {
@@ -428,7 +435,7 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> nameBetween(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> nameBetween(
     String lowerName,
     String upperName, {
     bool includeLower = true,
@@ -445,7 +452,7 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> nameStartsWith(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> nameStartsWith(
       String NamePrefix) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
@@ -456,7 +463,7 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> nameIsEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> nameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'name',
@@ -465,7 +472,7 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterWhereClause> nameIsNotEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterWhereClause> nameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -492,8 +499,10 @@ extension AreaQueryWhere on QueryBuilder<Area, Area, QWhereClause> {
   }
 }
 
-extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundIsNull() {
+extension AreaEntityQueryFilter
+    on QueryBuilder<AreaEntity, AreaEntity, QFilterCondition> {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      backgroundIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'background',
@@ -501,7 +510,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundIsNotNull() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      backgroundIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'background',
@@ -509,7 +519,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundEqualTo(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> backgroundEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -522,7 +532,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundGreaterThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      backgroundGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -537,7 +548,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundLessThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      backgroundLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -552,7 +564,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundBetween(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> backgroundBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -571,7 +583,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundStartsWith(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      backgroundStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -584,7 +597,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundEndsWith(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      backgroundEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -597,9 +611,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      backgroundContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'background',
@@ -609,7 +622,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundMatches(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> backgroundMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -621,7 +634,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundIsEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      backgroundIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'background',
@@ -630,7 +644,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> backgroundIsNotEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      backgroundIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'background',
@@ -639,7 +654,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haIdEqualTo(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> haIdEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -652,7 +667,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haIdGreaterThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> haIdGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -667,7 +682,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haIdLessThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> haIdLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -682,7 +697,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haIdBetween(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> haIdBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -701,7 +716,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haIdStartsWith(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> haIdStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -714,7 +729,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haIdEndsWith(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> haIdEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -727,7 +742,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haIdContains(String value,
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> haIdContains(
+      String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -738,7 +754,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haIdMatches(String pattern,
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> haIdMatches(
+      String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -749,7 +766,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haIdIsEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> haIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'haId',
@@ -758,7 +775,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haIdIsNotEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> haIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'haId',
@@ -767,7 +784,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> idEqualTo(
+      Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -776,7 +794,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> idGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -789,7 +807,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> idLessThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> idLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -802,7 +820,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> idBetween(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -819,7 +837,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageIsNull() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'image',
@@ -827,7 +845,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageIsNotNull() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'image',
@@ -835,7 +853,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageEqualTo(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -848,7 +866,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageGreaterThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -863,7 +881,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageLessThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -878,7 +896,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageBetween(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -897,7 +915,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageStartsWith(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -910,7 +928,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageEndsWith(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -923,7 +941,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageContains(String value,
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageContains(
+      String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -934,7 +953,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageMatches(String pattern,
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageMatches(
+      String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -945,7 +965,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageIsEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> imageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'image',
@@ -954,7 +974,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> imageIsNotEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      imageIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'image',
@@ -963,7 +984,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> nameEqualTo(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -976,7 +997,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> nameGreaterThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> nameGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -991,7 +1012,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> nameLessThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> nameLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1006,7 +1027,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> nameBetween(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> nameBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1025,7 +1046,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> nameStartsWith(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> nameStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1038,7 +1059,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> nameEndsWith(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> nameEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1051,7 +1072,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> nameContains(String value,
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> nameContains(
+      String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -1062,7 +1084,8 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> nameMatches(String pattern,
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> nameMatches(
+      String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -1073,7 +1096,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> nameIsEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> nameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'name',
@@ -1082,7 +1105,7 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> nameIsNotEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> nameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'name',
@@ -1092,36 +1115,40 @@ extension AreaQueryFilter on QueryBuilder<Area, Area, QFilterCondition> {
   }
 }
 
-extension AreaQueryObject on QueryBuilder<Area, Area, QFilterCondition> {}
+extension AreaEntityQueryObject
+    on QueryBuilder<AreaEntity, AreaEntity, QFilterCondition> {}
 
-extension AreaQueryLinks on QueryBuilder<Area, Area, QFilterCondition> {
-  QueryBuilder<Area, Area, QAfterFilterCondition> devices(
-      FilterQuery<Device> q) {
+extension AreaEntityQueryLinks
+    on QueryBuilder<AreaEntity, AreaEntity, QFilterCondition> {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> devices(
+      FilterQuery<DeviceEntity> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'devices');
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> devicesLengthEqualTo(
-      int length) {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      devicesLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'devices', length, true, length, true);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> devicesIsEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> devicesIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'devices', 0, true, 0, true);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> devicesIsNotEmpty() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      devicesIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'devices', 0, false, 999999, true);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> devicesLengthLessThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      devicesLengthLessThan(
     int length, {
     bool include = false,
   }) {
@@ -1130,7 +1157,8 @@ extension AreaQueryLinks on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> devicesLengthGreaterThan(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      devicesLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
@@ -1139,7 +1167,8 @@ extension AreaQueryLinks on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> devicesLengthBetween(
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition>
+      devicesLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1151,155 +1180,158 @@ extension AreaQueryLinks on QueryBuilder<Area, Area, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haServer(
-      FilterQuery<HaServer> q) {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> server(
+      FilterQuery<ServerEntity> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'haServer');
+      return query.link(q, r'server');
     });
   }
 
-  QueryBuilder<Area, Area, QAfterFilterCondition> haServerIsNull() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterFilterCondition> serverIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'haServer', 0, true, 0, true);
+      return query.linkLength(r'server', 0, true, 0, true);
     });
   }
 }
 
-extension AreaQuerySortBy on QueryBuilder<Area, Area, QSortBy> {
-  QueryBuilder<Area, Area, QAfterSortBy> sortByBackground() {
+extension AreaEntityQuerySortBy
+    on QueryBuilder<AreaEntity, AreaEntity, QSortBy> {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> sortByBackground() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'background', Sort.asc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> sortByBackgroundDesc() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> sortByBackgroundDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'background', Sort.desc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> sortByHaId() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> sortByHaId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'haId', Sort.asc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> sortByHaIdDesc() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> sortByHaIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'haId', Sort.desc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> sortByImage() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> sortByImage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.asc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> sortByImageDesc() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> sortByImageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.desc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> sortByName() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> sortByNameDesc() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
 }
 
-extension AreaQuerySortThenBy on QueryBuilder<Area, Area, QSortThenBy> {
-  QueryBuilder<Area, Area, QAfterSortBy> thenByBackground() {
+extension AreaEntityQuerySortThenBy
+    on QueryBuilder<AreaEntity, AreaEntity, QSortThenBy> {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> thenByBackground() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'background', Sort.asc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> thenByBackgroundDesc() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> thenByBackgroundDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'background', Sort.desc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> thenByHaId() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> thenByHaId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'haId', Sort.asc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> thenByHaIdDesc() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> thenByHaIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'haId', Sort.desc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> thenById() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> thenByImage() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> thenByImage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.asc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> thenByImageDesc() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> thenByImageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.desc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> thenByName() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
     });
   }
 
-  QueryBuilder<Area, Area, QAfterSortBy> thenByNameDesc() {
+  QueryBuilder<AreaEntity, AreaEntity, QAfterSortBy> thenByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
 }
 
-extension AreaQueryWhereDistinct on QueryBuilder<Area, Area, QDistinct> {
-  QueryBuilder<Area, Area, QDistinct> distinctByBackground(
+extension AreaEntityQueryWhereDistinct
+    on QueryBuilder<AreaEntity, AreaEntity, QDistinct> {
+  QueryBuilder<AreaEntity, AreaEntity, QDistinct> distinctByBackground(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'background', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Area, Area, QDistinct> distinctByHaId(
+  QueryBuilder<AreaEntity, AreaEntity, QDistinct> distinctByHaId(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'haId', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Area, Area, QDistinct> distinctByImage(
+  QueryBuilder<AreaEntity, AreaEntity, QDistinct> distinctByImage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'image', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Area, Area, QDistinct> distinctByName(
+  QueryBuilder<AreaEntity, AreaEntity, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
@@ -1307,32 +1339,33 @@ extension AreaQueryWhereDistinct on QueryBuilder<Area, Area, QDistinct> {
   }
 }
 
-extension AreaQueryProperty on QueryBuilder<Area, Area, QQueryProperty> {
-  QueryBuilder<Area, int, QQueryOperations> idProperty() {
+extension AreaEntityQueryProperty
+    on QueryBuilder<AreaEntity, AreaEntity, QQueryProperty> {
+  QueryBuilder<AreaEntity, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<Area, String?, QQueryOperations> backgroundProperty() {
+  QueryBuilder<AreaEntity, String?, QQueryOperations> backgroundProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'background');
     });
   }
 
-  QueryBuilder<Area, String, QQueryOperations> haIdProperty() {
+  QueryBuilder<AreaEntity, String, QQueryOperations> haIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'haId');
     });
   }
 
-  QueryBuilder<Area, String?, QQueryOperations> imageProperty() {
+  QueryBuilder<AreaEntity, String?, QQueryOperations> imageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'image');
     });
   }
 
-  QueryBuilder<Area, String, QQueryOperations> nameProperty() {
+  QueryBuilder<AreaEntity, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
     });
