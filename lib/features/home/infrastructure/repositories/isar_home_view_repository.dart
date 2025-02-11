@@ -1,6 +1,6 @@
 import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/features/home/domain/repositories/i_home_view_repository.dart';
-import 'package:hommie/features/server_manager/domain/models/server_config.dart';
+import 'package:hommie/features/server_manager/domain/models/ha_server_config.dart';
 import 'package:hommie/services/database/models/area.dart';
 import 'package:hommie/services/database/models/device.dart';
 import 'package:hommie/services/database/models/ha_server.dart';
@@ -10,7 +10,7 @@ import 'mappers/home_view_mapper.dart';
 
 class IsarHomeViewRepository implements IHomeViewRepository {
   final Isar _isar;
-  final ServerConfig _serverConfig;
+  final HaServerConfig _serverConfig;
 
   IsarHomeViewRepository(this._isar, this._serverConfig);
 

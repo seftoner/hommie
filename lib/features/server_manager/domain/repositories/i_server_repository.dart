@@ -1,11 +1,11 @@
-import 'package:hommie/features/server_manager/domain/models/server_config.dart';
+import 'package:hommie/features/server_manager/domain/models/ha_server_config.dart';
 
 abstract interface class IServerRepository {
-  Future<List<ServerConfig>> getAll();
-  Future<ServerConfig?> getById(int id);
-  Future<ServerConfig> save(ServerConfig config);
+  Future<List<HaServerConfig>> getAll();
+  Future<HaServerConfig?> getById(int id);
+  Future<HaServerConfig> save(HaServerConfig config);
   Future<void> delete(int id);
-  Future<ServerConfig?> getActiveServer();
-  Stream<ServerConfig?> watchActiveServer();
+  Future<HaServerConfig?> getActiveServer();
+  Stream<HaServerConfig?> watchActiveServer();
   Future<void> setActiveServer(int id);
 }

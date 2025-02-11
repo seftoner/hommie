@@ -1,0 +1,65 @@
+import 'package:flutter/services.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
+import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
+import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
+import 'package:hommie/features/server_manager/domain/i_server_manager.dart';
+import 'package:hommie/features/server_manager/domain/models/ha_server_config.dart';
+import 'package:hommie/features/shared/domain/models/htask.dart';
+import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
+import 'package:oauth2/oauth2.dart';
+
+class AttemptOAuthLogin extends HTask<Credentials, AuthFailure> {
+  final IServerManager _serverManager;
+
+  final Uri _redirectUrl = Uri.parse('hommie://');
+
+  AttemptOAuthLogin(this._serverManager);
+
+  @override
+  String get name => 'AttemptOAuthLogin';
+
+  @override
+  Future<HTaskResult<Credentials, AuthFailure>> execute(
+      TaskExecutionContext context) async {
+    final HaServerConfig server = context.get('server')!;
+    final IAuthRepository authRepository =
+        await _serverManager.getAuthRepository(server.id);
+
+    try {
+      final authResult = await authRepository.login(
+          serverUrl: server.baseUrl!,
+          redirectUrl: _redirectUrl,
+          handler: _handleAuthentication);
+
+      return authResult.fold(
+        (error) => HTaskResult.failure(error),
+        (credentials) => HTaskResult.success(credentials),
+      );
+    } on PlatformException catch (e) {
+      //BUG: Not sure that 'CANCELED' message will be return on all platforms
+      if (e.code == 'CANCELED') {
+        logger.e(e.message);
+        return HTaskResult.failure(
+          AuthFailure.userBrake(e.message),
+          message: 'User canceled authentication',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  Future<Map<String, String>> _handleAuthentication(Uri uri) async {
+    final authenticateResult = await FlutterWebAuth2.authenticate(
+      url: uri.toString(),
+      callbackUrlScheme: _redirectUrl.scheme,
+    );
+    return Uri.parse(authenticateResult).queryParameters;
+  }
+
+  @override
+  Future<void> rollback(TaskExecutionContext context) async {}
+
+  @override
+  bool get supportsRollback => false;
+}

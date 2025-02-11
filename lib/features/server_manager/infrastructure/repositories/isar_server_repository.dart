@@ -1,4 +1,4 @@
-import 'package:hommie/features/server_manager/domain/models/server_config.dart';
+import 'package:hommie/features/server_manager/domain/models/ha_server_config.dart';
 import 'package:hommie/features/server_manager/domain/repositories/i_server_repository.dart';
 import 'package:hommie/features/server_manager/infrastructure/repositories/mappers/server_mapper.dart';
 import 'package:hommie/services/database/models/ha_server.dart';
@@ -10,23 +10,23 @@ class IsarServerRepository implements IServerRepository {
   IsarServerRepository(this._isar);
 
   @override
-  Future<List<ServerConfig>> getAll() async {
+  Future<List<HaServerConfig>> getAll() async {
     final servers = await _isar.haServers.where().findAll();
     return servers.map((s) => s.toDomain()).toList();
   }
 
   @override
-  Future<ServerConfig?> getById(int id) async {
+  Future<HaServerConfig?> getById(int id) async {
     final server = await _isar.haServers.filter().idEqualTo(id).findFirst();
     return server?.toDomain();
   }
 
   @override
-  Future<ServerConfig> save(ServerConfig config) async {
+  Future<HaServerConfig> save(HaServerConfig config) async {
     return _isar.writeTxn(() async {
       final server = config.toDb();
-      await _isar.haServers.put(server);
-      return config;
+      final id = await _isar.haServers.put(server);
+      return config.copyWith(id: id);
     });
   }
 
@@ -38,14 +38,14 @@ class IsarServerRepository implements IServerRepository {
   }
 
   @override
-  Future<ServerConfig?> getActiveServer() async {
+  Future<HaServerConfig?> getActiveServer() async {
     final server =
         await _isar.haServers.filter().isActiveEqualTo(true).findFirst();
     return server?.toDomain();
   }
 
   @override
-  Stream<ServerConfig?> watchActiveServer() {
+  Stream<HaServerConfig?> watchActiveServer() {
     final query = _isar.haServers.filter().isActiveEqualTo(true).build();
     return query
         .watch(fireImmediately: true)

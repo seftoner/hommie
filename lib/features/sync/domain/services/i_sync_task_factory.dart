@@ -1,7 +1,7 @@
-import 'package:hommie/features/sync/domain/models/sync_task.dart';
+import 'package:hommie/features/shared/domain/models/htask.dart';
 
 abstract class ISyncTaskFactory {
-  Future<List<SyncTask>> createAllTasks();
-  Future<SyncTask> createAreaSyncTask();
-  Future<SyncTask> createDeviceSyncTask();
+  Future<List<HTask>> createAllTasks();
+  Future<HTask> createAreaSyncTask();
+  Future<HTask> createDeviceSyncTask();
 }

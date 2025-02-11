@@ -9,7 +9,8 @@ part 'auth_repository_provider.g.dart';
 
 @riverpod
 IAuthRepository authRepository(Ref ref) {
-  final securityCredentialStorage = ref.read(credentialsRepositoryProvider);
+  //TODO: Read activer serverID from server manager
+  final securityCredentialStorage = ref.read(credentialsRepositoryProvider(0));
   final httpClinet = ref.read(httpClientProvider);
 
   return AuthRepository(securityCredentialStorage, httpClinet);

@@ -1,20 +1,20 @@
-import 'package:hommie/features/server_manager/domain/models/server_config.dart';
+import 'package:hommie/features/server_manager/domain/models/ha_server_config.dart';
 import 'package:hommie/services/database/models/ha_server.dart';
 
 extension ServerMapper on HaServer {
-  ServerConfig toDomain() {
-    return ServerConfig(
+  HaServerConfig toDomain() {
+    return HaServerConfig(
       id: id,
-      uri: uri,
+      baseUrl: uri,
       name: name,
     );
   }
 }
 
-extension ServerConfigMapper on ServerConfig {
+extension ServerConfigMapper on HaServerConfig {
   HaServer toDb() {
     return HaServer(
-      uri: uri,
+      uri: url,
       name: name,
     );
   }
