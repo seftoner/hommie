@@ -28,6 +28,7 @@ class AuthController extends _$AuthController {
     final serverManager = ref.read(serverManagerProvider);
     final server = await serverManager.getActiveServer();
     if (server == null) {
+      state = const AsyncData(AuthState.unauthenticated());
       return;
     }
 
@@ -87,7 +88,7 @@ class AuthController extends _$AuthController {
   Future<void> login(String haServerURL) async {
     final serverManager = ref.read(serverManagerProvider);
 
-    final chain = TaskChain.builder()
+    final loginAction = TaskChain.builder()
         .withContext('serverUrl', haServerURL)
         .addTask(CreateServerTask(serverManager))
         .addTask(OAuthLoginAttemptTask(serverManager))
@@ -100,6 +101,6 @@ class AuthController extends _$AuthController {
         .onSuccess(() => state = const AsyncData(AuthState.authenticated()))
         .build();
 
-    await TaskExecutor(chain).execute();
+    await TaskExecutor(loginAction).execute();
   }
 }
