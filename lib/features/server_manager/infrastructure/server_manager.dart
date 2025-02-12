@@ -1,7 +1,6 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
-import 'package:hommie/features/auth/infrastructure/repositories/auth_repository.dart';
-import 'package:hommie/features/auth/infrastructure/repositories/secure_credentials_storage.dart';
+import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/features/server_manager/domain/i_server_manager.dart';
 import 'package:hommie/features/server_manager/domain/models/server.dart';
 import 'package:hommie/features/server_manager/domain/repositories/i_server_repository.dart';
@@ -9,9 +8,9 @@ import 'package:hommie/features/server_manager/domain/repositories/i_websocket_r
 
 class ServerManager implements IServerManager {
   final IServerRepository _serverRepository;
-  final Map<int, IAuthRepository> _authRepositoryCache = {};
+  final Ref _ref;
 
-  ServerManager(this._serverRepository);
+  ServerManager(this._serverRepository, this._ref);
 
   @override
   Future<Server> addServer(Server config) {
@@ -39,31 +38,13 @@ class ServerManager implements IServerManager {
   }
 
   @override
-  Future<IWebSocketRepository> webSocketRepository(int serverId) {
+  IWebSocketRepository webSocketRepository(int serverId) {
     // TODO: implement webSocketRepository
     throw UnimplementedError();
   }
 
   @override
-  Future<IAuthRepository> getAuthRepository(int serverId) async {
-    if (_authRepositoryCache.containsKey(serverId)) {
-      return _authRepositoryCache[serverId]!;
-    }
-
-    final server = await _serverRepository.getById(serverId);
-    if (server == null) {
-      throw StateError('Server with id $serverId not found');
-    }
-
-    final authRepository = AuthRepository(
-      SecureCredentialRepository(
-        const FlutterSecureStorage(),
-        serverId,
-      ),
-      http.Client(),
-    );
-
-    _authRepositoryCache[serverId] = authRepository;
-    return authRepository;
+  IAuthRepository getAuthRepository(int serverId) {
+    return _ref.read(authRepositoryProvider(serverId));
   }
 }

@@ -6,7 +6,7 @@ part of 'server_manager_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverManagerHash() => r'aa3867f64ce1a0466327235ea9312ed03561d141';
+String _$serverManagerHash() => r'f18898c67bade1866f9d6f01d18b0ba3af271399';
 
 /// See also [serverManager].
 @ProviderFor(serverManager)

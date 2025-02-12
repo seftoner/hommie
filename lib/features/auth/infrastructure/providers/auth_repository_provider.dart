@@ -8,9 +8,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_repository_provider.g.dart';
 
 @riverpod
-IAuthRepository authRepository(Ref ref) {
-  //TODO: Read activer serverID from server manager
-  final securityCredentialStorage = ref.read(credentialsRepositoryProvider(0));
+IAuthRepository authRepository(Ref ref, int serverId) {
+  final securityCredentialStorage =
+      ref.read(credentialsRepositoryProvider(serverId));
   final httpClinet = ref.read(httpClientProvider);
 
   return AuthRepository(securityCredentialStorage, httpClinet);

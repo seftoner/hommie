@@ -9,12 +9,12 @@ import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
 import 'package:oauth2/oauth2.dart';
 
-class AttemptOAuthLogin extends HTask<Credentials, AuthFailure> {
+class OAuthLoginAttemptTask extends HTask<Credentials, AuthFailure> {
   final IServerManager _serverManager;
 
   final Uri _redirectUrl = Uri.parse('hommie://');
 
-  AttemptOAuthLogin(this._serverManager);
+  OAuthLoginAttemptTask(this._serverManager);
 
   @override
   String get name => 'AttemptOAuthLogin';

@@ -8,6 +8,6 @@ part 'server_manager_provider.g.dart';
 
 @riverpod
 IServerManager serverManager(Ref ref) {
-  final serverReposiroey = ref.read(serverRepositoryProvider);
-  return ServerManager(serverReposiroey);
+  final serverRepository = ref.read(serverRepositoryProvider);
+  return ServerManager(serverRepository, ref);
 }

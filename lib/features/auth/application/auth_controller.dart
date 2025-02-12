@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/features/auth/infrastructure/tasks/attempt_oauth_login.dart';
+import 'package:hommie/features/auth/infrastructure/tasks/oauth_login_attempt_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/create_server_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/get_config_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/activate_server_task.dart';
@@ -26,7 +25,13 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> initialize() async {
-    final repository = ref.read(authRepositoryProvider);
+    final serverManager = ref.read(serverManagerProvider);
+    final server = await serverManager.getActiveServer();
+    if (server == null) {
+      return;
+    }
+
+    final repository = serverManager.getAuthRepository(server.id!);
     final credentialsOrFailure = await repository.getCredentials();
 
     state = await credentialsOrFailure.fold(
@@ -64,11 +69,19 @@ class AuthController extends _$AuthController {
     final serverSettings = ref.read(serverSettingsProvider);
     await serverSettings.clear();
 
-    final failureOrSuccess = await ref.read(authRepositoryProvider).signOut();
+    final serverManager = ref.read(serverManagerProvider);
+    final server = await serverManager.getActiveServer();
+    if (server == null) {
+      return;
+    }
+
+    final failureOrSuccess =
+        await serverManager.getAuthRepository(server.id!).signOut();
     failureOrSuccess.fold(
       (l) => state = AsyncData(AuthState.failure(l)),
       (r) => {state = const AsyncData(AuthState.unauthenticated())},
     );
+    await serverManager.removeServer(server.id!);
   }
 
   Future<void> login(String haServerURL) async {
@@ -77,10 +90,10 @@ class AuthController extends _$AuthController {
     final chain = TaskChain.builder()
         .withContext('serverUrl', haServerURL)
         .addTask(CreateServerTask(serverManager))
-        .addTask(AttemptOAuthLogin(serverManager))
+        .addTask(OAuthLoginAttemptTask(serverManager))
         .addTask(GetConfigTask(serverManager))
         .addTask(ActivateServerTask(serverManager))
-        .onTaskError<AttemptOAuthLogin, AuthFailure>((error) {
+        .onTaskError<OAuthLoginAttemptTask, AuthFailure>((error) {
           state = AsyncData(AuthState.failure(error));
         })
         .onAnyError((error) => logger.e('An error occurred: $error'))

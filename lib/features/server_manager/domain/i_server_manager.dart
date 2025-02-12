@@ -8,6 +8,6 @@ abstract interface class IServerManager {
   Future<Server> addServer(Server config);
   Future<void> removeServer(int id);
   Future<List<Server>> getAvailableServers();
-  Future<IWebSocketRepository> webSocketRepository(int serverId);
-  Future<IAuthRepository> getAuthRepository(int serverId);
+  IWebSocketRepository webSocketRepository(int serverId);
+  IAuthRepository getAuthRepository(int serverId);
 }
