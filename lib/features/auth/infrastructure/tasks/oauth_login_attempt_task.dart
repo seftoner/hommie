@@ -62,7 +62,9 @@ class OAuthLoginAttemptTask extends HTask<Credentials, AuthFailure> {
   }
 
   @override
-  Future<void> rollback(TaskExecutionContext context) async {}
+  Future<void> rollback(TaskExecutionContext context) async {
+    //TODO: sign out????
+  }
 
   @override
   bool get supportsRollback => false;

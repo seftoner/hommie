@@ -21,14 +21,14 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   void build() async {
     ref.onDispose(() {
       _isDisposed = true;
-      disconnectAndCleanup();
+      disconnect();
     });
 
     _isDisposed = false;
   }
 
   Future<void> reconnect() async {
-    disconnectAndCleanup();
+    disconnect();
     await _createNewConnection();
   }
 
@@ -37,6 +37,16 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       return _connection!;
     }
     return _createNewConnection();
+  }
+
+  void disconnect() {
+    if (!_isDisposed) {
+      ref.read(connectionStateProvider.notifier).reset();
+    }
+    _stopHeartbeat();
+    _connection?.close();
+    _connection = null;
+    _connectionCompleter = null;
   }
 
   Future<HAConnection> _createNewConnection() async {
@@ -97,7 +107,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
 
     switch (state) {
       case Disconnected(type: DisconnectionType.authFailure):
-        disconnectAndCleanup();
+        disconnect();
         ref.read(connectionStateProvider.notifier).setAuthFailure();
         break;
       case Connecting():
@@ -134,15 +144,5 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   void _stopHeartbeat() {
     _heartbeatTimer?.cancel();
     _heartbeatTimer = null;
-  }
-
-  void disconnectAndCleanup() {
-    if (!_isDisposed) {
-      ref.read(connectionStateProvider.notifier).reset();
-    }
-    _stopHeartbeat();
-    _connection?.close();
-    _connection = null;
-    _connectionCompleter = null;
   }
 }

@@ -65,7 +65,7 @@ class AuthController extends _$AuthController {
     logger.i('Sign out');
     final connectionManager =
         ref.read(serverConnectionManagerProvider.notifier);
-    connectionManager.disconnectAndCleanup();
+    connectionManager.disconnect();
 
     final serverSettings = ref.read(serverSettingsProvider);
     await serverSettings.clear();

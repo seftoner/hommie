@@ -28,7 +28,7 @@ void authStateHandler(Ref ref) async {
         router.go(const HomeRouteData().location);
         break;
       case Unauthenticated():
-        connectionManager.disconnectAndCleanup();
+        connectionManager.disconnect();
         router.go(const DicoveryRoute().location);
         break;
       case Failure():

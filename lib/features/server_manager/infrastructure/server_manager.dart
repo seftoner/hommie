@@ -5,6 +5,8 @@ import 'package:hommie/features/server_manager/domain/i_server_manager.dart';
 import 'package:hommie/features/server_manager/domain/models/server.dart';
 import 'package:hommie/features/server_manager/domain/repositories/i_server_repository.dart';
 import 'package:hommie/features/server_manager/domain/repositories/i_websocket_repository.dart';
+import 'package:hommie/features/server_manager/infrastructure/repositories/websocket_repository.dart';
+import 'package:hommie/services/networking/server_connection_provider.dart';
 
 class ServerManager implements IServerManager {
   final IServerRepository _serverRepository;
@@ -38,9 +40,9 @@ class ServerManager implements IServerManager {
   }
 
   @override
-  IWebSocketRepository webSocketRepository(int serverId) {
-    // TODO: implement webSocketRepository
-    throw UnimplementedError();
+  Future<IWebSocketRepository> webSocketRepository(int serverId) async {
+    final connection = await _ref.read(serverConnectionProvider.future);
+    return WebSocketRepository(connection);
   }
 
   @override

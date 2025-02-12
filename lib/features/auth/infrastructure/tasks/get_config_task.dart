@@ -11,7 +11,11 @@ class GetConfigTask extends HTask {
 
   @override
   Future<HTaskResult> execute(TaskExecutionContext context) async {
-    final server = context.get<Server>('server')!;
+    final server = context.get<Server>('server');
+
+    if (server == null) {
+      throw Exception('Server is not provided');
+    }
 
     final webSocketRepository =
         await _serverManager.webSocketRepository(server.id!);
