@@ -46,7 +46,7 @@ dependencies:
       path: workmanager/
 
 dev_dependencies:
-  bdd_widget_test: ^1.7.6
+  bdd_widget_test: ^1.8.0
   build_runner: 2.4.14
   custom_lint: ^0.7.0
 
