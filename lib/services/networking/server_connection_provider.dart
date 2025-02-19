@@ -7,7 +7,7 @@ import 'package:hommie/services/networking/server_connection_manager.dart';
 part 'server_connection_provider.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [ServerConnectionManager])
-Future<HAConnection> serverConnection(Ref ref) async {
+Future<HAConnection> serverConnection(Ref ref, int serverId) async {
   final manager = ref.watch(serverConnectionManagerProvider.notifier);
-  return manager.getConnection();
+  return manager.getConnection(serverId);
 }

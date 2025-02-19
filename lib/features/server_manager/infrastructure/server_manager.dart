@@ -41,7 +41,8 @@ class ServerManager implements IServerManager {
 
   @override
   Future<IWebSocketRepository> webSocketRepository(int serverId) async {
-    final connection = await _ref.read(serverConnectionProvider.future);
+    final connection =
+        await _ref.read(serverConnectionProvider(serverId).future);
     return WebSocketRepository(connection);
   }
 

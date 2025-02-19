@@ -12,51 +12,62 @@ part 'server_connection_manager.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [ConnectionState])
 class ServerConnectionManager extends _$ServerConnectionManager {
-  HAConnection? _connection;
+  final _connections = <int, HAConnection>{};
+  final _completers = <int, Completer<HAConnection>>{};
+  final _heartbeatTimers = <int, Timer>{};
   bool _isDisposed = false;
-  Timer? _heartbeatTimer;
-  Completer<HAConnection>? _connectionCompleter;
 
   @override
   void build() async {
     ref.onDispose(() {
       _isDisposed = true;
-      disconnect();
+      _disconnectAll();
     });
 
     _isDisposed = false;
   }
 
-  Future<void> reconnect() async {
-    disconnect();
-    await _createNewConnection();
+  Future<void> reconnect(int serverId) async {
+    disconnect(serverId);
+    await _createNewConnection(serverId);
   }
 
-  Future<HAConnection> getConnection() async {
-    if (_connection != null) {
-      return _connection!;
+  Future<HAConnection> getConnection(int serverId) async {
+    if (_connections.containsKey(serverId)) {
+      return _connections[serverId]!;
     }
-    return _createNewConnection();
+    return _createNewConnection(serverId);
   }
 
-  void disconnect() {
+  void disconnect(int serverId) {
     if (!_isDisposed) {
       ref.read(connectionStateProvider.notifier).reset();
     }
-    _stopHeartbeat();
-    _connection?.close();
-    _connection = null;
-    _connectionCompleter = null;
+    _connections[serverId]?.close();
+    _connections.remove(serverId);
+    _completers.remove(serverId);
+    _stopHeartbeat(serverId);
   }
 
-  Future<HAConnection> _createNewConnection() async {
-    // If there's already a connection being created, wait for it
-    if (_connectionCompleter != null) {
+  void _disconnectAll() {
+    for (final serverId in _connections.keys.toList()) {
+      disconnect(serverId);
+    }
+  }
+
+  Future<HAConnection> _createNewConnection(int serverId) async {
+    if (_completers.containsKey(serverId)) {
       logger.d('Lock by completer');
-      return _connectionCompleter!.future;
+      return _completers[serverId]!.future;
     }
 
-    _connectionCompleter = Completer<HAConnection>();
+    // // If there's already a connection being created, wait for it
+    // if (_connectionCompleter != null) {
+    //   logger.d('Lock by completer');
+    //   return _connectionCompleter!.future;
+    // }
+
+    _completers[serverId] = Completer<HAConnection>();
 
     try {
       if (_isDisposed) {
@@ -84,65 +95,67 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       final connection = HAConnection(connOption);
 
       connection.state.listen((state) {
-        _handleConnectionState(state);
+        _handleConnectionState(serverId, state);
       });
 
       await connection.connect();
-      _connection = connection;
-      _connectionCompleter!.complete(connection);
+      _connections[serverId] = connection;
+      _completers[serverId]!.complete(connection);
       return connection;
     } catch (e) {
-      _connectionCompleter!.completeError(e);
+      _completers[serverId]!.completeError(e);
       logger.e('Connection failed: $e');
       rethrow;
     } finally {
-      _connectionCompleter = null;
+      _completers.remove(serverId);
     }
   }
 
-  void _handleConnectionState(HASocketState state) {
+  void _handleConnectionState(int serverId, HASocketState state) {
     if (_isDisposed) {
       return;
     }
 
     switch (state) {
       case Disconnected(type: DisconnectionType.authFailure):
-        disconnect();
+        disconnect(serverId);
         ref.read(connectionStateProvider.notifier).setAuthFailure();
         break;
       case Connecting():
         ref.read(connectionStateProvider.notifier).setConnecting();
-        _stopHeartbeat();
+        _stopHeartbeat(serverId);
         break;
       case Authenticated():
         ref.read(connectionStateProvider.notifier).setConnected();
-        _startHeartbeat();
+        _startHeartbeat(serverId);
         break;
       case Reconnecting():
         ref.read(connectionStateProvider.notifier).setReconnecting();
-        _stopHeartbeat();
+        _stopHeartbeat(serverId);
         break;
       case Disconnected():
         ref.read(connectionStateProvider.notifier).setDisconnected();
-        _stopHeartbeat();
+        _stopHeartbeat(serverId);
         break;
     }
   }
 
-  void _startHeartbeat() {
-    _stopHeartbeat();
-    _heartbeatTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+  void _startHeartbeat(int serverId) {
+    _stopHeartbeat(serverId);
+    _heartbeatTimers[serverId] =
+        Timer.periodic(const Duration(seconds: 30), (_) {
       logger.d('Ping server');
-      if (_connection != null) {
-        HACommands.pingServer(_connection!).catchError((e) {
+      final connection = _connections[serverId];
+      if (connection != null) {
+        HACommands.pingServer(connection).catchError((e) {
           logger.e('Ping failed: $e');
         });
       }
     });
   }
 
-  void _stopHeartbeat() {
-    _heartbeatTimer?.cancel();
-    _heartbeatTimer = null;
+  void _stopHeartbeat(int serverId) {
+    _heartbeatTimers[serverId]?.cancel();
+    _heartbeatTimers.remove(serverId);
   }
 }
