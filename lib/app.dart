@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hommie/features/auth/application/app_state_handler.dart';
 import 'package:hommie/router/router.dart';
-import 'package:hommie/services/database/database_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
-import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
 import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:hommie/features/auth/application/auth_state_handler.dart';
 
 class HommieApp extends StatelessWidget {
   const HommieApp({super.key});
@@ -45,9 +43,8 @@ class _ServiceInitializer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(databaseConnectionProvider);
-    ref.watch(serverConnectionManagerProvider);
-    ref.watch(authStateHandlerProvider);
+    ref.watch(appStateHandlerProvider);
+
     ref.watch(connectionStateProvider);
     return child;
   }
