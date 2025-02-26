@@ -21,7 +21,7 @@ class GetConfigTask extends HTask {
         await _serverManager.webSocketRepository(server.id!);
     final serverConfig = await webSocketRepository.getConfig();
 
-    _serverManager.addServer(
+    final updatedServer = await _serverManager.addServer(
       server.copyWith(
         name: serverConfig.location_name,
         version: HaVersion.fromString(serverConfig.version),
@@ -29,6 +29,8 @@ class GetConfigTask extends HTask {
         externalUrl: serverConfig.external_url,
       ),
     );
+
+    context.set<Server>('server', updatedServer);
 
     return const HTaskResult(status: Status.success);
   }

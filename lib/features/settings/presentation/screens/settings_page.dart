@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hommie/features/server_manager/infrastructure/providers/server_manager_provider.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:hommie/ui/keys.dart';
-import 'package:hommie/features/auth/application/auth_controller.dart';
+import 'package:hommie/features/auth/application/server_auth_controller.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -94,9 +95,16 @@ class SettingsPage extends ConsumerWidget {
             style: TextButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,
             ),
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop();
-              ref.read(authControllerProvider.notifier).signOut();
+              // Get the active server ID and use the serverAuthController
+              final serverManager = ref.read(serverManagerProvider);
+              final activeServer = await serverManager.getActiveServer();
+              if (activeServer != null) {
+                ref
+                    .read(serverAuthControllerProvider.notifier)
+                    .signOut(activeServer.id!);
+              }
             },
             child: const Text('Sign Out'),
           ),

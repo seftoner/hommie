@@ -20,102 +20,166 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
       key: K.home.page,
       body: switch (homeState) {
-        AsyncData(value: final state) => state.homeView == null
-            ? const Center(child: Text('No home view configured'))
-            : CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    title: state.isEditing
-                        ? const Text('Edit home view')
-                        : const Text('My home'),
-                    centerTitle: false,
-                    actions: [
-                      if (state.isEditing)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: FilledButton(
+        AsyncData(value: final state) => CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                title: state.isEditing
+                    ? const Text('Edit home view')
+                    : const Text('My home'),
+                centerTitle: false,
+                actions: [
+                  if (state.isEditing && state.homeView != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: FilledButton(
+                        onPressed: () {
+                          ref
+                              .read(homePageControllerProvider.notifier)
+                              .toggleEditMode();
+                        },
+                        child: const Text('Done'),
+                      ),
+                    )
+                  else
+                    MenuAnchor(
+                      builder: (context, controller, child) {
+                        return IconButton(
+                          onPressed: () {
+                            if (controller.isOpen) {
+                              controller.close();
+                            } else {
+                              controller.open();
+                            }
+                          },
+                          icon: const Icon(Icons.more_vert),
+                        );
+                      },
+                      menuChildren: [
+                        MenuItemButton(
+                          trailingIcon: const Icon(Icons.settings_outlined),
+                          child: const Text('Settings'),
+                          onPressed: () {
+                            const SettingsRouteData().push(context);
+                          },
+                        ),
+                        if (state.homeView != null) ...[
+                          MenuItemButton(
+                            trailingIcon: const Icon(Icons.dashboard_rounded),
+                            child: const Text('Edit Home view'),
                             onPressed: () {
                               ref
                                   .read(homePageControllerProvider.notifier)
                                   .toggleEditMode();
                             },
-                            child: const Text('Done'),
                           ),
-                        )
-                      else
-                        MenuAnchor(
-                          builder: (context, controller, child) {
-                            return IconButton(
-                              onPressed: () {
-                                if (controller.isOpen) {
-                                  controller.close();
-                                } else {
-                                  controller.open();
-                                }
-                              },
-                              icon: const Icon(Icons.more_vert),
-                            );
-                          },
-                          menuChildren: [
-                            MenuItemButton(
-                              trailingIcon: const Icon(Icons.settings_outlined),
-                              child: const Text('Settings'),
-                              onPressed: () {
-                                const SettingsRouteData().push(context);
-                              },
-                            ),
-                            MenuItemButton(
-                              trailingIcon: const Icon(Icons.dashboard_rounded),
-                              child: const Text('Edit Home view'),
-                              onPressed: () {
-                                ref
-                                    .read(homePageControllerProvider.notifier)
-                                    .toggleEditMode();
-                              },
-                            ),
-                            MenuItemButton(
-                              trailingIcon:
-                                  const Icon(Icons.low_priority_rounded),
-                              child: const Text('Reorder Items'),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                    ],
-                    floating: true,
-                    pinned: true,
+                          MenuItemButton(
+                            trailingIcon:
+                                const Icon(Icons.low_priority_rounded),
+                            child: const Text('Reorder Items'),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ],
+                    ),
+                ],
+                floating: true,
+                pinned: true,
+              ),
+              if (state.homeView == null)
+                const SliverFillRemaining(
+                  child: Center(
+                    child: Text('No home view configured'),
                   ),
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, areaIndex) {
-                          final areaConfig = state.homeView!.areas[areaIndex];
-                          final area = areaConfig.area;
-                          final devices = areaConfig.devices;
+                )
+              else
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, areaIndex) {
+                        final areaConfig = state.homeView!.areas[areaIndex];
+                        final area = areaConfig.area;
+                        final devices = areaConfig.devices;
 
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RoomGroup(
-                                roomName: area.name,
-                                enabled: !state.isEditing,
-                              ),
-                              HomeDevicesGridView(
-                                  state: state, devices: devices),
-                              $h24,
-                            ],
-                          );
-                        },
-                        childCount: state.homeView?.areas.length ?? 0,
-                      ),
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RoomGroup(
+                              roomName: area.name,
+                              enabled: !state.isEditing,
+                            ),
+                            HomeDevicesGridView(state: state, devices: devices),
+                            $h24,
+                          ],
+                        );
+                      },
+                      childCount: state.homeView?.areas.length ?? 0,
                     ),
                   ),
-                ],
-              ),
-        AsyncError(:final error) => Text(error.toString()),
-        _ => const Center(
-            child: CircularProgressIndicator(),
+                ),
+            ],
+          ),
+        AsyncError(:final error) => Scaffold(
+            appBar: AppBar(
+              title: const Text('My home'),
+              actions: [
+                MenuAnchor(
+                  builder: (context, controller, child) {
+                    return IconButton(
+                      onPressed: () {
+                        if (controller.isOpen) {
+                          controller.close();
+                        } else {
+                          controller.open();
+                        }
+                      },
+                      icon: const Icon(Icons.more_vert),
+                    );
+                  },
+                  menuChildren: [
+                    MenuItemButton(
+                      trailingIcon: const Icon(Icons.settings_outlined),
+                      child: const Text('Settings'),
+                      onPressed: () {
+                        const SettingsRouteData().push(context);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            body: Center(child: Text(error.toString())),
+          ),
+        _ => Scaffold(
+            appBar: AppBar(
+              title: const Text('My home'),
+              actions: [
+                MenuAnchor(
+                  builder: (context, controller, child) {
+                    return IconButton(
+                      onPressed: () {
+                        if (controller.isOpen) {
+                          controller.close();
+                        } else {
+                          controller.open();
+                        }
+                      },
+                      icon: const Icon(Icons.more_vert),
+                    );
+                  },
+                  menuChildren: [
+                    MenuItemButton(
+                      trailingIcon: const Icon(Icons.settings_outlined),
+                      child: const Text('Settings'),
+                      onPressed: () {
+                        const SettingsRouteData().push(context);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            body: const Center(child: CircularProgressIndicator()),
           ),
       },
     );

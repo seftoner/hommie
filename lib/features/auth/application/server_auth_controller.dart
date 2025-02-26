@@ -15,7 +15,7 @@ part 'server_auth_controller.g.dart';
 @Riverpod(keepAlive: true, dependencies: [])
 class ServerAuthController extends _$ServerAuthController {
   @override
-  Future<AuthState> build(int serverId) async {
+  Future<AuthState> build() async {
     return const AuthState.initial();
   }
 
@@ -77,6 +77,11 @@ class ServerAuthController extends _$ServerAuthController {
         .onSuccess(() => state = const AsyncData(AuthState.authenticated()))
         .build();
 
-    await TaskExecutor(loginAction).execute();
+    try {
+      await TaskExecutor(loginAction).execute();
+    } catch (e, stack) {
+      state = AsyncError(e, stack);
+      logger.e('An error occurred: $e', stackTrace: stack);
+    }
   }
 }

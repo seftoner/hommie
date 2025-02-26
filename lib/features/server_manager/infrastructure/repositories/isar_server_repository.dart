@@ -56,16 +56,24 @@ class IsarServerRepository implements IServerRepository {
   @override
   Future<void> setActiveServer(int id) async {
     await _isar.writeTxn(() async {
-      // Deactivate current active
-      final current = await getActiveServer();
-      if (current != null) {
-        await save(current.copyWith(isActive: false));
-      }
+      // First deactivate all servers
+      await _isar.serverEntitys
+          .filter()
+          .isActiveEqualTo(true)
+          .build()
+          .findAll()
+          .then((activeServers) async {
+        for (final server in activeServers) {
+          server.isActive = false;
+          await _isar.serverEntitys.put(server);
+        }
+      });
 
-      // Activate new
-      final newActive = await getById(id);
-      if (newActive != null) {
-        await save(newActive.copyWith(isActive: true));
+      // Then activate the selected server
+      final serverToActivate = await _isar.serverEntitys.get(id);
+      if (serverToActivate != null) {
+        serverToActivate.isActive = true;
+        await _isar.serverEntitys.put(serverToActivate);
       }
     });
   }

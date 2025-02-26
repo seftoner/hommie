@@ -40,5 +40,4 @@ linter:
     - unnecessary_const
     - unnecessary_new
     - avoid_unnecessary_containers
-    - avoid_redundant_argument_values
     - avoid_unused_constructor_parameters

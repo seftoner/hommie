@@ -17,6 +17,8 @@ import 'package:hommie/features/auth/application/auth_state.dart';
 
 part 'auth_controller.g.dart';
 
+// THIS CLASS IS DEPRECATED
+// Use the new ServerAuthController class instead
 @Riverpod(dependencies: [ServerConnectionManager])
 class AuthController extends _$AuthController {
   @override
@@ -65,7 +67,7 @@ class AuthController extends _$AuthController {
     logger.i('Sign out');
     final connectionManager =
         ref.read(serverConnectionManagerProvider.notifier);
-    connectionManager.disconnect();
+    // connectionManager.disconnect();
 
     final serverSettings = ref.read(serverSettingsProvider);
     await serverSettings.clear();
@@ -86,21 +88,31 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> login(String haServerURL) async {
-    final serverManager = ref.read(serverManagerProvider);
+    try {
+      final serverManager = ref.read(serverManagerProvider);
 
-    final loginAction = TaskChain.builder()
-        .withContext('serverUrl', haServerURL)
-        .addTask(CreateServerTask(serverManager))
-        .addTask(OAuthLoginAttemptTask(serverManager))
-        .addTask(GetConfigTask(serverManager))
-        .addTask(ActivateServerTask(serverManager))
-        .onTaskError<OAuthLoginAttemptTask, AuthFailure>((error) {
-          state = AsyncData(AuthState.failure(error));
-        })
-        .onAnyError((error) => logger.e('An error occurred: $error'))
-        .onSuccess(() => state = const AsyncData(AuthState.authenticated()))
-        .build();
+      final loginAction = TaskChain.builder()
+          .withContext('serverUrl', haServerURL)
+          .addTask(CreateServerTask(serverManager))
+          .addTask(OAuthLoginAttemptTask(serverManager))
+          .addTask(GetConfigTask(serverManager))
+          .addTask(ActivateServerTask(ref))
+          .onTaskError<OAuthLoginAttemptTask, AuthFailure>((error) {
+            state = AsyncData(AuthState.failure(error));
+          })
+          .onAnyError((error) {
+            logger.e('An error occurred: $error');
+            state = AsyncData(AuthState.failure(AuthFailure.server(
+                error.toString()))); // Provide a more specific error
+          })
+          .onSuccess(() => state = const AsyncData(AuthState.authenticated()))
+          .build();
 
-    await TaskExecutor(loginAction).execute();
+      await TaskExecutor(loginAction).execute();
+    } catch (e, stack) {
+      logger.e('Login failed: $e', stackTrace: stack);
+      state = AsyncData(AuthState.failure(
+          AuthFailure.server(e.toString()))); // Provide a more specific error
+    }
   }
 }

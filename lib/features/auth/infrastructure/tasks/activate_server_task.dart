@@ -23,7 +23,7 @@ class ActivateServerTask extends HTask<void, Object> {
   }
 
   @override
-  String get name => 'SetActiveServer';
+  String get name => 'ActivateServerTask';
 
   @override
   Future<void> rollback(TaskExecutionContext context) async {

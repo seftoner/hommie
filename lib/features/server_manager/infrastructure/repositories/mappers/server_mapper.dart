@@ -7,6 +7,7 @@ extension ServerEntityMapper on ServerEntity {
       id: id,
       baseUrl: url,
       name: name,
+      isActive: isActive,
     );
   }
 }
@@ -17,11 +18,13 @@ extension ServerMapper on Server {
       return ServerEntity(
         url: url,
         name: name,
+        isActive: isActive,
       )..id = id!;
     } else {
       return ServerEntity(
         url: url,
         name: name,
+        isActive: isActive,
       );
     }
   }

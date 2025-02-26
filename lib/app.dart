@@ -44,7 +44,6 @@ class _ServiceInitializer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(appStateHandlerProvider);
-
     ref.watch(connectionStateProvider);
     return child;
   }

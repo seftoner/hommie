@@ -14,7 +14,6 @@ class ActiveServer extends _$ActiveServer {
   }
 
   Future<void> setActive(int serverId) async {
-    state = const AsyncLoading();
     final serverManager = ref.read(serverManagerProvider);
     await serverManager.setActiveServer(serverId);
 

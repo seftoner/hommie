@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hommie/features/auth/application/auth_controller.dart';
+import 'package:hommie/features/auth/application/server_auth_controller.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -40,8 +40,9 @@ class EnterAddressPage extends HookConsumerWidget {
                       labelText: 'Hub address',
                       border: OutlineInputBorder(),
                     ),
-                    onSubmitted: (value) =>
-                        ref.read(authControllerProvider.notifier).login(value),
+                    onSubmitted: (value) => ref
+                        .read(serverAuthControllerProvider.notifier)
+                        .login(value),
                   ),
                 ),
               ),
@@ -49,7 +50,7 @@ class EnterAddressPage extends HookConsumerWidget {
               FilledButton(
                 key: K.manualAddress.connectButton,
                 onPressed: () => ref
-                    .read(authControllerProvider.notifier)
+                    .read(serverAuthControllerProvider.notifier)
                     .login(haServerURLController.text),
                 child: const Text('Connect'),
               ),
