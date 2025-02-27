@@ -17,5 +17,14 @@ Future<IHomeViewRepository> homeViewRepository(Ref ref) async {
     throw Exception('No active server found.');
   }
 
-  return IsarHomeViewRepository(isar, activeServer);
+  return IsarHomeViewRepository(isar, activeServer.id!);
+}
+
+@riverpod
+IHomeViewRepository homeViewRepositoryForServer(
+  Ref ref,
+  int serverId,
+) {
+  final isar = ref.read(databaseConnectionProvider);
+  return IsarHomeViewRepository(isar, serverId);
 }

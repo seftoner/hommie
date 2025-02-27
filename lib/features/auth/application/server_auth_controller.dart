@@ -1,8 +1,11 @@
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
+import 'package:hommie/features/auth/infrastructure/tasks/activate_server_if_exist_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/activate_server_task.dart';
+import 'package:hommie/features/auth/infrastructure/tasks/clear_server_credentials_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/create_server_task.dart';
+import 'package:hommie/features/auth/infrastructure/tasks/delete_server_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/get_config_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/oauth_login_attempt_task.dart';
 import 'package:hommie/features/server_manager/infrastructure/providers/server_manager_provider.dart';
@@ -52,13 +55,21 @@ class ServerAuthController extends _$ServerAuthController {
 
   Future<void> signOut(int serverId) async {
     logger.i('Sign out server $serverId');
+
     final serverManager = ref.read(serverManagerProvider);
-    final repository = serverManager.getAuthRepository(serverId);
 
-    await repository.signOut();
-    // ref.read(serverConnectionStateProvider(serverId).notifier).remove(serverId);
+    final signOutAction = TaskChain.builder()
+        .withContext('serverId', serverId)
+        .addTask(SignOutServerTask(serverManager, ref))
+        .addTask(DeleteServerTask(serverManager, ref))
+        .addTask(ActivateServerIfExistTask(serverManager, ref))
+        .onAnyError(
+            (error) => logger.e('An error occurred during sign out: $error'))
+        .onSuccess(() {
+      state = const AsyncData(AuthState.unauthenticated());
+    }).build();
 
-    state = const AsyncData(AuthState.unauthenticated());
+    await TaskExecutor(signOutAction).execute();
   }
 
   Future<void> login(String haServerURL) async {

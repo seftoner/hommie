@@ -7,7 +7,7 @@ part of 'server_auth_controller.dart';
 // **************************************************************************
 
 String _$serverAuthControllerHash() =>
-    r'0115b471b38fc6511ac9a61249c5012930401bc3';
+    r'610b1f4a8022d399f2958d0b92972f7f9042ff9b';
 
 /// See also [ServerAuthController].
 @ProviderFor(ServerAuthController)

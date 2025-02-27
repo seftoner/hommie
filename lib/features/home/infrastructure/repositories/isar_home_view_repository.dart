@@ -10,15 +10,15 @@ import 'mappers/home_view_mapper.dart';
 
 class IsarHomeViewRepository implements IHomeViewRepository {
   final Isar _isar;
-  final Server _server;
+  final int _serverId;
 
-  IsarHomeViewRepository(this._isar, this._server);
+  IsarHomeViewRepository(this._isar, this._serverId);
 
   @override
   Future<HomeViewConf?> get() async {
     final config = await _isar.homeViewConfigs
         .filter()
-        .server((q) => q.idEqualTo(_server.id!))
+        .server((q) => q.idEqualTo(_serverId))
         .findFirst();
     return config?.toDomain();
   }
@@ -73,7 +73,7 @@ class IsarHomeViewRepository implements IHomeViewRepository {
     await _isar.writeTxn(() async {
       final config = await _isar.homeViewConfigs
           .filter()
-          .server((q) => q.idEqualTo(_server.id!))
+          .server((q) => q.idEqualTo(_serverId))
           .findFirst();
       if (config != null) {
         await _isar.homeViewConfigs.delete(config.id);
