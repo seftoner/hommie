@@ -24,7 +24,7 @@ dependencies:
   flutter_web_auth_2: ^4.0.2
   fpdart: ^1.1.0
   freezed_annotation: ^2.4.4
-  go_router: ^14.6.3
+  go_router: ^15.0.0
   hooks_riverpod: ^2.4.9
   http: ^1.3.0
   json_annotation: ^4.8.1
