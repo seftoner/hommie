@@ -12,7 +12,7 @@ dependencies:
   computer:
     git:
       url: https://github.com/seftoner/computer.git
-  connectivity_plus: ^6.1.2
+  connectivity_plus: ^6.1.4
   flutter:
     sdk: flutter
   flutter_animate: ^4.4.0
