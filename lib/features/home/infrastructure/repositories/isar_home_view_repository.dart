@@ -1,6 +1,5 @@
 import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/features/home/domain/repositories/i_home_view_repository.dart';
-import 'package:hommie/features/server_manager/domain/models/server.dart';
 import 'package:hommie/services/database/models/area_entity.dart';
 import 'package:hommie/services/database/models/device_entity.dart';
 import 'package:hommie/services/database/models/server_entity.dart';

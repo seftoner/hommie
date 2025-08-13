@@ -1,5 +1,3 @@
-import 'package:hommie/features/home/domain/entities/device.dart';
-
 class Area {
   final String id;
   final String name;
