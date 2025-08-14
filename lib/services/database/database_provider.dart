@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'database_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Isar databaseConnection(Ref ref) {
   throw UnimplementedError('You forgor to override it');
 }
@@ -26,6 +26,7 @@ class DatabaseInitializer {
       directory: dir.path,
     );
 
+    // Clear all data.
     await isar.writeTxn(() async => isar.clear());
 
     // Populate test data if database is empty
