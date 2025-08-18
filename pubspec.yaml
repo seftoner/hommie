@@ -12,7 +12,7 @@ dependencies:
   computer:
     git:
       url: https://github.com/seftoner/computer.git
-  connectivity_plus: ^6.1.2
+  connectivity_plus: ^6.1.4
   flutter:
     sdk: flutter
   flutter_animate: ^4.4.0
@@ -24,7 +24,7 @@ dependencies:
   flutter_web_auth_2: ^4.0.2
   fpdart: ^1.1.0
   freezed_annotation: ^2.4.4
-  go_router: ^14.6.3
+  go_router: ^15.1.1
   hooks_riverpod: ^2.4.9
   http: ^1.3.0
   json_annotation: ^4.8.1
@@ -48,14 +48,14 @@ dependencies:
 dev_dependencies:
   bdd_widget_test: ^1.7.6
   build_runner: 2.4.14
-  custom_lint: ^0.7.0
+  custom_lint: ^0.7.3
 
   flutter_lints: ^5.0.0
 
   flutter_test:
     sdk: flutter
   freezed: ^2.5.7
-  go_router_builder: ^2.7.3
+  go_router_builder: ^2.8.2
   integration_test:
     sdk: flutter
   json_serializable: ^6.9.5
