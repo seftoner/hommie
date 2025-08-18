@@ -61,10 +61,10 @@ packages:
     dependency: "direct dev"
     description:
       name: bdd_widget_test
-      sha256: e99afb33b2d11c6259b302ec649c5291fc526ef1617707948e95ab852c10693b
+      sha256: "7908b933db8abaac5dedf99388b9c7a326fcd05f39a10c109bdff3c1d59c2192"
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -633,10 +633,10 @@ packages:
     dependency: "direct dev"
     description:
       name: json_serializable
-      sha256: "81f04dee10969f89f604e1249382d46b97a1ccad53872875369622b5bfc9e58a"
+      sha256: c50ef5fc083d5b5e12eef489503ba3bf5ccc899e487d691584699b4bdefeea8c
       url: "https://pub.dev"
     source: hosted
-    version: "6.9.4"
+    version: "6.9.5"
   leak_tracker:
     dependency: transitive
     description:
