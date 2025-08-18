@@ -1,7 +1,7 @@
 import 'package:hommie/features/home/domain/entities/area.dart';
 import 'package:hommie/features/home/domain/entities/device.dart';
 // import 'package:hommie/services/networking/connection_state_provider.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/types/types.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/types/types.dart';
 
 abstract interface class IWebSocketRepository {
   // Stream<HAServerConnectionState> get connectionState;

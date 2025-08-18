@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/ha_socket.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/ha_auth_token.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
 
 typedef FetchAuthTokenCallback = Future<HAAuthToken> Function();
 
@@ -111,6 +111,13 @@ class AuthenticationError implements Exception {
 class ConnectionError implements Exception {
   final String message;
   ConnectionError(this.message);
+  @override
+  String toString() => message;
+}
+
+class ConnectionClosedError implements Exception {
+  final String message;
+  ConnectionClosedError(this.message);
   @override
   String toString() => message;
 }

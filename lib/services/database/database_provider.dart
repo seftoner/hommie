@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'database_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Isar databaseConnection(Ref ref) {
   throw UnimplementedError('You forgor to override it');
 }

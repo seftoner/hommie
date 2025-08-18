@@ -5,13 +5,13 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
-import 'package:hommie/services/networking/home_assitant_websocket/ha_connection_option.dart'
+import 'package:hommie/services/networking/home_assistant_websocket/ha_connection_option.dart'
     as _i7;
-import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart'
+import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart'
     as _i4;
-import 'package:hommie/services/networking/home_assitant_websocket/src/ha_messages.dart'
+import 'package:hommie/services/networking/home_assistant_websocket/src/ha_messages.dart'
     as _i6;
-import 'package:hommie/services/networking/home_assitant_websocket/src/ha_socket.dart'
+import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart'
     as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i5;
@@ -102,7 +102,7 @@ class MockHASocket extends _i1.Mock implements _i2.HASocket {
       ) as bool);
 
   @override
-  void sendMessage(_i6.HABaseMessgae? message) => super.noSuchMethod(
+  void sendMessage(_i6.HABaseMessage? message) => super.noSuchMethod(
         Invocation.method(
           #sendMessage,
           [message],

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-abstract class HABaseMessgae {
+abstract class HABaseMessage {
   late Map<String, dynamic> _payload;
   Map<String, dynamic> get _basePayload;
 
-  HABaseMessgae() {
+  HABaseMessage() {
     _payload = _basePayload;
   }
 
@@ -22,7 +22,7 @@ abstract class HABaseMessgae {
   String toString() => _payload.toString();
 }
 
-class AuthMessage extends HABaseMessgae {
+class AuthMessage extends HABaseMessage {
   AuthMessage({required String accessToken}) {
     _payload['access_token'] = accessToken;
   }
@@ -31,7 +31,7 @@ class AuthMessage extends HABaseMessgae {
   Map<String, dynamic> get _basePayload => {'type': 'auth'};
 }
 
-class SupportedFeaturesMessage extends HABaseMessgae {
+class SupportedFeaturesMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{
         'type': 'supported_features',
@@ -40,35 +40,35 @@ class SupportedFeaturesMessage extends HABaseMessgae {
       };
 }
 
-class AreasMessage extends HABaseMessgae {
+class AreasMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{
         'type': 'config/area_registry/list',
       };
 }
 
-class CurrentUserMessage extends HABaseMessgae {
+class CurrentUserMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{
         'type': 'auth/current_user',
       };
 }
 
-class GetStatesMessage extends HABaseMessgae {
+class GetStatesMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{
         'type': 'get_states',
       };
 }
 
-class GetServicesMessage extends HABaseMessgae {
+class GetServicesMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{
         'type': 'get_services',
       };
 }
 
-class ServiceCallMessage extends HABaseMessgae {
+class ServiceCallMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{
         'type': 'call_service',
@@ -90,7 +90,7 @@ class ServiceCallMessage extends HABaseMessgae {
   }
 }
 
-class SubscribeEntitiesMessage extends HABaseMessgae {
+class SubscribeEntitiesMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{
         'type': 'subscribe_entities',
@@ -102,25 +102,25 @@ class SubscribeEntitiesMessage extends HABaseMessgae {
   }
 }
 
-class UnsubscribeEventsMessage extends HABaseMessgae {
+class UnsubscribeEventsMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{
         'type': 'unsubscribe_events',
       };
 
-  UnsubscribeEventsMessage({required int subsctibtionID}) {
-    _payload['subscription'] = subsctibtionID;
+  UnsubscribeEventsMessage({required int subscriptionID}) {
+    _payload['subscription'] = subscriptionID;
   }
 }
 
-class ConfigMessage extends HABaseMessgae {
+class ConfigMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{
         'type': 'get_config',
       };
 }
 
-class PingMessage extends HABaseMessgae {
+class PingMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{
         'type': 'ping',

@@ -5,8 +5,8 @@ import 'package:hommie/core/bootstrap/app_startup.dart';
 import 'package:hommie/features/auth/infrastructure/providers/credential_repository_provider.dart';
 import 'package:hommie/features/auth/infrastructure/repositories/secure_credentials_storage.dart';
 import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
-import 'package:hommie/features/server_manager/application/server_manager.dart';
-import 'package:hommie/features/server_manager/domain/models/server_config.dart';
+// import 'package:hommie/features/server_manager/application/server_manager.dart';
+// import 'package:hommie/features/server_manager/domain/models/server_config.dart';
 import 'package:hommie/router/router.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
@@ -56,7 +56,7 @@ class _ServiceInitializer extends ConsumerWidget {
   }
 }
 
-class HommieAppV2 extends ConsumerWidget {
+/* class HommieAppV2 extends ConsumerWidget {
   const HommieAppV2({super.key});
 
   @override
@@ -68,12 +68,12 @@ class HommieAppV2 extends ConsumerWidget {
         if (server == null) {
           return const ServerDiscoveryPage();
         }
-        final crendetialStorage =
+        final credentialStorage =
             SecureCredentialRepository(const FlutterSecureStorage(), server.id);
 
         return ProviderScope(
           overrides: [
-            credentialsRepositoryProvider.overrideWithValue(crendetialStorage),
+            credentialsRepositoryProvider.overrideWithValue(credentialStorage),
           ],
           child: const _RootAppWidget(),
         );
@@ -115,3 +115,4 @@ class HommieAppV2 extends ConsumerWidget {
     ); */
   }
 }
+ */

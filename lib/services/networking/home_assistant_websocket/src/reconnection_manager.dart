@@ -1,5 +1,5 @@
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/backoff.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/backoff.dart';
 
 abstract class ReconnectionManagerDelegate {
   void reconnectionManagerWantsReconnect();
@@ -13,7 +13,12 @@ class ReconnectionManager {
   bool _reconnectScheduled = false;
 
   ReconnectionManager(this._delegate, [Backoff? backoff])
-      : _backoff = backoff ?? const ConstantBackoff(Duration(seconds: 5));
+      : _backoff = backoff ?? ExponentialBackoff(
+          initialDelay: const Duration(seconds: 1),
+          maxDelay: const Duration(minutes: 2),
+          multiplier: 2.0,
+          jitter: true,
+        );
 
   void didStartInitialConnect() {
     _closeRequested = false;

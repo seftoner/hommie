@@ -1,25 +1,25 @@
 import 'dart:async';
 
-import 'package:hommie/services/networking/home_assitant_websocket/ha_connection_option.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/ha_connection_state.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/ha_messages.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/ha_socket.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/hass_subscription.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/reconnection_manager.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/types/web_socket_response.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/ha_connection_option.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/ha_connection_state.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/ha_messages.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/hass_subscription.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/reconnection_manager.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/types/web_socket_response.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/backoff.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/message_handler.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/backoff.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/message_handler.dart';
 
 /// Interface for Home Assistant websocket connection.
 abstract class IHAConnection {
   /// Sends a message to Home Assistant and returns the response.
-  Future<dynamic> sendMessage(HABaseMessgae message);
+  Future<dynamic> sendMessage(HABaseMessage message);
 
   /// Subscribes to Home Assistant events.
   /// Returns a [HassSubscription] that can be used to receive events and unsubscribe.
-  HassSubscription subscribeMessage(HABaseMessgae subscribeMessage);
+  HassSubscription subscribeMessage(HABaseMessage subscribeMessage);
 
   /// Closes the connection.
   Future<void> close();
@@ -49,10 +49,10 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
   HASocketState get currentState => _connectionState.currentState;
 
   //Wonder why 2? this part from official code: socket may send 1 at the start to enable features
-  int _commndID = 2;
+  int _commandID = 2;
   final Map<int, Completer> _commands = {};
   final Map<int, HassSubscription> _subscriptions = {};
-  int get _getCommndID => _commndID++;
+  int get _getCommandID => _commandID++;
 
   /// Establishes connection to Home Assistant.
   Future<void> connect() async {
@@ -84,21 +84,27 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
   }
 
   @override
-  Future<dynamic> sendMessage(HABaseMessgae message) async {
-    ///TODO: Consider error handling options:
-    /// 1. Current: Using assertion which throws an error
-    /// 2. Alternative: Returning null for graceful degradation
-    ///
-    /// Decision needed: Balance between:
-    /// - Strict/fail-fast (assertion) vs
-    /// - Graceful degradation (null return)
-    /// TODO: Setup and handle timeout
-    assert(!_socket!.isClosed, 'Connections is closed');
+  Future<dynamic> sendMessage(HABaseMessage message,
+      {Duration timeout = const Duration(seconds: 15)}) async {
+    // Replace assertion with runtime check for better error handling
+    if (_socket == null || _socket!.isClosed) {
+      return Future.error(ConnectionClosedError('Connection is closed'));
+    }
 
     final completer = Completer<dynamic>();
-    final id = _getCommndID;
+    final id = _getCommandID;
     _commands[id] = completer;
     message.id = id;
+
+    // Set up timeout to prevent memory leaks from hanging commands
+    Timer(timeout, () {
+      final pendingCompleter = _commands.remove(id);
+      if (pendingCompleter != null && !pendingCompleter.isCompleted) {
+        pendingCompleter.completeError(TimeoutException(
+            'Command $id timed out after ${timeout.inSeconds}s', timeout));
+      }
+    });
+
     _socket!.sendMessage(message);
 
     return completer.future;
@@ -110,29 +116,37 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
     _socketSubscription?.cancel();
     await _socket?.close();
 
+    // Clear all subscriptions to prevent memory leaks
+    for (final subscription in _subscriptions.values) {
+      subscription.dispose();
+    }
+    _subscriptions.clear();
+
     _connectionState.dispose();
     _socket = null;
   }
 
   @override
-  HassSubscription subscribeMessage(HABaseMessgae subscribeMessage) {
-    assert(!_socket!.isClosed, 'Connections is closed');
+  HassSubscription subscribeMessage(HABaseMessage subscribeMessage) {
+    if (_socket == null || _socket!.isClosed) {
+      throw ConnectionClosedError('Connection is closed');
+    }
 
-    final id = _getCommndID;
+    final id = _getCommandID;
 
-    final hassSubscribtion = HassSubscription(unsubscribe: () async {
+    final hassSubscription = HassSubscription(unsubscribe: () async {
       if (!_socket!.isClosed) {
-        await sendMessage(UnsubscribeEventsMessage(subsctibtionID: id));
+        await sendMessage(UnsubscribeEventsMessage(subscriptionID: id));
       }
-      final removedSubscribtion = _subscriptions.remove(id);
-      removedSubscribtion?.dispose();
+      final removedSubscription = _subscriptions.remove(id);
+      removedSubscription?.dispose();
     });
 
-    _subscriptions[id] = hassSubscribtion;
+    _subscriptions[id] = hassSubscription;
 
     subscribeMessage.id = id;
     _socket!.sendMessage(subscribeMessage);
-    return hassSubscribtion;
+    return hassSubscription;
   }
 
   void _setSocket(HASocket socket) {
@@ -155,8 +169,10 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
         _handleResponse(response);
       }
     } catch (e) {
-      logger.e('Failed to handle message', error: e);
-      _handleError(e);
+      logger.e('Failed to handle message: $e, message: $incomingMessage');
+      // Don't tear down connection for single message parse failures
+      // Only escalate if we see a pattern of failures
+      // TODO: Add metrics tracking for parse failures
     }
   }
 
@@ -182,7 +198,7 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
       subscription.emit(event);
     } else {
       logger.e('Unknown subscription $id, unsubscribing');
-      sendMessage(UnsubscribeEventsMessage(subsctibtionID: id))
+      sendMessage(UnsubscribeEventsMessage(subscriptionID: id))
           .catchError((e) => logger.e('Error unsubscribing: $e'));
     }
   }
@@ -199,7 +215,7 @@ class HAConnection implements IHAConnection, ReconnectionManagerDelegate {
 
   void _handleClose() {
     logger.i('Connection closed 👋');
-    _commndID = 2;
+    _commandID = 2;
     _socketSubscription?.cancel();
 
     _handlePendingCommands();

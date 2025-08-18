@@ -1,5 +1,5 @@
 import 'package:hommie/features/server_manager/domain/models/server.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/ha_connection.dart';
 
 class ServerContext {
   final Server config;

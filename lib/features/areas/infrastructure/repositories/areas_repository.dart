@@ -1,9 +1,9 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/areas/domain/repositories/i_areas_repository.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_commands.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_connection.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/types/hass_types.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/ha_commands.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/ha_connection.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/types/hass_types.dart';
 
 class AreasRepository implements IAreasRepository {
   final HAConnection _haWebsocketsConnection;

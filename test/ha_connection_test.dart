@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/ha_socket.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart';
 
-import 'package:hommie/services/networking/home_assitant_websocket/src/types/hass_event.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/types/hass_event.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 

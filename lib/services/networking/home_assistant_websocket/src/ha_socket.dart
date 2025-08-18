@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:hommie/features/auth/domain/entities/ha_version.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/ha_auth_token.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/ha_socket_state.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
-import 'package:hommie/services/networking/home_assitant_websocket/src/ha_auth_handler.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/http_config.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/ha_auth_handler.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/http_config.dart';
 
 import 'ha_messages.dart';
 
@@ -210,7 +210,7 @@ class HASocket {
     _stateController.close();
   }
 
-  void sendMessage(HABaseMessgae message) {
+  void sendMessage(HABaseMessage message) {
     final encodedData = message.toJson();
     logger.t('Sending message: $encodedData');
 

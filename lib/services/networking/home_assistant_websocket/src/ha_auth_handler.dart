@@ -1,6 +1,6 @@
-import 'package:hommie/services/networking/home_assitant_websocket/ha_auth_token.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/ha_auth_token.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/networking/home_assitant_websocket/src/ha_messages.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/ha_messages.dart';
 
 class HAAuthHandler {
   static const _authRequired = 'auth_required';
@@ -9,7 +9,7 @@ class HAAuthHandler {
 
   final HAAuthToken authToken;
   void Function(AuthResult)? onAuthResult;
-  void Function(HABaseMessgae)? sendMessage;
+  void Function(HABaseMessage)? sendMessage;
 
   HAAuthHandler({
     required this.authToken,
@@ -45,7 +45,7 @@ class HAAuthHandler {
 
   AuthResult _handleAuthInvalid(String message) {
     // message = Invalid access token or password
-    // need handle this reponse properly -> log out from app
+    // need handle this response properly -> log out from app
     logger.e('Authentication invalid: $message');
     return AuthResult.invalid(message);
   }

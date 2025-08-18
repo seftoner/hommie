@@ -1,4 +1,4 @@
-import 'package:hommie/services/networking/home_assitant_websocket/src/types/hass_types.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/types/hass_types.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'areas_controller.g.dart';

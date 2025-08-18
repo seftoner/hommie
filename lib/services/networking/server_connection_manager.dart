@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:hommie/services/networking/home_assitant_websocket/home_assistant_websocket.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/ha_oauth2_token.dart';
@@ -102,10 +102,15 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       _completers[serverId]!.complete(connection);
       return connection;
     } catch (e) {
-      _completers[serverId]!.completeError(e);
+      // Ensure completer is completed even on error
+      final completer = _completers[serverId];
+      if (completer != null && !completer.isCompleted) {
+        completer.completeError(e);
+      }
       logger.e('Connection failed: $e');
       rethrow;
     } finally {
+      // Always clean up completer reference
       _completers.remove(serverId);
     }
   }
@@ -142,13 +147,23 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   void _startHeartbeat(int serverId) {
     _stopHeartbeat(serverId);
     _heartbeatTimers[serverId] =
-        Timer.periodic(const Duration(seconds: 30), (_) {
-      logger.d('Ping server');
+        Timer.periodic(const Duration(seconds: 30), (_) async {
+      logger.d('Ping server $serverId');
       final connection = _connections[serverId];
       if (connection != null) {
-        HACommands.pingServer(connection).catchError((e) {
-          logger.e('Ping failed: $e');
-        });
+        try {
+          // Use timeout for ping to detect stale connections
+          await HACommands.pingServer(connection)
+              .timeout(const Duration(seconds: 10));
+          logger.d('Ping successful for server $serverId');
+        } catch (e) {
+          logger.e('Ping failed for server $serverId: $e');
+          // Trigger reconnection on ping failure
+          logger.i('Triggering reconnection due to ping failure');
+          reconnect(serverId).catchError((error) {
+            logger.e('Reconnection failed after ping timeout: $error');
+          });
+        }
       }
     });
   }
