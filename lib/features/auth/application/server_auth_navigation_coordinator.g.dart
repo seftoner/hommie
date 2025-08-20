@@ -1,22 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'app_state_handler.dart';
+part of 'server_auth_navigation_coordinator.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appStateHandlerHash() => r'a6dc22aa6efd3b1be479f7ac3df252df469f3cab';
+String _$serverAuthNavigationCoordinatorHash() =>
+    r'53d806fa472f5cee6463e37694f62ae2195113f1';
 
-/// See also [AppStateHandler].
-@ProviderFor(AppStateHandler)
-final appStateHandlerProvider =
-    AsyncNotifierProvider<AppStateHandler, void>.internal(
-  AppStateHandler.new,
-  name: r'appStateHandlerProvider',
+/// See also [ServerAuthNavigationCoordinator].
+@ProviderFor(ServerAuthNavigationCoordinator)
+final serverAuthNavigationCoordinatorProvider =
+    AsyncNotifierProvider<ServerAuthNavigationCoordinator, void>.internal(
+  ServerAuthNavigationCoordinator.new,
+  name: r'serverAuthNavigationCoordinatorProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$appStateHandlerHash,
+      : _$serverAuthNavigationCoordinatorHash,
   dependencies: <ProviderOrFamily>[
     activeServerProvider,
     serverAuthControllerProvider
@@ -29,6 +30,6 @@ final appStateHandlerProvider =
   },
 );
 
-typedef _$AppStateHandler = AsyncNotifier<void>;
+typedef _$ServerAuthNavigationCoordinator = AsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

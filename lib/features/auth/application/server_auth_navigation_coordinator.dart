@@ -5,24 +5,26 @@ import 'package:hommie/router/router.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'app_state_handler.g.dart';
+part 'server_auth_navigation_coordinator.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [ActiveServer, ServerAuthController])
-class AppStateHandler extends _$AppStateHandler {
+class ServerAuthNavigationCoordinator
+    extends _$ServerAuthNavigationCoordinator {
   @override
   Future<void> build() async {
     ref.listen(activeServerProvider, (_, next) {
       next.whenData((server) {
         if (server != null) {
-          _initializeServer(server.id!);
+          _handleServerSelection(server.id!);
         } else {
+          // No active server - go to discovery page
           ref.read(goRouterProvider).go(const DicoveryRoute().location);
         }
       });
     });
   }
 
-  Future<void> _initializeServer(int serverId) async {
+  Future<void> _handleServerSelection(int serverId) async {
     // Create a new auth controller for this server
     final authController = ref.read(serverAuthControllerProvider.notifier);
 
@@ -41,6 +43,7 @@ class AppStateHandler extends _$AppStateHandler {
               goRouter.go(const HomeRouteData().location);
               break;
             case Unauthenticated():
+              // Go to discovery page when unauthenticated
               goRouter.go(const DicoveryRoute().location);
               break;
             default:

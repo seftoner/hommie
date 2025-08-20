@@ -6,7 +6,7 @@ part of 'active_server_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$activeServerHash() => r'd67a17ee402023e1c9a12d3b43e5f5f27bfcdbc8';
+String _$activeServerHash() => r'723a4437bb466e27c40441abe51e6a15f9df246f';
 
 /// See also [ActiveServer].
 @ProviderFor(ActiveServer)

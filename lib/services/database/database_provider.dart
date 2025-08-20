@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/services/database/models/models.dart';
 import 'package:isar/isar.dart';
@@ -28,10 +29,10 @@ class DatabaseInitializer {
 
     await isar.writeTxn(() async => isar.clear());
 
-    // Populate test data if database is empty
-    if ((await isar.serverEntitys.count()) == 0) {
-      await _populateTestData(isar);
-    }
+    // Populate test data if database is empty (debug mode only)
+    // if (kDebugMode && (await isar.serverEntitys.count()) == 0) {
+    //   await _populateTestData(isar);
+    // }
 
     return isar;
   }

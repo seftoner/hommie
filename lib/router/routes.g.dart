@@ -85,6 +85,10 @@ RouteBase get $settingsRouteData => GoRouteData.$route(
           factory: $HubRouteDataExtension._fromState,
         ),
         GoRouteData.$route(
+          path: 'servers',
+          factory: $ServersRouteDataExtension._fromState,
+        ),
+        GoRouteData.$route(
           path: 'logs',
           factory: $LogsRouteDataExtension._fromState,
         ),
@@ -122,6 +126,24 @@ extension $HubRouteDataExtension on HubRouteData {
 
   String get location => GoRouteData.$location(
         '/settings/hub',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ServersRouteDataExtension on ServersRouteData {
+  static ServersRouteData _fromState(GoRouterState state) =>
+      const ServersRouteData();
+
+  String get location => GoRouteData.$location(
+        '/settings/servers',
       );
 
   void go(BuildContext context) => context.go(location);

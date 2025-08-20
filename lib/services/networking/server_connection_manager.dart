@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:hommie/features/server_manager/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -10,11 +11,12 @@ import 'package:hommie/core/utils/logger.dart';
 
 part 'server_connection_manager.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [ConnectionState])
+@Riverpod(keepAlive: true, dependencies: [ConnectionState, ActiveServer])
 class ServerConnectionManager extends _$ServerConnectionManager {
   final _connections = <int, HAConnection>{};
   final _completers = <int, Completer<HAConnection>>{};
   final _heartbeatTimers = <int, Timer>{};
+  int? _activeServerId;
   bool _isDisposed = false;
 
   @override
@@ -24,7 +26,44 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       _disconnectAll();
     });
 
+    // Initialize active server
+    final activeServer = await ref.read(activeServerProvider.future);
+    _activeServerId = activeServer?.id;
+    logger.i(
+        'ServerConnectionManager initialized with active server: $_activeServerId');
+
+    // Listen to active server changes
+    ref.listen(activeServerProvider, (previous, next) {
+      _handleActiveServerChange(next.value?.id);
+    });
+
     _isDisposed = false;
+  }
+
+  void _handleActiveServerChange(int? newActiveServerId) {
+    if (_activeServerId == newActiveServerId) {
+      return; // No change
+    }
+
+    final previousActiveServerId = _activeServerId;
+    _activeServerId = newActiveServerId;
+
+    logger.i(
+        'Active server changed from $previousActiveServerId to $newActiveServerId');
+
+    // If no active server, reset connection state
+    if (newActiveServerId == null && !_isDisposed) {
+      logger.i('No active server - resetting connection state');
+      ref.read(connectionStateProvider.notifier).reset();
+    }
+
+    // Disconnect all inactive servers
+    for (final serverId in _connections.keys.toList()) {
+      if (serverId != newActiveServerId) {
+        logger.i('Disconnecting inactive server: $serverId');
+        disconnect(serverId);
+      }
+    }
   }
 
   Future<void> reconnect(int serverId) async {
@@ -33,6 +72,13 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   }
 
   Future<HAConnection> getConnection(int serverId) async {
+    // Only allow connections to the active server
+    if (_activeServerId != null && serverId != _activeServerId) {
+      logger.w(
+          'Attempted to get connection for inactive server $serverId, active is $_activeServerId');
+      throw Exception('Cannot connect to inactive server $serverId');
+    }
+
     if (_connections.containsKey(serverId)) {
       return _connections[serverId]!;
     }
@@ -145,19 +191,33 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   }
 
   void _startHeartbeat(int serverId) {
+    // Only start heartbeat for the active server
+    if (_activeServerId != serverId) {
+      logger.w('Skipping heartbeat start for inactive server $serverId');
+      return;
+    }
+
     _stopHeartbeat(serverId);
+    logger.i('Starting heartbeat for active server $serverId');
     _heartbeatTimers[serverId] =
         Timer.periodic(const Duration(seconds: 30), (_) async {
-      logger.d('Ping server $serverId');
+      // Double-check this is still the active server
+      if (_activeServerId != serverId) {
+        logger.i('Stopping heartbeat for server $serverId - no longer active');
+        _stopHeartbeat(serverId);
+        return;
+      }
+
+      logger.d('Ping active server $serverId');
       final connection = _connections[serverId];
       if (connection != null) {
         try {
           // Use timeout for ping to detect stale connections
           await HACommands.pingServer(connection)
               .timeout(const Duration(seconds: 10));
-          logger.d('Ping successful for server $serverId');
+          logger.d('Ping successful for active server $serverId');
         } catch (e) {
-          logger.e('Ping failed for server $serverId: $e');
+          logger.e('Ping failed for active server $serverId: $e');
           // Trigger reconnection on ping failure
           logger.i('Triggering reconnection due to ping failure');
           reconnect(serverId).catchError((error) {
@@ -169,7 +229,10 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   }
 
   void _stopHeartbeat(int serverId) {
-    _heartbeatTimers[serverId]?.cancel();
-    _heartbeatTimers.remove(serverId);
+    if (_heartbeatTimers.containsKey(serverId)) {
+      logger.i('Stopping heartbeat for server $serverId');
+      _heartbeatTimers[serverId]?.cancel();
+      _heartbeatTimers.remove(serverId);
+    }
   }
 }

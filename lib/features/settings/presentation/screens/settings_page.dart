@@ -25,6 +25,14 @@ class SettingsPage extends ConsumerWidget {
           ),
           const Divider(),
           ListTile(
+            leading: const Icon(Icons.dns),
+            title: const Text('Servers'),
+            subtitle: const Text('Manage your Home Assistant servers'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => {const ServersRouteData().push(context)},
+          ),
+          const Divider(),
+          ListTile(
             key: K.settings.sensorsItem,
             leading: const Icon(Icons.sensors),
             title: const Text('Sensors'),

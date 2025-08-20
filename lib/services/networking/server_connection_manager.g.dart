@@ -7,7 +7,7 @@ part of 'server_connection_manager.dart';
 // **************************************************************************
 
 String _$serverConnectionManagerHash() =>
-    r'53c2aa2351720c44cfe46ea47b65b930436cb559';
+    r'af40294deaed02b69283903c19cf03588aade1dc';
 
 /// See also [ServerConnectionManager].
 @ProviderFor(ServerConnectionManager)
@@ -18,10 +18,15 @@ final serverConnectionManagerProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$serverConnectionManagerHash,
-  dependencies: <ProviderOrFamily>[connectionStateProvider],
+  dependencies: <ProviderOrFamily>[
+    connectionStateProvider,
+    activeServerProvider
+  ],
   allTransitiveDependencies: <ProviderOrFamily>{
     connectionStateProvider,
-    ...?connectionStateProvider.allTransitiveDependencies
+    ...?connectionStateProvider.allTransitiveDependencies,
+    activeServerProvider,
+    ...?activeServerProvider.allTransitiveDependencies
   },
 );
 

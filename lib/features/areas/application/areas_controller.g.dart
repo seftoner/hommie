@@ -6,7 +6,7 @@ part of 'areas_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$areasControllerHash() => r'2ad97bf411c4b838b46bb318bac1513cb56160e8';
+String _$areasControllerHash() => r'26edd4182e73efdfd63e5decd65232433fd49d09';
 
 /// See also [AreasController].
 @ProviderFor(AreasController)
@@ -17,8 +17,11 @@ final areasControllerProvider = AutoDisposeAsyncNotifierProvider<
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$areasControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[serverScopeConnectionProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    serverScopeConnectionProvider,
+    ...?serverScopeConnectionProvider.allTransitiveDependencies
+  },
 );
 
 typedef _$AreasController = AutoDisposeAsyncNotifier<List<AreaEntity>>;
