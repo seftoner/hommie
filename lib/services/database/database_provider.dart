@@ -27,7 +27,7 @@ class DatabaseInitializer {
       directory: dir.path,
     );
 
-    await isar.writeTxn(() async => isar.clear());
+    // await isar.writeTxn(() async => isar.clear());
 
     // Populate test data if database is empty (debug mode only)
     // if (kDebugMode && (await isar.serverEntitys.count()) == 0) {

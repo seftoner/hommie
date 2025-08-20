@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/features/home/domain/repositories/i_home_view_repository.dart';
 import 'package:hommie/features/home/infrastructure/repositories/isar_home_view_repository.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/server_manager_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:hommie/services/database/database_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

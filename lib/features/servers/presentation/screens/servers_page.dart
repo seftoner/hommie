@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/features/server_management/infrastructure/providers/servers_list_provider.dart';
-import 'package:hommie/features/server_management/presentation/screens/add_edit_server_page.dart';
-import 'package:hommie/features/server_management/presentation/widgets/server_list_tile.dart';
-import 'package:hommie/features/server_manager/domain/models/server.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/servers_list_provider.dart';
+import 'package:hommie/features/servers/presentation/screens/add_edit_server_page.dart';
+import 'package:hommie/features/servers/presentation/widgets/server_list_tile.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 
 class ServersPage extends ConsumerWidget {
   const ServersPage({super.key});

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
 import 'package:hommie/features/home/application/home_page_controller.dart';
 import 'package:hommie/features/home/domain/entities/home_view.dart';
-import 'package:hommie/features/server_management/presentation/widgets/server_switching_demo.dart';
+import 'package:hommie/features/servers/presentation/widgets/server_switching_demo.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/spacings.dart';

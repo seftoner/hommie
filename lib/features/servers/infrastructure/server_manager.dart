@@ -2,11 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
-import 'package:hommie/features/server_manager/domain/i_server_manager.dart';
-import 'package:hommie/features/server_manager/domain/models/server.dart';
-import 'package:hommie/features/server_manager/domain/repositories/i_server_repository.dart';
-import 'package:hommie/features/server_manager/domain/repositories/i_websocket_repository.dart';
-import 'package:hommie/features/server_manager/infrastructure/repositories/websocket_repository.dart';
+import 'package:hommie/features/servers/domain/i_server_manager.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/repositories/i_server_repository.dart';
+import 'package:hommie/features/servers/domain/repositories/i_websocket_repository.dart';
+import 'package:hommie/features/servers/infrastructure/repositories/websocket_repository.dart';
 import 'package:hommie/services/networking/server_connection_provider.dart';
 
 class ServerManager implements IServerManager {

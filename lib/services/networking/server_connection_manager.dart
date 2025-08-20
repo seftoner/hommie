@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:hommie/features/server_manager/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

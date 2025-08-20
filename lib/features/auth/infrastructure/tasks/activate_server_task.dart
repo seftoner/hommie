@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/features/server_manager/domain/models/server.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/server_manager_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/features/auth/application/server_auth_controller.dart';

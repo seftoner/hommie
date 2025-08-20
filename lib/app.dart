@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hommie/features/auth/application/server_auth_navigation_coordinator.dart';
 import 'package:hommie/router/router.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
-import 'package:hommie/features/server_manager/infrastructure/widgets/server_scope_widget.dart';
+import 'package:hommie/features/servers/infrastructure/widgets/server_scope_widget.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
 import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

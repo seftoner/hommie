@@ -1,7 +1,7 @@
 import 'package:hommie/core/utils/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:hommie/features/server_manager/domain/models/server.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/server_manager_provider.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 
 part 'active_server_provider.g.dart';
 

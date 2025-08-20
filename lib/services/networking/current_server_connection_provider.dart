@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/services/networking/server_connection_provider.dart';
 
 part 'current_server_connection_provider.g.dart';

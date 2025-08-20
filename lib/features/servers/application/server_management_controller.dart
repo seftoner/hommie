@@ -1,9 +1,9 @@
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/application/server_auth_controller.dart';
-import 'package:hommie/features/server_management/infrastructure/providers/servers_list_provider.dart';
-import 'package:hommie/features/server_manager/domain/models/server.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/active_server_provider.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/server_manager_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/servers_list_provider.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_management_controller.g.dart';

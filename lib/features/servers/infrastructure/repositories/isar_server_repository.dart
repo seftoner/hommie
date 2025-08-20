@@ -1,6 +1,6 @@
-import 'package:hommie/features/server_manager/domain/models/server.dart';
-import 'package:hommie/features/server_manager/domain/repositories/i_server_repository.dart';
-import 'package:hommie/features/server_manager/infrastructure/repositories/mappers/server_mapper.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/repositories/i_server_repository.dart';
+import 'package:hommie/features/servers/infrastructure/repositories/mappers/server_mapper.dart';
 import 'package:hommie/services/database/models/server_entity.dart';
 import 'package:isar/isar.dart';
 

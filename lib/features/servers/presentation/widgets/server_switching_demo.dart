@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/features/areas/application/areas_controller.dart';
 import 'package:hommie/features/home/application/home_data_controller.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 
 /// A widget that demonstrates server switching by showing server-specific data.

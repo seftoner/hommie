@@ -1,6 +1,6 @@
 import 'package:hommie/features/auth/application/auth_state.dart';
 import 'package:hommie/features/auth/application/server_auth_controller.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/router/router.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

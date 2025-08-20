@@ -6,7 +6,7 @@ import 'package:hommie/features/auth/infrastructure/tasks/oauth_login_attempt_ta
 import 'package:hommie/features/auth/infrastructure/tasks/create_server_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/get_config_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/activate_server_task.dart';
-import 'package:hommie/features/server_manager/infrastructure/providers/server_manager_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
 import 'package:hommie/features/shared/domain/models/task_chain.dart';
 import 'package:hommie/features/shared/infrastructure/runner/task_executor.dart';

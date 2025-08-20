@@ -6,7 +6,7 @@ import 'package:hommie/features/automation/presentation/automations_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
-import 'package:hommie/features/server_management/presentation/screens/servers_page.dart';
+import 'package:hommie/features/servers/presentation/screens/servers_page.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
 import 'package:hommie/features/settings/presentation/screens/hub_page.dart';
 import 'package:hommie/features/settings/presentation/screens/logs_page.dart';

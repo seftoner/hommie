@@ -1,5 +1,5 @@
-import 'package:hommie/features/server_manager/domain/i_server_manager.dart';
-import 'package:hommie/features/server_manager/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/i_server_manager.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
 

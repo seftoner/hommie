@@ -1,4 +1,4 @@
-import 'package:hommie/features/server_manager/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/services/database/models/server_entity.dart';
 
 extension ServerEntityMapper on ServerEntity {

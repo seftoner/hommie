@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/home/infrastructure/providers/area_repository_provider.dart';
 import 'package:hommie/features/home/infrastructure/providers/home_view_repository_provider.dart';
-import 'package:hommie/features/server_manager/domain/i_server_manager.dart';
+import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';

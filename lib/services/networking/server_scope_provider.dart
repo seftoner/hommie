@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/features/server_manager/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

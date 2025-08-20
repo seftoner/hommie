@@ -1,6 +1,6 @@
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
-import 'package:hommie/features/server_manager/domain/models/server.dart';
-import 'package:hommie/features/server_manager/domain/repositories/i_websocket_repository.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/repositories/i_websocket_repository.dart';
 
 abstract interface class IServerManager {
   Future<Server?> getActiveServer();

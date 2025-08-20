@@ -1,4 +1,4 @@
-import 'package:hommie/features/server_manager/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
 
 abstract interface class IServerRepository {
   Future<List<Server>> getAll();
