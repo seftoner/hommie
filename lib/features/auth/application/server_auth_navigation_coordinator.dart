@@ -37,9 +37,6 @@ class ServerAuthNavigationCoordinator
         next.whenData((authState) {
           switch (authState) {
             case Authenticated():
-              // ref
-              //     .read(serverConnectionManagerProvider.notifier)
-              //     .reconnect(serverId);
               goRouter.go(const HomeRouteData().location);
               break;
             case Unauthenticated():

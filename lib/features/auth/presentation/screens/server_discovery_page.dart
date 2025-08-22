@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/application/servers_discovery_controller.dart';
+import 'package:hommie/features/auth/application/server_auth_controller.dart';
 import 'package:hommie/features/auth/domain/entities/ha_server.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_available_severs_list_title.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_empty_state.dart';
@@ -57,9 +57,9 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                           return SingleChildScrollView(
                             child: DiscoveredHaServersList(
                               servers: servers,
-                              onTap: (serverAddress) {
+                              onTap: (serverAddress) async {
                                 ref
-                                    .read(authControllerProvider.notifier)
+                                    .read(serverAuthControllerProvider.notifier)
                                     .login(serverAddress.toString());
                               },
                             ),
@@ -114,7 +114,7 @@ class EnterAddressManually extends StatelessWidget {
   }
 }
 
-typedef TapCallback = void Function(Uri serverAddress);
+typedef TapCallback = Future<void> Function(Uri serverAddress);
 
 class DiscoveredHaServersList extends StatelessWidget {
   final List<HaServer> servers;

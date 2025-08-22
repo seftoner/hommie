@@ -21,49 +21,37 @@ class ConstantBackoff implements Backoff {
   void reset() {}
 }
 
-/// Implements an exponential backoff strategy with optional jitter.
-class ExponentialBackoff implements Backoff {
-  final Duration initialDelay;
-  final Duration maxDelay;
-  final double multiplier;
-  final bool jitter;
-  
-  int _attemptCount = 0;
+/// A binary exponential backoff strategy.
+/// This backoff strategy will double the backoff duration on each attempt
+/// until the maximum step is reached.
+class BinaryExponentialBackoff implements Backoff {
+  /// The initial backoff duration.
+  final Duration initial;
 
-  ExponentialBackoff({
-    this.initialDelay = const Duration(seconds: 1),
-    this.maxDelay = const Duration(minutes: 5),
-    this.multiplier = 2.0,
-    this.jitter = true,
-  });
+  /// The maximum number of times the backoff duration is doubled.
+  final int maximumStep;
+
+  int _currentStep;
+  Duration _current;
+
+  BinaryExponentialBackoff({
+    required this.initial,
+    required this.maximumStep,
+  })  : _currentStep = 1,
+        _current = initial;
 
   @override
   Duration get next {
-    final delay = _calculateDelay();
-    _attemptCount++;
-    return delay;
+    final backoff = _current;
+    if (maximumStep > _currentStep++) {
+      _current = _current * 2;
+    }
+    return backoff;
   }
 
   @override
   void reset() {
-    _attemptCount = 0;
-  }
-
-  Duration _calculateDelay() {
-    var delayMs = initialDelay.inMilliseconds * 
-        (multiplier * _attemptCount).round();
-    
-    if (delayMs > maxDelay.inMilliseconds) {
-      delayMs = maxDelay.inMilliseconds;
-    }
-
-    if (jitter) {
-      // Add ±25% jitter to prevent thundering herd
-      final jitterRange = (delayMs * 0.25).round();
-      final jitterOffset = (DateTime.now().millisecondsSinceEpoch % (jitterRange * 2)) - jitterRange;
-      delayMs += jitterOffset;
-    }
-
-    return Duration(milliseconds: delayMs.clamp(0, maxDelay.inMilliseconds));
+    _currentStep = 1;
+    _current = initial;
   }
 }

@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
-import 'package:hommie/features/settings/infrastructure/providers/server_settings_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
+import 'package:hommie/features/auth/application/server_auth_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:hommie/services/networking/home_assistant_websocket/src/connection_orchestrator.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/ha_oauth2_token.dart';
@@ -13,9 +15,7 @@ part 'server_connection_manager.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [ConnectionState, ActiveServer])
 class ServerConnectionManager extends _$ServerConnectionManager {
-  final _connections = <int, HAConnection>{};
-  final _completers = <int, Completer<HAConnection>>{};
-  final _heartbeatTimers = <int, Timer>{};
+  final _orchestrators = <int, ConnectionOrchestrator>{};
   int? _activeServerId;
   bool _isDisposed = false;
 
@@ -58,7 +58,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     }
 
     // Disconnect all inactive servers
-    for (final serverId in _connections.keys.toList()) {
+    for (final serverId in _orchestrators.keys.toList()) {
       if (serverId != newActiveServerId) {
         logger.i('Disconnecting inactive server: $serverId');
         disconnect(serverId);
@@ -67,97 +67,116 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   }
 
   Future<void> reconnect(int serverId) async {
+    logger.i('Starting reconnection for server $serverId');
+
+    // Disconnect existing connection
     disconnect(serverId);
-    await _createNewConnection(serverId);
+
+    try {
+      // Create new orchestrator and connect
+      await _createNewOrchestrator(serverId);
+      logger.i('Successfully reconnected to server $serverId');
+    } catch (e) {
+      logger.e('Reconnection failed for server $serverId: $e');
+    }
   }
 
+  /// Gets a persistent connection for the specified server.
+  /// Each connection is managed by its own ConnectionOrchestrator which handles:
+  /// - Connection lifecycle (connect/disconnect/reconnect)
+  /// - Heartbeat monitoring and health checks
+  /// - Automatic reconnection with exponential backoff
+  /// - State management and event handling
   Future<HAConnection> getConnection(int serverId) async {
-    // Only allow connections to the active server
-    if (_activeServerId != null && serverId != _activeServerId) {
-      logger.w(
-          'Attempted to get connection for inactive server $serverId, active is $_activeServerId');
-      throw Exception('Cannot connect to inactive server $serverId');
+    if (_orchestrators.containsKey(serverId)) {
+      final connection = _orchestrators[serverId]!.connection;
+      if (connection != null) {
+        return connection;
+      }
     }
-
-    if (_connections.containsKey(serverId)) {
-      return _connections[serverId]!;
-    }
-    return _createNewConnection(serverId);
+    return _createNewOrchestrator(serverId);
   }
 
   void disconnect(int serverId) {
-    if (!_isDisposed) {
+    logger.i('Disconnecting server $serverId');
+
+    // Close orchestrator (this will handle heartbeat cleanup internally)
+    _orchestrators[serverId]?.close();
+    _orchestrators.remove(serverId);
+
+    // Update global state only if this was the active server
+    if (_activeServerId == serverId && !_isDisposed) {
       ref.read(connectionStateProvider.notifier).reset();
     }
-    _connections[serverId]?.close();
-    _connections.remove(serverId);
-    _completers.remove(serverId);
-    _stopHeartbeat(serverId);
   }
 
   void _disconnectAll() {
-    for (final serverId in _connections.keys.toList()) {
+    for (final serverId in _orchestrators.keys.toList()) {
       disconnect(serverId);
     }
   }
 
-  Future<HAConnection> _createNewConnection(int serverId) async {
-    if (_completers.containsKey(serverId)) {
-      logger.d('Lock by completer');
-      return _completers[serverId]!.future;
+  Future<HAConnection> _createNewOrchestrator(int serverId) async {
+    if (_isDisposed) {
+      throw Exception('ServerConnectionManager is disposed');
     }
 
-    // // If there's already a connection being created, wait for it
-    // if (_connectionCompleter != null) {
-    //   logger.d('Lock by completer');
-    //   return _connectionCompleter!.future;
-    // }
+    final serverManager = ref.read(serverManagerProvider);
+    final servers = await serverManager.getAvailableServers();
+    final server = servers.firstWhere((s) => s.id == serverId);
 
-    _completers[serverId] = Completer<HAConnection>();
+    final serverUrl = Uri.parse(server.url);
+
+    final connOption = HAConnectionOption(
+      serverUrl: serverUrl,
+      fetchAuthToken: () async {
+        final authRepository = ref.read(authRepositoryProvider(serverId));
+        final fetchedCredentials = await authRepository.getCredentials();
+        return fetchedCredentials.fold(
+          (error) => throw ConnectionError('Failed to refresh token: $error'),
+          (credentials) => HAOAuth2Token(credentials),
+        );
+      },
+    );
+
+    // Create orchestrator to manage the connection
+    final orchestrator = ConnectionOrchestrator(connOption);
+    _orchestrators[serverId] = orchestrator;
+
+    // Listen to connection state changes BEFORE starting connection
+    orchestrator.state.listen((state) {
+      _handleConnectionState(serverId, state);
+    });
 
     try {
-      if (_isDisposed) {
-        throw Exception('ServerConnectionManager is disposed');
+      // Start the connection through orchestrator
+      await orchestrator.connect();
+
+      // Return the connection instance
+      final connection = orchestrator.connection;
+      if (connection == null) {
+        throw Exception('Connection failed to establish');
       }
 
-      final serverUrl = await ref.read(serverSettingsProvider).getServerUrl();
-      if (serverUrl == null) {
-        throw Exception('Server URL is not configured');
-      }
-
-      final connOption = HAConnectionOption(
-        serverUrl: serverUrl,
-        fetchAuthToken: () async {
-          final authRepository = ref.read(authRepositoryProvider(serverId));
-          final fetchedCredentials = await authRepository.getCredentials();
-          return fetchedCredentials.fold(
-            (error) => throw ConnectionError('Failed to refresh token: $error'),
-            (credentials) => HAOAuth2Token(credentials),
-          );
-        },
-      );
-
-      final connection = HAConnection(connOption);
-
-      connection.state.listen((state) {
-        _handleConnectionState(serverId, state);
-      });
-
-      await connection.connect();
-      _connections[serverId] = connection;
-      _completers[serverId]!.complete(connection);
+      logger.i('Successfully created connection for server $serverId');
       return connection;
     } catch (e) {
-      // Ensure completer is completed even on error
-      final completer = _completers[serverId];
-      if (completer != null && !completer.isCompleted) {
-        completer.completeError(e);
+      logger.e('Connection failed for server $serverId: $e');
+
+      // Clean up orchestrator on failure
+      _orchestrators.remove(serverId);
+
+      // Update state only for active server
+      if (_activeServerId == serverId && !_isDisposed) {
+        // Determine the appropriate state based on error type
+        if (e.toString().contains('auth') || e.toString().contains('token')) {
+          ref.read(connectionStateProvider.notifier).setAuthFailure();
+        } else {
+          ref.read(connectionStateProvider.notifier).setDisconnected();
+        }
       }
-      logger.e('Connection failed: $e');
+
       rethrow;
-    } finally {
-      // Always clean up completer reference
-      _completers.remove(serverId);
     }
   }
 
@@ -166,73 +185,75 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       return;
     }
 
+    logger.d(
+        'ServerConnectionManager received state for server $serverId: $state');
+
+    // Only update global connection state for the active server
+    final shouldUpdateGlobalState = _activeServerId == serverId;
+
+    if (shouldUpdateGlobalState) {
+      logger.i(
+          'Updating global connection state to: $state (active server: $serverId)');
+    }
+
     switch (state) {
       case Disconnected(type: DisconnectionType.authFailure):
-        disconnect(serverId);
-        ref.read(connectionStateProvider.notifier).setAuthFailure();
+        // Handle auth failure by logging out the server
+        if (shouldUpdateGlobalState) {
+          ref.read(connectionStateProvider.notifier).setAuthFailure();
+        }
+        _handleAuthFailure(serverId);
         break;
       case Connecting():
-        ref.read(connectionStateProvider.notifier).setConnecting();
-        _stopHeartbeat(serverId);
+        if (shouldUpdateGlobalState) {
+          ref.read(connectionStateProvider.notifier).setConnecting();
+        }
         break;
       case Authenticated():
-        ref.read(connectionStateProvider.notifier).setConnected();
-        _startHeartbeat(serverId);
+        if (shouldUpdateGlobalState) {
+          ref.read(connectionStateProvider.notifier).setConnected();
+        }
+        // Note: heartbeat is now managed internally by ConnectionOrchestrator
         break;
       case Reconnecting():
-        ref.read(connectionStateProvider.notifier).setReconnecting();
-        _stopHeartbeat(serverId);
+        if (shouldUpdateGlobalState) {
+          ref.read(connectionStateProvider.notifier).setReconnecting();
+        }
         break;
       case Disconnected():
-        ref.read(connectionStateProvider.notifier).setDisconnected();
-        _stopHeartbeat(serverId);
+        if (shouldUpdateGlobalState) {
+          ref.read(connectionStateProvider.notifier).setDisconnected();
+        }
         break;
     }
   }
 
-  void _startHeartbeat(int serverId) {
-    // Only start heartbeat for the active server
-    if (_activeServerId != serverId) {
-      logger.w('Skipping heartbeat start for inactive server $serverId');
-      return;
-    }
+  /// Handles authentication failures by logging out the affected server
+  Future<void> _handleAuthFailure(int serverId) async {
+    try {
+      logger.w(
+          'Handling auth failure for server $serverId - token might be revoked');
 
-    _stopHeartbeat(serverId);
-    logger.i('Starting heartbeat for active server $serverId');
-    _heartbeatTimers[serverId] =
-        Timer.periodic(const Duration(seconds: 30), (_) async {
-      // Double-check this is still the active server
-      if (_activeServerId != serverId) {
-        logger.i('Stopping heartbeat for server $serverId - no longer active');
-        _stopHeartbeat(serverId);
-        return;
+      // Import the server auth controller to trigger logout
+      final serverManager = ref.read(serverManagerProvider);
+      final activeServer = await serverManager.getActiveServer();
+
+      if (activeServer?.id == serverId) {
+        // Use server auth controller to handle logout for this specific server
+        logger.i('Logging out server $serverId due to auth failure');
+
+        // Import server auth controller provider
+        await ref.read(serverAuthControllerProvider.notifier).signOut(serverId);
+      } else {
+        // If it's not the active server, just disconnect the orchestrator
+        logger
+            .i('Disconnecting non-active server $serverId due to auth failure');
+        disconnect(serverId);
       }
-
-      logger.d('Ping active server $serverId');
-      final connection = _connections[serverId];
-      if (connection != null) {
-        try {
-          // Use timeout for ping to detect stale connections
-          await HACommands.pingServer(connection)
-              .timeout(const Duration(seconds: 10));
-          logger.d('Ping successful for active server $serverId');
-        } catch (e) {
-          logger.e('Ping failed for active server $serverId: $e');
-          // Trigger reconnection on ping failure
-          logger.i('Triggering reconnection due to ping failure');
-          reconnect(serverId).catchError((error) {
-            logger.e('Reconnection failed after ping timeout: $error');
-          });
-        }
-      }
-    });
-  }
-
-  void _stopHeartbeat(int serverId) {
-    if (_heartbeatTimers.containsKey(serverId)) {
-      logger.i('Stopping heartbeat for server $serverId');
-      _heartbeatTimers[serverId]?.cancel();
-      _heartbeatTimers.remove(serverId);
+    } catch (e) {
+      logger.e('Error handling auth failure for server $serverId: $e');
+      // Fallback: just disconnect the orchestrator
+      disconnect(serverId);
     }
   }
 }

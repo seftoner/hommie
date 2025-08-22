@@ -7,7 +7,7 @@ part of 'server_auth_controller.dart';
 // **************************************************************************
 
 String _$serverAuthControllerHash() =>
-    r'610b1f4a8022d399f2958d0b92972f7f9042ff9b';
+    r'70bf664225ccd19bcee938fbf41e43a06c212098';
 
 /// See also [ServerAuthController].
 @ProviderFor(ServerAuthController)
@@ -18,8 +18,11 @@ final serverAuthControllerProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$serverAuthControllerHash,
-  dependencies: const <ProviderOrFamily>[],
-  allTransitiveDependencies: const <ProviderOrFamily>{},
+  dependencies: <ProviderOrFamily>[activeServerProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    activeServerProvider,
+    ...?activeServerProvider.allTransitiveDependencies
+  },
 );
 
 typedef _$ServerAuthController = AsyncNotifier<AuthState>;
