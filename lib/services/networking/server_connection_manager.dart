@@ -198,7 +198,6 @@ class ServerConnectionManager extends _$ServerConnectionManager {
 
     switch (state) {
       case Disconnected(type: DisconnectionType.authFailure):
-        // Handle auth failure by logging out the server
         if (shouldUpdateGlobalState) {
           ref.read(connectionStateProvider.notifier).setAuthFailure();
         }
@@ -213,7 +212,6 @@ class ServerConnectionManager extends _$ServerConnectionManager {
         if (shouldUpdateGlobalState) {
           ref.read(connectionStateProvider.notifier).setConnected();
         }
-        // Note: heartbeat is now managed internally by ConnectionOrchestrator
         break;
       case Reconnecting():
         if (shouldUpdateGlobalState) {

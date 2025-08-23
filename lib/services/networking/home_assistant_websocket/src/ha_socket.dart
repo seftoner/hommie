@@ -35,7 +35,7 @@ class HASocket {
   late final StreamController<dynamic> _outerStreamController;
 
   final _stateController = StreamController<HASocketState>.broadcast();
-  HASocketState _state = HASocketState.disconnected();
+  HASocketState _state = const Disconnected();
 
   /// A stream of [HASocketState] changes for the Home Assistant WebSocket connection.
   ///
@@ -97,21 +97,21 @@ class HASocket {
           case AuthResultSuccess(:final haVersion):
             HaVersion.fromString(haVersion);
             //TODO: send supported_features if HaVersion.isAtLeast(2022, 9) == true
-            _setState(HASocketState.authenticated());
+            _setState(const Authenticated());
             break;
           case AuthResultError(message: final message):
-            _setState(HASocketState.disconnected(
+            _setState(Disconnected(
               reason: 'Authentication error: $message',
               type: DisconnectionType.error,
             ));
             logger.e('Authentication error: $message');
             break;
           case AuthResultPending():
-            _setState(HASocketState.connecting());
+            _setState(const Connecting());
             break;
           case AuthResultInvalid(message: final message):
             _invalidAuth = true;
-            _setState(HASocketState.disconnected(
+            _setState(Disconnected(
               reason: 'Invalid authentication: $message',
               type: DisconnectionType.authFailure,
             ));
@@ -129,7 +129,7 @@ class HASocket {
 
   void _startConnection() async {
     try {
-      _setState(HASocketState.connecting());
+      _setState(const Connecting());
       _innerChanel = _createWebSocketChannel();
       await _innerChanel.ready;
       _configureSocketStream();
@@ -150,7 +150,7 @@ class HASocket {
       reason = 'Failed to start connection';
     }
 
-    _setState(HASocketState.disconnected(
+    _setState(Disconnected(
       reason: '$reason: $error',
       type: DisconnectionType.error,
     ));
@@ -187,12 +187,12 @@ class HASocket {
 
     if (_invalidAuth) {
       logger.e('Authentication is invalid - token might be revoked');
-      _setState(HASocketState.disconnected(
+      _setState(Disconnected(
         reason: reason,
         type: DisconnectionType.authFailure,
       ));
     } else {
-      _setState(HASocketState.disconnected(
+      _setState(Disconnected(
         reason: reason,
         type: switch (_innerChanel.closeCode) {
           status.normalClosure || status.goingAway => DisconnectionType.normal,

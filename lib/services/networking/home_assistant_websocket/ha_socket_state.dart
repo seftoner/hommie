@@ -1,26 +1,5 @@
 sealed class HASocketState {
   const HASocketState();
-
-  factory HASocketState.connecting() => const Connecting();
-  factory HASocketState.authenticated() => const Authenticated();
-  factory HASocketState.reconnecting() => const Reconnecting();
-  factory HASocketState.disconnected({
-    String? reason,
-    Object? error,
-    DisconnectionType type = DisconnectionType.normal,
-  }) =>
-      Disconnected(reason: reason, error: error, type: type);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    return other is HASocketState && runtimeType == other.runtimeType;
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
 }
 
 class Connecting extends HASocketState {
@@ -52,11 +31,12 @@ class Disconnected extends HASocketState {
     this.type = DisconnectionType.normal,
   });
 
+  bool get isAuthFailure => type == DisconnectionType.authFailure;
+  bool get isError => type == DisconnectionType.error;
+
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
+    if (identical(this, other)) return true;
 
     return other is Disconnected &&
         other.reason == reason &&
@@ -65,8 +45,5 @@ class Disconnected extends HASocketState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, reason, error, type);
-
-  bool get isAuthFailure => type == DisconnectionType.authFailure;
-  bool get isError => type == DisconnectionType.error;
+  int get hashCode => Object.hash(reason, error, type);
 }

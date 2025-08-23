@@ -62,18 +62,22 @@ class HAConnection implements IHAConnection {
       _setSocket(socket);
     } on AuthenticationError catch (e) {
       logger.e('Connection failed: $e');
-      _connectionState.setState(HASocketState.disconnected(
+      _connectionState.setState(Disconnected(
         type: DisconnectionType.authFailure,
         reason: e.toString(),
       ));
-      rethrow; // Let the orchestrator handle this
     } on ConnectionError catch (e) {
       logger.e('Connection failed: $e');
-      _connectionState.setState(HASocketState.disconnected(
+      _connectionState.setState(Disconnected(
         type: DisconnectionType.error,
         reason: e.toString(),
       ));
-      rethrow; // Let the orchestrator handle this
+    } catch (e) {
+      logger.e('Unexpected connection error: $e');
+      _connectionState.setState(Disconnected(
+        type: DisconnectionType.error,
+        reason: e.toString(),
+      ));
     }
   }
 
@@ -223,7 +227,7 @@ class HAConnection implements IHAConnection {
       _connectionState.setState(lastState);
     } else {
       logger.d('Setting generic disconnected state');
-      _connectionState.setState(HASocketState.disconnected());
+      _connectionState.setState(const Disconnected());
     }
   }
 

@@ -90,17 +90,21 @@ class ConnectionOrchestrator {
       // Monitor its state
       _stateSubscription = _connection!.state.listen(_handleStateChange);
 
-      // Attempt to connect
       await _connection!.connect();
     } catch (e) {
-      logger.e('Connection attempt failed: $e');
-      // Clean up the failed connection
+      logger.e('Unexpected connection attempt failure: $e');
+
       await _stateSubscription?.cancel();
       _stateSubscription = null;
       _connection = null;
 
-      // Don't emit disconnected state here - let the connection's state handle it
-      // or if no connection was created, schedule reconnection directly
+      if (!_stateController.isClosed) {
+        _stateController.add(Disconnected(
+          type: DisconnectionType.error,
+          reason: e.toString(),
+        ));
+      }
+
       if (!_isDisposed) {
         _scheduleReconnect();
       }
@@ -132,17 +136,6 @@ class ConnectionOrchestrator {
         logger.e('Authentication failed - stopping reconnection attempts');
         _reconnectRequested = false;
         _stopHeartbeat();
-        // Don't schedule reconnection for auth failures
-        break;
-
-      case Disconnected(:final reason)
-          when reason?.contains('Authentication failed') == true:
-        // Fallback: detect auth failures by reason text if type is not set correctly
-        logger.e(
-            'Authentication failed detected by reason text - stopping reconnection attempts');
-        _reconnectRequested = false;
-        _stopHeartbeat();
-        // Don't schedule reconnection for auth failures
         break;
 
       case Disconnected():

@@ -14,7 +14,7 @@ class HAConnectionState {
 
   HAConnectionState()
       : _controller = StreamController<HASocketState>.broadcast(),
-        _currentState = HASocketState.disconnected();
+        _currentState = const Disconnected();
 
   void monitorSocket(HASocket socket) {
     _socketSubscription?.cancel();

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hommie/features/auth/application/server_auth_controller.dart';
@@ -9,8 +10,9 @@ class EnterAddressPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final haServerURLController =
-        useTextEditingController(text: 'http://192.168.0.');
+    final haServerURLController = useTextEditingController(
+      text: kDebugMode ? 'http://localhost:8123' : 'http://192.168.0.',
+    );
     return Scaffold(
       key: K.manualAddress.page,
       appBar: AppBar(),
