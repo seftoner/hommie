@@ -39,7 +39,7 @@ void main() {
   }
 
   setUpAll(() {
-    provideDummy<HASocketState>(HASocketState.disconnected());
+    provideDummy<HASocketState>(const Disconnected());
   });
 
   setUp(() async {
@@ -49,7 +49,7 @@ void main() {
     socketStateController = StreamController<HASocketState>();
 
     when(mockSocket.isClosed).thenAnswer((_) => false);
-    when(mockSocket.state).thenAnswer((_) => HASocketState.authenticated());
+    when(mockSocket.state).thenAnswer((_) => const Authenticated());
     when(mockSocket.stream).thenAnswer((_) => socketStreamController.stream);
     when(mockSocket.stateStream)
         .thenAnswer((_) => socketStateController.stream);

@@ -40,7 +40,7 @@ void main() {
   }
 
   setUpAll(() {
-    provideDummy<HASocketState>(HASocketState.disconnected());
+    provideDummy<HASocketState>(const Disconnected());
   });
 
   setUp(() {
@@ -51,7 +51,7 @@ void main() {
     socketStreamController = StreamController<String>.broadcast();
 
     // Setup default mock behavior
-    when(mockSocket.state).thenReturn(HASocketState.disconnected());
+    when(mockSocket.state).thenReturn(const Disconnected());
     when(mockSocket.stateStream).thenAnswer((_) => stateController.stream);
     when(mockSocket.stream).thenAnswer((_) => socketStreamController.stream);
     when(mockOptions.createSocket()).thenAnswer((_) async => mockSocket);
@@ -71,7 +71,7 @@ void main() {
   group('Connection lifecycle', () {
     test('connect should create new socket if none exists', () async {
       // Arrange
-      when(mockSocket.state).thenReturn(HASocketState.authenticated());
+      when(mockSocket.state).thenReturn(const Authenticated());
 
       // Act
       await connection.connect();
