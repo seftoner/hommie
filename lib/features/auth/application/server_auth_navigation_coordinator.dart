@@ -3,11 +3,14 @@ import 'package:hommie/features/auth/application/server_auth_controller.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/router/router.dart';
 import 'package:hommie/router/routes.dart';
+import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_auth_navigation_coordinator.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [ActiveServer, ServerAuthController])
+@Riverpod(
+    keepAlive: true,
+    dependencies: [ActiveServer, ServerAuthController, ConnectionState])
 class ServerAuthNavigationCoordinator
     extends _$ServerAuthNavigationCoordinator {
   @override
@@ -21,6 +24,13 @@ class ServerAuthNavigationCoordinator
           ref.read(goRouterProvider).go(const DicoveryRoute().location);
         }
       });
+    });
+
+    // Listen to global connection state for auth failures
+    ref.listen(connectionStateProvider, (_, next) {
+      if (next == HAServerConnectionState.authFailure) {
+        _handleAuthFailure();
+      }
     });
   }
 
@@ -52,5 +62,15 @@ class ServerAuthNavigationCoordinator
 
     // Initialize auth state
     await authController.initialize(serverId);
+  }
+
+  /// Handles auth failures by signing out the active server
+  Future<void> _handleAuthFailure() async {
+    final activeServer = await ref.read(activeServerProvider.future);
+    if (activeServer != null) {
+      await ref
+          .read(serverAuthControllerProvider.notifier)
+          .signOut(activeServer.id!);
+    }
   }
 }

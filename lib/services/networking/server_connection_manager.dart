@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
-import 'package:hommie/features/auth/application/server_auth_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
@@ -201,7 +200,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
         if (shouldUpdateGlobalState) {
           ref.read(connectionStateProvider.notifier).setAuthFailure();
         }
-        _handleAuthFailure(serverId);
+        disconnect(serverId);
         break;
       case Connecting():
         if (shouldUpdateGlobalState) {
@@ -223,35 +222,6 @@ class ServerConnectionManager extends _$ServerConnectionManager {
           ref.read(connectionStateProvider.notifier).setDisconnected();
         }
         break;
-    }
-  }
-
-  /// Handles authentication failures by logging out the affected server
-  Future<void> _handleAuthFailure(int serverId) async {
-    try {
-      logger.w(
-          'Handling auth failure for server $serverId - token might be revoked');
-
-      // Import the server auth controller to trigger logout
-      final serverManager = ref.read(serverManagerProvider);
-      final activeServer = await serverManager.getActiveServer();
-
-      if (activeServer?.id == serverId) {
-        // Use server auth controller to handle logout for this specific server
-        logger.i('Logging out server $serverId due to auth failure');
-
-        // Import server auth controller provider
-        await ref.read(serverAuthControllerProvider.notifier).signOut(serverId);
-      } else {
-        // If it's not the active server, just disconnect the orchestrator
-        logger
-            .i('Disconnecting non-active server $serverId due to auth failure');
-        disconnect(serverId);
-      }
-    } catch (e) {
-      logger.e('Error handling auth failure for server $serverId: $e');
-      // Fallback: just disconnect the orchestrator
-      disconnect(serverId);
     }
   }
 }

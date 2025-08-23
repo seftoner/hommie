@@ -7,7 +7,7 @@ part of 'server_auth_navigation_coordinator.dart';
 // **************************************************************************
 
 String _$serverAuthNavigationCoordinatorHash() =>
-    r'53d806fa472f5cee6463e37694f62ae2195113f1';
+    r'f38ccdc11edab3bf043dee818651d3db19275399';
 
 /// See also [ServerAuthNavigationCoordinator].
 @ProviderFor(ServerAuthNavigationCoordinator)
@@ -20,13 +20,16 @@ final serverAuthNavigationCoordinatorProvider =
       : _$serverAuthNavigationCoordinatorHash,
   dependencies: <ProviderOrFamily>[
     activeServerProvider,
-    serverAuthControllerProvider
+    serverAuthControllerProvider,
+    connectionStateProvider
   ],
   allTransitiveDependencies: <ProviderOrFamily>{
     activeServerProvider,
     ...?activeServerProvider.allTransitiveDependencies,
     serverAuthControllerProvider,
-    ...?serverAuthControllerProvider.allTransitiveDependencies
+    ...?serverAuthControllerProvider.allTransitiveDependencies,
+    connectionStateProvider,
+    ...?connectionStateProvider.allTransitiveDependencies
   },
 );
 
