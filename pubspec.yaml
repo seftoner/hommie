@@ -44,6 +44,7 @@ dependencies:
       url: https://github.com/fluttercommunity/flutter_workmanager.git
       ref: main
       path: workmanager/
+    version: 0.9.0
 
 dev_dependencies:
   bdd_widget_test: ^1.8.1
