@@ -1,6 +1,6 @@
-import 'package:hommie/services/database/models/device_entity.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'server_entity.dart';
+import 'package:hommie/services/database/models/device_entity.dart';
 
 part 'area_entity.g.dart';
 

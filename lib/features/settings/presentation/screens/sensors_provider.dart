@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/features/mobile_companion/battery_sensor_provider.dart';
 import 'package:hommie/features/mobile_companion/connection_state_provider.dart';
 import 'package:hommie/features/mobile_companion/sensors/sensor.dart';
@@ -12,10 +11,7 @@ part 'sensors_provider.g.dart';
 @riverpod
 Future<List<Sensor>> sensorsList(Ref ref) {
   final sensorObserver = SensorObserver(
-    providers: [
-      BatterySensorProvider(),
-      ConnectionStateProvider(),
-    ],
+    providers: [BatterySensorProvider(), ConnectionStateProvider()],
     onNewData: () => ref.invalidateSelf(),
   );
 

@@ -10,7 +10,7 @@ import connectivity_plus
 import desktop_webview_window
 import flutter_secure_storage_macos
 import flutter_web_auth_2
-import isar_flutter_libs
+import isar_community_flutter_libs
 import network_info_plus
 import path_provider_foundation
 import patrol

@@ -22,170 +22,165 @@ class HomePage extends ConsumerWidget {
       key: K.home.page,
       body: switch (homeState) {
         AsyncData(value: final state) => CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                title: state.isEditing
-                    ? const Text('Edit home view')
-                    : const Text('My home'),
-                centerTitle: false,
-                actions: [
-                  if (state.isEditing && state.homeView != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: FilledButton(
-                        onPressed: () {
-                          ref
-                              .read(homePageControllerProvider.notifier)
-                              .toggleEditMode();
-                        },
-                        child: const Text('Done'),
-                      ),
-                    )
-                  else
-                    MenuAnchor(
-                      builder: (context, controller, child) {
-                        return IconButton(
-                          onPressed: () {
-                            if (controller.isOpen) {
-                              controller.close();
-                            } else {
-                              controller.open();
-                            }
-                          },
-                          icon: const Icon(Icons.more_vert),
-                        );
+          slivers: [
+            SliverAppBar(
+              title: state.isEditing
+                  ? const Text('Edit home view')
+                  : const Text('My home'),
+              centerTitle: false,
+              actions: [
+                if (state.isEditing && state.homeView != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: FilledButton(
+                      onPressed: () {
+                        ref
+                            .read(homePageControllerProvider.notifier)
+                            .toggleEditMode();
                       },
-                      menuChildren: [
+                      child: const Text('Done'),
+                    ),
+                  )
+                else
+                  MenuAnchor(
+                    builder: (context, controller, child) {
+                      return IconButton(
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                        },
+                        icon: const Icon(Icons.more_vert),
+                      );
+                    },
+                    menuChildren: [
+                      MenuItemButton(
+                        key: K.appScaffold.settingsButton,
+                        trailingIcon: const Icon(Icons.settings_outlined),
+                        child: const Text('Settings'),
+                        onPressed: () {
+                          const SettingsRouteData().push(context);
+                        },
+                      ),
+                      if (state.homeView != null) ...[
                         MenuItemButton(
-                          trailingIcon: const Icon(Icons.settings_outlined),
-                          child: const Text('Settings'),
+                          trailingIcon: const Icon(Icons.dashboard_rounded),
+                          child: const Text('Edit Home view'),
                           onPressed: () {
-                            const SettingsRouteData().push(context);
+                            ref
+                                .read(homePageControllerProvider.notifier)
+                                .toggleEditMode();
                           },
                         ),
-                        if (state.homeView != null) ...[
-                          MenuItemButton(
-                            trailingIcon: const Icon(Icons.dashboard_rounded),
-                            child: const Text('Edit Home view'),
-                            onPressed: () {
-                              ref
-                                  .read(homePageControllerProvider.notifier)
-                                  .toggleEditMode();
-                            },
-                          ),
-                          MenuItemButton(
-                            trailingIcon:
-                                const Icon(Icons.low_priority_rounded),
-                            child: const Text('Reorder Items'),
-                            onPressed: () {},
-                          ),
-                        ],
+                        MenuItemButton(
+                          trailingIcon: const Icon(Icons.low_priority_rounded),
+                          child: const Text('Reorder Items'),
+                          onPressed: () {},
+                        ),
                       ],
-                    ),
-                ],
-                floating: true,
-                pinned: true,
-              ),
-              // Demo widget to show server switching functionality
-              const SliverToBoxAdapter(
-                child: ServerSwitchingDemo(),
-              ),
-              if (state.homeView == null)
-                const SliverFillRemaining(
-                  child: Center(
-                    child: Text('No home view configured'),
+                    ],
                   ),
-                )
-              else
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, areaIndex) {
-                        final areaConfig = state.homeView!.areas[areaIndex];
-                        final area = areaConfig.area;
-                        final devices = areaConfig.devices;
+              ],
+              floating: true,
+              pinned: true,
+            ),
+            // Demo widget to show server switching functionality
+            const SliverToBoxAdapter(child: ServerSwitchingDemo()),
+            if (state.homeView == null)
+              const SliverFillRemaining(
+                child: Center(child: Text('No home view configured')),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate((context, areaIndex) {
+                    final areaConfig = state.homeView!.areas[areaIndex];
+                    final area = areaConfig.area;
+                    final devices = areaConfig.devices;
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RoomGroup(
-                              roomName: area.name,
-                              enabled: !state.isEditing,
-                            ),
-                            HomeDevicesGridView(state: state, devices: devices),
-                            $h24,
-                          ],
-                        );
-                      },
-                      childCount: state.homeView?.areas.length ?? 0,
-                    ),
-                  ),
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RoomGroup(
+                          roomName: area.name,
+                          enabled: !state.isEditing,
+                        ),
+                        HomeDevicesGridView(state: state, devices: devices),
+                        $h24,
+                      ],
+                    );
+                  }, childCount: state.homeView?.areas.length ?? 0),
                 ),
+              ),
+          ],
+        ),
+        AsyncError(:final error) => Scaffold(
+          appBar: AppBar(
+            title: const Text('My home'),
+            actions: [
+              MenuAnchor(
+                builder: (context, controller, child) {
+                  return IconButton(
+                    onPressed: () {
+                      if (controller.isOpen) {
+                        controller.close();
+                      } else {
+                        controller.open();
+                      }
+                    },
+                    icon: const Icon(Icons.more_vert),
+                  );
+                },
+                menuChildren: [
+                  MenuItemButton(
+                    key: K.appScaffold.settingsButton,
+                    trailingIcon: const Icon(Icons.settings_outlined),
+                    child: const Text('Settings'),
+                    onPressed: () {
+                      const SettingsRouteData().push(context);
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
-        AsyncError(:final error) => Scaffold(
-            appBar: AppBar(
-              title: const Text('My home'),
-              actions: [
-                MenuAnchor(
-                  builder: (context, controller, child) {
-                    return IconButton(
-                      onPressed: () {
-                        if (controller.isOpen) {
-                          controller.close();
-                        } else {
-                          controller.open();
-                        }
-                      },
-                      icon: const Icon(Icons.more_vert),
-                    );
-                  },
-                  menuChildren: [
-                    MenuItemButton(
-                      trailingIcon: const Icon(Icons.settings_outlined),
-                      child: const Text('Settings'),
-                      onPressed: () {
-                        const SettingsRouteData().push(context);
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            body: Center(child: Text(error.toString())),
-          ),
+          body: Center(child: Text(error.toString())),
+        ),
         _ => Scaffold(
-            appBar: AppBar(
-              title: const Text('My home'),
-              actions: [
-                MenuAnchor(
-                  builder: (context, controller, child) {
-                    return IconButton(
-                      onPressed: () {
-                        if (controller.isOpen) {
-                          controller.close();
-                        } else {
-                          controller.open();
-                        }
-                      },
-                      icon: const Icon(Icons.more_vert),
-                    );
-                  },
-                  menuChildren: [
-                    MenuItemButton(
-                      trailingIcon: const Icon(Icons.settings_outlined),
-                      child: const Text('Settings'),
-                      onPressed: () {
-                        const SettingsRouteData().push(context);
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            body: const Center(child: CircularProgressIndicator()),
+          appBar: AppBar(
+            title: const Text('My home'),
+            actions: [
+              MenuAnchor(
+                builder: (context, controller, child) {
+                  return IconButton(
+                    onPressed: () {
+                      if (controller.isOpen) {
+                        controller.close();
+                      } else {
+                        controller.open();
+                      }
+                    },
+                    icon: const Icon(Icons.more_vert),
+                  );
+                },
+                menuChildren: [
+                  MenuItemButton(
+                    key: K.appScaffold.settingsButton,
+                    trailingIcon: const Icon(Icons.settings_outlined),
+                    child: const Text('Settings'),
+                    onPressed: () {
+                      const SettingsRouteData().push(context);
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
+          body: const Center(child: CircularProgressIndicator()),
+        ),
       },
     );
   }
@@ -210,10 +205,7 @@ class HomeDevicesGridView extends StatelessWidget {
     final dragItemDecoration = BoxDecoration(
       color: Colors.transparent,
       boxShadow: [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.02),
-          blurRadius: 3,
-        ),
+        BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 3),
         BoxShadow(
           color: Colors.black.withValues(alpha: 0.15),
           blurRadius: 10,
@@ -282,10 +274,7 @@ class OnOffToggleButton extends StatelessWidget {
 }
 
 class DeviceWidget extends StatelessWidget {
-  const DeviceWidget({
-    super.key,
-    required this.deviceConfig,
-  });
+  const DeviceWidget({super.key, required this.deviceConfig});
 
   final DeviceWidgetConf deviceConfig;
 
@@ -298,10 +287,7 @@ class DeviceWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.lightbulb_circle,
-                size: 32.0,
-              ),
+              const Icon(Icons.lightbulb_circle, size: 32.0),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -312,13 +298,15 @@ class DeviceWidget extends StatelessWidget {
                       deviceConfig.device.name,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: context.fonts.labelLarge
-                          ?.copyWith(color: context.colors.onSurface),
+                      style: context.fonts.labelLarge?.copyWith(
+                        color: context.colors.onSurface,
+                      ),
                     ),
                     Text(
                       'On',
-                      style: context.fonts.labelSmall
-                          ?.copyWith(color: context.colors.onSurfaceVariant),
+                      style: context.fonts.labelSmall?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
@@ -346,10 +334,7 @@ class DeviceWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Icon(
-              Icons.lightbulb_circle,
-              size: 32.0,
-            ),
+            const Icon(Icons.lightbulb_circle, size: 32.0),
             OnOffToggleButton(
               value: true,
               onChanged: (value) {
@@ -379,9 +364,7 @@ class DeviceWidget extends StatelessWidget {
       color: context.colors.surfaceContainerLowest,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
-        side: BorderSide(
-          color: context.colors.outlineVariant,
-        ),
+        side: BorderSide(color: context.colors.outlineVariant),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
@@ -395,11 +378,7 @@ class DeviceWidget extends StatelessWidget {
 }
 
 class RoomGroup extends StatelessWidget {
-  const RoomGroup({
-    super.key,
-    required this.roomName,
-    required this.enabled,
-  });
+  const RoomGroup({super.key, required this.roomName, required this.enabled});
 
   final String roomName;
   final bool enabled;
@@ -414,15 +393,13 @@ class RoomGroup extends StatelessWidget {
           children: [
             Text(
               roomName,
-              style: context.fonts.titleMedium
-                  ?.copyWith(color: context.colors.onSurfaceVariant),
+              style: context.fonts.titleMedium?.copyWith(
+                color: context.colors.onSurfaceVariant,
+              ),
             ),
             const Spacer(),
             if (enabled)
-              Icon(
-                Icons.chevron_right,
-                color: context.colors.onSurfaceVariant,
-              ),
+              Icon(Icons.chevron_right, color: context.colors.onSurfaceVariant),
           ],
         ),
       ),

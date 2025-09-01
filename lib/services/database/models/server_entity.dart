@@ -1,4 +1,5 @@
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
+
 import 'home_view.dart';
 
 part 'server_entity.g.dart';
@@ -17,9 +18,5 @@ class ServerEntity {
   @Backlink(to: 'server')
   final homeConfig = IsarLink<HomeViewConfig>();
 
-  ServerEntity({
-    required this.name,
-    required this.url,
-    this.isActive = false,
-  });
+  ServerEntity({required this.name, required this.url, this.isActive = false});
 }

@@ -6,181 +6,140 @@ part of 'home_view_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homeViewRepositoryHash() =>
-    r'2fffce619323f43dcf25ba24d3c2c72d1039a031';
-
-/// See also [homeViewRepository].
 @ProviderFor(homeViewRepository)
-final homeViewRepositoryProvider =
-    AutoDisposeFutureProvider<IHomeViewRepository>.internal(
-  homeViewRepository,
-  name: r'homeViewRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$homeViewRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const homeViewRepositoryProvider = HomeViewRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef HomeViewRepositoryRef
-    = AutoDisposeFutureProviderRef<IHomeViewRepository>;
-String _$homeViewRepositoryForServerHash() =>
-    r'50182a0e435575b188b26fe2e83c419b3b396a84';
+final class HomeViewRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<IHomeViewRepository>,
+          IHomeViewRepository,
+          FutureOr<IHomeViewRepository>
+        >
+    with
+        $FutureModifier<IHomeViewRepository>,
+        $FutureProvider<IHomeViewRepository> {
+  const HomeViewRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'homeViewRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[serverManagerProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          HomeViewRepositoryProvider.$allTransitiveDependencies0,
+          HomeViewRepositoryProvider.$allTransitiveDependencies1,
+        ],
+      );
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
+  static const $allTransitiveDependencies0 = serverManagerProvider;
+  static const $allTransitiveDependencies1 =
+      ServerManagerProvider.$allTransitiveDependencies0;
 
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
+  @override
+  String debugGetCreateSourceHash() => _$homeViewRepositoryHash();
 
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  @$internal
+  @override
+  $FutureProviderElement<IHomeViewRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<IHomeViewRepository> create(Ref ref) {
+    return homeViewRepository(ref);
   }
 }
 
-/// See also [homeViewRepositoryForServer].
+String _$homeViewRepositoryHash() =>
+    r'ec45fe5363aa4ba18153b80e802ee21b8b2d0a55';
+
 @ProviderFor(homeViewRepositoryForServer)
-const homeViewRepositoryForServerProvider = HomeViewRepositoryForServerFamily();
+const homeViewRepositoryForServerProvider =
+    HomeViewRepositoryForServerFamily._();
 
-/// See also [homeViewRepositoryForServer].
-class HomeViewRepositoryForServerFamily extends Family<IHomeViewRepository> {
-  /// See also [homeViewRepositoryForServer].
-  const HomeViewRepositoryForServerFamily();
+final class HomeViewRepositoryForServerProvider
+    extends
+        $FunctionalProvider<
+          IHomeViewRepository,
+          IHomeViewRepository,
+          IHomeViewRepository
+        >
+    with $Provider<IHomeViewRepository> {
+  const HomeViewRepositoryForServerProvider._({
+    required HomeViewRepositoryForServerFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'homeViewRepositoryForServerProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [homeViewRepositoryForServer].
-  HomeViewRepositoryForServerProvider call(
-    int serverId,
-  ) {
-    return HomeViewRepositoryForServerProvider(
-      serverId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$homeViewRepositoryForServerHash();
+
+  @override
+  String toString() {
+    return r'homeViewRepositoryForServerProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  HomeViewRepositoryForServerProvider getProviderOverride(
-    covariant HomeViewRepositoryForServerProvider provider,
-  ) {
-    return call(
-      provider.serverId,
-    );
+  $ProviderElement<IHomeViewRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  IHomeViewRepository create(Ref ref) {
+    final argument = this.argument as int;
+    return homeViewRepositoryForServer(ref, argument);
   }
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'homeViewRepositoryForServerProvider';
-}
-
-/// See also [homeViewRepositoryForServer].
-class HomeViewRepositoryForServerProvider
-    extends AutoDisposeProvider<IHomeViewRepository> {
-  /// See also [homeViewRepositoryForServer].
-  HomeViewRepositoryForServerProvider(
-    int serverId,
-  ) : this._internal(
-          (ref) => homeViewRepositoryForServer(
-            ref as HomeViewRepositoryForServerRef,
-            serverId,
-          ),
-          from: homeViewRepositoryForServerProvider,
-          name: r'homeViewRepositoryForServerProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$homeViewRepositoryForServerHash,
-          dependencies: HomeViewRepositoryForServerFamily._dependencies,
-          allTransitiveDependencies:
-              HomeViewRepositoryForServerFamily._allTransitiveDependencies,
-          serverId: serverId,
-        );
-
-  HomeViewRepositoryForServerProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.serverId,
-  }) : super.internal();
-
-  final int serverId;
-
-  @override
-  Override overrideWith(
-    IHomeViewRepository Function(HomeViewRepositoryForServerRef provider)
-        create,
-  ) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IHomeViewRepository value) {
+    return $ProviderOverride(
       origin: this,
-      override: HomeViewRepositoryForServerProvider._internal(
-        (ref) => create(ref as HomeViewRepositoryForServerRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        serverId: serverId,
-      ),
+      providerOverride: $SyncValueProvider<IHomeViewRepository>(value),
     );
-  }
-
-  @override
-  AutoDisposeProviderElement<IHomeViewRepository> createElement() {
-    return _HomeViewRepositoryForServerProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
     return other is HomeViewRepositoryForServerProvider &&
-        other.serverId == serverId;
+        other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, serverId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin HomeViewRepositoryForServerRef
-    on AutoDisposeProviderRef<IHomeViewRepository> {
-  /// The parameter `serverId` of this provider.
-  int get serverId;
-}
+String _$homeViewRepositoryForServerHash() =>
+    r'50182a0e435575b188b26fe2e83c419b3b396a84';
 
-class _HomeViewRepositoryForServerProviderElement
-    extends AutoDisposeProviderElement<IHomeViewRepository>
-    with HomeViewRepositoryForServerRef {
-  _HomeViewRepositoryForServerProviderElement(super.provider);
+final class HomeViewRepositoryForServerFamily extends $Family
+    with $FunctionalFamilyOverride<IHomeViewRepository, int> {
+  const HomeViewRepositoryForServerFamily._()
+    : super(
+        retry: null,
+        name: r'homeViewRepositoryForServerProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  HomeViewRepositoryForServerProvider call(int serverId) =>
+      HomeViewRepositoryForServerProvider._(argument: serverId, from: this);
 
   @override
-  int get serverId => (origin as HomeViewRepositoryForServerProvider).serverId;
+  String toString() => r'homeViewRepositoryForServerProvider';
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

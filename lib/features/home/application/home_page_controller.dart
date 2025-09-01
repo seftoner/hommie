@@ -19,15 +19,14 @@ class HomePageState {
     bool? isEditing,
     bool? isReordering,
     HomeViewConf? homeView,
-  }) =>
-      HomePageState(
-        isEditing: isEditing ?? this.isEditing,
-        isReordering: isReordering ?? this.isReordering,
-        homeView: homeView ?? this.homeView,
-      );
+  }) => HomePageState(
+    isEditing: isEditing ?? this.isEditing,
+    isReordering: isReordering ?? this.isReordering,
+    homeView: homeView ?? this.homeView,
+  );
 }
 
-@riverpod
+@Riverpod(dependencies: [homeViewRepository])
 class HomePageController extends _$HomePageController {
   @override
   Future<HomePageState> build() async {
@@ -41,14 +40,16 @@ class HomePageController extends _$HomePageController {
 
   Future<void> toggleEditMode() async {
     final previousState = await future;
-    state =
-        AsyncData(previousState.copyWith(isEditing: !previousState.isEditing));
+    state = AsyncData(
+      previousState.copyWith(isEditing: !previousState.isEditing),
+    );
   }
 
   Future<void> toggleReorderMode() async {
     final previousState = await future;
     state = AsyncData(
-        previousState.copyWith(isReordering: !previousState.isReordering));
+      previousState.copyWith(isReordering: !previousState.isReordering),
+    );
   }
 }
 
@@ -57,9 +58,5 @@ class DeviceItem {
   final String name;
   final bool isBig;
 
-  const DeviceItem({
-    required this.id,
-    required this.name,
-    required this.isBig,
-  });
+  const DeviceItem({required this.id, required this.name, required this.isBig});
 }

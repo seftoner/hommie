@@ -1,7 +1,7 @@
 import 'package:hommie/features/home/domain/repositories/i_device_repository.dart';
 import 'package:hommie/services/database/models/area_entity.dart';
 import 'package:hommie/services/database/models/device_entity.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:hommie/features/home/domain/entities/device.dart' as domain;
 import 'package:hommie/features/home/infrastructure/repositories/mappers/device_mapper.dart';
 

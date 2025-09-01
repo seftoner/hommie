@@ -3,14 +3,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'ha_version.freezed.dart';
 
 @freezed
-class HaVersion with _$HaVersion {
+sealed class HaVersion with _$HaVersion {
   const HaVersion._();
 
-  factory HaVersion({
-    required int major,
-    required int minor,
-    int? patch,
-  }) = _HaVersion;
+  factory HaVersion({required int major, required int minor, int? patch}) =
+      _HaVersion;
 
   factory HaVersion.fromString(String strVersion) {
     final parts = strVersion.split('.');

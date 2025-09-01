@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -25,27 +24,30 @@ part 'server_scope_provider.g.dart';
 /// - All dependent providers automatically update
 /// - Clear dependency chain
 /// - Type-safe server context
-@riverpod
+@Riverpod(dependencies: [])
 Future<HAConnection> serverScopeConnection(Ref ref) async {
   throw UnimplementedError(
-      'serverScopeConnection must be overridden in a ProviderScope');
+    'serverScopeConnection must be overridden in a ProviderScope',
+  );
 }
 
 /// A scoped provider that represents the current server ID.
 ///
 /// Like serverScopeConnection, this should be overridden in a ProviderScope
 /// to provide the current server context.
-@riverpod
+@Riverpod(dependencies: [])
 int serverScopeId(Ref ref) {
   throw UnimplementedError(
-      'serverScopeId must be overridden in a ProviderScope');
+    'serverScopeId must be overridden in a ProviderScope',
+  );
 }
 
 /// A scoped provider that represents the current server object.
 ///
 /// This provides access to the full server configuration in the current scope.
-@riverpod
+@Riverpod(dependencies: [])
 Future<Server> serverScopeServer(Ref ref) async {
   throw UnimplementedError(
-      'serverScopeServer must be overridden in a ProviderScope');
+    'serverScopeServer must be overridden in a ProviderScope',
+  );
 }

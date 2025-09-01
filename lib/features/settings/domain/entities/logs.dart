@@ -5,7 +5,7 @@ part 'logs.freezed.dart';
 enum LogLevel { trace, debug, info, error, fatal, warning }
 
 @freezed
-class Log with _$Log {
+sealed class Log with _$Log {
   factory Log({
     required DateTime time,
     required String msg,

@@ -1,14 +1,12 @@
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
+
 import 'server_entity.dart';
 import 'area_entity.dart';
 import 'device_entity.dart';
 
 part 'home_view.g.dart';
 
-enum DeviceDisplaySize {
-  small,
-  big,
-}
+enum DeviceDisplaySize { small, big }
 
 @collection
 class HomeViewConfig {
@@ -35,9 +33,7 @@ class AreaHomeConfig {
   @Backlink(to: 'areaConfig')
   final deviceConfigs = IsarLinks<DeviceHomeConfig>();
 
-  AreaHomeConfig({
-    required this.position,
-  });
+  AreaHomeConfig({required this.position});
 }
 
 @collection

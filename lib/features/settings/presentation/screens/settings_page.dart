@@ -71,14 +71,15 @@ class SettingsPage extends ConsumerWidget {
                 key: K.hub.signOutButton,
                 style: FilledButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.errorContainer,
-                  foregroundColor:
-                      Theme.of(context).colorScheme.onErrorContainer,
+                  foregroundColor: Theme.of(
+                    context,
+                  ).colorScheme.onErrorContainer,
                 ),
                 onPressed: () => _showSignOutDialog(context, ref),
                 child: const Text('Sign Out'),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

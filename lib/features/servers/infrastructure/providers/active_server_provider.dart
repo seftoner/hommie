@@ -5,7 +5,7 @@ import 'package:hommie/features/servers/infrastructure/providers/server_manager_
 
 part 'active_server_provider.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true, dependencies: [serverManager])
 class ActiveServer extends _$ActiveServer {
   @override
   Future<Server?> build() async {
@@ -15,10 +15,11 @@ class ActiveServer extends _$ActiveServer {
 
   Future<void> setActive(int serverId) async {
     final serverManager = ref.read(serverManagerProvider);
-    final previousServer = state.valueOrNull;
+    final previousServer = state.value;
 
     logger.i(
-        'Switching active server from ${previousServer?.name} to server ID: $serverId');
+      'Switching active server from ${previousServer?.name} to server ID: $serverId',
+    );
 
     // Update the active server in the database
     await serverManager.setActiveServer(serverId);

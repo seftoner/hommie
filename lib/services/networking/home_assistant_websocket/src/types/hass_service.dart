@@ -3,7 +3,7 @@ part 'hass_service.freezed.dart';
 part 'hass_service.g.dart';
 
 @freezed
-class HassDomainServices with _$HassDomainServices {
+sealed class HassDomainServices with _$HassDomainServices {
   factory HassDomainServices(Map<String, HassService> services) =
       _HassDomainServices;
 
@@ -33,7 +33,7 @@ class HassDomainServicesConverter
 }
 
 @freezed
-class HassServices with _$HassServices {
+sealed class HassServices with _$HassServices {
   factory HassServices(Map<String, HassDomainServices> domains) = _HassServices;
 
   factory HassServices.fromJson(Map<String, dynamic> json) =>
@@ -63,7 +63,7 @@ class HassServicesConverter
 }
 
 @freezed
-class HassService with _$HassService {
+sealed class HassService with _$HassService {
   const factory HassService({
     String? name,
     required String description,
@@ -77,7 +77,7 @@ class HassService with _$HassService {
 }
 
 @freezed
-class Field with _$Field {
+sealed class Field with _$Field {
   const factory Field({
     @Default('') String? name,
     @Default('') String? description,
@@ -90,21 +90,20 @@ class Field with _$Field {
 }
 
 @freezed
-class FieldFilter with _$FieldFilter {
+sealed class FieldFilter with _$FieldFilter {
   factory FieldFilter(
-      // ignore: non_constant_identifier_names
-      List<int>? supported_features,
-      Map<String, dynamic>? attribute) = _FieldFilter;
+    // ignore: non_constant_identifier_names
+    List<int>? supported_features,
+    Map<String, dynamic>? attribute,
+  ) = _FieldFilter;
 
   factory FieldFilter.fromJson(Map<String, dynamic> json) =>
       _$FieldFilterFromJson(json);
 }
 
 @freezed
-class Response with _$Response {
-  const factory Response({
-    required bool optional,
-  }) = _Response;
+sealed class Response with _$Response {
+  const factory Response({required bool optional}) = _Response;
 
   factory Response.fromJson(Map<String, dynamic> json) =>
       _$ResponseFromJson(json);

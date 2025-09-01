@@ -23,10 +23,7 @@ Future<void> registerBackgroundTasks() async {
     }
   }
 
-  await Workmanager().initialize(
-    callbackDispatcher,
-    isInDebugMode: true,
-  );
+  await Workmanager().initialize(callbackDispatcher);
 
   if (Platform.isAndroid) {
     await Workmanager().registerPeriodicTask(

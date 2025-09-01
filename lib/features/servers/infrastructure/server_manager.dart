@@ -8,7 +8,10 @@ import 'package:hommie/features/servers/domain/repositories/i_server_repository.
 import 'package:hommie/features/servers/domain/repositories/i_websocket_repository.dart';
 import 'package:hommie/features/servers/infrastructure/repositories/websocket_repository.dart';
 import 'package:hommie/services/networking/server_connection_provider.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+@Dependencies([serverConnection])
 class ServerManager implements IServerManager {
   final IServerRepository _serverRepository;
   final Ref _ref;
@@ -41,15 +44,18 @@ class ServerManager implements IServerManager {
     await _removeServerInternal(id, allowLastServer: true);
   }
 
-  Future<void> _removeServerInternal(int id,
-      {required bool allowLastServer}) async {
+  Future<void> _removeServerInternal(
+    int id, {
+    required bool allowLastServer,
+  }) async {
     // Get all servers to check if this is the last one
     final allServers = await getAvailableServers();
     final isLastServer = allServers.length <= 1;
 
     if (isLastServer && !allowLastServer) {
       throw Exception(
-          'Cannot delete the last server. At least one server must be configured.');
+        'Cannot delete the last server. At least one server must be configured.',
+      );
     }
 
     // Check if this is the active server
@@ -74,12 +80,14 @@ class ServerManager implements IServerManager {
       if (remainingServers.length == 1) {
         // If only one server remains, automatically make it active
         logger.i(
-            'Only one server remaining, making it active: ${remainingServers.first.name}');
+          'Only one server remaining, making it active: ${remainingServers.first.name}',
+        );
         await setActiveServer(remainingServers.first.id!);
       } else if (isActiveServer && remainingServers.isNotEmpty) {
         // If deleted server was active and multiple servers remain, switch to the first one
         logger.i(
-            'Deleted active server, switching to ${remainingServers.first.name}');
+          'Deleted active server, switching to ${remainingServers.first.name}',
+        );
         await setActiveServer(remainingServers.first.id!);
       }
     } else {
@@ -120,8 +128,9 @@ class ServerManager implements IServerManager {
 
   @override
   Future<IWebSocketRepository> webSocketRepository(int serverId) async {
-    final connection =
-        await _ref.read(serverConnectionProvider(serverId).future);
+    final connection = await _ref.read(
+      serverConnectionProvider(serverId).future,
+    );
     return WebSocketRepository(connection);
   }
 

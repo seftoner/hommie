@@ -1,4 +1,5 @@
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
+
 import 'area_entity.dart';
 import 'server_entity.dart';
 
@@ -19,9 +20,5 @@ class DeviceEntity {
   @ignore
   ServerEntity get server => area.value!.server.value!;
 
-  DeviceEntity({
-    required this.haId,
-    required this.name,
-    required this.type,
-  });
+  DeviceEntity({required this.haId, required this.name, required this.type});
 }

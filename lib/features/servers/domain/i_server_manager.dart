@@ -9,6 +9,8 @@ abstract interface class IServerManager {
   Future<void> removeServer(int id);
   Future<void> forceRemoveServer(int id);
   Future<List<Server>> getAvailableServers();
+
+  //TODO: remove this methods from this interface!
   Future<IWebSocketRepository> webSocketRepository(int serverId);
   IAuthRepository getAuthRepository(int serverId);
 }

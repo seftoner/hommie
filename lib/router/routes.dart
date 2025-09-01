@@ -22,18 +22,10 @@ final rootKey = GlobalKey<NavigatorState>(debugLabel: 'routerKey');
 @TypedStatefulShellRoute<MainShellRouteData>(
   branches: [
     TypedStatefulShellBranch<HomeShellBranchData>(
-      routes: [
-        TypedGoRoute<HomeRouteData>(
-          path: '/home',
-        ),
-      ],
+      routes: [TypedGoRoute<HomeRouteData>(path: '/home')],
     ),
     TypedStatefulShellBranch<AutomationsShellBranchData>(
-      routes: [
-        TypedGoRoute<AutomationsRouteData>(
-          path: '/automations',
-        ),
-      ],
+      routes: [TypedGoRoute<AutomationsRouteData>(path: '/automations')],
     ),
   ],
 )
@@ -46,9 +38,7 @@ class MainShellRouteData extends StatefulShellRouteData {
     GoRouterState state,
     StatefulNavigationShell navigationShell,
   ) {
-    return AppScaffoldPage(
-      navigationShell: navigationShell,
-    );
+    return AppScaffoldPage(navigationShell: navigationShell);
   }
 }
 
@@ -56,7 +46,7 @@ class AutomationsShellBranchData extends StatefulShellBranchData {
   const AutomationsShellBranchData();
 }
 
-class AutomationsRouteData extends GoRouteData {
+class AutomationsRouteData extends GoRouteData with _$AutomationsRouteData {
   const AutomationsRouteData();
 
   @override
@@ -75,7 +65,7 @@ class AutomationsRouteData extends GoRouteData {
     TypedGoRoute<SensorsRouteData>(path: 'sensors'),
   ],
 )
-class SettingsRouteData extends GoRouteData {
+class SettingsRouteData extends GoRouteData with _$SettingsRouteData {
   const SettingsRouteData();
 
   @override
@@ -84,7 +74,7 @@ class SettingsRouteData extends GoRouteData {
   }
 }
 
-class LogsRouteData extends GoRouteData {
+class LogsRouteData extends GoRouteData with _$LogsRouteData {
   const LogsRouteData();
 
   @override
@@ -93,7 +83,7 @@ class LogsRouteData extends GoRouteData {
   }
 }
 
-class AboutRouteData extends GoRouteData {
+class AboutRouteData extends GoRouteData with _$AboutRouteData {
   const AboutRouteData();
 
   @override
@@ -102,7 +92,7 @@ class AboutRouteData extends GoRouteData {
   }
 }
 
-class SensorsRouteData extends GoRouteData {
+class SensorsRouteData extends GoRouteData with _$SensorsRouteData {
   const SensorsRouteData();
 
   @override
@@ -111,7 +101,7 @@ class SensorsRouteData extends GoRouteData {
   }
 }
 
-class HubRouteData extends GoRouteData {
+class HubRouteData extends GoRouteData with _$HubRouteData {
   const HubRouteData();
 
   @override
@@ -120,7 +110,7 @@ class HubRouteData extends GoRouteData {
   }
 }
 
-class ServersRouteData extends GoRouteData {
+class ServersRouteData extends GoRouteData with _$ServersRouteData {
   const ServersRouteData();
 
   @override
@@ -133,7 +123,7 @@ class HomeShellBranchData extends StatefulShellBranchData {
   const HomeShellBranchData();
 }
 
-class HomeRouteData extends GoRouteData {
+class HomeRouteData extends GoRouteData with _$HomeRouteData {
   const HomeRouteData();
 
   @override
@@ -143,7 +133,7 @@ class HomeRouteData extends GoRouteData {
 }
 
 @TypedGoRoute<DicoveryRoute>(path: '/discovery')
-class DicoveryRoute extends GoRouteData {
+class DicoveryRoute extends GoRouteData with _$DicoveryRoute {
   const DicoveryRoute();
 
   @override
@@ -153,7 +143,7 @@ class DicoveryRoute extends GoRouteData {
 }
 
 @TypedGoRoute<EnterAddressRoute>(path: '/manualAddres')
-class EnterAddressRoute extends GoRouteData {
+class EnterAddressRoute extends GoRouteData with _$EnterAddressRoute {
   const EnterAddressRoute();
 
   @override
@@ -163,7 +153,7 @@ class EnterAddressRoute extends GoRouteData {
 }
 
 @TypedGoRoute<StartupRoute>(path: '/startup')
-class StartupRoute extends GoRouteData {
+class StartupRoute extends GoRouteData with _$StartupRoute {
   const StartupRoute();
 
   @override

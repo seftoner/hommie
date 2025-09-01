@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/infrastructure/parallelism/providers/provider.dart';
 import 'package:hommie/core/utils/log_file.dart';
 import 'package:hommie/features/settings/domain/repository/i_logs_repository.dart';

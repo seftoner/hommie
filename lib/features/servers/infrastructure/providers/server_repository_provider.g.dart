@@ -6,23 +6,52 @@ part of 'server_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverRepositoryHash() => r'e9dbfabf03900047e5db89744e374935a80aca75';
-
-/// See also [serverRepository].
 @ProviderFor(serverRepository)
-final serverRepositoryProvider =
-    AutoDisposeProvider<IServerRepository>.internal(
-  serverRepository,
-  name: r'serverRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$serverRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const serverRepositoryProvider = ServerRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ServerRepositoryRef = AutoDisposeProviderRef<IServerRepository>;
+final class ServerRepositoryProvider
+    extends
+        $FunctionalProvider<
+          IServerRepository,
+          IServerRepository,
+          IServerRepository
+        >
+    with $Provider<IServerRepository> {
+  const ServerRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'serverRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$serverRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<IServerRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  IServerRepository create(Ref ref) {
+    return serverRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IServerRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<IServerRepository>(value),
+    );
+  }
+}
+
+String _$serverRepositoryHash() => r'4823452b3ed063537b1a0f11a9eff295a7660d09';
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

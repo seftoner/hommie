@@ -6,23 +6,47 @@ part of 'database_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$databaseConnectionHash() =>
-    r'ee157ac6af5558c58e8681081f6dc6e41e892872';
-
-/// See also [databaseConnection].
 @ProviderFor(databaseConnection)
-final databaseConnectionProvider = Provider<Isar>.internal(
-  databaseConnection,
-  name: r'databaseConnectionProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$databaseConnectionHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const databaseConnectionProvider = DatabaseConnectionProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DatabaseConnectionRef = ProviderRef<Isar>;
+final class DatabaseConnectionProvider
+    extends $FunctionalProvider<Isar, Isar, Isar>
+    with $Provider<Isar> {
+  const DatabaseConnectionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'databaseConnectionProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$databaseConnectionHash();
+
+  @$internal
+  @override
+  $ProviderElement<Isar> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Isar create(Ref ref) {
+    return databaseConnection(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Isar value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Isar>(value),
+    );
+  }
+}
+
+String _$databaseConnectionHash() =>
+    r'762e131d5c0e767fbcbd601cd4e3da5cb89ccf6b';
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -14,11 +14,7 @@ class Reconnecting extends HASocketState {
   const Reconnecting();
 }
 
-enum DisconnectionType {
-  normal,
-  error,
-  authFailure,
-}
+enum DisconnectionType { normal, error, authFailure }
 
 class Disconnected extends HASocketState {
   final String? reason;
@@ -36,7 +32,9 @@ class Disconnected extends HASocketState {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     return other is Disconnected &&
         other.reason == reason &&

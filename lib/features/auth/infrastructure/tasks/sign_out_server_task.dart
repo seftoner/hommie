@@ -4,7 +4,10 @@ import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
 import 'package:hommie/services/networking/server_connection_manager.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+@Dependencies([ServerConnectionManager])
 class SignOutServerTask extends HTask {
   final IServerManager _serverManager;
   final Ref _ref;
@@ -17,8 +20,9 @@ class SignOutServerTask extends HTask {
 
     try {
       // Step 1: Disconnect the server connection if active
-      final connectionManager =
-          _ref.read(serverConnectionManagerProvider.notifier);
+      final connectionManager = _ref.read(
+        serverConnectionManagerProvider.notifier,
+      );
 
       connectionManager.disconnect(serverId);
       logger.i('Disconnected server connection for server: $serverId');

@@ -4,7 +4,7 @@ import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 part 'ha_server.freezed.dart';
 
 @freezed
-class HaServer with _$HaServer {
+sealed class HaServer with _$HaServer {
   factory HaServer({
     String? uuid,
     required String name,

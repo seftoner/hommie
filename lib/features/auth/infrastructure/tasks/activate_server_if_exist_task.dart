@@ -4,7 +4,10 @@ import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+@Dependencies([ActiveServer])
 class ActivateServerIfExistTask extends HTask {
   final IServerManager _serverManager;
   final Ref _ref;
@@ -19,8 +22,9 @@ class ActivateServerIfExistTask extends HTask {
     final servers = await _serverManager.getAvailableServers();
 
     // Step 2: Find next available server (excluding the one being signed out)
-    final availableServers =
-        servers.where((server) => server.id != serverId).toList();
+    final availableServers = servers
+        .where((server) => server.id != serverId)
+        .toList();
 
     // Step 3: Activate next server if available
     if (availableServers.isNotEmpty) {

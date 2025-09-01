@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/app.dart';
@@ -17,12 +18,15 @@ Future<void> main() async {
 
       logger.i('Start the application 🚀');
 
-      final appOverrides = await _initializeProviderOverrides();
-
       runApp(
         ProviderScope(
           observers: const [AppStateLoggerObserver()],
-          overrides: appOverrides,
+          overrides: [
+            databaseConnectionProvider.overrideWith((ref) {
+              return DatabaseInitializer.instance;
+            }),
+          ],
+          retry: (retryCount, error) => null,
           child: const HommieApp(),
         ),
       );
@@ -32,15 +36,4 @@ Future<void> main() async {
       logger.e('Unhandled exception: $error', error: error, stackTrace: stack);
     },
   );
-}
-
-Future<List<Override>> _initializeProviderOverrides() async {
-  final isar = await DatabaseInitializer.initialize();
-
-  return [
-    databaseConnectionProvider.overrideWith((ref) {
-      ref.onDispose(() => isar.close());
-      return isar;
-    }),
-  ];
 }

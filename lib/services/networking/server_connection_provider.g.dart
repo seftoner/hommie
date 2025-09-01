@@ -6,161 +6,96 @@ part of 'server_connection_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverConnectionHash() => r'ddeeca7bdcf21e6b8f46da0f68a7526a73a345a3';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [serverConnection].
 @ProviderFor(serverConnection)
-const serverConnectionProvider = ServerConnectionFamily();
+const serverConnectionProvider = ServerConnectionFamily._();
 
-/// See also [serverConnection].
-class ServerConnectionFamily extends Family<AsyncValue<HAConnection>> {
-  /// See also [serverConnection].
-  const ServerConnectionFamily();
+final class ServerConnectionProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<HAConnection>,
+          HAConnection,
+          FutureOr<HAConnection>
+        >
+    with $FutureModifier<HAConnection>, $FutureProvider<HAConnection> {
+  const ServerConnectionProvider._({
+    required ServerConnectionFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'serverConnectionProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [serverConnection].
-  ServerConnectionProvider call(
-    int serverId,
-  ) {
-    return ServerConnectionProvider(
-      serverId,
-    );
+  static const $allTransitiveDependencies0 = serverConnectionManagerProvider;
+  static const $allTransitiveDependencies1 =
+      ServerConnectionManagerProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 =
+      ServerConnectionManagerProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies3 =
+      ServerConnectionManagerProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies4 =
+      ServerConnectionManagerProvider.$allTransitiveDependencies3;
+
+  @override
+  String debugGetCreateSourceHash() => _$serverConnectionHash();
+
+  @override
+  String toString() {
+    return r'serverConnectionProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  ServerConnectionProvider getProviderOverride(
-    covariant ServerConnectionProvider provider,
-  ) {
-    return call(
-      provider.serverId,
-    );
-  }
-
-  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    serverConnectionManagerProvider
-  ];
+  $FutureProviderElement<HAConnection> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
-      <ProviderOrFamily>{
-    serverConnectionManagerProvider,
-    ...?serverConnectionManagerProvider.allTransitiveDependencies
-  };
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'serverConnectionProvider';
-}
-
-/// See also [serverConnection].
-class ServerConnectionProvider extends FutureProvider<HAConnection> {
-  /// See also [serverConnection].
-  ServerConnectionProvider(
-    int serverId,
-  ) : this._internal(
-          (ref) => serverConnection(
-            ref as ServerConnectionRef,
-            serverId,
-          ),
-          from: serverConnectionProvider,
-          name: r'serverConnectionProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$serverConnectionHash,
-          dependencies: ServerConnectionFamily._dependencies,
-          allTransitiveDependencies:
-              ServerConnectionFamily._allTransitiveDependencies,
-          serverId: serverId,
-        );
-
-  ServerConnectionProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.serverId,
-  }) : super.internal();
-
-  final int serverId;
-
-  @override
-  Override overrideWith(
-    FutureOr<HAConnection> Function(ServerConnectionRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: ServerConnectionProvider._internal(
-        (ref) => create(ref as ServerConnectionRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        serverId: serverId,
-      ),
-    );
-  }
-
-  @override
-  FutureProviderElement<HAConnection> createElement() {
-    return _ServerConnectionProviderElement(this);
+  FutureOr<HAConnection> create(Ref ref) {
+    final argument = this.argument as int;
+    return serverConnection(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ServerConnectionProvider && other.serverId == serverId;
+    return other is ServerConnectionProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, serverId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ServerConnectionRef on FutureProviderRef<HAConnection> {
-  /// The parameter `serverId` of this provider.
-  int get serverId;
-}
+String _$serverConnectionHash() => r'ddeeca7bdcf21e6b8f46da0f68a7526a73a345a3';
 
-class _ServerConnectionProviderElement
-    extends FutureProviderElement<HAConnection> with ServerConnectionRef {
-  _ServerConnectionProviderElement(super.provider);
+final class ServerConnectionFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<HAConnection>, int> {
+  const ServerConnectionFamily._()
+    : super(
+        retry: null,
+        name: r'serverConnectionProvider',
+        dependencies: const <ProviderOrFamily>[serverConnectionManagerProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>{
+          ServerConnectionProvider.$allTransitiveDependencies0,
+          ServerConnectionProvider.$allTransitiveDependencies1,
+          ServerConnectionProvider.$allTransitiveDependencies2,
+          ServerConnectionProvider.$allTransitiveDependencies3,
+          ServerConnectionProvider.$allTransitiveDependencies4,
+        },
+        isAutoDispose: false,
+      );
+
+  ServerConnectionProvider call(int serverId) =>
+      ServerConnectionProvider._(argument: serverId, from: this);
 
   @override
-  int get serverId => (origin as ServerConnectionProvider).serverId;
+  String toString() => r'serverConnectionProvider';
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

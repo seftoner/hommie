@@ -6,7 +6,7 @@ part 'hass_event.freezed.dart';
 part 'hass_event.g.dart';
 
 @freezed
-class EntityStateRemove with _$EntityStateRemove {
+sealed class EntityStateRemove with _$EntityStateRemove {
   factory EntityStateRemove(List<String> a) = _EntityStateRemove;
 
   factory EntityStateRemove.fromJson(Map<String, dynamic> json) =>
@@ -14,20 +14,21 @@ class EntityStateRemove with _$EntityStateRemove {
 }
 
 @freezed
-class EntityState with _$EntityState {
-  factory EntityState(
-      {@JsonKey(name: 's') String? state,
-      @JsonKey(name: 'a') Map<String, dynamic>? attributes,
-      @JsonKey(name: 'c') Context? context,
-      @JsonKey(name: 'ls') double? last_changed,
-      @JsonKey(name: 'lu') double? last_updated}) = _EntityState;
+sealed class EntityState with _$EntityState {
+  factory EntityState({
+    @JsonKey(name: 's') String? state,
+    @JsonKey(name: 'a') Map<String, dynamic>? attributes,
+    @JsonKey(name: 'c') Context? context,
+    @JsonKey(name: 'ls') double? last_changed,
+    @JsonKey(name: 'lu') double? last_updated,
+  }) = _EntityState;
 
   factory EntityState.fromJson(Map<String, dynamic> json) =>
       _$EntityStateFromJson(json);
 }
 
 @freezed
-class EntityDiff with _$EntityDiff {
+sealed class EntityDiff with _$EntityDiff {
   factory EntityDiff({
     @JsonKey(name: '+') EntityState? add,
     @JsonKey(name: '-') EntityStateRemove? remove,
@@ -38,7 +39,7 @@ class EntityDiff with _$EntityDiff {
 }
 
 @freezed
-class StatesUpdates with _$StatesUpdates {
+sealed class StatesUpdates with _$StatesUpdates {
   const factory StatesUpdates({
     @JsonKey(name: 'a') Map<String, EntityState>? add,
     @JsonKey(name: 'r') List<String>? remove,
@@ -50,18 +51,16 @@ class StatesUpdates with _$StatesUpdates {
 }
 
 @freezed
-class CallServiceResponse with _$CallServiceResponse {
-  factory CallServiceResponse({
-    required Context context,
-    dynamic response,
-  }) = _CallServiceResponse;
+sealed class CallServiceResponse with _$CallServiceResponse {
+  factory CallServiceResponse({required Context context, dynamic response}) =
+      _CallServiceResponse;
 
   factory CallServiceResponse.fromJson(Map<String, dynamic> json) =>
       _$CallServiceResponseFromJson(json);
 }
 
 @freezed
-class Context with _$Context {
+sealed class Context with _$Context {
   const factory Context({
     required String id,
     String? user_id,
@@ -79,9 +78,10 @@ class ContextConverter implements JsonConverter<Context, Map<String, dynamic>> {
   Context fromJson(dynamic json) {
     if (json is Map<String, dynamic>) {
       return Context(
-          id: json['id'],
-          parent_id: json['parent_id'],
-          user_id: json['user_id']);
+        id: json['id'],
+        parent_id: json['parent_id'],
+        user_id: json['user_id'],
+      );
     } else if (json is String) {
       return Context(id: json);
     } else {
@@ -134,7 +134,7 @@ sealed class HassEntity with _$HassEntity {
 }
 
 @freezed
-class HassEntityAttributeBase with _$HassEntityAttributeBase {
+sealed class HassEntityAttributeBase with _$HassEntityAttributeBase {
   const factory HassEntityAttributeBase({
     String? friendly_name,
     String? unit_of_measurement,

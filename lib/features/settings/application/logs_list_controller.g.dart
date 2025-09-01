@@ -6,22 +6,51 @@ part of 'logs_list_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+@ProviderFor(LogsListController)
+const logsListControllerProvider = LogsListControllerProvider._();
+
+final class LogsListControllerProvider
+    extends $AsyncNotifierProvider<LogsListController, LogsListState> {
+  const LogsListControllerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'logsListControllerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$logsListControllerHash();
+
+  @$internal
+  @override
+  LogsListController create() => LogsListController();
+}
+
 String _$logsListControllerHash() =>
     r'04448d151f8d1501e468d53b76525578da73edb1';
 
-/// See also [LogsListController].
-@ProviderFor(LogsListController)
-final logsListControllerProvider = AutoDisposeAsyncNotifierProvider<
-    LogsListController, LogsListState>.internal(
-  LogsListController.new,
-  name: r'logsListControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$logsListControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$LogsListController extends $AsyncNotifier<LogsListState> {
+  FutureOr<LogsListState> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<LogsListState>, LogsListState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<LogsListState>, LogsListState>,
+              AsyncValue<LogsListState>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$LogsListController = AutoDisposeAsyncNotifier<LogsListState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

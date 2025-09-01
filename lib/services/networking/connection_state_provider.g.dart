@@ -6,27 +6,76 @@ part of 'connection_state_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$connectionStateHash() => r'a643516375053e0b8f5497e9f8f4f26d3f2eff5e';
+/// A Riverpod provider that manages the network connection state of the application.
+///
+/// This provider keeps track of the current network connectivity status and
+/// provides methods to update the connection state. It is marked as keepAlive
+/// to ensure the state persists across widget rebuilds.
+@ProviderFor(ServerConnectionState)
+const serverConnectionStateProvider = ServerConnectionStateProvider._();
 
 /// A Riverpod provider that manages the network connection state of the application.
 ///
 /// This provider keeps track of the current network connectivity status and
 /// provides methods to update the connection state. It is marked as keepAlive
 /// to ensure the state persists across widget rebuilds.
-///
-/// Copied from [ConnectionState].
-@ProviderFor(ConnectionState)
-final connectionStateProvider =
-    NotifierProvider<ConnectionState, HAServerConnectionState>.internal(
-  ConnectionState.new,
-  name: r'connectionStateProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$connectionStateHash,
-  dependencies: const <ProviderOrFamily>[],
-  allTransitiveDependencies: const <ProviderOrFamily>{},
-);
+final class ServerConnectionStateProvider
+    extends $NotifierProvider<ServerConnectionState, HAServerConnectionState> {
+  /// A Riverpod provider that manages the network connection state of the application.
+  ///
+  /// This provider keeps track of the current network connectivity status and
+  /// provides methods to update the connection state. It is marked as keepAlive
+  /// to ensure the state persists across widget rebuilds.
+  const ServerConnectionStateProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'serverConnectionStateProvider',
+        isAutoDispose: false,
+        dependencies: const <ProviderOrFamily>[],
+        $allTransitiveDependencies: const <ProviderOrFamily>[],
+      );
 
-typedef _$ConnectionState = Notifier<HAServerConnectionState>;
+  @override
+  String debugGetCreateSourceHash() => _$serverConnectionStateHash();
+
+  @$internal
+  @override
+  ServerConnectionState create() => ServerConnectionState();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(HAServerConnectionState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<HAServerConnectionState>(value),
+    );
+  }
+}
+
+String _$serverConnectionStateHash() =>
+    r'32ad7d257501aa0b8214e92822984ff4df1b6fbe';
+
+abstract class _$ServerConnectionState
+    extends $Notifier<HAServerConnectionState> {
+  HAServerConnectionState build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref =
+        this.ref as $Ref<HAServerConnectionState, HAServerConnectionState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<HAServerConnectionState, HAServerConnectionState>,
+              HAServerConnectionState,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

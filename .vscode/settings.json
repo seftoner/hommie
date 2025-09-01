@@ -1,5 +1,6 @@
 {
     "cmake.configureOnOpen": false,
+    "dart.mcpServer": true,
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,

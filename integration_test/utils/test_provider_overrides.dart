@@ -1,19 +1,27 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+// In Riverpod 3, provider overrides are handled using provider.overrideWith() methods
+// This class manages a list of dynamic overrides that can be used in ProviderScope
 class TestProviderOverrides {
   factory TestProviderOverrides.instance() => _singleton;
   TestProviderOverrides._();
   static final TestProviderOverrides _singleton = TestProviderOverrides._();
 
-  List<Override> _overrides = [];
+  List<dynamic> _overrides = [];
 
-  void setOverrides(List<Override> overrides) {
-    _overrides = overrides;
+  // Get current overrides for use in ProviderScope
+  List<dynamic> get overrides => List.unmodifiable(_overrides);
+
+  // Set overrides for tests
+  void setOverrides(List<dynamic> overrides) {
+    _overrides = List.from(overrides);
   }
 
-  List<Override> get overrides => _overrides;
+  // Add additional overrides
+  void addOverrides(List<dynamic> overrides) {
+    _overrides.addAll(overrides);
+  }
 
+  // Clear all overrides
   void clear() {
-    _overrides = [];
+    _overrides.clear();
   }
 }

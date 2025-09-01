@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/features/home/domain/repositories/i_device_repository.dart';
 import 'package:hommie/features/home/infrastructure/repositories/isar_device_repository.dart';
 import 'package:hommie/services/database/database_provider.dart';

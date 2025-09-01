@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -18,8 +17,10 @@ class TimeoutHttpClient extends http.BaseClient {
 
 @riverpod
 http.BaseClient httpClient(Ref ref) {
-  final httpClient =
-      TimeoutHttpClient(http.Client(), const Duration(seconds: 5));
+  final httpClient = TimeoutHttpClient(
+    http.Client(),
+    const Duration(seconds: 5),
+  );
 
   return httpClient;
 }

@@ -9,8 +9,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'server_auth_navigation_coordinator.g.dart';
 
 @Riverpod(
-    keepAlive: true,
-    dependencies: [ActiveServer, ServerAuthController, ConnectionState])
+  keepAlive: true,
+  dependencies: [ActiveServer, ServerConnectionState, ServerAuthController],
+)
 class ServerAuthNavigationCoordinator
     extends _$ServerAuthNavigationCoordinator {
   @override
@@ -27,7 +28,7 @@ class ServerAuthNavigationCoordinator
     });
 
     // Listen to global connection state for auth failures
-    ref.listen(connectionStateProvider, (_, next) {
+    ref.listen(serverConnectionStateProvider, (_, next) {
       if (next == HAServerConnectionState.authFailure) {
         _handleAuthFailure();
       }
@@ -41,24 +42,21 @@ class ServerAuthNavigationCoordinator
     final goRouter = ref.read(goRouterProvider);
 
     // Listen to auth state changes
-    ref.listen(
-      serverAuthControllerProvider,
-      (previous, next) {
-        next.whenData((authState) {
-          switch (authState) {
-            case Authenticated():
-              goRouter.go(const HomeRouteData().location);
-              break;
-            case Unauthenticated():
-              // Go to discovery page when unauthenticated
-              goRouter.go(const DicoveryRoute().location);
-              break;
-            default:
-              break;
-          }
-        });
-      },
-    );
+    ref.listen(serverAuthControllerProvider, (previous, next) {
+      next.whenData((authState) {
+        switch (authState) {
+          case Authenticated():
+            goRouter.go(const HomeRouteData().location);
+            break;
+          case Unauthenticated():
+            // Go to discovery page when unauthenticated
+            goRouter.go(const DicoveryRoute().location);
+            break;
+          default:
+            break;
+        }
+      });
+    });
 
     // Initialize auth state
     await authController.initialize(serverId);

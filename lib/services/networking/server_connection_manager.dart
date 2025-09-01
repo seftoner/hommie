@@ -5,14 +5,16 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/connection_orchestrator.dart';
-import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/ha_oauth2_token.dart';
 import 'package:hommie/core/utils/logger.dart';
 
 part 'server_connection_manager.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [ConnectionState, ActiveServer])
+@Riverpod(
+  keepAlive: true,
+  dependencies: [ActiveServer, ServerConnectionState, serverManager],
+)
 class ServerConnectionManager extends _$ServerConnectionManager {
   final _orchestrators = <int, ConnectionOrchestrator>{};
   int? _activeServerId;
@@ -25,11 +27,26 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       _disconnectAll();
     });
 
+    // Protect WebSocket connections from being paused due to invisible widgets
+    // WebSocket connections should stay active even when UI is not visible
+    ref.onCancel(() {
+      logger.w('ServerConnectionManager paused - WebSocket connections remain active');
+      // Note: We don't disconnect here as we want to maintain connections
+      // even when UI providers are paused
+    });
+
+    ref.onResume(() {
+      logger.i('ServerConnectionManager resumed');
+      // Verify all active connections are still healthy
+      _verifyActiveConnections();
+    });
+
     // Initialize active server
     final activeServer = await ref.read(activeServerProvider.future);
     _activeServerId = activeServer?.id;
     logger.i(
-        'ServerConnectionManager initialized with active server: $_activeServerId');
+      'ServerConnectionManager initialized with active server: $_activeServerId',
+    );
 
     // Listen to active server changes
     ref.listen(activeServerProvider, (previous, next) {
@@ -48,12 +65,13 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     _activeServerId = newActiveServerId;
 
     logger.i(
-        'Active server changed from $previousActiveServerId to $newActiveServerId');
+      'Active server changed from $previousActiveServerId to $newActiveServerId',
+    );
 
     // If no active server, reset connection state
     if (newActiveServerId == null && !_isDisposed) {
       logger.i('No active server - resetting connection state');
-      ref.read(connectionStateProvider.notifier).reset();
+      ref.read(serverConnectionStateProvider.notifier).reset();
     }
 
     // Disconnect all inactive servers
@@ -105,7 +123,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
 
     // Update global state only if this was the active server
     if (_activeServerId == serverId && !_isDisposed) {
-      ref.read(connectionStateProvider.notifier).reset();
+      ref.read(serverConnectionStateProvider.notifier).reset();
     }
   }
 
@@ -129,7 +147,8 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     final connOption = HAConnectionOption(
       serverUrl: serverUrl,
       fetchAuthToken: () async {
-        final authRepository = ref.read(authRepositoryProvider(serverId));
+        // Access authRepository through serverManager to avoid keepAlive constraint
+        final authRepository = serverManager.getAuthRepository(serverId);
         final fetchedCredentials = await authRepository.getCredentials();
         return fetchedCredentials.fold(
           (error) => throw ConnectionError('Failed to refresh token: $error'),
@@ -169,13 +188,29 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       if (_activeServerId == serverId && !_isDisposed) {
         // Determine the appropriate state based on error type
         if (e.toString().contains('auth') || e.toString().contains('token')) {
-          ref.read(connectionStateProvider.notifier).setAuthFailure();
+          ref.read(serverConnectionStateProvider.notifier).setAuthFailure();
         } else {
-          ref.read(connectionStateProvider.notifier).setDisconnected();
+          ref.read(serverConnectionStateProvider.notifier).setDisconnected();
         }
       }
 
       rethrow;
+    }
+  }
+
+  /// Verifies that all active connections are still healthy after resuming
+  void _verifyActiveConnections() {
+    if (_isDisposed) return;
+    
+    logger.d('Verifying ${_orchestrators.length} active connections');
+    for (final entry in _orchestrators.entries) {
+      final serverId = entry.key;
+      final orchestrator = entry.value;
+      
+      if (orchestrator.connection?.currentState is! Authenticated) {
+        logger.w('Connection $serverId not authenticated, may need reconnection');
+        // Could trigger a health check here if needed
+      }
     }
   }
 
@@ -185,41 +220,43 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     }
 
     logger.d(
-        'ServerConnectionManager received state for server $serverId: $state');
+      'ServerConnectionManager received state for server $serverId: $state',
+    );
 
     // Only update global connection state for the active server
     final shouldUpdateGlobalState = _activeServerId == serverId;
 
     if (shouldUpdateGlobalState) {
       logger.i(
-          'Updating global connection state to: $state (active server: $serverId)');
+        'Updating global connection state to: $state (active server: $serverId)',
+      );
     }
 
     switch (state) {
       case Disconnected(type: DisconnectionType.authFailure):
         if (shouldUpdateGlobalState) {
-          ref.read(connectionStateProvider.notifier).setAuthFailure();
+          ref.read(serverConnectionStateProvider.notifier).setAuthFailure();
         }
         disconnect(serverId);
         break;
       case Connecting():
         if (shouldUpdateGlobalState) {
-          ref.read(connectionStateProvider.notifier).setConnecting();
+          ref.read(serverConnectionStateProvider.notifier).setConnecting();
         }
         break;
       case Authenticated():
         if (shouldUpdateGlobalState) {
-          ref.read(connectionStateProvider.notifier).setConnected();
+          ref.read(serverConnectionStateProvider.notifier).setConnected();
         }
         break;
       case Reconnecting():
         if (shouldUpdateGlobalState) {
-          ref.read(connectionStateProvider.notifier).setReconnecting();
+          ref.read(serverConnectionStateProvider.notifier).setReconnecting();
         }
         break;
       case Disconnected():
         if (shouldUpdateGlobalState) {
-          ref.read(connectionStateProvider.notifier).setDisconnected();
+          ref.read(serverConnectionStateProvider.notifier).setDisconnected();
         }
         break;
     }

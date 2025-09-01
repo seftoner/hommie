@@ -47,6 +47,7 @@ class AppScaffoldKeys {
 
   final homeButton = const Key('homeButton');
   final automationButton = const Key('automationButton');
+  final settingsButton = const Key('settingsButton');
 }
 
 class SettingsKeys {

@@ -17,6 +17,7 @@ const HomeViewConfigSchema = CollectionSchema(
   name: r'HomeViewConfig',
   id: -88698802296639949,
   properties: {},
+
   estimateSize: _homeViewConfigEstimateSize,
   serialize: _homeViewConfigSerialize,
   deserialize: _homeViewConfigDeserialize,
@@ -36,13 +37,14 @@ const HomeViewConfigSchema = CollectionSchema(
       target: r'AreaHomeConfig',
       single: false,
       linkName: r'homeConfig',
-    )
+    ),
   },
   embeddedSchemas: {},
+
   getId: _homeViewConfigGetId,
   getLinks: _homeViewConfigGetLinks,
   attach: _homeViewConfigAttach,
-  version: '3.1.8',
+  version: '3.2.0-dev.2',
 );
 
 int _homeViewConfigEstimateSize(
@@ -92,11 +94,18 @@ List<IsarLinkBase<dynamic>> _homeViewConfigGetLinks(HomeViewConfig object) {
 }
 
 void _homeViewConfigAttach(
-    IsarCollection<dynamic> col, Id id, HomeViewConfig object) {
+  IsarCollection<dynamic> col,
+  Id id,
+  HomeViewConfig object,
+) {
   object.id = id;
   object.server.attach(col, col.isar.collection<ServerEntity>(), r'server', id);
-  object.areaConfigs
-      .attach(col, col.isar.collection<AreaHomeConfig>(), r'areaConfigs', id);
+  object.areaConfigs.attach(
+    col,
+    col.isar.collection<AreaHomeConfig>(),
+    r'areaConfigs',
+    id,
+  );
 }
 
 extension HomeViewConfigQueryWhereSort
@@ -111,17 +120,16 @@ extension HomeViewConfigQueryWhereSort
 extension HomeViewConfigQueryWhere
     on QueryBuilder<HomeViewConfig, HomeViewConfig, QWhereClause> {
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterWhereClause> idEqualTo(
-      Id id) {
+    Id id,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: id,
-        upper: id,
-      ));
+      return query.addWhereClause(IdWhereClause.between(lower: id, upper: id));
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterWhereClause> idNotEqualTo(
-      Id id) {
+    Id id,
+  ) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -144,8 +152,9 @@ extension HomeViewConfigQueryWhere
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterWhereClause> idGreaterThan(
-      Id id,
-      {bool include = false}) {
+    Id id, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -154,8 +163,9 @@ extension HomeViewConfigQueryWhere
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterWhereClause> idLessThan(
-      Id id,
-      {bool include = false}) {
+    Id id, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -170,12 +180,14 @@ extension HomeViewConfigQueryWhere
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerId,
-        includeLower: includeLower,
-        upper: upperId,
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IdWhereClause.between(
+          lower: lowerId,
+          includeLower: includeLower,
+          upper: upperId,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -183,40 +195,38 @@ extension HomeViewConfigQueryWhere
 extension HomeViewConfigQueryFilter
     on QueryBuilder<HomeViewConfig, HomeViewConfig, QFilterCondition> {
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition> idEqualTo(
-      Id value) {
+    Id value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'id', value: value),
+      );
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      idGreaterThan(
-    Id value, {
-    bool include = false,
-  }) {
+  idGreaterThan(Id value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      idLessThan(
-    Id value, {
-    bool include = false,
-  }) {
+  idLessThan(Id value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -227,13 +237,15 @@ extension HomeViewConfigQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'id',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -244,69 +256,64 @@ extension HomeViewConfigQueryObject
 extension HomeViewConfigQueryLinks
     on QueryBuilder<HomeViewConfig, HomeViewConfig, QFilterCondition> {
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition> server(
-      FilterQuery<ServerEntity> q) {
+    FilterQuery<ServerEntity> q,
+  ) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'server');
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      serverIsNull() {
+  serverIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'server', 0, true, 0, true);
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      areaConfigs(FilterQuery<AreaHomeConfig> q) {
+  areaConfigs(FilterQuery<AreaHomeConfig> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'areaConfigs');
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      areaConfigsLengthEqualTo(int length) {
+  areaConfigsLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'areaConfigs', length, true, length, true);
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      areaConfigsIsEmpty() {
+  areaConfigsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'areaConfigs', 0, true, 0, true);
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      areaConfigsIsNotEmpty() {
+  areaConfigsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'areaConfigs', 0, false, 999999, true);
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      areaConfigsLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
+  areaConfigsLengthLessThan(int length, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'areaConfigs', 0, true, length, include);
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      areaConfigsLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
+  areaConfigsLengthGreaterThan(int length, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'areaConfigs', length, include, 999999, true);
     });
   }
 
   QueryBuilder<HomeViewConfig, HomeViewConfig, QAfterFilterCondition>
-      areaConfigsLengthBetween(
+  areaConfigsLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -314,7 +321,12 @@ extension HomeViewConfigQueryLinks
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
-          r'areaConfigs', lower, includeLower, upper, includeUpper);
+        r'areaConfigs',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 }
@@ -360,12 +372,9 @@ const AreaHomeConfigSchema = CollectionSchema(
   name: r'AreaHomeConfig',
   id: -8144881742978909942,
   properties: {
-    r'position': PropertySchema(
-      id: 0,
-      name: r'position',
-      type: IsarType.long,
-    )
+    r'position': PropertySchema(id: 0, name: r'position', type: IsarType.long),
   },
+
   estimateSize: _areaHomeConfigEstimateSize,
   serialize: _areaHomeConfigSerialize,
   deserialize: _areaHomeConfigDeserialize,
@@ -391,13 +400,14 @@ const AreaHomeConfigSchema = CollectionSchema(
       target: r'DeviceHomeConfig',
       single: false,
       linkName: r'areaConfig',
-    )
+    ),
   },
   embeddedSchemas: {},
+
   getId: _areaHomeConfigGetId,
   getLinks: _areaHomeConfigGetLinks,
   attach: _areaHomeConfigAttach,
-  version: '3.1.8',
+  version: '3.2.0-dev.2',
 );
 
 int _areaHomeConfigEstimateSize(
@@ -424,9 +434,7 @@ AreaHomeConfig _areaHomeConfigDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = AreaHomeConfig(
-    position: reader.readLong(offsets[0]),
-  );
+  final object = AreaHomeConfig(position: reader.readLong(offsets[0]));
   object.id = id;
   return object;
 }
@@ -454,13 +462,24 @@ List<IsarLinkBase<dynamic>> _areaHomeConfigGetLinks(AreaHomeConfig object) {
 }
 
 void _areaHomeConfigAttach(
-    IsarCollection<dynamic> col, Id id, AreaHomeConfig object) {
+  IsarCollection<dynamic> col,
+  Id id,
+  AreaHomeConfig object,
+) {
   object.id = id;
   object.area.attach(col, col.isar.collection<AreaEntity>(), r'area', id);
-  object.homeConfig
-      .attach(col, col.isar.collection<HomeViewConfig>(), r'homeConfig', id);
+  object.homeConfig.attach(
+    col,
+    col.isar.collection<HomeViewConfig>(),
+    r'homeConfig',
+    id,
+  );
   object.deviceConfigs.attach(
-      col, col.isar.collection<DeviceHomeConfig>(), r'deviceConfigs', id);
+    col,
+    col.isar.collection<DeviceHomeConfig>(),
+    r'deviceConfigs',
+    id,
+  );
 }
 
 extension AreaHomeConfigQueryWhereSort
@@ -475,17 +494,16 @@ extension AreaHomeConfigQueryWhereSort
 extension AreaHomeConfigQueryWhere
     on QueryBuilder<AreaHomeConfig, AreaHomeConfig, QWhereClause> {
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterWhereClause> idEqualTo(
-      Id id) {
+    Id id,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: id,
-        upper: id,
-      ));
+      return query.addWhereClause(IdWhereClause.between(lower: id, upper: id));
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterWhereClause> idNotEqualTo(
-      Id id) {
+    Id id,
+  ) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -508,8 +526,9 @@ extension AreaHomeConfigQueryWhere
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterWhereClause> idGreaterThan(
-      Id id,
-      {bool include = false}) {
+    Id id, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -518,8 +537,9 @@ extension AreaHomeConfigQueryWhere
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterWhereClause> idLessThan(
-      Id id,
-      {bool include = false}) {
+    Id id, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -534,12 +554,14 @@ extension AreaHomeConfigQueryWhere
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerId,
-        includeLower: includeLower,
-        upper: upperId,
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IdWhereClause.between(
+          lower: lowerId,
+          includeLower: includeLower,
+          upper: upperId,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -547,40 +569,38 @@ extension AreaHomeConfigQueryWhere
 extension AreaHomeConfigQueryFilter
     on QueryBuilder<AreaHomeConfig, AreaHomeConfig, QFilterCondition> {
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition> idEqualTo(
-      Id value) {
+    Id value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'id', value: value),
+      );
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      idGreaterThan(
-    Id value, {
-    bool include = false,
-  }) {
+  idGreaterThan(Id value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      idLessThan(
-    Id value, {
-    bool include = false,
-  }) {
+  idLessThan(Id value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -591,69 +611,70 @@ extension AreaHomeConfigQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'id',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      positionEqualTo(int value) {
+  positionEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'position',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'position', value: value),
+      );
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      positionGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  positionGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'position',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'position',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      positionLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  positionLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'position',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'position',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      positionBetween(
+  positionBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'position',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'position',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -664,83 +685,78 @@ extension AreaHomeConfigQueryObject
 extension AreaHomeConfigQueryLinks
     on QueryBuilder<AreaHomeConfig, AreaHomeConfig, QFilterCondition> {
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition> area(
-      FilterQuery<AreaEntity> q) {
+    FilterQuery<AreaEntity> q,
+  ) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'area');
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      areaIsNull() {
+  areaIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'area', 0, true, 0, true);
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      homeConfig(FilterQuery<HomeViewConfig> q) {
+  homeConfig(FilterQuery<HomeViewConfig> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'homeConfig');
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      homeConfigIsNull() {
+  homeConfigIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'homeConfig', 0, true, 0, true);
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      deviceConfigs(FilterQuery<DeviceHomeConfig> q) {
+  deviceConfigs(FilterQuery<DeviceHomeConfig> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'deviceConfigs');
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      deviceConfigsLengthEqualTo(int length) {
+  deviceConfigsLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'deviceConfigs', length, true, length, true);
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      deviceConfigsIsEmpty() {
+  deviceConfigsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'deviceConfigs', 0, true, 0, true);
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      deviceConfigsIsNotEmpty() {
+  deviceConfigsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'deviceConfigs', 0, false, 999999, true);
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      deviceConfigsLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
+  deviceConfigsLengthLessThan(int length, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'deviceConfigs', 0, true, length, include);
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      deviceConfigsLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
+  deviceConfigsLengthGreaterThan(int length, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'deviceConfigs', length, include, 999999, true);
     });
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterFilterCondition>
-      deviceConfigsLengthBetween(
+  deviceConfigsLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -748,7 +764,12 @@ extension AreaHomeConfigQueryLinks
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
-          r'deviceConfigs', lower, includeLower, upper, includeUpper);
+        r'deviceConfigs',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 }
@@ -762,7 +783,7 @@ extension AreaHomeConfigQuerySortBy
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterSortBy>
-      sortByPositionDesc() {
+  sortByPositionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'position', Sort.desc);
     });
@@ -790,7 +811,7 @@ extension AreaHomeConfigQuerySortThenBy
   }
 
   QueryBuilder<AreaHomeConfig, AreaHomeConfig, QAfterSortBy>
-      thenByPositionDesc() {
+  thenByPositionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'position', Sort.desc);
     });
@@ -832,18 +853,15 @@ const DeviceHomeConfigSchema = CollectionSchema(
   name: r'DeviceHomeConfig',
   id: 1605330354188062233,
   properties: {
-    r'position': PropertySchema(
-      id: 0,
-      name: r'position',
-      type: IsarType.long,
-    ),
+    r'position': PropertySchema(id: 0, name: r'position', type: IsarType.long),
     r'size': PropertySchema(
       id: 1,
       name: r'size',
       type: IsarType.byte,
       enumMap: _DeviceHomeConfigsizeEnumValueMap,
-    )
+    ),
   },
+
   estimateSize: _deviceHomeConfigEstimateSize,
   serialize: _deviceHomeConfigSerialize,
   deserialize: _deviceHomeConfigDeserialize,
@@ -862,13 +880,14 @@ const DeviceHomeConfigSchema = CollectionSchema(
       name: r'areaConfig',
       target: r'AreaHomeConfig',
       single: true,
-    )
+    ),
   },
   embeddedSchemas: {},
+
   getId: _deviceHomeConfigGetId,
   getLinks: _deviceHomeConfigGetLinks,
   attach: _deviceHomeConfigAttach,
-  version: '3.1.8',
+  version: '3.2.0-dev.2',
 );
 
 int _deviceHomeConfigEstimateSize(
@@ -900,7 +919,7 @@ DeviceHomeConfig _deviceHomeConfigDeserialize(
     position: reader.readLong(offsets[0]),
     size:
         _DeviceHomeConfigsizeValueEnumMap[reader.readByteOrNull(offsets[1])] ??
-            DeviceDisplaySize.small,
+        DeviceDisplaySize.small,
   );
   object.id = id;
   return object;
@@ -916,18 +935,17 @@ P _deviceHomeConfigDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (_DeviceHomeConfigsizeValueEnumMap[
-              reader.readByteOrNull(offset)] ??
-          DeviceDisplaySize.small) as P;
+      return (_DeviceHomeConfigsizeValueEnumMap[reader.readByteOrNull(
+                offset,
+              )] ??
+              DeviceDisplaySize.small)
+          as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-const _DeviceHomeConfigsizeEnumValueMap = {
-  'small': 0,
-  'big': 1,
-};
+const _DeviceHomeConfigsizeEnumValueMap = {'small': 0, 'big': 1};
 const _DeviceHomeConfigsizeValueEnumMap = {
   0: DeviceDisplaySize.small,
   1: DeviceDisplaySize.big,
@@ -942,11 +960,18 @@ List<IsarLinkBase<dynamic>> _deviceHomeConfigGetLinks(DeviceHomeConfig object) {
 }
 
 void _deviceHomeConfigAttach(
-    IsarCollection<dynamic> col, Id id, DeviceHomeConfig object) {
+  IsarCollection<dynamic> col,
+  Id id,
+  DeviceHomeConfig object,
+) {
   object.id = id;
   object.device.attach(col, col.isar.collection<DeviceEntity>(), r'device', id);
-  object.areaConfig
-      .attach(col, col.isar.collection<AreaHomeConfig>(), r'areaConfig', id);
+  object.areaConfig.attach(
+    col,
+    col.isar.collection<AreaHomeConfig>(),
+    r'areaConfig',
+    id,
+  );
 }
 
 extension DeviceHomeConfigQueryWhereSort
@@ -961,17 +986,15 @@ extension DeviceHomeConfigQueryWhereSort
 extension DeviceHomeConfigQueryWhere
     on QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QWhereClause> {
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterWhereClause> idEqualTo(
-      Id id) {
+    Id id,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: id,
-        upper: id,
-      ));
+      return query.addWhereClause(IdWhereClause.between(lower: id, upper: id));
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterWhereClause>
-      idNotEqualTo(Id id) {
+  idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -994,7 +1017,7 @@ extension DeviceHomeConfigQueryWhere
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterWhereClause>
-      idGreaterThan(Id id, {bool include = false}) {
+  idGreaterThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -1003,7 +1026,7 @@ extension DeviceHomeConfigQueryWhere
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterWhereClause>
-      idLessThan(Id id, {bool include = false}) {
+  idLessThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -1018,12 +1041,14 @@ extension DeviceHomeConfigQueryWhere
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerId,
-        includeLower: includeLower,
-        upper: upperId,
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IdWhereClause.between(
+          lower: lowerId,
+          includeLower: includeLower,
+          upper: upperId,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -1031,170 +1056,167 @@ extension DeviceHomeConfigQueryWhere
 extension DeviceHomeConfigQueryFilter
     on QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QFilterCondition> {
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      idEqualTo(Id value) {
+  idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'id', value: value),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      idGreaterThan(
-    Id value, {
-    bool include = false,
-  }) {
+  idGreaterThan(Id value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      idLessThan(
-    Id value, {
-    bool include = false,
-  }) {
+  idLessThan(Id value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      idBetween(
+  idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'id',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      positionEqualTo(int value) {
+  positionEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'position',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'position', value: value),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      positionGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  positionGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'position',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'position',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      positionLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  positionLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'position',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'position',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      positionBetween(
+  positionBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'position',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'position',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      sizeEqualTo(DeviceDisplaySize value) {
+  sizeEqualTo(DeviceDisplaySize value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'size',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'size', value: value),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      sizeGreaterThan(
-    DeviceDisplaySize value, {
-    bool include = false,
-  }) {
+  sizeGreaterThan(DeviceDisplaySize value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'size',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'size',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      sizeLessThan(
-    DeviceDisplaySize value, {
-    bool include = false,
-  }) {
+  sizeLessThan(DeviceDisplaySize value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'size',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'size',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      sizeBetween(
+  sizeBetween(
     DeviceDisplaySize lower,
     DeviceDisplaySize upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'size',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'size',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -1205,28 +1227,28 @@ extension DeviceHomeConfigQueryObject
 extension DeviceHomeConfigQueryLinks
     on QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QFilterCondition> {
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      device(FilterQuery<DeviceEntity> q) {
+  device(FilterQuery<DeviceEntity> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'device');
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      deviceIsNull() {
+  deviceIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'device', 0, true, 0, true);
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      areaConfig(FilterQuery<AreaHomeConfig> q) {
+  areaConfig(FilterQuery<AreaHomeConfig> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'areaConfig');
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterFilterCondition>
-      areaConfigIsNull() {
+  areaConfigIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'areaConfig', 0, true, 0, true);
     });
@@ -1236,14 +1258,14 @@ extension DeviceHomeConfigQueryLinks
 extension DeviceHomeConfigQuerySortBy
     on QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QSortBy> {
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterSortBy>
-      sortByPosition() {
+  sortByPosition() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'position', Sort.asc);
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterSortBy>
-      sortByPositionDesc() {
+  sortByPositionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'position', Sort.desc);
     });
@@ -1256,7 +1278,7 @@ extension DeviceHomeConfigQuerySortBy
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterSortBy>
-      sortBySizeDesc() {
+  sortBySizeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'size', Sort.desc);
     });
@@ -1272,21 +1294,21 @@ extension DeviceHomeConfigQuerySortThenBy
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterSortBy>
-      thenByIdDesc() {
+  thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterSortBy>
-      thenByPosition() {
+  thenByPosition() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'position', Sort.asc);
     });
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterSortBy>
-      thenByPositionDesc() {
+  thenByPositionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'position', Sort.desc);
     });
@@ -1299,7 +1321,7 @@ extension DeviceHomeConfigQuerySortThenBy
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QAfterSortBy>
-      thenBySizeDesc() {
+  thenBySizeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'size', Sort.desc);
     });
@@ -1309,7 +1331,7 @@ extension DeviceHomeConfigQuerySortThenBy
 extension DeviceHomeConfigQueryWhereDistinct
     on QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QDistinct> {
   QueryBuilder<DeviceHomeConfig, DeviceHomeConfig, QDistinct>
-      distinctByPosition() {
+  distinctByPosition() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'position');
     });
@@ -1337,7 +1359,7 @@ extension DeviceHomeConfigQueryProperty
   }
 
   QueryBuilder<DeviceHomeConfig, DeviceDisplaySize, QQueryOperations>
-      sizeProperty() {
+  sizeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'size');
     });

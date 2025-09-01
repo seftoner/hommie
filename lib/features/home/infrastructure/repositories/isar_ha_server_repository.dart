@@ -1,6 +1,6 @@
 import 'package:hommie/features/home/domain/repositories/i_ha_server_repository.dart';
 import 'package:hommie/services/database/models/server_entity.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 class IsarServerEntityRepository implements IServerEntityRepository {
   final Isar _isar;

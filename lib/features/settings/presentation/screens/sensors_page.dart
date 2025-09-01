@@ -13,17 +13,16 @@ class SensorsPage extends HookConsumerWidget {
       appBar: AppBar(title: const Text('Settings')),
       body: switch (sensors) {
         AsyncData(value: final data) => ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(data[index].name),
-                trailing: Text(data[index].state.toString()),
-              );
-            },
-          ),
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(data[index].name),
+              trailing: Text(data[index].state.toString()),
+            );
+          },
+        ),
         AsyncError() => const Text('Oops, something unexpected happened'),
         AsyncLoading() => const CircularProgressIndicator(),
-        _ => const Text('Whoops!'),
       },
     );
   }

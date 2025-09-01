@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'servers_list_provider.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [serverManager])
 class ServersList extends _$ServersList {
   @override
   Future<List<Server>> build() async {

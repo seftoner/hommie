@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -11,7 +10,7 @@ part 'current_server_connection_provider.g.dart';
 ///
 /// This provider automatically updates when the active server changes,
 /// invalidating all dependent providers to ensure they reflect the new server's data.
-@Riverpod(keepAlive: true, dependencies: [ActiveServer])
+@Riverpod(keepAlive: true, dependencies: [ActiveServer, serverConnection])
 Future<HAConnection> currentServerConnection(Ref ref) async {
   // Watch the active server
   final activeServer = await ref.watch(activeServerProvider.future);
@@ -21,11 +20,13 @@ Future<HAConnection> currentServerConnection(Ref ref) async {
   }
 
   logger.i(
-      'Current server connection for: ${activeServer.name} (ID: ${activeServer.id})');
+    'Current server connection for: ${activeServer.name} (ID: ${activeServer.id})',
+  );
 
   // Get the connection for the active server
-  final connection =
-      await ref.read(serverConnectionProvider(activeServer.id!).future);
+  final connection = await ref.read(
+    serverConnectionProvider(activeServer.id!).future,
+  );
 
   return connection;
 }

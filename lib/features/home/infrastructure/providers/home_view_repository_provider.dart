@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/features/home/domain/repositories/i_home_view_repository.dart';
 import 'package:hommie/features/home/infrastructure/repositories/isar_home_view_repository.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
@@ -7,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_view_repository_provider.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [serverManager])
 Future<IHomeViewRepository> homeViewRepository(Ref ref) async {
   final isar = ref.read(databaseConnectionProvider);
   final serverManager = ref.read(serverManagerProvider);
@@ -21,10 +20,7 @@ Future<IHomeViewRepository> homeViewRepository(Ref ref) async {
 }
 
 @riverpod
-IHomeViewRepository homeViewRepositoryForServer(
-  Ref ref,
-  int serverId,
-) {
+IHomeViewRepository homeViewRepositoryForServer(Ref ref, int serverId) {
   final isar = ref.read(databaseConnectionProvider);
   return IsarHomeViewRepository(isar, serverId);
 }

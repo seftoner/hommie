@@ -1,7 +1,7 @@
 import 'package:hommie/features/home/domain/repositories/i_area_repository.dart';
 import 'package:hommie/services/database/models/area_entity.dart' as db;
 import 'package:hommie/services/database/models/server_entity.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:hommie/features/home/domain/entities/area.dart';
 import 'package:hommie/features/home/infrastructure/repositories/mappers/area_mapper.dart';
 

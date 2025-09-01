@@ -27,7 +27,10 @@ class ServersDiscoveryController extends _$ServersDiscoveryController {
   }
 
   Future<void> refresh() async {
-    // state = const AsyncValue.loading();
+    if (!ref.mounted) {
+      return;
+    }
+
     state = await AsyncValue.guard(_fetchServers);
   }
 
@@ -36,8 +39,8 @@ class ServersDiscoveryController extends _$ServersDiscoveryController {
       return;
     }
 
-    _timer = Timer.periodic(const Duration(seconds: 10), (_) {
-      refresh();
+    _timer = Timer.periodic(const Duration(seconds: 10), (_) async {
+      await refresh();
     });
   }
 }

@@ -4,18 +4,25 @@ import 'package:hommie/features/areas/application/areas_controller.dart';
 import 'package:hommie/features/home/application/home_data_controller.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
 /// A widget that demonstrates server switching by showing server-specific data.
 ///
 /// This widget updates automatically when the active server changes,
 /// displaying different data for each server to show that switching works.
+@Dependencies([
+  ActiveServer,
+  AreasController,
+  HomeDataController,
+  ServerConnectionState,
+])
 class ServerSwitchingDemo extends ConsumerWidget {
   const ServerSwitchingDemo({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activeServerAsync = ref.watch(activeServerProvider);
-    final connectionState = ref.watch(connectionStateProvider);
+    final connectionState = ref.watch(serverConnectionStateProvider);
     final areasAsync = ref.watch(areasControllerProvider);
     final homeDataAsync = ref.watch(homeDataControllerProvider);
 
@@ -28,16 +35,13 @@ class ServerSwitchingDemo extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.dns,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                Icon(Icons.dns, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
                 Text(
                   'Server Status',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -63,9 +67,9 @@ class ServerSwitchingDemo extends ConsumerWidget {
             // Server-specific Data
             Text(
               'Server Data (Auto-updates on switch)',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
 
@@ -111,33 +115,35 @@ class ServerSwitchingDemo extends ConsumerWidget {
   }
 
   Widget _buildConnectionState(
-      BuildContext context, HAServerConnectionState state) {
+    BuildContext context,
+    HAServerConnectionState state,
+  ) {
     final (icon, color, text) = switch (state) {
       HAServerConnectionState.connected => (
-          Icons.cloud_done,
-          Colors.green,
-          'Connected'
-        ),
+        Icons.cloud_done,
+        Colors.green,
+        'Connected',
+      ),
       HAServerConnectionState.connecting => (
-          Icons.cloud_sync,
-          Colors.orange,
-          'Connecting'
-        ),
+        Icons.cloud_sync,
+        Colors.orange,
+        'Connecting',
+      ),
       HAServerConnectionState.reconnecting => (
-          Icons.cloud_sync,
-          Colors.orange,
-          'Reconnecting'
-        ),
+        Icons.cloud_sync,
+        Colors.orange,
+        'Reconnecting',
+      ),
       HAServerConnectionState.disconnected => (
-          Icons.cloud_off,
-          Colors.red,
-          'Disconnected'
-        ),
+        Icons.cloud_off,
+        Colors.red,
+        'Disconnected',
+      ),
       HAServerConnectionState.authFailure => (
-          Icons.error,
-          Colors.red,
-          'Auth Failed'
-        ),
+        Icons.error,
+        Colors.red,
+        'Auth Failed',
+      ),
       HAServerConnectionState.unknown => (Icons.help, Colors.grey, 'Unknown'),
     };
 
@@ -150,9 +156,9 @@ class ServerSwitchingDemo extends ConsumerWidget {
         Text(
           text,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: color,
-                fontWeight: FontWeight.w500,
-              ),
+            color: color,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );
@@ -186,20 +192,27 @@ class ServerSwitchingDemo extends ConsumerWidget {
   }
 
   Widget _buildDataRow(
-      BuildContext context, String label, String value, IconData icon) {
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+  ) {
     return Row(
       children: [
-        Icon(icon,
-            size: 20, color: Theme.of(context).colorScheme.onSurfaceVariant),
+        Icon(
+          icon,
+          size: 20,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
         const SizedBox(width: 8),
         Text('$label:', style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(width: 4),
         Expanded(
           child: Text(
             value,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
           ),
         ),
       ],

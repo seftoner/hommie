@@ -2,7 +2,7 @@ import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/domain/repositories/i_server_repository.dart';
 import 'package:hommie/features/servers/infrastructure/repositories/mappers/server_mapper.dart';
 import 'package:hommie/services/database/models/server_entity.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 class IsarServerRepository implements IServerRepository {
   final Isar _isar;
@@ -40,8 +40,10 @@ class IsarServerRepository implements IServerRepository {
 
   @override
   Future<Server?> getActiveServer() async {
-    final server =
-        await _isar.serverEntitys.filter().isActiveEqualTo(true).findFirst();
+    final server = await _isar.serverEntitys
+        .filter()
+        .isActiveEqualTo(true)
+        .findFirst();
     return server?.toDomain();
   }
 
@@ -63,11 +65,11 @@ class IsarServerRepository implements IServerRepository {
           .build()
           .findAll()
           .then((activeServers) async {
-        for (final server in activeServers) {
-          server.isActive = false;
-          await _isar.serverEntitys.put(server);
-        }
-      });
+            for (final server in activeServers) {
+              server.isActive = false;
+              await _isar.serverEntitys.put(server);
+            }
+          });
 
       // Then activate the selected server
       final serverToActivate = await _isar.serverEntitys.get(id);

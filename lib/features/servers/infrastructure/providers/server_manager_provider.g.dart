@@ -6,22 +6,50 @@ part of 'server_manager_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverManagerHash() => r'f18898c67bade1866f9d6f01d18b0ba3af271399';
-
-/// See also [serverManager].
 @ProviderFor(serverManager)
-final serverManagerProvider = AutoDisposeProvider<IServerManager>.internal(
-  serverManager,
-  name: r'serverManagerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$serverManagerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const serverManagerProvider = ServerManagerProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ServerManagerRef = AutoDisposeProviderRef<IServerManager>;
+final class ServerManagerProvider
+    extends $FunctionalProvider<IServerManager, IServerManager, IServerManager>
+    with $Provider<IServerManager> {
+  const ServerManagerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'serverManagerProvider',
+        isAutoDispose: false,
+        dependencies: const <ProviderOrFamily>[serverRepositoryProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          ServerManagerProvider.$allTransitiveDependencies0,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = serverRepositoryProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$serverManagerHash();
+
+  @$internal
+  @override
+  $ProviderElement<IServerManager> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  IServerManager create(Ref ref) {
+    return serverManager(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IServerManager value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<IServerManager>(value),
+    );
+  }
+}
+
+String _$serverManagerHash() => r'4bac83c90bac98748b9947b94c3f75b91e1746c7';
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

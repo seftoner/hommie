@@ -8,15 +8,25 @@ import 'package:hommie/features/auth/infrastructure/tasks/create_server_task.dar
 import 'package:hommie/features/auth/infrastructure/tasks/delete_server_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/get_config_task.dart';
 import 'package:hommie/features/auth/infrastructure/tasks/oauth_login_attempt_task.dart';
-import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:hommie/features/shared/domain/models/task_chain.dart';
 import 'package:hommie/features/shared/infrastructure/runner/task_executor.dart';
+import 'package:hommie/services/networking/connection_state_provider.dart';
+import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_auth_controller.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [ActiveServer])
+@Riverpod(
+  keepAlive: true,
+  dependencies: [
+    serverManager,
+    ServerConnectionManager,
+    ServerConnectionState,
+    ActiveServer,
+  ],
+)
 class ServerAuthController extends _$ServerAuthController {
   @override
   Future<AuthState> build() async {
@@ -65,12 +75,15 @@ class ServerAuthController extends _$ServerAuthController {
         .addTask(DeleteServerTask(serverManager, ref))
         .addTask(ActivateServerIfExistTask(serverManager, ref))
         .onAnyError((error) {
-      logger.e('An error occurred during sign out: $error');
-      state = AsyncData(AuthState.failure(AuthFailure.server(
-          error.toString()))); // Provide a more specific error
-    }).onSuccess(() {
-      state = const AsyncData(AuthState.unauthenticated());
-    }).build();
+          logger.e('An error occurred during sign out: $error');
+          state = AsyncData(
+            AuthState.failure(AuthFailure.server(error.toString())),
+          ); // Provide a more specific error
+        })
+        .onSuccess(() {
+          state = const AsyncData(AuthState.unauthenticated());
+        })
+        .build();
 
     try {
       await TaskExecutor(signOutAction).execute();

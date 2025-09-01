@@ -14,10 +14,15 @@ Future<void> iHaveSuccessfullyLoggedIn(PatrolIntegrationTester $) async {
     throw Exception('Auth token not found in TestContext');
   }
 
+  // In Riverpod 3, for family providers we use overrideWithValue or override the family itself
   TestProviderOverrides.instance().setOverrides([
-    credentialsRepositoryProvider
-        .overrideWith((ref) => _CredentialsRepositoryMock(token)),
-    serverSettingsProvider.overrideWith((ref) => _ServerSettingRepositoryMock())
+    // Override the family provider for all server IDs
+    credentialsRepositoryProvider.overrideWith(
+      (ref, serverId) => _CredentialsRepositoryMock(token),
+    ),
+    serverSettingsProvider.overrideWith(
+      (ref) => _ServerSettingRepositoryMock(),
+    ),
   ]);
 }
 
@@ -54,12 +59,14 @@ class _CredentialsRepositoryMock implements ICredentialRepository {
       return Future.value();
     }
 
-    return Future.value(Credentials(
-      token,
-      refreshToken: token,
-      expiration: DateTime.now().add(const Duration(days: 365)),
-      tokenEndpoint: Uri.parse('$_serverUrl/auth/token'),
-    ));
+    return Future.value(
+      Credentials(
+        token,
+        refreshToken: token,
+        expiration: DateTime.now().add(const Duration(days: 365)),
+        tokenEndpoint: Uri.parse('$_serverUrl/auth/token'),
+      ),
+    );
   }
 
   @override

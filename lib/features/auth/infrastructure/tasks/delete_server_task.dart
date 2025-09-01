@@ -6,7 +6,10 @@ import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+@Dependencies([ServerConnectionState])
 class DeleteServerTask extends HTask {
   final IServerManager _serverManager;
   final Ref _ref;
@@ -19,8 +22,9 @@ class DeleteServerTask extends HTask {
 
     try {
       // 1. Delete all home view configurations for this server
-      final homeViewRepository =
-          _ref.read(homeViewRepositoryForServerProvider(serverId));
+      final homeViewRepository = _ref.read(
+        homeViewRepositoryForServerProvider(serverId),
+      );
       await homeViewRepository.delete();
       logger.i('Deleted home views for server: $serverId');
 
@@ -38,18 +42,20 @@ class DeleteServerTask extends HTask {
       // Isar operations in a future improvement.
       if (areas.isNotEmpty) {
         logger.w(
-            'Skipping individual area/device deletion due to ID type mismatch - relying on cascade deletion');
+          'Skipping individual area/device deletion due to ID type mismatch - relying on cascade deletion',
+        );
       }
 
       // 3. Reset connection state since we're removing a server
-      _ref.read(connectionStateProvider.notifier).reset();
+      _ref.read(serverConnectionStateProvider.notifier).reset();
       logger.i('Reset connection state after server deletion');
 
       // 4. Force remove server from manager (allows removing the last server during sign out)
       // This should handle the cascade deletion through the repository layer
       await _serverManager.forceRemoveServer(serverId);
       logger.i(
-          'Successfully removed server and initiated cascade deletion: $serverId');
+        'Successfully removed server and initiated cascade deletion: $serverId',
+      );
 
       return HTaskResult.success(null);
     } catch (e) {

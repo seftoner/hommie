@@ -8,10 +8,7 @@ Logger createLogger(String logsPath) {
     filter: _LoggerFilter(),
     output: MultiOutput([
       ConsoleOutput(),
-      AdvancedFileOutput(
-        path: logsPath,
-        maxFileSizeKB: -1,
-      ),
+      AdvancedFileOutput(path: logsPath, maxFileSizeKB: -1),
     ]),
   );
 }
@@ -19,15 +16,14 @@ Logger createLogger(String logsPath) {
 class _LoggerFilter extends LogFilter {
   @override
   bool shouldLog(LogEvent event) => switch (event.level) {
-        Level.debug ||
-        // Level.trace ||
-        Level.error ||
-        Level.info ||
-        Level.fatal ||
-        Level.warning =>
-          true,
-        _ => false,
-      };
+    Level.debug ||
+    // Level.trace ||
+    Level.error ||
+    Level.info ||
+    Level.fatal ||
+    Level.warning => true,
+    _ => false,
+  };
 }
 
 class _HLogfmtPrinter extends LogPrinter {

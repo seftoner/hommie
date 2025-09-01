@@ -8,19 +8,18 @@ import 'package:hommie/core/utils/logger.dart';
 import '../utils/test_provider_overrides.dart';
 
 Future<void> theApplicationIsRunningInTheForeground(
-    PatrolIntegrationTester $) async {
+  PatrolIntegrationTester $,
+) async {
   await initLogger();
   logger.i('Start the test integration tests 🚀👷');
 
   final computer = Computer.shared();
-  await computer.turnOn(
-    verbose: true,
-  );
+  await computer.turnOn(verbose: true);
 
   await $.pumpWidget(
     ProviderScope(
       observers: const [AppStateLoggerObserver()],
-      overrides: TestProviderOverrides.instance().overrides,
+      overrides: TestProviderOverrides.instance().overrides.cast(),
       child: const HommieApp(),
     ),
   );

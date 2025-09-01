@@ -6,33 +6,73 @@ part of 'server_auth_navigation_coordinator.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverAuthNavigationCoordinatorHash() =>
-    r'f38ccdc11edab3bf043dee818651d3db19275399';
-
-/// See also [ServerAuthNavigationCoordinator].
 @ProviderFor(ServerAuthNavigationCoordinator)
-final serverAuthNavigationCoordinatorProvider =
-    AsyncNotifierProvider<ServerAuthNavigationCoordinator, void>.internal(
-  ServerAuthNavigationCoordinator.new,
-  name: r'serverAuthNavigationCoordinatorProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$serverAuthNavigationCoordinatorHash,
-  dependencies: <ProviderOrFamily>[
-    activeServerProvider,
-    serverAuthControllerProvider,
-    connectionStateProvider
-  ],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    activeServerProvider,
-    ...?activeServerProvider.allTransitiveDependencies,
-    serverAuthControllerProvider,
-    ...?serverAuthControllerProvider.allTransitiveDependencies,
-    connectionStateProvider,
-    ...?connectionStateProvider.allTransitiveDependencies
-  },
-);
+const serverAuthNavigationCoordinatorProvider =
+    ServerAuthNavigationCoordinatorProvider._();
 
-typedef _$ServerAuthNavigationCoordinator = AsyncNotifier<void>;
+final class ServerAuthNavigationCoordinatorProvider
+    extends $AsyncNotifierProvider<ServerAuthNavigationCoordinator, void> {
+  const ServerAuthNavigationCoordinatorProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'serverAuthNavigationCoordinatorProvider',
+        isAutoDispose: false,
+        dependencies: const <ProviderOrFamily>[
+          activeServerProvider,
+          serverConnectionStateProvider,
+          serverAuthControllerProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>{
+          ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies0,
+          ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies1,
+          ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies2,
+          ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies3,
+          ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies4,
+          ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies5,
+        },
+      );
+
+  static const $allTransitiveDependencies0 = activeServerProvider;
+  static const $allTransitiveDependencies1 =
+      ActiveServerProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 =
+      ActiveServerProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies3 = serverConnectionStateProvider;
+  static const $allTransitiveDependencies4 = serverAuthControllerProvider;
+  static const $allTransitiveDependencies5 =
+      ServerAuthControllerProvider.$allTransitiveDependencies2;
+
+  @override
+  String debugGetCreateSourceHash() => _$serverAuthNavigationCoordinatorHash();
+
+  @$internal
+  @override
+  ServerAuthNavigationCoordinator create() => ServerAuthNavigationCoordinator();
+}
+
+String _$serverAuthNavigationCoordinatorHash() =>
+    r'6aaa0474e38421a5f9371180f08b04ab3a42c3f9';
+
+abstract class _$ServerAuthNavigationCoordinator extends $AsyncNotifier<void> {
+  FutureOr<void> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    build();
+    final ref = this.ref as $Ref<AsyncValue<void>, void>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<void>, void>,
+              AsyncValue<void>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, null);
+  }
+}
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,30 +6,75 @@ part of 'server_connection_manager.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverConnectionManagerHash() =>
-    r'bddb852d63f6546e29a4c061495b9f8684063e6e';
-
-/// See also [ServerConnectionManager].
 @ProviderFor(ServerConnectionManager)
-final serverConnectionManagerProvider =
-    NotifierProvider<ServerConnectionManager, void>.internal(
-  ServerConnectionManager.new,
-  name: r'serverConnectionManagerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$serverConnectionManagerHash,
-  dependencies: <ProviderOrFamily>[
-    connectionStateProvider,
-    activeServerProvider
-  ],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    connectionStateProvider,
-    ...?connectionStateProvider.allTransitiveDependencies,
-    activeServerProvider,
-    ...?activeServerProvider.allTransitiveDependencies
-  },
-);
+const serverConnectionManagerProvider = ServerConnectionManagerProvider._();
 
-typedef _$ServerConnectionManager = Notifier<void>;
+final class ServerConnectionManagerProvider
+    extends $NotifierProvider<ServerConnectionManager, void> {
+  const ServerConnectionManagerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'serverConnectionManagerProvider',
+        isAutoDispose: false,
+        dependencies: const <ProviderOrFamily>[
+          activeServerProvider,
+          serverConnectionStateProvider,
+          serverManagerProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>{
+          ServerConnectionManagerProvider.$allTransitiveDependencies0,
+          ServerConnectionManagerProvider.$allTransitiveDependencies1,
+          ServerConnectionManagerProvider.$allTransitiveDependencies2,
+          ServerConnectionManagerProvider.$allTransitiveDependencies3,
+        },
+      );
+
+  static const $allTransitiveDependencies0 = activeServerProvider;
+  static const $allTransitiveDependencies1 =
+      ActiveServerProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 =
+      ActiveServerProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies3 = serverConnectionStateProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$serverConnectionManagerHash();
+
+  @$internal
+  @override
+  ServerConnectionManager create() => ServerConnectionManager();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(void value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<void>(value),
+    );
+  }
+}
+
+String _$serverConnectionManagerHash() =>
+    r'2d60ba18770de092ec187c268245a437d8232f96';
+
+abstract class _$ServerConnectionManager extends $Notifier<void> {
+  void build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    build();
+    final ref = this.ref as $Ref<void, void>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<void, void>,
+              void,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, null);
+  }
+}
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

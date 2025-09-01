@@ -1,5 +1,6 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// A class that observes the state changes in a Provider.
 class AppStateLoggerObserver extends ProviderObserver {
@@ -7,29 +8,30 @@ class AppStateLoggerObserver extends ProviderObserver {
 
   @override
   void didUpdateProvider(
-    ProviderBase provider,
+    ProviderObserverContext context,
     Object? previousValue,
     Object? newValue,
-    ProviderContainer container,
   ) {
-    logger.t(
-      {
-        'msg':
-            "Provider '${provider.name ?? provider.runtimeType}' change state",
-        'old': previousValue,
-        'new': newValue
-      },
-    );
+    logger.t({
+      'msg':
+          "Provider '${context.provider.name ?? context.provider.runtimeType}' change state",
+      'old': previousValue,
+      'new': newValue,
+    });
+  }
 
-    @override
-    // ignore: unused_element
-    void providerDidFail(
-      ProviderBase<Object?> provider,
-      Object error,
-      StackTrace stackTrace,
-      ProviderContainer container,
-    ) {
-      logger.e(error, stackTrace: stackTrace);
+  @override
+  // ignore: unused_element
+  void providerDidFail(
+    ProviderObserverContext context,
+    Object error,
+    StackTrace stackTrace,
+  ) {
+    if (error is ProviderException) {
+      // The provider didn't fail directly, but instead depends on a failed provider.
+      // The error was therefore already logged.
+      return;
     }
+    logger.e(error, stackTrace: stackTrace);
   }
 }

@@ -4,7 +4,7 @@ import 'package:hommie/services/database/models/area_entity.dart';
 import 'package:hommie/services/database/models/device_entity.dart';
 import 'package:hommie/services/database/models/server_entity.dart';
 import 'package:hommie/services/database/models/home_view.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'mappers/home_view_mapper.dart';
 
 class IsarHomeViewRepository implements IHomeViewRepository {

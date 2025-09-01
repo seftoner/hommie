@@ -7,11 +7,8 @@ part 'logs_list_controller.g.dart';
 part 'logs_list_controller.freezed.dart';
 
 @freezed
-class LogsListState with _$LogsListState {
-  factory LogsListState(
-    bool isLoadingMore,
-    List<Log> logs,
-  ) = _LogsListState;
+sealed class LogsListState with _$LogsListState {
+  factory LogsListState(bool isLoadingMore, List<Log> logs) = _LogsListState;
 }
 
 @riverpod

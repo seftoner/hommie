@@ -7,7 +7,10 @@ import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+@Dependencies([ServerConnectionManager])
 class GetConfigTask extends HTask {
   final IServerManager _serverManager;
   final Ref _ref;
@@ -23,8 +26,9 @@ class GetConfigTask extends HTask {
     }
 
     // Use centralized connection management - no need to duplicate connection logic
-    final connectionManager =
-        _ref.read(serverConnectionManagerProvider.notifier);
+    final connectionManager = _ref.read(
+      serverConnectionManagerProvider.notifier,
+    );
     final connection = await connectionManager.getConnection(server.id!);
 
     try {

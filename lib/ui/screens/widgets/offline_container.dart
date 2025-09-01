@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/screens/widgets/offline_banner.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
+@Dependencies([ServerConnectionState])
 class OfflineContainer extends ConsumerWidget {
   final Widget? child;
 
@@ -11,7 +13,7 @@ class OfflineContainer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectionState = ref.watch(connectionStateProvider);
+    final connectionState = ref.watch(serverConnectionStateProvider);
 
     return Scaffold(
       body: Stack(
@@ -43,9 +45,7 @@ class OfflineContainer extends ConsumerWidget {
       top: 0,
       left: 0,
       right: 0,
-      child: OfflineBanner(
-        key: K.common.offlineBanner,
-      ),
+      child: OfflineBanner(key: K.common.offlineBanner),
     );
   }
 }
