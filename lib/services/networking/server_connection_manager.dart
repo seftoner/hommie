@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/connection_orchestrator.dart';
+import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/ha_oauth2_token.dart';
 import 'package:hommie/core/utils/logger.dart';
@@ -13,7 +14,12 @@ part 'server_connection_manager.g.dart';
 
 @Riverpod(
   keepAlive: true,
-  dependencies: [ActiveServer, ServerConnectionState, serverManager],
+  dependencies: [
+    ActiveServer,
+    ServerConnectionState,
+    serverManager,
+    authRepository,
+  ],
 )
 class ServerConnectionManager extends _$ServerConnectionManager {
   final _orchestrators = <int, ConnectionOrchestrator>{};
@@ -25,20 +31,6 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     ref.onDispose(() {
       _isDisposed = true;
       _disconnectAll();
-    });
-
-    // Protect WebSocket connections from being paused due to invisible widgets
-    // WebSocket connections should stay active even when UI is not visible
-    ref.onCancel(() {
-      logger.w('ServerConnectionManager paused - WebSocket connections remain active');
-      // Note: We don't disconnect here as we want to maintain connections
-      // even when UI providers are paused
-    });
-
-    ref.onResume(() {
-      logger.i('ServerConnectionManager resumed');
-      // Verify all active connections are still healthy
-      _verifyActiveConnections();
     });
 
     // Initialize active server
@@ -147,8 +139,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     final connOption = HAConnectionOption(
       serverUrl: serverUrl,
       fetchAuthToken: () async {
-        // Access authRepository through serverManager to avoid keepAlive constraint
-        final authRepository = serverManager.getAuthRepository(serverId);
+        final authRepository = ref.read(authRepositoryProvider(serverId));
         final fetchedCredentials = await authRepository.getCredentials();
         return fetchedCredentials.fold(
           (error) => throw ConnectionError('Failed to refresh token: $error'),
@@ -195,22 +186,6 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       }
 
       rethrow;
-    }
-  }
-
-  /// Verifies that all active connections are still healthy after resuming
-  void _verifyActiveConnections() {
-    if (_isDisposed) return;
-    
-    logger.d('Verifying ${_orchestrators.length} active connections');
-    for (final entry in _orchestrators.entries) {
-      final serverId = entry.key;
-      final orchestrator = entry.value;
-      
-      if (orchestrator.connection?.currentState is! Authenticated) {
-        logger.w('Connection $serverId not authenticated, may need reconnection');
-        // Could trigger a health check here if needed
-      }
     }
   }
 

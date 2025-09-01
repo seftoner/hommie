@@ -31,6 +31,7 @@ final class ServerAuthNavigationCoordinatorProvider
           ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies3,
           ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies4,
           ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies5,
+          ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies6,
         },
       );
 
@@ -43,6 +44,8 @@ final class ServerAuthNavigationCoordinatorProvider
   static const $allTransitiveDependencies4 = serverAuthControllerProvider;
   static const $allTransitiveDependencies5 =
       ServerAuthControllerProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies6 =
+      ServerAuthControllerProvider.$allTransitiveDependencies5;
 
   @override
   String debugGetCreateSourceHash() => _$serverAuthNavigationCoordinatorHash();

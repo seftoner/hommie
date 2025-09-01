@@ -19,7 +19,7 @@ final class AuthRepositoryProvider
   }) : super(
          retry: null,
          name: r'authRepositoryProvider',
-         isAutoDispose: true,
+         isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
@@ -64,7 +64,7 @@ final class AuthRepositoryProvider
   }
 }
 
-String _$authRepositoryHash() => r'2aae748fe02d1cd1f976e298b2ce7fbf6be36494';
+String _$authRepositoryHash() => r'c34d8e1ab68534f813e9f1cc23709fd81cf83ed7';
 
 final class AuthRepositoryFamily extends $Family
     with $FunctionalFamilyOverride<IAuthRepository, int> {
@@ -74,7 +74,7 @@ final class AuthRepositoryFamily extends $Family
         name: r'authRepositoryProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
-        isAutoDispose: true,
+        isAutoDispose: false,
       );
 
   AuthRepositoryProvider call(int serverId) =>

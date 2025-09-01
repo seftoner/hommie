@@ -32,7 +32,7 @@ final class ServersDiscoveryControllerProvider
 }
 
 String _$serversDiscoveryControllerHash() =>
-    r'72ef4e6662a3ea0c79524ebe80e2e72bf9ca63c6';
+    r'eb990ef66c025467c0d7a06391ddcba925553498';
 
 abstract class _$ServersDiscoveryController
     extends $AsyncNotifier<List<HaServer>> {

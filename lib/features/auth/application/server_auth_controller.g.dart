@@ -30,6 +30,7 @@ final class ServerAuthControllerProvider
           ServerAuthControllerProvider.$allTransitiveDependencies2,
           ServerAuthControllerProvider.$allTransitiveDependencies3,
           ServerAuthControllerProvider.$allTransitiveDependencies4,
+          ServerAuthControllerProvider.$allTransitiveDependencies5,
         },
       );
 
@@ -41,6 +42,8 @@ final class ServerAuthControllerProvider
       ServerConnectionManagerProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies4 =
       ServerConnectionManagerProvider.$allTransitiveDependencies3;
+  static const $allTransitiveDependencies5 =
+      ServerConnectionManagerProvider.$allTransitiveDependencies4;
 
   @override
   String debugGetCreateSourceHash() => _$serverAuthControllerHash();

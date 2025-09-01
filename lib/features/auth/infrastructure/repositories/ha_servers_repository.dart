@@ -8,6 +8,7 @@ import 'package:multicast_dns/multicast_dns.dart';
 
 class HAServersRepository implements IHAServersRepository {
   static const String _serviceName = '_home-assistant._tcp';
+  static const Duration _discoveryTimeout = Duration(seconds: 30);
 
   @override
   Future<List<HaServer>> getAvailableServers() async {
@@ -26,25 +27,34 @@ class HAServersRepository implements IHAServersRepository {
   }
 
   Future<void> _discoverWithTimeout(
-      MDnsClient client, Set<HaServer> results) async {
+    MDnsClient client,
+    Set<HaServer> results,
+  ) async {
     try {
       await Future.any([
         _performDiscovery(client, results),
-        Future.delayed(const Duration(seconds: 30),
-            () => throw TimeoutException('Discovery timed out')),
+        Future.delayed(
+          _discoveryTimeout,
+          () => throw TimeoutException(
+            'Discovery timed out after ${_discoveryTimeout.inSeconds}s',
+          ),
+        ),
       ]);
-    } catch (e, _) {
+    } catch (e) {
       logger.e('Error during discovery: $e');
-      rethrow; // Re-throw to propagate the error if needed
+      rethrow;
     }
   }
 
   Future<void> _performDiscovery(
-      MDnsClient client, Set<HaServer> results) async {
+    MDnsClient client,
+    Set<HaServer> results,
+  ) async {
     await for (final ptr in _lookupPtrRecords(client)) {
       await for (final TxtResourceRecord txt
           in client.lookup<TxtResourceRecord>(
-              ResourceRecordQuery.text(ptr.domainName))) {
+            ResourceRecordQuery.text(ptr.domainName),
+          )) {
         final server = _fromTxtRecord(txt);
 
         logger.i(

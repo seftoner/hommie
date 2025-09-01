@@ -37,6 +37,8 @@ final class ServerConnectionProvider
       ServerConnectionManagerProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 =
       ServerConnectionManagerProvider.$allTransitiveDependencies3;
+  static const $allTransitiveDependencies5 =
+      ServerConnectionManagerProvider.$allTransitiveDependencies4;
 
   @override
   String debugGetCreateSourceHash() => _$serverConnectionHash();
@@ -86,6 +88,7 @@ final class ServerConnectionFamily extends $Family
           ServerConnectionProvider.$allTransitiveDependencies2,
           ServerConnectionProvider.$allTransitiveDependencies3,
           ServerConnectionProvider.$allTransitiveDependencies4,
+          ServerConnectionProvider.$allTransitiveDependencies5,
         },
         isAutoDispose: false,
       );

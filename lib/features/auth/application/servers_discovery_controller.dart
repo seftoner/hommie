@@ -9,6 +9,7 @@ part 'servers_discovery_controller.g.dart';
 @riverpod
 class ServersDiscoveryController extends _$ServersDiscoveryController {
   Timer? _timer;
+  static const Duration _discoveryInterval = Duration(seconds: 10);
 
   @override
   Future<List<HaServer>> build() async {
@@ -16,6 +17,16 @@ class ServersDiscoveryController extends _$ServersDiscoveryController {
       _timer?.cancel();
       _timer = null;
     });
+
+    ref.onCancel(() {
+      _timer?.cancel();
+      _timer = null;
+    });
+
+    ref.onResume(() {
+      _startPeriodicDiscovery();
+    });
+
     _startPeriodicDiscovery();
     return _fetchServers();
   }
@@ -34,12 +45,19 @@ class ServersDiscoveryController extends _$ServersDiscoveryController {
     state = await AsyncValue.guard(_fetchServers);
   }
 
+  Future<void> forceRefresh() async {
+    final repository = ref.read(haServersRepositoryProvider);
+    repository.clearCache();
+
+    await refresh();
+  }
+
   void _startPeriodicDiscovery() {
     if (_timer != null) {
       return;
     }
 
-    _timer = Timer.periodic(const Duration(seconds: 10), (_) async {
+    _timer = Timer.periodic(_discoveryInterval, (_) async {
       await refresh();
     });
   }

@@ -27,10 +27,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.only(
-                  top: 16.0,
-                  bottom: 24.0,
-                ),
+                padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
                 child: Text(
                   'Servers Discovery',
                   style: Theme.of(context).textTheme.headlineMedium,
@@ -49,9 +46,10 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                             return EmptyState(
                               text: 'No servers found.',
                               onRefresh: () => ref
-                                  .read(serversDiscoveryControllerProvider
-                                      .notifier)
-                                  .refresh(),
+                                  .read(
+                                    serversDiscoveryControllerProvider.notifier,
+                                  )
+                                  .forceRefresh(),
                             );
                           }
                           return SingleChildScrollView(
@@ -70,7 +68,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                           text: 'Error discovering servers.',
                           onRefresh: () => ref
                               .read(serversDiscoveryControllerProvider.notifier)
-                              .refresh(),
+                              .forceRefresh(),
                         ),
                       ),
                     ),
@@ -87,9 +85,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
 }
 
 class EnterAddressManually extends StatelessWidget {
-  const EnterAddressManually({
-    super.key,
-  });
+  const EnterAddressManually({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +96,8 @@ class EnterAddressManually extends StatelessWidget {
           'Not finding your screen?',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         $h16,
         FilledButton.tonal(

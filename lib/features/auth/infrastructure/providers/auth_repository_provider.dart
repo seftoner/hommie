@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 IAuthRepository authRepository(Ref ref, int serverId) {
   final securityCredentialStorage = ref.read(
     credentialsRepositoryProvider(serverId),
