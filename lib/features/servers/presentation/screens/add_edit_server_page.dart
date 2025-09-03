@@ -3,14 +3,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hommie/features/servers/application/server_management_controller.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
+@Dependencies([ServerManagementController])
 class AddEditServerPage extends HookConsumerWidget {
   final Server? server;
 
-  const AddEditServerPage({
-    super.key,
-    this.server,
-  });
+  const AddEditServerPage({super.key, this.server});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,9 +39,9 @@ class AddEditServerPage extends HookConsumerWidget {
         return;
       }
 
-      ref.read(serverManagementControllerProvider.notifier).testConnection(
-            url: urlController.text.trim(),
-          );
+      ref
+          .read(serverManagementControllerProvider.notifier)
+          .testConnection(url: urlController.text.trim());
     }
 
     Future<void> saveServer() async {
@@ -51,8 +50,9 @@ class AddEditServerPage extends HookConsumerWidget {
       }
 
       try {
-        final controller =
-            ref.read(serverManagementControllerProvider.notifier);
+        final controller = ref.read(
+          serverManagementControllerProvider.notifier,
+        );
         Server? savedServer;
 
         if (isEditing) {
@@ -77,9 +77,11 @@ class AddEditServerPage extends HookConsumerWidget {
         if (context.mounted && savedServer != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(isEditing
-                  ? 'Server updated successfully'
-                  : 'Server added successfully'),
+              content: Text(
+                isEditing
+                    ? 'Server updated successfully'
+                    : 'Server added successfully',
+              ),
             ),
           );
 
@@ -94,17 +96,15 @@ class AddEditServerPage extends HookConsumerWidget {
         }
       } catch (e) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: $e')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: $e')));
         }
       }
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(isEditing ? 'Edit Server' : 'Add Server'),
-      ),
+      appBar: AppBar(title: Text(isEditing ? 'Edit Server' : 'Add Server')),
       body: Form(
         key: formKey,
         child: ListView(
@@ -201,8 +201,11 @@ class AddEditServerPage extends HookConsumerWidget {
     );
   }
 
-  Widget _buildTestConnectionSection(ServerTestResult testResult,
-      VoidCallback testConnection, BuildContext context) {
+  Widget _buildTestConnectionSection(
+    ServerTestResult testResult,
+    VoidCallback testConnection,
+    BuildContext context,
+  ) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -230,10 +233,13 @@ class AddEditServerPage extends HookConsumerWidget {
   }
 
   Widget _buildTestButton(
-      ServerTestResult testResult, VoidCallback testConnection) {
+    ServerTestResult testResult,
+    VoidCallback testConnection,
+  ) {
     return FilledButton.tonal(
-      onPressed:
-          testResult.status == ServerTestStatus.testing ? null : testConnection,
+      onPressed: testResult.status == ServerTestStatus.testing
+          ? null
+          : testConnection,
       child: testResult.status == ServerTestStatus.testing
           ? const SizedBox(
               width: 16,
@@ -337,15 +343,18 @@ class AddEditServerPage extends HookConsumerWidget {
 }
 
 Future<void> startAuthentication(
-    Server server, WidgetRef ref, BuildContext context) async {
+  Server server,
+  WidgetRef ref,
+  BuildContext context,
+) async {
   try {
     final controller = ref.read(serverManagementControllerProvider.notifier);
     await controller.authenticateServer(server.id!, server.url);
   } catch (e) {
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Authentication failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Authentication failed: $e')));
     }
   }
 }

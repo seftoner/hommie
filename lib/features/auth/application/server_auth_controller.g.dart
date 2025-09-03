@@ -20,9 +20,11 @@ final class ServerAuthControllerProvider
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
           serverManagerProvider,
+          authRepositoryProvider,
           serverConnectionManagerProvider,
           serverConnectionStateProvider,
           activeServerProvider,
+          websocketConfigRepositoryProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           ServerAuthControllerProvider.$allTransitiveDependencies0,
@@ -31,19 +33,20 @@ final class ServerAuthControllerProvider
           ServerAuthControllerProvider.$allTransitiveDependencies3,
           ServerAuthControllerProvider.$allTransitiveDependencies4,
           ServerAuthControllerProvider.$allTransitiveDependencies5,
+          ServerAuthControllerProvider.$allTransitiveDependencies6,
         },
       );
 
   static const $allTransitiveDependencies0 = serverManagerProvider;
-  static const $allTransitiveDependencies1 =
-      ServerManagerProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies1 = authRepositoryProvider;
   static const $allTransitiveDependencies2 = serverConnectionManagerProvider;
   static const $allTransitiveDependencies3 =
       ServerConnectionManagerProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies4 =
-      ServerConnectionManagerProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 =
-      ServerConnectionManagerProvider.$allTransitiveDependencies4;
+      ServerConnectionManagerProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies5 = websocketConfigRepositoryProvider;
+  static const $allTransitiveDependencies6 =
+      WebsocketConfigRepositoryProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$serverAuthControllerHash();
@@ -54,7 +57,7 @@ final class ServerAuthControllerProvider
 }
 
 String _$serverAuthControllerHash() =>
-    r'e699e9137ab33024d5cfa4567e6c1a64f8f4a9f7';
+    r'a14f9a1a954dc424c85b8055e397b7b78f6a1f6d';
 
 abstract class _$ServerAuthController extends $AsyncNotifier<AuthState> {
   FutureOr<AuthState> build();

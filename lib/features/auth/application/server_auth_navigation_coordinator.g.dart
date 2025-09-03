@@ -32,20 +32,23 @@ final class ServerAuthNavigationCoordinatorProvider
           ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies4,
           ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies5,
           ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies6,
+          ServerAuthNavigationCoordinatorProvider.$allTransitiveDependencies7,
         },
       );
 
   static const $allTransitiveDependencies0 = activeServerProvider;
   static const $allTransitiveDependencies1 =
       ActiveServerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
-      ActiveServerProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 = serverConnectionStateProvider;
-  static const $allTransitiveDependencies4 = serverAuthControllerProvider;
+  static const $allTransitiveDependencies2 = serverConnectionStateProvider;
+  static const $allTransitiveDependencies3 = serverAuthControllerProvider;
+  static const $allTransitiveDependencies4 =
+      ServerAuthControllerProvider.$allTransitiveDependencies1;
   static const $allTransitiveDependencies5 =
       ServerAuthControllerProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies6 =
       ServerAuthControllerProvider.$allTransitiveDependencies5;
+  static const $allTransitiveDependencies7 =
+      ServerAuthControllerProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$serverAuthNavigationCoordinatorHash();

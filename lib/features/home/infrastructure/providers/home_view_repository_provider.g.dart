@@ -29,13 +29,10 @@ final class HomeViewRepositoryProvider
         dependencies: const <ProviderOrFamily>[serverManagerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           HomeViewRepositoryProvider.$allTransitiveDependencies0,
-          HomeViewRepositoryProvider.$allTransitiveDependencies1,
         ],
       );
 
   static const $allTransitiveDependencies0 = serverManagerProvider;
-  static const $allTransitiveDependencies1 =
-      ServerManagerProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$homeViewRepositoryHash();

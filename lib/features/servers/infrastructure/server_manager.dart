@@ -1,22 +1,12 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
-import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/domain/repositories/i_server_repository.dart';
-import 'package:hommie/features/servers/domain/repositories/i_websocket_repository.dart';
-import 'package:hommie/features/servers/infrastructure/repositories/websocket_repository.dart';
-import 'package:hommie/services/networking/server_connection_provider.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-@Dependencies([serverConnection])
 class ServerManager implements IServerManager {
   final IServerRepository _serverRepository;
-  final Ref _ref;
 
-  ServerManager(this._serverRepository, this._ref);
+  ServerManager(this._serverRepository);
 
   @override
   Future<Server> addServer(Server config) {
@@ -62,18 +52,10 @@ class ServerManager implements IServerManager {
     final activeServer = await getActiveServer();
     final isActiveServer = activeServer?.id == id;
 
-    try {
-      // 1. Revoke OAuth token and clear credentials for this server (best effort)
-      await _revokeServerToken(id);
-    } catch (e) {
-      // Log but don't fail deletion if token revocation fails
-      logger.w('Failed to revoke token for server $id: $e');
-    }
-
-    // 2. Delete the server from database
+    // 1. Delete the server from database
     await _serverRepository.delete(id);
 
-    // 3. Handle active server logic (only if we're not deleting the last server)
+    // 2. Handle active server logic (only if we're not deleting the last server)
     if (!isLastServer) {
       final remainingServers = await getAvailableServers();
 
@@ -98,44 +80,8 @@ class ServerManager implements IServerManager {
     logger.i('Successfully removed server $id');
   }
 
-  /// Revoke the OAuth token for a server
-  Future<void> _revokeServerToken(int serverId) async {
-    try {
-      final authRepository = getAuthRepository(serverId);
-
-      // Use the same approach as signOut() in AuthRepository
-      // This properly revokes the token via OAuth2 token endpoint
-      final result = await authRepository.signOut();
-
-      result.fold(
-        (failure) {
-          logger.w('Failed to revoke token for server $serverId: $failure');
-        },
-        (_) {
-          logger.i('Successfully revoked token for server $serverId');
-        },
-      );
-    } catch (e) {
-      logger.e('Error during token revocation for server $serverId: $e');
-      rethrow;
-    }
-  }
-
   @override
   Future<void> setActiveServer(int id) {
     return _serverRepository.setActiveServer(id);
-  }
-
-  @override
-  Future<IWebSocketRepository> webSocketRepository(int serverId) async {
-    final connection = await _ref.read(
-      serverConnectionProvider(serverId).future,
-    );
-    return WebSocketRepository(connection);
-  }
-
-  @override
-  IAuthRepository getAuthRepository(int serverId) {
-    return _ref.read(authRepositoryProvider(serverId));
   }
 }

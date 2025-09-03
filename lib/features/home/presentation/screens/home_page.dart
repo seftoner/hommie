@@ -10,7 +10,9 @@ import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hommie/ui/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
+@Dependencies([HomePageController])
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 

@@ -21,13 +21,10 @@ final class ActiveServerProvider
         dependencies: const <ProviderOrFamily>[serverManagerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           ActiveServerProvider.$allTransitiveDependencies0,
-          ActiveServerProvider.$allTransitiveDependencies1,
         ],
       );
 
   static const $allTransitiveDependencies0 = serverManagerProvider;
-  static const $allTransitiveDependencies1 =
-      ServerManagerProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$activeServerHash();
@@ -37,7 +34,7 @@ final class ActiveServerProvider
   ActiveServer create() => ActiveServer();
 }
 
-String _$activeServerHash() => r'7bc3282ca8d12caf7a70a6fba6b33b2e26efdc25';
+String _$activeServerHash() => r'750168c9d6cb8d43ffeebc7707be4f55fc8c7810';
 
 abstract class _$ActiveServer extends $AsyncNotifier<Server?> {
   FutureOr<Server?> build();

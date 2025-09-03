@@ -1,6 +1,4 @@
-import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
-import 'package:hommie/features/servers/domain/repositories/i_websocket_repository.dart';
 
 abstract interface class IServerManager {
   Future<Server?> getActiveServer();
@@ -9,8 +7,4 @@ abstract interface class IServerManager {
   Future<void> removeServer(int id);
   Future<void> forceRemoveServer(int id);
   Future<List<Server>> getAvailableServers();
-
-  //TODO: remove this methods from this interface!
-  Future<IWebSocketRepository> webSocketRepository(int serverId);
-  IAuthRepository getAuthRepository(int serverId);
 }

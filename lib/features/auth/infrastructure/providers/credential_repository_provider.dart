@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'credential_repository_provider.g.dart';
 
-@riverpod
-ICredentialRepository credentialsRepository(Ref ref, int serverId) {
-  return SecureCredentialRepository(const FlutterSecureStorage(), serverId);
+@Riverpod(keepAlive: true)
+ICredentialRepository credentialRepository(Ref ref) {
+  return SecureCredentialRepository(const FlutterSecureStorage());
 }

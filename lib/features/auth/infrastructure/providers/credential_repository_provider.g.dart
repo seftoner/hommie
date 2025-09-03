@@ -6,10 +6,10 @@ part of 'credential_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-@ProviderFor(credentialsRepository)
-const credentialsRepositoryProvider = CredentialsRepositoryFamily._();
+@ProviderFor(credentialRepository)
+const credentialRepositoryProvider = CredentialRepositoryProvider._();
 
-final class CredentialsRepositoryProvider
+final class CredentialRepositoryProvider
     extends
         $FunctionalProvider<
           ICredentialRepository,
@@ -17,26 +17,19 @@ final class CredentialsRepositoryProvider
           ICredentialRepository
         >
     with $Provider<ICredentialRepository> {
-  const CredentialsRepositoryProvider._({
-    required CredentialsRepositoryFamily super.from,
-    required int super.argument,
-  }) : super(
-         retry: null,
-         name: r'credentialsRepositoryProvider',
-         isAutoDispose: true,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
+  const CredentialRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'credentialRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
-  String debugGetCreateSourceHash() => _$credentialsRepositoryHash();
-
-  @override
-  String toString() {
-    return r'credentialsRepositoryProvider'
-        ''
-        '($argument)';
-  }
+  String debugGetCreateSourceHash() => _$credentialRepositoryHash();
 
   @$internal
   @override
@@ -46,8 +39,7 @@ final class CredentialsRepositoryProvider
 
   @override
   ICredentialRepository create(Ref ref) {
-    final argument = this.argument as int;
-    return credentialsRepository(ref, argument);
+    return credentialRepository(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -57,38 +49,10 @@ final class CredentialsRepositoryProvider
       providerOverride: $SyncValueProvider<ICredentialRepository>(value),
     );
   }
-
-  @override
-  bool operator ==(Object other) {
-    return other is CredentialsRepositoryProvider && other.argument == argument;
-  }
-
-  @override
-  int get hashCode {
-    return argument.hashCode;
-  }
 }
 
-String _$credentialsRepositoryHash() =>
-    r'154cfa5da488cd918c3e59e85ad26efe2183ad96';
-
-final class CredentialsRepositoryFamily extends $Family
-    with $FunctionalFamilyOverride<ICredentialRepository, int> {
-  const CredentialsRepositoryFamily._()
-    : super(
-        retry: null,
-        name: r'credentialsRepositoryProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
-        isAutoDispose: true,
-      );
-
-  CredentialsRepositoryProvider call(int serverId) =>
-      CredentialsRepositoryProvider._(argument: serverId, from: this);
-
-  @override
-  String toString() => r'credentialsRepositoryProvider';
-}
+String _$credentialRepositoryHash() =>
+    r'a36c0e526b1fbccd043ee6d0a362cbc945ff5020';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

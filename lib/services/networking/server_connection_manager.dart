@@ -139,8 +139,10 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     final connOption = HAConnectionOption(
       serverUrl: serverUrl,
       fetchAuthToken: () async {
-        final authRepository = ref.read(authRepositoryProvider(serverId));
-        final fetchedCredentials = await authRepository.getCredentials();
+        final authRepository = ref.read(authRepositoryProvider);
+        final fetchedCredentials = await authRepository.getCredentials(
+          serverId,
+        );
         return fetchedCredentials.fold(
           (error) => throw ConnectionError('Failed to refresh token: $error'),
           (credentials) => HAOAuth2Token(credentials),

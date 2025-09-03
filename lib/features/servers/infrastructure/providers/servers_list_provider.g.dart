@@ -21,13 +21,10 @@ final class ServersListProvider
         dependencies: const <ProviderOrFamily>[serverManagerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           ServersListProvider.$allTransitiveDependencies0,
-          ServersListProvider.$allTransitiveDependencies1,
         ],
       );
 
   static const $allTransitiveDependencies0 = serverManagerProvider;
-  static const $allTransitiveDependencies1 =
-      ServerManagerProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$serversListHash();

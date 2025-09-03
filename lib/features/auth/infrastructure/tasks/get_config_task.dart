@@ -1,16 +1,14 @@
 import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/infrastructure/providers/websocket_config_repository_provider.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-@Dependencies([ServerConnectionManager])
+@Dependencies([websocketConfigRepository])
 class GetConfigTask extends HTask {
   final IServerManager _serverManager;
   final Ref _ref;
@@ -25,17 +23,14 @@ class GetConfigTask extends HTask {
       throw Exception('Server is not provided');
     }
 
-    // Use centralized connection management - no need to duplicate connection logic
-    final connectionManager = _ref.read(
-      serverConnectionManagerProvider.notifier,
-    );
-    final connection = await connectionManager.getConnection(server.id!);
-
     try {
       logger.i('Getting configuration for server ${server.id}');
 
-      // Get server configuration using the managed connection
-      final serverConfig = await HACommands.getConfig(connection);
+      // Use the WebSocket config repository instead of direct HACommands
+      final configRepository = await _ref.read(
+        websocketConfigRepositoryProvider(server.id!).future,
+      );
+      final serverConfig = await configRepository.getConfig();
 
       // Update server with configuration details
       final updatedServer = await _serverManager.addServer(
@@ -54,7 +49,7 @@ class GetConfigTask extends HTask {
       return const HTaskResult(status: Status.success);
     } catch (e) {
       logger.e('Failed to get server configuration: $e');
-      rethrow;
+      return HTaskResult.failure(e);
     }
   }
 

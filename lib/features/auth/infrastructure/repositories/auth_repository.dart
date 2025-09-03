@@ -11,28 +11,32 @@ import 'package:oauth2/oauth2.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRepository implements IAuthRepository {
-  final ICredentialRepository _credentialStorage;
+  final ICredentialRepository _credentialRepository;
   final http.Client _httpClient;
 
   final String _clientID = 'https://seftoner.github.io';
 
-  AuthRepository(this._credentialStorage, this._httpClient);
+  AuthRepository(this._credentialRepository, this._httpClient);
 
   @override
-  Future<Either<AuthFailure, Credentials>> login(
-      {required String serverUrl,
-      required Uri redirectUrl,
-      required AuthResponseHandler handler}) async {
+  Future<Either<AuthFailure, Credentials>> login({
+    required int serverId,
+    required String serverUrl,
+    required Uri redirectUrl,
+    required AuthResponseHandler handler,
+  }) async {
     final grant = AuthorizationCodeGrant(
-        _clientID,
-        Uri.parse('$serverUrl/auth/authorize'),
-        Uri.parse('$serverUrl/auth/token'));
+      _clientID,
+      Uri.parse('$serverUrl/auth/authorize'),
+      Uri.parse('$serverUrl/auth/token'),
+    );
 
     try {
-      final responseCode =
-          await handler(grant.getAuthorizationUrl(redirectUrl));
+      final responseCode = await handler(
+        grant.getAuthorizationUrl(redirectUrl),
+      );
       final httpClient = await grant.handleAuthorizationResponse(responseCode);
-      await _credentialStorage.save(httpClient.credentials);
+      await _credentialRepository.save(serverId, httpClient.credentials);
       // grant.close();
       return right(httpClient.credentials);
     } on FormatException {
@@ -46,24 +50,24 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, Unit>> signOut() async {
+  Future<Either<AuthFailure, Unit>> signOut(int serverId) async {
     try {
-      final credentials = await _credentialStorage.read();
+      final credentials = await _credentialRepository.read(serverId);
       final client = http.Client();
       try {
         //TODO: handle internet connection error
         // In this case token will be alive
-        await client.post(credentials!.tokenEndpoint!, body: {
-          'token': credentials.refreshToken,
-          'action': 'revoke',
-        });
+        await client.post(
+          credentials!.tokenEndpoint!,
+          body: {'token': credentials.refreshToken, 'action': 'revoke'},
+        );
       } on SocketException catch (e) {
         logger.e('Token revocation failed: $e');
       } finally {
         client.close();
       }
 
-      await _credentialStorage.clear();
+      await _credentialRepository.clear(serverId);
       return right(unit);
     } on PlatformException {
       return left(const AuthFailure.storage());
@@ -71,13 +75,16 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, Credentials>> getCredentials() async {
+  Future<Either<AuthFailure, Credentials>> getCredentials(int serverId) async {
     try {
-      final storedCredentials = await _credentialStorage.read();
+      final storedCredentials = await _credentialRepository.read(serverId);
       if (storedCredentials != null) {
         if (storedCredentials.canRefresh && storedCredentials.isExpired) {
           logger.i('Access token is expired 🌚');
-          final failureOrCredentials = await _refreshToken(storedCredentials);
+          final failureOrCredentials = await _refreshToken(
+            serverId,
+            storedCredentials,
+          );
 
           return failureOrCredentials.fold(
             (failure) {
@@ -105,7 +112,9 @@ class AuthRepository implements IAuthRepository {
   }
 
   Future<Either<AuthFailure, Credentials>> _refreshToken(
-      Credentials storedCredentials) async {
+    int serverId,
+    Credentials storedCredentials,
+  ) async {
     try {
       logger.i('Try to refresh token 🔄');
       final refreshedCredentials = await storedCredentials.refresh(
@@ -114,11 +123,12 @@ class AuthRepository implements IAuthRepository {
         httpClient: _httpClient,
       );
 
-      await _credentialStorage.save(refreshedCredentials);
+      await _credentialRepository.save(serverId, refreshedCredentials);
       return right(refreshedCredentials);
     } on TimeoutException catch (e) {
       logger.e(
-          'Timeout error. Refresh takes more than: ${e.duration!.inSeconds.toString()}');
+        'Timeout error. Refresh takes more than: ${e.duration!.inSeconds.toString()}',
+      );
       return left(const AuthFailure.connection());
     } on FormatException catch (e) {
       logger.e('Error parsing credentials: $e');
@@ -135,8 +145,8 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<bool> isLoggedIn() async {
-    final storedCredentials = await _credentialStorage.read();
+  Future<bool> isLoggedIn(int serverId) async {
+    final storedCredentials = await _credentialRepository.read(serverId);
     return storedCredentials != null;
   }
 }

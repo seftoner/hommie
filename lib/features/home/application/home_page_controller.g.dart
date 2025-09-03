@@ -22,15 +22,12 @@ final class HomePageControllerProvider
         $allTransitiveDependencies: const <ProviderOrFamily>[
           HomePageControllerProvider.$allTransitiveDependencies0,
           HomePageControllerProvider.$allTransitiveDependencies1,
-          HomePageControllerProvider.$allTransitiveDependencies2,
         ],
       );
 
   static const $allTransitiveDependencies0 = homeViewRepositoryProvider;
   static const $allTransitiveDependencies1 =
       HomeViewRepositoryProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
-      HomeViewRepositoryProvider.$allTransitiveDependencies1;
 
   @override
   String debugGetCreateSourceHash() => _$homePageControllerHash();

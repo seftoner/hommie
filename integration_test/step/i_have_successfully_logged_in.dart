@@ -16,9 +16,9 @@ Future<void> iHaveSuccessfullyLoggedIn(PatrolIntegrationTester $) async {
 
   // In Riverpod 3, for family providers we use overrideWithValue or override the family itself
   TestProviderOverrides.instance().setOverrides([
-    // Override the family provider for all server IDs
-    credentialsRepositoryProvider.overrideWith(
-      (ref, serverId) => _CredentialsRepositoryMock(token),
+    // Override the credential repository provider
+    credentialRepositoryProvider.overrideWith(
+      (ref) => _CredentialsRepositoryMock(token),
     ),
     serverSettingsProvider.overrideWith(
       (ref) => _ServerSettingRepositoryMock(),
@@ -48,13 +48,13 @@ class _CredentialsRepositoryMock implements ICredentialRepository {
   bool _isSigned = true;
 
   @override
-  Future<void> clear() {
+  Future<void> clear(int serverId) {
     _isSigned = false;
     return Future.value();
   }
 
   @override
-  Future<Credentials?> read() {
+  Future<Credentials?> read(int serverId) {
     if (_isSigned != true) {
       return Future.value();
     }
@@ -70,7 +70,12 @@ class _CredentialsRepositoryMock implements ICredentialRepository {
   }
 
   @override
-  Future<void> save(Credentials credentials) {
+  Future<void> save(int serverId, Credentials credentials) {
     return Future.value();
+  }
+
+  @override
+  Future<bool> hasCredentials(int serverId) {
+    return Future.value(_isSigned);
   }
 }

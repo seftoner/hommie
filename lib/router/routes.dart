@@ -7,6 +7,8 @@ import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
 import 'package:hommie/features/servers/presentation/screens/servers_page.dart';
+import 'package:hommie/features/servers/presentation/screens/add_edit_server_page.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
 import 'package:hommie/features/settings/presentation/screens/hub_page.dart';
 import 'package:hommie/features/settings/presentation/screens/logs_page.dart';
@@ -46,7 +48,7 @@ class AutomationsShellBranchData extends StatefulShellBranchData {
   const AutomationsShellBranchData();
 }
 
-class AutomationsRouteData extends GoRouteData with _$AutomationsRouteData {
+class AutomationsRouteData extends GoRouteData with $AutomationsRouteData {
   const AutomationsRouteData();
 
   @override
@@ -59,13 +61,19 @@ class AutomationsRouteData extends GoRouteData with _$AutomationsRouteData {
   path: '/settings',
   routes: [
     TypedGoRoute<HubRouteData>(path: 'hub'),
-    TypedGoRoute<ServersRouteData>(path: 'servers'),
+    TypedGoRoute<ServersRouteData>(
+      path: 'servers',
+      routes: [
+        TypedGoRoute<AddServerRouteData>(path: 'add'),
+        TypedGoRoute<EditServerRouteData>(path: 'edit'),
+      ],
+    ),
     TypedGoRoute<LogsRouteData>(path: 'logs'),
     TypedGoRoute<AboutRouteData>(path: 'about'),
     TypedGoRoute<SensorsRouteData>(path: 'sensors'),
   ],
 )
-class SettingsRouteData extends GoRouteData with _$SettingsRouteData {
+class SettingsRouteData extends GoRouteData with $SettingsRouteData {
   const SettingsRouteData();
 
   @override
@@ -74,7 +82,7 @@ class SettingsRouteData extends GoRouteData with _$SettingsRouteData {
   }
 }
 
-class LogsRouteData extends GoRouteData with _$LogsRouteData {
+class LogsRouteData extends GoRouteData with $LogsRouteData {
   const LogsRouteData();
 
   @override
@@ -83,7 +91,7 @@ class LogsRouteData extends GoRouteData with _$LogsRouteData {
   }
 }
 
-class AboutRouteData extends GoRouteData with _$AboutRouteData {
+class AboutRouteData extends GoRouteData with $AboutRouteData {
   const AboutRouteData();
 
   @override
@@ -92,7 +100,7 @@ class AboutRouteData extends GoRouteData with _$AboutRouteData {
   }
 }
 
-class SensorsRouteData extends GoRouteData with _$SensorsRouteData {
+class SensorsRouteData extends GoRouteData with $SensorsRouteData {
   const SensorsRouteData();
 
   @override
@@ -101,7 +109,7 @@ class SensorsRouteData extends GoRouteData with _$SensorsRouteData {
   }
 }
 
-class HubRouteData extends GoRouteData with _$HubRouteData {
+class HubRouteData extends GoRouteData with $HubRouteData {
   const HubRouteData();
 
   @override
@@ -110,7 +118,7 @@ class HubRouteData extends GoRouteData with _$HubRouteData {
   }
 }
 
-class ServersRouteData extends GoRouteData with _$ServersRouteData {
+class ServersRouteData extends GoRouteData with $ServersRouteData {
   const ServersRouteData();
 
   @override
@@ -119,11 +127,31 @@ class ServersRouteData extends GoRouteData with _$ServersRouteData {
   }
 }
 
+class AddServerRouteData extends GoRouteData with $AddServerRouteData {
+  const AddServerRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const AddEditServerPage();
+  }
+}
+
+class EditServerRouteData extends GoRouteData with $EditServerRouteData {
+  EditServerRouteData(this.$extra);
+
+  final Server? $extra;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return AddEditServerPage(server: $extra);
+  }
+}
+
 class HomeShellBranchData extends StatefulShellBranchData {
   const HomeShellBranchData();
 }
 
-class HomeRouteData extends GoRouteData with _$HomeRouteData {
+class HomeRouteData extends GoRouteData with $HomeRouteData {
   const HomeRouteData();
 
   @override
@@ -133,7 +161,7 @@ class HomeRouteData extends GoRouteData with _$HomeRouteData {
 }
 
 @TypedGoRoute<DicoveryRoute>(path: '/discovery')
-class DicoveryRoute extends GoRouteData with _$DicoveryRoute {
+class DicoveryRoute extends GoRouteData with $DicoveryRoute {
   const DicoveryRoute();
 
   @override
@@ -143,7 +171,7 @@ class DicoveryRoute extends GoRouteData with _$DicoveryRoute {
 }
 
 @TypedGoRoute<EnterAddressRoute>(path: '/manualAddres')
-class EnterAddressRoute extends GoRouteData with _$EnterAddressRoute {
+class EnterAddressRoute extends GoRouteData with $EnterAddressRoute {
   const EnterAddressRoute();
 
   @override
@@ -153,7 +181,7 @@ class EnterAddressRoute extends GoRouteData with _$EnterAddressRoute {
 }
 
 @TypedGoRoute<StartupRoute>(path: '/startup')
-class StartupRoute extends GoRouteData with _$StartupRoute {
+class StartupRoute extends GoRouteData with $StartupRoute {
   const StartupRoute();
 
   @override

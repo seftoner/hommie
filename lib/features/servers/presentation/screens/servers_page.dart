@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hommie/router/routes.dart';
 import 'package:hommie/features/servers/infrastructure/providers/servers_list_provider.dart';
-import 'package:hommie/features/servers/presentation/screens/add_edit_server_page.dart';
 import 'package:hommie/features/servers/presentation/widgets/server_list_tile.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
+@Dependencies([ActiveServer, ServersList])
 class ServersPage extends ConsumerWidget {
   const ServersPage({super.key});
 
@@ -20,7 +22,7 @@ class ServersPage extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => _navigateToAddServer(context),
+            onPressed: () => const AddServerRouteData().push(context),
           ),
         ],
       ),
@@ -36,7 +38,7 @@ class ServersPage extends ConsumerWidget {
                   const Text('No servers configured'),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () => _navigateToAddServer(context),
+                    onPressed: () => const AddServerRouteData().push(context),
                     child: const Text('Add Server'),
                   ),
                 ],
@@ -56,7 +58,7 @@ class ServersPage extends ConsumerWidget {
                   return ServerListTile(
                     server: server,
                     isActive: isActive,
-                    onTap: () => _navigateToEditServer(context, server),
+                    onTap: () => EditServerRouteData(server).push(context),
                     onSetActive: isActive
                         ? null
                         : () => _setActiveServer(ref, server.id!),
@@ -68,9 +70,8 @@ class ServersPage extends ConsumerWidget {
               ),
             ),
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stack) => Center(
-              child: Text('Error loading active server: $error'),
-            ),
+            error: (error, stack) =>
+                Center(child: Text('Error loading active server: $error')),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -90,22 +91,6 @@ class ServersPage extends ConsumerWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  void _navigateToAddServer(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const AddEditServerPage(),
-      ),
-    );
-  }
-
-  void _navigateToEditServer(BuildContext context, Server server) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AddEditServerPage(server: server),
       ),
     );
   }
@@ -156,7 +141,10 @@ class ServersPage extends ConsumerWidget {
   }
 
   Future<void> _showDeleteDialog(
-      BuildContext context, WidgetRef ref, Server server) {
+    BuildContext context,
+    WidgetRef ref,
+    Server server,
+  ) {
     final activeServerAsync = ref.read(activeServerProvider);
     final serversAsync = ref.read(serversListProvider);
 
@@ -170,10 +158,7 @@ class ServersPage extends ConsumerWidget {
       builder: (BuildContext context) => AlertDialog(
         title: Row(
           children: [
-            Icon(
-              Icons.warning,
-              color: Theme.of(context).colorScheme.error,
-            ),
+            Icon(Icons.warning, color: Theme.of(context).colorScheme.error),
             const SizedBox(width: 8),
             const Text('Delete Server'),
           ],
@@ -215,8 +200,9 @@ class ServersPage extends ConsumerWidget {
                             : 'You will be automatically switched to another server.',
                         style: TextStyle(
                           fontSize: 12,
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onPrimaryContainer,
                         ),
                       ),
                     ),
@@ -227,10 +213,7 @@ class ServersPage extends ConsumerWidget {
             const SizedBox(height: 16),
             const Text(
               'This action cannot be undone.',
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
             ),
           ],
         ),
@@ -255,7 +238,10 @@ class ServersPage extends ConsumerWidget {
   }
 
   Future<void> _deleteServer(
-      BuildContext context, WidgetRef ref, Server server) async {
+    BuildContext context,
+    WidgetRef ref,
+    Server server,
+  ) async {
     try {
       // Show loading indicator
       if (context.mounted) {
@@ -272,8 +258,9 @@ class ServersPage extends ConsumerWidget {
                 Text('Deleting "${server.name}"...'),
               ],
             ),
-            duration:
-                const Duration(seconds: 10), // Longer duration for deletion
+            duration: const Duration(
+              seconds: 10,
+            ), // Longer duration for deletion
           ),
         );
       }

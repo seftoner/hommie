@@ -19,14 +19,14 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
   branches: [
     StatefulShellBranchData.$branch(
       routes: [
-        GoRouteData.$route(path: '/home', factory: _$HomeRouteData._fromState),
+        GoRouteData.$route(path: '/home', factory: $HomeRouteData._fromState),
       ],
     ),
     StatefulShellBranchData.$branch(
       routes: [
         GoRouteData.$route(
           path: '/automations',
-          factory: _$AutomationsRouteData._fromState,
+          factory: $AutomationsRouteData._fromState,
         ),
       ],
     ),
@@ -38,7 +38,7 @@ extension $MainShellRouteDataExtension on MainShellRouteData {
       const MainShellRouteData();
 }
 
-mixin _$HomeRouteData on GoRouteData {
+mixin $HomeRouteData on GoRouteData {
   static HomeRouteData _fromState(GoRouterState state) => const HomeRouteData();
 
   @override
@@ -58,7 +58,7 @@ mixin _$HomeRouteData on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$AutomationsRouteData on GoRouteData {
+mixin $AutomationsRouteData on GoRouteData {
   static AutomationsRouteData _fromState(GoRouterState state) =>
       const AutomationsRouteData();
 
@@ -81,17 +81,30 @@ mixin _$AutomationsRouteData on GoRouteData {
 
 RouteBase get $settingsRouteData => GoRouteData.$route(
   path: '/settings',
-  factory: _$SettingsRouteData._fromState,
+  factory: $SettingsRouteData._fromState,
   routes: [
-    GoRouteData.$route(path: 'hub', factory: _$HubRouteData._fromState),
-    GoRouteData.$route(path: 'servers', factory: _$ServersRouteData._fromState),
-    GoRouteData.$route(path: 'logs', factory: _$LogsRouteData._fromState),
-    GoRouteData.$route(path: 'about', factory: _$AboutRouteData._fromState),
-    GoRouteData.$route(path: 'sensors', factory: _$SensorsRouteData._fromState),
+    GoRouteData.$route(path: 'hub', factory: $HubRouteData._fromState),
+    GoRouteData.$route(
+      path: 'servers',
+      factory: $ServersRouteData._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: 'add',
+          factory: $AddServerRouteData._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'edit',
+          factory: $EditServerRouteData._fromState,
+        ),
+      ],
+    ),
+    GoRouteData.$route(path: 'logs', factory: $LogsRouteData._fromState),
+    GoRouteData.$route(path: 'about', factory: $AboutRouteData._fromState),
+    GoRouteData.$route(path: 'sensors', factory: $SensorsRouteData._fromState),
   ],
 );
 
-mixin _$SettingsRouteData on GoRouteData {
+mixin $SettingsRouteData on GoRouteData {
   static SettingsRouteData _fromState(GoRouterState state) =>
       const SettingsRouteData();
 
@@ -112,7 +125,7 @@ mixin _$SettingsRouteData on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$HubRouteData on GoRouteData {
+mixin $HubRouteData on GoRouteData {
   static HubRouteData _fromState(GoRouterState state) => const HubRouteData();
 
   @override
@@ -132,7 +145,7 @@ mixin _$HubRouteData on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$ServersRouteData on GoRouteData {
+mixin $ServersRouteData on GoRouteData {
   static ServersRouteData _fromState(GoRouterState state) =>
       const ServersRouteData();
 
@@ -153,7 +166,53 @@ mixin _$ServersRouteData on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$LogsRouteData on GoRouteData {
+mixin $AddServerRouteData on GoRouteData {
+  static AddServerRouteData _fromState(GoRouterState state) =>
+      const AddServerRouteData();
+
+  @override
+  String get location => GoRouteData.$location('/settings/servers/add');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $EditServerRouteData on GoRouteData {
+  static EditServerRouteData _fromState(GoRouterState state) =>
+      EditServerRouteData(state.extra as Server?);
+
+  EditServerRouteData get _self => this as EditServerRouteData;
+
+  @override
+  String get location => GoRouteData.$location('/settings/servers/edit');
+
+  @override
+  void go(BuildContext context) => context.go(location, extra: _self.$extra);
+
+  @override
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: _self.$extra);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location, extra: _self.$extra);
+
+  @override
+  void replace(BuildContext context) =>
+      context.replace(location, extra: _self.$extra);
+}
+
+mixin $LogsRouteData on GoRouteData {
   static LogsRouteData _fromState(GoRouterState state) => const LogsRouteData();
 
   @override
@@ -173,7 +232,7 @@ mixin _$LogsRouteData on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$AboutRouteData on GoRouteData {
+mixin $AboutRouteData on GoRouteData {
   static AboutRouteData _fromState(GoRouterState state) =>
       const AboutRouteData();
 
@@ -194,7 +253,7 @@ mixin _$AboutRouteData on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$SensorsRouteData on GoRouteData {
+mixin $SensorsRouteData on GoRouteData {
   static SensorsRouteData _fromState(GoRouterState state) =>
       const SensorsRouteData();
 
@@ -216,9 +275,9 @@ mixin _$SensorsRouteData on GoRouteData {
 }
 
 RouteBase get $dicoveryRoute =>
-    GoRouteData.$route(path: '/discovery', factory: _$DicoveryRoute._fromState);
+    GoRouteData.$route(path: '/discovery', factory: $DicoveryRoute._fromState);
 
-mixin _$DicoveryRoute on GoRouteData {
+mixin $DicoveryRoute on GoRouteData {
   static DicoveryRoute _fromState(GoRouterState state) => const DicoveryRoute();
 
   @override
@@ -240,10 +299,10 @@ mixin _$DicoveryRoute on GoRouteData {
 
 RouteBase get $enterAddressRoute => GoRouteData.$route(
   path: '/manualAddres',
-  factory: _$EnterAddressRoute._fromState,
+  factory: $EnterAddressRoute._fromState,
 );
 
-mixin _$EnterAddressRoute on GoRouteData {
+mixin $EnterAddressRoute on GoRouteData {
   static EnterAddressRoute _fromState(GoRouterState state) =>
       const EnterAddressRoute();
 
@@ -265,9 +324,9 @@ mixin _$EnterAddressRoute on GoRouteData {
 }
 
 RouteBase get $startupRoute =>
-    GoRouteData.$route(path: '/startup', factory: _$StartupRoute._fromState);
+    GoRouteData.$route(path: '/startup', factory: $StartupRoute._fromState);
 
-mixin _$StartupRoute on GoRouteData {
+mixin $StartupRoute on GoRouteData {
   static StartupRoute _fromState(GoRouterState state) => const StartupRoute();
 
   @override

@@ -6,33 +6,38 @@ part of 'auth_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+/// Provides a singleton auth repository that can handle multiple servers
+///
+/// This replaces the family provider pattern with a single repository
+/// that accepts server IDs as method parameters
 @ProviderFor(authRepository)
-const authRepositoryProvider = AuthRepositoryFamily._();
+const authRepositoryProvider = AuthRepositoryProvider._();
 
+/// Provides a singleton auth repository that can handle multiple servers
+///
+/// This replaces the family provider pattern with a single repository
+/// that accepts server IDs as method parameters
 final class AuthRepositoryProvider
     extends
         $FunctionalProvider<IAuthRepository, IAuthRepository, IAuthRepository>
     with $Provider<IAuthRepository> {
-  const AuthRepositoryProvider._({
-    required AuthRepositoryFamily super.from,
-    required int super.argument,
-  }) : super(
-         retry: null,
-         name: r'authRepositoryProvider',
-         isAutoDispose: false,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
+  /// Provides a singleton auth repository that can handle multiple servers
+  ///
+  /// This replaces the family provider pattern with a single repository
+  /// that accepts server IDs as method parameters
+  const AuthRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$authRepositoryHash();
-
-  @override
-  String toString() {
-    return r'authRepositoryProvider'
-        ''
-        '($argument)';
-  }
 
   @$internal
   @override
@@ -41,8 +46,7 @@ final class AuthRepositoryProvider
 
   @override
   IAuthRepository create(Ref ref) {
-    final argument = this.argument as int;
-    return authRepository(ref, argument);
+    return authRepository(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -52,37 +56,9 @@ final class AuthRepositoryProvider
       providerOverride: $SyncValueProvider<IAuthRepository>(value),
     );
   }
-
-  @override
-  bool operator ==(Object other) {
-    return other is AuthRepositoryProvider && other.argument == argument;
-  }
-
-  @override
-  int get hashCode {
-    return argument.hashCode;
-  }
 }
 
-String _$authRepositoryHash() => r'c34d8e1ab68534f813e9f1cc23709fd81cf83ed7';
-
-final class AuthRepositoryFamily extends $Family
-    with $FunctionalFamilyOverride<IAuthRepository, int> {
-  const AuthRepositoryFamily._()
-    : super(
-        retry: null,
-        name: r'authRepositoryProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
-        isAutoDispose: false,
-      );
-
-  AuthRepositoryProvider call(int serverId) =>
-      AuthRepositoryProvider._(argument: serverId, from: this);
-
-  @override
-  String toString() => r'authRepositoryProvider';
-}
+String _$authRepositoryHash() => r'2974b39cbe410017cd4334a51e5536398adadb2a';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

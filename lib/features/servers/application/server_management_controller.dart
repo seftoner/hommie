@@ -8,33 +8,24 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_management_controller.g.dart';
 
-enum ServerTestStatus {
-  idle,
-  testing,
-  success,
-  error,
-}
+enum ServerTestStatus { idle, testing, success, error }
 
 class ServerTestResult {
   final ServerTestStatus status;
   final String? message;
   final String? version;
 
-  const ServerTestResult({
-    required this.status,
-    this.message,
-    this.version,
-  });
+  const ServerTestResult({required this.status, this.message, this.version});
 
   ServerTestResult.idle() : this(status: ServerTestStatus.idle);
   ServerTestResult.testing() : this(status: ServerTestStatus.testing);
   ServerTestResult.success({String? version})
-      : this(status: ServerTestStatus.success, version: version);
+    : this(status: ServerTestStatus.success, version: version);
   ServerTestResult.error(String message)
-      : this(status: ServerTestStatus.error, message: message);
+    : this(status: ServerTestStatus.error, message: message);
 }
 
-@riverpod
+@Riverpod(dependencies: [ServersList, ServerAuthController, ActiveServer])
 class ServerManagementController extends _$ServerManagementController {
   @override
   ServerTestResult build() {
@@ -42,10 +33,7 @@ class ServerManagementController extends _$ServerManagementController {
   }
 
   /// Test connection to a Home Assistant server
-  Future<void> testConnection({
-    required String url,
-    String? token,
-  }) async {
+  Future<void> testConnection({required String url, String? token}) async {
     state = ServerTestResult.testing();
 
     try {
@@ -87,11 +75,7 @@ class ServerManagementController extends _$ServerManagementController {
     try {
       final serverManager = ref.read(serverManagerProvider);
 
-      final server = Server(
-        name: name,
-        baseUrl: url,
-        externalUrl: externalUrl,
-      );
+      final server = Server(name: name, baseUrl: url, externalUrl: externalUrl);
 
       final savedServer = await serverManager.addServer(server);
       logger.i('Added new server: ${savedServer.name}');

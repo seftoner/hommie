@@ -29,17 +29,14 @@ final class ServerConnectionManagerProvider
           ServerConnectionManagerProvider.$allTransitiveDependencies1,
           ServerConnectionManagerProvider.$allTransitiveDependencies2,
           ServerConnectionManagerProvider.$allTransitiveDependencies3,
-          ServerConnectionManagerProvider.$allTransitiveDependencies4,
         },
       );
 
   static const $allTransitiveDependencies0 = activeServerProvider;
   static const $allTransitiveDependencies1 =
       ActiveServerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
-      ActiveServerProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 = serverConnectionStateProvider;
-  static const $allTransitiveDependencies4 = authRepositoryProvider;
+  static const $allTransitiveDependencies2 = serverConnectionStateProvider;
+  static const $allTransitiveDependencies3 = authRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverConnectionManagerHash();
@@ -58,7 +55,7 @@ final class ServerConnectionManagerProvider
 }
 
 String _$serverConnectionManagerHash() =>
-    r'd5b55ec05abbe4da625b92a80cddc49069aa8749';
+    r'11d7dc3c40ac505ed447d2a1e0d002a3fd4fd635';
 
 abstract class _$ServerConnectionManager extends $Notifier<void> {
   void build();

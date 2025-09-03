@@ -6,12 +6,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository_provider.g.dart';
 
+/// Provides a singleton auth repository that can handle multiple servers
+///
+/// This replaces the family provider pattern with a single repository
+/// that accepts server IDs as method parameters
 @Riverpod(keepAlive: true)
-IAuthRepository authRepository(Ref ref, int serverId) {
-  final securityCredentialStorage = ref.read(
-    credentialsRepositoryProvider(serverId),
-  );
-  final httpClinet = ref.read(httpClientProvider);
+IAuthRepository authRepository(Ref ref) {
+  final credentialRepository = ref.read(credentialRepositoryProvider);
+  final httpClient = ref.read(httpClientProvider);
 
-  return AuthRepository(securityCredentialStorage, httpClinet);
+  return AuthRepository(credentialRepository, httpClient);
 }

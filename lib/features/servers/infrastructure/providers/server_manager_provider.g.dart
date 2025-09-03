@@ -19,13 +19,9 @@ final class ServerManagerProvider
         retry: null,
         name: r'serverManagerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[serverRepositoryProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
-          ServerManagerProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static const $allTransitiveDependencies0 = serverRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverManagerHash();
@@ -49,7 +45,7 @@ final class ServerManagerProvider
   }
 }
 
-String _$serverManagerHash() => r'4bac83c90bac98748b9947b94c3f75b91e1746c7';
+String _$serverManagerHash() => r'6912a9d2aa492475253e107d6361467fe6257033';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

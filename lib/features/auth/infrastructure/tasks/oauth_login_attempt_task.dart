@@ -3,38 +3,37 @@ import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
-import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
 import 'package:oauth2/oauth2.dart';
 
 class OAuthLoginAttemptTask extends HTask<Credentials, AuthFailure> {
-  final IServerManager _serverManager;
+  final IAuthRepository _authRepository;
 
   final Uri _redirectUrl = Uri.parse('hommie://');
 
-  OAuthLoginAttemptTask(this._serverManager);
+  OAuthLoginAttemptTask(this._authRepository);
 
   @override
   String get name => 'AttemptOAuthLogin';
 
   @override
   Future<HTaskResult<Credentials, AuthFailure>> execute(
-      TaskExecutionContext context) async {
+    TaskExecutionContext context,
+  ) async {
     final Server? server = context.get('server');
     if (server == null) {
       throw Exception('Server is not provided');
     }
 
-    final IAuthRepository authRepository =
-        _serverManager.getAuthRepository(server.id!);
-
     try {
-      final authResult = await authRepository.login(
-          serverUrl: server.baseUrl!,
-          redirectUrl: _redirectUrl,
-          handler: _handleAuthentication);
+      final authResult = await _authRepository.login(
+        serverId: server.id!,
+        serverUrl: server.baseUrl!,
+        redirectUrl: _redirectUrl,
+        handler: _handleAuthentication,
+      );
 
       return authResult.fold(
         (error) => HTaskResult.failure(error),

@@ -5,8 +5,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_manager_provider.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [serverRepository])
+@Riverpod(keepAlive: true)
 IServerManager serverManager(Ref ref) {
   final serverRepository = ref.read(serverRepositoryProvider);
-  return ServerManager(serverRepository, ref);
+  return ServerManager(serverRepository);
 }
