@@ -36,7 +36,7 @@ jobs:
           channel: stable
 
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1.7.0
+        uses: dart-lang/setup-dart@v1.7.1
         with:
           sdk: 3.6.0
       
