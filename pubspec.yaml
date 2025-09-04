@@ -8,7 +8,7 @@ environment:
   flutter: ^3.35.1
 
 # Define riverpod version to use across all riverpod packages
-riverpod_version: &riverpod_version 3.0.0-dev.17
+define: &riverpod_version 3.0.0-dev.17
 
 dependencies:
   battery_plus: ^6.2.3
