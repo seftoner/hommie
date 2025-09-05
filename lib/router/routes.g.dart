@@ -9,7 +9,7 @@ part of 'routes.dart';
 List<RouteBase> get $appRoutes => [
   $mainShellRouteData,
   $settingsRouteData,
-  $dicoveryRoute,
+  $discoveryRoute,
   $enterAddressRoute,
   $startupRoute,
 ];
@@ -274,11 +274,12 @@ mixin $SensorsRouteData on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $dicoveryRoute =>
-    GoRouteData.$route(path: '/discovery', factory: $DicoveryRoute._fromState);
+RouteBase get $discoveryRoute =>
+    GoRouteData.$route(path: '/discovery', factory: $DiscoveryRoute._fromState);
 
-mixin $DicoveryRoute on GoRouteData {
-  static DicoveryRoute _fromState(GoRouterState state) => const DicoveryRoute();
+mixin $DiscoveryRoute on GoRouteData {
+  static DiscoveryRoute _fromState(GoRouterState state) =>
+      const DiscoveryRoute();
 
   @override
   String get location => GoRouteData.$location('/discovery');

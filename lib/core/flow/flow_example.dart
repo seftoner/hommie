@@ -16,17 +16,17 @@ class FlowExample {
   static final addServerFlow = FlowDefinition(
     name: 'onboarding_add_server',
     steps: [
-      RouteStep<DicoveryRoute>(
+      RouteStep<DiscoveryRoute>(
         id: 'choose_mode',
-        toRoute: (ctx) => const DicoveryRoute(),
+        toRoute: (ctx) => const DiscoveryRoute(),
         onEnter: (ctx) async {
           // Initialize discovery process
           ctx.put('discovery_started', true);
         },
       ),
-      RouteStep<DicoveryRoute>(
+      RouteStep<DiscoveryRoute>(
         id: 'discover',
-        toRoute: (ctx) => const DicoveryRoute(),
+        toRoute: (ctx) => const DiscoveryRoute(),
         canProceed: (ctx) => (ctx.get<List>('hosts')?.isNotEmpty ?? false),
         onEnter: (ctx) async {
           // Start server discovery

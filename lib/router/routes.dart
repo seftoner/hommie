@@ -160,9 +160,9 @@ class HomeRouteData extends GoRouteData with $HomeRouteData {
   }
 }
 
-@TypedGoRoute<DicoveryRoute>(path: '/discovery')
-class DicoveryRoute extends GoRouteData with $DicoveryRoute {
-  const DicoveryRoute();
+@TypedGoRoute<DiscoveryRoute>(path: '/discovery')
+class DiscoveryRoute extends GoRouteData with $DiscoveryRoute {
+  const DiscoveryRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {

@@ -22,7 +22,7 @@ class ServerAuthNavigationCoordinator
           _handleServerSelection(server.id!);
         } else {
           // No active server - go to discovery page
-          ref.read(goRouterProvider).go(const DicoveryRoute().location);
+          ref.read(goRouterProvider).go(const DiscoveryRoute().location);
         }
       });
     });
@@ -50,7 +50,7 @@ class ServerAuthNavigationCoordinator
             break;
           case Unauthenticated():
             // Go to discovery page when unauthenticated
-            goRouter.go(const DicoveryRoute().location);
+            goRouter.go(const DiscoveryRoute().location);
             break;
           default:
             break;

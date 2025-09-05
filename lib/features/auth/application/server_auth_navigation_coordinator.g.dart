@@ -59,7 +59,7 @@ final class ServerAuthNavigationCoordinatorProvider
 }
 
 String _$serverAuthNavigationCoordinatorHash() =>
-    r'6aaa0474e38421a5f9371180f08b04ab3a42c3f9';
+    r'321d948e146ac2c329f4e48a245f9ef4f72be0ab';
 
 abstract class _$ServerAuthNavigationCoordinator extends $AsyncNotifier<void> {
   FutureOr<void> build();
