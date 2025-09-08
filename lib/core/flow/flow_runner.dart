@@ -8,16 +8,33 @@ import 'toast_service.dart';
 
 part 'flow_runner.g.dart';
 
+/// Public abstraction for controlling a linear flow.
 abstract interface class FlowRunner {
+  /// Start a new flow. Throws [StateError] if already running.
+  /// [initialData] seeds the context key/value store.
+  /// [startAt] overrides the definition's `startAt` if provided.
   Future<void> start(
     FlowDefinition def, {
-    Object? initialInput,
+    Map<String, Object?>? initialData,
     StepId? startAt,
   });
+
+  /// Move to the next step if validation passes; on final step triggers success.
   Future<void> next();
-  Future<void> back(); // back from first step => exit (pop)
+
+  /// Navigate back one step; from index 0 => cancel (idle + pop router).
+  Future<void> back();
+
+  /// Explicitly cancel the current flow without success callback.
+  Future<void> cancel();
+
+  /// Active definition (null when idle).
   FlowDefinition? get definition;
+
+  /// Current step index or null when idle.
   int? get currentIndex;
+
+  /// Current flow state value.
   FlowState get state;
 }
 
@@ -27,6 +44,7 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
   FlowDefinition? _def;
   int? _idx;
   late FlowContext _ctx;
+  bool _transitioning = false; // reentrancy / race guard
 
   @override
   FlowState build(GoRouter router) {
@@ -43,11 +61,19 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
   @override
   Future<void> start(
     FlowDefinition def, {
-    Object? initialInput,
+    Map<String, Object?>? initialData,
     StepId? startAt,
   }) async {
+    if (_def != null) {
+      throw StateError(
+        'A flow is already running. Cancel before starting a new one.',
+      );
+    }
+    if (def.steps.isEmpty) {
+      throw ArgumentError('FlowDefinition "${def.name}" has no steps');
+    }
     _def = def;
-    _ctx = FlowContext(ref, initialInput as Map<String, Object?>?);
+    _ctx = FlowContext(ref, initialData);
     final steps = def.steps;
     _idx = _resolveStartIndex(steps, def.startAt ?? startAt);
     await _enterCurrentStep();
@@ -66,22 +92,31 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
     final i = _idx!;
     final step = _def!.steps[i];
     state = FlowInStep(step.id, i);
-    if (step.onEnter != null) {
-      await step.onEnter!(_ctx);
+    try {
+      if (step.onEnter != null) {
+        await step.onEnter!(_ctx);
+      }
+      // go_router_builder integration: navigate via typed route's `location`
+      final data = step.toRoute(_ctx);
+      _router.go(data.location);
+    } catch (e, st) {
+      // Expose error state; do not overwrite immediately.
+      ref.read(toastServiceProvider).show('Step error: $e');
+      state = FlowError(step.id, e, st);
     }
-
-    // go_router_builder integration: navigate via typed route's `location`
-    final data = step.toRoute(_ctx);
-    _router.go(data.location);
   }
 
   @override
   Future<void> next() async {
+    if (_def == null || _idx == null) return; // idle
+    if (_transitioning) return;
+    _transitioning = true;
     final i = _idx!;
     final step = _def!.steps[i];
     try {
       final ok = await (step.canProceed?.call(_ctx) ?? Future.value(true));
       if (!ok) {
+        ref.read(toastServiceProvider).show('Cannot proceed yet');
         return;
       }
       if (i + 1 >= _def!.steps.length) {
@@ -94,21 +129,41 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
     } catch (e, st) {
       ref.read(toastServiceProvider).show('Error: $e');
       state = FlowError(step.id, e, st);
-      state = FlowInStep(step.id, i);
+    } finally {
+      _transitioning = false;
     }
   }
 
   @override
   Future<void> back() async {
-    final i = _idx!;
-    if (i == 0) {
-      _def = null;
-      _idx = null;
-      state = const FlowIdle();
-      _router.pop();
-      return;
+    if (_def == null || _idx == null) return; // idle
+    if (_transitioning) return;
+    _transitioning = true;
+    try {
+      final i = _idx!;
+      if (i == 0) {
+        await cancel(pop: true);
+        return;
+      }
+      _idx = i - 1;
+      await _enterCurrentStep();
+    } finally {
+      _transitioning = false;
     }
-    _idx = i - 1;
-    await _enterCurrentStep();
+  }
+
+  @override
+  Future<void> cancel({bool pop = false}) async {
+    if (_def == null) return;
+    _def = null;
+    _idx = null;
+    state = const FlowIdle();
+    if (pop) {
+      try {
+        _router.pop();
+      } catch (_) {
+        // ignore if nothing to pop (e.g., tests)
+      }
+    }
   }
 }

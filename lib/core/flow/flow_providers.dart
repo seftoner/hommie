@@ -6,13 +6,13 @@ import 'flow_runner.dart';
 
 part 'flow_providers.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 FlowRunner flowRunner(Ref ref) {
   final router = ref.read(goRouterProvider);
   return ref.watch(flowRunnerNotifierProvider(router).notifier);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 FlowState flowState(Ref ref) {
   final router = ref.read(goRouterProvider);
   return ref.watch(flowRunnerNotifierProvider(router));

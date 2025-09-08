@@ -18,7 +18,7 @@ final class ToastServiceProvider
         argument: null,
         retry: null,
         name: r'toastServiceProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -45,7 +45,7 @@ final class ToastServiceProvider
   }
 }
 
-String _$toastServiceHash() => r'7a5b2d93bec3a375c11b31d6045fd75762e867ba';
+String _$toastServiceHash() => r'16cbb87670a306f3c06dedb6644fff2260df6b63';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

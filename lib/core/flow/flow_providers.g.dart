@@ -18,7 +18,7 @@ final class FlowRunnerProvider
         argument: null,
         retry: null,
         name: r'flowRunnerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -45,7 +45,7 @@ final class FlowRunnerProvider
   }
 }
 
-String _$flowRunnerHash() => r'e482b75b715b1eab11e407b5d4fb0466e88aba83';
+String _$flowRunnerHash() => r'372834e739a35dc053c6378fd635f7d4b679d1de';
 
 @ProviderFor(flowState)
 const flowStateProvider = FlowStateProvider._();
@@ -59,7 +59,7 @@ final class FlowStateProvider
         argument: null,
         retry: null,
         name: r'flowStateProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -86,7 +86,7 @@ final class FlowStateProvider
   }
 }
 
-String _$flowStateHash() => r'e3982a1253e1aed8f632a435308a3596ba174fca';
+String _$flowStateHash() => r'fa60b08be3e7dd81ee38c3ca8f6566bb6feb613d';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

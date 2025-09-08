@@ -1,7 +1,10 @@
 import 'dart:async';
 
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod/riverpod.dart';
+
+part 'flow_definition.freezed.dart';
 
 typedef StepId = String;
 
@@ -48,29 +51,22 @@ class FlowDefinition {
   });
 }
 
-sealed class FlowState {
-  const FlowState();
-}
+/// Base class for all flow states, implemented as a Freezed union.
+@freezed
+sealed class FlowState with _$FlowState {
+  /// No flow currently active.
+  const factory FlowState.idle() = FlowIdle;
 
-class FlowIdle extends FlowState {
-  const FlowIdle();
-}
+  /// Currently executing a step.
+  const factory FlowState.inStep(StepId stepId, int index) = FlowInStep;
 
-class FlowInStep extends FlowState {
-  final StepId stepId;
-  final int index;
+  /// Flow reached its natural successful end.
+  const factory FlowState.done() = FlowDone;
 
-  const FlowInStep(this.stepId, this.index);
-}
-
-class FlowDone extends FlowState {
-  const FlowDone();
-}
-
-class FlowError extends FlowState {
-  final StepId stepId;
-  final Object error;
-  final StackTrace stackTrace;
-
-  const FlowError(this.stepId, this.error, this.stackTrace);
+  /// An error occurred in the current step lifecycle (onEnter / canProceed / next logic).
+  const factory FlowState.error(
+    StepId stepId,
+    Object error,
+    StackTrace stackTrace,
+  ) = FlowError;
 }
