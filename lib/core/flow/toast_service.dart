@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'toast_service.g.dart';
@@ -39,15 +38,16 @@ class DebugToastService implements ToastService {
 }
 
 /// Optionally expose a global scaffold messenger key via override for production toasts.
-final scaffoldMessengerKeyProvider =
-    Provider<GlobalKey<ScaffoldMessengerState>?>(
-      (ref) => null,
-      name: 'scaffoldMessengerKeyProvider',
-    );
+@Riverpod(keepAlive: true)
+GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey(Ref ref) {
+  return null; // Override this provider to provide a key in production
+}
 
 @Riverpod(keepAlive: true)
 ToastService toastService(Ref ref) {
   final key = ref.read(scaffoldMessengerKeyProvider);
-  if (key != null) return ScaffoldToastService(scaffoldMessengerKey: key);
+  if (key != null) {
+    return ScaffoldToastService(scaffoldMessengerKey: key);
+  }
   return const DebugToastService();
 }

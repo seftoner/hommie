@@ -108,8 +108,12 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
 
   @override
   Future<void> next() async {
-    if (_def == null || _idx == null) return; // idle
-    if (_transitioning) return;
+    if (_def == null || _idx == null) {
+      return; // idle
+    }
+    if (_transitioning) {
+      return;
+    }
     _transitioning = true;
     final i = _idx!;
     final step = _def!.steps[i];
@@ -136,8 +140,12 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
 
   @override
   Future<void> back() async {
-    if (_def == null || _idx == null) return; // idle
-    if (_transitioning) return;
+    if (_def == null || _idx == null) {
+      return; // idle
+    }
+    if (_transitioning) {
+      return;
+    }
     _transitioning = true;
     try {
       final i = _idx!;
@@ -154,7 +162,9 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
 
   @override
   Future<void> cancel({bool pop = false}) async {
-    if (_def == null) return;
+    if (_def == null) {
+      return;
+    }
     _def = null;
     _idx = null;
     state = const FlowIdle();
