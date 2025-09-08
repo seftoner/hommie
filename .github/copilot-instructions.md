@@ -1,135 +1,117 @@
 ## Project Overview
 
-Hommie is a Flutter (Dart 3.6+) multi‑platform client for Home Assistant focusing on fast, offline‑aware control and a polished UX. Targets iOS, Android, macOS (desktop adaptations in progress); Windows/Linux not primary yet. Communicates mainly via Home Assistant WebSocket API plus REST for setup and discovery.
+Hommie is a Flutter (Dart 3.6+) multi‑platform client for Home Assistant focusing on fast, offline‑aware control and a polished UX. Targets iOS, Android, macOS; communicates via Home Assistant WebSocket API + REST.
 
-## Tech & Key Libraries
-- Flutter SDK ~3.27 (stable), Dart >=3.6 <4.0
-- State: Riverpod (providers + codegen via `riverpod_generator`), hooks_riverpod, freezed, json_serializable
-- Navigation: go_router (+ builder)
-- Data persistence: Isar (primary local cache), plus shared_preferences & secure storage
-- Background & tasks: workmanager (Android), platform background APIs (planned iOS BGTaskScheduler)
-- Networking: http/dio (currently http + planned migration?), web_socket_channel, multicast_dns for discovery
-- Auth & security: oauth2, flutter_secure_storage; tokens must never be logged
-- Testing: flutter_test, mockito, patrol (integration / end‑to‑end), bdd_widget_test (BDD style), integration_test
-- Code quality: custom_lint + analysis_options, riverpod_lint, flutter_lints
+## Tech Stack
+- Flutter SDK ~3.27, Dart >=3.6
+- State: Riverpod (codegen), hooks_riverpod, freezed, json_serializable
+- Navigation: go_router
+- Data: Isar (primary cache), shared_preferences, flutter_secure_storage
+- Testing: flutter_test, mockito, patrol, bdd_widget_test
 
-## Repository Layout (selected)
-- `lib/` core app code
-  - `main.dart` entrypoint; `app.dart` root widget
-  - `features/` feature‑oriented structure (add new feature via VS Code task: Create Feature Folder -> domain/application/infrastructure/presentation)
-  - `core/` cross‑cutting primitives (utils, constants, foundational widgets) (confirm before adding new cross‑cutting code)
-  - `providers/` higher‑level or global providers (consider co‑locating with a feature when feasible)
-  - `router/` navigation setup (go_router)
-  - `services/` external service facades (auth, discovery, HA API, logging)
-  - `ui/` shared design system components (theming, reusable widgets)
-- `integration_test/` patrol / integration specs (+ `.feature` BDD files)
-- `test/` unit & widget tests (mocks, data samples, utils)
-- `scripts/` helper shell scripts (test env setup / teardown)
-- `docker/` local HA & ancillary services for integration tests (creates `.patrol.env`)
-- `docs/` workflow & testing guides
-- `analysis_options.yaml` lints (enforced in CI/local)
+## MCP Workflows
+Use natural language prompts for development tasks:
+- "Find and fix layout overflow errors in the running app"
+- "Add a chart package for time-series data"
+- "Run tests and explain failures"
+- "Format code according to project standards"
 
-## Build & Run (General)
-Always run these from repo root unless stated.
-1. Install Flutter (stable) & ensure `flutter doctor` is clean.
-2. Dependencies: `flutter pub get` (ALWAYS after pubspec changes).
-3. Codegen & watchers (Riverpod / freezed / json): either
-   - Continuous: `dart run build_runner watch --delete-conflicting-outputs` (preferred during development), or
-   - One‑off before commits: `dart run build_runner build --delete-conflicting-outputs`
-4. Launch app (example): `flutter run -d macos` (or other device id).
-5. Hot reload/hot restart as usual. Keep build_runner watcher running to avoid stale generated code.
+## Architecture Patterns
 
-If generated files are missing or stale (compile errors referencing *.g.dart / *.freezed.dart / router files), rerun step 3.
+### Domain Layer
+- **Entities:** `@freezed` classes with `@JsonSerializable(fieldRename: FieldRename.snake)`
+- **Repositories:** Abstract interface classes with `I` prefix. Can throw domain-specific exceptions
+- **Value Objects:** Validation classes for primitives (ServerName, EmailAddress)
 
-## Testing
-Unit & Widget Tests:
-- Command: `flutter test` (ensure codegen step 3 completed first to avoid missing part errors).
+### Infrastructure Layer
+- **Repositories:** Implement domain interfaces. Convert platform exceptions to domain failures
+- **Providers:** Each feature must have `providers.dart` facade
 
-Integration / Patrol Tests (requires Docker + local HA):
-1. Ensure Docker daemon running.
-2. `chmod +x scripts/setup_test_env.sh scripts/cleanup_test_env.sh` (first time)
-3. `./scripts/setup_test_env.sh` (creates containers & `.patrol.env` with HASS_TOKEN) – wait for success message.
-4. Run: `patrol test` (CLI must be installed: `dart pub global activate patrol_cli`; run `patrol doctor` once).
-5. Cleanup (optional): `./scripts/cleanup_test_env.sh`.
+### Application Layer
+- **Controllers:** One per operation (CreateServerController, EditServerController)
+- **State:** Use `AsyncValue<T>` directly. Handle exceptions with try/catch → `AsyncError`
+- **Dependencies:** Use `@Riverpod(dependencies: [...])`
 
-Common failures:
-- Missing `.patrol.env`: re‑run setup script.
-- Port conflicts (8123 / 3000): stop other processes.
-- Stale generated code: re‑run build_runner.
+### Presentation Layer
+- **AsyncValue:** Use sealed pattern matching with `switch` statements
+- **Forms:** Use value objects for validation
+- **State:** Use `.select()` to minimize rebuilds
 
-## Linting & Quality
-- Automatic IDE lints come from `analysis_options.yaml` and `riverpod_lint`/`custom_lint` plugin.
-- Manual check: `flutter analyze`.
-- Style highlights: prefer single quotes, const constructors, no `print` (use `logger`), avoid unused params, small immutable state objects.
+## Code Examples
 
-## State Management & Patterns (Concise Rules)
-- Use Riverpod providers for all external services & app state. Prefer `@riverpod` codegen.
-- Derive read‑only values with plain `Provider`; mutable domain logic in `Notifier` / `AsyncNotifier`.
-- UI subscribes via `ref.watch` with `.select(...)` to minimize rebuilds. Keep provider scopes granular.
-- Represent async UI state with `AsyncValue<T>`; handle loading/error/empty states explicitly.
-- Co‑locate provider + model + notifier inside the feature folder. Global providers only for cross‑cutting concerns (e.g., auth token, router).
-- Avoid exposing mutable collections directly; return immutable snapshots (freezed data classes) and perform mutations inside notifiers.
+**Domain Entity:**
+```dart
+@freezed
+class ServerEntity with _$ServerEntity {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory ServerEntity({
+    @JsonKey(includeIfNull: false) String? id,
+    required String name,
+    required String url,
+  }) = _ServerEntity;
+  
+  factory ServerEntity.fromJson(Map<String, dynamic> json) => 
+    _$ServerEntityFromJson(json);
+}
+```
 
-## Routing
-- go_router central config in `router/`. When adding a new screen: create the feature (if new), add route entry + typed params, regenerate code if using builders, write a simple navigation test if critical.
+**Repository Interface:**
+```dart
+abstract interface class IServerRepository {
+  Future<List<ServerEntity>> getServers();
+  Future<ServerEntity> createServer(ServerUrl url, ServerName name);
+  Future<void> deleteServer(String id);
+}
+```
 
-## Data & Offline Strategy
-- Persist critical HA state locally (Isar). Reads should prefer local cache then refresh in background (optimistic UI). If offline, surface cached data + an offline banner (see existing offline banner test for pattern).
+**Controller:**
+```dart
+@Riverpod(dependencies: [serverRepository])
+class CreateServerController extends _$CreateServerController {
+  @override
+  Future<ServerEntity?> build() async => null;
+  
+  Future<void> createServer(ServerUrl url, ServerName name) async {
+    state = const AsyncLoading();
+    try {
+      final repo = ref.read(serverRepositoryProvider);
+      final server = await repo.createServer(url, name);
+      state = AsyncData(server);
+    } catch (error, stackTrace) {
+      state = AsyncError(error, stackTrace);
+    }
+  }
+}
+```
 
-## Security & Secrets
-- Never log tokens or PII. Use `flutter_secure_storage` for HA tokens. Redact secret fields in diagnostics. Treat `.patrol.env` only for local testing (not committed).
+**UI Pattern:**
+```dart
+Widget build(BuildContext context, WidgetRef ref) {
+  final createState = ref.watch(createServerControllerProvider);
+  
+  return switch (createState) {
+    AsyncData(:final value) => value != null 
+      ? Text('Server created: ${value.name}')
+      : const SizedBox.shrink(),
+    AsyncError(:final error) => Text('Error: $error'),
+    AsyncLoading() => const CircularProgressIndicator(),
+  };
+}
+```
 
-## Feature Development Checklist (Generalized)
-1. Create / update feature folder via task (domain, application, infrastructure, presentation).
-2. Define models (freezed) + providers (annotated) + generated code (run build_runner).
-3. Implement UI with loading/error/empty states.
-4. Add unit tests for notifiers & widget test for main UI path; add/update integration test if cross‑feature behavior.
-5. Run: build_runner (clean), flutter analyze, flutter test, (optional) patrol test.
-6. Ensure no debug prints; commit using Conventional Commit message.
+## Feature Development
+1. Create feature folder: domain/application/infrastructure/presentation
+2. **Domain:** Define entities (freezed), value objects, repository interfaces
+3. **Infrastructure:** Implement repositories, create `providers.dart` facade
+4. **Application:** Create operation-specific controllers using `AsyncValue<T>`
+5. **Presentation:** Use sealed `AsyncValue` pattern matching
 
-## Commit & Branch Conventions
-- Branch: `feature/<ticket>-short-desc` or `fix/…`, etc. (See `docs/development_workflow.md`).
-- Commits follow Conventional Commits (e.g., `feat(auth): add biometric unlock`).
+## Key Rules
+- **Security:** Never log tokens/PII. Use `flutter_secure_storage` for tokens
+- **State:** Keep immutable, use freezed data classes
+- **Providers:** Co-locate in features, use codegen `@riverpod`
+- **Testing:** Write tests early, handle all AsyncValue states
+- **Commands:** `flutter pub get` → `dart run build_runner build` → `flutter analyze` → `flutter test`
 
-## Adding Dependencies
-- Prefer lightweight, maintained packages. Justify large or binary heavy deps in PR description. Run `flutter pub get` then re‑run build_runner if codegen impacted.
-
-## Common Pitfalls & Remedies
-- Build fails with missing part file: run build_runner (step 3).
-- Patrol tests hang: verify Docker containers healthy (`docker compose ps` in `docker/`).
-- Slow rebuilds: ensure selective watching (close extra IDE windows) & keep provider scopes tight.
-- Rebuild storm in UI: add `.select` to narrow watched fields or split provider state.
-
-## Validation Before PR
-Run sequentially (stop on first failure):
-1. `flutter pub get`
-2. `dart run build_runner build --delete-conflicting-outputs`
-3. `flutter analyze`
-4. `flutter test`
-5. (Optional integration) Setup env + `patrol test`
-
-Ensure: no analyzer warnings you introduced, tests green, generated files committed, no secrets.
-
-## When to Search vs Trust Instructions
-Default: trust these instructions. Only perform broad searches if:
-- Adding a feature whose pattern is not described above
-- Modifying an area with no existing analogous provider/widget
-- Encountering a build/test error not covered under Common Pitfalls
-
-## Do / Avoid Summary
-Do: co‑locate feature code; use generated Riverpod providers; handle all AsyncValue states; keep state small & immutable; write tests early.
-Avoid: printing secrets; adding global singletons; bypassing providers for direct static access; large PRs without tests; committing without running codegen.
-
-## Quick Reference Commands
-- Install deps: `flutter pub get`
-- Watch codegen: `dart run build_runner watch --delete-conflicting-outputs`
-- One‑off codegen: `dart run build_runner build --delete-conflicting-outputs`
-- Analyze: `flutter analyze`
-- Unit/widget tests: `flutter test`
-- Integration setup: `./scripts/setup_test_env.sh`
-- Integration run: `patrol test`
-- Cleanup env: `./scripts/cleanup_test_env.sh`
-
-These instructions are repository‑wide and task‑agnostic. Keep them concise; update if toolchain or structure changes.
-
-Trust this file; search only if necessary due to gaps or contradictions.
+🔑 **Focus for Copilot:** Follow architecture + code patterns above.  
+Other details (CI, Docker, patrol, full workflows) — see `/docs`.

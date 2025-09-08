@@ -44,10 +44,15 @@ The Flow Builder system has been successfully implemented as a declarative linea
 - `ScaffoldToastService`: Production implementation using ScaffoldMessenger
 - `DebugToastService`: Debug implementation using debugPrint
 
+**Providers:**
+- `@riverpod scaffoldMessengerKey`: Optional scaffold messenger key for production
+- `@riverpod toastService`: Main toast service provider with fallback logic
+
 **Features:**
 - Abstracted user messaging system
 - Easy testing with fake implementations
 - Integration with existing Flutter messaging patterns
+- Consistent use of `@riverpod` annotations
 
 ### 4. Flow Providers (`lib/core/flow/flow_providers.dart`)
 
