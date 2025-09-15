@@ -8,7 +8,8 @@ environment:
   flutter: ^3.35.1
 
 # Define riverpod version to use across all riverpod packages
-define: &riverpod_version 3.0.0-dev.17
+riverpod_version: &riverpod_version 3.0.0
+isar_version: &isar_version 3.3.0-dev.2
 
 dependencies:
   battery_plus: ^6.2.3
@@ -52,8 +53,8 @@ dependencies:
   drag_arrange:
     git:
       url: https://github.com/seftoner/drag_arrange.git
-  isar_community: ^3.2.0-dev.2
-  isar_community_flutter_libs: ^3.2.0-dev.2
+  isar_community: *isar_version
+  isar_community_flutter_libs: *isar_version
 
 dev_dependencies:
   bdd_widget_test: ^2.0.0
@@ -72,12 +73,8 @@ dev_dependencies:
   patrol_finders: ^2.9.0
   riverpod_generator: *riverpod_version
   riverpod_lint: *riverpod_version
-  isar_community_generator:
-    git:
-      url: https://github.com/callumw-k/isar-community
-      ref: migrating-to-source_gen-3
-      path: packages/isar_community_generator/
-
+  isar_community_generator: *isar_version
+    
 flutter:
   uses-material-design: true
 
