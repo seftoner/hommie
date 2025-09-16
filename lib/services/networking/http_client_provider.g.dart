@@ -6,6 +6,9 @@ part of 'http_client_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(httpClient)
 const httpClientProvider = HttpClientProvider._();
 
@@ -47,6 +50,3 @@ final class HttpClientProvider
 }
 
 String _$httpClientHash() => r'6cd50a42ed5fa83bd674e814b057c34760fe70fb';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

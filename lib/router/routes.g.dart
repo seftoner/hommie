@@ -9,6 +9,8 @@ part of 'routes.dart';
 List<RouteBase> get $appRoutes => [
   $mainShellRouteData,
   $settingsRouteData,
+  $authDiscoveryRoute,
+  $addServerDiscoveryRoute,
   $discoveryRoute,
   $enterAddressRoute,
   $startupRoute,
@@ -259,6 +261,113 @@ mixin $SensorsRouteData on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/settings/sensors');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $authDiscoveryRoute => GoRouteData.$route(
+  path: '/auth/discovery',
+  factory: $AuthDiscoveryRoute._fromState,
+  routes: [
+    GoRouteData.$route(
+      path: '/manual',
+      factory: $AuthManualEntryRoute._fromState,
+    ),
+  ],
+);
+
+mixin $AuthDiscoveryRoute on GoRouteData {
+  static AuthDiscoveryRoute _fromState(GoRouterState state) =>
+      const AuthDiscoveryRoute();
+
+  @override
+  String get location => GoRouteData.$location('/auth/discovery');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $AuthManualEntryRoute on GoRouteData {
+  static AuthManualEntryRoute _fromState(GoRouterState state) =>
+      const AuthManualEntryRoute();
+
+  @override
+  String get location => GoRouteData.$location('/manual');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $addServerDiscoveryRoute => GoRouteData.$route(
+  path: '/settings/servers/add/discovery',
+  factory: $AddServerDiscoveryRoute._fromState,
+  routes: [
+    GoRouteData.$route(
+      path: '/manual',
+      factory: $AddServerManualEntryRoute._fromState,
+    ),
+  ],
+);
+
+mixin $AddServerDiscoveryRoute on GoRouteData {
+  static AddServerDiscoveryRoute _fromState(GoRouterState state) =>
+      const AddServerDiscoveryRoute();
+
+  @override
+  String get location =>
+      GoRouteData.$location('/settings/servers/add/discovery');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $AddServerManualEntryRoute on GoRouteData {
+  static AddServerManualEntryRoute _fromState(GoRouterState state) =>
+      const AddServerManualEntryRoute();
+
+  @override
+  String get location => GoRouteData.$location('/manual');
 
   @override
   void go(BuildContext context) => context.go(location);

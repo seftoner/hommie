@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/misc.dart';
 import 'package:hommie/core/utils/logger.dart';
 
 /// A class that observes the state changes in a Provider.
-class AppStateLoggerObserver extends ProviderObserver {
+final class AppStateLoggerObserver extends ProviderObserver {
   const AppStateLoggerObserver();
 
   @override

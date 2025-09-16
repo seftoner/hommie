@@ -6,6 +6,9 @@ part of 'server_manager_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(serverManager)
 const serverManagerProvider = ServerManagerProvider._();
 
@@ -46,6 +49,3 @@ final class ServerManagerProvider
 }
 
 String _$serverManagerHash() => r'6912a9d2aa492475253e107d6361467fe6257033';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

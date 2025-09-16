@@ -6,10 +6,13 @@ part of 'auth_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Provides a singleton auth repository that can handle multiple servers
 ///
 /// This replaces the family provider pattern with a single repository
 /// that accepts server IDs as method parameters
+
 @ProviderFor(authRepository)
 const authRepositoryProvider = AuthRepositoryProvider._();
 
@@ -17,6 +20,7 @@ const authRepositoryProvider = AuthRepositoryProvider._();
 ///
 /// This replaces the family provider pattern with a single repository
 /// that accepts server IDs as method parameters
+
 final class AuthRepositoryProvider
     extends
         $FunctionalProvider<IAuthRepository, IAuthRepository, IAuthRepository>
@@ -59,6 +63,3 @@ final class AuthRepositoryProvider
 }
 
 String _$authRepositoryHash() => r'2974b39cbe410017cd4334a51e5536398adadb2a';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

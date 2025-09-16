@@ -6,6 +6,8 @@ part of 'example_server_data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Example of how easy it is to create server-dependent providers with the new approach.
 ///
 /// Before (old approach):
@@ -18,6 +20,7 @@ part of 'example_server_data_provider.dart';
 /// - Automatically updates when server changes
 /// - No manual invalidation needed
 /// - No risk of stale data
+
 @ProviderFor(exampleEntities)
 const exampleEntitiesProvider = ExampleEntitiesProvider._();
 
@@ -33,6 +36,7 @@ const exampleEntitiesProvider = ExampleEntitiesProvider._();
 /// - Automatically updates when server changes
 /// - No manual invalidation needed
 /// - No risk of stale data
+
 final class ExampleEntitiesProvider
     extends
         $FunctionalProvider<
@@ -177,6 +181,3 @@ final class ExampleServerStatusProvider
 
 String _$exampleServerStatusHash() =>
     r'baf5fd0b27192e69baf62f2a203e03c55dab8c4a';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

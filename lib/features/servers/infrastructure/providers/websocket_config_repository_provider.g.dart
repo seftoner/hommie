@@ -6,15 +6,19 @@ part of 'websocket_config_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Provides WebSocket config repository for server-level operations
 ///
 /// This handles ping, config, and other server-wide operations via WebSocket
+
 @ProviderFor(websocketConfigRepository)
 const websocketConfigRepositoryProvider = WebsocketConfigRepositoryFamily._();
 
 /// Provides WebSocket config repository for server-level operations
 ///
 /// This handles ping, config, and other server-wide operations via WebSocket
+
 final class WebsocketConfigRepositoryProvider
     extends
         $FunctionalProvider<
@@ -91,6 +95,7 @@ String _$websocketConfigRepositoryHash() =>
 /// Provides WebSocket config repository for server-level operations
 ///
 /// This handles ping, config, and other server-wide operations via WebSocket
+
 final class WebsocketConfigRepositoryFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<IWebSocketConfigRepository>, int> {
   const WebsocketConfigRepositoryFamily._()
@@ -112,12 +117,10 @@ final class WebsocketConfigRepositoryFamily extends $Family
   /// Provides WebSocket config repository for server-level operations
   ///
   /// This handles ping, config, and other server-wide operations via WebSocket
+
   WebsocketConfigRepositoryProvider call(int serverId) =>
       WebsocketConfigRepositoryProvider._(argument: serverId, from: this);
 
   @override
   String toString() => r'websocketConfigRepositoryProvider';
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,11 +6,15 @@ part of 'toast_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Optionally expose a global scaffold messenger key via override for production toasts.
+
 @ProviderFor(scaffoldMessengerKey)
 const scaffoldMessengerKeyProvider = ScaffoldMessengerKeyProvider._();
 
 /// Optionally expose a global scaffold messenger key via override for production toasts.
+
 final class ScaffoldMessengerKeyProvider
     extends
         $FunctionalProvider<
@@ -99,6 +103,3 @@ final class ToastServiceProvider
 }
 
 String _$toastServiceHash() => r'4114f163df16290674ae1b02d0cfc18dd95c84f8';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,6 +6,9 @@ part of 'ha_server_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(haServerRepository)
 const haServerRepositoryProvider = HaServerRepositoryProvider._();
 
@@ -53,6 +56,3 @@ final class HaServerRepositoryProvider
 
 String _$haServerRepositoryHash() =>
     r'c34210338403f4380332ca072b36f138ac2961e5';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

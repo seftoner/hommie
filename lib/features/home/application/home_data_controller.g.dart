@@ -6,6 +6,8 @@ part of 'home_data_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Example controller that demonstrates server-specific data.
 ///
 /// This controller automatically refreshes when the active server changes thanks to
@@ -15,6 +17,7 @@ part of 'home_data_controller.dart';
 /// 1. Depend on serverScopeConnectionProvider and/or serverScopeIdProvider
 /// 2. Add the dependencies annotation: @Riverpod(dependencies: [serverScopeConnection, serverScopeId])
 /// 3. That's it! The provider will automatically update when servers switch
+
 @ProviderFor(HomeDataController)
 const homeDataControllerProvider = HomeDataControllerProvider._();
 
@@ -69,6 +72,16 @@ final class HomeDataControllerProvider
 String _$homeDataControllerHash() =>
     r'fd396eedbb2c6d3b475a6829c0d34a9b059294c7';
 
+/// Example controller that demonstrates server-specific data.
+///
+/// This controller automatically refreshes when the active server changes thanks to
+/// the ProviderScope approach. No manual invalidation needed!
+///
+/// To add new server-dependent providers:
+/// 1. Depend on serverScopeConnectionProvider and/or serverScopeIdProvider
+/// 2. Add the dependencies annotation: @Riverpod(dependencies: [serverScopeConnection, serverScopeId])
+/// 3. That's it! The provider will automatically update when servers switch
+
 abstract class _$HomeDataController
     extends $AsyncNotifier<Map<String, dynamic>> {
   FutureOr<Map<String, dynamic>> build();
@@ -93,6 +106,3 @@ abstract class _$HomeDataController
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

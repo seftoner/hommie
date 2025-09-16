@@ -6,10 +6,13 @@ part of 'websocket_area_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Provides WebSocket-based area repository for a specific server
 ///
 /// This fetches area data directly from Home Assistant via WebSocket API
 /// Use this when you need real-time area data from a specific server
+
 @ProviderFor(websocketAreaRepository)
 const websocketAreaRepositoryProvider = WebsocketAreaRepositoryFamily._();
 
@@ -17,6 +20,7 @@ const websocketAreaRepositoryProvider = WebsocketAreaRepositoryFamily._();
 ///
 /// This fetches area data directly from Home Assistant via WebSocket API
 /// Use this when you need real-time area data from a specific server
+
 final class WebsocketAreaRepositoryProvider
     extends
         $FunctionalProvider<
@@ -93,6 +97,7 @@ String _$websocketAreaRepositoryHash() =>
 ///
 /// This fetches area data directly from Home Assistant via WebSocket API
 /// Use this when you need real-time area data from a specific server
+
 final class WebsocketAreaRepositoryFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<IAreaRepository>, int> {
   const WebsocketAreaRepositoryFamily._()
@@ -115,12 +120,10 @@ final class WebsocketAreaRepositoryFamily extends $Family
   ///
   /// This fetches area data directly from Home Assistant via WebSocket API
   /// Use this when you need real-time area data from a specific server
+
   WebsocketAreaRepositoryProvider call(int serverId) =>
       WebsocketAreaRepositoryProvider._(argument: serverId, from: this);
 
   @override
   String toString() => r'websocketAreaRepositoryProvider';
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

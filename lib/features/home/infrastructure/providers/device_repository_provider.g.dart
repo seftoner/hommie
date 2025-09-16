@@ -6,6 +6,9 @@ part of 'device_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(deviceRepository)
 const deviceRepositoryProvider = DeviceRepositoryProvider._();
 
@@ -52,6 +55,3 @@ final class DeviceRepositoryProvider
 }
 
 String _$deviceRepositoryHash() => r'ca686d58363096ed4d94172139d017b3243a8a22';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,11 +6,14 @@ part of 'connection_state_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// A Riverpod provider that manages the network connection state of the application.
 ///
 /// This provider keeps track of the current network connectivity status and
 /// provides methods to update the connection state. It is marked as keepAlive
 /// to ensure the state persists across widget rebuilds.
+
 @ProviderFor(ServerConnectionState)
 const serverConnectionStateProvider = ServerConnectionStateProvider._();
 
@@ -56,6 +59,12 @@ final class ServerConnectionStateProvider
 String _$serverConnectionStateHash() =>
     r'32ad7d257501aa0b8214e92822984ff4df1b6fbe';
 
+/// A Riverpod provider that manages the network connection state of the application.
+///
+/// This provider keeps track of the current network connectivity status and
+/// provides methods to update the connection state. It is marked as keepAlive
+/// to ensure the state persists across widget rebuilds.
+
 abstract class _$ServerConnectionState
     extends $Notifier<HAServerConnectionState> {
   HAServerConnectionState build();
@@ -76,6 +85,3 @@ abstract class _$ServerConnectionState
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

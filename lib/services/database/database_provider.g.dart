@@ -6,6 +6,9 @@ part of 'database_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(databaseConnection)
 const databaseConnectionProvider = DatabaseConnectionProvider._();
 
@@ -47,6 +50,3 @@ final class DatabaseConnectionProvider
 
 String _$databaseConnectionHash() =>
     r'762e131d5c0e767fbcbd601cd4e3da5cb89ccf6b';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,10 +6,13 @@ part of 'websocket_device_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Provides WebSocket-based device repository for a specific server
 ///
 /// This fetches device data directly from Home Assistant via WebSocket API
 /// Use this when you need real-time device data from a specific server
+
 @ProviderFor(websocketDeviceRepository)
 const websocketDeviceRepositoryProvider = WebsocketDeviceRepositoryFamily._();
 
@@ -17,6 +20,7 @@ const websocketDeviceRepositoryProvider = WebsocketDeviceRepositoryFamily._();
 ///
 /// This fetches device data directly from Home Assistant via WebSocket API
 /// Use this when you need real-time device data from a specific server
+
 final class WebsocketDeviceRepositoryProvider
     extends
         $FunctionalProvider<
@@ -95,6 +99,7 @@ String _$websocketDeviceRepositoryHash() =>
 ///
 /// This fetches device data directly from Home Assistant via WebSocket API
 /// Use this when you need real-time device data from a specific server
+
 final class WebsocketDeviceRepositoryFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<IDeviceRepository>, int> {
   const WebsocketDeviceRepositoryFamily._()
@@ -117,12 +122,10 @@ final class WebsocketDeviceRepositoryFamily extends $Family
   ///
   /// This fetches device data directly from Home Assistant via WebSocket API
   /// Use this when you need real-time device data from a specific server
+
   WebsocketDeviceRepositoryProvider call(int serverId) =>
       WebsocketDeviceRepositoryProvider._(argument: serverId, from: this);
 
   @override
   String toString() => r'websocketDeviceRepositoryProvider';
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

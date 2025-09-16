@@ -6,6 +6,8 @@ part of 'server_scope_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// A scoped provider that represents the connection for the current server context.
 ///
 /// This provider is designed to be overridden in a ProviderScope when the active
@@ -26,6 +28,7 @@ part of 'server_scope_provider.dart';
 /// - All dependent providers automatically update
 /// - Clear dependency chain
 /// - Type-safe server context
+
 @ProviderFor(serverScopeConnection)
 const serverScopeConnectionProvider = ServerScopeConnectionProvider._();
 
@@ -49,6 +52,7 @@ const serverScopeConnectionProvider = ServerScopeConnectionProvider._();
 /// - All dependent providers automatically update
 /// - Clear dependency chain
 /// - Type-safe server context
+
 final class ServerScopeConnectionProvider
     extends
         $FunctionalProvider<
@@ -110,6 +114,7 @@ String _$serverScopeConnectionHash() =>
 ///
 /// Like serverScopeConnection, this should be overridden in a ProviderScope
 /// to provide the current server context.
+
 @ProviderFor(serverScopeId)
 const serverScopeIdProvider = ServerScopeIdProvider._();
 
@@ -117,6 +122,7 @@ const serverScopeIdProvider = ServerScopeIdProvider._();
 ///
 /// Like serverScopeConnection, this should be overridden in a ProviderScope
 /// to provide the current server context.
+
 final class ServerScopeIdProvider extends $FunctionalProvider<int, int, int>
     with $Provider<int> {
   /// A scoped provider that represents the current server ID.
@@ -161,12 +167,14 @@ String _$serverScopeIdHash() => r'1ec1108c0391b713f03b9131cb7fba1c11fba9b9';
 /// A scoped provider that represents the current server object.
 ///
 /// This provides access to the full server configuration in the current scope.
+
 @ProviderFor(serverScopeServer)
 const serverScopeServerProvider = ServerScopeServerProvider._();
 
 /// A scoped provider that represents the current server object.
 ///
 /// This provides access to the full server configuration in the current scope.
+
 final class ServerScopeServerProvider
     extends $FunctionalProvider<AsyncValue<Server>, Server, FutureOr<Server>>
     with $FutureModifier<Server>, $FutureProvider<Server> {
@@ -199,6 +207,3 @@ final class ServerScopeServerProvider
 }
 
 String _$serverScopeServerHash() => r'2626685f73e10e324f972ce4a35fa06a92d71a48';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
