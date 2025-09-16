@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:go_router/go_router.dart';
+import 'package:hommie/features/auth/application/server_auth_controller.dart';
+import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/router/router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'flow_definition.dart';
@@ -36,9 +39,18 @@ abstract interface class FlowRunner {
 
   /// Current flow state value.
   FlowState get state;
+
+  /// Read a value from the running flow context (null if absent or idle).
+  T? ctxGet<T>(String key);
+
+  /// Insert/update a value in the flow context (no-op if idle).
+  void put(String key, Object? value);
 }
 
-@Riverpod(keepAlive: true)
+@Riverpod(
+  keepAlive: true,
+  dependencies: [ActiveServer, toastService, ServerAuthController],
+)
 class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
   late final GoRouter _router;
   FlowDefinition? _def;
@@ -47,9 +59,25 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
   bool _transitioning = false; // reentrancy / race guard
 
   @override
-  FlowState build(GoRouter router) {
-    _router = router;
+  FlowState build() {
+    _router = ref.read(goRouterProvider);
     return const FlowIdle();
+  }
+
+  @override
+  FlowState get state => super.state;
+
+  void _setState(FlowState newState) => super.state = newState;
+
+  @override
+  T? ctxGet<T>(String key) => _def == null ? null : _ctx.get<T>(key);
+
+  @override
+  void put(String key, Object? value) {
+    if (_def == null) {
+      return;
+    }
+    _ctx.put(key, value);
   }
 
   @override
@@ -79,7 +107,7 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
     await _enterCurrentStep();
   }
 
-  int _resolveStartIndex(List<RouteStep> steps, StepId? startAt) {
+  int _resolveStartIndex(List<FlowStep> steps, StepId? startAt) {
     if (startAt == null) {
       return 0;
     }
@@ -91,18 +119,24 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
   Future<void> _enterCurrentStep() async {
     final i = _idx!;
     final step = _def!.steps[i];
-    state = FlowInStep(step.id, i);
+    _setState(FlowInStep(step.id, i));
     try {
-      if (step.onEnter != null) {
-        await step.onEnter!(_ctx);
+      await step.onEnter(_ctx);
+      if (step.isRoute) {
+        final routeStep = step as RouteStep;
+        final data = routeStep.toRoute(_ctx);
+        _router.go(data.location);
+      } else {
+        // ActionStep: optionally auto-advance if canProceed already true and not last
+        final proceed = await step.canProceed(_ctx);
+        if (proceed) {
+          await next();
+        }
       }
-      // go_router_builder integration: navigate via typed route's `location`
-      final data = step.toRoute(_ctx);
-      _router.go(data.location);
     } catch (e, st) {
       // Expose error state; do not overwrite immediately.
       ref.read(toastServiceProvider).show('Step error: $e');
-      state = FlowError(step.id, e, st);
+      _setState(FlowError(step.id, e, st));
     }
   }
 
@@ -118,13 +152,13 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
     final i = _idx!;
     final step = _def!.steps[i];
     try {
-      final ok = await (step.canProceed?.call(_ctx) ?? Future.value(true));
+      final ok = await step.canProceed(_ctx);
       if (!ok) {
         ref.read(toastServiceProvider).show('Cannot proceed yet');
         return;
       }
       if (i + 1 >= _def!.steps.length) {
-        state = const FlowDone();
+        _setState(const FlowDone());
         await _def!.onSuccess?.call(_ctx);
         return; // caller decides what to do (e.g., pop)
       }
@@ -132,7 +166,7 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
       await _enterCurrentStep();
     } catch (e, st) {
       ref.read(toastServiceProvider).show('Error: $e');
-      state = FlowError(step.id, e, st);
+      _setState(FlowError(step.id, e, st));
     } finally {
       _transitioning = false;
     }
@@ -167,7 +201,7 @@ class FlowRunnerNotifier extends _$FlowRunnerNotifier implements FlowRunner {
     }
     _def = null;
     _idx = null;
-    state = const FlowIdle();
+    _setState(const FlowIdle());
     if (pop) {
       try {
         _router.pop();

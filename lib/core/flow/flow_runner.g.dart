@@ -6,31 +6,57 @@ part of 'flow_runner.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(FlowRunnerNotifier)
-const flowRunnerNotifierProvider = FlowRunnerNotifierFamily._();
+const flowRunnerProvider = FlowRunnerNotifierProvider._();
 
 final class FlowRunnerNotifierProvider
     extends $NotifierProvider<FlowRunnerNotifier, FlowState> {
-  const FlowRunnerNotifierProvider._({
-    required FlowRunnerNotifierFamily super.from,
-    required GoRouter super.argument,
-  }) : super(
-         retry: null,
-         name: r'flowRunnerNotifierProvider',
-         isAutoDispose: false,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
+  const FlowRunnerNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'flowRunnerProvider',
+        isAutoDispose: false,
+        dependencies: const <ProviderOrFamily>[
+          activeServerProvider,
+          toastServiceProvider,
+          serverAuthControllerProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>{
+          FlowRunnerNotifierProvider.$allTransitiveDependencies0,
+          FlowRunnerNotifierProvider.$allTransitiveDependencies1,
+          FlowRunnerNotifierProvider.$allTransitiveDependencies2,
+          FlowRunnerNotifierProvider.$allTransitiveDependencies3,
+          FlowRunnerNotifierProvider.$allTransitiveDependencies4,
+          FlowRunnerNotifierProvider.$allTransitiveDependencies5,
+          FlowRunnerNotifierProvider.$allTransitiveDependencies6,
+          FlowRunnerNotifierProvider.$allTransitiveDependencies7,
+          FlowRunnerNotifierProvider.$allTransitiveDependencies8,
+        },
+      );
+
+  static const $allTransitiveDependencies0 = activeServerProvider;
+  static const $allTransitiveDependencies1 =
+      ActiveServerProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = toastServiceProvider;
+  static const $allTransitiveDependencies3 = serverAuthControllerProvider;
+  static const $allTransitiveDependencies4 =
+      ServerAuthControllerProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies5 =
+      ServerAuthControllerProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies6 =
+      ServerAuthControllerProvider.$allTransitiveDependencies4;
+  static const $allTransitiveDependencies7 =
+      ServerAuthControllerProvider.$allTransitiveDependencies5;
+  static const $allTransitiveDependencies8 =
+      ServerAuthControllerProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$flowRunnerNotifierHash();
-
-  @override
-  String toString() {
-    return r'flowRunnerNotifierProvider'
-        ''
-        '($argument)';
-  }
 
   @$internal
   @override
@@ -43,55 +69,17 @@ final class FlowRunnerNotifierProvider
       providerOverride: $SyncValueProvider<FlowState>(value),
     );
   }
-
-  @override
-  bool operator ==(Object other) {
-    return other is FlowRunnerNotifierProvider && other.argument == argument;
-  }
-
-  @override
-  int get hashCode {
-    return argument.hashCode;
-  }
 }
 
 String _$flowRunnerNotifierHash() =>
-    r'6b40230206197c51c5a6c3bfcc4c82b4daafa374';
-
-final class FlowRunnerNotifierFamily extends $Family
-    with
-        $ClassFamilyOverride<
-          FlowRunnerNotifier,
-          FlowState,
-          FlowState,
-          FlowState,
-          GoRouter
-        > {
-  const FlowRunnerNotifierFamily._()
-    : super(
-        retry: null,
-        name: r'flowRunnerNotifierProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
-        isAutoDispose: false,
-      );
-
-  FlowRunnerNotifierProvider call(GoRouter router) =>
-      FlowRunnerNotifierProvider._(argument: router, from: this);
-
-  @override
-  String toString() => r'flowRunnerNotifierProvider';
-}
+    r'ecea86cf2e17378441e541865b5be2f6d3e2dd87';
 
 abstract class _$FlowRunnerNotifier extends $Notifier<FlowState> {
-  late final _$args = ref.$arg as GoRouter;
-  GoRouter get router => _$args;
-
-  FlowState build(GoRouter router);
+  FlowState build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
+    final created = build();
     final ref = this.ref as $Ref<FlowState, FlowState>;
     final element =
         ref.element
@@ -104,6 +92,3 @@ abstract class _$FlowRunnerNotifier extends $Notifier<FlowState> {
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
