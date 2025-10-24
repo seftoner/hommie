@@ -80,7 +80,7 @@ const AreaEntitySchema = CollectionSchema(
   getId: _areaEntityGetId,
   getLinks: _areaEntityGetLinks,
   attach: _areaEntityAttach,
-  version: '3.3.0-dev.2',
+  version: '3.3.0-dev.3',
 );
 
 int _areaEntityEstimateSize(

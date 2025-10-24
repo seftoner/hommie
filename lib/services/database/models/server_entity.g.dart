@@ -42,7 +42,7 @@ const ServerEntitySchema = CollectionSchema(
   getId: _serverEntityGetId,
   getLinks: _serverEntityGetLinks,
   attach: _serverEntityAttach,
-  version: '3.3.0-dev.2',
+  version: '3.3.0-dev.3',
 );
 
 int _serverEntityEstimateSize(
