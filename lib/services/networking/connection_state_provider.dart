@@ -17,6 +17,13 @@ part 'connection_state_provider.g.dart';
 /// [unknown] - Initial state when app launches, before any connection attempt is made.
 /// This state indicates that the connection status to the home assistant server
 /// has not been determined yet.
+///
+/// [authFailure] - Authentication failure occurred. This state fires when:
+/// - The access token has been revoked on the Home Assistant server
+/// - The user account has been deleted from the Home Assistant server
+/// - The authentication credentials are no longer valid
+/// When this state is triggered, the app MUST log out the user from the selected
+/// server, clear all stored credentials, and redirect to the login/authentication flow.
 enum HAServerConnectionState {
   unknown,
   connected,
