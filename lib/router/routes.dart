@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hommie/core/bootstrap/app_startup.dart';
-import 'package:hommie/features/auth/presentation/screens/flow_aware_server_discovery_page.dart';
-import 'package:hommie/features/auth/presentation/screens/auth_discovery_page.dart';
-import 'package:hommie/features/auth/presentation/screens/auth_manual_entry_page.dart';
-import 'package:hommie/features/auth/presentation/screens/add_server_discovery_page.dart';
-import 'package:hommie/features/auth/presentation/screens/add_server_manual_entry_page.dart';
+import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
 import 'package:hommie/features/automation/presentation/automations_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
@@ -122,31 +118,6 @@ class HubRouteData extends GoRouteData with $HubRouteData {
   }
 }
 
-// ignore: provider_dependencies
-@TypedGoRoute<AuthDiscoveryRoute>(
-  path: '/auth/discovery',
-  routes: [
-    TypedGoRoute<AuthManualEntryRoute>(path: '/manual'),
-  ],
-)
-class AuthDiscoveryRoute extends GoRouteData with $AuthDiscoveryRoute {
-  const AuthDiscoveryRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const AuthDiscoveryPage();
-  }
-}
-
-class AuthManualEntryRoute extends GoRouteData with $AuthManualEntryRoute {
-  const AuthManualEntryRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const AuthManualEntryPage();
-  }
-}
-
 class ServersRouteData extends GoRouteData with $ServersRouteData {
   const ServersRouteData();
 
@@ -163,30 +134,6 @@ class AddServerRouteData extends GoRouteData with $AddServerRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const AddEditServerPage();
-  }
-}
-
-@TypedGoRoute<AddServerDiscoveryRoute>(
-  path: '/settings/servers/add/discovery',
-  routes: [
-    TypedGoRoute<AddServerManualEntryRoute>(path: '/manual'),
-  ],
-)
-class AddServerDiscoveryRoute extends GoRouteData with $AddServerDiscoveryRoute {
-  const AddServerDiscoveryRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const AddServerDiscoveryPage();
-  }
-}
-
-class AddServerManualEntryRoute extends GoRouteData with $AddServerManualEntryRoute {
-  const AddServerManualEntryRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const AddServerManualEntryPage();
   }
 }
 
@@ -224,7 +171,7 @@ class DiscoveryRoute extends GoRouteData with $DiscoveryRoute {
   Widget build(BuildContext context, GoRouterState state) {
     // Use flow-aware variant so the same route participates in linear auth flows
     // while remaining compatible when accessed directly.
-    return const FlowAwareServerDiscoveryPage();
+    return const ServerDiscoveryPage();
   }
 }
 

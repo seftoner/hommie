@@ -176,8 +176,8 @@ const serverScopeServerProvider = ServerScopeServerProvider._();
 /// This provides access to the full server configuration in the current scope.
 
 final class ServerScopeServerProvider
-    extends $FunctionalProvider<AsyncValue<Server>, Server, FutureOr<Server>>
-    with $FutureModifier<Server>, $FutureProvider<Server> {
+    extends $FunctionalProvider<Server, Server, Server>
+    with $Provider<Server> {
   /// A scoped provider that represents the current server object.
   ///
   /// This provides access to the full server configuration in the current scope.
@@ -197,13 +197,21 @@ final class ServerScopeServerProvider
 
   @$internal
   @override
-  $FutureProviderElement<Server> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+  $ProviderElement<Server> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
-  FutureOr<Server> create(Ref ref) {
+  Server create(Ref ref) {
     return serverScopeServer(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Server value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Server>(value),
+    );
   }
 }
 
-String _$serverScopeServerHash() => r'2626685f73e10e324f972ce4a35fa06a92d71a48';
+String _$serverScopeServerHash() => r'6727d7257c615b9e887856a1399f7f4fae47179f';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hommie/app/scopes/server_scope_host.dart';
 import 'package:hommie/features/auth/application/server_auth_navigation_coordinator.dart';
 import 'package:hommie/router/router.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
-import 'package:hommie/features/servers/infrastructure/widgets/server_scope_widget.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
 import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -14,7 +14,7 @@ class HommieApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const _ServiceInitializer(
-      child: ServerScopeWidget(child: _RootAppWidget()),
+      child: ServerScopeHost(child: _RootAppWidget()),
     );
   }
 }

@@ -46,7 +46,7 @@ int serverScopeId(Ref ref) {
 ///
 /// This provides access to the full server configuration in the current scope.
 @Riverpod(dependencies: [])
-Future<Server> serverScopeServer(Ref ref) async {
+Server serverScopeServer(Ref ref) {
   throw UnimplementedError(
     'serverScopeServer must be overridden in a ProviderScope',
   );
