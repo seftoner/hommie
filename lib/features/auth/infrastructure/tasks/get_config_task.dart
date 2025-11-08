@@ -19,10 +19,6 @@ class GetConfigTask extends HTask {
   Future<HTaskResult> execute(TaskExecutionContext context) async {
     final server = context.get<Server>('server');
 
-    if (server == null) {
-      throw Exception('Server is not provided');
-    }
-
     try {
       logger.i('Getting configuration for server ${server.id}');
 

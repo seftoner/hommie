@@ -10,12 +10,11 @@ class CreateServerTask extends HTask<Server, void> {
 
   @override
   Future<HTaskResult<Server, void>> execute(
-      TaskExecutionContext context) async {
+    TaskExecutionContext context,
+  ) async {
     final serverUrl = context.get('serverUrl');
 
-    final newServer = Server.temporary(
-      baseUrl: serverUrl,
-    );
+    final newServer = Server.temporary(baseUrl: serverUrl);
 
     final server = await _serverManager.addServer(newServer);
     context.set<Server>('server', server);
@@ -29,9 +28,7 @@ class CreateServerTask extends HTask<Server, void> {
   @override
   Future<void> rollback(TaskExecutionContext context) async {
     final server = context.get<Server>('server');
-    if (server != null) {
-      await _serverManager.removeServer(server.id!);
-    }
+    await _serverManager.removeServer(server.id!);
   }
 
   @override

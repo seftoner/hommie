@@ -18,7 +18,7 @@ class DeleteServerTask extends HTask {
 
   @override
   Future<HTaskResult> execute(TaskExecutionContext context) async {
-    final serverId = context.get<int>('serverId')!;
+    final serverId = context.get<int>('serverId');
 
     try {
       // 1. Delete all home view configurations for this server

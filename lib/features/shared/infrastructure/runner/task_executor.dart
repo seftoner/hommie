@@ -31,13 +31,11 @@ class TaskExecutor {
         final result = await task.execute(_chain.context);
 
         if (result.status == Status.failed) {
-          logger.e(
-            'Task ${task.name} failed',
-            error: result.error,
-          );
+          logger.e('Task ${task.name} failed', error: result.error);
 
           logger.d(
-              'Starting rollback for ${completedTasks.length} completed tasks');
+            'Starting rollback for ${completedTasks.length} completed tasks',
+          );
           await _rollback(completedTasks);
 
           _handleError(task, result.error ?? UnknownError());
@@ -49,7 +47,7 @@ class TaskExecutor {
       }
 
       logger.d('Task chain completed successfully');
-      _chain.onSuccess?.call();
+      _chain.onSuccess?.call(_chain.context);
     } catch (e, stack) {
       final currentTask = _chain.tasks[completedTasks.length];
       logger.e(
@@ -71,8 +69,9 @@ class TaskExecutor {
       if (task.supportsRollback) {
         try {
           await task.rollback(_chain.context);
-          rollbackResults[task.name] =
-              const HTaskResult(status: Status.success);
+          rollbackResults[task.name] = const HTaskResult(
+            status: Status.success,
+          );
         } catch (e) {
           rollbackResults[task.name] = HTaskResult(
             status: Status.failed,
@@ -94,14 +93,11 @@ class TaskExecutionResult {
   final String? message;
 
   const TaskExecutionResult.success()
-      : isSuccess = true,
-        failedTask = null,
-        error = null,
-        message = null;
+    : isSuccess = true,
+      failedTask = null,
+      error = null,
+      message = null;
 
-  const TaskExecutionResult.failure({
-    this.failedTask,
-    this.error,
-    this.message,
-  }) : isSuccess = false;
+  const TaskExecutionResult.failure({this.failedTask, this.error, this.message})
+    : isSuccess = false;
 }

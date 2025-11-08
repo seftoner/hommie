@@ -22,10 +22,7 @@ class OAuthLoginAttemptTask extends HTask<Credentials, AuthFailure> {
   Future<HTaskResult<Credentials, AuthFailure>> execute(
     TaskExecutionContext context,
   ) async {
-    final Server? server = context.get('server');
-    if (server == null) {
-      throw Exception('Server is not provided');
-    }
+    final server = context.get<Server>('server');
 
     try {
       final authResult = await _authRepository.login(

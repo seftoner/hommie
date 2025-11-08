@@ -5,7 +5,7 @@ class TaskChain {
   final List<HTask> tasks;
   final TaskExecutionContext context;
   final Map<Type, void Function(Object error)> errorHandlers;
-  final void Function()? onSuccess;
+  final void Function(TaskExecutionContext context)? onSuccess;
   final void Function(Object error)? defaultErrorHandler;
 
   TaskChain({
@@ -23,7 +23,7 @@ class TaskChainBuilder {
   final List<HTask> _tasks = [];
   final Map<String, dynamic> _context = {};
   final Map<Type, void Function(Object error)> _errorHandlers = {};
-  void Function()? _onSuccess;
+  void Function(TaskExecutionContext context)? _onSuccess;
   void Function(Object error)? _defaultErrorHandler;
 
   TaskChainBuilder addTask(HTask task) {
@@ -48,16 +48,18 @@ class TaskChainBuilder {
     return this;
   }
 
-  TaskChainBuilder onSuccess(void Function() handler) {
+  TaskChainBuilder onSuccess(
+    void Function(TaskExecutionContext context) handler,
+  ) {
     _onSuccess = handler;
     return this;
   }
 
   TaskChain build() => TaskChain(
-        tasks: _tasks,
-        context: TaskExecutionContext(_context),
-        errorHandlers: _errorHandlers,
-        onSuccess: _onSuccess,
-        defaultErrorHandler: _defaultErrorHandler,
-      );
+    tasks: _tasks,
+    context: TaskExecutionContext(_context),
+    errorHandlers: _errorHandlers,
+    onSuccess: _onSuccess,
+    defaultErrorHandler: _defaultErrorHandler,
+  );
 }

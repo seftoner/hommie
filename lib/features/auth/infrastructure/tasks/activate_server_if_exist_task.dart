@@ -16,7 +16,7 @@ class ActivateServerIfExistTask extends HTask {
 
   @override
   Future<HTaskResult> execute(TaskExecutionContext context) async {
-    final serverId = context.get<int>('serverId')!;
+    final serverId = context.get<int>('serverId');
 
     // Step 1: Get all available servers
     final servers = await _serverManager.getAvailableServers();

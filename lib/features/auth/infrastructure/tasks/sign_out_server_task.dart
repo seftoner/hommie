@@ -16,7 +16,7 @@ class SignOutServerTask extends HTask {
 
   @override
   Future<HTaskResult> execute(TaskExecutionContext context) async {
-    final serverId = context.get<int>('serverId')!;
+    final serverId = context.get<int>('serverId');
 
     try {
       // Step 1: Disconnect the server connection if active

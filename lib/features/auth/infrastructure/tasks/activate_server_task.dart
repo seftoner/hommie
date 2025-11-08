@@ -17,7 +17,7 @@ class ActivateServerTask extends HTask<void, Object> {
     TaskExecutionContext context,
   ) async {
     try {
-      final Server server = context.get('server')!;
+      final Server server = context.get('server');
       // Use ActiveServerProvider instead of direct repository access
       await _ref.read(activeServerProvider.notifier).setActive(server.id!);
       return HTaskResult.success(null);
