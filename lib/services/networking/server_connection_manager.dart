@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
-import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
+import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
+import 'package:hommie/services/networking/providers/server_config_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/connection_orchestrator.dart';
-import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
+import 'package:hommie/features/auth/application/server_auth_token_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
-import 'package:hommie/services/networking/ha_oauth2_token.dart';
 import 'package:hommie/core/utils/logger.dart';
 
 part 'server_connection_manager.g.dart';
@@ -17,8 +17,8 @@ part 'server_connection_manager.g.dart';
   dependencies: [
     ActiveServer,
     ServerConnectionState,
-    serverManager,
-    authRepository,
+    serverConfig,
+    serverAuthToken,
   ],
 )
 class ServerConnectionManager extends _$ServerConnectionManager {
@@ -130,24 +130,21 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       throw Exception('ServerConnectionManager is disposed');
     }
 
-    final serverManager = ref.read(serverManagerProvider);
-    final servers = await serverManager.getAvailableServers();
-    final server = servers.firstWhere((s) => s.id == serverId);
-
+    final server = await ref.read(serverConfigProvider(serverId).future);
     final serverUrl = Uri.parse(server.url);
+
+    // ignore: provider_dependencies
+    Future<HAAuthToken> fetchToken() async {
+      try {
+        return await ref.read(serverAuthTokenProvider(serverId).future);
+      } on AuthFailure catch (failure) {
+        throw ConnectionError('Failed to resolve token: $failure');
+      }
+    }
 
     final connOption = HAConnectionOption(
       serverUrl: serverUrl,
-      fetchAuthToken: () async {
-        final authRepository = ref.read(authRepositoryProvider);
-        final fetchedCredentials = await authRepository.getCredentials(
-          serverId,
-        );
-        return fetchedCredentials.fold(
-          (error) => throw ConnectionError('Failed to refresh token: $error'),
-          (credentials) => HAOAuth2Token(credentials),
-        );
-      },
+      fetchAuthToken: fetchToken,
     );
 
     // Create orchestrator to manage the connection

@@ -32,6 +32,8 @@ final class AuthFlowControllerProvider
           activeServerProvider,
           authStateMachineProvider,
           serverConnectionStateProvider,
+          goRouterProvider,
+          serverConnectionManagerProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           AuthFlowControllerProvider.$allTransitiveDependencies0,
@@ -47,6 +49,9 @@ final class AuthFlowControllerProvider
           AuthFlowControllerProvider.$allTransitiveDependencies10,
           AuthFlowControllerProvider.$allTransitiveDependencies11,
           AuthFlowControllerProvider.$allTransitiveDependencies12,
+          AuthFlowControllerProvider.$allTransitiveDependencies13,
+          AuthFlowControllerProvider.$allTransitiveDependencies14,
+          AuthFlowControllerProvider.$allTransitiveDependencies15,
         },
       );
 
@@ -74,6 +79,11 @@ final class AuthFlowControllerProvider
       AuthStateMachineProvider.$allTransitiveDependencies1;
   static const $allTransitiveDependencies12 =
       AuthStateMachineProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies13 = goRouterProvider;
+  static const $allTransitiveDependencies14 =
+      GoRouterProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies15 =
+      GoRouterProvider.$allTransitiveDependencies3;
 
   @override
   String debugGetCreateSourceHash() => _$authFlowControllerHash();
@@ -99,4 +109,4 @@ final class AuthFlowControllerProvider
 }
 
 String _$authFlowControllerHash() =>
-    r'3b087ac02f9944f7745949a0a32f23187dde8182';
+    r'3b0132d5b68bd3f4450f43cf3abf1df51491d93f';

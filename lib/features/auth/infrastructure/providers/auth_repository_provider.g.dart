@@ -8,27 +8,14 @@ part of 'auth_repository_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Provides a singleton auth repository that can handle multiple servers
-///
-/// This replaces the family provider pattern with a single repository
-/// that accepts server IDs as method parameters
 
 @ProviderFor(authRepository)
 const authRepositoryProvider = AuthRepositoryProvider._();
-
-/// Provides a singleton auth repository that can handle multiple servers
-///
-/// This replaces the family provider pattern with a single repository
-/// that accepts server IDs as method parameters
 
 final class AuthRepositoryProvider
     extends
         $FunctionalProvider<IAuthRepository, IAuthRepository, IAuthRepository>
     with $Provider<IAuthRepository> {
-  /// Provides a singleton auth repository that can handle multiple servers
-  ///
-  /// This replaces the family provider pattern with a single repository
-  /// that accepts server IDs as method parameters
   const AuthRepositoryProvider._()
     : super(
         from: null,

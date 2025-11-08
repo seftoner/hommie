@@ -15,7 +15,7 @@ class TimeoutHttpClient extends http.BaseClient {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 http.BaseClient httpClient(Ref ref) {
   final httpClient = TimeoutHttpClient(
     http.Client(),

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hommie/app/boot/boot_status.dart';
 import 'package:hommie/app/boot/boot_status_provider.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
-import 'package:hommie/features/auth/application/server_auth_controller.dart';
+import 'package:hommie/features/auth/application/active_auth_state_provider.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/router/routes.dart';
@@ -14,7 +14,7 @@ part 'router.g.dart';
 
 @Riverpod(
   keepAlive: true,
-  dependencies: [BootStatusController, ActiveServer, ServerAuthController],
+  dependencies: [BootStatusController, ActiveServer, activeAuthState],
 )
 GoRouter goRouter(Ref ref) {
   final router = GoRouter(
@@ -58,7 +58,7 @@ GoRouter goRouter(Ref ref) {
         return discoveryLocation;
       }
 
-      final authState = ref.read(serverAuthControllerProvider);
+      final authState = ref.read(activeAuthStateProvider);
       if (authState.isLoading) {
         return location == startupLocation ? null : startupLocation;
       }
@@ -74,8 +74,12 @@ GoRouter goRouter(Ref ref) {
         return location == startupLocation ? null : startupLocation;
       }
 
-      return authValue.map<String?>(
-        initial: (_) => location == startupLocation ? null : startupLocation,
+      return authValue.when<String?>(
+        initial: () => location == startupLocation ? null : startupLocation,
+        unauthenticated: () =>
+            onboardingLocations.contains(location) ? null : discoveryLocation,
+        authenticating: () =>
+            location == startupLocation ? null : startupLocation,
         authenticated: (_) {
           if (location == startupLocation ||
               onboardingLocations.contains(location)) {
@@ -83,7 +87,8 @@ GoRouter goRouter(Ref ref) {
           }
           return null;
         },
-        unauthenticated: (_) =>
+        refreshing: (_) => null,
+        revoked: (_) =>
             onboardingLocations.contains(location) ? null : discoveryLocation,
         failure: (_) =>
             onboardingLocations.contains(location) ? null : discoveryLocation,
@@ -109,10 +114,7 @@ GoRouter goRouter(Ref ref) {
       refreshRouter,
     )
     ..listen<AsyncValue<Server?>>(activeServerProvider, refreshRouter)
-    ..listen<AsyncValue<AuthState>>(
-      serverAuthControllerProvider,
-      refreshRouter,
-    );
+    ..listen<AsyncValue<AuthState>>(activeAuthStateProvider, refreshRouter);
 
   return router;
 }

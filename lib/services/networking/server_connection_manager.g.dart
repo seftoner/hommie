@@ -24,14 +24,17 @@ final class ServerConnectionManagerProvider
         dependencies: const <ProviderOrFamily>[
           activeServerProvider,
           serverConnectionStateProvider,
-          serverManagerProvider,
-          authRepositoryProvider,
+          serverConfigProvider,
+          serverAuthTokenProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           ServerConnectionManagerProvider.$allTransitiveDependencies0,
           ServerConnectionManagerProvider.$allTransitiveDependencies1,
           ServerConnectionManagerProvider.$allTransitiveDependencies2,
           ServerConnectionManagerProvider.$allTransitiveDependencies3,
+          ServerConnectionManagerProvider.$allTransitiveDependencies4,
+          ServerConnectionManagerProvider.$allTransitiveDependencies5,
+          ServerConnectionManagerProvider.$allTransitiveDependencies6,
         },
       );
 
@@ -39,7 +42,12 @@ final class ServerConnectionManagerProvider
   static const $allTransitiveDependencies1 =
       ActiveServerProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies2 = serverConnectionStateProvider;
-  static const $allTransitiveDependencies3 = authRepositoryProvider;
+  static const $allTransitiveDependencies3 = serverConfigProvider;
+  static const $allTransitiveDependencies4 = serverAuthTokenProvider;
+  static const $allTransitiveDependencies5 =
+      ServerAuthTokenProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies6 =
+      ServerAuthTokenProvider.$allTransitiveDependencies1;
 
   @override
   String debugGetCreateSourceHash() => _$serverConnectionManagerHash();
@@ -58,7 +66,7 @@ final class ServerConnectionManagerProvider
 }
 
 String _$serverConnectionManagerHash() =>
-    r'11d7dc3c40ac505ed447d2a1e0d002a3fd4fd635';
+    r'ce8e4827ccc9a26714b3630aaf086c6cb469ca04';
 
 abstract class _$ServerConnectionManager extends $Notifier<void> {
   void build();

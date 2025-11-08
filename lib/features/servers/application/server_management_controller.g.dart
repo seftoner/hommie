@@ -24,7 +24,7 @@ final class ServerManagementControllerProvider
         isAutoDispose: true,
         dependencies: const <ProviderOrFamily>[
           serversListProvider,
-          serverAuthControllerProvider,
+          authFlowControllerProvider,
           activeServerProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
@@ -37,25 +37,52 @@ final class ServerManagementControllerProvider
           ServerManagementControllerProvider.$allTransitiveDependencies6,
           ServerManagementControllerProvider.$allTransitiveDependencies7,
           ServerManagementControllerProvider.$allTransitiveDependencies8,
+          ServerManagementControllerProvider.$allTransitiveDependencies9,
+          ServerManagementControllerProvider.$allTransitiveDependencies10,
+          ServerManagementControllerProvider.$allTransitiveDependencies11,
+          ServerManagementControllerProvider.$allTransitiveDependencies12,
+          ServerManagementControllerProvider.$allTransitiveDependencies13,
+          ServerManagementControllerProvider.$allTransitiveDependencies14,
+          ServerManagementControllerProvider.$allTransitiveDependencies15,
+          ServerManagementControllerProvider.$allTransitiveDependencies16,
+          ServerManagementControllerProvider.$allTransitiveDependencies17,
         },
       );
 
   static const $allTransitiveDependencies0 = serversListProvider;
   static const $allTransitiveDependencies1 =
       ServersListProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = serverAuthControllerProvider;
+  static const $allTransitiveDependencies2 = authFlowControllerProvider;
   static const $allTransitiveDependencies3 =
-      ServerAuthControllerProvider.$allTransitiveDependencies1;
+      AuthFlowControllerProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies4 =
-      ServerAuthControllerProvider.$allTransitiveDependencies2;
+      AuthFlowControllerProvider.$allTransitiveDependencies1;
   static const $allTransitiveDependencies5 =
-      ServerAuthControllerProvider.$allTransitiveDependencies3;
+      AuthFlowControllerProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies6 =
-      ServerAuthControllerProvider.$allTransitiveDependencies4;
+      AuthFlowControllerProvider.$allTransitiveDependencies3;
   static const $allTransitiveDependencies7 =
-      ServerAuthControllerProvider.$allTransitiveDependencies5;
+      AuthFlowControllerProvider.$allTransitiveDependencies5;
   static const $allTransitiveDependencies8 =
-      ServerAuthControllerProvider.$allTransitiveDependencies6;
+      AuthFlowControllerProvider.$allTransitiveDependencies6;
+  static const $allTransitiveDependencies9 =
+      AuthFlowControllerProvider.$allTransitiveDependencies7;
+  static const $allTransitiveDependencies10 =
+      AuthFlowControllerProvider.$allTransitiveDependencies8;
+  static const $allTransitiveDependencies11 =
+      AuthFlowControllerProvider.$allTransitiveDependencies9;
+  static const $allTransitiveDependencies12 =
+      AuthFlowControllerProvider.$allTransitiveDependencies10;
+  static const $allTransitiveDependencies13 =
+      AuthFlowControllerProvider.$allTransitiveDependencies11;
+  static const $allTransitiveDependencies14 =
+      AuthFlowControllerProvider.$allTransitiveDependencies12;
+  static const $allTransitiveDependencies15 =
+      AuthFlowControllerProvider.$allTransitiveDependencies13;
+  static const $allTransitiveDependencies16 =
+      AuthFlowControllerProvider.$allTransitiveDependencies14;
+  static const $allTransitiveDependencies17 =
+      AuthFlowControllerProvider.$allTransitiveDependencies15;
 
   @override
   String debugGetCreateSourceHash() => _$serverManagementControllerHash();
@@ -74,7 +101,7 @@ final class ServerManagementControllerProvider
 }
 
 String _$serverManagementControllerHash() =>
-    r'e3c7e97dae80bbe343527633dd7695df970fd318';
+    r'78fc7696db57bd81a4d194fb0f6f377bb8e11860';
 
 abstract class _$ServerManagementController
     extends $Notifier<ServerTestResult> {

@@ -122,6 +122,8 @@ class AuthFlowController {
     ActiveServer,
     AuthStateMachine,
     ServerConnectionState,
+    goRouter,
+    ServerConnectionManager,
   ],
 )
 AuthFlowController authFlowController(Ref ref) {

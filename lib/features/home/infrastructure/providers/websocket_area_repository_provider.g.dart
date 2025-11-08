@@ -55,6 +55,12 @@ final class WebsocketAreaRepositoryProvider
       ServerConnectionProvider.$allTransitiveDependencies3;
   static const $allTransitiveDependencies5 =
       ServerConnectionProvider.$allTransitiveDependencies4;
+  static const $allTransitiveDependencies6 =
+      ServerConnectionProvider.$allTransitiveDependencies5;
+  static const $allTransitiveDependencies7 =
+      ServerConnectionProvider.$allTransitiveDependencies6;
+  static const $allTransitiveDependencies8 =
+      ServerConnectionProvider.$allTransitiveDependencies7;
 
   @override
   String debugGetCreateSourceHash() => _$websocketAreaRepositoryHash();
@@ -112,6 +118,9 @@ final class WebsocketAreaRepositoryFamily extends $Family
           WebsocketAreaRepositoryProvider.$allTransitiveDependencies3,
           WebsocketAreaRepositoryProvider.$allTransitiveDependencies4,
           WebsocketAreaRepositoryProvider.$allTransitiveDependencies5,
+          WebsocketAreaRepositoryProvider.$allTransitiveDependencies6,
+          WebsocketAreaRepositoryProvider.$allTransitiveDependencies7,
+          WebsocketAreaRepositoryProvider.$allTransitiveDependencies8,
         },
         isAutoDispose: true,
       );

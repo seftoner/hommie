@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:hommie/ui/keys.dart';
-import 'package:hommie/features/auth/application/server_auth_controller.dart';
+import 'package:hommie/features/auth/application/auth_flow_controller.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
+@Dependencies([authFlowController])
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
@@ -110,8 +112,8 @@ class SettingsPage extends ConsumerWidget {
               final serverManager = ref.read(serverManagerProvider);
               final activeServer = await serverManager.getActiveServer();
               if (activeServer != null) {
-                ref
-                    .read(serverAuthControllerProvider.notifier)
+                await ref
+                    .read(authFlowControllerProvider)
                     .signOut(activeServer.id!);
               }
             },

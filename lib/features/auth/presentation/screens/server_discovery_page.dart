@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/auth/application/servers_discovery_controller.dart';
-import 'package:hommie/features/auth/application/server_auth_controller.dart';
+import 'package:hommie/features/auth/application/auth_flow_controller.dart';
 import 'package:hommie/features/auth/domain/entities/ha_server.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_available_severs_list_title.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_empty_state.dart';
@@ -9,7 +9,9 @@ import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/corners.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
+@Dependencies([authFlowController])
 class ServerDiscoveryPage extends HookConsumerWidget {
   const ServerDiscoveryPage({super.key});
 
@@ -57,7 +59,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                               servers: servers,
                               onTap: (serverAddress) async {
                                 ref
-                                    .read(serverAuthControllerProvider.notifier)
+                                    .read(authFlowControllerProvider)
                                     .login(serverAddress.toString());
                               },
                             ),

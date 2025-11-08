@@ -1,5 +1,5 @@
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/features/auth/application/server_auth_controller.dart';
+import 'package:hommie/features/auth/application/auth_flow_controller.dart';
 import 'package:hommie/features/servers/infrastructure/providers/servers_list_provider.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
@@ -25,7 +25,7 @@ class ServerTestResult {
     : this(status: ServerTestStatus.error, message: message);
 }
 
-@Riverpod(dependencies: [ServersList, ServerAuthController, ActiveServer])
+@Riverpod(dependencies: [ServersList, authFlowController, ActiveServer])
 class ServerManagementController extends _$ServerManagementController {
   @override
   ServerTestResult build() {
@@ -127,7 +127,7 @@ class ServerManagementController extends _$ServerManagementController {
   Future<void> authenticateServer(int serverId, String serverUrl) async {
     try {
       // Use the existing auth controller for OAuth flow
-      await ref.read(serverAuthControllerProvider.notifier).login(serverUrl);
+      await ref.read(authFlowControllerProvider).login(serverUrl);
       logger.i('Authentication completed for server ID: $serverId');
     } catch (e) {
       logger.e('Authentication failed for server ID: $serverId, error: $e');
