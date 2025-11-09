@@ -1,5 +1,4 @@
 import 'package:hommie/features/auth/application/auth_state.dart';
-import 'package:hommie/features/auth/application/server_credentials_provider.dart';
 import 'package:hommie/features/auth/application/token_store_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';

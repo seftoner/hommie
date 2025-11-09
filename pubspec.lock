@@ -593,6 +593,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  go_router_guards:
+    dependency: "direct main"
+    description:
+      name: go_router_guards
+      sha256: "0d2383d2f389b0d5fa3344b714650cd498030746cecf295d5493685e7da657b4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0+2"
   graphs:
     dependency: transitive
     description:

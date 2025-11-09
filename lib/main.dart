@@ -9,6 +9,7 @@ import 'package:hommie/core/observers/app_state_logger.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/services/database/database_provider.dart';
 
+// ignore: provider_dependencies
 Future<void> main() async {
   runZonedGuarded<Future<void>>(
     () async {
