@@ -1,16 +1,23 @@
+import 'dart:async';
+
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/domain/repositories/i_server_repository.dart';
 
 class ServerManager implements IServerManager {
+  final _controller = StreamController<Server?>.broadcast();
   final IServerRepository _serverRepository;
+  bool _isClosed = false;
 
-  ServerManager(this._serverRepository);
+  ServerManager(this._serverRepository) {
+    _refreshActiveServer();
+  }
 
   @override
-  Future<Server> addServer(Server config) {
-    return _serverRepository.save(config);
+  Future<Server> addServer(Server config) async {
+    final savedServer = await _serverRepository.save(config);
+    return savedServer;
   }
 
   @override
@@ -19,69 +26,96 @@ class ServerManager implements IServerManager {
   }
 
   @override
-  Future<List<Server>> getAvailableServers() {
+  Stream<Server?> watchActiveServer() => _controller.stream;
+
+  @override
+  Future<Server?> activateServer(int id) async {
+    final activeServer = await _setActiveServer(id);
+    if (activeServer == null) {
+      logger.i('Attempted to activate server $id, but it was not found');
+    } else {
+      logger.i(
+        'Active server set to: ${activeServer.name} (ID: ${activeServer.id})',
+      );
+    }
+    return activeServer;
+  }
+
+  @override
+  Future<Server?> activateNextServer({int? excludingId}) async {
+    final servers = await getServers();
+    final availableServers = servers
+        .where((server) => server.id != excludingId)
+        .toList();
+
+    if (availableServers.isEmpty) {
+      logger.i('No servers available to activate');
+      return _setActiveServer(null);
+    }
+
+    final nextServer = availableServers.first;
+
+    if (nextServer.id == null) {
+      logger.w('Next server ${nextServer.name} is missing an ID');
+      return null;
+    }
+
+    logger.i(
+      'Activating next server: ${nextServer.name} (ID: ${nextServer.id})',
+    );
+    return activateServer(nextServer.id!);
+  }
+
+  @override
+  Future<List<Server>> getServers() {
     return _serverRepository.getAll();
   }
 
   @override
-  Future<void> removeServer(int id) async {
-    await _removeServerInternal(id, allowLastServer: false);
-  }
-
-  /// Force remove a server, even if it's the last one (used during sign out)
-  @override
-  Future<void> forceRemoveServer(int id) async {
-    await _removeServerInternal(id, allowLastServer: true);
-  }
-
-  Future<void> _removeServerInternal(
-    int id, {
-    required bool allowLastServer,
-  }) async {
-    // Get all servers to check if this is the last one
-    final allServers = await getAvailableServers();
+  Future<void> removeServer(int id, {bool allowRemovingLast = false}) async {
+    final allServers = await getServers();
     final isLastServer = allServers.length <= 1;
+    final activeServer = await getActiveServer();
+    final removedWasActive = activeServer?.id == id;
 
-    if (isLastServer && !allowLastServer) {
+    if (isLastServer && !allowRemovingLast) {
       throw Exception(
         'Cannot delete the last server. At least one server must be configured.',
       );
     }
 
-    // Check if this is the active server
-    final activeServer = await getActiveServer();
-    final isActiveServer = activeServer?.id == id;
-
-    // 1. Delete the server from database
     await _serverRepository.delete(id);
-
-    // 2. Handle active server logic (only if we're not deleting the last server)
-    if (!isLastServer) {
-      final remainingServers = await getAvailableServers();
-
-      if (remainingServers.length == 1) {
-        // If only one server remains, automatically make it active
-        logger.i(
-          'Only one server remaining, making it active: ${remainingServers.first.name}',
-        );
-        await setActiveServer(remainingServers.first.id!);
-      } else if (isActiveServer && remainingServers.isNotEmpty) {
-        // If deleted server was active and multiple servers remain, switch to the first one
-        logger.i(
-          'Deleted active server, switching to ${remainingServers.first.name}',
-        );
-        await setActiveServer(remainingServers.first.id!);
-      }
-    } else {
-      // If this was the last server, clear the active server
-      logger.i('Removed the last server, clearing active server');
-    }
-
     logger.i('Successfully removed server $id');
+
+    if (removedWasActive || activeServer == null) {
+      await activateNextServer(excludingId: id);
+    } else {
+      await _refreshActiveServer(value: activeServer);
+    }
   }
 
-  @override
-  Future<void> setActiveServer(int id) {
-    return _serverRepository.setActiveServer(id);
+  Future<Server?> _setActiveServer(int? id) async {
+    final activeServer = await _serverRepository.setActiveServer(id);
+    await _refreshActiveServer(value: activeServer, fetchWhenNull: false);
+    return activeServer;
+  }
+
+  Future<void> _refreshActiveServer({
+    Server? value,
+    bool fetchWhenNull = true,
+  }) async {
+    if (_isClosed) {
+      return;
+    }
+    var server = value;
+    if (server == null && fetchWhenNull) {
+      server = await _serverRepository.getActiveServer();
+    }
+    _controller.add(server);
+  }
+
+  void dispose() {
+    _isClosed = true;
+    _controller.close();
   }
 }

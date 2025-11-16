@@ -8,5 +8,7 @@ part 'server_manager_provider.g.dart';
 @Riverpod(keepAlive: true)
 IServerManager serverManager(Ref ref) {
   final serverRepository = ref.read(serverRepositoryProvider);
-  return ServerManager(serverRepository);
+  final manager = ServerManager(serverRepository);
+  ref.onDispose(manager.dispose);
+  return manager;
 }

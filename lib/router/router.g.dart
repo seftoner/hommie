@@ -22,37 +22,16 @@ final class GoRouterProvider
         retry: null,
         name: r'goRouterProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
-          bootStatusControllerProvider,
-          activeServerProvider,
-          activeAuthStateProvider,
-        ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        dependencies: const <ProviderOrFamily>[authStateMachineProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
           GoRouterProvider.$allTransitiveDependencies0,
           GoRouterProvider.$allTransitiveDependencies1,
-          GoRouterProvider.$allTransitiveDependencies2,
-          GoRouterProvider.$allTransitiveDependencies3,
-          GoRouterProvider.$allTransitiveDependencies4,
-          GoRouterProvider.$allTransitiveDependencies5,
-          GoRouterProvider.$allTransitiveDependencies6,
-          GoRouterProvider.$allTransitiveDependencies7,
-        },
+        ],
       );
 
-  static const $allTransitiveDependencies0 = bootStatusControllerProvider;
+  static const $allTransitiveDependencies0 = authStateMachineProvider;
   static const $allTransitiveDependencies1 =
-      BootStatusControllerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
-      BootStatusControllerProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 = activeAuthStateProvider;
-  static const $allTransitiveDependencies4 =
-      ActiveAuthStateProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies5 =
-      ActiveAuthStateProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies6 =
-      ActiveAuthStateProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies7 =
-      ActiveAuthStateProvider.$allTransitiveDependencies5;
+      AuthStateMachineProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$goRouterHash();
@@ -76,4 +55,4 @@ final class GoRouterProvider
   }
 }
 
-String _$goRouterHash() => r'3786113eed96e65748ccdf9871b4f6908ac1abf3';
+String _$goRouterHash() => r'74900a1ca32c23180a6ec1ae77efefbdcac9b362';

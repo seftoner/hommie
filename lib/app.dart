@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/app/scopes/server_scope_host.dart';
-import 'package:hommie/features/auth/application/auth_lifecycle_coordinator.dart';
 import 'package:hommie/router/router.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
@@ -8,7 +7,7 @@ import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([AuthLifecycleCoordinator, ServerConnectionState])
+@Dependencies([ServerConnectionState])
 class HommieApp extends StatelessWidget {
   const HommieApp({super.key});
 
@@ -39,14 +38,13 @@ class _RootAppWidget extends ConsumerWidget {
   }
 }
 
-@Dependencies([AuthLifecycleCoordinator, ServerConnectionState])
+@Dependencies([ServerConnectionState])
 class _ServiceInitializer extends ConsumerWidget {
   const _ServiceInitializer({required this.child});
   final Widget child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(authLifecycleCoordinatorProvider);
     ref.watch(serverConnectionStateProvider);
     return child;
   }

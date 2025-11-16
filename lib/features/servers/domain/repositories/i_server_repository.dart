@@ -6,6 +6,5 @@ abstract interface class IServerRepository {
   Future<Server> save(Server config);
   Future<void> delete(int id);
   Future<Server?> getActiveServer();
-  Stream<Server?> watchActiveServer();
-  Future<void> setActiveServer(int id);
+  Future<Server?> setActiveServer(int? id);
 }

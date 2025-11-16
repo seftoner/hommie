@@ -37,7 +37,7 @@ final class ServersListProvider
   ServersList create() => ServersList();
 }
 
-String _$serversListHash() => r'0542abc4ff1a8552fdae2cb2b585ecd130aad48d';
+String _$serversListHash() => r'e5645ddc2e12b03d439a0692266fe96ed9e46adb';
 
 abstract class _$ServersList extends $AsyncNotifier<List<Server>> {
   FutureOr<List<Server>> build();

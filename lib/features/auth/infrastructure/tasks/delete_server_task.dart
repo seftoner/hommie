@@ -37,7 +37,7 @@ class DeleteServerTask extends HTask {
 
       // NOTE: Due to data type mismatch between domain models (String IDs) and
       // repository interfaces (int IDs), we cannot directly delete areas and devices here.
-      // The ServerManager.forceRemoveServer should handle cascade deletion through
+      // The ServerManager.removeServer should handle cascade deletion through
       // the database layer. If not, this will need to be implemented with direct
       // Isar operations in a future improvement.
       if (areas.isNotEmpty) {
@@ -50,11 +50,11 @@ class DeleteServerTask extends HTask {
       _ref.read(serverConnectionStateProvider.notifier).reset();
       logger.i('Reset connection state after server deletion');
 
-      // 4. Force remove server from manager (allows removing the last server during sign out)
+      // 4. Remove server from manager (allows removing the last server during sign out)
       // This should handle the cascade deletion through the repository layer
-      await _serverManager.forceRemoveServer(serverId);
-      logger.i(
-        'Successfully removed server and initiated cascade deletion: $serverId',
+      await _serverManager.removeServer(
+        serverId,
+        allowRemovingLast: true,
       );
 
       return HTaskResult.success(null);

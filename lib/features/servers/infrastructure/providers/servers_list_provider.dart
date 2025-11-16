@@ -9,14 +9,14 @@ class ServersList extends _$ServersList {
   @override
   Future<List<Server>> build() async {
     final serverManager = ref.watch(serverManagerProvider);
-    return serverManager.getAvailableServers();
+    return serverManager.getServers();
   }
 
   Future<void> refresh() async {
     state = const AsyncLoading();
     final serverManager = ref.read(serverManagerProvider);
     try {
-      final servers = await serverManager.getAvailableServers();
+      final servers = await serverManager.getServers();
       state = AsyncData(servers);
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);

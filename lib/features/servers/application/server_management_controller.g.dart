@@ -40,12 +40,6 @@ final class ServerManagementControllerProvider
           ServerManagementControllerProvider.$allTransitiveDependencies9,
           ServerManagementControllerProvider.$allTransitiveDependencies10,
           ServerManagementControllerProvider.$allTransitiveDependencies11,
-          ServerManagementControllerProvider.$allTransitiveDependencies12,
-          ServerManagementControllerProvider.$allTransitiveDependencies13,
-          ServerManagementControllerProvider.$allTransitiveDependencies14,
-          ServerManagementControllerProvider.$allTransitiveDependencies15,
-          ServerManagementControllerProvider.$allTransitiveDependencies16,
-          ServerManagementControllerProvider.$allTransitiveDependencies17,
         },
       );
 
@@ -62,27 +56,15 @@ final class ServerManagementControllerProvider
   static const $allTransitiveDependencies6 =
       AuthFlowControllerProvider.$allTransitiveDependencies3;
   static const $allTransitiveDependencies7 =
-      AuthFlowControllerProvider.$allTransitiveDependencies5;
+      AuthFlowControllerProvider.$allTransitiveDependencies4;
   static const $allTransitiveDependencies8 =
-      AuthFlowControllerProvider.$allTransitiveDependencies6;
+      AuthFlowControllerProvider.$allTransitiveDependencies5;
   static const $allTransitiveDependencies9 =
-      AuthFlowControllerProvider.$allTransitiveDependencies7;
+      AuthFlowControllerProvider.$allTransitiveDependencies6;
   static const $allTransitiveDependencies10 =
-      AuthFlowControllerProvider.$allTransitiveDependencies8;
+      AuthFlowControllerProvider.$allTransitiveDependencies7;
   static const $allTransitiveDependencies11 =
-      AuthFlowControllerProvider.$allTransitiveDependencies9;
-  static const $allTransitiveDependencies12 =
-      AuthFlowControllerProvider.$allTransitiveDependencies10;
-  static const $allTransitiveDependencies13 =
-      AuthFlowControllerProvider.$allTransitiveDependencies11;
-  static const $allTransitiveDependencies14 =
-      AuthFlowControllerProvider.$allTransitiveDependencies12;
-  static const $allTransitiveDependencies15 =
-      AuthFlowControllerProvider.$allTransitiveDependencies13;
-  static const $allTransitiveDependencies16 =
-      AuthFlowControllerProvider.$allTransitiveDependencies14;
-  static const $allTransitiveDependencies17 =
-      AuthFlowControllerProvider.$allTransitiveDependencies15;
+      AuthFlowControllerProvider.$allTransitiveDependencies8;
 
   @override
   String debugGetCreateSourceHash() => _$serverManagementControllerHash();
@@ -101,7 +83,7 @@ final class ServerManagementControllerProvider
 }
 
 String _$serverManagementControllerHash() =>
-    r'78fc7696db57bd81a4d194fb0f6f377bb8e11860';
+    r'ed9982f4e4be00499e45362c8d1e342e1eda50f6';
 
 abstract class _$ServerManagementController
     extends $Notifier<ServerTestResult> {

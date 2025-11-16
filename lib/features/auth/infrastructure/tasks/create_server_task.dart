@@ -28,7 +28,7 @@ class CreateServerTask extends HTask<Server, void> {
   @override
   Future<void> rollback(TaskExecutionContext context) async {
     final server = context.get<Server>('server');
-    await _serverManager.removeServer(server.id!);
+    await _serverManager.removeServer(server.id!, allowRemovingLast: true);
   }
 
   @override

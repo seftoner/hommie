@@ -1,33 +1,33 @@
-import 'package:hommie/core/utils/logger.dart';
+import 'dart:async';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 
 part 'active_server_provider.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [serverManager])
+@Riverpod(keepAlive: true)
 class ActiveServer extends _$ActiveServer {
+  StreamSubscription<Server?>? _subscription;
+
   @override
   Future<Server?> build() async {
-    final serverManager = ref.read(serverManagerProvider);
-    return serverManager.getActiveServer();
-  }
+    final serverManager = ref.watch(serverManagerProvider);
+    _subscription?.cancel();
 
-  Future<void> setActive(int serverId) async {
-    final serverManager = ref.read(serverManagerProvider);
-    final previousServer = state.value;
-
-    logger.i(
-      'Switching active server from ${previousServer?.name} to server ID: $serverId',
+    final stream = serverManager.watchActiveServer();
+    _subscription = stream.listen(
+      (server) => state = AsyncData(server),
+      onError: (error, stack) => state = AsyncError(error, stack),
     );
 
-    // Update the active server in the database
-    await serverManager.setActiveServer(serverId);
+    ref.onDispose(() {
+      _subscription?.cancel();
+      _subscription = null;
+    });
+    ref.onCancel(() => _subscription?.pause());
+    ref.onResume(() => _subscription?.resume());
 
-    // Get the new active server
-    final activeServer = await serverManager.getActiveServer();
-    state = AsyncData(activeServer);
-
-    logger.i('Active server switched to: ${activeServer?.name}');
+    return serverManager.getActiveServer();
   }
 }

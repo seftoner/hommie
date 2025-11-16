@@ -7,7 +7,7 @@ part 'server_config_provider.g.dart';
 @Riverpod(keepAlive: true, dependencies: [])
 Future<Server> serverConfig(Ref ref, int serverId) async {
   final manager = ref.read(serverManagerProvider);
-  final servers = await manager.getAvailableServers();
+  final servers = await manager.getServers();
   final server = servers.firstWhere(
     (element) => element.id == serverId,
     orElse: () => throw StateError('Server $serverId not found'),

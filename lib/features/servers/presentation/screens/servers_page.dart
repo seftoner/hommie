@@ -6,6 +6,7 @@ import 'package:hommie/features/servers/infrastructure/providers/servers_list_pr
 import 'package:hommie/features/servers/presentation/widgets/server_list_tile.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
 @Dependencies([ActiveServer, ServersList])
@@ -116,7 +117,7 @@ class ServersPage extends ConsumerWidget {
         ),
       );
 
-      await ref.read(activeServerProvider.notifier).setActive(serverId);
+      await ref.read(serverManagerProvider).activateServer(serverId);
 
       if (ref.context.mounted) {
         ScaffoldMessenger.of(ref.context).clearSnackBars();

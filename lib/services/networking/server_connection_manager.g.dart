@@ -34,19 +34,16 @@ final class ServerConnectionManagerProvider
           ServerConnectionManagerProvider.$allTransitiveDependencies3,
           ServerConnectionManagerProvider.$allTransitiveDependencies4,
           ServerConnectionManagerProvider.$allTransitiveDependencies5,
-          ServerConnectionManagerProvider.$allTransitiveDependencies6,
         },
       );
 
   static const $allTransitiveDependencies0 = activeServerProvider;
-  static const $allTransitiveDependencies1 =
-      ActiveServerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = serverConnectionStateProvider;
-  static const $allTransitiveDependencies3 = serverConfigProvider;
-  static const $allTransitiveDependencies4 = serverAuthTokenProvider;
-  static const $allTransitiveDependencies5 =
+  static const $allTransitiveDependencies1 = serverConnectionStateProvider;
+  static const $allTransitiveDependencies2 = serverConfigProvider;
+  static const $allTransitiveDependencies3 = serverAuthTokenProvider;
+  static const $allTransitiveDependencies4 =
       ServerAuthTokenProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies6 =
+  static const $allTransitiveDependencies5 =
       ServerAuthTokenProvider.$allTransitiveDependencies1;
 
   @override

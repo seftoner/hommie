@@ -24,13 +24,10 @@ final class BootStatusControllerProvider
         dependencies: const <ProviderOrFamily>[activeServerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           BootStatusControllerProvider.$allTransitiveDependencies0,
-          BootStatusControllerProvider.$allTransitiveDependencies1,
         ],
       );
 
   static const $allTransitiveDependencies0 = activeServerProvider;
-  static const $allTransitiveDependencies1 =
-      ActiveServerProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$bootStatusControllerHash();

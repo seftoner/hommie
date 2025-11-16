@@ -24,29 +24,17 @@ class OAuthLoginAttemptTask extends HTask<Credentials, AuthFailure> {
   ) async {
     final server = context.get<Server>('server');
 
-    try {
-      final authResult = await _authRepository.login(
-        serverId: server.id!,
-        serverUrl: server.baseUrl!,
-        redirectUrl: _redirectUrl,
-        handler: _handleAuthentication,
-      );
+    final authResult = await _authRepository.login(
+      serverId: server.id!,
+      serverUrl: server.baseUrl!,
+      redirectUrl: _redirectUrl,
+      handler: _handleAuthentication,
+    );
 
-      return authResult.fold(
-        (error) => HTaskResult.failure(error),
-        (credentials) => HTaskResult.success(credentials),
-      );
-    } on PlatformException catch (e) {
-      //BUG: Not sure that 'CANCELED' message will be return on all platforms
-      if (e.code == 'CANCELED') {
-        logger.e(e.message);
-        return HTaskResult.failure(
-          AuthFailure.userBrake(e.message),
-          message: 'User canceled authentication',
-        );
-      }
-      rethrow;
-    }
+    return authResult.fold(
+      (error) => HTaskResult.failure(error),
+      (credentials) => HTaskResult.success(credentials),
+    );
   }
 
   Future<Map<String, String>> _handleAuthentication(Uri uri) async {

@@ -58,7 +58,7 @@ final class ServerConfigProvider
   }
 }
 
-String _$serverConfigHash() => r'ee8adeb2f6268e2a5c0f1f4f7643b5d8a668b03c';
+String _$serverConfigHash() => r'0350c6de12d9c0d61ee474c926979fac49e8c87e';
 
 final class ServerConfigFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Server>, int> {

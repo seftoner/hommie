@@ -101,7 +101,7 @@ class ServerManagementController extends _$ServerManagementController {
       final serverManager = ref.read(serverManagerProvider);
 
       // Get the existing server
-      final servers = await serverManager.getAvailableServers();
+      final servers = await serverManager.getServers();
       final existingServer = servers.firstWhere((s) => s.id == serverId);
 
       final updatedServer = existingServer.copyWith(
@@ -138,7 +138,8 @@ class ServerManagementController extends _$ServerManagementController {
   /// Set a server as active
   Future<void> setActiveServer(int serverId) async {
     try {
-      await ref.read(activeServerProvider.notifier).setActive(serverId);
+      final serverManager = ref.read(serverManagerProvider);
+      await serverManager.activateServer(serverId);
       logger.i('Set server $serverId as active');
     } catch (e) {
       logger.e('Failed to set active server: $e');

@@ -8,27 +8,23 @@ class Server {
   final String? internalUrl;
   final String? externalUrl;
   final String name;
-  final bool isActive;
   final HaVersion? version;
 
   const Server({
     this.id,
     required this.name,
-    this.isActive = false,
     this.version,
     this.baseUrl,
     this.internalUrl,
     this.externalUrl,
   });
 
-  const Server.temporary({
-    required this.baseUrl,
-  })  : id = null,
-        name = defaultName,
-        isActive = false,
-        version = null,
-        internalUrl = null,
-        externalUrl = null;
+  const Server.temporary({required this.baseUrl})
+    : id = null,
+      name = defaultName,
+      version = null,
+      internalUrl = null,
+      externalUrl = null;
 
   //In the future here will addition logic to properly resolve url base on settings.
   String get url {
@@ -47,7 +43,6 @@ class Server {
     String? url,
     String? name,
     String? token,
-    bool? isActive,
     String? internalUrl,
     String? externalUrl,
     HaVersion? version,
@@ -59,7 +54,6 @@ class Server {
       externalUrl: externalUrl,
       name: name ?? this.name,
       version: version ?? this.version,
-      isActive: isActive ?? this.isActive,
     );
   }
 }

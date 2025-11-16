@@ -1,8 +1,7 @@
 import 'package:hommie/features/auth/application/auth_state.dart';
-import 'package:hommie/features/auth/application/token_store_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
-import 'package:oauth2/oauth2.dart';
+import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_state_machine.g.dart';
@@ -18,16 +17,28 @@ part 'auth_state_machine.g.dart';
 /// * Exposes imperative helpers (`refresh`, `clearSession`, `markRevoked`)
 ///   consumed by flow orchestration when auth edges occur (user sign-out,
 ///   server-side revocation, etc.).
-@Riverpod(keepAlive: true, dependencies: [authRepository, tokenStore])
+@Riverpod(keepAlive: true, dependencies: [ActiveServer])
 class AuthStateMachine extends _$AuthStateMachine {
   @override
-  Future<AuthState> build(int serverId) async {
-    return _evaluateCredentials();
+  Future<AuthState> build() async {
+    final activeServerAsync = ref.watch(activeServerProvider);
+
+    return activeServerAsync.when(
+      data: (activeServer) {
+        if (activeServer?.id == null) {
+          return const AuthState.unauthenticated();
+        }
+        return _evaluateCredentials(activeServer!.id!);
+      },
+      loading: () => const AuthState.initial(),
+      error: (error, stack) =>
+          AuthState.failure(AuthFailure.server(error.toString())),
+    );
   }
 
   /// Evaluates stored credentials for the current server, returning the
   /// appropriate [AuthState] (authenticated, revoked, unauthenticated, etc.).
-  Future<AuthState> _evaluateCredentials() async {
+  Future<AuthState> _evaluateCredentials(int serverId) async {
     final repository = ref.read(authRepositoryProvider);
     final result = await repository.getCredentials(serverId);
 
@@ -45,50 +56,5 @@ class AuthStateMachine extends _$AuthStateMachine {
       InvalidToken() => AuthState.revoked(failure: failure),
       _ => AuthState.failure(failure),
     };
-  }
-
-  /// Forces a re-evaluation from persisted storage; used on cold boot or when
-  /// the active server changes.
-  Future<void> hydrate() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(_evaluateCredentials);
-  }
-
-  /// Runs a refresh cycle while preserving the last known credentials so UI can
-  /// keep rendering privileged content until the refresh succeeds or fails.
-  Future<void> refresh() async {
-    final current = state.asData?.value;
-    final previousCredentials = current?.maybeWhen(
-      authenticated: (credentials) => credentials,
-      refreshing: (credentials) => credentials,
-      orElse: () => null,
-    );
-
-    state = AsyncData(
-      previousCredentials != null
-          ? AuthState.refreshing(previousCredentials)
-          : const AuthState.authenticating(),
-    );
-
-    state = await AsyncValue.guard(_evaluateCredentials);
-  }
-
-  /// Clears persisted credentials and transitions into an unauthenticated state.
-  Future<void> clearSession() async {
-    final store = ref.read(tokenStoreProvider(serverId));
-    await store.clear();
-    state = const AsyncData(AuthState.unauthenticated());
-  }
-
-  void markRevoked([AuthFailure? failure]) {
-    state = AsyncData(AuthState.revoked(failure: failure));
-  }
-
-  void setAuthenticatedWithCredentials(Credentials credentials) {
-    state = AsyncData(AuthState.authenticated(credentials));
-  }
-
-  void setFailure(AuthFailure failure) {
-    state = AsyncData(AuthState.failure(failure));
   }
 }

@@ -48,16 +48,8 @@ class IsarServerRepository implements IServerRepository {
   }
 
   @override
-  Stream<Server?> watchActiveServer() {
-    final query = _isar.serverEntitys.filter().isActiveEqualTo(true).build();
-    return query
-        .watch(fireImmediately: true)
-        .map((servers) => servers.isNotEmpty ? servers.first.toDomain() : null);
-  }
-
-  @override
-  Future<void> setActiveServer(int id) async {
-    await _isar.writeTxn(() async {
+  Future<Server?> setActiveServer(int? id) async {
+    return _isar.writeTxn(() async {
       // First deactivate all servers
       await _isar.serverEntitys
           .filter()
@@ -71,12 +63,16 @@ class IsarServerRepository implements IServerRepository {
             }
           });
 
-      // Then activate the selected server
-      final serverToActivate = await _isar.serverEntitys.get(id);
-      if (serverToActivate != null) {
-        serverToActivate.isActive = true;
-        await _isar.serverEntitys.put(serverToActivate);
+      // Then activate the selected server (if id is not null)
+      if (id != null) {
+        final serverToActivate = await _isar.serverEntitys.get(id);
+        if (serverToActivate != null) {
+          serverToActivate.isActive = true;
+          await _isar.serverEntitys.put(serverToActivate);
+          return serverToActivate.toDomain();
+        }
       }
+      return null;
     });
   }
 }

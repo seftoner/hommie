@@ -29,10 +29,7 @@ final class AuthFlowControllerProvider
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
           websocketConfigRepositoryProvider,
-          activeServerProvider,
-          authStateMachineProvider,
           serverConnectionStateProvider,
-          goRouterProvider,
           serverConnectionManagerProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
@@ -45,13 +42,6 @@ final class AuthFlowControllerProvider
           AuthFlowControllerProvider.$allTransitiveDependencies6,
           AuthFlowControllerProvider.$allTransitiveDependencies7,
           AuthFlowControllerProvider.$allTransitiveDependencies8,
-          AuthFlowControllerProvider.$allTransitiveDependencies9,
-          AuthFlowControllerProvider.$allTransitiveDependencies10,
-          AuthFlowControllerProvider.$allTransitiveDependencies11,
-          AuthFlowControllerProvider.$allTransitiveDependencies12,
-          AuthFlowControllerProvider.$allTransitiveDependencies13,
-          AuthFlowControllerProvider.$allTransitiveDependencies14,
-          AuthFlowControllerProvider.$allTransitiveDependencies15,
         },
       );
 
@@ -72,18 +62,6 @@ final class AuthFlowControllerProvider
       WebsocketConfigRepositoryProvider.$allTransitiveDependencies6;
   static const $allTransitiveDependencies8 =
       WebsocketConfigRepositoryProvider.$allTransitiveDependencies7;
-  static const $allTransitiveDependencies9 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies8;
-  static const $allTransitiveDependencies10 = authStateMachineProvider;
-  static const $allTransitiveDependencies11 =
-      AuthStateMachineProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies12 =
-      AuthStateMachineProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies13 = goRouterProvider;
-  static const $allTransitiveDependencies14 =
-      GoRouterProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies15 =
-      GoRouterProvider.$allTransitiveDependencies3;
 
   @override
   String debugGetCreateSourceHash() => _$authFlowControllerHash();
@@ -109,4 +87,4 @@ final class AuthFlowControllerProvider
 }
 
 String _$authFlowControllerHash() =>
-    r'3b0132d5b68bd3f4450f43cf3abf1df51491d93f';
+    r'd4a3e5ddbf06411e27ed9734901fd755d2e05028';
