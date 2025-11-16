@@ -39,7 +39,6 @@ final class ServerManagementControllerProvider
           ServerManagementControllerProvider.$allTransitiveDependencies8,
           ServerManagementControllerProvider.$allTransitiveDependencies9,
           ServerManagementControllerProvider.$allTransitiveDependencies10,
-          ServerManagementControllerProvider.$allTransitiveDependencies11,
         },
       );
 
@@ -61,10 +60,7 @@ final class ServerManagementControllerProvider
       AuthFlowControllerProvider.$allTransitiveDependencies5;
   static const $allTransitiveDependencies9 =
       AuthFlowControllerProvider.$allTransitiveDependencies6;
-  static const $allTransitiveDependencies10 =
-      AuthFlowControllerProvider.$allTransitiveDependencies7;
-  static const $allTransitiveDependencies11 =
-      AuthFlowControllerProvider.$allTransitiveDependencies8;
+  static const $allTransitiveDependencies10 = activeServerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverManagementControllerHash();
@@ -83,7 +79,7 @@ final class ServerManagementControllerProvider
 }
 
 String _$serverManagementControllerHash() =>
-    r'ed9982f4e4be00499e45362c8d1e342e1eda50f6';
+    r'08c244a1dcdd9590f3eacda968f20877a7bc0e56';
 
 abstract class _$ServerManagementController
     extends $Notifier<ServerTestResult> {

@@ -11,7 +11,7 @@ import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([authFlowController])
+@Dependencies([AuthFlowController])
 class ServerDiscoveryPage extends HookConsumerWidget {
   const ServerDiscoveryPage({super.key});
 
@@ -59,7 +59,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                               servers: servers,
                               onTap: (serverAddress) async {
                                 ref
-                                    .read(authFlowControllerProvider)
+                                    .read(authFlowControllerProvider.notifier)
                                     .login(serverAddress.toString());
                               },
                             ),

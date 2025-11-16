@@ -6,7 +6,7 @@ import 'package:hommie/ui/keys.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([authFlowController])
+@Dependencies([AuthFlowController])
 class EnterAddressPage extends HookConsumerWidget {
   const EnterAddressPage({super.key});
 
@@ -41,8 +41,9 @@ class EnterAddressPage extends HookConsumerWidget {
                       labelText: 'Hub address',
                       border: OutlineInputBorder(),
                     ),
-                    onSubmitted: (value) =>
-                        ref.read(authFlowControllerProvider).login(value),
+                    onSubmitted: (value) => ref
+                        .read(authFlowControllerProvider.notifier)
+                        .login(value),
                   ),
                 ),
               ),
@@ -50,7 +51,7 @@ class EnterAddressPage extends HookConsumerWidget {
               FilledButton(
                 key: K.manualAddress.connectButton,
                 onPressed: () => ref
-                    .read(authFlowControllerProvider)
+                    .read(authFlowControllerProvider.notifier)
                     .login(haServerURLController.text),
                 child: const Text('Connect'),
               ),

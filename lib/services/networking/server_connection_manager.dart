@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
+import 'package:hommie/services/networking/i_server_connection_manager.dart';
 import 'package:hommie/services/networking/providers/server_config_provider.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
@@ -14,41 +15,29 @@ part 'server_connection_manager.g.dart';
 
 @Riverpod(
   keepAlive: true,
-  dependencies: [
-    ActiveServer,
-    ServerConnectionState,
-    serverConfig,
-    serverAuthToken,
-  ],
+  dependencies: [ServerConnectionState, serverConfig, serverAuthToken],
 )
-class ServerConnectionManager extends _$ServerConnectionManager {
+IServerConnectionManager serverConnectionManager(Ref ref) {
+  final manager = _ServerConnectionManager(ref);
+
+  ref.onDispose(() {
+    manager._disconnectAll();
+  });
+
+  return manager;
+}
+
+@Dependencies([ServerConnectionState, serverConfig, serverAuthToken])
+class _ServerConnectionManager implements IServerConnectionManager {
   final _orchestrators = <int, ConnectionOrchestrator>{};
   int? _activeServerId;
   bool _isDisposed = false;
+  final Ref _ref;
+
+  _ServerConnectionManager(this._ref);
 
   @override
-  void build() async {
-    ref.onDispose(() {
-      _isDisposed = true;
-      _disconnectAll();
-    });
-
-    // Initialize active server
-    final activeServer = await ref.read(activeServerProvider.future);
-    _activeServerId = activeServer?.id;
-    logger.i(
-      'ServerConnectionManager initialized with active server: $_activeServerId',
-    );
-
-    // Listen to active server changes
-    ref.listen(activeServerProvider, (previous, next) {
-      _handleActiveServerChange(next.value?.id);
-    });
-
-    _isDisposed = false;
-  }
-
-  void _handleActiveServerChange(int? newActiveServerId) {
+  void setActiveServer(int? newActiveServerId) {
     if (_activeServerId == newActiveServerId) {
       return; // No change
     }
@@ -63,7 +52,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     // If no active server, reset connection state
     if (newActiveServerId == null && !_isDisposed) {
       logger.i('No active server - resetting connection state');
-      ref.read(serverConnectionStateProvider.notifier).reset();
+      _ref.read(serverConnectionStateProvider.notifier).reset();
     }
 
     // Disconnect all inactive servers
@@ -75,6 +64,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     }
   }
 
+  @override
   Future<void> reconnect(int serverId) async {
     logger.i('Starting reconnection for server $serverId');
 
@@ -96,6 +86,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
   /// - Heartbeat monitoring and health checks
   /// - Automatic reconnection with exponential backoff
   /// - State management and event handling
+  @override
   Future<HAConnection> getConnection(int serverId) async {
     if (_orchestrators.containsKey(serverId)) {
       final connection = _orchestrators[serverId]!.connection;
@@ -106,6 +97,7 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     return _createNewOrchestrator(serverId);
   }
 
+  @override
   void disconnect(int serverId) {
     logger.i('Disconnecting server $serverId');
 
@@ -115,8 +107,13 @@ class ServerConnectionManager extends _$ServerConnectionManager {
 
     // Update global state only if this was the active server
     if (_activeServerId == serverId && !_isDisposed) {
-      ref.read(serverConnectionStateProvider.notifier).reset();
+      _ref.read(serverConnectionStateProvider.notifier).reset();
     }
+  }
+
+  void dispose() {
+    _isDisposed = true;
+    _disconnectAll();
   }
 
   void _disconnectAll() {
@@ -130,13 +127,13 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       throw Exception('ServerConnectionManager is disposed');
     }
 
-    final server = await ref.read(serverConfigProvider(serverId).future);
+    final server = await _ref.read(serverConfigProvider(serverId).future);
     final serverUrl = Uri.parse(server.url);
 
     // ignore: provider_dependencies
     Future<HAAuthToken> fetchToken() async {
       try {
-        return await ref.read(serverAuthTokenProvider(serverId).future);
+        return await _ref.read(serverAuthTokenProvider(serverId).future);
       } on AuthFailure catch (failure) {
         throw ConnectionError('Failed to resolve token: $failure');
       }
@@ -178,9 +175,9 @@ class ServerConnectionManager extends _$ServerConnectionManager {
       if (_activeServerId == serverId && !_isDisposed) {
         // Determine the appropriate state based on error type
         if (e.toString().contains('auth') || e.toString().contains('token')) {
-          ref.read(serverConnectionStateProvider.notifier).setAuthFailure();
+          _ref.read(serverConnectionStateProvider.notifier).setAuthFailure();
         } else {
-          ref.read(serverConnectionStateProvider.notifier).setDisconnected();
+          _ref.read(serverConnectionStateProvider.notifier).setDisconnected();
         }
       }
 
@@ -209,28 +206,28 @@ class ServerConnectionManager extends _$ServerConnectionManager {
     switch (state) {
       case Disconnected(type: DisconnectionType.authFailure):
         if (shouldUpdateGlobalState) {
-          ref.read(serverConnectionStateProvider.notifier).setAuthFailure();
+          _ref.read(serverConnectionStateProvider.notifier).setAuthFailure();
         }
         disconnect(serverId);
         break;
       case Connecting():
         if (shouldUpdateGlobalState) {
-          ref.read(serverConnectionStateProvider.notifier).setConnecting();
+          _ref.read(serverConnectionStateProvider.notifier).setConnecting();
         }
         break;
       case Authenticated():
         if (shouldUpdateGlobalState) {
-          ref.read(serverConnectionStateProvider.notifier).setConnected();
+          _ref.read(serverConnectionStateProvider.notifier).setConnected();
         }
         break;
       case Reconnecting():
         if (shouldUpdateGlobalState) {
-          ref.read(serverConnectionStateProvider.notifier).setReconnecting();
+          _ref.read(serverConnectionStateProvider.notifier).setReconnecting();
         }
         break;
       case Disconnected():
         if (shouldUpdateGlobalState) {
-          ref.read(serverConnectionStateProvider.notifier).setDisconnected();
+          _ref.read(serverConnectionStateProvider.notifier).setDisconnected();
         }
         break;
     }

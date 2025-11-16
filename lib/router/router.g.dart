@@ -22,16 +22,9 @@ final class GoRouterProvider
         retry: null,
         name: r'goRouterProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[authStateMachineProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
-          GoRouterProvider.$allTransitiveDependencies0,
-          GoRouterProvider.$allTransitiveDependencies1,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static const $allTransitiveDependencies0 = authStateMachineProvider;
-  static const $allTransitiveDependencies1 =
-      AuthStateMachineProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$goRouterHash();
@@ -55,4 +48,4 @@ final class GoRouterProvider
   }
 }
 
-String _$goRouterHash() => r'74900a1ca32c23180a6ec1ae77efefbdcac9b362';
+String _$goRouterHash() => r'71b09851f0fbe02b7d4049b245e4537281d0255a';

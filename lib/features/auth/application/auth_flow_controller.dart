@@ -13,30 +13,29 @@ import 'package:hommie/features/shared/domain/models/task_chain.dart';
 import 'package:hommie/features/shared/infrastructure/runner/task_executor.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/server_connection_manager.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_flow_controller.g.dart';
 
-@Dependencies([
-  websocketConfigRepository,
-  ServerConnectionState,
-  ServerConnectionManager,
-])
-class AuthFlowController {
-  AuthFlowController(this._ref);
-
-  final Ref _ref;
+@Riverpod(
+  keepAlive: true,
+  dependencies: [websocketConfigRepository, serverConnectionManager],
+)
+class AuthFlowController extends _$AuthFlowController {
+  @override
+  void build() {
+    return;
+  }
 
   Future<void> login(String serverUrl) async {
-    final serverManager = _ref.read(serverManagerProvider);
-    final authRepository = _ref.read(authRepositoryProvider);
+    final serverManager = ref.read(serverManagerProvider);
+    final authRepository = ref.read(authRepositoryProvider);
 
     final loginAction = TaskChain.builder()
         .withContext('serverUrl', serverUrl)
         .addTask(CreateServerTask(serverManager))
         .addTask(OAuthLoginAttemptTask(authRepository))
-        .addTask(GetConfigTask(serverManager, _ref))
+        .addTask(GetConfigTask(serverManager, ref))
         .addTask(ActivateServerTask(serverManager))
         .onAnyError((failure) {
           logger.e('Auth failure occurred: $failure');
@@ -47,34 +46,20 @@ class AuthFlowController {
   }
 
   Future<void> signOut(int serverId) async {
-    final serverManager = _ref.read(serverManagerProvider);
-    final authRepository = _ref.read(authRepositoryProvider);
+    final serverManager = ref.read(serverManagerProvider);
+    final serverConnectionManager = ref.read(serverConnectionManagerProvider);
+    final authRepository = ref.read(authRepositoryProvider);
 
     final signOutAction = TaskChain.builder()
         .withContext('serverId', serverId)
-        .addTask(SignOutServerTask(authRepository, _ref))
-        .addTask(DeleteServerTask(serverManager, _ref))
+        .addTask(SignOutServerTask(authRepository, serverConnectionManager))
+        .addTask(DeleteServerTask(serverManager, ref))
         .addTask(ActivateServerIfExistTask(serverManager))
         .onAnyError((failure) {
           logger.e('Sign out failure occurred: $failure');
-        })
-        .onSuccess((context) async {
-          _ref.read(serverConnectionStateProvider.notifier).reset();
         })
         .build();
 
     await TaskExecutor(signOutAction).execute();
   }
-}
-
-@Riverpod(
-  keepAlive: true,
-  dependencies: [
-    websocketConfigRepository,
-    ServerConnectionState,
-    ServerConnectionManager,
-  ],
-)
-AuthFlowController authFlowController(Ref ref) {
-  return AuthFlowController(ref);
 }

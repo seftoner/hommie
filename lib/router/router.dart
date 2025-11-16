@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
-import 'package:hommie/features/auth/application/auth_state_machine.dart';
+import 'package:hommie/features/auth/application/auth_state_provider.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [AuthStateMachine])
+@Riverpod(keepAlive: true)
 GoRouter goRouter(Ref ref) {
   final router = GoRouter(
     navigatorKey: rootKey,
@@ -16,10 +16,7 @@ GoRouter goRouter(Ref ref) {
     routes: $appRoutes,
   );
 
-  void refreshRouter<T>(
-    AsyncValue<AuthState>? previous,
-    AsyncValue<AuthState> next,
-  ) {
+  void refreshRouter<T>(_, AsyncValue<AuthState> next) {
     switch (next) {
       case AsyncLoading():
         router.go(const StartupRoute().location);
@@ -46,7 +43,7 @@ GoRouter goRouter(Ref ref) {
     }
   }
 
-  ref.listen<AsyncValue<AuthState>>(authStateMachineProvider, refreshRouter);
+  ref.listen<AsyncValue<AuthState>>(authStateProvider, refreshRouter);
 
   return router;
 }

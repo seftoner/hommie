@@ -9,11 +9,17 @@ part of 'server_connection_manager.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(ServerConnectionManager)
+@ProviderFor(serverConnectionManager)
 const serverConnectionManagerProvider = ServerConnectionManagerProvider._();
 
 final class ServerConnectionManagerProvider
-    extends $NotifierProvider<ServerConnectionManager, void> {
+    extends
+        $FunctionalProvider<
+          IServerConnectionManager,
+          IServerConnectionManager,
+          IServerConnectionManager
+        >
+    with $Provider<IServerConnectionManager> {
   const ServerConnectionManagerProvider._()
     : super(
         from: null,
@@ -22,7 +28,6 @@ final class ServerConnectionManagerProvider
         name: r'serverConnectionManagerProvider',
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
-          activeServerProvider,
           serverConnectionStateProvider,
           serverConfigProvider,
           serverAuthTokenProvider,
@@ -33,17 +38,15 @@ final class ServerConnectionManagerProvider
           ServerConnectionManagerProvider.$allTransitiveDependencies2,
           ServerConnectionManagerProvider.$allTransitiveDependencies3,
           ServerConnectionManagerProvider.$allTransitiveDependencies4,
-          ServerConnectionManagerProvider.$allTransitiveDependencies5,
         },
       );
 
-  static const $allTransitiveDependencies0 = activeServerProvider;
-  static const $allTransitiveDependencies1 = serverConnectionStateProvider;
-  static const $allTransitiveDependencies2 = serverConfigProvider;
-  static const $allTransitiveDependencies3 = serverAuthTokenProvider;
-  static const $allTransitiveDependencies4 =
+  static const $allTransitiveDependencies0 = serverConnectionStateProvider;
+  static const $allTransitiveDependencies1 = serverConfigProvider;
+  static const $allTransitiveDependencies2 = serverAuthTokenProvider;
+  static const $allTransitiveDependencies3 =
       ServerAuthTokenProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies5 =
+  static const $allTransitiveDependencies4 =
       ServerAuthTokenProvider.$allTransitiveDependencies1;
 
   @override
@@ -51,35 +54,23 @@ final class ServerConnectionManagerProvider
 
   @$internal
   @override
-  ServerConnectionManager create() => ServerConnectionManager();
+  $ProviderElement<IServerConnectionManager> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  IServerConnectionManager create(Ref ref) {
+    return serverConnectionManager(ref);
+  }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(void value) {
+  Override overrideWithValue(IServerConnectionManager value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<void>(value),
+      providerOverride: $SyncValueProvider<IServerConnectionManager>(value),
     );
   }
 }
 
 String _$serverConnectionManagerHash() =>
-    r'ce8e4827ccc9a26714b3630aaf086c6cb469ca04';
-
-abstract class _$ServerConnectionManager extends $Notifier<void> {
-  void build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    build();
-    final ref = this.ref as $Ref<void, void>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<void, void>,
-              void,
-              Object?,
-              Object?
-            >;
-    element.handleValue(ref, null);
-  }
-}
+    r'2f05f52fd96349f52095ff0ca945d5e7ff4d754b';

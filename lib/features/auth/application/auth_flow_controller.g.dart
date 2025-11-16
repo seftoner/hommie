@@ -9,17 +9,11 @@ part of 'auth_flow_controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(authFlowController)
+@ProviderFor(AuthFlowController)
 const authFlowControllerProvider = AuthFlowControllerProvider._();
 
 final class AuthFlowControllerProvider
-    extends
-        $FunctionalProvider<
-          AuthFlowController,
-          AuthFlowController,
-          AuthFlowController
-        >
-    with $Provider<AuthFlowController> {
+    extends $NotifierProvider<AuthFlowController, void> {
   const AuthFlowControllerProvider._()
     : super(
         from: null,
@@ -29,7 +23,6 @@ final class AuthFlowControllerProvider
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
           websocketConfigRepositoryProvider,
-          serverConnectionStateProvider,
           serverConnectionManagerProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
@@ -40,8 +33,6 @@ final class AuthFlowControllerProvider
           AuthFlowControllerProvider.$allTransitiveDependencies4,
           AuthFlowControllerProvider.$allTransitiveDependencies5,
           AuthFlowControllerProvider.$allTransitiveDependencies6,
-          AuthFlowControllerProvider.$allTransitiveDependencies7,
-          AuthFlowControllerProvider.$allTransitiveDependencies8,
         },
       );
 
@@ -58,33 +49,41 @@ final class AuthFlowControllerProvider
       WebsocketConfigRepositoryProvider.$allTransitiveDependencies4;
   static const $allTransitiveDependencies6 =
       WebsocketConfigRepositoryProvider.$allTransitiveDependencies5;
-  static const $allTransitiveDependencies7 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies6;
-  static const $allTransitiveDependencies8 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies7;
 
   @override
   String debugGetCreateSourceHash() => _$authFlowControllerHash();
 
   @$internal
   @override
-  $ProviderElement<AuthFlowController> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  AuthFlowController create(Ref ref) {
-    return authFlowController(ref);
-  }
+  AuthFlowController create() => AuthFlowController();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AuthFlowController value) {
+  Override overrideWithValue(void value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<AuthFlowController>(value),
+      providerOverride: $SyncValueProvider<void>(value),
     );
   }
 }
 
 String _$authFlowControllerHash() =>
-    r'd4a3e5ddbf06411e27ed9734901fd755d2e05028';
+    r'0fdca1d52517cc1c60ab345e7045ec29d0ca2fc4';
+
+abstract class _$AuthFlowController extends $Notifier<void> {
+  void build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    build();
+    final ref = this.ref as $Ref<void, void>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<void, void>,
+              void,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, null);
+  }
+}

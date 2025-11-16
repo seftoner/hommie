@@ -2,11 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
-import 'package:hommie/services/networking/server_connection_provider.dart';
+import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:hommie/services/networking/server_scope_provider.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([ActiveServer])
 /// Hosts a nested [ProviderScope] that injects server-specific overrides for the
 /// currently selected Home Assistant server. When no server is active the
 /// widget keeps the tree mounted without crashing consumers.
@@ -30,8 +28,9 @@ class ServerScopeHost extends ConsumerWidget {
             serverScopeIdProvider.overrideWith((innerRef) => server.id!),
             serverScopeServerProvider.overrideWith((innerRef) => server),
             serverScopeConnectionProvider.overrideWith(
-              (innerRef) =>
-                  innerRef.watch(serverConnectionProvider(server.id!).future),
+              (innerRef) => innerRef
+                  .watch(serverConnectionManagerProvider)
+                  .getConnection(server.id!),
             ),
           ],
           child: child,

@@ -44,21 +44,17 @@ final class WebsocketAreaRepositoryProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = serverConnectionProvider;
+  static const $allTransitiveDependencies0 = serverConnectionManagerProvider;
   static const $allTransitiveDependencies1 =
-      ServerConnectionProvider.$allTransitiveDependencies0;
+      ServerConnectionManagerProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies2 =
-      ServerConnectionProvider.$allTransitiveDependencies1;
+      ServerConnectionManagerProvider.$allTransitiveDependencies1;
   static const $allTransitiveDependencies3 =
-      ServerConnectionProvider.$allTransitiveDependencies2;
+      ServerConnectionManagerProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 =
-      ServerConnectionProvider.$allTransitiveDependencies3;
+      ServerConnectionManagerProvider.$allTransitiveDependencies3;
   static const $allTransitiveDependencies5 =
-      ServerConnectionProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies6 =
-      ServerConnectionProvider.$allTransitiveDependencies5;
-  static const $allTransitiveDependencies7 =
-      ServerConnectionProvider.$allTransitiveDependencies6;
+      ServerConnectionManagerProvider.$allTransitiveDependencies4;
 
   @override
   String debugGetCreateSourceHash() => _$websocketAreaRepositoryHash();
@@ -95,7 +91,7 @@ final class WebsocketAreaRepositoryProvider
 }
 
 String _$websocketAreaRepositoryHash() =>
-    r'f5c55144c8af2d245a1b10cd450b21baca1e3dd1';
+    r'c6617fad01ad82358a3c53c28f081bf4ab5c95f6';
 
 /// Provides WebSocket-based area repository for a specific server
 ///
@@ -108,7 +104,7 @@ final class WebsocketAreaRepositoryFamily extends $Family
     : super(
         retry: null,
         name: r'websocketAreaRepositoryProvider',
-        dependencies: const <ProviderOrFamily>[serverConnectionProvider],
+        dependencies: const <ProviderOrFamily>[serverConnectionManagerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           WebsocketAreaRepositoryProvider.$allTransitiveDependencies0,
           WebsocketAreaRepositoryProvider.$allTransitiveDependencies1,
@@ -116,8 +112,6 @@ final class WebsocketAreaRepositoryFamily extends $Family
           WebsocketAreaRepositoryProvider.$allTransitiveDependencies3,
           WebsocketAreaRepositoryProvider.$allTransitiveDependencies4,
           WebsocketAreaRepositoryProvider.$allTransitiveDependencies5,
-          WebsocketAreaRepositoryProvider.$allTransitiveDependencies6,
-          WebsocketAreaRepositoryProvider.$allTransitiveDependencies7,
         },
         isAutoDispose: true,
       );

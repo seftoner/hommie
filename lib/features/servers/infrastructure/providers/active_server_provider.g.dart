@@ -9,11 +9,12 @@ part of 'active_server_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(ActiveServer)
+@ProviderFor(activeServer)
 const activeServerProvider = ActiveServerProvider._();
 
 final class ActiveServerProvider
-    extends $AsyncNotifierProvider<ActiveServer, Server?> {
+    extends $FunctionalProvider<AsyncValue<Server?>, Server?, Stream<Server?>>
+    with $FutureModifier<Server?>, $StreamProvider<Server?> {
   const ActiveServerProvider._()
     : super(
         from: null,
@@ -30,26 +31,13 @@ final class ActiveServerProvider
 
   @$internal
   @override
-  ActiveServer create() => ActiveServer();
-}
+  $StreamProviderElement<Server?> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
 
-String _$activeServerHash() => r'41504888b73b0aa8a8910700d0f85cc11dea6320';
-
-abstract class _$ActiveServer extends $AsyncNotifier<Server?> {
-  FutureOr<Server?> build();
-  @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
-    final ref = this.ref as $Ref<AsyncValue<Server?>, Server?>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<Server?>, Server?>,
-              AsyncValue<Server?>,
-              Object?,
-              Object?
-            >;
-    element.handleValue(ref, created);
+  Stream<Server?> create(Ref ref) {
+    return activeServer(ref);
   }
 }
+
+String _$activeServerHash() => r'6f4c0c91d55b350152b728e7212cb3e691aa0ef9';

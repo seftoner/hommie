@@ -1,18 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
-import 'package:hommie/services/networking/server_connection_manager.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:hommie/services/networking/i_server_connection_manager.dart';
 
-@Dependencies([ServerConnectionManager])
 class SignOutServerTask extends HTask {
   final IAuthRepository _authRepository;
-  final Ref _ref;
+  final IServerConnectionManager _serverConnectionManager;
 
-  SignOutServerTask(this._authRepository, this._ref);
+  SignOutServerTask(this._authRepository, this._serverConnectionManager);
 
   @override
   Future<HTaskResult> execute(TaskExecutionContext context) async {
@@ -20,11 +16,7 @@ class SignOutServerTask extends HTask {
 
     try {
       // Step 1: Disconnect the server connection if active
-      final connectionManager = _ref.read(
-        serverConnectionManagerProvider.notifier,
-      );
-
-      connectionManager.disconnect(serverId);
+      _serverConnectionManager.disconnect(serverId);
       logger.i('Disconnected server connection for server: $serverId');
 
       // Step 2: Clear credentials from repository

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/app/scopes/server_scope_host.dart';
+import 'package:hommie/features/auth/application/server_session_coordinator.dart';
 import 'package:hommie/router/router.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
 import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 @Dependencies([ServerConnectionState])
 class HommieApp extends StatelessWidget {
@@ -13,13 +14,11 @@ class HommieApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _ServiceInitializer(
-      child: ServerScopeHost(child: _RootAppWidget()),
-    );
+    return const _ServiceInitializer(child: _RootAppWidget());
   }
 }
 
-@Dependencies([goRouter, ServerConnectionState])
+@Dependencies([ServerConnectionState])
 class _RootAppWidget extends ConsumerWidget {
   const _RootAppWidget();
 
@@ -29,7 +28,7 @@ class _RootAppWidget extends ConsumerWidget {
       title: 'Hommie',
       debugShowCheckedModeBanner: false,
       showPerformanceOverlay: false,
-      routerConfig: ref.read(goRouterProvider),
+      routerConfig: ref.watch(goRouterProvider),
       theme: HommieMaterialTheme.platform().light(),
       darkTheme: HommieMaterialTheme.platformDark().dark(),
       supportedLocales: const [Locale('en', '')],
@@ -38,14 +37,14 @@ class _RootAppWidget extends ConsumerWidget {
   }
 }
 
-@Dependencies([ServerConnectionState])
+@Dependencies([serverSessionCoordinator])
 class _ServiceInitializer extends ConsumerWidget {
   const _ServiceInitializer({required this.child});
   final Widget child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(serverConnectionStateProvider);
+    ref.watch(serverSessionCoordinatorProvider);
     return child;
   }
 }

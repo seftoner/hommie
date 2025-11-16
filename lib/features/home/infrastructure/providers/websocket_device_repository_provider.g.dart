@@ -46,21 +46,17 @@ final class WebsocketDeviceRepositoryProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = serverConnectionProvider;
+  static const $allTransitiveDependencies0 = serverConnectionManagerProvider;
   static const $allTransitiveDependencies1 =
-      ServerConnectionProvider.$allTransitiveDependencies0;
+      ServerConnectionManagerProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies2 =
-      ServerConnectionProvider.$allTransitiveDependencies1;
+      ServerConnectionManagerProvider.$allTransitiveDependencies1;
   static const $allTransitiveDependencies3 =
-      ServerConnectionProvider.$allTransitiveDependencies2;
+      ServerConnectionManagerProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 =
-      ServerConnectionProvider.$allTransitiveDependencies3;
+      ServerConnectionManagerProvider.$allTransitiveDependencies3;
   static const $allTransitiveDependencies5 =
-      ServerConnectionProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies6 =
-      ServerConnectionProvider.$allTransitiveDependencies5;
-  static const $allTransitiveDependencies7 =
-      ServerConnectionProvider.$allTransitiveDependencies6;
+      ServerConnectionManagerProvider.$allTransitiveDependencies4;
 
   @override
   String debugGetCreateSourceHash() => _$websocketDeviceRepositoryHash();
@@ -97,7 +93,7 @@ final class WebsocketDeviceRepositoryProvider
 }
 
 String _$websocketDeviceRepositoryHash() =>
-    r'290f28a4e28ee3c025dbdbbf5034d67e19cc2828';
+    r'5e159f32c48edba20cde1697fbe234edc6dde0bc';
 
 /// Provides WebSocket-based device repository for a specific server
 ///
@@ -110,7 +106,7 @@ final class WebsocketDeviceRepositoryFamily extends $Family
     : super(
         retry: null,
         name: r'websocketDeviceRepositoryProvider',
-        dependencies: const <ProviderOrFamily>[serverConnectionProvider],
+        dependencies: const <ProviderOrFamily>[serverConnectionManagerProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           WebsocketDeviceRepositoryProvider.$allTransitiveDependencies0,
           WebsocketDeviceRepositoryProvider.$allTransitiveDependencies1,
@@ -118,8 +114,6 @@ final class WebsocketDeviceRepositoryFamily extends $Family
           WebsocketDeviceRepositoryProvider.$allTransitiveDependencies3,
           WebsocketDeviceRepositoryProvider.$allTransitiveDependencies4,
           WebsocketDeviceRepositoryProvider.$allTransitiveDependencies5,
-          WebsocketDeviceRepositoryProvider.$allTransitiveDependencies6,
-          WebsocketDeviceRepositoryProvider.$allTransitiveDependencies7,
         },
         isAutoDispose: true,
       );

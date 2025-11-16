@@ -5,11 +5,7 @@ import 'package:hommie/features/home/infrastructure/providers/home_view_reposito
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/shared/domain/models/htask.dart';
 import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
-import 'package:hommie/services/networking/connection_state_provider.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-@Dependencies([ServerConnectionState])
 class DeleteServerTask extends HTask {
   final IServerManager _serverManager;
   final Ref _ref;
@@ -46,16 +42,9 @@ class DeleteServerTask extends HTask {
         );
       }
 
-      // 3. Reset connection state since we're removing a server
-      _ref.read(serverConnectionStateProvider.notifier).reset();
-      logger.i('Reset connection state after server deletion');
-
-      // 4. Remove server from manager (allows removing the last server during sign out)
+      // 3. Remove server from manager (allows removing the last server during sign out)
       // This should handle the cascade deletion through the repository layer
-      await _serverManager.removeServer(
-        serverId,
-        allowRemovingLast: true,
-      );
+      await _serverManager.removeServer(serverId, allowRemovingLast: true);
 
       return HTaskResult.success(null);
     } catch (e) {

@@ -7,27 +7,13 @@ import 'package:hommie/features/servers/infrastructure/providers/server_manager_
 part 'active_server_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class ActiveServer extends _$ActiveServer {
-  StreamSubscription<Server?>? _subscription;
+Stream<Server?> activeServer(Ref ref) async* {
+  final serverManager = ref.watch(serverManagerProvider);
+  final current = await serverManager.getActiveServer();
+  // Emit the persisted value first so consumers have synchronous access
+  // even if the manager stream hasn't produced an event yet.
+  yield current;
 
-  @override
-  Future<Server?> build() async {
-    final serverManager = ref.watch(serverManagerProvider);
-    _subscription?.cancel();
-
-    final stream = serverManager.watchActiveServer();
-    _subscription = stream.listen(
-      (server) => state = AsyncData(server),
-      onError: (error, stack) => state = AsyncError(error, stack),
-    );
-
-    ref.onDispose(() {
-      _subscription?.cancel();
-      _subscription = null;
-    });
-    ref.onCancel(() => _subscription?.pause());
-    ref.onResume(() => _subscription?.resume());
-
-    return serverManager.getActiveServer();
-  }
+  // Forward live updates from the manager stream.
+  yield* serverManager.watchActiveServer();
 }

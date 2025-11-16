@@ -9,7 +9,7 @@ import 'package:hommie/features/servers/infrastructure/providers/active_server_p
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([ActiveServer, ServersList])
+@Dependencies([activeServer, ServersList])
 class ServersPage extends ConsumerWidget {
   const ServersPage({super.key});
 
@@ -40,7 +40,8 @@ class ServersPage extends ConsumerWidget {
                   const Text('No servers configured'),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () => context.push('/settings/servers/add/discovery'),
+                    onPressed: () =>
+                        context.push('/settings/servers/add/discovery'),
                     child: const Text('Add Server'),
                   ),
                 ],
