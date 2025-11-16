@@ -34,7 +34,7 @@ final class LogsListControllerProvider
 }
 
 String _$logsListControllerHash() =>
-    r'04448d151f8d1501e468d53b76525578da73edb1';
+    r'704ee7d6de609b5fef8eeabedcc6f2f2b1ba8485';
 
 abstract class _$LogsListController extends $AsyncNotifier<LogsListState> {
   FutureOr<LogsListState> build();

@@ -33,7 +33,7 @@ final class LogsControlerProvider
   LogsControler create() => LogsControler();
 }
 
-String _$logsControlerHash() => r'f666ef0a5b114f907669f4253d99f3e89557f8c0';
+String _$logsControlerHash() => r'ed776663a0c849eef49a022cd9d1773179a9660d';
 
 abstract class _$LogsControler extends $AsyncNotifier<void> {
   FutureOr<void> build();

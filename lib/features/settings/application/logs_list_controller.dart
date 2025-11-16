@@ -8,7 +8,11 @@ part 'logs_list_controller.freezed.dart';
 
 @freezed
 sealed class LogsListState with _$LogsListState {
-  factory LogsListState(bool isLoadingMore, List<Log> logs) = _LogsListState;
+  factory LogsListState(
+    bool isLoadingMore,
+    List<Log> logs, {
+    @Default(false) bool hasReachedEnd,
+  }) = _LogsListState;
 }
 
 @riverpod
@@ -29,7 +33,7 @@ class LogsListController extends _$LogsListController {
   Future<void> loadMoreLogs() async {
     final currentState = await future;
 
-    if (currentState.isLoadingMore) {
+    if (currentState.isLoadingMore || currentState.hasReachedEnd) {
       return;
     }
 
@@ -50,7 +54,10 @@ class LogsListController extends _$LogsListController {
           ),
         );
       } else {
-        state = AsyncValue.data(currentState.copyWith(isLoadingMore: false));
+        // No more logs to fetch
+        state = AsyncValue.data(
+          currentState.copyWith(isLoadingMore: false, hasReachedEnd: true),
+        );
       }
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);

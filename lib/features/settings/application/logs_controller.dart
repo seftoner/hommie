@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:hommie/core/utils/log_file.dart';
 import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/features/settings/infrastructure/providers/logs_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -39,6 +40,23 @@ class LogsControler extends _$LogsControler {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<void> deleteLogs() async {
+    state = const AsyncLoading();
+    try {
+      final repository = await ref.read(logsRepositoryProvider.future);
+      await repository.deleteLogs();
+      logger.i('Logs deleted successfully');
+      if (ref.mounted) {
+        state = const AsyncData(null);
+      }
+    } catch (error, stackTrace) {
+      logger.e('Failed to delete logs', error: error, stackTrace: stackTrace);
+      if (ref.mounted) {
+        state = AsyncError(error, stackTrace);
+      }
     }
   }
 }

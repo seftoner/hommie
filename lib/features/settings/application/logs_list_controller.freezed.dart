@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LogsListState {
 
- bool get isLoadingMore; List<Log> get logs;
+ bool get isLoadingMore; List<Log> get logs; bool get hasReachedEnd;
 /// Create a copy of LogsListState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LogsListStateCopyWith<LogsListState> get copyWith => _$LogsListStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsListState&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other.logs, logs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsListState&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other.logs, logs)&&(identical(other.hasReachedEnd, hasReachedEnd) || other.hasReachedEnd == hasReachedEnd));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoadingMore,const DeepCollectionEquality().hash(logs));
+int get hashCode => Object.hash(runtimeType,isLoadingMore,const DeepCollectionEquality().hash(logs),hasReachedEnd);
 
 @override
 String toString() {
-  return 'LogsListState(isLoadingMore: $isLoadingMore, logs: $logs)';
+  return 'LogsListState(isLoadingMore: $isLoadingMore, logs: $logs, hasReachedEnd: $hasReachedEnd)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LogsListStateCopyWith<$Res>  {
   factory $LogsListStateCopyWith(LogsListState value, $Res Function(LogsListState) _then) = _$LogsListStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoadingMore, List<Log> logs
+ bool isLoadingMore, List<Log> logs, bool hasReachedEnd
 });
 
 
@@ -62,11 +62,12 @@ class _$LogsListStateCopyWithImpl<$Res>
 
 /// Create a copy of LogsListState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoadingMore = null,Object? logs = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoadingMore = null,Object? logs = null,Object? hasReachedEnd = null,}) {
   return _then(_self.copyWith(
 isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,logs: null == logs ? _self.logs : logs // ignore: cast_nullable_to_non_nullable
-as List<Log>,
+as List<Log>,hasReachedEnd: null == hasReachedEnd ? _self.hasReachedEnd : hasReachedEnd // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -148,10 +149,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoadingMore,  List<Log> logs)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoadingMore,  List<Log> logs,  bool hasReachedEnd)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LogsListState() when $default != null:
-return $default(_that.isLoadingMore,_that.logs);case _:
+return $default(_that.isLoadingMore,_that.logs,_that.hasReachedEnd);case _:
   return orElse();
 
 }
@@ -169,10 +170,10 @@ return $default(_that.isLoadingMore,_that.logs);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoadingMore,  List<Log> logs)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoadingMore,  List<Log> logs,  bool hasReachedEnd)  $default,) {final _that = this;
 switch (_that) {
 case _LogsListState():
-return $default(_that.isLoadingMore,_that.logs);}
+return $default(_that.isLoadingMore,_that.logs,_that.hasReachedEnd);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -186,10 +187,10 @@ return $default(_that.isLoadingMore,_that.logs);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoadingMore,  List<Log> logs)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoadingMore,  List<Log> logs,  bool hasReachedEnd)?  $default,) {final _that = this;
 switch (_that) {
 case _LogsListState() when $default != null:
-return $default(_that.isLoadingMore,_that.logs);case _:
+return $default(_that.isLoadingMore,_that.logs,_that.hasReachedEnd);case _:
   return null;
 
 }
@@ -201,7 +202,7 @@ return $default(_that.isLoadingMore,_that.logs);case _:
 
 
 class _LogsListState implements LogsListState {
-   _LogsListState(this.isLoadingMore, final  List<Log> logs): _logs = logs;
+   _LogsListState(this.isLoadingMore, final  List<Log> logs, {this.hasReachedEnd = false}): _logs = logs;
   
 
 @override final  bool isLoadingMore;
@@ -212,6 +213,7 @@ class _LogsListState implements LogsListState {
   return EqualUnmodifiableListView(_logs);
 }
 
+@override@JsonKey() final  bool hasReachedEnd;
 
 /// Create a copy of LogsListState
 /// with the given fields replaced by the non-null parameter values.
@@ -223,16 +225,16 @@ _$LogsListStateCopyWith<_LogsListState> get copyWith => __$LogsListStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LogsListState&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other._logs, _logs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LogsListState&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other._logs, _logs)&&(identical(other.hasReachedEnd, hasReachedEnd) || other.hasReachedEnd == hasReachedEnd));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoadingMore,const DeepCollectionEquality().hash(_logs));
+int get hashCode => Object.hash(runtimeType,isLoadingMore,const DeepCollectionEquality().hash(_logs),hasReachedEnd);
 
 @override
 String toString() {
-  return 'LogsListState(isLoadingMore: $isLoadingMore, logs: $logs)';
+  return 'LogsListState(isLoadingMore: $isLoadingMore, logs: $logs, hasReachedEnd: $hasReachedEnd)';
 }
 
 
@@ -243,7 +245,7 @@ abstract mixin class _$LogsListStateCopyWith<$Res> implements $LogsListStateCopy
   factory _$LogsListStateCopyWith(_LogsListState value, $Res Function(_LogsListState) _then) = __$LogsListStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoadingMore, List<Log> logs
+ bool isLoadingMore, List<Log> logs, bool hasReachedEnd
 });
 
 
@@ -260,11 +262,12 @@ class __$LogsListStateCopyWithImpl<$Res>
 
 /// Create a copy of LogsListState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoadingMore = null,Object? logs = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoadingMore = null,Object? logs = null,Object? hasReachedEnd = null,}) {
   return _then(_LogsListState(
 null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,null == logs ? _self._logs : logs // ignore: cast_nullable_to_non_nullable
-as List<Log>,
+as List<Log>,hasReachedEnd: null == hasReachedEnd ? _self.hasReachedEnd : hasReachedEnd // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
