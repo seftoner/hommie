@@ -45,7 +45,7 @@ abstract class Sensor {
   bool isDisabled = true;
 
   ///Attributes to attach to the sensor
-  late Map<String, dynamic> attributes;
+  Map<String, dynamic>? attributes;
 
   Sensor({required this.uniqueId, required this.name, this.state});
 }
