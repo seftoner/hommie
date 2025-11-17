@@ -35,8 +35,8 @@ class AuthFlowController extends _$AuthFlowController {
         .withContext('serverUrl', serverUrl)
         .addTask(CreateServerTask(serverManager))
         .addTask(OAuthLoginAttemptTask(authRepository))
-        .addTask(GetConfigTask(serverManager, ref))
         .addTask(ActivateServerTask(serverManager))
+        .addTask(GetConfigTask(serverManager, ref))
         .onAnyError((failure) {
           logger.e('Auth failure occurred: $failure');
         })
