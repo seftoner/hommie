@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_credentials_provider.g.dart';
 
-@Riverpod(dependencies: [authRepository])
+@riverpod
 Future<Credentials> serverCredentials(Ref ref, int serverId) async {
   final repository = ref.read(authRepositoryProvider);
   final result = await repository.getCredentials(serverId);

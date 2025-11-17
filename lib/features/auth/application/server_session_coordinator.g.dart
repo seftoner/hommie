@@ -48,7 +48,6 @@ final class ServerSessionCoordinatorProvider
           ServerSessionCoordinatorProvider.$allTransitiveDependencies4,
           ServerSessionCoordinatorProvider.$allTransitiveDependencies5,
           ServerSessionCoordinatorProvider.$allTransitiveDependencies6,
-          ServerSessionCoordinatorProvider.$allTransitiveDependencies7,
         },
       );
 
@@ -65,8 +64,6 @@ final class ServerSessionCoordinatorProvider
       AuthFlowControllerProvider.$allTransitiveDependencies4;
   static const $allTransitiveDependencies6 =
       AuthFlowControllerProvider.$allTransitiveDependencies5;
-  static const $allTransitiveDependencies7 =
-      AuthFlowControllerProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$serverSessionCoordinatorHash();

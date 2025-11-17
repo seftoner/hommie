@@ -32,8 +32,6 @@ final class ServerAuthTokenProvider
        );
 
   static const $allTransitiveDependencies0 = serverCredentialsProvider;
-  static const $allTransitiveDependencies1 =
-      ServerCredentialsProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$serverAuthTokenHash();
@@ -79,7 +77,6 @@ final class ServerAuthTokenFamily extends $Family
         dependencies: const <ProviderOrFamily>[serverCredentialsProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           ServerAuthTokenProvider.$allTransitiveDependencies0,
-          ServerAuthTokenProvider.$allTransitiveDependencies1,
         ],
         isAutoDispose: true,
       );

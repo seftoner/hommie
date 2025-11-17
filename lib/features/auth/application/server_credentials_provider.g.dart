@@ -31,8 +31,6 @@ final class ServerCredentialsProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = authRepositoryProvider;
-
   @override
   String debugGetCreateSourceHash() => _$serverCredentialsHash();
 
@@ -66,7 +64,7 @@ final class ServerCredentialsProvider
   }
 }
 
-String _$serverCredentialsHash() => r'2d54716680388f23b49ce6835e480ef968fcbef0';
+String _$serverCredentialsHash() => r'a2ed9b2e36d017999b5e3fc505de172c528bf0f5';
 
 final class ServerCredentialsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Credentials>, int> {
@@ -74,10 +72,8 @@ final class ServerCredentialsFamily extends $Family
     : super(
         retry: null,
         name: r'serverCredentialsProvider',
-        dependencies: const <ProviderOrFamily>[authRepositoryProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
-          ServerCredentialsProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 

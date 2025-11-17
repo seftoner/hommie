@@ -38,7 +38,6 @@ final class ServerManagementControllerProvider
           ServerManagementControllerProvider.$allTransitiveDependencies7,
           ServerManagementControllerProvider.$allTransitiveDependencies8,
           ServerManagementControllerProvider.$allTransitiveDependencies9,
-          ServerManagementControllerProvider.$allTransitiveDependencies10,
         },
       );
 
@@ -58,9 +57,7 @@ final class ServerManagementControllerProvider
       AuthFlowControllerProvider.$allTransitiveDependencies4;
   static const $allTransitiveDependencies8 =
       AuthFlowControllerProvider.$allTransitiveDependencies5;
-  static const $allTransitiveDependencies9 =
-      AuthFlowControllerProvider.$allTransitiveDependencies6;
-  static const $allTransitiveDependencies10 = activeServerProvider;
+  static const $allTransitiveDependencies9 = activeServerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverManagementControllerHash();

@@ -92,12 +92,14 @@ class AuthRepository implements IAuthRepository {
           return failureOrCredentials.fold(
             (failure) {
               logger.e('Token refresh failed: $failure');
-              // Return the stored credentials even if refresh failed
-              if (failure is Connection) {
-                logger.i('Using stored credentials for offline access');
-                return right(storedCredentials);
-              }
-              return left(failure);
+              // Return stored credentials for offline access if connection failed
+              return switch (failure) {
+                Connection() || ServerFailure() => () {
+                  logger.i('Using stored credentials for offline access');
+                  return right<AuthFailure, Credentials>(storedCredentials);
+                }(),
+                _ => left<AuthFailure, Credentials>(failure),
+              };
             },
             (newCredentials) {
               logger.i('Token refreshed successfully');
@@ -140,8 +142,8 @@ class AuthRepository implements IAuthRepository {
       logger.e('Error refreshing token: $e');
       return left(AuthFailure.invalidToken(e.error));
     } on SocketException catch (e) {
-      logger.e('Token refresh failed: $e');
-      return left(AuthFailure.server('$e'));
+      logger.e('Token refresh failed due to connection: $e');
+      return left(const AuthFailure.connection());
     } on PlatformException {
       return left(const AuthFailure.storage());
     }
