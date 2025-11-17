@@ -32,10 +32,6 @@ bool operator ==(Object other) {
 @override
 int get hashCode => Object.hash(runtimeType,major,minor,patch);
 
-@override
-String toString() {
-  return 'HaVersion(major: $major, minor: $minor, patch: $patch)';
-}
 
 
 }
@@ -226,10 +222,6 @@ bool operator ==(Object other) {
 @override
 int get hashCode => Object.hash(runtimeType,major,minor,patch);
 
-@override
-String toString() {
-  return 'HaVersion(major: $major, minor: $minor, patch: $patch)';
-}
 
 
 }

@@ -20,6 +20,7 @@ const ServerEntitySchema = CollectionSchema(
     r'isActive': PropertySchema(id: 0, name: r'isActive', type: IsarType.bool),
     r'name': PropertySchema(id: 1, name: r'name', type: IsarType.string),
     r'url': PropertySchema(id: 2, name: r'url', type: IsarType.string),
+    r'version': PropertySchema(id: 3, name: r'version', type: IsarType.string),
   },
 
   estimateSize: _serverEntityEstimateSize,
@@ -53,6 +54,12 @@ int _serverEntityEstimateSize(
   var bytesCount = offsets.last;
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.url.length * 3;
+  {
+    final value = object.version;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -65,6 +72,7 @@ void _serverEntitySerialize(
   writer.writeBool(offsets[0], object.isActive);
   writer.writeString(offsets[1], object.name);
   writer.writeString(offsets[2], object.url);
+  writer.writeString(offsets[3], object.version);
 }
 
 ServerEntity _serverEntityDeserialize(
@@ -77,6 +85,7 @@ ServerEntity _serverEntityDeserialize(
     isActive: reader.readBoolOrNull(offsets[0]) ?? false,
     name: reader.readString(offsets[1]),
     url: reader.readString(offsets[2]),
+    version: reader.readStringOrNull(offsets[3]),
   );
   object.id = id;
   return object;
@@ -95,6 +104,8 @@ P _serverEntityDeserializeProp<P>(
       return (reader.readString(offset)) as P;
     case 2:
       return (reader.readString(offset)) as P;
+    case 3:
+      return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -568,6 +579,165 @@ extension ServerEntityQueryFilter
       );
     });
   }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'version'),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'version'),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionEqualTo(String? value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'version',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'version',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'version',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'version',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionStartsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'version',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionEndsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'version',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'version',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'version',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'version', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterFilterCondition>
+  versionIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'version', value: ''),
+      );
+    });
+  }
 }
 
 extension ServerEntityQueryObject
@@ -628,6 +798,18 @@ extension ServerEntityQuerySortBy
       return query.addSortBy(r'url', Sort.desc);
     });
   }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterSortBy> sortByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterSortBy> sortByVersionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.desc);
+    });
+  }
 }
 
 extension ServerEntityQuerySortThenBy
@@ -679,6 +861,18 @@ extension ServerEntityQuerySortThenBy
       return query.addSortBy(r'url', Sort.desc);
     });
   }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterSortBy> thenByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QAfterSortBy> thenByVersionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.desc);
+    });
+  }
 }
 
 extension ServerEntityQueryWhereDistinct
@@ -702,6 +896,14 @@ extension ServerEntityQueryWhereDistinct
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'url', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<ServerEntity, ServerEntity, QDistinct> distinctByVersion({
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'version', caseSensitive: caseSensitive);
     });
   }
 }
@@ -729,6 +931,12 @@ extension ServerEntityQueryProperty
   QueryBuilder<ServerEntity, String, QQueryOperations> urlProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'url');
+    });
+  }
+
+  QueryBuilder<ServerEntity, String?, QQueryOperations> versionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'version');
     });
   }
 }

@@ -35,4 +35,9 @@ sealed class HaVersion with _$HaVersion {
             (minor > minMinor ||
                 (minor == minMinor && (patch ?? 0) >= minPatch)));
   }
+
+  @override
+  String toString() {
+    return patch != null ? '$major.$minor.$patch' : '$major.$minor';
+  }
 }

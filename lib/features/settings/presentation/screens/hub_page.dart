@@ -59,7 +59,6 @@ class _HubStatusContent extends StatelessWidget {
               title: 'WebSocket',
               value: _connectionLabel(status.connectionState),
             ),
-            _HubInfoTile(title: 'Local Push', value: 'Disabled'),
             _HubInfoTile(
               title: 'Logged in as',
               value: _authLabel(status.authState),
@@ -81,13 +80,6 @@ class _HubStatusContent extends StatelessWidget {
               value: _urlLabel(server.externalUrl),
             ),
           ],
-        ),
-        const SizedBox(height: 12),
-        Text(
-          'Connection state: ${status.connectionState.name}',
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
         ),
       ],
     );

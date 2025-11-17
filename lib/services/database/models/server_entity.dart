@@ -15,8 +15,10 @@ class ServerEntity {
   // @Index(unique: true)
   String url;
 
+  String? version;
+
   @Backlink(to: 'server')
   final homeConfig = IsarLink<HomeViewConfig>();
 
-  ServerEntity({required this.name, required this.url, this.isActive = false});
+  ServerEntity({required this.name, required this.url, this.isActive = false, this.version});
 }
