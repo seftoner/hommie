@@ -5,10 +5,9 @@ import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/ui/keys.dart';
+import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([hubStatus])
 class HubPage extends HookConsumerWidget {
   const HubPage({super.key});
 
@@ -38,7 +37,6 @@ class _HubStatusContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final server = status.server!;
-    final theme = Theme.of(context);
 
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -65,12 +63,12 @@ class _HubStatusContent extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        $h24,
         _SectionCard(
           title: 'Details',
           children: [
             _HubInfoTile(title: 'Name', value: server.name),
-            const _HubInfoTile(title: 'Device Name', value: 'This device'),
+            _HubInfoTile(title: 'Device Name', value: status.deviceName),
             _HubInfoTile(
               title: 'Internal URL',
               value: _urlLabel(server.internalUrl ?? server.baseUrl),

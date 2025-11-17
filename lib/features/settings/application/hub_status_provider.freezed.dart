@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HubStatusState {
 
- Server? get server; HAServerConnectionState get connectionState; AuthState get authState;
+ Server? get server; HAServerConnectionState get connectionState; AuthState get authState; String get deviceName;
 /// Create a copy of HubStatusState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $HubStatusStateCopyWith<HubStatusState> get copyWith => _$HubStatusStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HubStatusState&&(identical(other.server, server) || other.server == server)&&(identical(other.connectionState, connectionState) || other.connectionState == connectionState)&&(identical(other.authState, authState) || other.authState == authState));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HubStatusState&&(identical(other.server, server) || other.server == server)&&(identical(other.connectionState, connectionState) || other.connectionState == connectionState)&&(identical(other.authState, authState) || other.authState == authState)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,server,connectionState,authState);
+int get hashCode => Object.hash(runtimeType,server,connectionState,authState,deviceName);
 
 @override
 String toString() {
-  return 'HubStatusState(server: $server, connectionState: $connectionState, authState: $authState)';
+  return 'HubStatusState(server: $server, connectionState: $connectionState, authState: $authState, deviceName: $deviceName)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $HubStatusStateCopyWith<$Res>  {
   factory $HubStatusStateCopyWith(HubStatusState value, $Res Function(HubStatusState) _then) = _$HubStatusStateCopyWithImpl;
 @useResult
 $Res call({
- Server? server, HAServerConnectionState connectionState, AuthState authState
+ Server? server, HAServerConnectionState connectionState, AuthState authState, String deviceName
 });
 
 
@@ -62,12 +62,13 @@ class _$HubStatusStateCopyWithImpl<$Res>
 
 /// Create a copy of HubStatusState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? server = freezed,Object? connectionState = null,Object? authState = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? server = freezed,Object? connectionState = null,Object? authState = null,Object? deviceName = null,}) {
   return _then(_self.copyWith(
 server: freezed == server ? _self.server : server // ignore: cast_nullable_to_non_nullable
 as Server?,connectionState: null == connectionState ? _self.connectionState : connectionState // ignore: cast_nullable_to_non_nullable
 as HAServerConnectionState,authState: null == authState ? _self.authState : authState // ignore: cast_nullable_to_non_nullable
-as AuthState,
+as AuthState,deviceName: null == deviceName ? _self.deviceName : deviceName // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 /// Create a copy of HubStatusState
@@ -158,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Server? server,  HAServerConnectionState connectionState,  AuthState authState)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Server? server,  HAServerConnectionState connectionState,  AuthState authState,  String deviceName)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HubStatusState() when $default != null:
-return $default(_that.server,_that.connectionState,_that.authState);case _:
+return $default(_that.server,_that.connectionState,_that.authState,_that.deviceName);case _:
   return orElse();
 
 }
@@ -179,10 +180,10 @@ return $default(_that.server,_that.connectionState,_that.authState);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Server? server,  HAServerConnectionState connectionState,  AuthState authState)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Server? server,  HAServerConnectionState connectionState,  AuthState authState,  String deviceName)  $default,) {final _that = this;
 switch (_that) {
 case _HubStatusState():
-return $default(_that.server,_that.connectionState,_that.authState);}
+return $default(_that.server,_that.connectionState,_that.authState,_that.deviceName);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -196,10 +197,10 @@ return $default(_that.server,_that.connectionState,_that.authState);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Server? server,  HAServerConnectionState connectionState,  AuthState authState)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Server? server,  HAServerConnectionState connectionState,  AuthState authState,  String deviceName)?  $default,) {final _that = this;
 switch (_that) {
 case _HubStatusState() when $default != null:
-return $default(_that.server,_that.connectionState,_that.authState);case _:
+return $default(_that.server,_that.connectionState,_that.authState,_that.deviceName);case _:
   return null;
 
 }
@@ -211,12 +212,13 @@ return $default(_that.server,_that.connectionState,_that.authState);case _:
 
 
 class _HubStatusState implements HubStatusState {
-  const _HubStatusState({required this.server, required this.connectionState, required this.authState});
+  const _HubStatusState({required this.server, required this.connectionState, required this.authState, required this.deviceName});
   
 
 @override final  Server? server;
 @override final  HAServerConnectionState connectionState;
 @override final  AuthState authState;
+@override final  String deviceName;
 
 /// Create a copy of HubStatusState
 /// with the given fields replaced by the non-null parameter values.
@@ -228,16 +230,16 @@ _$HubStatusStateCopyWith<_HubStatusState> get copyWith => __$HubStatusStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HubStatusState&&(identical(other.server, server) || other.server == server)&&(identical(other.connectionState, connectionState) || other.connectionState == connectionState)&&(identical(other.authState, authState) || other.authState == authState));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HubStatusState&&(identical(other.server, server) || other.server == server)&&(identical(other.connectionState, connectionState) || other.connectionState == connectionState)&&(identical(other.authState, authState) || other.authState == authState)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,server,connectionState,authState);
+int get hashCode => Object.hash(runtimeType,server,connectionState,authState,deviceName);
 
 @override
 String toString() {
-  return 'HubStatusState(server: $server, connectionState: $connectionState, authState: $authState)';
+  return 'HubStatusState(server: $server, connectionState: $connectionState, authState: $authState, deviceName: $deviceName)';
 }
 
 
@@ -248,7 +250,7 @@ abstract mixin class _$HubStatusStateCopyWith<$Res> implements $HubStatusStateCo
   factory _$HubStatusStateCopyWith(_HubStatusState value, $Res Function(_HubStatusState) _then) = __$HubStatusStateCopyWithImpl;
 @override @useResult
 $Res call({
- Server? server, HAServerConnectionState connectionState, AuthState authState
+ Server? server, HAServerConnectionState connectionState, AuthState authState, String deviceName
 });
 
 
@@ -265,12 +267,13 @@ class __$HubStatusStateCopyWithImpl<$Res>
 
 /// Create a copy of HubStatusState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? server = freezed,Object? connectionState = null,Object? authState = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? server = freezed,Object? connectionState = null,Object? authState = null,Object? deviceName = null,}) {
   return _then(_HubStatusState(
 server: freezed == server ? _self.server : server // ignore: cast_nullable_to_non_nullable
 as Server?,connectionState: null == connectionState ? _self.connectionState : connectionState // ignore: cast_nullable_to_non_nullable
 as HAServerConnectionState,authState: null == authState ? _self.authState : authState // ignore: cast_nullable_to_non_nullable
-as AuthState,
+as AuthState,deviceName: null == deviceName ? _self.deviceName : deviceName // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

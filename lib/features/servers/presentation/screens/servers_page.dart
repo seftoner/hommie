@@ -9,7 +9,7 @@ import 'package:hommie/features/servers/infrastructure/providers/active_server_p
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([activeServer, ServersList])
+@Dependencies([ServersList])
 class ServersPage extends ConsumerWidget {
   const ServersPage({super.key});
 

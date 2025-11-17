@@ -3,6 +3,7 @@ import 'package:hommie/features/auth/application/auth_state.dart';
 import 'package:hommie/features/auth/application/auth_state_provider.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/settings/infrastructure/providers/device_info_repository_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,6 +16,7 @@ sealed class HubStatusState with _$HubStatusState {
     required Server? server,
     required HAServerConnectionState connectionState,
     required AuthState authState,
+    required String deviceName,
   }) = _HubStatusState;
 }
 
@@ -23,10 +25,14 @@ Future<HubStatusState> hubStatus(Ref ref) async {
   final server = await ref.watch(activeServerProvider.future);
   final connectionState = ref.watch(serverConnectionStateProvider);
   final authState = await ref.watch(authStateProvider.future);
+  final deviceName = await ref
+      .read(deviceInfoRepositoryProvider)
+      .getDeviceName();
 
   return HubStatusState(
     server: server,
     connectionState: connectionState,
     authState: authState,
+    deviceName: deviceName,
   );
 }
