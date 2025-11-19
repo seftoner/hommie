@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/features/auth/application/servers_discovery_controller.dart';
+import 'package:hommie/core/flow_builder/flow_controller.dart';
 import 'package:hommie/features/auth/application/auth_flow_controller.dart';
+import 'package:hommie/features/auth/application/flows/server_flows.dart';
+import 'package:hommie/features/auth/application/servers_discovery_controller.dart';
 import 'package:hommie/features/auth/domain/entities/ha_server.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_available_severs_list_title.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_empty_state.dart';
@@ -58,9 +60,10 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                             child: DiscoveredHaServersList(
                               servers: servers,
                               onTap: (serverAddress) async {
-                                ref
-                                    .read(authFlowControllerProvider.notifier)
-                                    .login(serverAddress.toString());
+                                await handleServerSelection(
+                                  ref,
+                                  serverAddress.toString(),
+                                );
                               },
                             ),
                           );
@@ -86,11 +89,14 @@ class ServerDiscoveryPage extends HookConsumerWidget {
   }
 }
 
-class EnterAddressManually extends StatelessWidget {
+class EnterAddressManually extends ConsumerWidget {
   const EnterAddressManually({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final flowState = ref.watch(flowControllerProvider);
+    final manualRoute = manualEntryRouteForState(flowState);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -104,7 +110,7 @@ class EnterAddressManually extends StatelessWidget {
         $h16,
         FilledButton.tonal(
           key: K.serversDiscovery.enterManuallyButton,
-          onPressed: () => {const EnterAddressRoute().push(context)},
+          onPressed: () => manualRoute.push(context),
           child: const Text('Enter addres manually'),
         ),
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hommie/core/bootstrap/app_startup.dart';
+import 'package:hommie/core/flow_builder/flow_shell.dart';
 import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
 import 'package:hommie/features/automation/presentation/automations_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
@@ -46,6 +47,42 @@ class MainShellRouteData extends StatefulShellRouteData {
 
 class AutomationsShellBranchData extends StatefulShellBranchData {
   const AutomationsShellBranchData();
+}
+
+@TypedShellRoute<OnboardingFlowShellRouteData>(
+  routes: [
+    TypedGoRoute<OnboardingDiscoveryRouteData>(path: '/onboarding/discovery'),
+    TypedGoRoute<OnboardingManualEntryRouteData>(
+      path: '/onboarding/manual-entry',
+    ),
+  ],
+)
+class OnboardingFlowShellRouteData extends ShellRouteData {
+  const OnboardingFlowShellRouteData();
+
+  @override
+  Widget builder(BuildContext context, GoRouterState state, Widget navigator) {
+    return FlowShell(size: FlowShellSize.constrainedCard, child: navigator);
+  }
+}
+
+@TypedShellRoute<AddServerFlowShellRouteData>(
+  routes: [
+    TypedGoRoute<AddServerDiscoveryRouteData>(
+      path: '/settings/servers/add/discovery',
+    ),
+    TypedGoRoute<AddServerManualEntryRouteData>(
+      path: '/settings/servers/add/manual-entry',
+    ),
+  ],
+)
+class AddServerFlowShellRouteData extends ShellRouteData {
+  const AddServerFlowShellRouteData();
+
+  @override
+  Widget builder(BuildContext context, GoRouterState state, Widget child) {
+    return FlowShell(size: FlowShellSize.fullscreen, child: child);
+  }
 }
 
 class AutomationsRouteData extends GoRouteData with $AutomationsRouteData {
@@ -159,6 +196,56 @@ class HomeRouteData extends GoRouteData with $HomeRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const HomePage();
+  }
+}
+
+// Flow-specific discovery/manual routes so each flow can live under a unique
+// navigation pass while reusing the same UI widgets.
+@TypedGoRoute<OnboardingDiscoveryRouteData>(path: '/onboarding/discovery')
+class OnboardingDiscoveryRouteData extends GoRouteData
+    with $OnboardingDiscoveryRouteData {
+  const OnboardingDiscoveryRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ServerDiscoveryPage();
+  }
+}
+
+@TypedGoRoute<OnboardingManualEntryRouteData>(path: '/onboarding/manual-entry')
+class OnboardingManualEntryRouteData extends GoRouteData
+    with $OnboardingManualEntryRouteData {
+  const OnboardingManualEntryRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const EnterAddressPage();
+  }
+}
+
+@TypedGoRoute<AddServerDiscoveryRouteData>(
+  path: '/settings/servers/add/discovery',
+)
+class AddServerDiscoveryRouteData extends GoRouteData
+    with $AddServerDiscoveryRouteData {
+  const AddServerDiscoveryRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ServerDiscoveryPage();
+  }
+}
+
+@TypedGoRoute<AddServerManualEntryRouteData>(
+  path: '/settings/servers/add/manual-entry',
+)
+class AddServerManualEntryRouteData extends GoRouteData
+    with $AddServerManualEntryRouteData {
+  const AddServerManualEntryRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const EnterAddressPage();
   }
 }
 

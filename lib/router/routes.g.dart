@@ -8,7 +8,13 @@ part of 'routes.dart';
 
 List<RouteBase> get $appRoutes => [
   $mainShellRouteData,
+  $onboardingFlowShellRouteData,
+  $addServerFlowShellRouteData,
   $settingsRouteData,
+  $onboardingDiscoveryRouteData,
+  $onboardingManualEntryRouteData,
+  $addServerDiscoveryRouteData,
+  $addServerManualEntryRouteData,
   $discoveryRoute,
   $enterAddressRoute,
   $startupRoute,
@@ -64,6 +70,131 @@ mixin $AutomationsRouteData on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/automations');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $onboardingFlowShellRouteData => ShellRouteData.$route(
+  factory: $OnboardingFlowShellRouteDataExtension._fromState,
+  routes: [
+    GoRouteData.$route(
+      path: '/onboarding/discovery',
+      factory: $OnboardingDiscoveryRouteData._fromState,
+    ),
+    GoRouteData.$route(
+      path: '/onboarding/manual-entry',
+      factory: $OnboardingManualEntryRouteData._fromState,
+    ),
+  ],
+);
+
+extension $OnboardingFlowShellRouteDataExtension
+    on OnboardingFlowShellRouteData {
+  static OnboardingFlowShellRouteData _fromState(GoRouterState state) =>
+      const OnboardingFlowShellRouteData();
+}
+
+mixin $OnboardingDiscoveryRouteData on GoRouteData {
+  static OnboardingDiscoveryRouteData _fromState(GoRouterState state) =>
+      const OnboardingDiscoveryRouteData();
+
+  @override
+  String get location => GoRouteData.$location('/onboarding/discovery');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $OnboardingManualEntryRouteData on GoRouteData {
+  static OnboardingManualEntryRouteData _fromState(GoRouterState state) =>
+      const OnboardingManualEntryRouteData();
+
+  @override
+  String get location => GoRouteData.$location('/onboarding/manual-entry');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $addServerFlowShellRouteData => ShellRouteData.$route(
+  factory: $AddServerFlowShellRouteDataExtension._fromState,
+  routes: [
+    GoRouteData.$route(
+      path: '/settings/servers/add/discovery',
+      factory: $AddServerDiscoveryRouteData._fromState,
+    ),
+    GoRouteData.$route(
+      path: '/settings/servers/add/manual-entry',
+      factory: $AddServerManualEntryRouteData._fromState,
+    ),
+  ],
+);
+
+extension $AddServerFlowShellRouteDataExtension on AddServerFlowShellRouteData {
+  static AddServerFlowShellRouteData _fromState(GoRouterState state) =>
+      const AddServerFlowShellRouteData();
+}
+
+mixin $AddServerDiscoveryRouteData on GoRouteData {
+  static AddServerDiscoveryRouteData _fromState(GoRouterState state) =>
+      const AddServerDiscoveryRouteData();
+
+  @override
+  String get location =>
+      GoRouteData.$location('/settings/servers/add/discovery');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $AddServerManualEntryRouteData on GoRouteData {
+  static AddServerManualEntryRouteData _fromState(GoRouterState state) =>
+      const AddServerManualEntryRouteData();
+
+  @override
+  String get location =>
+      GoRouteData.$location('/settings/servers/add/manual-entry');
 
   @override
   void go(BuildContext context) => context.go(location);
@@ -273,6 +404,26 @@ mixin $SensorsRouteData on GoRouteData {
   @override
   void replace(BuildContext context) => context.replace(location);
 }
+
+RouteBase get $onboardingDiscoveryRouteData => GoRouteData.$route(
+  path: '/onboarding/discovery',
+  factory: $OnboardingDiscoveryRouteData._fromState,
+);
+
+RouteBase get $onboardingManualEntryRouteData => GoRouteData.$route(
+  path: '/onboarding/manual-entry',
+  factory: $OnboardingManualEntryRouteData._fromState,
+);
+
+RouteBase get $addServerDiscoveryRouteData => GoRouteData.$route(
+  path: '/settings/servers/add/discovery',
+  factory: $AddServerDiscoveryRouteData._fromState,
+);
+
+RouteBase get $addServerManualEntryRouteData => GoRouteData.$route(
+  path: '/settings/servers/add/manual-entry',
+  factory: $AddServerManualEntryRouteData._fromState,
+);
 
 RouteBase get $discoveryRoute =>
     GoRouteData.$route(path: '/discovery', factory: $DiscoveryRoute._fromState);
