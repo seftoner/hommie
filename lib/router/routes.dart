@@ -57,6 +57,7 @@ class AutomationsRouteData extends GoRouteData with $AutomationsRouteData {
   }
 }
 
+// ignore: provider_dependencies
 @TypedGoRoute<SettingsRouteData>(
   path: '/settings',
   routes: [

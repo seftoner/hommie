@@ -9,15 +9,17 @@ environment:
 
 # Define riverpod version to use across all riverpod packages
 riverpod_version: &riverpod_version 3.0.3
-isar_version: &isar_version 3.3.0-dev.3
+isar_version: &isar_version 3.3.0
 
 dependencies:
-  battery_plus: ^6.2.3
   computer:
     git:
       url: https://github.com/seftoner/computer.git
-  connectivity_plus: ^6.1.5
+  battery_plus: ^7.0.0
+  connectivity_plus: ^7.0.0
   device_info_plus: ^12.2.0
+  share_plus: ^12.0.1
+  network_info_plus: ^7.0.0
   flutter:
     sdk: flutter
   flutter_animate: ^4.5.2
@@ -29,21 +31,19 @@ dependencies:
   flutter_web_auth_2: ^4.1.0
   fpdart: ^1.1.1
   freezed_annotation: ^3.1.0
-  go_router: ^16.2.1
-  go_router_guards: ^2.0.0
+  go_router: ^17.0.0
   hooks_riverpod: *riverpod_version
   http: ^1.2.2
   json_annotation: ^4.9.0
   logger: ^2.6.1
   multicast_dns: ^0.3.3
-  network_info_plus: ^6.1.4
+
   oauth2: ^2.0.3
   path: ^1.9.1
   path_provider: ^2.1.5
-  permission_handler: ^11.4.0
+  permission_handler: ^12.0.1
   riverpod: *riverpod_version
   riverpod_annotation: *riverpod_version
-  share_plus: ^10.1.4
   shared_preferences: ^2.5.3
   url_launcher: ^6.3.2
   web_socket_channel: ^3.0.1

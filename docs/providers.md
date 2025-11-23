@@ -96,6 +96,12 @@ Complete reference for all Riverpod providers in the Hommie application.
 - **Dependencies:** `websocketConfigRepository`, `ActiveServer`, `AuthStateMachine`, `ServerConnectionState`, `goRouter`, `ServerConnectionManager`
 - **Lifecycle:** Scoped
 
+### `serverSessionCoordinatorProvider`
+- **Type:** Provider<void>
+- **Purpose:** Keeps the active server session healthy by (1) eagerly creating a WebSocket connection whenever a server becomes authenticated and (2) watching for auth revocations from either the credential refresh flow or the socket transport. If a revocation occurs it triggers `authFlowController.signOut` to wipe that server.
+- **Dependencies:** `authState`, `ServerConnectionManager`, `ServerConnectionState`, `activeServer`, `authFlowController`
+- **Lifecycle:** `keepAlive: true`
+
 ### `serversDiscoveryControllerProvider`
 - **Type:** AsyncNotifierProvider<ServersDiscoveryController, List<HaServer>>
 - **Purpose:** Discovers Home Assistant servers on local network via mDNS.

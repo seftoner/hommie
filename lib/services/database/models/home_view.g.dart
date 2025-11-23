@@ -44,7 +44,7 @@ const HomeViewConfigSchema = CollectionSchema(
   getId: _homeViewConfigGetId,
   getLinks: _homeViewConfigGetLinks,
   attach: _homeViewConfigAttach,
-  version: '3.3.0-dev.3',
+  version: '3.3.0',
 );
 
 int _homeViewConfigEstimateSize(
@@ -407,7 +407,7 @@ const AreaHomeConfigSchema = CollectionSchema(
   getId: _areaHomeConfigGetId,
   getLinks: _areaHomeConfigGetLinks,
   attach: _areaHomeConfigAttach,
-  version: '3.3.0-dev.3',
+  version: '3.3.0',
 );
 
 int _areaHomeConfigEstimateSize(
@@ -887,7 +887,7 @@ const DeviceHomeConfigSchema = CollectionSchema(
   getId: _deviceHomeConfigGetId,
   getLinks: _deviceHomeConfigGetLinks,
   attach: _deviceHomeConfigAttach,
-  version: '3.3.0-dev.3',
+  version: '3.3.0',
 );
 
 int _deviceHomeConfigEstimateSize(
