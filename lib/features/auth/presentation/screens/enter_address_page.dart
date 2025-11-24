@@ -8,7 +8,10 @@ import 'package:riverpod_annotation/experimental/scope.dart';
 
 @Dependencies([AuthFlowController])
 class EnterAddressPage extends HookConsumerWidget {
-  const EnterAddressPage({super.key});
+  /// Optional callback for when connect button is pressed - used when in flow context
+  final void Function(String serverUrl)? onConnect;
+
+  const EnterAddressPage({super.key, this.onConnect});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,18 +44,30 @@ class EnterAddressPage extends HookConsumerWidget {
                       labelText: 'Hub address',
                       border: OutlineInputBorder(),
                     ),
-                    onSubmitted: (value) => ref
-                        .read(authFlowControllerProvider.notifier)
-                        .login(value),
+                    onSubmitted: (value) {
+                      if (onConnect != null) {
+                        onConnect!(value);
+                      } else {
+                        ref
+                            .read(authFlowControllerProvider.notifier)
+                            .login(value);
+                      }
+                    },
                   ),
                 ),
               ),
               const Spacer(),
               FilledButton(
                 key: K.manualAddress.connectButton,
-                onPressed: () => ref
-                    .read(authFlowControllerProvider.notifier)
-                    .login(haServerURLController.text),
+                onPressed: () {
+                  if (onConnect != null) {
+                    onConnect!(haServerURLController.text);
+                  } else {
+                    ref
+                        .read(authFlowControllerProvider.notifier)
+                        .login(haServerURLController.text);
+                  }
+                },
                 child: const Text('Connect'),
               ),
             ],

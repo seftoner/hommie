@@ -13,7 +13,21 @@ import 'package:riverpod_annotation/experimental/scope.dart';
 
 @Dependencies([AuthFlowController])
 class ServerDiscoveryPage extends HookConsumerWidget {
-  const ServerDiscoveryPage({super.key});
+  /// Optional callback for manual entry - used when in flow context
+  final VoidCallback? onManualEntry;
+
+  /// Optional callback for server selection - used when in flow context
+  final TapCallback? onServerSelected;
+
+  /// Optional callback invoked when the user wants to exit/cancel the page.
+  final VoidCallback? onExit;
+
+  const ServerDiscoveryPage({
+    super.key,
+    this.onManualEntry,
+    this.onServerSelected,
+    this.onExit,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,7 +35,9 @@ class ServerDiscoveryPage extends HookConsumerWidget {
 
     return Scaffold(
       key: K.serversDiscovery.page,
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: onExit != null ? BackButton(onPressed: onExit) : null,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -57,11 +73,15 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                           return SingleChildScrollView(
                             child: DiscoveredHaServersList(
                               servers: servers,
-                              onTap: (serverAddress) async {
-                                ref
-                                    .read(authFlowControllerProvider.notifier)
-                                    .login(serverAddress.toString());
-                              },
+                              onTap:
+                                  onServerSelected ??
+                                  (serverAddress) async {
+                                    ref
+                                        .read(
+                                          authFlowControllerProvider.notifier,
+                                        )
+                                        .login(serverAddress.toString());
+                                  },
                             ),
                           );
                         },
@@ -77,7 +97,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                   ],
                 ),
               ),
-              const EnterAddressManually(),
+              _ManuallyInputAddress(onPressed: onManualEntry),
             ],
           ),
         ),
@@ -86,8 +106,11 @@ class ServerDiscoveryPage extends HookConsumerWidget {
   }
 }
 
-class EnterAddressManually extends StatelessWidget {
-  const EnterAddressManually({super.key});
+class _ManuallyInputAddress extends StatelessWidget {
+  /// Optional callback - used when in flow context
+  final VoidCallback? onPressed;
+
+  const _ManuallyInputAddress({this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +127,8 @@ class EnterAddressManually extends StatelessWidget {
         $h16,
         FilledButton.tonal(
           key: K.serversDiscovery.enterManuallyButton,
-          onPressed: () => {const EnterAddressRoute().push(context)},
+          onPressed:
+              onPressed ?? () => {const EnterAddressRoute().push(context)},
           child: const Text('Enter addres manually'),
         ),
       ],

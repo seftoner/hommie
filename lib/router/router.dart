@@ -33,7 +33,7 @@ GoRouter goRouter(Ref ref) {
           case Unauthenticated():
           case Revoked():
           case Failure():
-            router.go(const DiscoveryRoute().location);
+            router.go(const OnboardingRoute().location);
             break;
           case Authenticated():
           case Refreshing():

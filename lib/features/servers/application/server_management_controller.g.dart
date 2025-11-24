@@ -37,27 +37,24 @@ final class ServerManagementControllerProvider
           ServerManagementControllerProvider.$allTransitiveDependencies6,
           ServerManagementControllerProvider.$allTransitiveDependencies7,
           ServerManagementControllerProvider.$allTransitiveDependencies8,
-          ServerManagementControllerProvider.$allTransitiveDependencies9,
         },
       );
 
   static const $allTransitiveDependencies0 = serversListProvider;
-  static const $allTransitiveDependencies1 =
-      ServersListProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = authFlowControllerProvider;
-  static const $allTransitiveDependencies3 =
+  static const $allTransitiveDependencies1 = authFlowControllerProvider;
+  static const $allTransitiveDependencies2 =
       AuthFlowControllerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies4 =
+  static const $allTransitiveDependencies3 =
       AuthFlowControllerProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies5 =
+  static const $allTransitiveDependencies4 =
       AuthFlowControllerProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies6 =
+  static const $allTransitiveDependencies5 =
       AuthFlowControllerProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies7 =
+  static const $allTransitiveDependencies6 =
       AuthFlowControllerProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies8 =
+  static const $allTransitiveDependencies7 =
       AuthFlowControllerProvider.$allTransitiveDependencies5;
-  static const $allTransitiveDependencies9 = activeServerProvider;
+  static const $allTransitiveDependencies8 = activeServerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverManagementControllerHash();

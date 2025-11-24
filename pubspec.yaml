@@ -55,6 +55,7 @@ dependencies:
   drag_arrange:
     git:
       url: https://github.com/seftoner/drag_arrange.git
+  flow_builder: ^0.1.0
   isar_community: *isar_version
   isar_community_flutter_libs: *isar_version
 

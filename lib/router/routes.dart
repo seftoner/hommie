@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hommie/core/bootstrap/app_startup.dart';
+import 'package:hommie/features/auth/presentation/flows/add_server_flow.dart';
 import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
 import 'package:hommie/features/automation/presentation/automations_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
+import 'package:hommie/features/onboarding/presentation/flows/onboarding_flow.dart';
 import 'package:hommie/features/servers/presentation/screens/servers_page.dart';
 import 'package:hommie/features/servers/presentation/screens/add_edit_server_page.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
@@ -134,7 +136,8 @@ class AddServerRouteData extends GoRouteData with $AddServerRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const AddEditServerPage();
+    // Use flow-based server addition instead of direct form
+    return const AddServerFlow();
   }
 }
 
@@ -160,6 +163,17 @@ class HomeRouteData extends GoRouteData with $HomeRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const HomePage();
+  }
+}
+
+// ignore: provider_dependencies
+@TypedGoRoute<OnboardingRoute>(path: '/onboarding')
+class OnboardingRoute extends GoRouteData with $OnboardingRoute {
+  const OnboardingRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const OnboardingFlow();
   }
 }
 

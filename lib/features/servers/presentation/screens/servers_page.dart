@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:hommie/features/servers/infrastructure/providers/servers_list_provider.dart';
 import 'package:hommie/features/servers/presentation/widgets/server_list_tile.dart';
@@ -24,7 +23,7 @@ class ServersPage extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => context.push('/settings/servers/add/discovery'),
+            onPressed: () => const AddServerRouteData().push(context),
           ),
         ],
       ),
@@ -40,8 +39,7 @@ class ServersPage extends ConsumerWidget {
                   const Text('No servers configured'),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () =>
-                        context.push('/settings/servers/add/discovery'),
+                    onPressed: () => const AddServerRouteData().push(context),
                     child: const Text('Add Server'),
                   ),
                 ],

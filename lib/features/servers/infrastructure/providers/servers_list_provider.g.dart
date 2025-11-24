@@ -20,14 +20,10 @@ final class ServersListProvider
         argument: null,
         retry: null,
         name: r'serversListProvider',
-        isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[serverManagerProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
-          ServersListProvider.$allTransitiveDependencies0,
-        ],
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static const $allTransitiveDependencies0 = serverManagerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serversListHash();
@@ -37,7 +33,7 @@ final class ServersListProvider
   ServersList create() => ServersList();
 }
 
-String _$serversListHash() => r'e5645ddc2e12b03d439a0692266fe96ed9e46adb';
+String _$serversListHash() => r'5aa7a2d7d3e7dc51ad1887397a25590ea18b8fcf';
 
 abstract class _$ServersList extends $AsyncNotifier<List<Server>> {
   FutureOr<List<Server>> build();
