@@ -7,7 +7,7 @@ import 'package:hommie/features/automation/presentation/automations_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
-import 'package:hommie/features/onboarding/presentation/flows/onboarding_flow.dart';
+import 'package:hommie/features/onboarding/presentation/flows/onbording_riverflow.dart';
 import 'package:hommie/features/servers/presentation/screens/servers_page.dart';
 import 'package:hommie/features/servers/presentation/screens/add_edit_server_page.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
@@ -173,7 +173,7 @@ class OnboardingRoute extends GoRouteData with $OnboardingRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const OnboardingFlow();
+    return const OnboardingRiverFlow();
   }
 }
 
