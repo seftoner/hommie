@@ -73,7 +73,7 @@ final class ServerManagementControllerProvider
 }
 
 String _$serverManagementControllerHash() =>
-    r'08c244a1dcdd9590f3eacda968f20877a7bc0e56';
+    r'd80d35e928cee856952846a0b434d763d2c88aca';
 
 abstract class _$ServerManagementController
     extends $Notifier<ServerTestResult> {

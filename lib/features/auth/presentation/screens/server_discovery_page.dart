@@ -1,33 +1,23 @@
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:hommie/features/auth/application/servers_discovery_controller.dart';
-import 'package:hommie/features/auth/application/auth_flow_controller.dart';
 import 'package:hommie/features/auth/domain/entities/ha_server.dart';
+import 'package:hommie/features/auth/presentation/flows/add_server_flow.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_available_severs_list_title.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_empty_state.dart';
-import 'package:hommie/router/routes.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/corners.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([AuthFlowController])
-class ServerDiscoveryPage extends HookConsumerWidget {
-  /// Optional callback for manual entry - used when in flow context
-  final VoidCallback? onManualEntry;
-
-  /// Optional callback for server selection - used when in flow context
-  final TapCallback? onServerSelected;
+class ServerDiscoveryPage extends ConsumerWidget {
+  /// Callback for server selection - used when in flow context
+  final TapCallback onConnect;
 
   /// Optional callback invoked when the user wants to exit/cancel the page.
   final VoidCallback? onExit;
 
-  const ServerDiscoveryPage({
-    super.key,
-    this.onManualEntry,
-    this.onServerSelected,
-    this.onExit,
-  });
+  const ServerDiscoveryPage({super.key, this.onExit, required this.onConnect});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,15 +63,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                           return SingleChildScrollView(
                             child: DiscoveredHaServersList(
                               servers: servers,
-                              onTap:
-                                  onServerSelected ??
-                                  (serverAddress) async {
-                                    ref
-                                        .read(
-                                          authFlowControllerProvider.notifier,
-                                        )
-                                        .login(serverAddress.toString());
-                                  },
+                              onTap: onConnect,
                             ),
                           );
                         },
@@ -97,7 +79,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
                   ],
                 ),
               ),
-              _ManuallyInputAddress(onPressed: onManualEntry),
+              _ManuallyInputAddress(),
             ],
           ),
         ),
@@ -107,10 +89,7 @@ class ServerDiscoveryPage extends HookConsumerWidget {
 }
 
 class _ManuallyInputAddress extends StatelessWidget {
-  /// Optional callback - used when in flow context
-  final VoidCallback? onPressed;
-
-  const _ManuallyInputAddress({this.onPressed});
+  const _ManuallyInputAddress();
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +106,11 @@ class _ManuallyInputAddress extends StatelessWidget {
         $h16,
         FilledButton.tonal(
           key: K.serversDiscovery.enterManuallyButton,
-          onPressed:
-              onPressed ?? () => {const EnterAddressRoute().push(context)},
+          onPressed: () => {
+            context.flow<AddServerFlowState>().update(
+              (step) => AddServerFlowState.manualEntry,
+            ),
+          },
           child: const Text('Enter addres manually'),
         ),
       ],

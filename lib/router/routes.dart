@@ -7,6 +7,7 @@ import 'package:hommie/features/automation/presentation/automations_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
+import 'package:hommie/features/onboarding/presentation/flows/onboarding_flow.dart';
 import 'package:hommie/features/onboarding/presentation/flows/onbording_riverflow.dart';
 import 'package:hommie/features/servers/presentation/screens/servers_page.dart';
 import 'package:hommie/features/servers/presentation/screens/add_edit_server_page.dart';
@@ -173,12 +174,13 @@ class OnboardingRoute extends GoRouteData with $OnboardingRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const OnboardingRiverFlow();
+    // return const OnboardingRiverFlow();
+    return const OnboardingFlow();
   }
 }
 
 // ignore: provider_dependencies
-@TypedGoRoute<DiscoveryRoute>(path: '/discovery')
+/* @TypedGoRoute<DiscoveryRoute>(path: '/discovery')
 class DiscoveryRoute extends GoRouteData with $DiscoveryRoute {
   const DiscoveryRoute();
 
@@ -188,10 +190,10 @@ class DiscoveryRoute extends GoRouteData with $DiscoveryRoute {
     // while remaining compatible when accessed directly.
     return const ServerDiscoveryPage();
   }
-}
+} */
 
 // ignore: provider_dependencies
-@TypedGoRoute<EnterAddressRoute>(path: '/manualAddres')
+/* @TypedGoRoute<EnterAddressRoute>(path: '/manualAddres')
 class EnterAddressRoute extends GoRouteData with $EnterAddressRoute {
   const EnterAddressRoute();
 
@@ -199,7 +201,7 @@ class EnterAddressRoute extends GoRouteData with $EnterAddressRoute {
   Widget build(BuildContext context, GoRouterState state) {
     return const EnterAddressPage();
   }
-}
+} */
 
 @TypedGoRoute<StartupRoute>(path: '/startup')
 class StartupRoute extends GoRouteData with $StartupRoute {

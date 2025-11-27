@@ -9,11 +9,17 @@ part of 'auth_flow_controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(AuthFlowController)
+@ProviderFor(authFlowController)
 const authFlowControllerProvider = AuthFlowControllerProvider._();
 
 final class AuthFlowControllerProvider
-    extends $NotifierProvider<AuthFlowController, void> {
+    extends
+        $FunctionalProvider<
+          AuthFlowController,
+          AuthFlowController,
+          AuthFlowController
+        >
+    with $Provider<AuthFlowController> {
   const AuthFlowControllerProvider._()
     : super(
         from: null,
@@ -52,35 +58,23 @@ final class AuthFlowControllerProvider
 
   @$internal
   @override
-  AuthFlowController create() => AuthFlowController();
+  $ProviderElement<AuthFlowController> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  AuthFlowController create(Ref ref) {
+    return authFlowController(ref);
+  }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(void value) {
+  Override overrideWithValue(AuthFlowController value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<void>(value),
+      providerOverride: $SyncValueProvider<AuthFlowController>(value),
     );
   }
 }
 
 String _$authFlowControllerHash() =>
-    r'0fdca1d52517cc1c60ab345e7045ec29d0ca2fc4';
-
-abstract class _$AuthFlowController extends $Notifier<void> {
-  void build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    build();
-    final ref = this.ref as $Ref<void, void>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<void, void>,
-              void,
-              Object?,
-              Object?
-            >;
-    element.handleValue(ref, null);
-  }
-}
+    r'5ac3abfbd5b8ac3675f07b1e4a981e4ae3ecc224';

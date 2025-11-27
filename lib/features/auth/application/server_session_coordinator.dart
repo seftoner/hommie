@@ -21,7 +21,7 @@ part 'server_session_coordinator.g.dart';
 @Riverpod(
   keepAlive: true,
   dependencies: [
-    AuthFlowController,
+    authFlowController,
     serverConnectionManager,
     ServerConnectionState,
   ],
@@ -51,7 +51,7 @@ void serverSessionCoordinator(Ref ref) {
 @Dependencies([
   serverConnectionManager,
   ServerConnectionState,
-  AuthFlowController,
+  authFlowController,
 ])
 class _ServerSessionHandler {
   _ServerSessionHandler(this._ref);
@@ -138,7 +138,7 @@ class _ServerSessionHandler {
 
   Future<void> _signOut(int serverId) async {
     try {
-      await _ref.read(authFlowControllerProvider.notifier).signOut(serverId);
+      await _ref.read(authFlowControllerProvider).signOut(serverId);
       _lastHandledServerId = serverId;
     } catch (error, stackTrace) {
       logger.e(

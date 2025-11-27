@@ -25,7 +25,7 @@ class ServerTestResult {
     : this(status: ServerTestStatus.error, message: message);
 }
 
-@Riverpod(dependencies: [ServersList, AuthFlowController, activeServer])
+@Riverpod(dependencies: [ServersList, authFlowController, activeServer])
 class ServerManagementController extends _$ServerManagementController {
   @override
   ServerTestResult build() {
@@ -127,7 +127,7 @@ class ServerManagementController extends _$ServerManagementController {
   Future<void> authenticateServer(int serverId, String serverUrl) async {
     try {
       // Use the existing auth controller for OAuth flow
-      await ref.read(authFlowControllerProvider.notifier).login(serverUrl);
+      await ref.read(authFlowControllerProvider).login(serverUrl);
       logger.i('Authentication completed for server ID: $serverId');
     } catch (e) {
       logger.e('Authentication failed for server ID: $serverId, error: $e');

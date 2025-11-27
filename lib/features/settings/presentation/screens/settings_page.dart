@@ -6,7 +6,7 @@ import 'package:hommie/ui/keys.dart';
 import 'package:hommie/features/auth/application/auth_flow_controller.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([AuthFlowController])
+@Dependencies([authFlowController])
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
@@ -113,7 +113,7 @@ class SettingsPage extends ConsumerWidget {
               final activeServer = await serverManager.getActiveServer();
               if (activeServer != null) {
                 await ref
-                    .read(authFlowControllerProvider.notifier)
+                    .read(authFlowControllerProvider)
                     .signOut(activeServer.id!);
               }
             },

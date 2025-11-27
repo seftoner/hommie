@@ -1,17 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hommie/features/auth/application/auth_flow_controller.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([AuthFlowController])
 class EnterAddressPage extends HookConsumerWidget {
   /// Optional callback for when connect button is pressed - used when in flow context
-  final void Function(String serverUrl)? onConnect;
+  final void Function(String serverUrl) onConnect;
 
-  const EnterAddressPage({super.key, this.onConnect});
+  const EnterAddressPage({super.key, required this.onConnect});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,13 +42,7 @@ class EnterAddressPage extends HookConsumerWidget {
                       border: OutlineInputBorder(),
                     ),
                     onSubmitted: (value) {
-                      if (onConnect != null) {
-                        onConnect!(value);
-                      } else {
-                        ref
-                            .read(authFlowControllerProvider.notifier)
-                            .login(value);
-                      }
+                      onConnect(value);
                     },
                   ),
                 ),
@@ -60,13 +51,7 @@ class EnterAddressPage extends HookConsumerWidget {
               FilledButton(
                 key: K.manualAddress.connectButton,
                 onPressed: () {
-                  if (onConnect != null) {
-                    onConnect!(haServerURLController.text);
-                  } else {
-                    ref
-                        .read(authFlowControllerProvider.notifier)
-                        .login(haServerURLController.text);
-                  }
+                  onConnect(haServerURLController.text);
                 },
                 child: const Text('Connect'),
               ),

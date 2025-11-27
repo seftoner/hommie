@@ -1,90 +1,60 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hommie/features/auth/application/auth_flow_controller.dart';
-import 'package:hommie/features/auth/application/auth_state.dart';
-import 'package:hommie/features/auth/application/auth_state_provider.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'add_server_flow.freezed.dart';
-part 'add_server_flow.g.dart';
+// ignore_for_file: provider_dependencies
+
+// Riverpod codegen removed; local FlowController used instead.
 
 /// Steps that compose the add server experience.
-@freezed
-sealed class _AddServerFlowStep with _$AddServerFlowStep {
-  const factory _AddServerFlowStep.discovery() = Discovery;
-  const factory _AddServerFlowStep.manualEntry() = ManualEntry;
-}
+enum AddServerFlowState { discovery, manualEntry }
 
-@riverpod
-class _AddServerFlowController extends _$AddServerFlowController {
-  @override
-  _AddServerFlowStep build() {
-    return const _AddServerFlowStep.discovery();
-  }
-
-  void goToManualEntry() {
-    state = const _AddServerFlowStep.manualEntry();
-  }
-
-  void goToDiscovery() {
-    state = const _AddServerFlowStep.discovery();
-  }
-}
-
-// ignore: provider_dependencies
 /// Flow that orchestrates discovery and manual entry when adding a server.
-class AddServerFlow extends HookConsumerWidget {
-  const AddServerFlow({super.key});
+class AddServerFlow extends ConsumerStatefulWidget {
+  final bool userCanCancel;
+  const AddServerFlow({super.key, this.userCanCancel = true});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    /*     final controller = useMemoized(
-      () => FlowController(AddServerFlowStep.discovery),
-    );
-    useEffect(() {
-      return controller.dispose;
-    }, [controller]); */
+  ConsumerState<AddServerFlow> createState() => _AddServerFlowState();
+}
 
-    /*     ref.listen<AsyncValue<AuthState>>(authStateProvider, (previous, next) {
-      next.whenData((state) {
-        switch (state) {
-          case Authenticated():
-          case Refreshing():
-            controller.complete();
-          default:
-            break;
-        }
-      });
-    }); */
+class _AddServerFlowState extends ConsumerState<AddServerFlow> {
+  late final FlowController<AddServerFlowState> controller;
 
-    final state = ref.watch(_addServerFlowControllerProvider);
+  @override
+  void initState() {
+    super.initState();
+    controller = FlowController(AddServerFlowState.discovery);
+  }
 
-    return FlowBuilder<_AddServerFlowStep>(
-      state: state,
-      onGeneratePages: (step, pages) {
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FlowBuilder<AddServerFlowState>(
+      controller: controller,
+      onGeneratePages: (current, pages) {
         return [
           MaterialPage(
             child: ServerDiscoveryPage(
-              onManualEntry: ref
-                  .read(_addServerFlowControllerProvider.notifier)
-                  .goToManualEntry,
-              onExit: () => Navigator.of(context).pop(),
+              onConnect: (serverAddress) => ref
+                  .read(authFlowControllerProvider)
+                  .login(serverAddress.toString()),
+              onExit: widget.userCanCancel ? controller.complete : null,
             ),
           ),
-
-          if (step is ManualEntry)
+          if (current == AddServerFlowState.manualEntry)
             MaterialPage(
               child: EnterAddressPage(
                 onConnect: (serverUrl) async {
-                  await ref
-                      .read(authFlowControllerProvider.notifier)
-                      .login(serverUrl);
+                  await ref.read(authFlowControllerProvider).login(serverUrl);
                 },
               ),
             ),

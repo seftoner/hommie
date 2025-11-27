@@ -1,113 +1,65 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hommie/features/auth/application/auth_state.dart';
-import 'package:hommie/features/auth/application/auth_state_provider.dart';
+// Freezed no longer needed; replaced with enum
 import 'package:hommie/features/auth/presentation/flows/add_server_flow.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+// riverpod_annotation no longer needed after removing controller
 
-part 'onboarding_flow.freezed.dart';
-part 'onboarding_flow.g.dart';
+// part 'onboarding_flow.freezed.dart'; // removed: using enum
 
 /// Steps that compose the onboarding flow.
-@freezed
-sealed class OnboardingStep with _$OnboardingStep {
-  const factory OnboardingStep.welcomeOne() = WelcomeOne;
-  const factory OnboardingStep.permissions() = Permissions;
-  const factory OnboardingStep.addServer() = AddServer;
-}
+enum OnboardingStep { welcomeOne, permissions, addServer }
 
-@riverpod
-class OnboardingFlowController extends _$OnboardingFlowController {
-  @override
-  OnboardingStep build() {
-    return const OnboardingStep.welcomeOne();
-  }
-
-  void next() {
-    state = switch (state) {
-      WelcomeOne() => const OnboardingStep.permissions(),
-      Permissions() => const OnboardingStep.addServer(),
-      AddServer() => state,
-    };
-  }
-
-  void back() {
-    state = switch (state) {
-      WelcomeOne() => state,
-      Permissions() => const OnboardingStep.welcomeOne(),
-      AddServer() => const OnboardingStep.permissions(),
-    };
-  }
-}
-
-/* List<Page<dynamic>> _onGenerateOnboardingPages(
-  OnboardingStep step,
-  List<Page<dynamic>> pages,
-) {
-  return [
-    const MaterialPage<void>(child: _WelcomeOnePage()),
-    if (step is WelcomeTwo) const MaterialPage<void>(child: _WelcomeTwoPage()),
-  ];
-  /* 
-  return switch (step) {
-    WelcomeOne() => const [MaterialPage<void>(child: _WelcomeOnePage())],
-    WelcomeTwo() => const [
-      MaterialPage<void>(child: _WelcomeOnePage()),
-      MaterialPage<void>(child: _WelcomeTwoPage()),
-    ],
-  }; */
-} */
-
-class OnboardingFlow extends HookConsumerWidget {
+class OnboardingFlow extends StatefulWidget {
   const OnboardingFlow({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final flowControllerState = ref.watch(onboardingFlowControllerProvider);
+  State<OnboardingFlow> createState() => _OnboardingFlowState();
+}
 
-    /*  final controller = useMemoized(
-      () => FlowController(const OnboardingStep.welcomeOne()),
-    );
-    useEffect(() {
-      return controller.dispose;
-    }, [controller]); */
+class _OnboardingFlowState extends State<OnboardingFlow> {
+  late final FlowController<OnboardingStep> controller;
 
-    /*  ref.listen<AsyncValue<AuthState>>(authStateProvider, (previous, next) {
-      next.whenData((state) {
-        switch (state) {
-          case Authenticated():
-          case Refreshing():
-            controller.complete();
-          default:
-            break;
-        }
-      });
-    }); */
+  @override
+  void initState() {
+    super.initState();
+    controller = FlowController(OnboardingStep.welcomeOne);
+  }
 
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return FlowBuilder<OnboardingStep>(
-      // controller: controller,
-      state: flowControllerState,
+      controller: controller,
       onGeneratePages: (step, pages) => [
         MaterialPage<void>(
           child: _WelcomePage(
             onContinue: () {
-              ref.read(onboardingFlowControllerProvider.notifier).next();
+              controller.update((_) => OnboardingStep.permissions);
             },
           ),
         ),
-        if (step is Permissions)
+        if (step == OnboardingStep.permissions ||
+            step == OnboardingStep.addServer)
           MaterialPage<void>(
             child: _PermissionsPage(
-              onBack: () {
-                ref.read(onboardingFlowControllerProvider.notifier).back();
+              onConnect: () {
+                controller.update((_) => OnboardingStep.addServer);
               },
             ),
           ),
 
-        if (step is AddServer) const MaterialPage<void>(child: AddServerFlow()),
+        if (step == OnboardingStep.addServer)
+          const MaterialPage(
+            child: PopScope(
+              canPop: false,
+              child: AddServerFlow(userCanCancel: false),
+            ),
+          ),
       ],
     );
   }
@@ -143,22 +95,22 @@ class _WelcomePage extends StatelessWidget {
 }
 
 class _PermissionsPage extends StatelessWidget {
-  final VoidCallback onBack;
+  final VoidCallback onConnect;
 
-  const _PermissionsPage({required this.onBack});
+  const _PermissionsPage({required this.onConnect});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(leading: BackButton(onPressed: onBack)),
+      appBar: AppBar(
+        title: Text('Enable Permissions', style: theme.textTheme.headlineLarge),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Enable Permissions', style: theme.textTheme.headlineLarge),
-            const SizedBox(height: 24),
             const _PermissionTile(
               icon: Icons.notifications_outlined,
               title: 'Notifications',
@@ -185,16 +137,7 @@ class _PermissionsPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            FilledButton(
-              onPressed: () async {
-                await Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const AddServerFlow(),
-                  ),
-                );
-              },
-              child: const Text('Connect'),
-            ),
+            FilledButton(onPressed: onConnect, child: const Text('Connect')),
           ],
         ),
       ),
