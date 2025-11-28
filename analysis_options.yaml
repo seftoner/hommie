@@ -3,6 +3,10 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   plugins:
     - custom_lint
+  
+  #https://pub.dev/packages/freezed#disabling-invalid_annotation_target-warning-and-warning-in-generates-files
+  errors:
+    invalid_annotation_target: ignore
 
 linter:
   rules:
