@@ -9,9 +9,8 @@ import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hommie/ui/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
-@Dependencies([HomePageController])
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
@@ -53,13 +52,13 @@ class HomePage extends ConsumerWidget {
                             controller.open();
                           }
                         },
-                        icon: const Icon(Icons.more_vert),
+                        icon: const Icon(Symbols.more_vert_rounded),
                       );
                     },
                     menuChildren: [
                       MenuItemButton(
                         key: K.appScaffold.settingsButton,
-                        trailingIcon: const Icon(Icons.settings_outlined),
+                        trailingIcon: const Icon(Symbols.settings_rounded),
                         child: const Text('Settings'),
                         onPressed: () {
                           const SettingsRouteData().push(context);
@@ -67,7 +66,7 @@ class HomePage extends ConsumerWidget {
                       ),
                       if (state.homeView != null) ...[
                         MenuItemButton(
-                          trailingIcon: const Icon(Icons.dashboard_rounded),
+                          trailingIcon: const Icon(Symbols.dashboard_rounded),
                           child: const Text('Edit Home view'),
                           onPressed: () {
                             ref
@@ -76,7 +75,9 @@ class HomePage extends ConsumerWidget {
                           },
                         ),
                         MenuItemButton(
-                          trailingIcon: const Icon(Icons.low_priority_rounded),
+                          trailingIcon: const Icon(
+                            Symbols.low_priority_rounded,
+                          ),
                           child: const Text('Reorder Items'),
                           onPressed: () {},
                         ),
@@ -162,13 +163,13 @@ class HomePage extends ConsumerWidget {
                         controller.open();
                       }
                     },
-                    icon: const Icon(Icons.more_vert),
+                    icon: const Icon(Symbols.more_vert_rounded),
                   );
                 },
                 menuChildren: [
                   MenuItemButton(
                     key: K.appScaffold.settingsButton,
-                    trailingIcon: const Icon(Icons.settings_outlined),
+                    trailingIcon: const Icon(Symbols.settings_rounded),
                     child: const Text('Settings'),
                     onPressed: () {
                       const SettingsRouteData().push(context);
@@ -264,7 +265,7 @@ class OnOffToggleButton extends StatelessWidget {
         shape: const CircleBorder(),
       ),
       icon: Icon(
-        Icons.power_settings_new_rounded,
+        Symbols.power_settings_new_rounded,
         size: 24,
         color: value ? context.colors.onSecondaryContainer : Colors.grey[600],
       ),
@@ -286,7 +287,7 @@ class DeviceWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.lightbulb_circle, size: 32.0),
+              const Icon(Symbols.lightbulb_rounded, size: 32.0),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -333,7 +334,7 @@ class DeviceWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Icon(Icons.lightbulb_circle, size: 32.0),
+            const Icon(Symbols.lightbulb_rounded, size: 32.0),
             OnOffToggleButton(
               value: true,
               onChanged: (value) {
@@ -398,7 +399,10 @@ class RoomGroup extends StatelessWidget {
             ),
             const Spacer(),
             if (enabled)
-              Icon(Icons.chevron_right, color: context.colors.onSurfaceVariant),
+              Icon(
+                Symbols.chevron_right_rounded,
+                color: context.colors.onSurfaceVariant,
+              ),
           ],
         ),
       ),

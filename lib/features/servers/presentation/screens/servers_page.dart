@@ -6,6 +6,7 @@ import 'package:hommie/features/servers/presentation/widgets/server_list_tile.da
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class ServersPage extends ConsumerWidget {
   const ServersPage({super.key});
@@ -20,7 +21,7 @@ class ServersPage extends ConsumerWidget {
         title: const Text('Servers'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: const Icon(Symbols.add_rounded),
             onPressed: () => const AddServerRouteData().push(context),
           ),
         ],
@@ -32,7 +33,7 @@ class ServersPage extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.cloud_off, size: 64),
+                  const Icon(Symbols.cloud_off_rounded, size: 64),
                   const SizedBox(height: 16),
                   const Text('No servers configured'),
                   const SizedBox(height: 16),
@@ -61,6 +62,7 @@ class ServersPage extends ConsumerWidget {
                     onSetActive: isActive
                         ? null
                         : () => _setActiveServer(ref, server.id!),
+                    //FIXME: server not deleted propperly + crash. Occured when there are at least 2 servers.
                     onDelete: servers.length > 1
                         ? () => _showDeleteDialog(context, ref, server)
                         : null,
@@ -78,7 +80,7 @@ class ServersPage extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 64),
+              const Icon(Symbols.error_outline_rounded, size: 64),
               const SizedBox(height: 16),
               Text('Error loading servers: $error'),
               const SizedBox(height: 16),
@@ -157,7 +159,10 @@ class ServersPage extends ConsumerWidget {
       builder: (BuildContext context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.warning, color: Theme.of(context).colorScheme.error),
+            Icon(
+              Symbols.warning_rounded,
+              color: Theme.of(context).colorScheme.error,
+            ),
             const SizedBox(width: 8),
             const Text('Delete Server'),
           ],
@@ -187,7 +192,7 @@ class ServersPage extends ConsumerWidget {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.info,
+                      Symbols.info_rounded,
                       size: 16,
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),

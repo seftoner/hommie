@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class PermissionsPage extends StatelessWidget {
   final VoidCallback onConnect;
@@ -18,19 +19,19 @@ class PermissionsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const _PermissionTile(
-              icon: Icons.notifications_outlined,
+              icon: Symbols.notifications_rounded,
               title: 'Notifications',
               description: 'Get alerts from your smart home devices',
             ),
             const SizedBox(height: 16),
             const _PermissionTile(
-              icon: Icons.location_on_outlined,
+              icon: Symbols.location_on_rounded,
               title: 'Location',
               description: 'Enable presence detection and automations',
             ),
             const SizedBox(height: 16),
             const _PermissionTile(
-              icon: Icons.wifi_outlined,
+              icon: Symbols.wifi_rounded,
               title: 'Network Access',
               description: 'Connect to your Home Assistant server',
             ),

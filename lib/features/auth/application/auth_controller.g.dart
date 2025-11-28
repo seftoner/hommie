@@ -21,7 +21,7 @@ final class AuthControllerProvider
         argument: null,
         retry: null,
         name: r'authControllerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
           websocketConfigRepositoryProvider,
           serverConnectionManagerProvider,
@@ -61,4 +61,4 @@ final class AuthControllerProvider
   }
 }
 
-String _$authControllerHash() => r'74e2b9476cc9306b7f5552765487e64d4315efa0';
+String _$authControllerHash() => r'32fbff39d39dc9a508d00b7542c52df539cf6f1f';

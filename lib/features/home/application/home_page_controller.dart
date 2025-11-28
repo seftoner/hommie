@@ -26,7 +26,7 @@ class HomePageState {
   );
 }
 
-@Riverpod(dependencies: [homeViewRepository])
+@riverpod
 class HomePageController extends _$HomePageController {
   @override
   Future<HomePageState> build() async {

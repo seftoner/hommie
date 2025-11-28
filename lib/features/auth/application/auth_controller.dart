@@ -60,7 +60,10 @@ class AuthController {
   }
 }
 
-@Riverpod(dependencies: [websocketConfigRepository, serverConnectionManager])
+@Riverpod(
+  keepAlive: true,
+  dependencies: [websocketConfigRepository, serverConnectionManager],
+)
 AuthController authController(Ref ref) {
   return AuthController(ref);
 }

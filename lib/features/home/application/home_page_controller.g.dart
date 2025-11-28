@@ -21,13 +21,9 @@ final class HomePageControllerProvider
         retry: null,
         name: r'homePageControllerProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[homeViewRepositoryProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
-          HomePageControllerProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static const $allTransitiveDependencies0 = homeViewRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$homePageControllerHash();
@@ -38,7 +34,7 @@ final class HomePageControllerProvider
 }
 
 String _$homePageControllerHash() =>
-    r'b9759dfcfe71e6d358acc4df5bff4e421695c408';
+    r'bbdf9eac152a8bae85fd5a6c3c4c9020514ae769';
 
 abstract class _$HomePageController extends $AsyncNotifier<HomePageState> {
   FutureOr<HomePageState> build();

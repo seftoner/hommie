@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hommie/features/mobile_companion/application/sensors_controller.dart';
 import 'package:hommie/features/mobile_companion/sensors/sensor.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class SensorsPage extends ConsumerWidget {
   const SensorsPage({super.key});
@@ -16,7 +17,7 @@ class SensorsPage extends ConsumerWidget {
         title: const Text('Sensors'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Symbols.refresh_rounded),
             onPressed: sensorsState.isLoading ? null : notifier.refresh,
           ),
         ],
@@ -93,15 +94,9 @@ class _SensorsError extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
-          Text(
-            message,
-            textAlign: TextAlign.center,
-          ),
+          Text(message, textAlign: TextAlign.center),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onRetry,
-            child: const Text('Try again'),
-          ),
+          ElevatedButton(onPressed: onRetry, child: const Text('Try again')),
         ],
       ),
     );

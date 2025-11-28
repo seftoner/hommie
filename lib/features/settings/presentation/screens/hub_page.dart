@@ -7,6 +7,7 @@ import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class HubPage extends HookConsumerWidget {
   const HubPage({super.key});
@@ -156,7 +157,7 @@ class _HubStatusError extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline, color: theme.colorScheme.error),
+            Icon(Symbols.error_outline_rounded, color: theme.colorScheme.error),
             const SizedBox(height: 12),
             Text(
               'Failed to load hub details',
@@ -188,7 +189,7 @@ class _EmptyHubStatusView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.home_outlined,
+              Symbols.home_rounded,
               size: 56,
               color: theme.colorScheme.onSurfaceVariant,
             ),

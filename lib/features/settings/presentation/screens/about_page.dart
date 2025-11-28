@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class AboutPage extends HookConsumerWidget {
   const AboutPage({super.key});
@@ -15,15 +16,13 @@ class AboutPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('About'),
-      ),
+      appBar: AppBar(title: const Text('About')),
       body: ListView(
         children: [
           ListTile(
-            leading: const Icon(Icons.code),
+            leading: const Icon(Symbols.code_rounded),
             title: const Text('Git hub'),
-            trailing: const Icon(Icons.open_in_new_rounded),
+            trailing: const Icon(Symbols.open_in_new_rounded),
             onTap: _launchGithub,
           ),
           const Divider(),

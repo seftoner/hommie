@@ -4,6 +4,7 @@ import 'package:hommie/features/settings/application/logs_controller.dart';
 import 'package:hommie/features/settings/application/logs_list_controller.dart';
 import 'package:hommie/features/settings/domain/entities/logs.dart';
 import 'package:hommie/features/settings/presentation/widgets/color_badge.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -40,11 +41,11 @@ class LogsPage extends HookConsumerWidget {
               final position = box!.localToGlobal(Offset.zero) & box.size;
               ref.read(logsControlerProvider.notifier).shareLogs(position);
             },
-            icon: const Icon(Icons.share),
+            icon: const Icon(Symbols.share_rounded),
           ),
           IconButton(
             onPressed: () => _showDeleteConfirmationDialog(context, ref),
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Symbols.delete_rounded),
           ),
         ],
       ),
@@ -56,7 +57,7 @@ class LogsPage extends HookConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Icons.article_outlined,
+                        Symbols.article_rounded,
                         size: 64,
                         color: Theme.of(
                           context,

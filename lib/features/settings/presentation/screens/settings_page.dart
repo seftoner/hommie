@@ -5,6 +5,7 @@ import 'package:hommie/router/routes.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 @Dependencies([authController])
 class SettingsPage extends ConsumerWidget {
@@ -19,50 +20,50 @@ class SettingsPage extends ConsumerWidget {
         children: [
           ListTile(
             key: K.settings.hubItem,
-            leading: const Icon(Icons.cloud),
+            leading: const Icon(Symbols.cloud_rounded),
             title: const Text('Hub name'),
             subtitle: const Text('Username'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(Symbols.chevron_right_rounded),
             onTap: () => {const HubRouteData().push(context)},
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.dns),
+            leading: const Icon(Symbols.dns_rounded),
             title: const Text('Servers'),
             subtitle: const Text('Manage your Home Assistant servers'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(Symbols.chevron_right_rounded),
             onTap: () => {const ServersRouteData().push(context)},
           ),
           const Divider(),
           ListTile(
             key: K.settings.sensorsItem,
-            leading: const Icon(Icons.sensors),
+            leading: const Icon(Symbols.sensors_rounded),
             title: const Text('Sensors'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(Symbols.chevron_right_rounded),
             onTap: () => {const SensorsRouteData().push(context)},
           ),
           const Divider(),
           ListTile(
             key: K.settings.nfsItem,
-            leading: const Icon(Icons.nfc_rounded),
+            leading: const Icon(Symbols.nfc_rounded),
             title: const Text('NFC'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(Symbols.chevron_right_rounded),
             onTap: () => {/* Handle  tap */},
           ),
           const Divider(),
           ListTile(
             key: K.settings.logsItem,
-            leading: const Icon(Icons.bug_report_outlined),
+            leading: const Icon(Symbols.bug_report_rounded),
             title: const Text('Logs'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(Symbols.chevron_right_rounded),
             onTap: () => {const LogsRouteData().push(context)},
           ),
           const Divider(),
           ListTile(
             key: K.settings.aboutItem,
-            leading: const Icon(Icons.info_outline),
+            leading: const Icon(Symbols.info_rounded),
             title: const Text('About'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(Symbols.chevron_right_rounded),
             onTap: () => {const AboutRouteData().push(context)},
           ),
           const Divider(),

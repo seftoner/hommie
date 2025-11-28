@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class ServerListTile extends StatelessWidget {
   final Server server;
@@ -27,7 +28,8 @@ class ServerListTile extends StatelessWidget {
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.surfaceContainerHighest,
           child: Icon(
-            isActive ? Icons.cloud : Icons.cloud_outlined,
+            Symbols.cloud_rounded,
+            fill: isActive ? 1 : 0,
             color: isActive
                 ? Theme.of(context).colorScheme.onPrimary
                 : Theme.of(context).colorScheme.onSurfaceVariant,
@@ -73,7 +75,7 @@ class ServerListTile extends StatelessWidget {
             const PopupMenuItem(
               value: 'edit',
               child: ListTile(
-                leading: Icon(Icons.edit),
+                leading: Icon(Symbols.edit_rounded),
                 title: Text('Edit'),
                 dense: true,
               ),
@@ -82,7 +84,7 @@ class ServerListTile extends StatelessWidget {
               const PopupMenuItem(
                 value: 'activate',
                 child: ListTile(
-                  leading: Icon(Icons.radio_button_unchecked),
+                  leading: Icon(Symbols.radio_button_unchecked_rounded),
                   title: Text('Set Active'),
                   dense: true,
                 ),
@@ -92,7 +94,7 @@ class ServerListTile extends StatelessWidget {
                 value: 'delete',
                 child: ListTile(
                   leading: Icon(
-                    Icons.delete,
+                    Symbols.delete_rounded,
                     color: Theme.of(context).colorScheme.error,
                   ),
                   title: Text(
