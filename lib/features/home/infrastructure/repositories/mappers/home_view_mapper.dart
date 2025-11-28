@@ -15,7 +15,7 @@ extension HomeViewMapper on HomeViewConf {
 extension AreaHomeMapper on AreaHomeConf {
   AreaHomeConfigsCompanion toCompanion(int homeConfigId, int areaDbId) {
     return AreaHomeConfigsCompanion(
-      position: Value(position),
+      order: Value(position),
       areaId: Value(areaDbId),
       homeConfigId: Value(homeConfigId),
     );
@@ -30,7 +30,7 @@ extension DeviceHomeMapper on DeviceWidgetConf {
         : db.DeviceDisplaySizeDb.small;
 
     return DeviceHomeConfigsCompanion(
-      position: Value(position),
+      order: Value(position),
       size: Value(dbSize),
       deviceId: Value(deviceDbId),
       areaConfigId: Value(areaConfigId),

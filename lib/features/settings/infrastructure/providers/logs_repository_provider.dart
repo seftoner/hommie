@@ -1,5 +1,5 @@
-import 'package:hommie/core/infrastructure/parallelism/providers/provider.dart';
-import 'package:hommie/core/utils/log_file.dart';
+import 'package:hommie/core/infrastructure/parallelism/parallelism_executor_provider.dart';
+import 'package:hommie/core/infrastructure/logging/log_file.dart';
 import 'package:hommie/features/settings/domain/repository/i_logs_repository.dart';
 import 'package:hommie/features/settings/infrastructure/repositories/logs_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

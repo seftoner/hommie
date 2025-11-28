@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/ha_connection.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/ha_connection_option.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
@@ -23,11 +23,12 @@ class ConnectionOrchestrator {
   final StreamController<HASocketState> _stateController =
       StreamController<HASocketState>.broadcast();
   ConnectionOrchestrator(this._connectionOption, [Backoff? backoff])
-      : _backoff = backoff ??
-            BinaryExponentialBackoff(
-              initial: const Duration(seconds: 1),
-              maximumStep: 7,
-            );
+    : _backoff =
+          backoff ??
+          BinaryExponentialBackoff(
+            initial: const Duration(seconds: 1),
+            maximumStep: 7,
+          );
 
   /// Stream of connection state changes.
   Stream<HASocketState> get state => _stateController.stream;
@@ -99,10 +100,9 @@ class ConnectionOrchestrator {
       _connection = null;
 
       if (!_stateController.isClosed) {
-        _stateController.add(Disconnected(
-          type: DisconnectionType.error,
-          reason: e.toString(),
-        ));
+        _stateController.add(
+          Disconnected(type: DisconnectionType.error, reason: e.toString()),
+        );
       }
 
       if (!_isDisposed) {
@@ -117,7 +117,8 @@ class ConnectionOrchestrator {
     }
 
     logger.d(
-        'ConnectionOrchestrator received state: $state (type: ${state.runtimeType})');
+      'ConnectionOrchestrator received state: $state (type: ${state.runtimeType})',
+    );
 
     // Forward state changes to our controller so external listeners get notified
     if (!_stateController.isClosed) {
@@ -127,7 +128,8 @@ class ConnectionOrchestrator {
     switch (state) {
       case Authenticated():
         logger.i(
-            'Connection authenticated - resetting backoff and starting heartbeat');
+          'Connection authenticated - resetting backoff and starting heartbeat',
+        );
         _backoff.reset(); // Reset backoff on successful connection
         _startHeartbeat(); // Start heartbeat monitoring
         break;
@@ -155,7 +157,8 @@ class ConnectionOrchestrator {
   void _scheduleReconnect() {
     if (_isDisposed || _reconnectRequested || _reconnectTimer != null) {
       logger.d(
-          'Skipping reconnection scheduling: disposed=$_isDisposed, requested=$_reconnectRequested, timer=${_reconnectTimer != null}');
+        'Skipping reconnection scheduling: disposed=$_isDisposed, requested=$_reconnectRequested, timer=${_reconnectTimer != null}',
+      );
       return;
     }
 
@@ -176,7 +179,8 @@ class ConnectionOrchestrator {
         _attemptConnection();
       } else {
         logger.w(
-            'Reconnection timer expired but conditions not met: disposed=$_isDisposed, requested=$_reconnectRequested');
+          'Reconnection timer expired but conditions not met: disposed=$_isDisposed, requested=$_reconnectRequested',
+        );
       }
     });
   }
@@ -186,8 +190,9 @@ class ConnectionOrchestrator {
 
     logger.i('Starting heartbeat monitoring');
 
-    _heartbeatTimer =
-        Timer.periodic(const Duration(seconds: 30), (timer) async {
+    _heartbeatTimer = Timer.periodic(const Duration(seconds: 30), (
+      timer,
+    ) async {
       // Check if connection still exists
       if (_connection == null || _isDisposed) {
         logger.w('Heartbeat stopped - connection no longer exists');
@@ -200,8 +205,9 @@ class ConnectionOrchestrator {
 
       try {
         // Use timeout for ping to detect stale connections
-        await HACommands.pingServer(_connection!)
-            .timeout(const Duration(seconds: 10));
+        await HACommands.pingServer(
+          _connection!,
+        ).timeout(const Duration(seconds: 10));
         logger.d('Ping successful');
       } catch (e) {
         logger.e('Ping failed: $e');

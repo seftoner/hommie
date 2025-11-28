@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/ha_auth_token.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
@@ -11,10 +11,11 @@ class HAConnectionOption {
   final Uri _serverUrl;
   final FetchAuthTokenCallback _fetchAuthToken;
 
-  HAConnectionOption(
-      {required Uri serverUrl, required FetchAuthTokenCallback fetchAuthToken})
-      : _serverUrl = serverUrl,
-        _fetchAuthToken = fetchAuthToken;
+  HAConnectionOption({
+    required Uri serverUrl,
+    required FetchAuthTokenCallback fetchAuthToken,
+  }) : _serverUrl = serverUrl,
+       _fetchAuthToken = fetchAuthToken;
 
   Future<HASocket> createSocket() async {
     final credentials = await _fetchAuthToken();
@@ -42,11 +43,11 @@ class HAConnectionOption {
   }
 
   void _connect(
-      Uri uri, HAAuthToken credentials, Completer<HASocket> completer) {
-    final socket = HASocket.connect(
-      wsUri: uri,
-      authToken: credentials,
-    );
+    Uri uri,
+    HAAuthToken credentials,
+    Completer<HASocket> completer,
+  ) {
+    final socket = HASocket.connect(wsUri: uri, authToken: credentials);
 
     StreamSubscription<HASocketState>? stateSubscription;
     StreamSubscription<dynamic>? messageSubscription;
@@ -63,29 +64,27 @@ class HAConnectionOption {
       }
     }
 
-    stateSubscription = socket.stateStream.listen(
-      (state) {
-        switch (state) {
-          case Authenticated():
-            cleanup();
-            completer.complete(socket);
+    stateSubscription = socket.stateStream.listen((state) {
+      switch (state) {
+        case Authenticated():
+          cleanup();
+          completer.complete(socket);
 
-          case Disconnected(:final type)
-              when type == DisconnectionType.authFailure:
-            handleError(AuthenticationError('Authentication failed'));
+        case Disconnected(:final type)
+            when type == DisconnectionType.authFailure:
+          handleError(AuthenticationError('Authentication failed'));
 
-          case Disconnected() when !completer.isCompleted:
-            // Only handle non-auth disconnections if we haven't completed yet
-            handleError(
-                ConnectionError('Connection closed before authentication'));
+        case Disconnected() when !completer.isCompleted:
+          // Only handle non-auth disconnections if we haven't completed yet
+          handleError(
+            ConnectionError('Connection closed before authentication'),
+          );
 
-          default:
-            // Wait for other states
-            break;
-        }
-      },
-      onError: handleError,
-    );
+        default:
+          // Wait for other states
+          break;
+      }
+    }, onError: handleError);
 
     messageSubscription = socket.stream.listen(
       null, // We don't need to handle messages here as auth is handled by HASocket

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hommie/core/caching/cached_repository.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 
 import '../../utils/tests_logger.dart';
 

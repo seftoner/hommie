@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';

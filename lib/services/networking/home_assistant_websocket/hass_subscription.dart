@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 
 /// Represents a subscription to Home Assistant events.
 /// Provides a stream of events and a way to unsubscribe.

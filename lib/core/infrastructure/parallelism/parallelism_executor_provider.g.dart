@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'provider.dart';
+part of 'parallelism_executor_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator

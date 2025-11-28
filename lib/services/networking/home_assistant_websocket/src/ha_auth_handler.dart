@@ -1,5 +1,5 @@
 import 'package:hommie/services/networking/home_assistant_websocket/ha_auth_token.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/ha_messages.dart';
 
 class HAAuthHandler {
@@ -11,15 +11,13 @@ class HAAuthHandler {
   void Function(AuthResult)? onAuthResult;
   void Function(HABaseMessage)? sendMessage;
 
-  HAAuthHandler({
-    required this.authToken,
-    this.onAuthResult,
-    this.sendMessage,
-  });
+  HAAuthHandler({required this.authToken, this.onAuthResult, this.sendMessage});
 
   void handleAuthMessage(Map<String, dynamic> message) {
-    assert(onAuthResult != null && sendMessage != null,
-        'Auth handler not properly initialized');
+    assert(
+      onAuthResult != null && sendMessage != null,
+      'Auth handler not properly initialized',
+    );
 
     try {
       final messageType = message['type'] as String;

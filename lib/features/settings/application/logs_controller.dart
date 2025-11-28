@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:hommie/core/utils/log_file.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/log_file.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/settings/infrastructure/providers/logs_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:share_plus/share_plus.dart';

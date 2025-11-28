@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/background_task/background_task.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:workmanager/workmanager.dart';

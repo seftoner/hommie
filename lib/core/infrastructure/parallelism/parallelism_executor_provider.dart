@@ -3,7 +3,7 @@ import 'package:hommie/core/infrastructure/parallelism/computer_executor.dart';
 import 'package:hommie/core/infrastructure/parallelism/i_parallel_executor.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'provider.g.dart';
+part 'parallelism_executor_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 IParallelExecutor parallelismExecutor(Ref ref) {

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/auth/infrastructure/repositories/ha_servers_repository.dart';
 import 'package:hommie/features/auth/infrastructure/repositories/cached_ha_servers_repository.dart';
 

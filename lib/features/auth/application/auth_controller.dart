@@ -1,4 +1,4 @@
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/features/auth/infrastructure/actions/activate_server_if_exist_action.dart';
 import 'package:hommie/features/auth/infrastructure/actions/activate_server_action.dart';

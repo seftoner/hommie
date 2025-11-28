@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
 
@@ -13,8 +13,8 @@ class HAConnectionState {
   HASocketState get currentState => _currentState;
 
   HAConnectionState()
-      : _controller = StreamController<HASocketState>.broadcast(),
-        _currentState = const Disconnected();
+    : _controller = StreamController<HASocketState>.broadcast(),
+      _currentState = const Disconnected();
 
   void monitorSocket(HASocket socket) {
     _socketSubscription?.cancel();

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart';
 
@@ -21,7 +21,7 @@ class MockEventCallback extends Mock {
   HASocket,
   HAConnectionOption,
   StreamController,
-  StreamSubscription<String>
+  StreamSubscription<String>,
 ])
 void main() {
   late MockHASocket mockSocket;
@@ -33,10 +33,14 @@ void main() {
 
   logger = testLogger;
 
-  void emitSocketMessage(Map<String, dynamic> message,
-      {Duration delay = const Duration(milliseconds: 100)}) {
+  void emitSocketMessage(
+    Map<String, dynamic> message, {
+    Duration delay = const Duration(milliseconds: 100),
+  }) {
     Future.delayed(
-        delay, () => socketStreamController.add(jsonEncode(message)));
+      delay,
+      () => socketStreamController.add(jsonEncode(message)),
+    );
   }
 
   setUpAll(() {
@@ -57,8 +61,9 @@ void main() {
     when(mockOptions.createSocket()).thenAnswer((_) async => mockSocket);
 
     // Make sure subscription can be cancelled
-    when(mockStreamSubscription.cancel())
-        .thenAnswer((_) => Future<void>.value());
+    when(
+      mockStreamSubscription.cancel(),
+    ).thenAnswer((_) => Future<void>.value());
 
     connection = HAConnection(mockOptions);
   });
@@ -81,18 +86,20 @@ void main() {
       expect(connection.currentState, isA<Authenticated>());
     });
 
-    test('connect should not create new socket if one already exists',
-        () async {
-      // Arrange
-      await connection.connect();
-      clearInteractions(mockOptions);
+    test(
+      'connect should not create new socket if one already exists',
+      () async {
+        // Arrange
+        await connection.connect();
+        clearInteractions(mockOptions);
 
-      // Act
-      await connection.connect();
+        // Act
+        await connection.connect();
 
-      // Assert
-      verifyNever(mockOptions.createSocket());
-    });
+        // Assert
+        verifyNever(mockOptions.createSocket());
+      },
+    );
 
     test('close should properly cleanup resources', () async {
       // Arrange
@@ -125,15 +132,15 @@ void main() {
             'last_updated': '2023-10-10T10:00:00.000Z',
             'attributes': {
               'friendly_name': 'Test Light',
-              'supported_features': 0
+              'supported_features': 0,
             },
             'context': {
               'id': '123456',
               'parent_id': null,
-              'user_id': 'user_123'
-            }
-          }
-        ]
+              'user_id': 'user_123',
+            },
+          },
+        ],
       });
 
       // Act
@@ -149,44 +156,46 @@ void main() {
   });
 
   group('Subscription handling', () {
-    test('subscribeMessage should register subscription and handle events',
-        () async {
-      // Arrange
-      when(mockSocket.isClosed).thenReturn(false);
-      await connection.connect();
+    test(
+      'subscribeMessage should register subscription and handle events',
+      () async {
+        // Arrange
+        when(mockSocket.isClosed).thenReturn(false);
+        await connection.connect();
 
-      emitSocketMessage({
-        'id': 2,
-        'type': 'result',
-        'success': true,
-        'result': null,
-      });
+        emitSocketMessage({
+          'id': 2,
+          'type': 'result',
+          'success': true,
+          'result': null,
+        });
 
-      emitSocketMessage({
-        'id': 2,
-        'type': 'event',
-        'event': {
-          'a': {
-            'light.test': {
-              's': 'on',
-              'a': {'friendly_name': 'Test Light', 'supported_features': 0},
-              'c': '01HV3B31R2CXV8P961E8W3JCZC',
-              'lc': 1712730507.010314,
-              'lu': 1712730507.010314
-            }
-          }
-        }
-      }, delay: const Duration(milliseconds: 200));
+        emitSocketMessage({
+          'id': 2,
+          'type': 'event',
+          'event': {
+            'a': {
+              'light.test': {
+                's': 'on',
+                'a': {'friendly_name': 'Test Light', 'supported_features': 0},
+                'c': '01HV3B31R2CXV8P961E8W3JCZC',
+                'lc': 1712730507.010314,
+                'lu': 1712730507.010314,
+              },
+            },
+          },
+        }, delay: const Duration(milliseconds: 200));
 
-      // Act
-      final subscription = HACommands.subscribeEntities(connection);
-      final subscriptionMessage =
-          await subscription.stream.first as StatesUpdates;
+        // Act
+        final subscription = HACommands.subscribeEntities(connection);
+        final subscriptionMessage =
+            await subscription.stream.first as StatesUpdates;
 
-      // Assert
-      verify(mockSocket.sendMessage(any)).called(1);
-      expect(subscription, isA<HassSubscription>());
-      expect(subscriptionMessage.add?['light.test']!.state, equals('on'));
-    });
+        // Assert
+        verify(mockSocket.sendMessage(any)).called(1);
+        expect(subscription, isA<HassSubscription>());
+        expect(subscriptionMessage.add?['light.test']!.state, equals('on'));
+      },
+    );
   });
 }

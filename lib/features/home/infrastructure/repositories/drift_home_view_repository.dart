@@ -28,7 +28,7 @@ class DriftHomeViewRepository implements IHomeViewRepository {
     final areaConfigsQuery =
         (_database.select(_database.areaHomeConfigs)
               ..where((ac) => ac.homeConfigId.equals(homeConfig.id))
-              ..orderBy([(ac) => OrderingTerm.asc(ac.position)]))
+              ..orderBy([(ac) => OrderingTerm.asc(ac.order)]))
             .join([
               innerJoin(
                 _database.areaEntities,
@@ -49,7 +49,7 @@ class DriftHomeViewRepository implements IHomeViewRepository {
       final deviceConfigsQuery =
           (_database.select(_database.deviceHomeConfigs)
                 ..where((dc) => dc.areaConfigId.equals(areaConfig.id))
-                ..orderBy([(dc) => OrderingTerm.asc(dc.position)]))
+                ..orderBy([(dc) => OrderingTerm.asc(dc.order)]))
               .join([
                 innerJoin(
                   _database.deviceEntities,
@@ -71,7 +71,7 @@ class DriftHomeViewRepository implements IHomeViewRepository {
 
         return DeviceWidgetConf(
           device: device.toDomain(area.haId),
-          position: deviceConfig.position,
+          position: deviceConfig.order,
           size: domainSize,
         );
       }).toList();
@@ -79,7 +79,7 @@ class DriftHomeViewRepository implements IHomeViewRepository {
       areas.add(
         AreaHomeConf(
           area: area.toDomain(),
-          position: areaConfig.position,
+          position: areaConfig.order,
           devices: devices,
         ),
       );

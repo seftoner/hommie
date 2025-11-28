@@ -6,8 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/app.dart';
 import 'package:hommie/core/bootstrap/bootstrap.dart';
 import 'package:hommie/core/observers/app_state_logger.dart';
-import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/services/database/database_provider.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 
 // ignore: provider_dependencies
 Future<void> main() async {

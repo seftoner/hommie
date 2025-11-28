@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/ha_auth_token.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -72,17 +72,13 @@ class HASocket {
   String? get closeReason => _innerChanel.closeReason;
   bool get isAuthInvalid => _invalidAuth;
 
-  HASocket.connect({
-    required Uri wsUri,
-    required HAAuthToken authToken,
-  })  : _config = HASocketConfig(
-          wsUri: wsUri,
-          pingInterval: const Duration(seconds: 5),
-          connectionTimeout: const Duration(seconds: 10),
-        ),
-        _authHandler = HAAuthHandler(
-          authToken: authToken,
-        ) {
+  HASocket.connect({required Uri wsUri, required HAAuthToken authToken})
+    : _config = HASocketConfig(
+        wsUri: wsUri,
+        pingInterval: const Duration(seconds: 5),
+        connectionTimeout: const Duration(seconds: 10),
+      ),
+      _authHandler = HAAuthHandler(authToken: authToken) {
     _outerStreamController = StreamController.broadcast();
 
     _initializeAuthHandler();
@@ -100,10 +96,12 @@ class HASocket {
             _setState(const Authenticated());
             break;
           case AuthResultError(message: final message):
-            _setState(Disconnected(
-              reason: 'Authentication error: $message',
-              type: DisconnectionType.error,
-            ));
+            _setState(
+              Disconnected(
+                reason: 'Authentication error: $message',
+                type: DisconnectionType.error,
+              ),
+            );
             logger.e('Authentication error: $message');
             break;
           case AuthResultPending():
@@ -111,10 +109,12 @@ class HASocket {
             break;
           case AuthResultInvalid(message: final message):
             _invalidAuth = true;
-            _setState(Disconnected(
-              reason: 'Invalid authentication: $message',
-              type: DisconnectionType.authFailure,
-            ));
+            _setState(
+              Disconnected(
+                reason: 'Invalid authentication: $message',
+                type: DisconnectionType.authFailure,
+              ),
+            );
             break;
         }
       }
@@ -150,10 +150,9 @@ class HASocket {
       reason = 'Failed to start connection';
     }
 
-    _setState(Disconnected(
-      reason: '$reason: $error',
-      type: DisconnectionType.error,
-    ));
+    _setState(
+      Disconnected(reason: '$reason: $error', type: DisconnectionType.error),
+    );
     logger.e('$reason: $error');
   }
 
@@ -187,18 +186,20 @@ class HASocket {
 
     if (_invalidAuth) {
       logger.e('Authentication is invalid - token might be revoked');
-      _setState(Disconnected(
-        reason: reason,
-        type: DisconnectionType.authFailure,
-      ));
+      _setState(
+        Disconnected(reason: reason, type: DisconnectionType.authFailure),
+      );
     } else {
-      _setState(Disconnected(
-        reason: reason,
-        type: switch (_innerChanel.closeCode) {
-          status.normalClosure || status.goingAway => DisconnectionType.normal,
-          _ => DisconnectionType.error,
-        },
-      ));
+      _setState(
+        Disconnected(
+          reason: reason,
+          type: switch (_innerChanel.closeCode) {
+            status.normalClosure ||
+            status.goingAway => DisconnectionType.normal,
+            _ => DisconnectionType.error,
+          },
+        ),
+      );
     }
 
     if (!_outerStreamController.isClosed) {
@@ -219,7 +220,9 @@ class HASocket {
 
   Future<void> close() async {
     logger.t('Inner socket is going to close');
-    await _innerChanel.sink
-        .close(status.normalClosure, 'Session removed from app.');
+    await _innerChanel.sink.close(
+      status.normalClosure,
+      'Session removed from app.',
+    );
   }
 }

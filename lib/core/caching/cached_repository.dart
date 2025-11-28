@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 
 /// A generic caching wrapper for repositories that provides automatic caching
 /// with configurable TTL and cache invalidation.

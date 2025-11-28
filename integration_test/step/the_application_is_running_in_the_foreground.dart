@@ -4,7 +4,7 @@ import 'package:hommie/app.dart';
 import 'package:patrol/patrol.dart';
 import 'package:hommie/core/bootstrap/bootstrap.dart';
 import 'package:hommie/core/observers/app_state_logger.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import '../utils/test_provider_overrides.dart';
 
 Future<void> theApplicationIsRunningInTheForeground(

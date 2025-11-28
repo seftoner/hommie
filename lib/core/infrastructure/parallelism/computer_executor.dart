@@ -1,6 +1,6 @@
 import 'package:computer/computer.dart';
 import 'package:hommie/core/infrastructure/parallelism/i_parallel_executor.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 
 class ComputerExecutor implements IParallelExecutor {
   final Computer _computer;
@@ -19,8 +19,10 @@ class ComputerExecutor implements IParallelExecutor {
   }
 
   @override
-  Future<Stream<R>> executeStream<P, R>(Stream<R> Function(P param) task,
-      {P? param}) async {
+  Future<Stream<R>> executeStream<P, R>(
+    Stream<R> Function(P param) task, {
+    P? param,
+  }) async {
     try {
       return await _computer.computeStream<P, R>(task, param: param);
     } catch (e, _) {

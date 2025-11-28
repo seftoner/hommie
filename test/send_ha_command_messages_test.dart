@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/ha_messages.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -32,9 +32,9 @@ void main() {
 
   // Helper method to verify sent message
   void verifyHAMessage(Map<String, dynamic> expectedPayload) {
-    final capturedMessage = verify(mockSocket.sendMessage(captureAny))
-        .captured
-        .single as HABaseMessage;
+    final capturedMessage =
+        verify(mockSocket.sendMessage(captureAny)).captured.single
+            as HABaseMessage;
     expect(capturedMessage.payload, equals(expectedPayload));
   }
 
@@ -51,8 +51,9 @@ void main() {
     when(mockSocket.isClosed).thenAnswer((_) => false);
     when(mockSocket.state).thenAnswer((_) => const Authenticated());
     when(mockSocket.stream).thenAnswer((_) => socketStreamController.stream);
-    when(mockSocket.stateStream)
-        .thenAnswer((_) => socketStateController.stream);
+    when(
+      mockSocket.stateStream,
+    ).thenAnswer((_) => socketStateController.stream);
 
     final mockConOption = MockHAConnectionOption();
     when(mockConOption.createSocket()).thenAnswer((_) async => mockSocket);
@@ -79,18 +80,20 @@ void main() {
             'context': {
               'id': '326ef27d19415c60c492fe330945f954',
               'parent_id': null,
-              'user_id': '31ddb597e03147118cf8d2f8fbea5553'
+              'user_id': '31ddb597e03147118cf8d2f8fbea5553',
             },
-            'response': null
-          }
+            'response': null,
+          },
         });
 
-        final result = await HACommands.callService(connection,
-            domain: 'light',
-            service: 'turn_on',
-            serviceData: {'color_name': 'beige', 'brightness': '101'},
-            target: '{"entity_id": "light.kitchen"}',
-            returnResponse: true);
+        final result = await HACommands.callService(
+          connection,
+          domain: 'light',
+          service: 'turn_on',
+          serviceData: {'color_name': 'beige', 'brightness': '101'},
+          target: '{"entity_id": "light.kitchen"}',
+          returnResponse: true,
+        );
 
         verifyHAMessage({
           'id': 2,
@@ -99,7 +102,7 @@ void main() {
           'service': 'turn_on',
           'service_data': {'color_name': 'beige', 'brightness': '101'},
           'target': '{"entity_id": "light.kitchen"}',
-          'return_response': true
+          'return_response': true,
         });
 
         expect(result, isNotNull);
@@ -112,46 +115,44 @@ void main() {
           name: 'Areas',
           method: HACommands.getAreas,
           type: 'config/area_registry/list',
-          file: 'get_areas_response.json'
+          file: 'get_areas_response.json',
         ),
         (
           name: 'User',
           method: HACommands.getUser,
           type: 'auth/current_user',
-          file: 'get_user_response.json'
+          file: 'get_user_response.json',
         ),
         (
           name: 'Config',
           method: HACommands.getConfig,
           type: 'get_config',
-          file: 'get_config_response.json'
+          file: 'get_config_response.json',
         ),
         (
           name: 'Services',
           method: HACommands.getServices,
           type: 'get_services',
-          file: 'get_services_response.json'
+          file: 'get_services_response.json',
         ),
         (
           name: 'States',
           method: HACommands.getStates,
           type: 'get_states',
-          file: 'get_states_response.json'
+          file: 'get_states_response.json',
         ),
       ];
 
       for (final testCase in testCases) {
         test('successfully retrieves ${testCase.name}', () async {
           final testJson = await readJsonTestDataFromFile(
-              'test/data_samples/${testCase.file}');
+            'test/data_samples/${testCase.file}',
+          );
           simulateHAResponse(testJson);
 
           final result = await testCase.method(connection);
 
-          verifyHAMessage({
-            'id': 2,
-            'type': testCase.type,
-          });
+          verifyHAMessage({'id': 2, 'type': testCase.type});
 
           expect(result, isNotNull);
         });

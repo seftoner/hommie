@@ -9,7 +9,7 @@ import 'package:hommie/services/networking/home_assistant_websocket/home_assista
 import 'package:hommie/services/networking/home_assistant_websocket/src/connection_orchestrator.dart';
 import 'package:hommie/features/auth/infrastructure/providers/server_auth_token_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 
 part 'server_connection_manager.g.dart';
 

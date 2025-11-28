@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:battery_plus/battery_plus.dart' as battery_plus;
 import 'package:flutter/services.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/mobile_companion/i_sensor_provider.dart';
 import 'package:hommie/features/mobile_companion/sensors/battery_level.dart';
 import 'package:hommie/features/mobile_companion/sensors/battery_state.dart';

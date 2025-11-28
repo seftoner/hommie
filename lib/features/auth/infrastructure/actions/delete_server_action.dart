@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/home/infrastructure/providers/area_repository_provider.dart';
 import 'package:hommie/features/home/infrastructure/providers/home_view_repository_provider.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';

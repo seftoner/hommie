@@ -49,4 +49,4 @@ final class DatabaseConnectionProvider
 }
 
 String _$databaseConnectionHash() =>
-    r'ca0a1e1342f2705052a7f224341c7c97e4605e2f';
+    r'04bc5ce2d5e3689d07d7246d6e9341bcc8234700';

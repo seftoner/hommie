@@ -7,7 +7,7 @@ import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socke
 import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/hass_subscription.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/types/web_socket_response.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/message_handler.dart';
 
 /// Interface for Home Assistant websocket connection.
@@ -35,8 +35,8 @@ class HAConnection implements IHAConnection {
   final HAConnectionState _connectionState;
 
   HAConnection(this._haConnectionOption)
-      : _messageHandler = HAMessageHandler(),
-        _connectionState = HAConnectionState();
+    : _messageHandler = HAMessageHandler(),
+      _connectionState = HAConnectionState();
 
   /// Stream of connection state changes.
   Stream<HASocketState> get state => _connectionState.stateStream;
@@ -62,28 +62,27 @@ class HAConnection implements IHAConnection {
       _setSocket(socket);
     } on AuthenticationError catch (e) {
       logger.e('Connection failed: $e');
-      _connectionState.setState(Disconnected(
-        type: DisconnectionType.authFailure,
-        reason: e.toString(),
-      ));
+      _connectionState.setState(
+        Disconnected(type: DisconnectionType.authFailure, reason: e.toString()),
+      );
     } on ConnectionError catch (e) {
       logger.e('Connection failed: $e');
-      _connectionState.setState(Disconnected(
-        type: DisconnectionType.error,
-        reason: e.toString(),
-      ));
+      _connectionState.setState(
+        Disconnected(type: DisconnectionType.error, reason: e.toString()),
+      );
     } catch (e) {
       logger.e('Unexpected connection error: $e');
-      _connectionState.setState(Disconnected(
-        type: DisconnectionType.error,
-        reason: e.toString(),
-      ));
+      _connectionState.setState(
+        Disconnected(type: DisconnectionType.error, reason: e.toString()),
+      );
     }
   }
 
   @override
-  Future<dynamic> sendMessage(HABaseMessage message,
-      {Duration timeout = const Duration(seconds: 15)}) async {
+  Future<dynamic> sendMessage(
+    HABaseMessage message, {
+    Duration timeout = const Duration(seconds: 15),
+  }) async {
     // Replace assertion with runtime check for better error handling
     if (_socket == null || _socket!.isClosed) {
       return Future.error(ConnectionClosedError('Connection is closed'));
@@ -98,8 +97,12 @@ class HAConnection implements IHAConnection {
     Timer(timeout, () {
       final pendingCompleter = _commands.remove(id);
       if (pendingCompleter != null && !pendingCompleter.isCompleted) {
-        pendingCompleter.completeError(TimeoutException(
-            'Command $id timed out after ${timeout.inSeconds}s', timeout));
+        pendingCompleter.completeError(
+          TimeoutException(
+            'Command $id timed out after ${timeout.inSeconds}s',
+            timeout,
+          ),
+        );
       }
     });
 
@@ -131,13 +134,15 @@ class HAConnection implements IHAConnection {
 
     final id = _getCommandID;
 
-    final hassSubscription = HassSubscription(unsubscribe: () async {
-      if (!_socket!.isClosed) {
-        await sendMessage(UnsubscribeEventsMessage(subscriptionID: id));
-      }
-      final removedSubscription = _subscriptions.remove(id);
-      removedSubscription?.dispose();
-    });
+    final hassSubscription = HassSubscription(
+      unsubscribe: () async {
+        if (!_socket!.isClosed) {
+          await sendMessage(UnsubscribeEventsMessage(subscriptionID: id));
+        }
+        final removedSubscription = _subscriptions.remove(id);
+        removedSubscription?.dispose();
+      },
+    );
 
     _subscriptions[id] = hassSubscription;
 
@@ -150,8 +155,11 @@ class HAConnection implements IHAConnection {
     _socket = socket;
 
     _socketSubscription?.cancel();
-    _socketSubscription = socket.stream
-        .listen(_messageListener, onDone: _handleClose, onError: _handleError);
+    _socketSubscription = socket.stream.listen(
+      _messageListener,
+      onDone: _handleClose,
+      onError: _handleError,
+    );
 
     _connectionState.monitorSocket(socket);
     logger.i('Connection established 🤝');
@@ -195,8 +203,9 @@ class HAConnection implements IHAConnection {
       subscription.emit(event);
     } else {
       logger.e('Unknown subscription $id, unsubscribing');
-      sendMessage(UnsubscribeEventsMessage(subscriptionID: id))
-          .catchError((e) => logger.e('Error unsubscribing: $e'));
+      sendMessage(
+        UnsubscribeEventsMessage(subscriptionID: id),
+      ).catchError((e) => logger.e('Error unsubscribing: $e'));
     }
   }
 

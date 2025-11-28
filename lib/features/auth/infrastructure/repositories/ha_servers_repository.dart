@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:hommie/features/auth/domain/entities/ha_server.dart';
 import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:hommie/features/auth/domain/repository/i_ha_servers_repository.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 
 class HAServersRepository implements IHAServersRepository {

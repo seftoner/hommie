@@ -1,6 +1,6 @@
 import 'package:hommie/core/infrastructure/actions/haction.dart';
 import 'package:hommie/core/infrastructure/actions/action_chain.dart';
-import 'package:hommie/core/utils/logger.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 
 class UnknownError implements Exception {
   @override

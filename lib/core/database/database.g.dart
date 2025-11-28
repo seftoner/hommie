@@ -150,10 +150,20 @@ class $ServerEntitiesTable extends ServerEntities
 }
 
 class ServerEntity extends DataClass implements Insertable<ServerEntity> {
+  /// Auto-incrementing primary key
   final int id;
+
+  /// User-defined name for the server (e.g., "Home", "Office")
   final String name;
+
+  /// Indicates whether this server is currently active.
+  /// Only one server should be active at a time.
   final bool isActive;
+
+  /// Full URL to the Home Assistant instance (e.g., "http://homeassistant.local:8123")
   final String url;
+
+  /// Home Assistant version string (e.g., "2024.11.3"), populated after successful connection
   final String? version;
   const ServerEntity({
     required this.id,
@@ -416,7 +426,7 @@ class $AreaEntitiesTable extends AreaEntities
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES server_entities (id)',
+      'REFERENCES server_entities (id) ON DELETE CASCADE',
     ),
   );
   @override
@@ -522,11 +532,23 @@ class $AreaEntitiesTable extends AreaEntities
 }
 
 class AreaEntity extends DataClass implements Insertable<AreaEntity> {
+  /// Auto-incrementing primary key (local database ID)
   final int id;
+
+  /// Home Assistant unique identifier (e.g., "living_room")
   final String haId;
+
+  /// Display name for the area (e.g., "Living Room")
   final String name;
+
+  /// Optional background color/gradient for UI (hex color or gradient string)
   final String? background;
+
+  /// Optional custom image URL for area representation
   final String? image;
+
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all its areas
   final int serverId;
   const AreaEntity({
     required this.id,
@@ -804,7 +826,7 @@ class $DeviceEntitiesTable extends DeviceEntities
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES area_entities (id)',
+      'REFERENCES area_entities (id) ON DELETE CASCADE',
     ),
   );
   @override
@@ -895,10 +917,20 @@ class $DeviceEntitiesTable extends DeviceEntities
 }
 
 class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
+  /// Auto-incrementing primary key (local database ID)
   final int id;
+
+  /// Home Assistant entity ID (e.g., "light.living_room_lamp")
   final String haId;
+
+  /// Display name for the device (e.g., "Living Room Lamp")
   final String name;
+
+  /// Device domain/type (e.g., "light", "switch", "media_player", "sensor")
   final String type;
+
+  /// Foreign key reference to [AreaEntities]
+  /// Cascades: deleting an area deletes all its devices
   final int areaId;
   const DeviceEntity({
     required this.id,
@@ -1120,7 +1152,7 @@ class $HomeViewConfigsTable extends HomeViewConfigs
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES server_entities (id)',
+      'UNIQUE REFERENCES server_entities (id) ON DELETE CASCADE',
     ),
   );
   @override
@@ -1175,7 +1207,12 @@ class $HomeViewConfigsTable extends HomeViewConfigs
 }
 
 class HomeViewConfig extends DataClass implements Insertable<HomeViewConfig> {
+  /// Auto-incrementing primary key
   final int id;
+
+  /// Foreign key reference to [ServerEntities]
+  /// UNIQUE constraint enforces 1:1 relationship - one config per server
+  /// Cascades: deleting a server deletes its home view configuration
   final int serverId;
   const HomeViewConfig({required this.id, required this.serverId});
   @override
@@ -1306,12 +1343,10 @@ class $AreaHomeConfigsTable extends AreaHomeConfigs
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _positionMeta = const VerificationMeta(
-    'position',
-  );
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
   @override
-  late final GeneratedColumn<int> position = GeneratedColumn<int>(
-    'position',
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+    'order',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -1326,7 +1361,7 @@ class $AreaHomeConfigsTable extends AreaHomeConfigs
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES area_entities (id)',
+      'REFERENCES area_entities (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _homeConfigIdMeta = const VerificationMeta(
@@ -1340,11 +1375,11 @@ class $AreaHomeConfigsTable extends AreaHomeConfigs
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES home_view_configs (id)',
+      'REFERENCES home_view_configs (id) ON DELETE CASCADE',
     ),
   );
   @override
-  List<GeneratedColumn> get $columns => [id, position, areaId, homeConfigId];
+  List<GeneratedColumn> get $columns => [id, order, areaId, homeConfigId];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1360,13 +1395,13 @@ class $AreaHomeConfigsTable extends AreaHomeConfigs
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('position')) {
+    if (data.containsKey('order')) {
       context.handle(
-        _positionMeta,
-        position.isAcceptableOrUnknown(data['position']!, _positionMeta),
+        _orderMeta,
+        order.isAcceptableOrUnknown(data['order']!, _orderMeta),
       );
     } else if (isInserting) {
-      context.missing(_positionMeta);
+      context.missing(_orderMeta);
     }
     if (data.containsKey('area_id')) {
       context.handle(
@@ -1393,6 +1428,10 @@ class $AreaHomeConfigsTable extends AreaHomeConfigs
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {homeConfigId, areaId},
+  ];
+  @override
   AreaHomeConfig map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AreaHomeConfig(
@@ -1400,9 +1439,9 @@ class $AreaHomeConfigsTable extends AreaHomeConfigs
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      position: attachedDatabase.typeMapping.read(
+      order: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}position'],
+        data['${effectivePrefix}order'],
       )!,
       areaId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -1422,13 +1461,22 @@ class $AreaHomeConfigsTable extends AreaHomeConfigs
 }
 
 class AreaHomeConfig extends DataClass implements Insertable<AreaHomeConfig> {
+  /// Auto-incrementing primary key
   final int id;
-  final int position;
+
+  /// Sort order in home view (lower number = displayed first)
+  final int order;
+
+  /// Foreign key reference to [AreaEntities]
+  /// Cascades: deleting an area removes it from home view config
   final int areaId;
+
+  /// Foreign key reference to [HomeViewConfigs]
+  /// Cascades: deleting home config removes all area configurations
   final int homeConfigId;
   const AreaHomeConfig({
     required this.id,
-    required this.position,
+    required this.order,
     required this.areaId,
     required this.homeConfigId,
   });
@@ -1436,7 +1484,7 @@ class AreaHomeConfig extends DataClass implements Insertable<AreaHomeConfig> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['position'] = Variable<int>(position);
+    map['order'] = Variable<int>(order);
     map['area_id'] = Variable<int>(areaId);
     map['home_config_id'] = Variable<int>(homeConfigId);
     return map;
@@ -1445,7 +1493,7 @@ class AreaHomeConfig extends DataClass implements Insertable<AreaHomeConfig> {
   AreaHomeConfigsCompanion toCompanion(bool nullToAbsent) {
     return AreaHomeConfigsCompanion(
       id: Value(id),
-      position: Value(position),
+      order: Value(order),
       areaId: Value(areaId),
       homeConfigId: Value(homeConfigId),
     );
@@ -1458,7 +1506,7 @@ class AreaHomeConfig extends DataClass implements Insertable<AreaHomeConfig> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return AreaHomeConfig(
       id: serializer.fromJson<int>(json['id']),
-      position: serializer.fromJson<int>(json['position']),
+      order: serializer.fromJson<int>(json['order']),
       areaId: serializer.fromJson<int>(json['areaId']),
       homeConfigId: serializer.fromJson<int>(json['homeConfigId']),
     );
@@ -1468,7 +1516,7 @@ class AreaHomeConfig extends DataClass implements Insertable<AreaHomeConfig> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'position': serializer.toJson<int>(position),
+      'order': serializer.toJson<int>(order),
       'areaId': serializer.toJson<int>(areaId),
       'homeConfigId': serializer.toJson<int>(homeConfigId),
     };
@@ -1476,19 +1524,19 @@ class AreaHomeConfig extends DataClass implements Insertable<AreaHomeConfig> {
 
   AreaHomeConfig copyWith({
     int? id,
-    int? position,
+    int? order,
     int? areaId,
     int? homeConfigId,
   }) => AreaHomeConfig(
     id: id ?? this.id,
-    position: position ?? this.position,
+    order: order ?? this.order,
     areaId: areaId ?? this.areaId,
     homeConfigId: homeConfigId ?? this.homeConfigId,
   );
   AreaHomeConfig copyWithCompanion(AreaHomeConfigsCompanion data) {
     return AreaHomeConfig(
       id: data.id.present ? data.id.value : this.id,
-      position: data.position.present ? data.position.value : this.position,
+      order: data.order.present ? data.order.value : this.order,
       areaId: data.areaId.present ? data.areaId.value : this.areaId,
       homeConfigId: data.homeConfigId.present
           ? data.homeConfigId.value
@@ -1500,7 +1548,7 @@ class AreaHomeConfig extends DataClass implements Insertable<AreaHomeConfig> {
   String toString() {
     return (StringBuffer('AreaHomeConfig(')
           ..write('id: $id, ')
-          ..write('position: $position, ')
+          ..write('order: $order, ')
           ..write('areaId: $areaId, ')
           ..write('homeConfigId: $homeConfigId')
           ..write(')'))
@@ -1508,45 +1556,45 @@ class AreaHomeConfig extends DataClass implements Insertable<AreaHomeConfig> {
   }
 
   @override
-  int get hashCode => Object.hash(id, position, areaId, homeConfigId);
+  int get hashCode => Object.hash(id, order, areaId, homeConfigId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is AreaHomeConfig &&
           other.id == this.id &&
-          other.position == this.position &&
+          other.order == this.order &&
           other.areaId == this.areaId &&
           other.homeConfigId == this.homeConfigId);
 }
 
 class AreaHomeConfigsCompanion extends UpdateCompanion<AreaHomeConfig> {
   final Value<int> id;
-  final Value<int> position;
+  final Value<int> order;
   final Value<int> areaId;
   final Value<int> homeConfigId;
   const AreaHomeConfigsCompanion({
     this.id = const Value.absent(),
-    this.position = const Value.absent(),
+    this.order = const Value.absent(),
     this.areaId = const Value.absent(),
     this.homeConfigId = const Value.absent(),
   });
   AreaHomeConfigsCompanion.insert({
     this.id = const Value.absent(),
-    required int position,
+    required int order,
     required int areaId,
     required int homeConfigId,
-  }) : position = Value(position),
+  }) : order = Value(order),
        areaId = Value(areaId),
        homeConfigId = Value(homeConfigId);
   static Insertable<AreaHomeConfig> custom({
     Expression<int>? id,
-    Expression<int>? position,
+    Expression<int>? order,
     Expression<int>? areaId,
     Expression<int>? homeConfigId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (position != null) 'position': position,
+      if (order != null) 'order': order,
       if (areaId != null) 'area_id': areaId,
       if (homeConfigId != null) 'home_config_id': homeConfigId,
     });
@@ -1554,13 +1602,13 @@ class AreaHomeConfigsCompanion extends UpdateCompanion<AreaHomeConfig> {
 
   AreaHomeConfigsCompanion copyWith({
     Value<int>? id,
-    Value<int>? position,
+    Value<int>? order,
     Value<int>? areaId,
     Value<int>? homeConfigId,
   }) {
     return AreaHomeConfigsCompanion(
       id: id ?? this.id,
-      position: position ?? this.position,
+      order: order ?? this.order,
       areaId: areaId ?? this.areaId,
       homeConfigId: homeConfigId ?? this.homeConfigId,
     );
@@ -1572,8 +1620,8 @@ class AreaHomeConfigsCompanion extends UpdateCompanion<AreaHomeConfig> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (position.present) {
-      map['position'] = Variable<int>(position.value);
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
     }
     if (areaId.present) {
       map['area_id'] = Variable<int>(areaId.value);
@@ -1588,7 +1636,7 @@ class AreaHomeConfigsCompanion extends UpdateCompanion<AreaHomeConfig> {
   String toString() {
     return (StringBuffer('AreaHomeConfigsCompanion(')
           ..write('id: $id, ')
-          ..write('position: $position, ')
+          ..write('order: $order, ')
           ..write('areaId: $areaId, ')
           ..write('homeConfigId: $homeConfigId')
           ..write(')'))
@@ -1615,12 +1663,10 @@ class $DeviceHomeConfigsTable extends DeviceHomeConfigs
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _positionMeta = const VerificationMeta(
-    'position',
-  );
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
   @override
-  late final GeneratedColumn<int> position = GeneratedColumn<int>(
-    'position',
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+    'order',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -1648,7 +1694,7 @@ class $DeviceHomeConfigsTable extends DeviceHomeConfigs
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES device_entities (id)',
+      'REFERENCES device_entities (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _areaConfigIdMeta = const VerificationMeta(
@@ -1662,13 +1708,13 @@ class $DeviceHomeConfigsTable extends DeviceHomeConfigs
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES area_home_configs (id)',
+      'REFERENCES area_home_configs (id) ON DELETE CASCADE',
     ),
   );
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    position,
+    order,
     size,
     deviceId,
     areaConfigId,
@@ -1688,13 +1734,13 @@ class $DeviceHomeConfigsTable extends DeviceHomeConfigs
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('position')) {
+    if (data.containsKey('order')) {
       context.handle(
-        _positionMeta,
-        position.isAcceptableOrUnknown(data['position']!, _positionMeta),
+        _orderMeta,
+        order.isAcceptableOrUnknown(data['order']!, _orderMeta),
       );
     } else if (isInserting) {
-      context.missing(_positionMeta);
+      context.missing(_orderMeta);
     }
     if (data.containsKey('device_id')) {
       context.handle(
@@ -1721,6 +1767,10 @@ class $DeviceHomeConfigsTable extends DeviceHomeConfigs
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {areaConfigId, deviceId},
+  ];
+  @override
   DeviceHomeConfig map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return DeviceHomeConfig(
@@ -1728,9 +1778,9 @@ class $DeviceHomeConfigsTable extends DeviceHomeConfigs
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      position: attachedDatabase.typeMapping.read(
+      order: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}position'],
+        data['${effectivePrefix}order'],
       )!,
       size: $DeviceHomeConfigsTable.$convertersize.fromSql(
         attachedDatabase.typeMapping.read(
@@ -1760,14 +1810,25 @@ class $DeviceHomeConfigsTable extends DeviceHomeConfigs
 
 class DeviceHomeConfig extends DataClass
     implements Insertable<DeviceHomeConfig> {
+  /// Auto-incrementing primary key
   final int id;
-  final int position;
+
+  /// Sort order within the area section (lower number = displayed first)
+  final int order;
+
+  /// Display size for device tile ([DeviceDisplaySizeDb.small] or [DeviceDisplaySizeDb.big])
   final DeviceDisplaySizeDb size;
+
+  /// Foreign key reference to [DeviceEntities]
+  /// Cascades: deleting a device removes it from home view config
   final int deviceId;
+
+  /// Foreign key reference to [AreaHomeConfigs]
+  /// Cascades: deleting area config removes all device configurations
   final int areaConfigId;
   const DeviceHomeConfig({
     required this.id,
-    required this.position,
+    required this.order,
     required this.size,
     required this.deviceId,
     required this.areaConfigId,
@@ -1776,7 +1837,7 @@ class DeviceHomeConfig extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['position'] = Variable<int>(position);
+    map['order'] = Variable<int>(order);
     {
       map['size'] = Variable<int>(
         $DeviceHomeConfigsTable.$convertersize.toSql(size),
@@ -1790,7 +1851,7 @@ class DeviceHomeConfig extends DataClass
   DeviceHomeConfigsCompanion toCompanion(bool nullToAbsent) {
     return DeviceHomeConfigsCompanion(
       id: Value(id),
-      position: Value(position),
+      order: Value(order),
       size: Value(size),
       deviceId: Value(deviceId),
       areaConfigId: Value(areaConfigId),
@@ -1804,7 +1865,7 @@ class DeviceHomeConfig extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return DeviceHomeConfig(
       id: serializer.fromJson<int>(json['id']),
-      position: serializer.fromJson<int>(json['position']),
+      order: serializer.fromJson<int>(json['order']),
       size: $DeviceHomeConfigsTable.$convertersize.fromJson(
         serializer.fromJson<int>(json['size']),
       ),
@@ -1817,7 +1878,7 @@ class DeviceHomeConfig extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'position': serializer.toJson<int>(position),
+      'order': serializer.toJson<int>(order),
       'size': serializer.toJson<int>(
         $DeviceHomeConfigsTable.$convertersize.toJson(size),
       ),
@@ -1828,13 +1889,13 @@ class DeviceHomeConfig extends DataClass
 
   DeviceHomeConfig copyWith({
     int? id,
-    int? position,
+    int? order,
     DeviceDisplaySizeDb? size,
     int? deviceId,
     int? areaConfigId,
   }) => DeviceHomeConfig(
     id: id ?? this.id,
-    position: position ?? this.position,
+    order: order ?? this.order,
     size: size ?? this.size,
     deviceId: deviceId ?? this.deviceId,
     areaConfigId: areaConfigId ?? this.areaConfigId,
@@ -1842,7 +1903,7 @@ class DeviceHomeConfig extends DataClass
   DeviceHomeConfig copyWithCompanion(DeviceHomeConfigsCompanion data) {
     return DeviceHomeConfig(
       id: data.id.present ? data.id.value : this.id,
-      position: data.position.present ? data.position.value : this.position,
+      order: data.order.present ? data.order.value : this.order,
       size: data.size.present ? data.size.value : this.size,
       deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
       areaConfigId: data.areaConfigId.present
@@ -1855,7 +1916,7 @@ class DeviceHomeConfig extends DataClass
   String toString() {
     return (StringBuffer('DeviceHomeConfig(')
           ..write('id: $id, ')
-          ..write('position: $position, ')
+          ..write('order: $order, ')
           ..write('size: $size, ')
           ..write('deviceId: $deviceId, ')
           ..write('areaConfigId: $areaConfigId')
@@ -1864,13 +1925,13 @@ class DeviceHomeConfig extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, position, size, deviceId, areaConfigId);
+  int get hashCode => Object.hash(id, order, size, deviceId, areaConfigId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is DeviceHomeConfig &&
           other.id == this.id &&
-          other.position == this.position &&
+          other.order == this.order &&
           other.size == this.size &&
           other.deviceId == this.deviceId &&
           other.areaConfigId == this.areaConfigId);
@@ -1878,37 +1939,37 @@ class DeviceHomeConfig extends DataClass
 
 class DeviceHomeConfigsCompanion extends UpdateCompanion<DeviceHomeConfig> {
   final Value<int> id;
-  final Value<int> position;
+  final Value<int> order;
   final Value<DeviceDisplaySizeDb> size;
   final Value<int> deviceId;
   final Value<int> areaConfigId;
   const DeviceHomeConfigsCompanion({
     this.id = const Value.absent(),
-    this.position = const Value.absent(),
+    this.order = const Value.absent(),
     this.size = const Value.absent(),
     this.deviceId = const Value.absent(),
     this.areaConfigId = const Value.absent(),
   });
   DeviceHomeConfigsCompanion.insert({
     this.id = const Value.absent(),
-    required int position,
+    required int order,
     required DeviceDisplaySizeDb size,
     required int deviceId,
     required int areaConfigId,
-  }) : position = Value(position),
+  }) : order = Value(order),
        size = Value(size),
        deviceId = Value(deviceId),
        areaConfigId = Value(areaConfigId);
   static Insertable<DeviceHomeConfig> custom({
     Expression<int>? id,
-    Expression<int>? position,
+    Expression<int>? order,
     Expression<int>? size,
     Expression<int>? deviceId,
     Expression<int>? areaConfigId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (position != null) 'position': position,
+      if (order != null) 'order': order,
       if (size != null) 'size': size,
       if (deviceId != null) 'device_id': deviceId,
       if (areaConfigId != null) 'area_config_id': areaConfigId,
@@ -1917,14 +1978,14 @@ class DeviceHomeConfigsCompanion extends UpdateCompanion<DeviceHomeConfig> {
 
   DeviceHomeConfigsCompanion copyWith({
     Value<int>? id,
-    Value<int>? position,
+    Value<int>? order,
     Value<DeviceDisplaySizeDb>? size,
     Value<int>? deviceId,
     Value<int>? areaConfigId,
   }) {
     return DeviceHomeConfigsCompanion(
       id: id ?? this.id,
-      position: position ?? this.position,
+      order: order ?? this.order,
       size: size ?? this.size,
       deviceId: deviceId ?? this.deviceId,
       areaConfigId: areaConfigId ?? this.areaConfigId,
@@ -1937,8 +1998,8 @@ class DeviceHomeConfigsCompanion extends UpdateCompanion<DeviceHomeConfig> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (position.present) {
-      map['position'] = Variable<int>(position.value);
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
     }
     if (size.present) {
       map['size'] = Variable<int>(
@@ -1958,7 +2019,7 @@ class DeviceHomeConfigsCompanion extends UpdateCompanion<DeviceHomeConfig> {
   String toString() {
     return (StringBuffer('DeviceHomeConfigsCompanion(')
           ..write('id: $id, ')
-          ..write('position: $position, ')
+          ..write('order: $order, ')
           ..write('size: $size, ')
           ..write('deviceId: $deviceId, ')
           ..write('areaConfigId: $areaConfigId')
@@ -1993,6 +2054,58 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     areaHomeConfigs,
     deviceHomeConfigs,
   ];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'server_entities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('area_entities', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'area_entities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('device_entities', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'server_entities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('home_view_configs', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'area_entities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('area_home_configs', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'home_view_configs',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('area_home_configs', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'device_entities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('device_home_configs', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'area_home_configs',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('device_home_configs', kind: UpdateKind.delete)],
+    ),
+  ]);
 }
 
 typedef $$ServerEntitiesTableCreateCompanionBuilder =
@@ -3714,14 +3827,14 @@ typedef $$HomeViewConfigsTableProcessedTableManager =
 typedef $$AreaHomeConfigsTableCreateCompanionBuilder =
     AreaHomeConfigsCompanion Function({
       Value<int> id,
-      required int position,
+      required int order,
       required int areaId,
       required int homeConfigId,
     });
 typedef $$AreaHomeConfigsTableUpdateCompanionBuilder =
     AreaHomeConfigsCompanion Function({
       Value<int> id,
-      Value<int> position,
+      Value<int> order,
       Value<int> areaId,
       Value<int> homeConfigId,
     });
@@ -3815,8 +3928,8 @@ class $$AreaHomeConfigsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get position => $composableBuilder(
-    column: $table.position,
+  ColumnFilters<int> get order => $composableBuilder(
+    column: $table.order,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3906,8 +4019,8 @@ class $$AreaHomeConfigsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get position => $composableBuilder(
-    column: $table.position,
+  ColumnOrderings<int> get order => $composableBuilder(
+    column: $table.order,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3970,8 +4083,8 @@ class $$AreaHomeConfigsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<int> get position =>
-      $composableBuilder(column: $table.position, builder: (column) => column);
+  GeneratedColumn<int> get order =>
+      $composableBuilder(column: $table.order, builder: (column) => column);
 
   $$AreaEntitiesTableAnnotationComposer get areaId {
     final $$AreaEntitiesTableAnnotationComposer composer = $composerBuilder(
@@ -4081,24 +4194,24 @@ class $$AreaHomeConfigsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<int> position = const Value.absent(),
+                Value<int> order = const Value.absent(),
                 Value<int> areaId = const Value.absent(),
                 Value<int> homeConfigId = const Value.absent(),
               }) => AreaHomeConfigsCompanion(
                 id: id,
-                position: position,
+                order: order,
                 areaId: areaId,
                 homeConfigId: homeConfigId,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required int position,
+                required int order,
                 required int areaId,
                 required int homeConfigId,
               }) => AreaHomeConfigsCompanion.insert(
                 id: id,
-                position: position,
+                order: order,
                 areaId: areaId,
                 homeConfigId: homeConfigId,
               ),
@@ -4222,7 +4335,7 @@ typedef $$AreaHomeConfigsTableProcessedTableManager =
 typedef $$DeviceHomeConfigsTableCreateCompanionBuilder =
     DeviceHomeConfigsCompanion Function({
       Value<int> id,
-      required int position,
+      required int order,
       required DeviceDisplaySizeDb size,
       required int deviceId,
       required int areaConfigId,
@@ -4230,7 +4343,7 @@ typedef $$DeviceHomeConfigsTableCreateCompanionBuilder =
 typedef $$DeviceHomeConfigsTableUpdateCompanionBuilder =
     DeviceHomeConfigsCompanion Function({
       Value<int> id,
-      Value<int> position,
+      Value<int> order,
       Value<DeviceDisplaySizeDb> size,
       Value<int> deviceId,
       Value<int> areaConfigId,
@@ -4308,8 +4421,8 @@ class $$DeviceHomeConfigsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get position => $composableBuilder(
-    column: $table.position,
+  ColumnFilters<int> get order => $composableBuilder(
+    column: $table.order,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4380,8 +4493,8 @@ class $$DeviceHomeConfigsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get position => $composableBuilder(
-    column: $table.position,
+  ColumnOrderings<int> get order => $composableBuilder(
+    column: $table.order,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4449,8 +4562,8 @@ class $$DeviceHomeConfigsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<int> get position =>
-      $composableBuilder(column: $table.position, builder: (column) => column);
+  GeneratedColumn<int> get order =>
+      $composableBuilder(column: $table.order, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<DeviceDisplaySizeDb, int> get size =>
       $composableBuilder(column: $table.size, builder: (column) => column);
@@ -4536,13 +4649,13 @@ class $$DeviceHomeConfigsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<int> position = const Value.absent(),
+                Value<int> order = const Value.absent(),
                 Value<DeviceDisplaySizeDb> size = const Value.absent(),
                 Value<int> deviceId = const Value.absent(),
                 Value<int> areaConfigId = const Value.absent(),
               }) => DeviceHomeConfigsCompanion(
                 id: id,
-                position: position,
+                order: order,
                 size: size,
                 deviceId: deviceId,
                 areaConfigId: areaConfigId,
@@ -4550,13 +4663,13 @@ class $$DeviceHomeConfigsTableTableManager
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required int position,
+                required int order,
                 required DeviceDisplaySizeDb size,
                 required int deviceId,
                 required int areaConfigId,
               }) => DeviceHomeConfigsCompanion.insert(
                 id: id,
-                position: position,
+                order: order,
                 size: size,
                 deviceId: deviceId,
                 areaConfigId: areaConfigId,
