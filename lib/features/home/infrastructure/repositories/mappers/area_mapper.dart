@@ -1,7 +1,8 @@
+import 'package:drift/drift.dart';
 import 'package:hommie/features/home/domain/entities/area.dart';
-import 'package:hommie/services/database/models/area_entity.dart' as db;
+import 'package:hommie/core/database/database.dart';
 
-extension AreaMapper on db.AreaEntity {
+extension AreaMapper on AreaEntity {
   Area toDomain() {
     return Area(
       id: haId,
@@ -13,29 +14,30 @@ extension AreaMapper on db.AreaEntity {
 }
 
 extension AreaDomainMapper on Area {
-  db.AreaEntity toDb() {
-    return db.AreaEntity(
-      haId: id,
-      name: name,
-      image: imageUrl,
-      background: backgroundUrl,
+  AreaEntitiesCompanion toCompanion(int serverId) {
+    return AreaEntitiesCompanion(
+      haId: Value(id),
+      name: Value(name),
+      image: Value(imageUrl),
+      background: Value(backgroundUrl),
+      serverId: Value(serverId),
     );
   }
 }
 
-extension AreFutureaListMapper on Future<List<db.AreaEntity>> {
+extension AreFutureaListMapper on Future<List<AreaEntity>> {
   Future<List<Area>> mapToDomain() {
     return then((list) => list.map((value) => value.toDomain()).toList());
   }
 }
 
-extension AreFutureaMapper on Future<db.AreaEntity> {
+extension AreFutureaMapper on Future<AreaEntity> {
   Future<Area> mapToDomain() {
     return then((value) => value.toDomain());
   }
 }
 
-extension AreFutureaNullableMapper on Future<db.AreaEntity?> {
+extension AreFutureaNullableMapper on Future<AreaEntity?> {
   Future<Area?> mapToDomain() {
     return then((value) => value?.toDomain());
   }

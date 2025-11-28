@@ -22,11 +22,6 @@ Future<void> main() async {
       runApp(
         ProviderScope(
           observers: const [AppStateLoggerObserver()],
-          overrides: [
-            databaseConnectionProvider.overrideWith((ref) {
-              return DatabaseInitializer.instance;
-            }),
-          ],
           retry: (retryCount, error) => null,
           child: const HommieApp(),
         ),

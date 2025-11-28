@@ -55,4 +55,4 @@ final class HaServerRepositoryProvider
 }
 
 String _$haServerRepositoryHash() =>
-    r'c34210338403f4380332ca072b36f138ac2961e5';
+    r'64cb2eae2d7440428b430c8b1a5a91bfefbce933';

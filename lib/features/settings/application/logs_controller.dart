@@ -19,10 +19,12 @@ class LogsControler extends _$LogsControler {
     try {
       final logFile = await getLogsPath(); // Your existing method
       if (await logFile.exists()) {
-        final sharingResult = await Share.shareXFiles(
-          [XFile(logFile.path)],
-          text: 'Share logs',
-          sharePositionOrigin: sharePositionOrigin,
+        final sharingResult = await SharePlus.instance.share(
+          ShareParams(
+            files: [XFile(logFile.path)],
+            text: 'Share logs',
+            sharePositionOrigin: sharePositionOrigin,
+          ),
         );
 
         switch (sharingResult.status) {

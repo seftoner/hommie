@@ -255,7 +255,9 @@ String _authLabel(AuthState state) {
 }
 
 String _versionLabel(HaVersion? version) {
-  if (version == null) return 'Unknown';
+  if (version == null) {
+    return 'Unknown';
+  }
   final patch = version.patch != null ? '.${version.patch}' : '';
   return '${version.major}.${version.minor}$patch';
 }
@@ -263,8 +265,14 @@ String _versionLabel(HaVersion? version) {
 String _urlLabel(String? url) => url ?? 'Not configured';
 
 String _connectionRoute(Server server) {
-  if (server.internalUrl != null) return 'Internal URL';
-  if (server.externalUrl != null) return 'External URL';
-  if (server.baseUrl != null) return 'Base URL';
+  if (server.internalUrl != null) {
+    return 'Internal URL';
+  }
+  if (server.externalUrl != null) {
+    return 'External URL';
+  }
+  if (server.baseUrl != null) {
+    return 'Base URL';
+  }
   return 'Not configured';
 }

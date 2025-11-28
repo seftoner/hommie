@@ -1,6 +1,7 @@
+import 'package:drift/drift.dart';
 import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
-import 'package:hommie/services/database/models/server_entity.dart';
+import 'package:hommie/core/database/database.dart';
 
 extension ServerEntityMapper on ServerEntity {
   Server toDomain() {
@@ -17,12 +18,13 @@ extension ServerEntityMapper on ServerEntity {
 }
 
 extension ServerMapper on Server {
-  ServerEntity toDb() {
-    if (id != null) {
-      return ServerEntity(url: url, name: name, version: version?.toString())
-        ..id = id!;
-    } else {
-      return ServerEntity(url: url, name: name, version: version?.toString());
-    }
+  ServerEntitiesCompanion toCompanion() {
+    return ServerEntitiesCompanion(
+      id: id != null ? Value(id!) : const Value.absent(),
+      name: Value(name),
+      url: Value(url),
+      isActive: const Value(false),
+      version: Value(version?.toString()),
+    );
   }
 }

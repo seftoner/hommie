@@ -49,7 +49,7 @@ final class HomeViewRepositoryProvider
 }
 
 String _$homeViewRepositoryHash() =>
-    r'2fffce619323f43dcf25ba24d3c2c72d1039a031';
+    r'7b4ee71f267e059c446f4b6157a903f1c68bf8b3';
 
 @ProviderFor(homeViewRepositoryForServer)
 const homeViewRepositoryForServerProvider =
@@ -117,7 +117,7 @@ final class HomeViewRepositoryForServerProvider
 }
 
 String _$homeViewRepositoryForServerHash() =>
-    r'50182a0e435575b188b26fe2e83c419b3b396a84';
+    r'a297356dda947e813d7a3fcbe82dcf302a019c5e';
 
 final class HomeViewRepositoryForServerFamily extends $Family
     with $FunctionalFamilyOverride<IHomeViewRepository, int> {

@@ -1,4 +1,4 @@
-import 'package:hommie/services/database/models/server_entity.dart';
+import 'package:hommie/core/database/database.dart';
 
 abstract interface class IServerEntityRepository {
   Future<List<ServerEntity>> getAll();

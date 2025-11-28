@@ -49,4 +49,4 @@ final class AreaRepositoryProvider
   }
 }
 
-String _$areaRepositoryHash() => r'fb8a92eedcbeaf4fb78443b0195af95b291c418b';
+String _$areaRepositoryHash() => r'7dc8f1de27d150de5eae4b3a402702ae3501f1dc';

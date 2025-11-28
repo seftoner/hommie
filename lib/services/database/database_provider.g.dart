@@ -13,8 +13,8 @@ part of 'database_provider.dart';
 const databaseConnectionProvider = DatabaseConnectionProvider._();
 
 final class DatabaseConnectionProvider
-    extends $FunctionalProvider<Isar, Isar, Isar>
-    with $Provider<Isar> {
+    extends $FunctionalProvider<AppDatabase, AppDatabase, AppDatabase>
+    with $Provider<AppDatabase> {
   const DatabaseConnectionProvider._()
     : super(
         from: null,
@@ -31,22 +31,22 @@ final class DatabaseConnectionProvider
 
   @$internal
   @override
-  $ProviderElement<Isar> $createElement($ProviderPointer pointer) =>
+  $ProviderElement<AppDatabase> $createElement($ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  Isar create(Ref ref) {
+  AppDatabase create(Ref ref) {
     return databaseConnection(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Isar value) {
+  Override overrideWithValue(AppDatabase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<Isar>(value),
+      providerOverride: $SyncValueProvider<AppDatabase>(value),
     );
   }
 }
 
 String _$databaseConnectionHash() =>
-    r'762e131d5c0e767fbcbd601cd4e3da5cb89ccf6b';
+    r'ca0a1e1342f2705052a7f224341c7c97e4605e2f';

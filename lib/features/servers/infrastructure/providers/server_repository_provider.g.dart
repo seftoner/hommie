@@ -54,4 +54,4 @@ final class ServerRepositoryProvider
   }
 }
 
-String _$serverRepositoryHash() => r'4823452b3ed063537b1a0f11a9eff295a7660d09';
+String _$serverRepositoryHash() => r'705eaab9de1e59819e3fb49cd9ea6a5430795286';
