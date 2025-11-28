@@ -2,10 +2,10 @@ import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'servers_list_provider.g.dart';
+part 'servers_list_controller.g.dart';
 
 @Riverpod(keepAlive: true)
-class ServersList extends _$ServersList {
+class ServersListController extends _$ServersListController {
   @override
   Future<List<Server>> build() async {
     final serverManager = ref.watch(serverManagerProvider);

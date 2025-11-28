@@ -2,10 +2,10 @@ import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
-import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/application/active_server.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'auth_state_provider.g.dart';
+part 'auth_state.g.dart';
 
 /// Server-scoped auth state machine represented as a stream. Consumers receive a
 /// new [AuthState] every time the active server (and therefore credential

@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
-import 'package:hommie/features/auth/application/auth_state_provider.dart';
+import 'package:hommie/features/auth/application/auth_state.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
-import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/application/active_server.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/i_server_connection_manager.dart';
 import 'package:hommie/services/networking/server_connection_manager.dart';
@@ -18,7 +18,10 @@ part 'server_session_coordinator.g.dart';
 /// - eagerly opens a websocket connection after the user authenticates
 /// - watches for auth revocations from credential or transport layers and
 ///   triggers the logout flow so persisted data gets wiped
-@Riverpod(dependencies: [serverConnectionManager, authController])
+@Riverpod(
+  keepAlive: true,
+  dependencies: [serverConnectionManager, authController],
+)
 void serverSessionCoordinator(Ref ref) {
   final handler = _ServerSessionHandler(ref);
   ref.onDispose(handler.dispose);

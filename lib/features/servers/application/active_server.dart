@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 
-part 'active_server_provider.g.dart';
+part 'active_server.g.dart';
 
 @Riverpod(keepAlive: true)
 Stream<Server?> activeServer(Ref ref) async* {

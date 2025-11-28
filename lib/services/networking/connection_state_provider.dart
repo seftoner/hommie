@@ -38,7 +38,7 @@ enum HAServerConnectionState {
 /// This provider keeps track of the current network connectivity status and
 /// provides methods to update the connection state. It is marked as keepAlive
 /// to ensure the state persists across widget rebuilds.
-@riverpod
+@Riverpod(keepAlive: true)
 class ServerConnectionState extends _$ServerConnectionState {
   /// Initializes the connection state as disconnected.
   ///

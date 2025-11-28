@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/router/routes.dart';
-import 'package:hommie/features/servers/infrastructure/providers/servers_list_provider.dart';
+import 'package:hommie/features/servers/application/servers_list_controller.dart';
 import 'package:hommie/features/servers/presentation/widgets/server_list_tile.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
-import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/application/active_server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
@@ -14,7 +14,7 @@ class ServersPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activeServerAsync = ref.watch(activeServerProvider);
-    final serversAsync = ref.watch(serversListProvider);
+    final serversAsync = ref.watch(serversListControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +48,8 @@ class ServersPage extends ConsumerWidget {
 
           return activeServerAsync.when(
             data: (activeServer) => RefreshIndicator(
-              onRefresh: () => ref.read(serversListProvider.notifier).refresh(),
+              onRefresh: () =>
+                  ref.read(serversListControllerProvider.notifier).refresh(),
               child: ListView.builder(
                 itemCount: servers.length,
                 itemBuilder: (context, index) {
@@ -86,7 +87,7 @@ class ServersPage extends ConsumerWidget {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () =>
-                    ref.read(serversListProvider.notifier).refresh(),
+                    ref.read(serversListControllerProvider.notifier).refresh(),
                 child: const Text('Retry'),
               ),
             ],
@@ -147,7 +148,7 @@ class ServersPage extends ConsumerWidget {
     Server server,
   ) {
     final activeServerAsync = ref.read(activeServerProvider);
-    final serversAsync = ref.read(serversListProvider);
+    final serversAsync = ref.read(serversListControllerProvider);
 
     final isActive = activeServerAsync.value?.id == server.id;
     final serverCount = serversAsync.value?.length ?? 0;
@@ -269,7 +270,9 @@ class ServersPage extends ConsumerWidget {
         );
       }
 
-      await ref.read(serversListProvider.notifier).removeServer(server.id!);
+      await ref
+          .read(serversListControllerProvider.notifier)
+          .removeServer(server.id!);
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).clearSnackBars();

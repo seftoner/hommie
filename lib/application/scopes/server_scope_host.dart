@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
+import 'package:hommie/features/servers/application/active_server.dart';
 import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:hommie/services/networking/server_scope_provider.dart';
 

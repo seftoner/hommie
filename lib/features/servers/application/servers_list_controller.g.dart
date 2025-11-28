@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'servers_list_provider.dart';
+part of 'servers_list_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,33 +9,34 @@ part of 'servers_list_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(ServersList)
-const serversListProvider = ServersListProvider._();
+@ProviderFor(ServersListController)
+const serversListControllerProvider = ServersListControllerProvider._();
 
-final class ServersListProvider
-    extends $AsyncNotifierProvider<ServersList, List<Server>> {
-  const ServersListProvider._()
+final class ServersListControllerProvider
+    extends $AsyncNotifierProvider<ServersListController, List<Server>> {
+  const ServersListControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'serversListProvider',
+        name: r'serversListControllerProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$serversListHash();
+  String debugGetCreateSourceHash() => _$serversListControllerHash();
 
   @$internal
   @override
-  ServersList create() => ServersList();
+  ServersListController create() => ServersListController();
 }
 
-String _$serversListHash() => r'5aa7a2d7d3e7dc51ad1887397a25590ea18b8fcf';
+String _$serversListControllerHash() =>
+    r'8ee356eeb76b84159bd51e80c683fcc5c36f53fe';
 
-abstract class _$ServersList extends $AsyncNotifier<List<Server>> {
+abstract class _$ServersListController extends $AsyncNotifier<List<Server>> {
   FutureOr<List<Server>> build();
   @$mustCallSuper
   @override

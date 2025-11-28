@@ -34,7 +34,7 @@ final class ServerSessionCoordinatorProvider
         argument: null,
         retry: null,
         name: r'serverSessionCoordinatorProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
           serverConnectionManagerProvider,
           authControllerProvider,
@@ -77,4 +77,4 @@ final class ServerSessionCoordinatorProvider
 }
 
 String _$serverSessionCoordinatorHash() =>
-    r'157104088bbbcf33114176d8c86e6abcf77e7102';
+    r'74dc15b250304f820ce8118134a6701aa0bb5f02';
