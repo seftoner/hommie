@@ -35,9 +35,9 @@ final class ServerConnectionStateProvider
         argument: null,
         retry: null,
         name: r'serverConnectionStateProvider',
-        isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[],
-        $allTransitiveDependencies: const <ProviderOrFamily>[],
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
   @override
@@ -57,7 +57,7 @@ final class ServerConnectionStateProvider
 }
 
 String _$serverConnectionStateHash() =>
-    r'32ad7d257501aa0b8214e92822984ff4df1b6fbe';
+    r'eb5312a03e20710e7e20e89730d9ae0630d326a1';
 
 /// A Riverpod provider that manages the network connection state of the application.
 ///

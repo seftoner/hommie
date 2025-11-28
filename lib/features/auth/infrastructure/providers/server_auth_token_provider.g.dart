@@ -31,8 +31,6 @@ final class ServerAuthTokenProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = serverCredentialsProvider;
-
   @override
   String debugGetCreateSourceHash() => _$serverAuthTokenHash();
 
@@ -66,7 +64,7 @@ final class ServerAuthTokenProvider
   }
 }
 
-String _$serverAuthTokenHash() => r'cdff06eecc41b46940dd603f0ec1e52d352f46df';
+String _$serverAuthTokenHash() => r'6af2aafd01444307219e88d440ed355423dc115c';
 
 final class ServerAuthTokenFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<HAOAuth2Token>, int> {
@@ -74,10 +72,8 @@ final class ServerAuthTokenFamily extends $Family
     : super(
         retry: null,
         name: r'serverAuthTokenProvider',
-        dependencies: const <ProviderOrFamily>[serverCredentialsProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
-          ServerAuthTokenProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 

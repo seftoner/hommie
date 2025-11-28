@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hommie/features/auth/application/auth_state.dart';
+import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/auth/application/auth_state_provider.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';

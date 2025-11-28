@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/application/auth_flow_controller.dart';
-import 'package:hommie/features/auth/application/auth_state.dart';
+import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/auth/application/auth_state_provider.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
@@ -31,21 +31,29 @@ void serverSessionCoordinator(Ref ref) {
   ref.onDispose(handler.dispose);
 
   ref.listen(activeServerProvider, (_, next) {
-    next.when(
-      data: handler.updateActiveServer,
-      loading: () {},
-      error: (_, __) => handler.updateActiveServer(null),
-    );
+    switch (next) {
+      case AsyncData(:final value):
+        handler.updateActiveServer(value);
+      case AsyncError():
+        handler.updateActiveServer(null);
+      case AsyncLoading():
+        break;
+    }
   });
 
   ref.listen(authStateProvider, (_, next) {
-    next.when(data: handler.handleAuthState, loading: () {}, error: (_, __) {});
+    switch (next) {
+      case AsyncData(:final value):
+        handler.handleAuthState(value);
+      case AsyncError():
+      case AsyncLoading():
+        break;
+    }
   });
 
-  ref.listen(
-    serverConnectionStateProvider,
-    (_, next) => handler.handleConnectionState(next),
-  );
+  ref.listen(serverConnectionStateProvider, (_, next) {
+    handler.handleConnectionState(next);
+  });
 }
 
 @Dependencies([

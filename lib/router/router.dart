@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hommie/features/auth/application/auth_state.dart';
+import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/auth/application/auth_state_provider.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

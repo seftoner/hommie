@@ -30,21 +30,15 @@ final class ServerConnectionManagerProvider
         dependencies: const <ProviderOrFamily>[
           serverConnectionStateProvider,
           serverConfigProvider,
-          serverAuthTokenProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: const <ProviderOrFamily>[
           ServerConnectionManagerProvider.$allTransitiveDependencies0,
           ServerConnectionManagerProvider.$allTransitiveDependencies1,
-          ServerConnectionManagerProvider.$allTransitiveDependencies2,
-          ServerConnectionManagerProvider.$allTransitiveDependencies3,
-        },
+        ],
       );
 
   static const $allTransitiveDependencies0 = serverConnectionStateProvider;
   static const $allTransitiveDependencies1 = serverConfigProvider;
-  static const $allTransitiveDependencies2 = serverAuthTokenProvider;
-  static const $allTransitiveDependencies3 =
-      ServerAuthTokenProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$serverConnectionManagerHash();
@@ -70,4 +64,4 @@ final class ServerConnectionManagerProvider
 }
 
 String _$serverConnectionManagerHash() =>
-    r'2f05f52fd96349f52095ff0ca945d5e7ff4d754b';
+    r'ce18c96439e40b7f7f7a39f992bd108b43643c24';

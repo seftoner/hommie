@@ -46,8 +46,6 @@ final class ServerSessionCoordinatorProvider
           ServerSessionCoordinatorProvider.$allTransitiveDependencies2,
           ServerSessionCoordinatorProvider.$allTransitiveDependencies3,
           ServerSessionCoordinatorProvider.$allTransitiveDependencies4,
-          ServerSessionCoordinatorProvider.$allTransitiveDependencies5,
-          ServerSessionCoordinatorProvider.$allTransitiveDependencies6,
         },
       );
 
@@ -60,10 +58,6 @@ final class ServerSessionCoordinatorProvider
       AuthFlowControllerProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 =
       AuthFlowControllerProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 =
-      AuthFlowControllerProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies6 =
-      AuthFlowControllerProvider.$allTransitiveDependencies5;
 
   @override
   String debugGetCreateSourceHash() => _$serverSessionCoordinatorHash();
@@ -88,4 +82,4 @@ final class ServerSessionCoordinatorProvider
 }
 
 String _$serverSessionCoordinatorHash() =>
-    r'09eb123b19862092e06b5ba73d4f05d6f06c2efd';
+    r'81cecb62f6e1e6cd8d82bfb3aa57d404d7d5e1e7';

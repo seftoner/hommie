@@ -7,16 +7,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/services/networking/home_assistant_websocket/src/connection_orchestrator.dart';
-import 'package:hommie/features/auth/application/server_auth_token_provider.dart';
+import 'package:hommie/features/auth/infrastructure/providers/server_auth_token_provider.dart';
 import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/core/utils/logger.dart';
 
 part 'server_connection_manager.g.dart';
 
-@Riverpod(
-  keepAlive: true,
-  dependencies: [ServerConnectionState, serverConfig, serverAuthToken],
-)
+@Riverpod(keepAlive: true, dependencies: [ServerConnectionState, serverConfig])
 IServerConnectionManager serverConnectionManager(Ref ref) {
   final manager = _ServerConnectionManager(ref);
 
@@ -27,7 +24,7 @@ IServerConnectionManager serverConnectionManager(Ref ref) {
   return manager;
 }
 
-@Dependencies([ServerConnectionState, serverConfig, serverAuthToken])
+@Dependencies([ServerConnectionState, serverConfig])
 class _ServerConnectionManager implements IServerConnectionManager {
   final _orchestrators = <int, ConnectionOrchestrator>{};
   int? _activeServerId;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/features/auth/application/auth_state.dart';
+import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/settings/application/hub_status_provider.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/auth/domain/entities/ha_version.dart';

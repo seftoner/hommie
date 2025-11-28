@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/features/auth/application/server_session_coordinator.dart';
+import 'package:hommie/application/session/server_session_coordinator.dart';
 import 'package:hommie/router/router.dart';
-import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
 import 'package:hommie/ui/styles/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-@Dependencies([ServerConnectionState])
+@Dependencies([serverSessionCoordinator])
 class HommieApp extends StatelessWidget {
   const HommieApp({super.key});
 
@@ -18,7 +16,6 @@ class HommieApp extends StatelessWidget {
   }
 }
 
-@Dependencies([ServerConnectionState])
 class _RootAppWidget extends ConsumerWidget {
   const _RootAppWidget();
 

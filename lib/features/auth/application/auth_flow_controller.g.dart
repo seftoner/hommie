@@ -36,8 +36,6 @@ final class AuthFlowControllerProvider
           AuthFlowControllerProvider.$allTransitiveDependencies1,
           AuthFlowControllerProvider.$allTransitiveDependencies2,
           AuthFlowControllerProvider.$allTransitiveDependencies3,
-          AuthFlowControllerProvider.$allTransitiveDependencies4,
-          AuthFlowControllerProvider.$allTransitiveDependencies5,
         },
       );
 
@@ -48,10 +46,6 @@ final class AuthFlowControllerProvider
       WebsocketConfigRepositoryProvider.$allTransitiveDependencies1;
   static const $allTransitiveDependencies3 =
       WebsocketConfigRepositoryProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies4;
 
   @override
   String debugGetCreateSourceHash() => _$authFlowControllerHash();

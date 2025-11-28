@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:oauth2/oauth2.dart';
 
-part 'auth_state.freezed.dart';
+part '../../application/auth_state.freezed.dart';
 
 /// Represents the current state of authentication in the application.
 ///

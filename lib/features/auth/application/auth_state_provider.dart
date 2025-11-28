@@ -1,4 +1,4 @@
-import 'package:hommie/features/auth/application/auth_state.dart';
+import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
