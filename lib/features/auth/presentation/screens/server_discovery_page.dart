@@ -1,8 +1,6 @@
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:hommie/features/auth/application/servers_discovery_controller.dart';
 import 'package:hommie/features/auth/domain/entities/ha_server.dart';
-import 'package:hommie/features/auth/presentation/flows/add_server_flow.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_available_severs_list_title.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_empty_state.dart';
 import 'package:hommie/ui/keys.dart';
@@ -10,14 +8,19 @@ import 'package:hommie/ui/styles/corners.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ServerDiscoveryPage extends ConsumerWidget {
-  /// Callback for server selection - used when in flow context
-  final TapCallback onConnect;
+typedef TapCallback = Future<void> Function(Uri serverAddress);
 
-  /// Optional callback invoked when the user wants to exit/cancel the page.
+class ServerDiscoveryPage extends ConsumerWidget {
+  final TapCallback onConnect;
+  final VoidCallback onManualEntry;
   final VoidCallback? onExit;
 
-  const ServerDiscoveryPage({super.key, this.onExit, required this.onConnect});
+  const ServerDiscoveryPage({
+    super.key,
+    this.onExit,
+    required this.onConnect,
+    required this.onManualEntry,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -79,7 +82,24 @@ class ServerDiscoveryPage extends ConsumerWidget {
                   ],
                 ),
               ),
-              _ManuallyInputAddress(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Not finding your screen?',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  $h16,
+                  FilledButton.tonal(
+                    key: K.serversDiscovery.enterManuallyButton,
+                    onPressed: onManualEntry,
+                    child: const Text('Enter addres manually'),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -87,38 +107,6 @@ class ServerDiscoveryPage extends ConsumerWidget {
     );
   }
 }
-
-class _ManuallyInputAddress extends StatelessWidget {
-  const _ManuallyInputAddress();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          'Not finding your screen?',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ),
-        $h16,
-        FilledButton.tonal(
-          key: K.serversDiscovery.enterManuallyButton,
-          onPressed: () => {
-            context.flow<AddServerFlowState>().update(
-              (step) => AddServerFlowState.manualEntry,
-            ),
-          },
-          child: const Text('Enter addres manually'),
-        ),
-      ],
-    );
-  }
-}
-
-typedef TapCallback = Future<void> Function(Uri serverAddress);
 
 class DiscoveredHaServersList extends StatelessWidget {
   final List<HaServer> servers;

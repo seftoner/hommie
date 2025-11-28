@@ -6,9 +6,7 @@ import 'package:hommie/features/servers/presentation/widgets/server_list_tile.da
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/active_server_provider.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
-import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([ServersList])
 class ServersPage extends ConsumerWidget {
   const ServersPage({super.key});
 
@@ -59,7 +57,7 @@ class ServersPage extends ConsumerWidget {
                   return ServerListTile(
                     server: server,
                     isActive: isActive,
-                    onTap: () => EditServerRouteData(server).push(context),
+                    // onTap: () => EditServerRouteData(server).push(context),
                     onSetActive: isActive
                         ? null
                         : () => _setActiveServer(ref, server.id!),

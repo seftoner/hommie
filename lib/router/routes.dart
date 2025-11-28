@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hommie/core/bootstrap/app_startup.dart';
 import 'package:hommie/features/auth/presentation/flows/add_server_flow.dart';
-import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
 import 'package:hommie/features/automation/presentation/automations_page.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
-import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
 import 'package:hommie/features/onboarding/presentation/flows/onboarding_flow.dart';
-import 'package:hommie/features/onboarding/presentation/flows/onbording_riverflow.dart';
 import 'package:hommie/features/servers/presentation/screens/servers_page.dart';
-import 'package:hommie/features/servers/presentation/screens/add_edit_server_page.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
 import 'package:hommie/features/settings/presentation/screens/hub_page.dart';
@@ -67,10 +63,7 @@ class AutomationsRouteData extends GoRouteData with $AutomationsRouteData {
     TypedGoRoute<HubRouteData>(path: 'hub'),
     TypedGoRoute<ServersRouteData>(
       path: 'servers',
-      routes: [
-        TypedGoRoute<AddServerRouteData>(path: 'add'),
-        TypedGoRoute<EditServerRouteData>(path: 'edit'),
-      ],
+      routes: [TypedGoRoute<AddServerRouteData>(path: 'add')],
     ),
     TypedGoRoute<LogsRouteData>(path: 'logs'),
     TypedGoRoute<AboutRouteData>(path: 'about'),
@@ -142,18 +135,6 @@ class AddServerRouteData extends GoRouteData with $AddServerRouteData {
   }
 }
 
-// ignore: provider_dependencies
-class EditServerRouteData extends GoRouteData with $EditServerRouteData {
-  EditServerRouteData(this.$extra);
-
-  final Server? $extra;
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return AddEditServerPage(server: $extra);
-  }
-}
-
 class HomeShellBranchData extends StatefulShellBranchData {
   const HomeShellBranchData();
 }
@@ -178,30 +159,6 @@ class OnboardingRoute extends GoRouteData with $OnboardingRoute {
     return const OnboardingFlow();
   }
 }
-
-// ignore: provider_dependencies
-/* @TypedGoRoute<DiscoveryRoute>(path: '/discovery')
-class DiscoveryRoute extends GoRouteData with $DiscoveryRoute {
-  const DiscoveryRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    // Use flow-aware variant so the same route participates in linear auth flows
-    // while remaining compatible when accessed directly.
-    return const ServerDiscoveryPage();
-  }
-} */
-
-// ignore: provider_dependencies
-/* @TypedGoRoute<EnterAddressRoute>(path: '/manualAddres')
-class EnterAddressRoute extends GoRouteData with $EnterAddressRoute {
-  const EnterAddressRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const EnterAddressPage();
-  }
-} */
 
 @TypedGoRoute<StartupRoute>(path: '/startup')
 class StartupRoute extends GoRouteData with $StartupRoute {

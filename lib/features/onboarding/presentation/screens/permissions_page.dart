@@ -1,76 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/core/flows/river_flow.dart';
 
-class OnboardingRiverFlow extends ConsumerWidget {
-  const OnboardingRiverFlow({super.key});
+class PermissionsPage extends StatelessWidget {
+  final VoidCallback onConnect;
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return RiverFlow<String>(
-      initialStep: 'step1',
-      steps: [
-        FlowStep(
-          id: 'step1',
-          builder: (ctx, flow) =>
-              _WelcomePage(onContinue: () => flow.goTo('step2')),
-        ),
-        FlowStep(
-          id: 'step2',
-          builder: (ctx, flow) => _PermissionsPage(onBack: flow.back),
-        ),
-      ],
-      onComplete: (finalStep) {},
-    );
-  }
-}
-
-class _WelcomePage extends StatelessWidget {
-  final VoidCallback onContinue;
-
-  const _WelcomePage({required this.onContinue});
+  const PermissionsPage({super.key, required this.onConnect});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text('Welcome to Hommie', style: theme.textTheme.headlineLarge),
-            const SizedBox(height: 16),
-            Text(
-              'Control your Home Assistant setup faster with offline-aware widgets and automations.',
-              style: theme.textTheme.bodyLarge,
-            ),
-            const Spacer(),
-            FilledButton(onPressed: onContinue, child: const Text('Continue')),
-          ],
-        ),
+      appBar: AppBar(
+        title: Text('Enable Permissions', style: theme.textTheme.headlineLarge),
       ),
-    );
-  }
-}
-
-class _PermissionsPage extends StatelessWidget {
-  final VoidCallback onBack;
-
-  const _PermissionsPage({required this.onBack});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(leading: BackButton(onPressed: onBack)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Enable Permissions', style: theme.textTheme.headlineLarge),
-            const SizedBox(height: 24),
             const _PermissionTile(
               icon: Icons.notifications_outlined,
               title: 'Notifications',
@@ -97,7 +43,7 @@ class _PermissionsPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            FilledButton(onPressed: () {}, child: const Text('Connect')),
+            FilledButton(onPressed: onConnect, child: const Text('Connect')),
           ],
         ),
       ),

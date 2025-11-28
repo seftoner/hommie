@@ -91,10 +91,6 @@ RouteBase get $settingsRouteData => GoRouteData.$route(
           path: 'add',
           factory: $AddServerRouteData._fromState,
         ),
-        GoRouteData.$route(
-          path: 'edit',
-          factory: $EditServerRouteData._fromState,
-        ),
       ],
     ),
     GoRouteData.$route(path: 'logs', factory: $LogsRouteData._fromState),
@@ -184,31 +180,6 @@ mixin $AddServerRouteData on GoRouteData {
 
   @override
   void replace(BuildContext context) => context.replace(location);
-}
-
-mixin $EditServerRouteData on GoRouteData {
-  static EditServerRouteData _fromState(GoRouterState state) =>
-      EditServerRouteData(state.extra as Server?);
-
-  EditServerRouteData get _self => this as EditServerRouteData;
-
-  @override
-  String get location => GoRouteData.$location('/settings/servers/edit');
-
-  @override
-  void go(BuildContext context) => context.go(location, extra: _self.$extra);
-
-  @override
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: _self.$extra);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: _self.$extra);
-
-  @override
-  void replace(BuildContext context) =>
-      context.replace(location, extra: _self.$extra);
 }
 
 mixin $LogsRouteData on GoRouteData {

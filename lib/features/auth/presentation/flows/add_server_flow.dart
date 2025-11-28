@@ -4,14 +4,11 @@ import 'package:hommie/features/auth/application/auth_flow_controller.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
-// ignore_for_file: provider_dependencies
-
-// Riverpod codegen removed; local FlowController used instead.
-
-/// Steps that compose the add server experience.
 enum AddServerFlowState { discovery, manualEntry }
 
+@Dependencies([authFlowController])
 /// Flow that orchestrates discovery and manual entry when adding a server.
 class AddServerFlow extends ConsumerStatefulWidget {
   final bool userCanCancel;
@@ -47,6 +44,8 @@ class _AddServerFlowState extends ConsumerState<AddServerFlow> {
               onConnect: (serverAddress) => ref
                   .read(authFlowControllerProvider)
                   .login(serverAddress.toString()),
+              onManualEntry: () =>
+                  controller.update((state) => AddServerFlowState.manualEntry),
               onExit: widget.userCanCancel ? controller.complete : null,
             ),
           ),
