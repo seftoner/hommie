@@ -27,18 +27,13 @@ final class ServerConnectionManagerProvider
         retry: null,
         name: r'serverConnectionManagerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
-          serverConnectionStateProvider,
-          serverConfigProvider,
-        ],
+        dependencies: const <ProviderOrFamily>[serverConfigProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           ServerConnectionManagerProvider.$allTransitiveDependencies0,
-          ServerConnectionManagerProvider.$allTransitiveDependencies1,
         ],
       );
 
-  static const $allTransitiveDependencies0 = serverConnectionStateProvider;
-  static const $allTransitiveDependencies1 = serverConfigProvider;
+  static const $allTransitiveDependencies0 = serverConfigProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverConnectionManagerHash();
@@ -64,4 +59,4 @@ final class ServerConnectionManagerProvider
 }
 
 String _$serverConnectionManagerHash() =>
-    r'ce18c96439e40b7f7f7a39f992bd108b43643c24';
+    r'1bc550cdb550dbdac8988134e37531c2455c70b1';

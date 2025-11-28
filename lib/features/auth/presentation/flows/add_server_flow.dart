@@ -1,6 +1,6 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:hommie/features/auth/application/auth_flow_controller.dart';
+import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/presentation/screens/enter_address_page.dart';
 import 'package:hommie/features/auth/presentation/screens/server_discovery_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/experimental/scope.dart';
 
 enum AddServerFlowState { discovery, manualEntry }
 
-@Dependencies([authFlowController])
+@Dependencies([authController])
 /// Flow that orchestrates discovery and manual entry when adding a server.
 class AddServerFlow extends ConsumerStatefulWidget {
   final bool userCanCancel;
@@ -42,7 +42,7 @@ class _AddServerFlowState extends ConsumerState<AddServerFlow> {
           MaterialPage(
             child: ServerDiscoveryPage(
               onConnect: (serverAddress) => ref
-                  .read(authFlowControllerProvider)
+                  .read(authControllerProvider)
                   .login(serverAddress.toString()),
               onManualEntry: () =>
                   controller.update((state) => AddServerFlowState.manualEntry),
@@ -53,7 +53,7 @@ class _AddServerFlowState extends ConsumerState<AddServerFlow> {
             MaterialPage(
               child: EnterAddressPage(
                 onConnect: (serverUrl) async {
-                  await ref.read(authFlowControllerProvider).login(serverUrl);
+                  await ref.read(authControllerProvider).login(serverUrl);
                 },
               ),
             ),

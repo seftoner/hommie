@@ -29,13 +29,9 @@ final class HomeViewRepositoryProvider
         retry: null,
         name: r'homeViewRepositoryProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[serverManagerProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
-          HomeViewRepositoryProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static const $allTransitiveDependencies0 = serverManagerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$homeViewRepositoryHash();
@@ -53,7 +49,7 @@ final class HomeViewRepositoryProvider
 }
 
 String _$homeViewRepositoryHash() =>
-    r'ec45fe5363aa4ba18153b80e802ee21b8b2d0a55';
+    r'2fffce619323f43dcf25ba24d3c2c72d1039a031';
 
 @ProviderFor(homeViewRepositoryForServer)
 const homeViewRepositoryForServerProvider =

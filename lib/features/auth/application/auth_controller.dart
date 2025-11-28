@@ -11,18 +11,17 @@ import 'package:hommie/features/servers/infrastructure/providers/server_manager_
 import 'package:hommie/features/servers/infrastructure/providers/websocket_config_repository_provider.dart';
 import 'package:hommie/features/shared/domain/models/task_chain.dart';
 import 'package:hommie/features/shared/infrastructure/runner/task_executor.dart';
-import 'package:hommie/services/networking/connection_state_provider.dart';
 import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'auth_flow_controller.g.dart';
+part 'auth_controller.g.dart';
 
 @Dependencies([websocketConfigRepository, serverConnectionManager])
-class AuthFlowController {
+class AuthController {
   final Ref ref;
 
-  AuthFlowController(this.ref);
+  AuthController(this.ref);
 
   Future<void> login(String serverUrl) async {
     final serverManager = ref.read(serverManagerProvider);
@@ -61,10 +60,7 @@ class AuthFlowController {
   }
 }
 
-@Riverpod(
-  keepAlive: true,
-  dependencies: [websocketConfigRepository, serverConnectionManager],
-)
-AuthFlowController authFlowController(Ref ref) {
-  return AuthFlowController(ref);
+@Riverpod(dependencies: [websocketConfigRepository, serverConnectionManager])
+AuthController authController(Ref ref) {
+  return AuthController(ref);
 }

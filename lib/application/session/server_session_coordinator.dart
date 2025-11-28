@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:hommie/core/utils/logger.dart';
-import 'package:hommie/features/auth/application/auth_flow_controller.dart';
+import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/auth/application/auth_state_provider.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
@@ -18,14 +18,7 @@ part 'server_session_coordinator.g.dart';
 /// - eagerly opens a websocket connection after the user authenticates
 /// - watches for auth revocations from credential or transport layers and
 ///   triggers the logout flow so persisted data gets wiped
-@Riverpod(
-  keepAlive: true,
-  dependencies: [
-    authFlowController,
-    serverConnectionManager,
-    ServerConnectionState,
-  ],
-)
+@Riverpod(dependencies: [serverConnectionManager, authController])
 void serverSessionCoordinator(Ref ref) {
   final handler = _ServerSessionHandler(ref);
   ref.onDispose(handler.dispose);
@@ -56,11 +49,7 @@ void serverSessionCoordinator(Ref ref) {
   });
 }
 
-@Dependencies([
-  serverConnectionManager,
-  ServerConnectionState,
-  authFlowController,
-])
+@Dependencies([serverConnectionManager, authController])
 class _ServerSessionHandler {
   _ServerSessionHandler(this._ref);
 
@@ -146,7 +135,7 @@ class _ServerSessionHandler {
 
   Future<void> _signOut(int serverId) async {
     try {
-      await _ref.read(authFlowControllerProvider).signOut(serverId);
+      await _ref.read(authControllerProvider).signOut(serverId);
       _lastHandledServerId = serverId;
     } catch (error, stackTrace) {
       logger.e(

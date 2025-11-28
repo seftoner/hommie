@@ -54,37 +54,7 @@ class ServerListTile extends StatelessWidget {
               ),
           ],
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(server.url),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                Icon(
-                  Icons.circle,
-                  size: 8,
-                  color: _getStatusColor(context),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  _getStatusText(),
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: _getStatusColor(context),
-                  ),
-                ),
-                if (server.version != null) ...[
-                  const SizedBox(width: 8),
-                  Text(
-                    'v${server.version}',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ],
-            ),
-          ],
-        ),
+        subtitle: Text(server.url),
         trailing: PopupMenuButton<String>(
           onSelected: (value) {
             switch (value) {
@@ -139,25 +109,5 @@ class ServerListTile extends StatelessWidget {
         onTap: onTap,
       ),
     );
-  }
-
-  Color _getStatusColor(BuildContext context) {
-    // TODO: Implement actual connection status checking
-    // For now, show different states based on server properties
-    if (isActive) {
-      return Colors.green;
-    }
-    // Show orange for inactive servers to indicate unknown status
-    return Colors.orange;
-  }
-
-  String _getStatusText() {
-    // TODO: Implement actual connection status checking
-    // For now, show different states based on server properties
-    if (isActive) {
-      return 'Connected';
-    }
-    // Show last connection time or other relevant info
-    return 'Last connected: Unknown';
   }
 }

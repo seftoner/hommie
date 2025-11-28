@@ -86,7 +86,7 @@ Complete reference for all Riverpod providers in the Hommie application.
 - **Dependencies:** Server-specific
 - **States:** Tracks OAuth flow, token refresh, and auth failures
 
-### `authFlowControllerProvider`
+### `authControllerProvider`
 - **Type:** Provider<AuthFlowController>
 - **Purpose:** Orchestrates authentication flows (login, logout, discovery).
 - **API:**

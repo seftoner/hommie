@@ -1,12 +1,15 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/presentation/flows/add_server_flow.dart';
 import 'package:hommie/features/onboarding/presentation/screens/permissions_page.dart';
 import 'package:hommie/features/onboarding/presentation/screens/welcome_page.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
 /// Steps that compose the onboarding flow.
 enum OnboardingStep { welcomeOne, permissions, addServer }
 
+@Dependencies([authController])
 class OnboardingFlow extends StatefulWidget {
   const OnboardingFlow({super.key});
 

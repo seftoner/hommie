@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_view_repository_provider.g.dart';
 
-@Riverpod(dependencies: [serverManager])
+@riverpod
 Future<IHomeViewRepository> homeViewRepository(Ref ref) async {
   final isar = ref.read(databaseConnectionProvider);
   final serverManager = ref.read(serverManagerProvider);

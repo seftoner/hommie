@@ -24,13 +24,10 @@ final class HomePageControllerProvider
         dependencies: const <ProviderOrFamily>[homeViewRepositoryProvider],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           HomePageControllerProvider.$allTransitiveDependencies0,
-          HomePageControllerProvider.$allTransitiveDependencies1,
         ],
       );
 
   static const $allTransitiveDependencies0 = homeViewRepositoryProvider;
-  static const $allTransitiveDependencies1 =
-      HomeViewRepositoryProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$homePageControllerHash();

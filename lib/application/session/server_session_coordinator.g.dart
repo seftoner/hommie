@@ -34,30 +34,25 @@ final class ServerSessionCoordinatorProvider
         argument: null,
         retry: null,
         name: r'serverSessionCoordinatorProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: const <ProviderOrFamily>[
-          authFlowControllerProvider,
           serverConnectionManagerProvider,
-          serverConnectionStateProvider,
+          authControllerProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           ServerSessionCoordinatorProvider.$allTransitiveDependencies0,
           ServerSessionCoordinatorProvider.$allTransitiveDependencies1,
           ServerSessionCoordinatorProvider.$allTransitiveDependencies2,
           ServerSessionCoordinatorProvider.$allTransitiveDependencies3,
-          ServerSessionCoordinatorProvider.$allTransitiveDependencies4,
         },
       );
 
-  static const $allTransitiveDependencies0 = authFlowControllerProvider;
+  static const $allTransitiveDependencies0 = serverConnectionManagerProvider;
   static const $allTransitiveDependencies1 =
-      AuthFlowControllerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
-      AuthFlowControllerProvider.$allTransitiveDependencies1;
+      ServerConnectionManagerProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = authControllerProvider;
   static const $allTransitiveDependencies3 =
-      AuthFlowControllerProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
-      AuthFlowControllerProvider.$allTransitiveDependencies3;
+      AuthControllerProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$serverSessionCoordinatorHash();
@@ -82,4 +77,4 @@ final class ServerSessionCoordinatorProvider
 }
 
 String _$serverSessionCoordinatorHash() =>
-    r'81cecb62f6e1e6cd8d82bfb3aa57d404d7d5e1e7';
+    r'157104088bbbcf33114176d8c86e6abcf77e7102';

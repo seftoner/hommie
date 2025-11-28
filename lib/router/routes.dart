@@ -7,7 +7,6 @@ import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
 import 'package:hommie/features/onboarding/presentation/flows/onboarding_flow.dart';
 import 'package:hommie/features/servers/presentation/screens/servers_page.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
 import 'package:hommie/features/settings/presentation/screens/hub_page.dart';
 import 'package:hommie/features/settings/presentation/screens/logs_page.dart';

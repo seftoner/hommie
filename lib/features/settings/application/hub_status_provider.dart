@@ -20,7 +20,7 @@ sealed class HubStatusState with _$HubStatusState {
   }) = _HubStatusState;
 }
 
-@Riverpod(dependencies: [ServerConnectionState])
+@riverpod
 Future<HubStatusState> hubStatus(Ref ref) async {
   final server = await ref.watch(activeServerProvider.future);
   final connectionState = ref.watch(serverConnectionStateProvider);

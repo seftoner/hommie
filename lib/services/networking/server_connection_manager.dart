@@ -13,7 +13,7 @@ import 'package:hommie/core/utils/logger.dart';
 
 part 'server_connection_manager.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [ServerConnectionState, serverConfig])
+@Riverpod(keepAlive: true, dependencies: [serverConfig])
 IServerConnectionManager serverConnectionManager(Ref ref) {
   final manager = _ServerConnectionManager(ref);
 
@@ -24,7 +24,7 @@ IServerConnectionManager serverConnectionManager(Ref ref) {
   return manager;
 }
 
-@Dependencies([ServerConnectionState, serverConfig])
+@Dependencies([serverConfig])
 class _ServerConnectionManager implements IServerConnectionManager {
   final _orchestrators = <int, ConnectionOrchestrator>{};
   int? _activeServerId;

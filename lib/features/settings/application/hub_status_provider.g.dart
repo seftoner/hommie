@@ -27,13 +27,9 @@ final class HubStatusProvider
         retry: null,
         name: r'hubStatusProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[serverConnectionStateProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
-          HubStatusProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static const $allTransitiveDependencies0 = serverConnectionStateProvider;
 
   @override
   String debugGetCreateSourceHash() => _$hubStatusHash();
@@ -50,4 +46,4 @@ final class HubStatusProvider
   }
 }
 
-String _$hubStatusHash() => r'cd19fdae1ed58774de22866b99fa4312d92f3846';
+String _$hubStatusHash() => r'84b686da23f61e78b1b613375b6b08556b680f1e';

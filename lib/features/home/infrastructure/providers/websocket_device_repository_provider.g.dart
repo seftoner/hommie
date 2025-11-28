@@ -49,8 +49,6 @@ final class WebsocketDeviceRepositoryProvider
   static const $allTransitiveDependencies0 = serverConnectionManagerProvider;
   static const $allTransitiveDependencies1 =
       ServerConnectionManagerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
-      ServerConnectionManagerProvider.$allTransitiveDependencies1;
 
   @override
   String debugGetCreateSourceHash() => _$websocketDeviceRepositoryHash();
@@ -104,7 +102,6 @@ final class WebsocketDeviceRepositoryFamily extends $Family
         $allTransitiveDependencies: const <ProviderOrFamily>[
           WebsocketDeviceRepositoryProvider.$allTransitiveDependencies0,
           WebsocketDeviceRepositoryProvider.$allTransitiveDependencies1,
-          WebsocketDeviceRepositoryProvider.$allTransitiveDependencies2,
         ],
         isAutoDispose: true,
       );
