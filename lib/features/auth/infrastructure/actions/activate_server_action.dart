@@ -1,21 +1,21 @@
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
-import 'package:hommie/features/shared/domain/models/htask.dart';
-import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
+import 'package:hommie/core/infrastructure/actions/haction.dart';
+import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';
 
-class ActivateServerTask extends HTask {
+class ActivateServerAction extends HAction {
   final IServerManager _serverManager;
 
-  ActivateServerTask(this._serverManager);
+  ActivateServerAction(this._serverManager);
 
   @override
-  Future<HTaskResult> execute(TaskExecutionContext context) async {
+  Future<HActionResult> execute(ActionExecutionContext context) async {
     try {
       final Server server = context.get('server');
       await _serverManager.activateServer(server.id!);
-      return HTaskResult.success(null);
+      return HActionResult.success(null);
     } catch (e) {
-      return HTaskResult.failure(e);
+      return HActionResult.failure(e);
     }
   }
 
@@ -23,7 +23,7 @@ class ActivateServerTask extends HTask {
   String get name => 'ActivateServerTask';
 
   @override
-  Future<void> rollback(TaskExecutionContext context) async {
+  Future<void> rollback(ActionExecutionContext context) async {
     throw UnimplementedError();
   }
 

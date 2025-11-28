@@ -1,16 +1,16 @@
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
-import 'package:hommie/features/auth/infrastructure/tasks/activate_server_if_exist_task.dart';
-import 'package:hommie/features/auth/infrastructure/tasks/activate_server_task.dart';
-import 'package:hommie/features/auth/infrastructure/tasks/create_server_task.dart';
-import 'package:hommie/features/auth/infrastructure/tasks/delete_server_task.dart';
-import 'package:hommie/features/auth/infrastructure/tasks/get_config_task.dart';
-import 'package:hommie/features/auth/infrastructure/tasks/oauth_login_attempt_task.dart';
-import 'package:hommie/features/auth/infrastructure/tasks/sign_out_server_task.dart';
+import 'package:hommie/features/auth/infrastructure/actions/activate_server_if_exist_action.dart';
+import 'package:hommie/features/auth/infrastructure/actions/activate_server_action.dart';
+import 'package:hommie/features/auth/infrastructure/actions/create_server_action.dart';
+import 'package:hommie/features/auth/infrastructure/actions/delete_server_action.dart';
+import 'package:hommie/features/auth/infrastructure/actions/get_config_action.dart';
+import 'package:hommie/features/auth/infrastructure/actions/oauth_login_attempt_action.dart';
+import 'package:hommie/features/auth/infrastructure/actions/sign_out_server_action.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:hommie/features/servers/infrastructure/providers/websocket_config_repository_provider.dart';
-import 'package:hommie/features/shared/domain/models/task_chain.dart';
-import 'package:hommie/features/shared/infrastructure/runner/task_executor.dart';
+import 'package:hommie/core/infrastructure/actions/action_chain.dart';
+import 'package:hommie/core/infrastructure/actions/action_runner.dart';
 import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -27,18 +27,18 @@ class AuthController {
     final serverManager = ref.read(serverManagerProvider);
     final authRepository = ref.read(authRepositoryProvider);
 
-    final loginAction = TaskChain.builder()
+    final loginAction = ActionChain.builder()
         .withContext('serverUrl', serverUrl)
-        .addTask(CreateServerTask(serverManager))
-        .addTask(OAuthLoginAttemptTask(authRepository))
-        .addTask(GetConfigTask(serverManager, ref))
-        .addTask(ActivateServerTask(serverManager))
+        .addAction(CreateServerAction(serverManager))
+        .addAction(OAuthLoginAttemptAction(authRepository))
+        .addAction(GetConfigAction(serverManager, ref))
+        .addAction(ActivateServerAction(serverManager))
         .onAnyError((failure) {
           logger.e('Auth failure occurred: $failure');
         })
         .build();
 
-    await TaskExecutor(loginAction).execute();
+    await ActionRunner(loginAction).run();
   }
 
   Future<void> signOut(int serverId) async {
@@ -46,17 +46,17 @@ class AuthController {
     final serverConnectionManager = ref.read(serverConnectionManagerProvider);
     final authRepository = ref.read(authRepositoryProvider);
 
-    final signOutAction = TaskChain.builder()
+    final signOutAction = ActionChain.builder()
         .withContext('serverId', serverId)
-        .addTask(SignOutServerTask(authRepository, serverConnectionManager))
-        .addTask(DeleteServerTask(serverManager, ref))
-        .addTask(ActivateServerIfExistTask(serverManager))
+        .addAction(SignOutServerAction(authRepository, serverConnectionManager))
+        .addAction(DeleteServerAction(serverManager, ref))
+        .addAction(ActivateServerIfExistAction(serverManager))
         .onAnyError((failure) {
           logger.e('Sign out failure occurred: $failure');
         })
         .build();
 
-    await TaskExecutor(signOutAction).execute();
+    await ActionRunner(signOutAction).run();
   }
 }
 

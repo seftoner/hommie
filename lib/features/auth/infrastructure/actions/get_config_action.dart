@@ -2,21 +2,21 @@ import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/websocket_config_repository_provider.dart';
-import 'package:hommie/features/shared/domain/models/htask.dart';
-import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
+import 'package:hommie/core/infrastructure/actions/haction.dart';
+import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
 @Dependencies([websocketConfigRepository])
-class GetConfigTask extends HTask {
+class GetConfigAction extends HAction {
   final IServerManager _serverManager;
   final Ref _ref;
 
-  GetConfigTask(this._serverManager, this._ref);
+  GetConfigAction(this._serverManager, this._ref);
 
   @override
-  Future<HTaskResult> execute(TaskExecutionContext context) async {
+  Future<HActionResult> execute(ActionExecutionContext context) async {
     final server = context.get<Server>('server');
 
     try {
@@ -42,10 +42,10 @@ class GetConfigTask extends HTask {
 
       logger.i('Retrieved configuration for server: ${updatedServer.name}');
 
-      return const HTaskResult(status: Status.success);
+      return const HActionResult(status: Status.success);
     } catch (e) {
       logger.e('Failed to get server configuration: $e');
-      return HTaskResult.failure(e);
+      return HActionResult.failure(e);
     }
   }
 

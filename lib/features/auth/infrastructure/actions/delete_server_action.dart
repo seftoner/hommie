@@ -3,17 +3,17 @@ import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/home/infrastructure/providers/area_repository_provider.dart';
 import 'package:hommie/features/home/infrastructure/providers/home_view_repository_provider.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
-import 'package:hommie/features/shared/domain/models/htask.dart';
-import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
+import 'package:hommie/core/infrastructure/actions/haction.dart';
+import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';
 
-class DeleteServerTask extends HTask {
+class DeleteServerAction extends HAction {
   final IServerManager _serverManager;
   final Ref _ref;
 
-  DeleteServerTask(this._serverManager, this._ref);
+  DeleteServerAction(this._serverManager, this._ref);
 
   @override
-  Future<HTaskResult> execute(TaskExecutionContext context) async {
+  Future<HActionResult> execute(ActionExecutionContext context) async {
     final serverId = context.get<int>('serverId');
 
     try {
@@ -46,10 +46,10 @@ class DeleteServerTask extends HTask {
       // This should handle the cascade deletion through the repository layer
       await _serverManager.removeServer(serverId, allowRemovingLast: true);
 
-      return HTaskResult.success(null);
+      return HActionResult.success(null);
     } catch (e) {
       logger.e('Error deleting server $serverId: $e');
-      return HTaskResult.failure(e);
+      return HActionResult.failure(e);
     }
   }
 

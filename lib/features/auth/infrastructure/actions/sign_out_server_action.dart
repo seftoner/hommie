@@ -1,17 +1,17 @@
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
-import 'package:hommie/features/shared/domain/models/htask.dart';
-import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
+import 'package:hommie/core/infrastructure/actions/haction.dart';
+import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';
 import 'package:hommie/services/networking/i_server_connection_manager.dart';
 
-class SignOutServerTask extends HTask {
+class SignOutServerAction extends HAction {
   final IAuthRepository _authRepository;
   final IServerConnectionManager _serverConnectionManager;
 
-  SignOutServerTask(this._authRepository, this._serverConnectionManager);
+  SignOutServerAction(this._authRepository, this._serverConnectionManager);
 
   @override
-  Future<HTaskResult> execute(TaskExecutionContext context) async {
+  Future<HActionResult> execute(ActionExecutionContext context) async {
     final serverId = context.get<int>('serverId');
 
     try {
@@ -23,10 +23,10 @@ class SignOutServerTask extends HTask {
       await _authRepository.signOut(serverId);
       logger.i('Successfully signed out from server: $serverId');
 
-      return HTaskResult.success(null);
+      return HActionResult.success(null);
     } catch (e) {
       logger.e('Failed to sign out from server: $serverId', error: e);
-      return HTaskResult.failure(e);
+      return HActionResult.failure(e);
     }
   }
 

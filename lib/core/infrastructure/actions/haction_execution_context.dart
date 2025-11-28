@@ -1,7 +1,7 @@
-class TaskExecutionContext {
+class ActionExecutionContext {
   final Map<String, dynamic> _data;
 
-  TaskExecutionContext([Map<String, dynamic>? initialData])
+  ActionExecutionContext([Map<String, dynamic>? initialData])
     : _data = {...initialData ?? {}};
 
   T get<T>(String key) => _data[key] as T;

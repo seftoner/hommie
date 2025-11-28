@@ -1,15 +1,15 @@
 import 'package:hommie/core/utils/logger.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
-import 'package:hommie/features/shared/domain/models/htask.dart';
-import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
+import 'package:hommie/core/infrastructure/actions/haction.dart';
+import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';
 
-class ActivateServerIfExistTask extends HTask {
+class ActivateServerIfExistAction extends HAction {
   final IServerManager _serverManager;
 
-  ActivateServerIfExistTask(this._serverManager);
+  ActivateServerIfExistAction(this._serverManager);
 
   @override
-  Future<HTaskResult> execute(TaskExecutionContext context) async {
+  Future<HActionResult> execute(ActionExecutionContext context) async {
     final serverId = context.get<int>('serverId');
 
     final nextServer = await _serverManager.activateNextServer(
@@ -22,7 +22,7 @@ class ActivateServerIfExistTask extends HTask {
       logger.i('No other servers available after sign out');
     }
 
-    return const HTaskResult(status: Status.success);
+    return const HActionResult(status: Status.success);
   }
 
   @override

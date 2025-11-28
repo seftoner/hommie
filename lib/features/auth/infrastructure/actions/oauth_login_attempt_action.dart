@@ -2,23 +2,23 @@ import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/features/servers/domain/models/server.dart';
-import 'package:hommie/features/shared/domain/models/htask.dart';
-import 'package:hommie/features/shared/domain/models/htask_execution_context.dart';
+import 'package:hommie/core/infrastructure/actions/haction.dart';
+import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';
 import 'package:oauth2/oauth2.dart';
 
-class OAuthLoginAttemptTask extends HTask<Credentials, AuthFailure> {
+class OAuthLoginAttemptAction extends HAction<Credentials, AuthFailure> {
   final IAuthRepository _authRepository;
 
   final Uri _redirectUrl = Uri.parse('hommie://');
 
-  OAuthLoginAttemptTask(this._authRepository);
+  OAuthLoginAttemptAction(this._authRepository);
 
   @override
   String get name => 'AttemptOAuthLogin';
 
   @override
-  Future<HTaskResult<Credentials, AuthFailure>> execute(
-    TaskExecutionContext context,
+  Future<HActionResult<Credentials, AuthFailure>> execute(
+    ActionExecutionContext context,
   ) async {
     final server = context.get<Server>('server');
 
@@ -30,8 +30,8 @@ class OAuthLoginAttemptTask extends HTask<Credentials, AuthFailure> {
     );
 
     return authResult.fold(
-      (error) => HTaskResult.failure(error),
-      (credentials) => HTaskResult.success(credentials),
+      (error) => HActionResult.failure(error),
+      (credentials) => HActionResult.success(credentials),
     );
   }
 
@@ -44,7 +44,7 @@ class OAuthLoginAttemptTask extends HTask<Credentials, AuthFailure> {
   }
 
   @override
-  Future<void> rollback(TaskExecutionContext context) async {
+  Future<void> rollback(ActionExecutionContext context) async {
     //TODO: sign out????
   }
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:hommie/core/infrastructure/tasks/base_task.dart';
+import 'package:hommie/core/infrastructure/parallelism/base_task.dart';
 import 'package:hommie/features/settings/domain/entities/logs.dart';
 
 class FetchLogsParams {
@@ -34,8 +34,10 @@ class FetchLogsTask extends BaseTask<FetchLogsParams, List<Log>> {
 
     int currentLineIndex = 0;
 
-    final stream =
-        file.openRead().transform(utf8.decoder).transform(const LineSplitter());
+    final stream = file
+        .openRead()
+        .transform(utf8.decoder)
+        .transform(const LineSplitter());
 
     await for (final line in stream) {
       if (currentLineIndex >= params.offset &&
@@ -91,12 +93,12 @@ class FetchLogsTask extends BaseTask<FetchLogsParams, List<Log>> {
   }
 
   LogLevel _parseLogLevel(String level) => switch (level.toLowerCase()) {
-        'trace' => LogLevel.trace,
-        'debug' => LogLevel.debug,
-        'info' => LogLevel.info,
-        'warning' => LogLevel.warning,
-        'error' => LogLevel.error,
-        'fatal' => LogLevel.fatal,
-        _ => throw Exception('Unknown log level: $level'),
-      };
+    'trace' => LogLevel.trace,
+    'debug' => LogLevel.debug,
+    'info' => LogLevel.info,
+    'warning' => LogLevel.warning,
+    'error' => LogLevel.error,
+    'fatal' => LogLevel.fatal,
+    _ => throw Exception('Unknown log level: $level'),
+  };
 }
