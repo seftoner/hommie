@@ -9,21 +9,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'step/perform_cleanup.dart';
-import 'step/the_application_is_running_in_the_foreground.dart';
-import 'step/i_see_page.dart';
-import 'step/i_see_button.dart';
-import 'step/i_tap_on_button.dart';
-import 'step/i_enter_into_field.dart';
-import 'step/i_see_credentials_web_view_form.dart';
-import 'step/i_enter_credentials.dart';
-import 'step/i_tap_on_login_button.dart';
-import 'step/home_assistant_access_is_configured.dart';
-import 'step/i_have_successfully_logged_in.dart';
-import 'step/i_tap_on_list_item.dart';
-import 'step/i_see_alert.dart';
-import 'step/home_assistant_revokes_access.dart';
-import 'step/i_should_see_the_offline_banner.dart';
+import './step/perform_cleanup.dart';
+import './step/the_application_is_running_in_the_foreground.dart';
+import './step/i_see_page.dart';
+import './step/i_see_button.dart';
+import './step/i_tap_on_button.dart';
+import './step/i_enter_into_field.dart';
+import './step/i_see_credentials_web_view_form.dart';
+import './step/i_enter_credentials.dart';
+import './step/i_tap_on_login_button.dart';
+import './step/home_assistant_access_is_configured.dart';
+import './step/i_have_successfully_logged_in.dart';
+import './step/i_tap_on_list_item.dart';
+import './step/i_see_alert.dart';
+import './step/home_assistant_revokes_access.dart';
+import './step/i_should_see_the_offline_banner.dart';
 
 void main() {
   group('''Sign In''', () {
@@ -39,10 +39,7 @@ void main() {
         await iTapOnButton($, K.serversDiscovery.enterManuallyButton);
         await iSeePage($, K.manualAddress.page);
         await iEnterIntoField(
-          $,
-          'http://10.0.2.2:8123',
-          K.manualAddress.addressField,
-        );
+            $, 'http://10.0.2.2:8123', K.manualAddress.addressField);
         await iTapOnButton($, K.manualAddress.connectButton);
         await iSeeCredentialsWebViewForm($);
         await iEnterCredentials($, 'admin', 'yourpassword');

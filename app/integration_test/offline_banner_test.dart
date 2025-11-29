@@ -9,16 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'step/the_device_regains_network_connectivity.dart';
-import 'step/i_wait_seconds.dart';
-import 'step/perform_cleanup.dart';
-import 'step/home_assistant_access_is_configured.dart';
-import 'step/i_have_successfully_logged_in.dart';
-import 'step/the_application_is_running_in_the_foreground.dart';
-import 'step/i_see_page.dart';
-import 'step/i_should_not_see_the_offline_banner.dart';
-import 'step/the_device_loses_network_connectivity.dart';
-import 'step/i_should_see_the_offline_banner.dart';
+import './step/the_device_regains_network_connectivity.dart';
+import './step/i_wait_seconds.dart';
+import './step/perform_cleanup.dart';
+import './step/home_assistant_access_is_configured.dart';
+import './step/i_have_successfully_logged_in.dart';
+import './step/the_application_is_running_in_the_foreground.dart';
+import './step/i_see_page.dart';
+import './step/i_should_not_see_the_offline_banner.dart';
+import './step/the_device_loses_network_connectivity.dart';
+import './step/i_should_see_the_offline_banner.dart';
 
 void main() {
   group('''Connection Status Banner''', () {
@@ -33,9 +33,8 @@ void main() {
       await performCleanup($);
     }
 
-    patrol('''Banner visibility when connection is lost and restored''', (
-      $,
-    ) async {
+    patrol('''Banner visibility when connection is lost and restored''',
+        ($) async {
       try {
         await bddSetUp($);
         await theApplicationIsRunningInTheForeground($);

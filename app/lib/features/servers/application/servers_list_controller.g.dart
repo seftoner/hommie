@@ -20,7 +20,7 @@ final class ServersListControllerProvider
         argument: null,
         retry: null,
         name: r'serversListControllerProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -34,7 +34,7 @@ final class ServersListControllerProvider
 }
 
 String _$serversListControllerHash() =>
-    r'8ee356eeb76b84159bd51e80c683fcc5c36f53fe';
+    r'f5cc5d48d6fc06b2adeb4bf4c6f5a6e171c2ff8c';
 
 abstract class _$ServersListController extends $AsyncNotifier<List<Server>> {
   FutureOr<List<Server>> build();

@@ -15,7 +15,10 @@
 				"$dart-build_runner"
 			],
 			"label": "flutter: build_runner watch",
-			"detail": "Watch and build generated files"
+			"detail": "Watch and build generated files",
+			"options": {
+				"cwd": "${workspaceFolder}/app"
+			}
 		},
 		{
 			"label": "patrol: run tests",
@@ -26,14 +29,17 @@
 			],
 			"group": "test",
 			"problemMatcher": [],
-			"detail": "Run patrol integration tests"
+			"detail": "Run patrol integration tests",
+			"options": {
+				"cwd": "${workspaceFolder}/app"
+			}
 		},
 		{
 			"label": "Create Feature Folder",
 			"type": "shell",
 			"command": "mkdir",
 			"args": [
-				"-p", // Enables creating nested directories.
+				"-p",
 				"./app/lib/features/${input:featureName}/domain",
 				"./app/lib/features/${input:featureName}/application",
 				"./app/lib/features/${input:featureName}/infrastructure",
