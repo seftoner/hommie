@@ -7,19 +7,25 @@
         {
             "name": "hommie",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "cwd": "app",
+            "program": "lib/main.dart"
         },
         {
             "name": "hommie (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "cwd": "app",
+            "program": "lib/main.dart"
         },
         {
             "name": "hommie (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "cwd": "app",
+            "program": "lib/main.dart"
         }
     ]
 }

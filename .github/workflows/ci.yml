@@ -28,7 +28,9 @@ jobs:
         run: flutter pub get
 
       - name: Analyze project source
-        run: dart analyze
+        working-directory: app
+        run: flutter analyze
 
       - name: Run tests
+        working-directory: app
         run: flutter test

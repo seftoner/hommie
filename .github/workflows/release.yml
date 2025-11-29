@@ -44,6 +44,7 @@ jobs:
         run: flutter pub get
 
       - name: Build
+        working-directory: app
         run: flutter build web
 
       - name: Create Release
@@ -55,4 +56,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            build/web/*
+            app/build/web/*
