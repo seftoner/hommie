@@ -50,7 +50,7 @@ packages:
     source: hosted
     version: "2.13.0"
   battery_plus:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: battery_plus
       sha256: ad16fcb55b7384be6b4bbc763d5e2031ac7ea62b2d9b6b661490c7b9741155bf
@@ -66,7 +66,7 @@ packages:
     source: hosted
     version: "2.0.1"
   bdd_widget_test:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: bdd_widget_test
       sha256: "2bf0923a53bd1d02a228967c1e660d92c671cecf311d8adaf16e12cbc7b013b6"
@@ -114,7 +114,7 @@ packages:
     source: hosted
     version: "3.0.3"
   build_runner:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: build_runner
       sha256: b24597fceb695969d47025c958f3837f9f0122e237c6a22cb082a5ac66c3ca30
@@ -225,17 +225,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
-  computer:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "8fc642ff64efd370cc0f76d46d9bd96fa9a1cdaa"
-      url: "https://github.com/seftoner/computer.git"
-    source: git
-    version: "3.3.0"
   connectivity_plus:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: connectivity_plus
       sha256: "33bae12a398f841c6cda09d1064212957265869104c478e5ad51e2fb26c3973c"
@@ -283,7 +274,7 @@ packages:
     source: hosted
     version: "3.0.7"
   custom_lint:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: custom_lint
       sha256: "78085fbe842de7c5bef92de811ca81536968dbcbbcdac5c316711add2d15e796"
@@ -339,7 +330,7 @@ packages:
     source: hosted
     version: "0.2.3"
   device_info_plus:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: device_info_plus
       sha256: "4df8babf73058181227e18b08e6ea3520cf5fc5d796888d33b7cb0f33f984b7c"
@@ -370,17 +361,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  drag_arrange:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: e9e9ad8b55f6f758ffa3012ed642d445433ebfd2
-      url: "https://github.com/seftoner/drag_arrange.git"
-    source: git
-    version: "0.0.3"
   drift:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: drift
       sha256: "83290a32ae006a7535c5ecf300722cb77177250d9df4ee2becc5fa8a36095114"
@@ -388,7 +370,7 @@ packages:
     source: hosted
     version: "2.29.0"
   drift_dev:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: drift_dev
       sha256: "6019f827544e77524ffd5134ae0cb75dfd92ef5ef3e269872af92840c929cd43"
@@ -396,7 +378,7 @@ packages:
     source: hosted
     version: "2.29.0"
   drift_flutter:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: drift_flutter
       sha256: b7534bf320aac5213259aac120670ba67b63a1fd010505babc436ff86083818f
@@ -444,7 +426,7 @@ packages:
     source: hosted
     version: "1.1.1"
   flow_builder:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flow_builder
       sha256: "9e66aa7209e9a31c347bb316abf191d2300db41cd6b7254f89abd4e76d9b3f8d"
@@ -452,12 +434,12 @@ packages:
     source: hosted
     version: "0.1.0"
   flutter:
-    dependency: "direct main"
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
   flutter_animate:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_animate
       sha256: "7befe2d3252728afb77aecaaea1dec88a89d35b9b1d2eea6d04479e8af9117b5"
@@ -470,7 +452,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_hooks:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_hooks
       sha256: "8ae1f090e5f4ef5cfa6670ce1ab5dddadd33f3533a7f9ba19d9f958aa2a89f42"
@@ -478,7 +460,7 @@ packages:
     source: hosted
     version: "0.21.3+1"
   flutter_lints:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: flutter_lints
       sha256: "3105dc8492f6183fb076ccf1f351ac3d60564bff92e20bfc4af9cc1651f4e7e1"
@@ -486,12 +468,12 @@ packages:
     source: hosted
     version: "6.0.0"
   flutter_localizations:
-    dependency: "direct main"
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
   flutter_riverpod:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_riverpod
       sha256: "9e2d6907f12cc7d23a846847615941bddee8709bf2bfd274acdf5e80bcf22fde"
@@ -499,7 +481,7 @@ packages:
     source: hosted
     version: "3.0.3"
   flutter_secure_storage:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_secure_storage
       sha256: "9cad52d75ebc511adfae3d447d5d13da15a55a92c9410e50f67335b6d21d16ea"
@@ -563,12 +545,12 @@ packages:
     source: hosted
     version: "0.7.0"
   flutter_test:
-    dependency: "direct dev"
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
   flutter_web_auth_2:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_web_auth_2
       sha256: "3c14babeaa066c371f3a743f204dd0d348b7d42ffa6fae7a9847a521aff33696"
@@ -589,7 +571,7 @@ packages:
     source: sdk
     version: "0.0.0"
   fpdart:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: fpdart
       sha256: f8e9d0989ba293946673e382c59ac513e30cb6746a9452df195f29e3357a73d4
@@ -597,7 +579,7 @@ packages:
     source: hosted
     version: "1.2.0"
   freezed:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: freezed
       sha256: "13065f10e135263a4f5a4391b79a8efc5fb8106f8dd555a9e49b750b45393d77"
@@ -605,7 +587,7 @@ packages:
     source: hosted
     version: "3.2.3"
   freezed_annotation:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: freezed_annotation
       sha256: "7294967ff0a6d98638e7acb774aac3af2550777accd8149c90af5b014e6d44d8"
@@ -634,7 +616,7 @@ packages:
     source: hosted
     version: "2.1.3"
   go_router:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: go_router
       sha256: c92d18e1fe994cb06d48aa786c46b142a5633067e8297cff6b5a3ac742620104
@@ -642,7 +624,7 @@ packages:
     source: hosted
     version: "17.0.0"
   go_router_builder:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: go_router_builder
       sha256: e0646fb5586e04e1df92678f539059f38e4314848f06dd4f3cd87fed434e16b5
@@ -658,7 +640,7 @@ packages:
     source: hosted
     version: "2.3.2"
   hooks_riverpod:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: hooks_riverpod
       sha256: ae4a2f6d82dd895379f9b95457e090ac2d2fef9446f9325f8d31b9c86cadc131
@@ -674,7 +656,7 @@ packages:
     source: hosted
     version: "4.3.0"
   http:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: http
       sha256: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
@@ -698,7 +680,7 @@ packages:
     source: hosted
     version: "4.1.2"
   integration_test:
-    dependency: "direct dev"
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -727,7 +709,7 @@ packages:
     source: hosted
     version: "0.6.7"
   json_annotation:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: json_annotation
       sha256: "1ce844379ca14835a50d2f019a3099f419082cfdd231cd86a142af94dd5c6bb1"
@@ -735,7 +717,7 @@ packages:
     source: hosted
     version: "4.9.0"
   json_serializable:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: json_serializable
       sha256: c5b2ee75210a0f263c6c7b9eeea80553dbae96ea1bf57f02484e806a3ffdffa3
@@ -775,7 +757,7 @@ packages:
     source: hosted
     version: "6.0.0"
   logger:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: logger
       sha256: a7967e31b703831a893bbc3c3dd11db08126fe5f369b5c648a36f821979f5be3
@@ -807,7 +789,7 @@ packages:
     source: hosted
     version: "0.11.1"
   material_symbols_icons:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: material_symbols_icons
       sha256: "9a7de58ffc299c8e362b4e860e36e1d198fa0981a894376fe1b6bfe52773e15b"
@@ -831,7 +813,7 @@ packages:
     source: hosted
     version: "2.0.0"
   mockito:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: mockito
       sha256: "2314cbe9165bcd16106513df9cf3c3224713087f09723b128928dc11a4379f99"
@@ -839,7 +821,7 @@ packages:
     source: hosted
     version: "5.5.0"
   multicast_dns:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: multicast_dns
       sha256: de72ada5c3db6fdd6ad4ae99452fe05fb403c4bb37c67ceb255ddd37d2b5b1eb
@@ -847,7 +829,7 @@ packages:
     source: hosted
     version: "0.3.3"
   network_info_plus:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: network_info_plus
       sha256: "2866dadcbee2709e20d67737a1556f5675b8b0cdcf2c1659ba74bc21bffede4f"
@@ -879,7 +861,7 @@ packages:
     source: hosted
     version: "2.0.2"
   oauth2:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: oauth2
       sha256: "890a032ba1b44fa8dcfeba500e613df0ecbe16aeace13bb0fe1d25eb42cda5b8"
@@ -895,7 +877,7 @@ packages:
     source: hosted
     version: "2.2.0"
   path:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: path
       sha256: "75cca69d1490965be98c73ceaea117e8a04dd21217b37b292c9ddbec0d955bc5"
@@ -903,7 +885,7 @@ packages:
     source: hosted
     version: "1.9.1"
   path_provider:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: path_provider
       sha256: "50c5dd5b6e1aaf6fb3a78b33f6aa3afca52bf903a8a5298f53101fdaee55bbcd"
@@ -951,7 +933,7 @@ packages:
     source: hosted
     version: "2.3.0"
   patrol:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: patrol
       sha256: "32fd0709f3871fa56eb9cd88410e3ca816bfa757122bae806a0f842188acb820"
@@ -959,7 +941,7 @@ packages:
     source: hosted
     version: "3.20.0"
   patrol_finders:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: patrol_finders
       sha256: "4a658d7d560de523f92deb3fa3326c78747ca0bf7e7f4b8788c012463138b628"
@@ -975,7 +957,7 @@ packages:
     source: hosted
     version: "0.5.0"
   permission_handler:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: permission_handler
       sha256: bc917da36261b00137bbc8896bf1482169cd76f866282368948f032c8c1caae1
@@ -1087,7 +1069,7 @@ packages:
     source: hosted
     version: "4.1.0"
   riverpod:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: riverpod
       sha256: c406de02bff19d920b832bddfb8283548bfa05ce41c59afba57ce643e116aa59
@@ -1103,7 +1085,7 @@ packages:
     source: hosted
     version: "1.0.0-dev.7"
   riverpod_annotation:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: riverpod_annotation
       sha256: "7230014155777fc31ba3351bc2cb5a3b5717b11bfafe52b1553cb47d385f8897"
@@ -1111,7 +1093,7 @@ packages:
     source: hosted
     version: "3.0.3"
   riverpod_generator:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: riverpod_generator
       sha256: "49894543a42cf7a9954fc4e7366b6d3cb2e6ec0fa07775f660afcdd92d097702"
@@ -1119,7 +1101,7 @@ packages:
     source: hosted
     version: "3.0.3"
   riverpod_lint:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: riverpod_lint
       sha256: "7ef9c43469e9b5ac4e4c3b24d7c30642e47ce1b12cd7dcdd643534db0a72ed13"
@@ -1135,7 +1117,7 @@ packages:
     source: hosted
     version: "0.28.0"
   share_plus:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: share_plus
       sha256: "14c8860d4de93d3a7e53af51bff479598c4e999605290756bbbe45cf65b37840"
@@ -1151,7 +1133,7 @@ packages:
     source: hosted
     version: "6.1.0"
   shared_preferences:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: shared_preferences
       sha256: "6e8bf70b7fef813df4e9a36f658ac46d107db4b4cfe1048b477d4e453a8159f5"
@@ -1412,7 +1394,7 @@ packages:
     source: hosted
     version: "0.7.0"
   url_launcher:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: url_launcher
       sha256: f6a7e5c4835bb4e3026a04793a4199ca2d14c739ec378fdfe23fc8075d0439f8
@@ -1524,7 +1506,7 @@ packages:
     source: hosted
     version: "1.0.1"
   web_socket_channel:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: web_socket_channel
       sha256: d645757fb0f4773d602444000a8131ff5d48c9e47adfe9772652dd1a4f2d45c8
@@ -1572,13 +1554,12 @@ packages:
     source: hosted
     version: "0.0.3"
   workmanager:
-    dependency: "direct main"
+    dependency: transitive
     description:
-      path: workmanager
-      ref: main
-      resolved-ref: "7f4f870d593f858b0f55bd344c9863a6099cb30f"
-      url: "https://github.com/fluttercommunity/flutter_workmanager.git"
-    source: git
+      name: workmanager
+      sha256: "065673b2a465865183093806925419d311a9a5e0995aa74ccf8920fd695e2d10"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.9.0+3"
   workmanager_android:
     dependency: transitive

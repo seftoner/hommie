@@ -1,6 +1,6 @@
 import 'package:patrol/patrol.dart';
 import 'package:hommie/ui/keys.dart';
-import './utils/common.dart';
+import 'utils/common.dart';
 
 @testMethodName: patrol
 @testerName: $

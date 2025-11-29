@@ -1,0 +1,85 @@
+name: hommie
+description: "Will be added in the future"
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ^3.35.1
+resolution: workspace
+
+dependencies:
+  computer:
+  drag_arrange:
+  battery_plus: ^7.0.0
+  connectivity_plus: ^7.0.0
+  device_info_plus: ^12.3.0
+  share_plus: ^12.0.1
+  network_info_plus: ^7.0.0
+  logger: ^2.6.1
+  flutter:
+    sdk: flutter
+  flutter_animate: ^4.5.2
+  flutter_hooks:
+  material_symbols_icons: ^4.2874.0
+  flutter_localizations:
+    sdk: flutter
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
+
+  fpdart: ^1.1.1
+  go_router: ^17.0.0
+  
+  http: ^1.2.2
+  multicast_dns: ^0.3.3
+
+  oauth2: ^2.0.3
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  permission_handler: ^12.0.1
+  shared_preferences: ^2.5.3
+  url_launcher: ^6.3.2
+  flutter_secure_storage: ^9.2.4
+  flutter_web_auth_2: ^4.1.0
+  
+  flutter_riverpod: ^3.0.3
+  hooks_riverpod: ^3.0.3
+  riverpod: ^3.0.3
+  riverpod_annotation: ^3.0.3
+
+  web_socket_channel: ^3.0.3
+  workmanager: ^0.9.0
+  flow_builder: ^0.1.0
+  drift: ^2.29.0
+  drift_flutter: ^0.2.7
+
+dev_dependencies:
+  bdd_widget_test: ^2.0.1
+  build_runner: ^2.7.0
+  custom_lint: ^0.8.0
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+  freezed: ^3.1.0
+  go_router_builder: ^4.0.0
+  integration_test:
+    sdk: flutter
+  json_serializable: ^6.11.2
+  mockito: ^5.4.6
+  patrol: ^3.19.0
+  patrol_finders: ^2.9.0
+  riverpod_generator: ^3.0.3
+  riverpod_lint: ^3.0.3
+  drift_dev: ^2.29.0
+    
+flutter:
+  uses-material-design: true
+
+patrol:
+  app_name: hommie
+  android:
+    package_name: com.seftoner.hommie
+  ios:
+    bundle_id: com.seftoner.hommie
+  macos:
+    bundle_id: com.seftoner.hommie
