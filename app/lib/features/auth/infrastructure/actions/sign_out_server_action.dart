@@ -1,8 +1,8 @@
-import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/core/infrastructure/actions/haction.dart';
 import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';
-import 'package:hommie/services/networking/i_server_connection_manager.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
+import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
+import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 
 class SignOutServerAction extends HAction {
   final IAuthRepository _authRepository;

@@ -7,7 +7,7 @@ part 'websocket_config_repository_provider.g.dart';
 /// Provides WebSocket config repository for server-level operations
 ///
 /// This handles ping, config, and other server-wide operations via WebSocket
-@riverpod
+@Riverpod(dependencies: [serverConnectionManager])
 Future<IWebSocketConfigRepository> websocketConfigRepository(
   Ref ref,
   int serverId,

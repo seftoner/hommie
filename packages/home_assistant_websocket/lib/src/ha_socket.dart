@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -13,6 +11,7 @@ import 'ha_auth_token.dart';
 import 'ha_messages.dart';
 import 'ha_socket_state.dart';
 import 'http_config.dart';
+import 'logger_interface.dart';
 
 class HASocketConfig {
   final Uri wsUri;
@@ -29,6 +28,7 @@ class HASocketConfig {
 class HASocket {
   final HASocketConfig _config;
   final HAAuthHandler? _authHandler;
+  final HaLogger _logger;
 
   late WebSocketChannel _innerChanel;
   bool _invalidAuth = false;
@@ -72,13 +72,17 @@ class HASocket {
   String? get closeReason => _innerChanel.closeReason;
   bool get isAuthInvalid => _invalidAuth;
 
-  HASocket.connect({required Uri wsUri, required HAAuthToken authToken})
-    : _config = HASocketConfig(
-        wsUri: wsUri,
-        pingInterval: const Duration(seconds: 5),
-        connectionTimeout: const Duration(seconds: 10),
-      ),
-      _authHandler = HAAuthHandler(authToken: authToken) {
+  HASocket.connect({
+    required Uri wsUri,
+    required HAAuthToken authToken,
+    required HaLogger logger,
+  }) : _config = HASocketConfig(
+         wsUri: wsUri,
+         pingInterval: const Duration(seconds: 5),
+         connectionTimeout: const Duration(seconds: 10),
+       ),
+       _authHandler = HAAuthHandler(authToken: authToken, logger: logger),
+       _logger = logger {
     _outerStreamController = StreamController.broadcast();
 
     _initializeAuthHandler();
@@ -90,9 +94,9 @@ class HASocket {
     _authHandler!
       ..onAuthResult = (result) {
         switch (result) {
-          case AuthResultSuccess(:final haVersion):
-            HaVersion.fromString(haVersion);
-            //TODO: send supported_features if HaVersion.isAtLeast(2022, 9) == true
+          case AuthResultSuccess():
+            // TODO: Parse haVersion if needed for feature detection
+            // TODO: send supported_features if HaVersion.isAtLeast(2022, 9) == true
             _setState(const Authenticated());
             break;
           case AuthResultError(message: final message):
@@ -102,7 +106,7 @@ class HASocket {
                 type: DisconnectionType.error,
               ),
             );
-            logger.e('Authentication error: $message');
+            _logger.error('Authentication error: $message');
             break;
           case AuthResultPending():
             _setState(const Connecting());
@@ -124,7 +128,7 @@ class HASocket {
   void _setState(HASocketState newState) {
     _state = newState;
     _stateController.add(newState);
-    logger.d('Inner socket state changed to: ${newState.runtimeType}');
+    _logger.debug('Inner socket state changed to: ${newState.runtimeType}');
   }
 
   void _startConnection() async {
@@ -153,7 +157,7 @@ class HASocket {
     _setState(
       Disconnected(reason: '$reason: $error', type: DisconnectionType.error),
     );
-    logger.e('$reason: $error');
+    _logger.error('$reason: $error');
   }
 
   WebSocketChannel _createWebSocketChannel() {
@@ -182,10 +186,10 @@ class HASocket {
   void _handleSocketClosure() {
     final reason =
         'Inner socket is closed. Code ${_innerChanel.closeCode} Reason: ${_innerChanel.closeReason}';
-    logger.d(reason);
+    _logger.debug(reason);
 
     if (_invalidAuth) {
-      logger.e('Authentication is invalid - token might be revoked');
+      _logger.error('Authentication is invalid - token might be revoked');
       _setState(
         Disconnected(reason: reason, type: DisconnectionType.authFailure),
       );
@@ -213,13 +217,13 @@ class HASocket {
 
   void sendMessage(HABaseMessage message) {
     final encodedData = message.toJson();
-    logger.t('Sending message: $encodedData');
+    _logger.trace('Sending message: $encodedData');
 
     _innerChanel.sink.add(encodedData);
   }
 
   Future<void> close() async {
-    logger.t('Inner socket is going to close');
+    _logger.trace('Inner socket is going to close');
     await _innerChanel.sink.close(
       status.normalClosure,
       'Session removed from app.',

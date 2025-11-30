@@ -8,12 +8,12 @@ import 'package:home_assistant_websocket/src/ha_connection_option.dart';
 import 'package:home_assistant_websocket/src/ha_messages.dart';
 import 'package:home_assistant_websocket/src/ha_socket.dart';
 import 'package:home_assistant_websocket/src/ha_socket_state.dart';
+import 'package:home_assistant_websocket/src/logger_interface.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../../app/test/utils/tests_helpers.dart';
-import '../../../app/test/utils/tests_logger.dart';
 import 'send_ha_command_messages_test.mocks.dart';
+import 'utils/tests_helpers.dart';
 
 @GenerateMocks([HASocket, HAConnectionOption])
 void main() {
@@ -21,8 +21,6 @@ void main() {
   late StreamController<dynamic> socketStreamController;
   late StreamController<HASocketState> socketStateController;
   late HAConnection connection;
-
-  logger = testLogger;
 
   // Helper method to simulate HA response
   void simulateHAResponse(response) {
@@ -33,9 +31,9 @@ void main() {
 
   // Helper method to verify sent message
   void verifyHAMessage(Map<String, dynamic> expectedPayload) {
-    final capturedMessage = verify(mockSocket.sendMessage(captureAny))
-        .captured
-        .single as HABaseMessage;
+    final capturedMessage =
+        verify(mockSocket.sendMessage(captureAny)).captured.single
+            as HABaseMessage;
     expect(capturedMessage.payload, equals(expectedPayload));
   }
 
@@ -58,6 +56,7 @@ void main() {
 
     final mockConOption = MockHAConnectionOption();
     when(mockConOption.createSocket()).thenAnswer((_) async => mockSocket);
+    when(mockConOption.logger).thenReturn(const NoOpLogger());
 
     connection = HAConnection(mockConOption);
     await connection.connect();

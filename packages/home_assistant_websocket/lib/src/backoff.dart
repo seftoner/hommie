@@ -34,11 +34,9 @@ class BinaryExponentialBackoff implements Backoff {
   int _currentStep;
   Duration _current;
 
-  BinaryExponentialBackoff({
-    required this.initial,
-    required this.maximumStep,
-  })  : _currentStep = 1,
-        _current = initial;
+  BinaryExponentialBackoff({required this.initial, required this.maximumStep})
+    : _currentStep = 1,
+      _current = initial;
 
   @override
   Duration get next {

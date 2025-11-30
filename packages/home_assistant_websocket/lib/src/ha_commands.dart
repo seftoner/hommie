@@ -37,8 +37,10 @@ class HACommands {
     return connection.sendMessage(ConfigMessage()).mapItem(HassConfig.fromJson);
   }
 
-  static HassSubscription subscribeEntities(IHAConnection connection,
-      [String? eventType]) {
+  static HassSubscription subscribeEntities(
+    IHAConnection connection, [
+    String? eventType,
+  ]) {
     return connection.subscribeMessage(SubscribeEntitiesMessage());
   }
 
@@ -57,12 +59,15 @@ class HACommands {
     bool? returnResponse,
   }) {
     return connection
-        .sendMessage(ServiceCallMessage(
+        .sendMessage(
+          ServiceCallMessage(
             domain: domain,
             service: service,
             target: target,
             serviceData: serviceData,
-            returnResponse: returnResponse))
+            returnResponse: returnResponse,
+          ),
+        )
         .mapItem(CallServiceResponse.fromJson);
   }
 }

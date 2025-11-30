@@ -1,6 +1,6 @@
 import 'ha_auth_token.dart';
-import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'ha_messages.dart';
+import 'logger_interface.dart';
 
 class HAAuthHandler {
   static const _authRequired = 'auth_required';
@@ -8,10 +8,16 @@ class HAAuthHandler {
   static const _authOk = 'auth_ok';
 
   final HAAuthToken authToken;
+  final HaLogger _logger;
   void Function(AuthResult)? onAuthResult;
   void Function(HABaseMessage)? sendMessage;
 
-  HAAuthHandler({required this.authToken, this.onAuthResult, this.sendMessage});
+  HAAuthHandler({
+    required this.authToken,
+    required HaLogger logger,
+    this.onAuthResult,
+    this.sendMessage,
+  }) : _logger = logger;
 
   void handleAuthMessage(Map<String, dynamic> message) {
     assert(
@@ -30,13 +36,13 @@ class HAAuthHandler {
 
       onAuthResult!(authResult);
     } catch (e) {
-      logger.e('Authentication error', error: e);
+      _logger.error('Authentication error', error: e);
       onAuthResult!(AuthResult.error(e.toString()));
     }
   }
 
   AuthResult _handleAuthRequired() {
-    logger.i('Auth required, sending credentials');
+    _logger.info('Auth required, sending credentials');
     sendMessage!(AuthMessage(accessToken: authToken.accessToken));
     return AuthResult.pending();
   }
@@ -44,12 +50,12 @@ class HAAuthHandler {
   AuthResult _handleAuthInvalid(String message) {
     // message = Invalid access token or password
     // need handle this response properly -> log out from app
-    logger.e('Authentication invalid: $message');
+    _logger.error('Authentication invalid: $message');
     return AuthResult.invalid(message);
   }
 
   AuthResult _handleAuthOk(String version) {
-    logger.i('Authentication successful. HA version: $version');
+    _logger.info('Authentication successful. HA version: $version');
     return AuthResult.success(version);
   }
 }

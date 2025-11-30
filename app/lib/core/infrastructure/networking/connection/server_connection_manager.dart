@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:hommie/core/infrastructure/logging/ha_logger_adapter.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
@@ -135,9 +136,10 @@ class _ServerConnectionManager implements IServerConnectionManager {
       }
     }
 
-    final connOption = HAConnectionOption(
+    final connOption = HAConnectionOption.withLogger(
       serverUrl: serverUrl,
       fetchAuthToken: fetchToken,
+      customLogger: HaLoggerAdapter(logger),
     );
 
     // Create orchestrator to manage the connection

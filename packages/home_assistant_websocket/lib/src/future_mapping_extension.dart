@@ -8,6 +8,7 @@ extension FutureMappingExtension on Future<dynamic> {
 
   Future<List<T>> mapList<T>(JsonMapper<T> fromJson) {
     return then(
-        (value) => (value as List<dynamic>).map((e) => fromJson(e)).toList());
+      (value) => (value as List<dynamic>).map((e) => fromJson(e)).toList(),
+    );
   }
 }

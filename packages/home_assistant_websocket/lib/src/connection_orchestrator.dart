@@ -1,18 +1,18 @@
 import 'dart:async';
 
-import 'package:hommie/core/infrastructure/logging/logger.dart';
-
 import 'backoff.dart';
 import 'ha_commands.dart';
 import 'ha_connection.dart';
 import 'ha_connection_option.dart';
 import 'ha_socket_state.dart';
+import 'logger_interface.dart';
 
 /// Orchestrates connection lifecycle and reconnection logic.
 /// Operates HAConnection from the outside, managing its lifecycle.
 class ConnectionOrchestrator {
   final HAConnectionOption _connectionOption;
   final Backoff _backoff;
+  final HaLogger _logger;
 
   HAConnection? _connection;
   StreamSubscription<HASocketState>? _stateSubscription;
@@ -30,7 +30,8 @@ class ConnectionOrchestrator {
           BinaryExponentialBackoff(
             initial: const Duration(seconds: 1),
             maximumStep: 7,
-          );
+          ),
+      _logger = _connectionOption.logger;
 
   /// Stream of connection state changes.
   Stream<HASocketState> get state => _stateController.stream;
@@ -80,7 +81,7 @@ class ConnectionOrchestrator {
     _reconnectRequested = false;
 
     try {
-      logger.i('Attempting connection...');
+      _logger.info('Attempting connection...');
 
       // Emit connecting state
       if (!_stateController.isClosed) {
@@ -95,7 +96,7 @@ class ConnectionOrchestrator {
 
       await _connection!.connect();
     } catch (e) {
-      logger.e('Unexpected connection attempt failure: $e');
+      _logger.error('Unexpected connection attempt failure: $e');
 
       await _stateSubscription?.cancel();
       _stateSubscription = null;
@@ -118,7 +119,7 @@ class ConnectionOrchestrator {
       return;
     }
 
-    logger.d(
+    _logger.debug(
       'ConnectionOrchestrator received state: $state (type: ${state.runtimeType})',
     );
 
@@ -129,7 +130,7 @@ class ConnectionOrchestrator {
 
     switch (state) {
       case Authenticated():
-        logger.i(
+        _logger.info(
           'Connection authenticated - resetting backoff and starting heartbeat',
         );
         _backoff.reset(); // Reset backoff on successful connection
@@ -137,13 +138,13 @@ class ConnectionOrchestrator {
         break;
 
       case Disconnected(type: DisconnectionType.authFailure):
-        logger.e('Authentication failed - stopping reconnection attempts');
+        _logger.error('Authentication failed - stopping reconnection attempts');
         _reconnectRequested = false;
         _stopHeartbeat();
         break;
 
       case Disconnected():
-        logger.w('Connection lost - scheduling reconnection');
+        _logger.warning('Connection lost - scheduling reconnection');
         _stopHeartbeat();
         _connection = null;
         _scheduleReconnect();
@@ -158,7 +159,7 @@ class ConnectionOrchestrator {
 
   void _scheduleReconnect() {
     if (_isDisposed || _reconnectRequested || _reconnectTimer != null) {
-      logger.d(
+      _logger.debug(
         'Skipping reconnection scheduling: disposed=$_isDisposed, requested=$_reconnectRequested, timer=${_reconnectTimer != null}',
       );
       return;
@@ -167,7 +168,7 @@ class ConnectionOrchestrator {
     _reconnectRequested = true;
     final delay = _backoff.next;
 
-    logger.i('Scheduling reconnection in ${delay.inSeconds} seconds');
+    _logger.info('Scheduling reconnection in ${delay.inSeconds} seconds');
 
     // Emit reconnecting state
     if (!_stateController.isClosed) {
@@ -177,10 +178,10 @@ class ConnectionOrchestrator {
     _reconnectTimer = Timer(delay, () {
       _reconnectTimer = null;
       if (!_isDisposed && _reconnectRequested) {
-        logger.i('Reconnection timer expired - attempting connection');
+        _logger.info('Reconnection timer expired - attempting connection');
         _attemptConnection();
       } else {
-        logger.w(
+        _logger.warning(
           'Reconnection timer expired but conditions not met: disposed=$_isDisposed, requested=$_reconnectRequested',
         );
       }
@@ -190,29 +191,29 @@ class ConnectionOrchestrator {
   void _startHeartbeat() {
     _stopHeartbeat();
 
-    logger.i('Starting heartbeat monitoring');
+    _logger.info('Starting heartbeat monitoring');
 
     _heartbeatTimer = Timer.periodic(const Duration(seconds: 30), (
       timer,
     ) async {
       // Check if connection still exists
       if (_connection == null || _isDisposed) {
-        logger.w('Heartbeat stopped - connection no longer exists');
+        _logger.warning('Heartbeat stopped - connection no longer exists');
         timer.cancel();
         _heartbeatTimer = null;
         return;
       }
 
-      logger.d('Pinging server');
+      _logger.debug('Pinging server');
 
       try {
         // Use timeout for ping to detect stale connections
         await HACommands.pingServer(
           _connection!,
         ).timeout(const Duration(seconds: 10));
-        logger.d('Ping successful');
+        _logger.debug('Ping successful');
       } catch (e) {
-        logger.e('Ping failed: $e');
+        _logger.error('Ping failed: $e');
 
         // Stop current heartbeat to prevent overlapping reconnection attempts
         _stopHeartbeat();
@@ -226,7 +227,7 @@ class ConnectionOrchestrator {
 
   void _stopHeartbeat() {
     if (_heartbeatTimer != null) {
-      logger.i('Stopping heartbeat monitoring');
+      _logger.info('Stopping heartbeat monitoring');
       _heartbeatTimer!.cancel();
       _heartbeatTimer = null;
     }

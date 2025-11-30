@@ -41,11 +41,7 @@ class WebSocketResponseConverter
   @override
   WebSocketResponse fromJson(Map<String, dynamic> json) {
     return switch (json) {
-      {
-        'id': final int id,
-        'type': 'pong',
-      } =>
-        WebSocketResponse.pong(id: id),
+      {'id': final int id, 'type': 'pong'} => WebSocketResponse.pong(id: id),
       {
         'id': final int id,
         'type': 'event',
@@ -58,11 +54,7 @@ class WebSocketResponseConverter
         'result': final dynamic result,
         'success': true,
       } =>
-        WebSocketResponse.resultSuccess(
-          id: id,
-          result: result,
-          success: true,
-        ),
+        WebSocketResponse.resultSuccess(id: id, result: result, success: true),
       {
         'id': final int id,
         'type': 'result',
@@ -75,7 +67,8 @@ class WebSocketResponseConverter
           success: true,
         ),
       _ => throw UnsupportedError(
-          'Unsupported response type: ${json['type'] as String}')
+        'Unsupported response type: ${json['type'] as String}',
+      ),
     };
   }
 

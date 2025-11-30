@@ -2,12 +2,17 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:home_assistant_websocket/src/ha_commands.dart';
+import 'package:home_assistant_websocket/src/ha_connection.dart';
 import 'package:home_assistant_websocket/src/ha_connection_option.dart';
 import 'package:home_assistant_websocket/src/ha_socket.dart';
+import 'package:home_assistant_websocket/src/ha_socket_state.dart';
+import 'package:home_assistant_websocket/src/hass_subscription.dart';
+import 'package:home_assistant_websocket/src/logger_interface.dart';
+import 'package:home_assistant_websocket/src/types/hass_event.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../../app/test/utils/tests_logger.dart';
 import 'ha_connection_test.mocks.dart';
 
 class MockEventCallback extends Mock {
@@ -27,8 +32,6 @@ void main() {
   late StreamController<HASocketState> stateController;
   late MockStreamSubscription<String> mockStreamSubscription;
   late StreamController<String> socketStreamController;
-
-  logger = testLogger;
 
   void emitSocketMessage(
     Map<String, dynamic> message, {
@@ -56,6 +59,7 @@ void main() {
     when(mockSocket.stateStream).thenAnswer((_) => stateController.stream);
     when(mockSocket.stream).thenAnswer((_) => socketStreamController.stream);
     when(mockOptions.createSocket()).thenAnswer((_) async => mockSocket);
+    when(mockOptions.logger).thenReturn(const NoOpLogger());
 
     // Make sure subscription can be cancelled
     when(

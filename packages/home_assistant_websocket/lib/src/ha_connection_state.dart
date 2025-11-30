@@ -1,18 +1,19 @@
 import 'dart:async';
 
-import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'ha_socket.dart';
 import 'ha_socket_state.dart';
+import 'logger_interface.dart';
 
 class HAConnectionState {
   final StreamController<HASocketState> _controller;
+  final HaLogger _logger;
   HASocketState _currentState;
   StreamSubscription<HASocketState>? _socketSubscription;
 
   Stream<HASocketState> get stateStream => _controller.stream;
   HASocketState get currentState => _currentState;
 
-  HAConnectionState()
+  HAConnectionState(this._logger)
     : _controller = StreamController<HASocketState>.broadcast(),
       _currentState = const Disconnected();
 
@@ -23,7 +24,7 @@ class HAConnectionState {
         setState(newState);
       },
       onError: (error) {
-        logger.e('Socket state error: $error');
+        _logger.error('Socket state error: $error');
       },
     );
 
@@ -34,7 +35,7 @@ class HAConnectionState {
     if (_currentState != newState) {
       _currentState = newState;
       _controller.add(newState);
-      logger.d('Connection state changed to: $newState');
+      _logger.debug('Connection state changed to: $newState');
     }
   }
 
