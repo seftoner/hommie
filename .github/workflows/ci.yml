@@ -15,12 +15,11 @@ jobs:
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v4.0
         with:
-          version: 3.35.1
+          version: 3.35.7
           cache: true
           channel: stable
       
       - name: Install workspace dependencies
-        working-directory: app
         run: flutter pub get
       
       - name: Analyze project source
