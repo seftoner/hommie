@@ -13,14 +13,18 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v4.0
+        uses: flutter-actions/setup-flutter@v4.1
         with:
           version: 3.35.7
           cache: true
           channel: stable
       
-      - name: Install workspace dependencies
-        working-directory: app
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1.7.1
+        with:
+          sdk: 3.9.0
+      
+      - name: Resolve workspace dependencies
         run: flutter pub get
       
       - name: Analyze project source
@@ -32,5 +36,5 @@ jobs:
         run: flutter test
 
       - name: Run home_assistant_websocket tests 
-        working-directory: home_assistant_websocket
-        run: flutter test
+        working-directory: packages/home_assistant_websocket
+        run: dart test

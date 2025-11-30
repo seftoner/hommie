@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:home_assistant_websocket/src/ha_commands.dart';
 import 'package:home_assistant_websocket/src/ha_connection.dart';
 import 'package:home_assistant_websocket/src/ha_connection_option.dart';
@@ -12,6 +11,7 @@ import 'package:home_assistant_websocket/src/logger_interface.dart';
 import 'package:home_assistant_websocket/src/types/hass_event.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 import 'ha_connection_test.mocks.dart';
 
