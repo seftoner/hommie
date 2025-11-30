@@ -24,13 +24,17 @@ jobs:
         with:
           sdk: 3.9.0
       
-      - name: Install dependencies
+      - name: Install workspace dependencies
         run: flutter pub get
-
+      
       - name: Analyze project source
         working-directory: app
         run: flutter analyze
 
-      - name: Run tests
+      - name: Run main app tests 
         working-directory: app
+        run: flutter test
+
+      - name: Run home_assistant_websocket tests 
+        working-directory: home_assistant_websocket
         run: flutter test
