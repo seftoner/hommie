@@ -3,7 +3,7 @@ version: 3.3.0
 description: Easy to use pool of concurrent workers with compute() like API.
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.9.0 <4.0.0"
 resolution: workspace
 
 dev_dependencies:
