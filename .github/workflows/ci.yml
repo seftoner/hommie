@@ -20,6 +20,7 @@ jobs:
           channel: stable
       
       - name: Install workspace dependencies
+        working-directory: app
         run: flutter pub get
       
       - name: Analyze project source
