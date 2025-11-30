@@ -18,13 +18,9 @@ jobs:
           version: 3.35.1
           cache: true
           channel: stable
-
-      - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1.7.1
-        with:
-          sdk: 3.9.0
       
       - name: Install workspace dependencies
+        working-directory: app
         run: flutter pub get
       
       - name: Analyze project source
