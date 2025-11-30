@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hommie/ui/keys.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class PermissionsPage extends StatelessWidget {
@@ -10,6 +11,7 @@ class PermissionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      key: K.onboarding.permissionPage,
       appBar: AppBar(
         title: Text('Enable Permissions', style: theme.textTheme.headlineLarge),
       ),
@@ -44,7 +46,11 @@ class PermissionsPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            FilledButton(onPressed: onConnect, child: const Text('Connect')),
+            FilledButton(
+              key: K.onboarding.permissionsConnectButton,
+              onPressed: onConnect,
+              child: const Text('Connect'),
+            ),
           ],
         ),
       ),

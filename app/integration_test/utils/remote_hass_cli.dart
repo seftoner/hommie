@@ -1,5 +1,6 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,8 +46,10 @@ class RemoteHassCli {
     }
 
     _token = const String.fromEnvironment('HASS_TOKEN');
-    assert(_token?.isNotEmpty == true,
-        'HASS_TOKEN environment variable is not set');
+    assert(
+      _token?.isNotEmpty == true,
+      'HASS_TOKEN environment variable is not set',
+    );
 
     _isInitialized = true;
   }
@@ -65,10 +68,7 @@ class RemoteHassCli {
       final response = await http.post(
         Uri.parse(_cliServerUrl),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'command': command,
-          'token': _token,
-        }),
+        body: jsonEncode({'command': command, 'token': _token}),
       );
 
       final data = jsonDecode(response.body);

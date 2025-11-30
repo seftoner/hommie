@@ -11,6 +11,7 @@ import 'package:integration_test/integration_test.dart';
 
 import './step/perform_cleanup.dart';
 import './step/the_application_is_running_in_the_foreground.dart';
+import './step/i_complete_onboarding.dart';
 import './step/i_see_page.dart';
 import './step/i_see_button.dart';
 import './step/i_tap_on_button.dart';
@@ -34,6 +35,7 @@ void main() {
     patrol('''Enter address manually and sign in''', ($) async {
       try {
         await theApplicationIsRunningInTheForeground($);
+        await iCompleteOnboarding($);
         await iSeePage($, K.serversDiscovery.page);
         await iSeeButton($, K.serversDiscovery.enterManuallyButton);
         await iTapOnButton($, K.serversDiscovery.enterManuallyButton);

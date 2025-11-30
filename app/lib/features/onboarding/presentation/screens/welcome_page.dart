@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hommie/ui/keys.dart';
 
 class WelcomePage extends StatelessWidget {
   final VoidCallback onContinue;
@@ -9,6 +10,7 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      key: K.onboarding.welcomePage,
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -21,7 +23,11 @@ class WelcomePage extends StatelessWidget {
               style: theme.textTheme.bodyLarge,
             ),
             const Spacer(),
-            FilledButton(onPressed: onContinue, child: const Text('Continue')),
+            FilledButton(
+              key: K.onboarding.welcomeContinueButton,
+              onPressed: onContinue,
+              child: const Text('Continue'),
+            ),
           ],
         ),
       ),

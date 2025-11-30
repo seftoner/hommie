@@ -12,6 +12,7 @@ class Keys {
   static const common = CommonKeys();
   static const settings = SettingsKeys();
   static const hub = HubKeys();
+  static const onboarding = OnboardingKeys();
 }
 
 class ServersDiscoveryKeys {
@@ -67,4 +68,13 @@ class HubKeys {
   final page = const Key('hubPage');
   final signOutButton = const Key('signOutButton');
   final signOutAlert = const Key('signOutDialog');
+}
+
+class OnboardingKeys {
+  const OnboardingKeys();
+
+  final permissionPage = const Key('permissionsPage');
+  final welcomePage = const Key('welcomePage');
+  final welcomeContinueButton = const Key('welcomeContinueButton');
+  final permissionsConnectButton = const Key('permissionsConnectButton');
 }

@@ -16,6 +16,7 @@ Feature: Sign In
   @quick
   Scenario: Enter address manually and sign in
     Given the application is running in the foreground
+    When I complete onboarding
     And I see {K.serversDiscovery.page} page
     And I see {K.serversDiscovery.enterManuallyButton} button
     When I tap on {K.serversDiscovery.enterManuallyButton} button
