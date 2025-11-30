@@ -22,7 +22,7 @@ jobs:
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@v1.7.1
         with:
-          sdk: 3.9.0
+          sdk: 3.10.2
       
       - name: Resolve workspace dependencies
         run: flutter pub get
