@@ -9,6 +9,7 @@ environment:
 resolution: workspace
 
 dependencies:
+  home_assistant_websocket:
   computer:
   drag_arrange:
   battery_plus: ^7.0.0
@@ -25,7 +26,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   freezed_annotation: ^3.1.0
-  json_annotation: ^4.9.0
 
   fpdart: ^1.1.1
   go_router: ^17.0.0
@@ -47,7 +47,6 @@ dependencies:
   riverpod: ^3.0.3
   riverpod_annotation: ^3.0.3
 
-  web_socket_channel: ^3.0.3
   workmanager: ^0.9.0
   flow_builder: ^0.1.0
   drift: ^2.29.0

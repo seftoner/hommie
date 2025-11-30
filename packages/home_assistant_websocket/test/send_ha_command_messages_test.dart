@@ -2,17 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/ha_messages.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart';
-import 'package:hommie/core/infrastructure/logging/logger.dart';
+import 'package:home_assistant_websocket/src/ha_commands.dart';
+import 'package:home_assistant_websocket/src/ha_connection.dart';
+import 'package:home_assistant_websocket/src/ha_connection_option.dart';
+import 'package:home_assistant_websocket/src/ha_messages.dart';
+import 'package:home_assistant_websocket/src/ha_socket.dart';
+import 'package:home_assistant_websocket/src/ha_socket_state.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../app/test/utils/tests_helpers.dart';
+import '../../../app/test/utils/tests_logger.dart';
 import 'send_ha_command_messages_test.mocks.dart';
-import 'utils/tests_helpers.dart';
-import 'utils/tests_logger.dart';
 
 @GenerateMocks([HASocket, HAConnectionOption])
 void main() {
@@ -32,9 +33,9 @@ void main() {
 
   // Helper method to verify sent message
   void verifyHAMessage(Map<String, dynamic> expectedPayload) {
-    final capturedMessage =
-        verify(mockSocket.sendMessage(captureAny)).captured.single
-            as HABaseMessage;
+    final capturedMessage = verify(mockSocket.sendMessage(captureAny))
+        .captured
+        .single as HABaseMessage;
     expect(capturedMessage.payload, equals(expectedPayload));
   }
 

@@ -1,5 +1,5 @@
-import 'package:hommie/services/networking/server_scope_provider.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/types/hass_types.dart';
+import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'areas_controller.g.dart';
@@ -10,16 +10,9 @@ class AreasController extends _$AreasController {
   Future<List<AreaEntity>> build() async {
     try {
       // Get the current server connection - this ensures we're using the active server
-      await ref.watch(serverScopeConnectionProvider.future);
-
-      // TODO: Use the connection to fetch real areas data from the current server
-      // For now, return mock data but the dependency ensures server-specific refresh
-      return const [
-        AreaEntity(area_id: 'living_room', name: 'Living Room'),
-        AreaEntity(area_id: 'bedroom', name: 'Bedroom'),
-        AreaEntity(area_id: 'kitchen', name: 'Kitchen'),
-        AreaEntity(area_id: 'bathroom', name: 'Bathroom'),
-      ];
+      final connection = await ref.watch(serverScopeConnectionProvider.future);
+      final areas = await HACommands.getAreas(connection);
+      return areas;
     } catch (e) {
       // No active server or connection failed - return empty list
       return const [];

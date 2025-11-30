@@ -1,17 +1,17 @@
+import 'package:hommie/core/infrastructure/actions/action_chain.dart';
+import 'package:hommie/core/infrastructure/actions/action_runner.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
-import 'package:hommie/features/auth/infrastructure/actions/activate_server_if_exist_action.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/features/auth/infrastructure/actions/activate_server_action.dart';
+import 'package:hommie/features/auth/infrastructure/actions/activate_server_if_exist_action.dart';
 import 'package:hommie/features/auth/infrastructure/actions/create_server_action.dart';
 import 'package:hommie/features/auth/infrastructure/actions/delete_server_action.dart';
 import 'package:hommie/features/auth/infrastructure/actions/get_config_action.dart';
 import 'package:hommie/features/auth/infrastructure/actions/oauth_login_attempt_action.dart';
 import 'package:hommie/features/auth/infrastructure/actions/sign_out_server_action.dart';
+import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:hommie/features/servers/infrastructure/providers/websocket_config_repository_provider.dart';
-import 'package:hommie/core/infrastructure/actions/action_chain.dart';
-import 'package:hommie/core/infrastructure/actions/action_runner.dart';
-import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

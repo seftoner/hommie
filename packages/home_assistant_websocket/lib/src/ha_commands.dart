@@ -1,10 +1,13 @@
 import 'dart:async';
 
-import 'package:hommie/services/networking/home_assistant_websocket/src/future_mapping_extension.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_connection.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/ha_messages.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/hass_subscription.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/types/types.dart';
+import 'package:home_assistant_websocket/src/types/hass_event.dart';
+import 'package:home_assistant_websocket/src/types/hass_service.dart';
+import 'package:home_assistant_websocket/src/types/hass_types.dart';
+
+import 'future_mapping_extension.dart';
+import 'ha_connection.dart';
+import 'ha_messages.dart';
+import 'hass_subscription.dart';
 
 class HACommands {
   /// Returns a value indicating whether the operation was successful.

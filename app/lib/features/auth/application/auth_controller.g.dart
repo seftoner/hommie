@@ -34,10 +34,9 @@ final class AuthControllerProvider
       );
 
   static const $allTransitiveDependencies0 = websocketConfigRepositoryProvider;
-  static const $allTransitiveDependencies1 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies1 = serverConnectionManagerProvider;
   static const $allTransitiveDependencies2 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies1;
+      ServerConnectionManagerProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$authControllerHash();

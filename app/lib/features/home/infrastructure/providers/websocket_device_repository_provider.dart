@@ -1,6 +1,6 @@
+import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/features/home/domain/repositories/i_device_repository.dart';
 import 'package:hommie/features/home/infrastructure/repositories/websocket_device_repository.dart';
-import 'package:hommie/services/networking/server_connection_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'websocket_device_repository_provider.g.dart';

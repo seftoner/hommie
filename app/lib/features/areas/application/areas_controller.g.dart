@@ -37,7 +37,7 @@ final class AreasControllerProvider
   AreasController create() => AreasController();
 }
 
-String _$areasControllerHash() => r'26edd4182e73efdfd63e5decd65232433fd49d09';
+String _$areasControllerHash() => r'2205a7c4a7d648c7fb2982bd5fe6d64d7ccd69a4';
 
 abstract class _$AreasController extends $AsyncNotifier<List<AreaEntity>> {
   FutureOr<List<AreaEntity>> build();

@@ -17,22 +17,10 @@ void main() {
     });
 
     test('throws FormatException for invalid version strings', () {
-      expect(
-        () => HaVersion.fromString('2023'),
-        throwsFormatException,
-      );
-      expect(
-        () => HaVersion.fromString('2023.12.0.0'),
-        throwsFormatException,
-      );
-      expect(
-        () => HaVersion.fromString('invalid'),
-        throwsFormatException,
-      );
-      expect(
-        () => HaVersion.fromString('2023.abc'),
-        throwsFormatException,
-      );
+      expect(() => HaVersion.fromString('2023'), throwsFormatException);
+      expect(() => HaVersion.fromString('2023.12.0.0'), throwsFormatException);
+      expect(() => HaVersion.fromString('invalid'), throwsFormatException);
+      expect(() => HaVersion.fromString('2023.abc'), throwsFormatException);
     });
 
     group('isAtLeast', () {

@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_auth_token.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
+import 'ha_auth_token.dart';
+import 'ha_socket.dart';
+import 'ha_socket_state.dart';
 
 typedef FetchAuthTokenCallback = Future<HAAuthToken> Function();
 

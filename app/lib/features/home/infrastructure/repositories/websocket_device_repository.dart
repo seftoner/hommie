@@ -1,6 +1,6 @@
+import 'package:home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/features/home/domain/entities/device.dart';
 import 'package:hommie/features/home/domain/repositories/i_device_repository.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_connection.dart';
 
 /// WebSocket-based implementation of device repository
 /// Fetches device data from Home Assistant via WebSocket API

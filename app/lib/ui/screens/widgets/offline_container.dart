@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/services/networking/connection_state_provider.dart';
+import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/screens/widgets/offline_banner.dart';
 

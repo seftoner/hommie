@@ -1,7 +1,7 @@
+import 'package:home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/core/infrastructure/actions/haction.dart';
 import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/types/types.dart';
+
 
 class AreaSyncTask extends HAction<List<AreaEntity>, dynamic> {
   final IHAConnection _connection;

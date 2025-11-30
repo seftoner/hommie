@@ -1,15 +1,14 @@
 import 'dart:async';
+
+import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
+import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
+import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
+import 'package:hommie/core/infrastructure/networking/providers/server_config_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
-import 'package:hommie/services/networking/i_server_connection_manager.dart';
-import 'package:hommie/services/networking/providers/server_config_provider.dart';
+import 'package:hommie/features/auth/infrastructure/providers/server_auth_token_provider.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/connection_orchestrator.dart';
-import 'package:hommie/features/auth/infrastructure/providers/server_auth_token_provider.dart';
-import 'package:hommie/services/networking/connection_state_provider.dart';
-import 'package:hommie/core/infrastructure/logging/logger.dart';
 
 part 'server_connection_manager.g.dart';
 

@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:hommie/core/infrastructure/logging/logger.dart';
+import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
+import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
 import 'package:hommie/features/auth/application/auth_controller.dart';
-import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/servers/application/active_server.dart';
-import 'package:hommie/services/networking/connection_state_provider.dart';
-import 'package:hommie/services/networking/i_server_connection_manager.dart';
-import 'package:hommie/services/networking/server_connection_manager.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -52,7 +52,7 @@ void serverSessionCoordinator(Ref ref) {
   });
 }
 
-@Dependencies([serverConnectionManager, authController])
+@Dependencies([authController])
 class _ServerSessionHandler {
   _ServerSessionHandler(this._ref);
 

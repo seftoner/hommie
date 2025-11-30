@@ -11,3 +11,4 @@ workspace:
   # Third-party local packages
   - packages/computer
   - packages/drag_arrange
+  - packages/home_assistant_websocket

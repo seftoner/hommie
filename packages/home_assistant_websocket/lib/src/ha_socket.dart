@@ -2,17 +2,17 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:hommie/features/auth/domain/entities/ha_version.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_auth_token.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
+import 'package:hommie/features/auth/domain/entities/ha_version.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
-import 'package:hommie/services/networking/home_assistant_websocket/src/ha_auth_handler.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/http_config.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'ha_auth_handler.dart';
+import 'ha_auth_token.dart';
 import 'ha_messages.dart';
+import 'ha_socket_state.dart';
+import 'http_config.dart';
 
 class HASocketConfig {
   final Uri wsUri;

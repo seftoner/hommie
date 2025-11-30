@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:hommie/services/networking/home_assistant_websocket/src/types/hass_event.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/types/hass_types.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/types/web_socket_response.dart';
+import 'types/hass_event.dart';
+import 'types/hass_types.dart';
+import 'types/web_socket_response.dart';
 
 class HAMessageHandler {
   List<WebSocketResponse> parseMessages(dynamic rawMessage) {

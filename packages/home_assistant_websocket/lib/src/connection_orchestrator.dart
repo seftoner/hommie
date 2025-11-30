@@ -1,10 +1,12 @@
 import 'dart:async';
+
 import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_connection.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_connection_option.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_commands.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/backoff.dart';
+
+import 'backoff.dart';
+import 'ha_commands.dart';
+import 'ha_connection.dart';
+import 'ha_connection_option.dart';
+import 'ha_socket_state.dart';
 
 /// Orchestrates connection lifecycle and reconnection logic.
 /// Operates HAConnection from the outside, managing its lifecycle.

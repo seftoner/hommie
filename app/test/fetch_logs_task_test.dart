@@ -4,7 +4,8 @@ import 'package:hommie/features/settings/infrastructure/tasks/fetch_logs_task.da
 void main() {
   test('Test FetchLogsTask logs parsing', () async {
     final fetchTask = FetchLogsTask(
-        FetchLogsParams(0, 100, 'test/data_samples/test_logs.log'));
+      FetchLogsParams(0, 100, 'test/data_samples/test_logs.log'),
+    );
     final result = await fetchTask.run();
 
     expect(result, isNotEmpty);
@@ -17,21 +18,26 @@ void main() {
     const limit = 3;
 
     final fetchTask = FetchLogsTask(
-      FetchLogsParams(
-        offset,
-        limit,
-        'test/data_samples/test_logs.log',
-      ),
+      FetchLogsParams(offset, limit, 'test/data_samples/test_logs.log'),
     );
 
     final result = await fetchTask.run();
 
     expect(result, isNotEmpty, reason: 'The result should not be empty.');
-    expect(result.length, equals(limit),
-        reason: 'The number of fetched logs should match the limit.');
-    expect(result.first.msg, equals('Start the application 🚀'),
-        reason: 'The first log should match the expected offset.');
-    expect(result.last.msg, equals('Access token is expired'),
-        reason: 'The last log should match the expected offset and limit.');
+    expect(
+      result.length,
+      equals(limit),
+      reason: 'The number of fetched logs should match the limit.',
+    );
+    expect(
+      result.first.msg,
+      equals('Start the application 🚀'),
+      reason: 'The first log should match the expected offset.',
+    );
+    expect(
+      result.last.msg,
+      equals('Access token is expired'),
+      reason: 'The last log should match the expected offset and limit.',
+    );
   });
 }

@@ -1,6 +1,6 @@
-import 'package:hommie/services/networking/home_assistant_websocket/ha_auth_token.dart';
+import 'ha_auth_token.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/ha_messages.dart';
+import 'ha_messages.dart';
 
 class HAAuthHandler {
   static const _authRequired = 'auth_required';

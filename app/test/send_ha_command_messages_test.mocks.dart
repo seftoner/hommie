@@ -5,13 +5,13 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
-import 'package:hommie/services/networking/home_assistant_websocket/ha_connection_option.dart'
+import '../../packages/home_assistant_websocket/lib/ha_connection_option.dart'
     as _i7;
-import 'package:hommie/services/networking/home_assistant_websocket/ha_socket_state.dart'
+import '../../packages/home_assistant_websocket/lib/ha_socket_state.dart'
     as _i4;
-import 'package:hommie/services/networking/home_assistant_websocket/src/ha_messages.dart'
+import '../../packages/home_assistant_websocket/lib/src/ha_messages.dart'
     as _i6;
-import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart'
+import '../../packages/home_assistant_websocket/lib/src/ha_socket.dart'
     as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i5;

@@ -2,16 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/ha_socket.dart';
-
-import 'package:hommie/services/networking/home_assistant_websocket/src/types/hass_event.dart';
-import 'package:mockito/mockito.dart';
+import 'package:home_assistant_websocket/src/ha_connection_option.dart';
+import 'package:home_assistant_websocket/src/ha_socket.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
+import '../../../app/test/utils/tests_logger.dart';
 import 'ha_connection_test.mocks.dart';
-import 'utils/tests_logger.dart';
 
 class MockEventCallback extends Mock {
   void call(Map<String, dynamic> event);

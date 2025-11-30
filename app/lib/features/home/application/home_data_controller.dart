@@ -1,4 +1,4 @@
-import 'package:hommie/services/networking/server_scope_provider.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_data_controller.g.dart';

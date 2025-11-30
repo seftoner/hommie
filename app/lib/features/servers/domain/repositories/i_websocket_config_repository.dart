@@ -1,6 +1,4 @@
-import 'package:hommie/services/networking/home_assistant_websocket/ha_commands.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/ha_connection.dart';
-import 'package:hommie/services/networking/home_assistant_websocket/src/types/types.dart';
+import 'package:home_assistant_websocket/home_assistant_websocket.dart';
 
 /// Repository for WebSocket-only operations (ping, config, etc.)
 ///

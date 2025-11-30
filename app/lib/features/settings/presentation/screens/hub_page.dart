@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
-import 'package:hommie/features/settings/application/hub_status_provider.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
 import 'package:hommie/features/auth/domain/entities/ha_version.dart';
-import 'package:hommie/services/networking/connection_state_provider.dart';
+import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/settings/application/hub_status_provider.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
