@@ -25,7 +25,7 @@ extension AreaDomainMapper on Area {
   }
 }
 
-extension AreFutureaListMapper on Future<List<AreaEntity>> {
+extension AreaFutureListMapper on Future<List<AreaEntity>> {
   Future<List<Area>> mapToDomain() {
     return then((list) => list.map((value) => value.toDomain()).toList());
   }
