@@ -10,11 +10,41 @@ class EnterAddressPage extends HookConsumerWidget {
 
   const EnterAddressPage({super.key, required this.onConnect});
 
+  /// Validates that the given URL is a valid server address.
+  /// Returns an error message if invalid, or null if valid.
+  static String? validateServerUrl(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a server address';
+    }
+
+    try {
+      final uri = Uri.parse(value);
+      if (!uri.hasScheme || (uri.scheme != 'http' && uri.scheme != 'https')) {
+        return 'Address must start with http:// or https://';
+      }
+      if (uri.host.isEmpty) {
+        return 'Please enter a valid host address';
+      }
+    } on FormatException {
+      return 'Invalid server address format';
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = useMemoized(() => GlobalKey<FormState>());
     final haServerURLController = useTextEditingController(
       text: kDebugMode ? 'http://localhost:8123' : 'http://192.168.0.',
     );
+
+    void submitForm() {
+      if (formKey.currentState!.validate()) {
+        onConnect(haServerURLController.text);
+      }
+    }
+
     return Scaffold(
       key: K.manualAddress.page,
       appBar: AppBar(),
@@ -22,40 +52,40 @@ class EnterAddressPage extends HookConsumerWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
-                child: Text(
-                  'Enter your hub address',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-              ),
-              Expanded(
-                child: Center(
-                  child: TextField(
-                    key: K.manualAddress.addressField,
-                    controller: haServerURLController,
-                    decoration: const InputDecoration(
-                      labelText: 'Hub address',
-                      border: OutlineInputBorder(),
-                    ),
-                    onSubmitted: (value) {
-                      onConnect(value);
-                    },
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
+                  child: Text(
+                    'Enter your hub address',
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
-              ),
-              const Spacer(),
-              FilledButton(
-                key: K.manualAddress.connectButton,
-                onPressed: () {
-                  onConnect(haServerURLController.text);
-                },
-                child: const Text('Connect'),
-              ),
-            ],
+                Expanded(
+                  child: Center(
+                    child: TextFormField(
+                      key: K.manualAddress.addressField,
+                      controller: haServerURLController,
+                      decoration: const InputDecoration(
+                        labelText: 'Hub address',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: validateServerUrl,
+                      onFieldSubmitted: (_) => submitForm(),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                FilledButton(
+                  key: K.manualAddress.connectButton,
+                  onPressed: submitForm,
+                  child: const Text('Connect'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
