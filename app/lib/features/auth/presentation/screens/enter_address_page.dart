@@ -19,14 +19,6 @@ class EnterAddressPage extends HookConsumerWidget {
     );
     final focusNode = useFocusNode();
 
-    useEffect(() {
-      // Auto-focus the text field when the page opens
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        focusNode.requestFocus();
-      });
-      return null;
-    }, const []);
-
     void submitForm() {
       if (formKey.currentState!.validate()) {
         onConnect(haServerURLController.text.trim());
@@ -58,6 +50,7 @@ class EnterAddressPage extends HookConsumerWidget {
                       key: K.manualAddress.addressField,
                       controller: haServerURLController,
                       focusNode: focusNode,
+                      autofocus: true,
                       keyboardType: TextInputType.url,
                       decoration: const InputDecoration(
                         labelText: 'Hub address',
