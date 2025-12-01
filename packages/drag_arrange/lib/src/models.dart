@@ -9,10 +9,7 @@ class DragListItem {
   ///
   /// The [key] is a required unique identifier for the item.
   /// The [widget] is the widget content of the item.
-  const DragListItem({
-    required this.key,
-    required this.widget,
-  });
+  const DragListItem({required this.key, required this.widget});
 
   @override
   bool operator ==(Object other) {
@@ -34,17 +31,16 @@ abstract class DragGridItem extends DragListItem {
   /// The [mainAxisCellCount] specifies the number of cells along the main axis.
   /// The [crossAxisCellCount] specifies the number of cells along the cross axis.
   /// The [widget] is the widget content of the item.
-  const DragGridItem({
-    required super.key,
-    required super.widget,
-  });
+  const DragGridItem({required super.key, required super.widget});
 
   num get mainAxisSize;
   int get crossAxisSize;
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
     return other is DragGridItem &&
         key == other.key &&
         mainAxisSize == other.mainAxisSize &&

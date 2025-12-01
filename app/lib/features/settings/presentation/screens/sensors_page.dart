@@ -61,7 +61,7 @@ class _SensorsList extends StatelessWidget {
           trailing: Text(sensorValue),
         );
       },
-      separatorBuilder: (_, __) => const Divider(height: 1),
+      separatorBuilder: (_, _) => const Divider(height: 1),
       itemCount: sensors.length,
     );
   }

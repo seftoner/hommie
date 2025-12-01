@@ -3,14 +3,14 @@ import 'package:hommie/features/settings/domain/entities/logs.dart';
 import 'package:hommie/features/settings/infrastructure/providers/logs_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'logs_list_controller.g.dart';
 part 'logs_list_controller.freezed.dart';
+part 'logs_list_controller.g.dart';
 
 @freezed
 sealed class LogsListState with _$LogsListState {
-  factory LogsListState(
-    bool isLoadingMore,
-    List<Log> logs, {
+  factory LogsListState({
+    required bool isLoadingMore,
+    required List<Log> logs,
     @Default(false) bool hasReachedEnd,
   }) = _LogsListState;
 }
@@ -27,7 +27,7 @@ class LogsListController extends _$LogsListController {
     final logs = await repository.fetchLogs(_offset, _limit);
     _offset += logs.length;
 
-    return LogsListState(false, logs);
+    return LogsListState(isLoadingMore: false, logs: logs);
   }
 
   Future<void> loadMoreLogs() async {

@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter/widgets.dart';
 
 import 'shakeConstant/shake_constant.dart';
@@ -19,13 +20,14 @@ class ShakeWidget extends StatefulWidget {
   /// AnimationController can help if  want to control by yourself
   final Function(AnimationController controller)? onController;
 
-  const ShakeWidget(
-      {super.key,
-      required this.child,
-      required this.shakeConstant,
-      this.duration,
-      this.enabled = false,
-      this.onController});
+  const ShakeWidget({
+    super.key,
+    required this.child,
+    required this.shakeConstant,
+    this.duration,
+    this.enabled = false,
+    this.onController,
+  });
 
   @override
   State<ShakeWidget> createState() => _ShakeWidgetState();
@@ -41,8 +43,9 @@ class _ShakeWidgetState extends State<ShakeWidget>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        vsync: this,
-        duration: widget.duration ?? widget.shakeConstant.duration);
+      vsync: this,
+      duration: widget.duration ?? widget.shakeConstant.duration,
+    );
 
     _translateAnimation = _createAnimation(
       values: widget.shakeConstant.translate,
@@ -52,10 +55,8 @@ class _ShakeWidgetState extends State<ShakeWidget>
 
     _rotateAnimation = _createAnimation(
       values: widget.shakeConstant.rotate,
-      createTween: (begin, end) => Tween(
-        begin: math.pi / 180 * begin,
-        end: math.pi / 180 * end,
-      ),
+      createTween: (begin, end) =>
+          Tween(begin: math.pi / 180 * begin, end: math.pi / 180 * end),
       defaultValue: 0.0,
     );
 
@@ -95,15 +96,12 @@ class _ShakeWidgetState extends State<ShakeWidget>
     }
 
     return TweenSequence<T>(
-      List.generate(
-        values.length - 1,
-        (index) {
-          return TweenSequenceItem(
-            tween: createTween(values[index], values[index + 1]),
-            weight: _calculateWeight(index, values),
-          );
-        },
-      ),
+      List.generate(values.length - 1, (index) {
+        return TweenSequenceItem(
+          tween: createTween(values[index], values[index + 1]),
+          weight: _calculateWeight(index, values),
+        );
+      }),
     ).animate(_controller);
   }
 
@@ -138,10 +136,24 @@ class _ShakeWidgetState extends State<ShakeWidget>
             // Apply transformations in local space only
             transformHitTests: false, // Don't affect hit testing
             transform: Matrix4.identity()
+              ..translateByDouble(
+                _translateAnimation.value.dx,
+                _translateAnimation.value.dy,
+                0.0,
+                1.0,
+              )
+              ..rotateZ(_rotateAnimation.value),
+            child: child,
+
+            /*
+            * Comment this code as it works previoulsy, but translate method is
+            * deprecated now. I can't test this funtionality by now, but I need to pass anyze checks. 
+            
+            Matrix4.identity()
               ..translate(
                   _translateAnimation.value.dx, _translateAnimation.value.dy)
               ..rotateZ(_rotateAnimation.value),
-            child: child,
+             */
           );
         },
 

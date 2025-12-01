@@ -47,9 +47,7 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter WorkManager Example'),
-        ),
+        appBar: AppBar(title: const Text('Flutter WorkManager Example')),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -71,10 +69,7 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                       }
                     }
                     if (!workmanagerInitialized) {
-                      Workmanager().initialize(
-                        callbackDispatcher,
-                        isInDebugMode: true,
-                      );
+                      await Workmanager().initialize(callbackDispatcher);
                       setState(() => workmanagerInitialized = true);
                     }
                   },
@@ -127,14 +122,15 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                 //This task runs once
                 //This wait at least 10 seconds before running
                 ElevatedButton(
-                    child: const Text('Register Delayed OneOff Task'),
-                    onPressed: () {
-                      Workmanager().registerOneOffTask(
-                        simpleDelayedTask,
-                        simpleDelayedTask,
-                        initialDelay: const Duration(seconds: 10),
-                      );
-                    }),
+                  child: const Text('Register Delayed OneOff Task'),
+                  onPressed: () {
+                    Workmanager().registerOneOffTask(
+                      simpleDelayedTask,
+                      simpleDelayedTask,
+                      initialDelay: const Duration(seconds: 10),
+                    );
+                  },
+                ),
                 const SizedBox(height: 8),
                 Text(
                   'Register periodic task (android only)',
@@ -189,7 +185,8 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                         }
                       : null,
                   child: const Text(
-                      'Register Periodic Background App Refresh (iOS)'),
+                    'Register Periodic Background App Refresh (iOS)',
+                  ),
                 ),
 
                 // This task runs only once, to perform a time consuming task at
@@ -218,10 +215,8 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
                 ElevatedButton(
                   onPressed: Platform.isAndroid
                       ? () async {
-                          final workInfo =
-                              await Workmanager().isScheduledByUniqueName(
-                            simplePeriodicTask,
-                          );
+                          final workInfo = await Workmanager()
+                              .isScheduledByUniqueName(simplePeriodicTask);
                           print('isscheduled = $workInfo');
                         }
                       : null,
@@ -283,8 +278,9 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Workmanager not initialized'),
-          content:
-              const Text('Workmanager is not initialized, please initialize'),
+          content: const Text(
+            'Workmanager is not initialized, please initialize',
+          ),
           actions: <Widget>[
             TextButton(
               child: const Text('OK'),
@@ -302,8 +298,10 @@ class _BGTaskDebugginPageState extends State<BGTaskDebugginPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('No permission'),
-          content: Text('Background app refresh is disabled, please enable in '
-              'App settings. Status ${hasPermission.name}'),
+          content: Text(
+            'Background app refresh is disabled, please enable in '
+            'App settings. Status ${hasPermission.name}',
+          ),
           actions: <Widget>[
             TextButton(
               child: const Text('OK'),

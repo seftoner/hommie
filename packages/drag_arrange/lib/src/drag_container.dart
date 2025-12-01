@@ -138,9 +138,7 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
   Widget build(BuildContext context) {
     final items = widget.dataList.map((e) => setDraggable(e as T)).toList();
     if (widget.isDragNotification) {
-      return DragNotification(
-        child: widget.buildItems(items),
-      );
+      return DragNotification(child: widget.buildItems(items));
     } else {
       return widget.buildItems(items);
     }
@@ -179,8 +177,12 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
       _timer = Timer(const Duration(milliseconds: 200), () {
         if (!DragNotification.isScroll) {
           if (widget.dragCallbacks.onWillAccept != null) {
-            widget.dragCallbacks.onWillAccept
-                ?.call(moveData, data, isFront, acceptDetails: acceptDetails);
+            widget.dragCallbacks.onWillAccept?.call(
+              moveData,
+              data,
+              isFront: isFront,
+              acceptDetails: acceptDetails,
+            );
           } else if (moveData != null) {
             final int oldIndex = widget.dataList.indexOf(moveData);
             int newIndex = widget.dataList.indexOf(data);
@@ -198,8 +200,10 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
                 }
               }
             });
-            acceptDetails =
-                AcceptDetails(oldIndex: originalindex!, newIndex: newIndex);
+            acceptDetails = AcceptDetails(
+              oldIndex: originalindex!,
+              newIndex: newIndex,
+            );
           }
         }
       });
@@ -229,99 +233,122 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
   Widget setDragScope(T data, Widget child) {
     final Widget keyWidget = child;
     return DragItem(
-        child: Stack(
-          children: [
-            if (isDragStart &&
-                dragData == data &&
-                widget.draggingWidgetOpacity > 0)
-              AnimatedOpacity(
-                opacity: widget.draggingWidgetOpacity,
-                duration: const Duration(milliseconds: 300),
-                child: keyWidget,
-              )
-            else
-              Visibility(
-                maintainState: true,
-                visible: dragData != data,
-                child: widget.enableShakeAnimation && widget.isDrag
-                    ? ShakeWidget(
-                        shakeConstant: RandomShakeConstant(
-                          offsetX: const ShakeRange(min: -1.5, max: 1.5),
-                          offsetY: const ShakeRange(min: -1.5, max: 1.5),
-                          rotation: const ShakeRange(min: -0.3, max: 1.5),
-                        ),
-                        enabled: true,
-                        child: keyWidget,
-                      )
-                    : keyWidget,
-              ),
-            if (isDragStart && !isContains(data))
-              Flex(
-                direction: widget.scrollDirection,
-                children: <Widget>[
-                  getSizedBox(
-                    data,
-                    DragTarget<T>(
-                        onWillAcceptWithDetails:
-                            (DragTargetDetails<T> details) {
-                          setWillAccept(details.data, data);
-                          return true;
-                        },
-                        onAcceptWithDetails: widget.dragCallbacks.onAccept == null
-                            ? null
-                            : (DragTargetDetails<T> details) => widget
-                                .dragCallbacks.onAccept
-                                ?.call(details.data, data, true,
-                                    acceptDetails: acceptDetails),
-                        onLeave: widget.dragCallbacks.onLeave == null
-                            ? null
-                            : (T? moveData) => widget.dragCallbacks.onLeave
-                                ?.call(moveData, data, true),
-                        onMove: widget.dragCallbacks.onMove == null
-                            ? null
-                            : (DragTargetDetails<T> details) => widget
-                                .dragCallbacks.onMove
-                                ?.call(data, details, true),
-                        hitTestBehavior: widget.hitTestBehavior,
-                        builder: (BuildContext context, List<T?> candidateData,
-                            List<dynamic> rejectedData) {
+      child: Stack(
+        children: [
+          if (isDragStart &&
+              dragData == data &&
+              widget.draggingWidgetOpacity > 0)
+            AnimatedOpacity(
+              opacity: widget.draggingWidgetOpacity,
+              duration: const Duration(milliseconds: 300),
+              child: keyWidget,
+            )
+          else
+            Visibility(
+              maintainState: true,
+              visible: dragData != data,
+              child: widget.enableShakeAnimation && widget.isDrag
+                  ? ShakeWidget(
+                      shakeConstant: RandomShakeConstant(
+                        offsetX: const ShakeRange(min: -1.5, max: 1.5),
+                        offsetY: const ShakeRange(min: -1.5, max: 1.5),
+                        rotation: const ShakeRange(min: -0.3, max: 1.5),
+                      ),
+                      enabled: true,
+                      child: keyWidget,
+                    )
+                  : keyWidget,
+            ),
+          if (isDragStart && !isContains(data))
+            Flex(
+              direction: widget.scrollDirection,
+              children: <Widget>[
+                getSizedBox(
+                  data,
+                  DragTarget<T>(
+                    onWillAcceptWithDetails: (DragTargetDetails<T> details) {
+                      setWillAccept(details.data, data);
+                      return true;
+                    },
+                    onAcceptWithDetails: widget.dragCallbacks.onAccept == null
+                        ? null
+                        : (DragTargetDetails<T> details) =>
+                              widget.dragCallbacks.onAccept?.call(
+                                details.data,
+                                data,
+                                isFront: true,
+                                acceptDetails: acceptDetails,
+                              ),
+                    onLeave: widget.dragCallbacks.onLeave == null
+                        ? null
+                        : (T? moveData) => widget.dragCallbacks.onLeave?.call(
+                            moveData,
+                            data,
+                            isFront: true,
+                          ),
+                    onMove: widget.dragCallbacks.onMove == null
+                        ? null
+                        : (DragTargetDetails<T> details) => widget
+                              .dragCallbacks
+                              .onMove
+                              ?.call(data, details, isFront: true),
+                    hitTestBehavior: widget.hitTestBehavior,
+                    builder:
+                        (
+                          BuildContext context,
+                          List<T?> candidateData,
+                          List<dynamic> rejectedData,
+                        ) {
                           return Container(color: Colors.transparent);
-                        }),
-                  ),
-                  getSizedBox(
-                    data,
-                    DragTarget<T>(
-                        onWillAcceptWithDetails:
-                            (DragTargetDetails<T> details) {
-                          setWillAccept(details.data, data, isFront: false);
-                          return true;
                         },
-                        onAcceptWithDetails: widget.dragCallbacks.onAccept == null
-                            ? null
-                            : (DragTargetDetails<T> details) => widget
-                                .dragCallbacks.onAccept
-                                ?.call(details.data, data, false,
-                                    acceptDetails: acceptDetails),
-                        onLeave: widget.dragCallbacks.onLeave == null
-                            ? null
-                            : (T? moveData) => widget.dragCallbacks.onLeave
-                                ?.call(moveData, data, false),
-                        onMove: widget.dragCallbacks.onMove == null
-                            ? null
-                            : (DragTargetDetails<T> details) => widget
-                                .dragCallbacks.onMove
-                                ?.call(data, details, false),
-                        hitTestBehavior: widget.hitTestBehavior,
-                        builder: (BuildContext context, List<T?> candidateData,
-                            List<dynamic> rejectedData) {
-                          return Container(color: Colors.transparent);
-                        }),
                   ),
-                ],
-              ),
-          ],
-        ),
-        onAnimationStatus: (AnimationStatus status) => this.status = status);
+                ),
+                getSizedBox(
+                  data,
+                  DragTarget<T>(
+                    onWillAcceptWithDetails: (DragTargetDetails<T> details) {
+                      setWillAccept(details.data, data, isFront: false);
+                      return true;
+                    },
+                    onAcceptWithDetails: widget.dragCallbacks.onAccept == null
+                        ? null
+                        : (DragTargetDetails<T> details) =>
+                              widget.dragCallbacks.onAccept?.call(
+                                details.data,
+                                data,
+                                isFront: false,
+                                acceptDetails: acceptDetails,
+                              ),
+                    onLeave: widget.dragCallbacks.onLeave == null
+                        ? null
+                        : (T? moveData) => widget.dragCallbacks.onLeave?.call(
+                            moveData,
+                            data,
+                            isFront: false,
+                          ),
+                    onMove: widget.dragCallbacks.onMove == null
+                        ? null
+                        : (DragTargetDetails<T> details) => widget
+                              .dragCallbacks
+                              .onMove
+                              ?.call(data, details, isFront: false),
+                    hitTestBehavior: widget.hitTestBehavior,
+                    builder:
+                        (
+                          BuildContext context,
+                          List<T?> candidateData,
+                          List<dynamic> rejectedData,
+                        ) {
+                          return Container(color: Colors.transparent);
+                        },
+                  ),
+                ),
+              ],
+            ),
+        ],
+      ),
+      onAnimationStatus: (AnimationStatus status) => this.status = status,
+    );
   }
 
   Widget setDraggable(T data) {
@@ -347,8 +374,11 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
             onDraggableCanceled: (Velocity velocity, Offset offset) {
               setDragStart(isDragStart: false);
               endAnimation();
-              widget.dragCallbacks.onDraggableCanceled
-                  ?.call(velocity, offset, data);
+              widget.dragCallbacks.onDraggableCanceled?.call(
+                velocity,
+                offset,
+                data,
+              );
             },
             onDragEnd: (details) {
               setDragStart(isDragStart: false);
@@ -378,8 +408,11 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
             onDraggableCanceled: (Velocity velocity, Offset offset) {
               setDragStart(isDragStart: false);
               endAnimation();
-              widget.dragCallbacks.onDraggableCanceled
-                  ?.call(velocity, offset, data);
+              widget.dragCallbacks.onDraggableCanceled?.call(
+                velocity,
+                offset,
+                data,
+              );
             },
             onDragEnd: (DraggableDetails details) {
               setDragStart(isDragStart: false);
@@ -397,16 +430,12 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
       return child;
     });
 
-    return RenderBoxSize(
-      draggable,
-      (Size size) {
-        mapSize[data] = size;
-        if (mapSize.length == widget.dataList.length) {
-          setState(() {});
-        }
-      },
-      key: ValueKey<T>(data),
-    );
+    return RenderBoxSize(draggable, (Size size) {
+      mapSize[data] = size;
+      if (mapSize.length == widget.dataList.length) {
+        setState(() {});
+      }
+    }, key: ValueKey<T>(data));
   }
 
   Widget setFeedback(T data, Widget e) {
@@ -435,14 +464,16 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
       scrollRenderBox = context.findRenderObject()! as RenderBox;
     }
     final Offset scrollOrigin = scrollRenderBox.localToGlobal(Offset.zero);
-    final double scrollStart =
-        _offsetExtent(scrollOrigin, widget.scrollDirection);
+    final double scrollStart = _offsetExtent(
+      scrollOrigin,
+      widget.scrollDirection,
+    );
     final double scrollEnd =
         scrollStart + _sizeExtent(scrollRenderBox.size, widget.scrollDirection);
     final double currentOffset = _offsetExtent(details, widget.scrollDirection);
     final double mediaQuery =
         _sizeExtent(MediaQuery.of(context).size, widget.scrollDirection) *
-            widget.edgeScroll;
+        widget.edgeScroll;
     if (currentOffset < (scrollStart + mediaQuery)) {
       animateTo(mediaQuery, isNext: false);
     } else if (currentOffset > (scrollEnd - mediaQuery)) {
@@ -463,21 +494,24 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
     }
     DragNotification.isScroll = true;
     _scrollableTimer = Timer.periodic(
-        Duration(milliseconds: widget.edgeScrollSpeedMilliseconds),
-        (Timer timer) {
-      if (isNext && position.pixels >= position.maxScrollExtent) {
-        endAnimation();
-      } else if (!isNext && position.pixels <= position.minScrollExtent) {
-        endAnimation();
-      } else {
-        endWillAccept();
-        position.animateTo(
-          position.pixels + (isNext ? mediaQuery : -mediaQuery),
-          duration: Duration(milliseconds: widget.edgeScrollSpeedMilliseconds),
-          curve: Curves.linear,
-        );
-      }
-    });
+      Duration(milliseconds: widget.edgeScrollSpeedMilliseconds),
+      (Timer timer) {
+        if (isNext && position.pixels >= position.maxScrollExtent) {
+          endAnimation();
+        } else if (!isNext && position.pixels <= position.minScrollExtent) {
+          endAnimation();
+        } else {
+          endWillAccept();
+          position.animateTo(
+            position.pixels + (isNext ? mediaQuery : -mediaQuery),
+            duration: Duration(
+              milliseconds: widget.edgeScrollSpeedMilliseconds,
+            ),
+            curve: Curves.linear,
+          );
+        }
+      },
+    );
   }
 
   void endAnimation() {

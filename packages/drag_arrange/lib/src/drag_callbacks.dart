@@ -1,22 +1,37 @@
 import 'package:flutter/material.dart';
+
 import 'models.dart';
 
 /// A class that holds all drag-related callbacks for the reorderable scroll view.
 class DragCallbacks<T extends DragListItem> {
   /// Called when a draggable is dropped onto a [DragTarget].
-  final void Function(T? moveData, T data, bool isFront,
-      {AcceptDetails? acceptDetails})? onAccept;
+  final void Function(
+    T? moveData,
+    T data, {
+    required bool isFront,
+    AcceptDetails? acceptDetails,
+  })?
+  onAccept;
 
   /// Called to determine whether this [DragTarget] is interested in receiving the dragged item.
-  final bool Function(T? moveData, T data, bool isFront,
-      {AcceptDetails? acceptDetails})? onWillAccept;
+  final bool Function(
+    T? moveData,
+    T data, {
+    required bool isFront,
+    AcceptDetails? acceptDetails,
+  })?
+  onWillAccept;
 
   /// Called when a draggable leaves the target.
-  final void Function(T? moveData, T data, bool isFront)? onLeave;
+  final void Function(T? moveData, T data, {required bool isFront})? onLeave;
 
   /// Called when a draggable moves within the target.
-  final void Function(T data, DragTargetDetails<T> details, bool isFront)?
-      onMove;
+  final void Function(
+    T data,
+    DragTargetDetails<T> details, {
+    required bool isFront,
+  })?
+  onMove;
 
   /// Called when dragging starts.
   final void Function(T data)? onDragStarted;
@@ -26,7 +41,7 @@ class DragCallbacks<T extends DragListItem> {
 
   /// Called when the draggable is dropped without being accepted.
   final void Function(Velocity velocity, Offset offset, T data)?
-      onDraggableCanceled;
+  onDraggableCanceled;
 
   /// Called when the draggable is dropped.
   final void Function(DraggableDetails details, T data)? onDragEnd;

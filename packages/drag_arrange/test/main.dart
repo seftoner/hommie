@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:drag_arrange/drag_arrange.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,49 +15,49 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Builder(builder: (context) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Example'),
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomePage(isList: true),
-                      ),
-                    );
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text('List'),
+      home: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Example')),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomePage(isList: true),
+                        ),
+                      );
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text('List'),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomePage(isList: false),
-                      ),
-                    );
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text('Grid'),
+                  const SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomePage(isList: false),
+                        ),
+                      );
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text('Grid'),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 }
@@ -78,24 +79,24 @@ class _HomePageState extends State<HomePage> {
       mainAxisCellCount: 1,
       crossAxisCellCount: Random().nextInt(2) + 1,
       widget: const Card(
-          child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Center(child: Text('Non Draggable')),
-      )),
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Center(child: Text('Non Draggable')),
+        ),
+      ),
     );
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.isList ? 'List Example' : 'Grid Example'),
         actions: [
           IconButton(
-              onPressed: () {
-                setState(() {
-                  _dragEnabled = !_dragEnabled;
-                });
-              },
-              icon: Icon(
-                _dragEnabled ? Icons.pause : Icons.play_arrow,
-              ))
+            onPressed: () {
+              setState(() {
+                _dragEnabled = !_dragEnabled;
+              });
+            },
+            icon: Icon(_dragEnabled ? Icons.pause : Icons.play_arrow),
+          ),
         ],
       ),
       body: widget.isList
@@ -113,32 +114,33 @@ class _HomePageState extends State<HomePage> {
               axis: Axis.vertical,
               isLongPressDraggable: false,
               isNotDragList: [nonDraggable],
-              children: List.generate(
-                5,
-                (index) => DragListItem(
-                  key: ValueKey(index.toString()),
-                  widget: Card(
-                      child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Center(child: Text('Item $index')),
-                  )),
-                ),
-              )..addAll(
-                  [
+              children:
+                  List.generate(
+                    5,
+                    (index) => DragListItem(
+                      key: ValueKey(index.toString()),
+                      widget: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Center(child: Text('Item $index')),
+                        ),
+                      ),
+                    ),
+                  )..addAll([
                     nonDraggable,
                     ...List.generate(
                       5,
                       (index) => DragListItem(
                         key: ValueKey('${index + 5}'),
                         widget: Card(
-                            child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Center(child: Text('Item ${index + 5}')),
-                        )),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Center(child: Text('Item ${index + 5}')),
+                          ),
+                        ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  ]),
             )
           : DragGridView(
               enableReordering: _dragEnabled,
@@ -150,7 +152,9 @@ class _HomePageState extends State<HomePage> {
               crossAxisSpacing: 16,
               dragCallbacks: DragCallbacks(
                 onDragEnd: (details, item) {
-                  print('onDragEnd: $details ${item.key}');
+                  if (kDebugMode) {
+                    print('onDragEnd: $details ${item.key}');
+                  }
                 },
               ),
 
@@ -158,27 +162,29 @@ class _HomePageState extends State<HomePage> {
               isLongPressDraggable: false,
 
               isNotDragList: [nonDraggable],
-              children: List.generate(
-                5,
-                (index) => DragGridCountItem(
-                  key: ValueKey(index.toString()),
-                  mainAxisCellCount: 1,
-                  crossAxisCellCount: Random().nextInt(2) + 1,
-                  widget: Card(child: Center(child: Text('Item $index'))),
-                ),
-              )..addAll([
-                  nonDraggable,
-                  ...List.generate(
+              children:
+                  List.generate(
                     5,
                     (index) => DragGridCountItem(
-                      key: ValueKey('${index + 5}'),
+                      key: ValueKey(index.toString()),
                       mainAxisCellCount: 1,
                       crossAxisCellCount: Random().nextInt(2) + 1,
-                      widget:
-                          Card(child: Center(child: Text('Item ${index + 5}'))),
+                      widget: Card(child: Center(child: Text('Item $index'))),
                     ),
-                  )
-                ]), // Provide the list of reorderable items
+                  )..addAll([
+                    nonDraggable,
+                    ...List.generate(
+                      5,
+                      (index) => DragGridCountItem(
+                        key: ValueKey('${index + 5}'),
+                        mainAxisCellCount: 1,
+                        crossAxisCellCount: Random().nextInt(2) + 1,
+                        widget: Card(
+                          child: Center(child: Text('Item ${index + 5}')),
+                        ),
+                      ),
+                    ),
+                  ]), // Provide the list of reorderable items
             ),
     );
   }

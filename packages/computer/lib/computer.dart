@@ -1,3 +1,3 @@
-library computer;
+library;
 
 export 'src/computer.dart';

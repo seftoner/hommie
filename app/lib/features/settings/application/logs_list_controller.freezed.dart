@@ -202,7 +202,7 @@ return $default(_that.isLoadingMore,_that.logs,_that.hasReachedEnd);case _:
 
 
 class _LogsListState implements LogsListState {
-   _LogsListState(this.isLoadingMore, final  List<Log> logs, {this.hasReachedEnd = false}): _logs = logs;
+   _LogsListState({required this.isLoadingMore, required final  List<Log> logs, this.hasReachedEnd = false}): _logs = logs;
   
 
 @override final  bool isLoadingMore;
@@ -264,8 +264,8 @@ class __$LogsListStateCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? isLoadingMore = null,Object? logs = null,Object? hasReachedEnd = null,}) {
   return _then(_LogsListState(
-null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
-as bool,null == logs ? _self._logs : logs // ignore: cast_nullable_to_non_nullable
+isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
+as bool,logs: null == logs ? _self._logs : logs // ignore: cast_nullable_to_non_nullable
 as List<Log>,hasReachedEnd: null == hasReachedEnd ? _self.hasReachedEnd : hasReachedEnd // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
