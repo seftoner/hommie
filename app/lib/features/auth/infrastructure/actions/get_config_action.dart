@@ -45,7 +45,7 @@ class GetConfigAction extends HAction {
       return const HActionResult(status: Status.success);
     } catch (e) {
       logger.e('Failed to get server configuration: $e');
-      return HActionResult.failure(e);
+      return HActionResult.failure(Exception('Failed to get server configuration: $e'));
     }
   }
 
