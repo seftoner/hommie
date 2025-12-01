@@ -44,7 +44,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           const Divider(),
           ListTile(
-            key: K.settings.nfsItem,
+            key: K.settings.nfcItem,
             leading: const Icon(Symbols.nfc_rounded),
             title: const Text('NFC'),
             trailing: const Icon(Symbols.chevron_right_rounded),
