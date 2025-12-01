@@ -146,8 +146,8 @@ class _ShakeWidgetState extends State<ShakeWidget>
             child: child,
 
             /*
-            * Comment this code as it works previoulsy, but translate method is
-            * deprecated now. I can't test this funtionality by now, but I need to pass anyze checks. 
+            * Comment this code as it works previously, but translate method is
+            * deprecated now. I can't test this functionality by now, but I need to pass analyze checks. 
             
             Matrix4.identity()
               ..translate(
