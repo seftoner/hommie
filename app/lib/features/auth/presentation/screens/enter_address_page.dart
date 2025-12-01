@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hommie/features/auth/domain/entities/server_url.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -9,28 +10,6 @@ class EnterAddressPage extends HookConsumerWidget {
   final void Function(String serverUrl) onConnect;
 
   const EnterAddressPage({super.key, required this.onConnect});
-
-  /// Validates that the given URL is a valid server address.
-  /// Returns an error message if invalid, or null if valid.
-  static String? validateServerUrl(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter a server address';
-    }
-
-    try {
-      final uri = Uri.parse(value);
-      if (!uri.hasScheme || (uri.scheme != 'http' && uri.scheme != 'https')) {
-        return 'Address must start with http:// or https://';
-      }
-      if (uri.host.isEmpty) {
-        return 'Please enter a valid host address';
-      }
-    } on FormatException {
-      return 'Invalid server address format';
-    }
-
-    return null;
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,7 +52,7 @@ class EnterAddressPage extends HookConsumerWidget {
                         labelText: 'Hub address',
                         border: OutlineInputBorder(),
                       ),
-                      validator: validateServerUrl,
+                      validator: ServerUrl.validate,
                       onFieldSubmitted: (_) => submitForm(),
                     ),
                   ),
