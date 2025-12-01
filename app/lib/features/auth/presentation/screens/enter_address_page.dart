@@ -17,10 +17,19 @@ class EnterAddressPage extends HookConsumerWidget {
     final haServerURLController = useTextEditingController(
       text: kDebugMode ? 'http://localhost:8123' : 'http://192.168.0.',
     );
+    final focusNode = useFocusNode();
+
+    useEffect(() {
+      // Auto-focus the text field when the page opens
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        focusNode.requestFocus();
+      });
+      return null;
+    }, const []);
 
     void submitForm() {
       if (formKey.currentState!.validate()) {
-        onConnect(haServerURLController.text);
+        onConnect(haServerURLController.text.trim());
       }
     }
 
@@ -48,6 +57,8 @@ class EnterAddressPage extends HookConsumerWidget {
                     child: TextFormField(
                       key: K.manualAddress.addressField,
                       controller: haServerURLController,
+                      focusNode: focusNode,
+                      keyboardType: TextInputType.url,
                       decoration: const InputDecoration(
                         labelText: 'Hub address',
                         border: OutlineInputBorder(),

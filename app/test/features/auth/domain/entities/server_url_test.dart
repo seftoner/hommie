@@ -14,6 +14,17 @@ void main() {
       );
     });
 
+    test('returns error for whitespace-only input', () {
+      expect(
+        ServerUrl.validate('   '),
+        equals('Please enter a server address'),
+      );
+      expect(
+        ServerUrl.validate('\t\n'),
+        equals('Please enter a server address'),
+      );
+    });
+
     test('returns error for missing scheme', () {
       expect(
         ServerUrl.validate('localhost:8123'),
@@ -69,6 +80,55 @@ void main() {
         isNull,
       );
     });
+
+    test('trims whitespace and validates correctly', () {
+      expect(
+        ServerUrl.validate(' http://localhost:8123 '),
+        isNull,
+      );
+      expect(
+        ServerUrl.validate('  http://localhost:8123  '),
+        isNull,
+      );
+    });
+  });
+
+  group('ServerUrl.create', () {
+    test('returns Left with ValueFailure for invalid URL', () {
+      final result = ServerUrl.create('http://localhost:81:23');
+      expect(result.isLeft(), isTrue);
+      result.fold(
+        (failure) => expect(failure.message, 'Invalid server address format'),
+        (_) => fail('Expected Left'),
+      );
+    });
+
+    test('returns Left with ValueFailure for empty input', () {
+      final result = ServerUrl.create('');
+      expect(result.isLeft(), isTrue);
+      result.fold(
+        (failure) => expect(failure.message, 'Please enter a server address'),
+        (_) => fail('Expected Left'),
+      );
+    });
+
+    test('returns Right with ServerUrl for valid URL', () {
+      final result = ServerUrl.create('http://localhost:8123');
+      expect(result.isRight(), isTrue);
+      result.fold(
+        (_) => fail('Expected Right'),
+        (serverUrl) => expect(serverUrl.value, 'http://localhost:8123'),
+      );
+    });
+
+    test('trims whitespace and stores trimmed value', () {
+      final result = ServerUrl.create(' http://localhost:8123 ');
+      expect(result.isRight(), isTrue);
+      result.fold(
+        (_) => fail('Expected Right'),
+        (serverUrl) => expect(serverUrl.value, 'http://localhost:8123'),
+      );
+    });
   });
 
   group('ServerUrl.tryParse', () {
@@ -83,6 +143,12 @@ void main() {
       expect(serverUrl, isNotNull);
       expect(serverUrl!.value, equals('http://localhost:8123'));
       expect(serverUrl.toString(), equals('http://localhost:8123'));
+    });
+
+    test('trims whitespace in parsed URL', () {
+      final serverUrl = ServerUrl.tryParse(' http://localhost:8123 ');
+      expect(serverUrl, isNotNull);
+      expect(serverUrl!.value, equals('http://localhost:8123'));
     });
   });
 
