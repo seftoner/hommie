@@ -4,9 +4,8 @@ import 'package:hommie/features/settings/application/logs_controller.dart';
 import 'package:hommie/features/settings/application/logs_list_controller.dart';
 import 'package:hommie/features/settings/domain/entities/logs.dart';
 import 'package:hommie/features/settings/presentation/widgets/color_badge.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class LogsPage extends HookConsumerWidget {
   const LogsPage({super.key});
@@ -39,7 +38,7 @@ class LogsPage extends HookConsumerWidget {
             onPressed: () {
               final box = context.findRenderObject() as RenderBox?;
               final position = box!.localToGlobal(Offset.zero) & box.size;
-              ref.read(logsControlerProvider.notifier).shareLogs(position);
+              ref.read(logsControllerProvider.notifier).shareLogs(position);
             },
             icon: const Icon(Symbols.share_rounded),
           ),
@@ -160,7 +159,7 @@ class LogsPage extends HookConsumerWidget {
     );
 
     if (confirmed == true && context.mounted) {
-      await ref.read(logsControlerProvider.notifier).deleteLogs();
+      await ref.read(logsControllerProvider.notifier).deleteLogs();
       // Refresh the logs list
       ref.invalidate(logsListControllerProvider);
     }

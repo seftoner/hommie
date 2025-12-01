@@ -227,7 +227,7 @@ Complete reference for all Riverpod providers in the Hommie application.
 - **Dependencies:** `logsRepository`
 - **Lifecycle:** Auto-dispose
 
-### `logsControlerProvider`
+### `logsControllerProvider`
 - **Type:** AsyncNotifierProvider<LogsControler, void>
 - **Purpose:** Handles log management actions (clear, export).
 - **Dependencies:** None

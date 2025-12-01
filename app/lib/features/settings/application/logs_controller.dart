@@ -9,7 +9,7 @@ import 'package:share_plus/share_plus.dart';
 part 'logs_controller.g.dart';
 
 @riverpod
-class LogsControler extends _$LogsControler {
+class LogsController extends _$LogsController {
   @override
   FutureOr<void> build() {
     return null;

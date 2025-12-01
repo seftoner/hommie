@@ -9,33 +9,33 @@ part of 'logs_controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(LogsControler)
-const logsControlerProvider = LogsControlerProvider._();
+@ProviderFor(LogsController)
+const logsControllerProvider = LogsControllerProvider._();
 
-final class LogsControlerProvider
-    extends $AsyncNotifierProvider<LogsControler, void> {
-  const LogsControlerProvider._()
+final class LogsControllerProvider
+    extends $AsyncNotifierProvider<LogsController, void> {
+  const LogsControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'logsControlerProvider',
+        name: r'logsControllerProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$logsControlerHash();
+  String debugGetCreateSourceHash() => _$logsControllerHash();
 
   @$internal
   @override
-  LogsControler create() => LogsControler();
+  LogsController create() => LogsController();
 }
 
-String _$logsControlerHash() => r'cd556e3066e36fbd5107e1bb05d4e47015692198';
+String _$logsControllerHash() => r'66191d58f214e4b320b5e18c41e223775f363081';
 
-abstract class _$LogsControler extends $AsyncNotifier<void> {
+abstract class _$LogsController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override
