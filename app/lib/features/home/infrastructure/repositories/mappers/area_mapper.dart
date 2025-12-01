@@ -37,7 +37,7 @@ extension AreaFutureMapper on Future<AreaEntity> {
   }
 }
 
-extension AreFutureaNullableMapper on Future<AreaEntity?> {
+extension AreaFutureNullableMapper on Future<AreaEntity?> {
   Future<Area?> mapToDomain() {
     return then((value) => value?.toDomain());
   }
