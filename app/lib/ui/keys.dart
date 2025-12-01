@@ -57,7 +57,7 @@ class SettingsKeys {
   final page = const Key('settingsPage');
   final hubItem = const Key('hubListItem');
   final sensorsItem = const Key('sensorsListItem');
-  final nfsItem = const Key('nfsListItem');
+  final nfcItem = const Key('nfcListItem');
   final logsItem = const Key('logsListItem');
   final aboutItem = const Key('aboutListItem');
 }
