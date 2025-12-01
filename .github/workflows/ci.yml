@@ -2,33 +2,34 @@ name: CI
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v4.0
+        uses: flutter-actions/setup-flutter@v4.1
         with:
-          version: 3.27.1
+          version: 3.35.7
           cache: true
           channel: stable
 
-      - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1.7.1
-        with:
-          sdk: 3.6.0
-      
-      - name: Install dependencies
+      - name: Resolve workspace dependencies
         run: flutter pub get
 
       - name: Analyze project source
-        run: dart analyze
+        working-directory: app
+        run: flutter analyze
 
-      - name: Run tests
+      - name: Run main app tests
+        working-directory: app
+        run: flutter test
+
+      - name: Run home_assistant_websocket tests
+        working-directory: packages/home_assistant_websocket
         run: flutter test

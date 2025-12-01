@@ -1,5 +1,16 @@
 {
     "cmake.configureOnOpen": false,
+    "dart.mcpServer": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [
+        80
+    ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.organizeImports": "explicit",
+        "quickfix.insertSemicolon": "explicit"
+    },
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,

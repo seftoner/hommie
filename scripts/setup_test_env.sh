@@ -68,11 +68,11 @@ if [ -z "$HASS_TOKEN" ]; then
     exit 1
 fi
 
-# Create patrol env file with verification
-echo "HASS_TOKEN=$HASS_TOKEN" > "../.patrol.env"
+# Create patrol env file in app folder with verification
+echo "HASS_TOKEN=$HASS_TOKEN" > "../app/.patrol.env"
 
 # Verify patrol env file was created correctly
-if ! grep -q "HASS_TOKEN=$HASS_TOKEN" "../.patrol.env"; then
+if ! grep -q "HASS_TOKEN=$HASS_TOKEN" "../app/.patrol.env"; then
     echo "Error: Failed to write token to .patrol.env"
     exit 1
 fi

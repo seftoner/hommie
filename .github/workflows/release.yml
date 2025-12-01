@@ -31,19 +31,20 @@ jobs:
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v4.0
         with:
-          version: 3.27.1
+          version: 3.35.1
           cache: true
           channel: stable
 
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@v1.7.1
         with:
-          sdk: 3.6.0
-      
+          sdk: 3.9.0
+
       - name: Install dependencies
         run: flutter pub get
 
       - name: Build
+        working-directory: app
         run: flutter build web
 
       - name: Create Release
@@ -55,4 +56,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            build/web/*
+            app/build/web/*

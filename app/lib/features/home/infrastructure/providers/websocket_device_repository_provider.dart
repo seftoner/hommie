@@ -1,0 +1,21 @@
+import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
+import 'package:hommie/features/home/domain/repositories/i_device_repository.dart';
+import 'package:hommie/features/home/infrastructure/repositories/websocket_device_repository.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'websocket_device_repository_provider.g.dart';
+
+/// Provides WebSocket-based device repository for a specific server
+///
+/// This fetches device data directly from Home Assistant via WebSocket API
+/// Use this when you need real-time device data from a specific server
+@Riverpod(dependencies: [serverConnectionManager])
+Future<IDeviceRepository> websocketDeviceRepository(
+  Ref ref,
+  int serverId,
+) async {
+  final connection = await ref
+      .watch(serverConnectionManagerProvider)
+      .getConnection(serverId);
+  return WebSocketDeviceRepository(connection);
+}

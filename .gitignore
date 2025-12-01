@@ -31,7 +31,8 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+build/
+**/build/
 
 # Integration tests
 docker/hass_init_conf/.initialized
