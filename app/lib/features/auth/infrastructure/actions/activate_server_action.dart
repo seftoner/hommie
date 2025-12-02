@@ -1,4 +1,4 @@
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/core/infrastructure/actions/haction.dart';
 import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';

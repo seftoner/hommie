@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hommie/features/auth/domain/entities/ha_version.dart';
+import 'package:hommie/features/common/domain/entities/ha_version.dart';
 
 part 'ha_server.freezed.dart';
 

@@ -1,9 +1,9 @@
 import 'package:hommie/core/infrastructure/actions/haction.dart';
 import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/features/auth/domain/entities/ha_version.dart';
+import 'package:hommie/features/common/domain/entities/ha_version.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/websocket_config_repository_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';

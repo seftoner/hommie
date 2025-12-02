@@ -1,10 +1,11 @@
-import 'package:hommie/features/auth/domain/entities/ha_version.dart';
+import 'package:hommie/features/common/domain/entities/ha_version.dart';
+import 'package:hommie/features/common/domain/values/server_url.dart';
 
 class Server {
   static const String defaultName = 'My home';
 
   final int? id;
-  final String? baseUrl;
+  final ServerUrl? baseUrl;
   final String? internalUrl;
   final String? externalUrl;
   final String name;
@@ -29,7 +30,7 @@ class Server {
   //In the future here will addition logic to properly resolve url base on settings.
   String get url {
     final effectiveInternalOrExternalUrl =
-        internalUrl ?? externalUrl ?? baseUrl;
+        internalUrl ?? externalUrl ?? baseUrl?.value.getOrElse((_) => '');
 
     if (effectiveInternalOrExternalUrl == null) {
       throw const FormatException('No valid URL found in TXT record.');

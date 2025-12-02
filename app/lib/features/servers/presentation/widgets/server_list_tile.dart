@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class ServerListTile extends StatelessWidget {

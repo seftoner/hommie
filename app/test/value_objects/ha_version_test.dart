@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_redundant_argument_values
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hommie/features/auth/domain/entities/ha_version.dart';
+import 'package:hommie/features/common/domain/entities/ha_version.dart';
 
 void main() {
   group('HaVersion', () {

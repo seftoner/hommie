@@ -3,7 +3,7 @@ import 'package:hommie/core/infrastructure/networking/providers/connection_state
 import 'package:hommie/features/auth/application/auth_state.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/servers/application/active_server.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/settings/infrastructure/providers/device_info_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

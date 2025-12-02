@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/domain/repositories/i_server_repository.dart';
 
 class ServerManager implements IServerManager {
