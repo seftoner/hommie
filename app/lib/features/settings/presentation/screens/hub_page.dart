@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
-import 'package:hommie/features/auth/domain/entities/ha_version.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/common/domain/entities/ha_version.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/settings/application/hub_status_provider.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/styles/spacings.dart';
@@ -72,7 +72,9 @@ class _HubStatusContent extends StatelessWidget {
             _HubInfoTile(title: 'Device Name', value: status.deviceName),
             _HubInfoTile(
               title: 'Internal URL',
-              value: _urlLabel(server.internalUrl ?? server.baseUrl),
+              value: _urlLabel(
+                server.internalUrl ?? server.baseUrl!.value.getOrElse((_) => ''),
+              ),
             ),
             _HubInfoTile(
               title: 'External URL',

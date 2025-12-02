@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:hommie/features/servers/application/servers_list_controller.dart';
 import 'package:hommie/features/servers/presentation/widgets/server_list_tile.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/application/active_server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';

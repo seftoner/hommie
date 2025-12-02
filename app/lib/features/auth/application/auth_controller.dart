@@ -2,7 +2,7 @@ import 'package:hommie/core/infrastructure/actions/action_chain.dart';
 import 'package:hommie/core/infrastructure/actions/action_runner.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
-import 'package:hommie/features/auth/domain/entities/server_url.dart';
+import 'package:hommie/features/common/domain/values/server_url.dart';
 import 'package:hommie/features/auth/infrastructure/actions/activate_server_action.dart';
 import 'package:hommie/features/auth/infrastructure/actions/activate_server_if_exist_action.dart';
 import 'package:hommie/features/auth/infrastructure/actions/create_server_action.dart';

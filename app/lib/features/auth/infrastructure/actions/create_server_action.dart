@@ -1,8 +1,8 @@
 import 'package:hommie/core/infrastructure/actions/haction.dart';
 import 'package:hommie/core/infrastructure/actions/haction_execution_context.dart';
-import 'package:hommie/features/auth/domain/entities/server_url.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/common/domain/values/server_url.dart';
 
 class CreateServerAction extends HAction<Server, void> {
   final IServerManager _serverManager;
@@ -15,9 +15,7 @@ class CreateServerAction extends HAction<Server, void> {
   ) async {
     final serverUrl = context.get<ServerUrl>('serverUrl');
 
-    final newServer = Server.temporary(
-      baseUrl: serverUrl.value.getOrElse((_) => ''),
-    );
+    final newServer = Server.temporary(baseUrl: serverUrl);
 
     final server = await _serverManager.addServer(newServer);
     context.set<Server>('server', server);

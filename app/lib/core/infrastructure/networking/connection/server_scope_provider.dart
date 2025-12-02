@@ -1,5 +1,5 @@
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_scope_provider.g.dart';

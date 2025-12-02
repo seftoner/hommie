@@ -16,6 +16,16 @@ class ServerUrl extends ValueObject<String> {
   Either<ValueFailure, String> get value => _value;
 
   final Either<ValueFailure, String> _value;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ServerUrl &&
+          runtimeType == other.runtimeType &&
+          value == other.value;
+
+  @override
+  int get hashCode => value.hashCode;
 }
 
 /// Validates and normalizes a server URL string.

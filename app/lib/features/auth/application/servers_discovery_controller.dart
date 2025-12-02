@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:hommie/features/auth/domain/entities/ha_server.dart';
 import 'package:hommie/features/auth/infrastructure/providers/ha_servers_repository_provider.dart';
+import 'package:hommie/features/common/domain/entities/ha_server.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'servers_discovery_controller.g.dart';

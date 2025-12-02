@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hommie/features/auth/domain/entities/server_url.dart';
+import 'package:hommie/features/common/domain/values/server_url.dart';
 
 void main() {
   group('ServerUrl', () {

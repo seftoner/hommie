@@ -1,5 +1,5 @@
 import 'package:hommie/core/caching/caching.dart';
-import 'package:hommie/features/auth/domain/entities/ha_server.dart';
+import 'package:hommie/features/common/domain/entities/ha_server.dart';
 import 'package:hommie/features/auth/domain/repository/i_ha_servers_repository.dart';
 
 /// A cached wrapper for IHAServersRepository that provides caching and retry functionality

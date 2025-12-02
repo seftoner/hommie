@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 
 part 'active_server.g.dart';

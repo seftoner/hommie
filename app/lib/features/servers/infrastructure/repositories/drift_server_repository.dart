@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:hommie/core/database/database.dart';
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/domain/repositories/i_server_repository.dart';
 import 'package:hommie/features/servers/infrastructure/repositories/mappers/server_mapper.dart';
 

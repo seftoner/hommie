@@ -1,4 +1,4 @@
-import 'package:hommie/features/servers/domain/models/server.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 
 abstract interface class IServerManager {
   Future<Server> addServer(Server config);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/auth/application/servers_discovery_controller.dart';
-import 'package:hommie/features/auth/domain/entities/ha_server.dart';
-import 'package:hommie/features/auth/domain/entities/server_url.dart';
+import 'package:hommie/features/common/domain/entities/ha_server.dart';
+import 'package:hommie/features/common/domain/values/server_url.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_available_severs_list_title.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_empty_state.dart';
 import 'package:hommie/ui/keys.dart';
