@@ -30,23 +30,27 @@ class ValueFailure {
 /// ```dart
 /// class EmailAddress extends ValueObject<String> {
 ///   const EmailAddress._(super.value);
+/// }
 ///
-///   static Either<ValueFailure, EmailAddress> create(String? input) {
+/// class EmailAddressValidator {
+///   const EmailAddressValidator();
+///
+///   String? validate(String? input) {
 ///     if (input == null || input.isEmpty) {
-///       return left(const ValueFailure('Email cannot be empty'));
+///       return 'Email cannot be empty';
 ///     }
 ///     if (!input.contains('@')) {
-///       return left(const ValueFailure('Invalid email format'));
+///       return 'Invalid email format';
 ///     }
-///     return right(EmailAddress._(input));
+///     return null;
 ///   }
 ///
-///   /// For use as a form field validator
-///   static String? validate(String? input) {
-///     return create(input).fold(
-///       (failure) => failure.message,
-///       (_) => null,
-///     );
+///   Either<ValueFailure, EmailAddress> parse(String? input) {
+///     final error = validate(input);
+///     if (error != null) {
+///       return left(ValueFailure(error));
+///     }
+///     return right(EmailAddress._(input!));
 ///   }
 /// }
 /// ```

@@ -11,6 +11,8 @@ class EnterAddressPage extends HookConsumerWidget {
 
   const EnterAddressPage({super.key, required this.onConnect});
 
+  static const _validator = ServerUrlValidator();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormState>());
@@ -56,7 +58,7 @@ class EnterAddressPage extends HookConsumerWidget {
                         labelText: 'Hub address',
                         border: OutlineInputBorder(),
                       ),
-                      validator: ServerUrl.validate,
+                      validator: _validator.validate,
                       onFieldSubmitted: (_) => submitForm(),
                     ),
                   ),
