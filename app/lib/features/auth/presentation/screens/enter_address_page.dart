@@ -7,15 +7,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class EnterAddressPage extends HookConsumerWidget {
   /// Optional callback for when connect button is pressed - used when in flow context
-  final void Function(String serverUrl) onConnect;
+  final void Function(ServerUrl serverUrl) onConnect;
 
   const EnterAddressPage({super.key, required this.onConnect});
-
-  static const _validator = ServerUrlValidator();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormState>());
+
     final haServerURLController = useTextEditingController(
       text: kDebugMode ? 'http://localhost:8123' : 'http://192.168.0.',
     );
@@ -23,7 +22,11 @@ class EnterAddressPage extends HookConsumerWidget {
 
     void submitForm() {
       if (formKey.currentState!.validate()) {
-        onConnect(haServerURLController.text.trim());
+        final serverUrl = ServerUrl(haServerURLController.text);
+        serverUrl.value.fold(
+          (_) {}, // Validation already handled by form
+          (_) => onConnect(serverUrl),
+        );
       }
     }
 
@@ -58,7 +61,7 @@ class EnterAddressPage extends HookConsumerWidget {
                         labelText: 'Hub address',
                         border: OutlineInputBorder(),
                       ),
-                      validator: _validator.validate,
+                      validator: (value) => ServerUrl(value).validate,
                       onFieldSubmitted: (_) => submitForm(),
                     ),
                   ),

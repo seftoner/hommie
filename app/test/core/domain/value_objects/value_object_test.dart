@@ -1,67 +1,149 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:hommie/core/domain/value_objects/value_object.dart';
-
-// Test implementation of ValueObject
-class TestValueObject extends ValueObject<String> {
-  const TestValueObject._(super.value);
-
-  static Either<ValueFailure, TestValueObject> create(String? input) {
-    if (input == null || input.isEmpty) {
-      return left(const ValueFailure('Value cannot be empty'));
-    }
-    return right(TestValueObject._(input));
-  }
-}
+import 'package:hommie/features/auth/domain/entities/server_url.dart';
 
 void main() {
-  group('ValueObject', () {
-    test('toString returns the value', () {
-      final result = TestValueObject.create('test');
-      expect(result.isRight(), isTrue);
-      final vo = result.getOrElse((_) => fail('Expected Right'));
-      expect(vo.toString(), equals('test'));
+  group('ServerUrl', () {
+    group('Valid URLs', () {
+      test('accepts valid http URL', () {
+        final serverUrl = ServerUrl('http://example.com');
+        expect(serverUrl.value.isRight(), isTrue);
+        expect(serverUrl.validate, isNull);
+        expect(serverUrl.toString(), equals('http://example.com'));
+      });
+
+      test('accepts valid https URL', () {
+        final serverUrl = ServerUrl('https://example.com');
+        expect(serverUrl.value.isRight(), isTrue);
+        expect(serverUrl.validate, isNull);
+      });
+
+      test('accepts URL with port', () {
+        final serverUrl = ServerUrl('http://localhost:8123');
+        expect(serverUrl.value.isRight(), isTrue);
+        expect(serverUrl.validate, isNull);
+      });
+
+      test('accepts URL with IP address', () {
+        final serverUrl = ServerUrl('http://192.168.1.1');
+        expect(serverUrl.value.isRight(), isTrue);
+        expect(serverUrl.validate, isNull);
+      });
+
+      test('accepts URL with path', () {
+        final serverUrl = ServerUrl('http://example.com/api');
+        expect(serverUrl.value.isRight(), isTrue);
+        expect(serverUrl.validate, isNull);
+      });
+
+      test('removes trailing slash from base URL', () {
+        final serverUrl = ServerUrl('http://localhost:8123/');
+        expect(serverUrl.value.isRight(), isTrue);
+        serverUrl.value.fold(
+          (_) => fail('Expected valid URL'),
+          (url) => expect(url, equals('http://localhost:8123')),
+        );
+      });
+
+      test('removes trailing slash from URL with path', () {
+        final serverUrl = ServerUrl('http://example.com/api/');
+        expect(serverUrl.value.isRight(), isTrue);
+        serverUrl.value.fold(
+          (_) => fail('Expected valid URL'),
+          (url) => expect(url, equals('http://example.com/api')),
+        );
+      });
+
+      test('trims whitespace', () {
+        final serverUrl = ServerUrl('  http://example.com  ');
+        expect(serverUrl.value.isRight(), isTrue);
+        serverUrl.value.fold(
+          (_) => fail('Expected valid URL'),
+          (url) => expect(url, equals('http://example.com')),
+        );
+      });
     });
 
-    test('two value objects with same value are equal', () {
-      final result1 = TestValueObject.create('test');
-      final result2 = TestValueObject.create('test');
-      expect(result1.isRight(), isTrue);
-      expect(result2.isRight(), isTrue);
-      final vo1 = result1.getOrElse((_) => fail('Expected Right'));
-      final vo2 = result2.getOrElse((_) => fail('Expected Right'));
-      expect(vo1, equals(vo2));
-      expect(vo1.hashCode, equals(vo2.hashCode));
+    group('Invalid URLs', () {
+      test('rejects null input', () {
+        final serverUrl = ServerUrl(null);
+        expect(serverUrl.value.isLeft(), isTrue);
+        expect(serverUrl.validate, equals('Please enter a server address'));
+      });
+
+      test('rejects empty string', () {
+        final serverUrl = ServerUrl('');
+        expect(serverUrl.value.isLeft(), isTrue);
+        expect(serverUrl.validate, equals('Please enter a server address'));
+      });
+
+      test('rejects whitespace-only string', () {
+        final serverUrl = ServerUrl('   ');
+        expect(serverUrl.value.isLeft(), isTrue);
+        expect(serverUrl.validate, equals('Please enter a server address'));
+      });
+
+      test('rejects URL without scheme', () {
+        final serverUrl = ServerUrl('example.com');
+        expect(serverUrl.value.isLeft(), isTrue);
+        expect(
+          serverUrl.validate,
+          equals('Address must start with http:// or https://'),
+        );
+      });
+
+      test('rejects ftp:// scheme', () {
+        final serverUrl = ServerUrl('ftp://example.com');
+        expect(serverUrl.value.isLeft(), isTrue);
+        expect(
+          serverUrl.validate,
+          equals('Address must start with http:// or https://'),
+        );
+      });
+
+      test('rejects URL without host', () {
+        final serverUrl = ServerUrl('http://');
+        expect(serverUrl.value.isLeft(), isTrue);
+        expect(serverUrl.validate, equals('Please enter a valid host address'));
+      });
+
+      test('rejects malformed URL', () {
+        final serverUrl = ServerUrl('http://[invalid');
+        expect(serverUrl.value.isLeft(), isTrue);
+        expect(serverUrl.validate, equals('Invalid server address format'));
+      });
     });
 
-    test('two value objects with different values are not equal', () {
-      final result1 = TestValueObject.create('test1');
-      final result2 = TestValueObject.create('test2');
-      expect(result1.isRight(), isTrue);
-      expect(result2.isRight(), isTrue);
-      final vo1 = result1.getOrElse((_) => fail('Expected Right'));
-      final vo2 = result2.getOrElse((_) => fail('Expected Right'));
-      expect(vo1, isNot(equals(vo2)));
-    });
-  });
+    group('toString', () {
+      test('returns URL when valid', () {
+        final serverUrl = ServerUrl('http://example.com');
+        expect(serverUrl.toString(), equals('http://example.com'));
+      });
 
-  group('ValueFailure', () {
-    test('toString returns the message', () {
-      const failure = ValueFailure('Error message');
-      expect(failure.toString(), equals('Error message'));
+      test('returns error message when invalid', () {
+        final serverUrl = ServerUrl(null);
+        expect(serverUrl.toString(), equals('Please enter a server address'));
+      });
     });
 
-    test('two failures with same message are equal', () {
-      const failure1 = ValueFailure('Error');
-      const failure2 = ValueFailure('Error');
-      expect(failure1, equals(failure2));
-      expect(failure1.hashCode, equals(failure2.hashCode));
-    });
+    group('value getter', () {
+      test('returns Right with URL for valid input', () {
+        final serverUrl = ServerUrl('http://example.com');
+        serverUrl.value.fold(
+          (_) => fail('Expected Right'),
+          (url) => expect(url, equals('http://example.com')),
+        );
+      });
 
-    test('two failures with different messages are not equal', () {
-      const failure1 = ValueFailure('Error 1');
-      const failure2 = ValueFailure('Error 2');
-      expect(failure1, isNot(equals(failure2)));
+      test('returns Left with failure for invalid input', () {
+        final serverUrl = ServerUrl('invalid');
+        serverUrl.value.fold(
+          (failure) => expect(
+            failure.message,
+            equals('Address must start with http:// or https://'),
+          ),
+          (_) => fail('Expected Left'),
+        );
+      });
     });
   });
 }

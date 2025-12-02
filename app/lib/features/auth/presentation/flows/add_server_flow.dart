@@ -43,7 +43,7 @@ class _AddServerFlowState extends ConsumerState<AddServerFlow> {
             child: ServerDiscoveryPage(
               onConnect: (serverAddress) => ref
                   .read(authControllerProvider)
-                  .login(serverAddress.toString()),
+                  .login(serverAddress),
               onManualEntry: () =>
                   controller.update((state) => AddServerFlowState.manualEntry),
               onExit: widget.userCanCancel ? controller.complete : null,

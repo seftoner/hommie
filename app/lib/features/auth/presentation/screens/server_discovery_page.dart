@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/auth/application/servers_discovery_controller.dart';
 import 'package:hommie/features/auth/domain/entities/ha_server.dart';
+import 'package:hommie/features/auth/domain/entities/server_url.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_available_severs_list_title.dart';
 import 'package:hommie/features/auth/presentation/widgets/w_empty_state.dart';
 import 'package:hommie/ui/keys.dart';
@@ -8,10 +9,10 @@ import 'package:hommie/ui/styles/corners.dart';
 import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-typedef TapCallback = Future<void> Function(Uri serverAddress);
+typedef ConnectCallback = Future<void> Function(ServerUrl serverAddress);
 
 class ServerDiscoveryPage extends ConsumerWidget {
-  final TapCallback onConnect;
+  final ConnectCallback onConnect;
   final VoidCallback onManualEntry;
   final VoidCallback? onExit;
 
@@ -110,7 +111,7 @@ class ServerDiscoveryPage extends ConsumerWidget {
 
 class DiscoveredHaServersList extends StatelessWidget {
   final List<HaServer> servers;
-  final TapCallback onTap;
+  final ConnectCallback onTap;
 
   const DiscoveredHaServersList({
     super.key,
@@ -138,7 +139,7 @@ class DiscoveredHaServersList extends StatelessWidget {
               title: Text(servers[index].name),
               subtitle: Text(servers[index].uri.toString()),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => onTap(servers[index].uri),
+              onTap: () => onTap(ServerUrl(servers[index].uri.toString())),
             ),
           );
         },
