@@ -18,7 +18,6 @@ class EnterAddressPage extends HookConsumerWidget {
     final haServerURLController = useTextEditingController(
       text: kDebugMode ? 'http://localhost:8123' : 'http://192.168.0.',
     );
-    final focusNode = useFocusNode();
 
     void submitForm() {
       if (formKey.currentState!.validate()) {
@@ -54,7 +53,6 @@ class EnterAddressPage extends HookConsumerWidget {
                     child: TextFormField(
                       key: K.manualAddress.addressField,
                       controller: haServerURLController,
-                      focusNode: focusNode,
                       autofocus: true,
                       keyboardType: TextInputType.url,
                       decoration: const InputDecoration(
