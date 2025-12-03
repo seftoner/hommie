@@ -29,7 +29,7 @@ Map<String, dynamic> _$HassServicesToJson(_HassServices instance) =>
 
 _HassService _$HassServiceFromJson(Map<String, dynamic> json) => _HassService(
   name: json['name'] as String?,
-  description: json['description'] as String,
+  description: json['description'] as String?,
   target: json['target'] as Map<String, dynamic>?,
   fields: (json['fields'] as Map<String, dynamic>).map(
     (k, e) => MapEntry(k, Field.fromJson(e as Map<String, dynamic>)),

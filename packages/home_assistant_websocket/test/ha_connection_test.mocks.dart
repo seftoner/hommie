@@ -26,6 +26,7 @@ import 'package:mockito/src/dummies.dart' as _i6;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeHaLogger_0 extends _i1.SmartFake implements _i2.HaLogger {
   _FakeHaLogger_0(Object parent, Invocation parentInvocation)
@@ -185,26 +186,26 @@ class MockStreamController<T> extends _i1.Mock
           as _i4.Future<dynamic>);
 
   @override
-  set onListen(void Function()? _onListen) => super.noSuchMethod(
-    Invocation.setter(#onListen, _onListen),
+  set onListen(void Function()? value) => super.noSuchMethod(
+    Invocation.setter(#onListen, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set onPause(void Function()? _onPause) => super.noSuchMethod(
-    Invocation.setter(#onPause, _onPause),
+  set onPause(void Function()? value) => super.noSuchMethod(
+    Invocation.setter(#onPause, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set onResume(void Function()? _onResume) => super.noSuchMethod(
-    Invocation.setter(#onResume, _onResume),
+  set onResume(void Function()? value) => super.noSuchMethod(
+    Invocation.setter(#onResume, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set onCancel(_i4.FutureOr<void> Function()? _onCancel) => super.noSuchMethod(
-    Invocation.setter(#onCancel, _onCancel),
+  set onCancel(_i4.FutureOr<void> Function()? value) => super.noSuchMethod(
+    Invocation.setter(#onCancel, value),
     returnValueForMissingStub: null,
   );
 

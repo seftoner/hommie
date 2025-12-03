@@ -6,7 +6,6 @@
         "homeassistant": {
             "save_persistent_states": {
                 "name": "Save persistent states",
-                "description": "Saves the persistent states immediately. Maintains the normal periodic saving interval.",
                 "fields": {}
             },
             "turn_off": {
