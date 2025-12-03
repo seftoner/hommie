@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'hass_service.freezed.dart';
 part 'hass_service.g.dart';
 
@@ -66,7 +67,7 @@ class HassServicesConverter
 sealed class HassService with _$HassService {
   const factory HassService({
     String? name,
-    required String description,
+    String? description,
     Map<String, dynamic>? target,
     required Map<String, Field> fields,
     Response? response,

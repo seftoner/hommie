@@ -37,7 +37,6 @@
                 "description": "Mark a notification read.",
                 "fields": {
                     "notification_id": {
-                        "description": "Target ID of the notification, which should be mark read. [Required]",
                         "example": 1234
                     }
                 }
