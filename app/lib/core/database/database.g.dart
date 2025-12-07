@@ -817,20 +817,22 @@ class $DeviceEntitiesTable extends DeviceEntities
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _areaIdMeta = const VerificationMeta('areaId');
+  static const VerificationMeta _serverIdMeta = const VerificationMeta(
+    'serverId',
+  );
   @override
-  late final GeneratedColumn<int> areaId = GeneratedColumn<int>(
-    'area_id',
+  late final GeneratedColumn<int> serverId = GeneratedColumn<int>(
+    'server_id',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES area_entities (id) ON DELETE CASCADE',
+      'REFERENCES server_entities (id) ON DELETE CASCADE',
     ),
   );
   @override
-  List<GeneratedColumn> get $columns => [id, haId, name, type, areaId];
+  List<GeneratedColumn> get $columns => [id, haId, name, type, serverId];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -870,13 +872,13 @@ class $DeviceEntitiesTable extends DeviceEntities
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
-    if (data.containsKey('area_id')) {
+    if (data.containsKey('server_id')) {
       context.handle(
-        _areaIdMeta,
-        areaId.isAcceptableOrUnknown(data['area_id']!, _areaIdMeta),
+        _serverIdMeta,
+        serverId.isAcceptableOrUnknown(data['server_id']!, _serverIdMeta),
       );
     } else if (isInserting) {
-      context.missing(_areaIdMeta);
+      context.missing(_serverIdMeta);
     }
     return context;
   }
@@ -903,9 +905,9 @@ class $DeviceEntitiesTable extends DeviceEntities
         DriftSqlType.string,
         data['${effectivePrefix}type'],
       )!,
-      areaId: attachedDatabase.typeMapping.read(
+      serverId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}area_id'],
+        data['${effectivePrefix}server_id'],
       )!,
     );
   }
@@ -929,15 +931,15 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
   /// Device domain/type (e.g., "light", "switch", "media_player", "sensor")
   final String type;
 
-  /// Foreign key reference to [AreaEntities]
-  /// Cascades: deleting an area deletes all its devices
-  final int areaId;
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all its devices
+  final int serverId;
   const DeviceEntity({
     required this.id,
     required this.haId,
     required this.name,
     required this.type,
-    required this.areaId,
+    required this.serverId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -946,7 +948,7 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
     map['ha_id'] = Variable<String>(haId);
     map['name'] = Variable<String>(name);
     map['type'] = Variable<String>(type);
-    map['area_id'] = Variable<int>(areaId);
+    map['server_id'] = Variable<int>(serverId);
     return map;
   }
 
@@ -956,7 +958,7 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       haId: Value(haId),
       name: Value(name),
       type: Value(type),
-      areaId: Value(areaId),
+      serverId: Value(serverId),
     );
   }
 
@@ -970,7 +972,7 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       haId: serializer.fromJson<String>(json['haId']),
       name: serializer.fromJson<String>(json['name']),
       type: serializer.fromJson<String>(json['type']),
-      areaId: serializer.fromJson<int>(json['areaId']),
+      serverId: serializer.fromJson<int>(json['serverId']),
     );
   }
   @override
@@ -981,7 +983,7 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       'haId': serializer.toJson<String>(haId),
       'name': serializer.toJson<String>(name),
       'type': serializer.toJson<String>(type),
-      'areaId': serializer.toJson<int>(areaId),
+      'serverId': serializer.toJson<int>(serverId),
     };
   }
 
@@ -990,13 +992,13 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
     String? haId,
     String? name,
     String? type,
-    int? areaId,
+    int? serverId,
   }) => DeviceEntity(
     id: id ?? this.id,
     haId: haId ?? this.haId,
     name: name ?? this.name,
     type: type ?? this.type,
-    areaId: areaId ?? this.areaId,
+    serverId: serverId ?? this.serverId,
   );
   DeviceEntity copyWithCompanion(DeviceEntitiesCompanion data) {
     return DeviceEntity(
@@ -1004,7 +1006,7 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       haId: data.haId.present ? data.haId.value : this.haId,
       name: data.name.present ? data.name.value : this.name,
       type: data.type.present ? data.type.value : this.type,
-      areaId: data.areaId.present ? data.areaId.value : this.areaId,
+      serverId: data.serverId.present ? data.serverId.value : this.serverId,
     );
   }
 
@@ -1015,13 +1017,13 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
           ..write('haId: $haId, ')
           ..write('name: $name, ')
           ..write('type: $type, ')
-          ..write('areaId: $areaId')
+          ..write('serverId: $serverId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, haId, name, type, areaId);
+  int get hashCode => Object.hash(id, haId, name, type, serverId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1030,7 +1032,7 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
           other.haId == this.haId &&
           other.name == this.name &&
           other.type == this.type &&
-          other.areaId == this.areaId);
+          other.serverId == this.serverId);
 }
 
 class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
@@ -1038,37 +1040,37 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
   final Value<String> haId;
   final Value<String> name;
   final Value<String> type;
-  final Value<int> areaId;
+  final Value<int> serverId;
   const DeviceEntitiesCompanion({
     this.id = const Value.absent(),
     this.haId = const Value.absent(),
     this.name = const Value.absent(),
     this.type = const Value.absent(),
-    this.areaId = const Value.absent(),
+    this.serverId = const Value.absent(),
   });
   DeviceEntitiesCompanion.insert({
     this.id = const Value.absent(),
     required String haId,
     required String name,
     required String type,
-    required int areaId,
+    required int serverId,
   }) : haId = Value(haId),
        name = Value(name),
        type = Value(type),
-       areaId = Value(areaId);
+       serverId = Value(serverId);
   static Insertable<DeviceEntity> custom({
     Expression<int>? id,
     Expression<String>? haId,
     Expression<String>? name,
     Expression<String>? type,
-    Expression<int>? areaId,
+    Expression<int>? serverId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (haId != null) 'ha_id': haId,
       if (name != null) 'name': name,
       if (type != null) 'type': type,
-      if (areaId != null) 'area_id': areaId,
+      if (serverId != null) 'server_id': serverId,
     });
   }
 
@@ -1077,14 +1079,14 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
     Value<String>? haId,
     Value<String>? name,
     Value<String>? type,
-    Value<int>? areaId,
+    Value<int>? serverId,
   }) {
     return DeviceEntitiesCompanion(
       id: id ?? this.id,
       haId: haId ?? this.haId,
       name: name ?? this.name,
       type: type ?? this.type,
-      areaId: areaId ?? this.areaId,
+      serverId: serverId ?? this.serverId,
     );
   }
 
@@ -1103,8 +1105,8 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
     if (type.present) {
       map['type'] = Variable<String>(type.value);
     }
-    if (areaId.present) {
-      map['area_id'] = Variable<int>(areaId.value);
+    if (serverId.present) {
+      map['server_id'] = Variable<int>(serverId.value);
     }
     return map;
   }
@@ -1116,6 +1118,273 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
           ..write('haId: $haId, ')
           ..write('name: $name, ')
           ..write('type: $type, ')
+          ..write('serverId: $serverId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $DeviceAreaConfigsTable extends DeviceAreaConfigs
+    with TableInfo<$DeviceAreaConfigsTable, DeviceAreaConfig> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DeviceAreaConfigsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
+    'deviceId',
+  );
+  @override
+  late final GeneratedColumn<int> deviceId = GeneratedColumn<int>(
+    'device_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES device_entities (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _areaIdMeta = const VerificationMeta('areaId');
+  @override
+  late final GeneratedColumn<int> areaId = GeneratedColumn<int>(
+    'area_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES area_entities (id) ON DELETE CASCADE',
+    ),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, deviceId, areaId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'device_area_configs';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DeviceAreaConfig> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('device_id')) {
+      context.handle(
+        _deviceIdMeta,
+        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_deviceIdMeta);
+    }
+    if (data.containsKey('area_id')) {
+      context.handle(
+        _areaIdMeta,
+        areaId.isAcceptableOrUnknown(data['area_id']!, _areaIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_areaIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {deviceId, areaId},
+  ];
+  @override
+  DeviceAreaConfig map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DeviceAreaConfig(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      deviceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}device_id'],
+      )!,
+      areaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}area_id'],
+      )!,
+    );
+  }
+
+  @override
+  $DeviceAreaConfigsTable createAlias(String alias) {
+    return $DeviceAreaConfigsTable(attachedDatabase, alias);
+  }
+}
+
+class DeviceAreaConfig extends DataClass
+    implements Insertable<DeviceAreaConfig> {
+  /// Auto-incrementing primary key
+  final int id;
+
+  /// Foreign key reference to [DeviceEntities]
+  /// Cascades: deleting a device removes all its area associations
+  final int deviceId;
+
+  /// Foreign key reference to [AreaEntities]
+  /// Cascades: deleting an area removes all its device associations
+  final int areaId;
+  const DeviceAreaConfig({
+    required this.id,
+    required this.deviceId,
+    required this.areaId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['device_id'] = Variable<int>(deviceId);
+    map['area_id'] = Variable<int>(areaId);
+    return map;
+  }
+
+  DeviceAreaConfigsCompanion toCompanion(bool nullToAbsent) {
+    return DeviceAreaConfigsCompanion(
+      id: Value(id),
+      deviceId: Value(deviceId),
+      areaId: Value(areaId),
+    );
+  }
+
+  factory DeviceAreaConfig.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DeviceAreaConfig(
+      id: serializer.fromJson<int>(json['id']),
+      deviceId: serializer.fromJson<int>(json['deviceId']),
+      areaId: serializer.fromJson<int>(json['areaId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'deviceId': serializer.toJson<int>(deviceId),
+      'areaId': serializer.toJson<int>(areaId),
+    };
+  }
+
+  DeviceAreaConfig copyWith({int? id, int? deviceId, int? areaId}) =>
+      DeviceAreaConfig(
+        id: id ?? this.id,
+        deviceId: deviceId ?? this.deviceId,
+        areaId: areaId ?? this.areaId,
+      );
+  DeviceAreaConfig copyWithCompanion(DeviceAreaConfigsCompanion data) {
+    return DeviceAreaConfig(
+      id: data.id.present ? data.id.value : this.id,
+      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
+      areaId: data.areaId.present ? data.areaId.value : this.areaId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeviceAreaConfig(')
+          ..write('id: $id, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('areaId: $areaId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, deviceId, areaId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DeviceAreaConfig &&
+          other.id == this.id &&
+          other.deviceId == this.deviceId &&
+          other.areaId == this.areaId);
+}
+
+class DeviceAreaConfigsCompanion extends UpdateCompanion<DeviceAreaConfig> {
+  final Value<int> id;
+  final Value<int> deviceId;
+  final Value<int> areaId;
+  const DeviceAreaConfigsCompanion({
+    this.id = const Value.absent(),
+    this.deviceId = const Value.absent(),
+    this.areaId = const Value.absent(),
+  });
+  DeviceAreaConfigsCompanion.insert({
+    this.id = const Value.absent(),
+    required int deviceId,
+    required int areaId,
+  }) : deviceId = Value(deviceId),
+       areaId = Value(areaId);
+  static Insertable<DeviceAreaConfig> custom({
+    Expression<int>? id,
+    Expression<int>? deviceId,
+    Expression<int>? areaId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (deviceId != null) 'device_id': deviceId,
+      if (areaId != null) 'area_id': areaId,
+    });
+  }
+
+  DeviceAreaConfigsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? deviceId,
+    Value<int>? areaId,
+  }) {
+    return DeviceAreaConfigsCompanion(
+      id: id ?? this.id,
+      deviceId: deviceId ?? this.deviceId,
+      areaId: areaId ?? this.areaId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (deviceId.present) {
+      map['device_id'] = Variable<int>(deviceId.value);
+    }
+    if (areaId.present) {
+      map['area_id'] = Variable<int>(areaId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeviceAreaConfigsCompanion(')
+          ..write('id: $id, ')
+          ..write('deviceId: $deviceId, ')
           ..write('areaId: $areaId')
           ..write(')'))
         .toString();
@@ -2034,6 +2303,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ServerEntitiesTable serverEntities = $ServerEntitiesTable(this);
   late final $AreaEntitiesTable areaEntities = $AreaEntitiesTable(this);
   late final $DeviceEntitiesTable deviceEntities = $DeviceEntitiesTable(this);
+  late final $DeviceAreaConfigsTable deviceAreaConfigs =
+      $DeviceAreaConfigsTable(this);
   late final $HomeViewConfigsTable homeViewConfigs = $HomeViewConfigsTable(
     this,
   );
@@ -2050,6 +2321,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     serverEntities,
     areaEntities,
     deviceEntities,
+    deviceAreaConfigs,
     homeViewConfigs,
     areaHomeConfigs,
     deviceHomeConfigs,
@@ -2065,10 +2337,24 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'area_entities',
+        'server_entities',
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('device_entities', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'device_entities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('device_area_configs', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'area_entities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('device_area_configs', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -2154,6 +2440,27 @@ final class $$ServerEntitiesTableReferences
     );
   }
 
+  static MultiTypedResultKey<$DeviceEntitiesTable, List<DeviceEntity>>
+  _deviceEntitiesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.deviceEntities,
+    aliasName: $_aliasNameGenerator(
+      db.serverEntities.id,
+      db.deviceEntities.serverId,
+    ),
+  );
+
+  $$DeviceEntitiesTableProcessedTableManager get deviceEntitiesRefs {
+    final manager = $$DeviceEntitiesTableTableManager(
+      $_db,
+      $_db.deviceEntities,
+    ).filter((f) => f.serverId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_deviceEntitiesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
   static MultiTypedResultKey<$HomeViewConfigsTable, List<HomeViewConfig>>
   _homeViewConfigsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.homeViewConfigs,
@@ -2228,6 +2535,31 @@ class $$ServerEntitiesTableFilterComposer
           }) => $$AreaEntitiesTableFilterComposer(
             $db: $db,
             $table: $db.areaEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> deviceEntitiesRefs(
+    Expression<bool> Function($$DeviceEntitiesTableFilterComposer f) f,
+  ) {
+    final $$DeviceEntitiesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.deviceEntities,
+      getReferencedColumn: (t) => t.serverId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeviceEntitiesTableFilterComposer(
+            $db: $db,
+            $table: $db.deviceEntities,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2347,6 +2679,31 @@ class $$ServerEntitiesTableAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> deviceEntitiesRefs<T extends Object>(
+    Expression<T> Function($$DeviceEntitiesTableAnnotationComposer a) f,
+  ) {
+    final $$DeviceEntitiesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.deviceEntities,
+      getReferencedColumn: (t) => t.serverId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeviceEntitiesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.deviceEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
   Expression<T> homeViewConfigsRefs<T extends Object>(
     Expression<T> Function($$HomeViewConfigsTableAnnotationComposer a) f,
   ) {
@@ -2388,6 +2745,7 @@ class $$ServerEntitiesTableTableManager
           ServerEntity,
           PrefetchHooks Function({
             bool areaEntitiesRefs,
+            bool deviceEntitiesRefs,
             bool homeViewConfigsRefs,
           })
         > {
@@ -2441,11 +2799,16 @@ class $$ServerEntitiesTableTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({areaEntitiesRefs = false, homeViewConfigsRefs = false}) {
+              ({
+                areaEntitiesRefs = false,
+                deviceEntitiesRefs = false,
+                homeViewConfigsRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (areaEntitiesRefs) db.areaEntities,
+                    if (deviceEntitiesRefs) db.deviceEntities,
                     if (homeViewConfigsRefs) db.homeViewConfigs,
                   ],
                   addJoins: null,
@@ -2466,6 +2829,27 @@ class $$ServerEntitiesTableTableManager
                                 table,
                                 p0,
                               ).areaEntitiesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.serverId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (deviceEntitiesRefs)
+                        await $_getPrefetchedData<
+                          ServerEntity,
+                          $ServerEntitiesTable,
+                          DeviceEntity
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ServerEntitiesTableReferences
+                              ._deviceEntitiesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ServerEntitiesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).deviceEntitiesRefs,
                           referencedItemsForCurrentItem:
                               (item, referencedItems) => referencedItems.where(
                                 (e) => e.serverId == item.id,
@@ -2513,7 +2897,11 @@ typedef $$ServerEntitiesTableProcessedTableManager =
       $$ServerEntitiesTableUpdateCompanionBuilder,
       (ServerEntity, $$ServerEntitiesTableReferences),
       ServerEntity,
-      PrefetchHooks Function({bool areaEntitiesRefs, bool homeViewConfigsRefs})
+      PrefetchHooks Function({
+        bool areaEntitiesRefs,
+        bool deviceEntitiesRefs,
+        bool homeViewConfigsRefs,
+      })
     >;
 typedef $$AreaEntitiesTableCreateCompanionBuilder =
     AreaEntitiesCompanion Function({
@@ -2557,22 +2945,25 @@ final class $$AreaEntitiesTableReferences
     );
   }
 
-  static MultiTypedResultKey<$DeviceEntitiesTable, List<DeviceEntity>>
-  _deviceEntitiesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-    db.deviceEntities,
-    aliasName: $_aliasNameGenerator(
-      db.areaEntities.id,
-      db.deviceEntities.areaId,
-    ),
-  );
+  static MultiTypedResultKey<$DeviceAreaConfigsTable, List<DeviceAreaConfig>>
+  _deviceAreaConfigsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.deviceAreaConfigs,
+        aliasName: $_aliasNameGenerator(
+          db.areaEntities.id,
+          db.deviceAreaConfigs.areaId,
+        ),
+      );
 
-  $$DeviceEntitiesTableProcessedTableManager get deviceEntitiesRefs {
-    final manager = $$DeviceEntitiesTableTableManager(
+  $$DeviceAreaConfigsTableProcessedTableManager get deviceAreaConfigsRefs {
+    final manager = $$DeviceAreaConfigsTableTableManager(
       $_db,
-      $_db.deviceEntities,
+      $_db.deviceAreaConfigs,
     ).filter((f) => f.areaId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final cache = $_typedResult.readTableOrNull(_deviceEntitiesRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(
+      _deviceAreaConfigsRefsTable($_db),
+    );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -2659,22 +3050,22 @@ class $$AreaEntitiesTableFilterComposer
     return composer;
   }
 
-  Expression<bool> deviceEntitiesRefs(
-    Expression<bool> Function($$DeviceEntitiesTableFilterComposer f) f,
+  Expression<bool> deviceAreaConfigsRefs(
+    Expression<bool> Function($$DeviceAreaConfigsTableFilterComposer f) f,
   ) {
-    final $$DeviceEntitiesTableFilterComposer composer = $composerBuilder(
+    final $$DeviceAreaConfigsTableFilterComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.deviceEntities,
+      referencedTable: $db.deviceAreaConfigs,
       getReferencedColumn: (t) => t.areaId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$DeviceEntitiesTableFilterComposer(
+          }) => $$DeviceAreaConfigsTableFilterComposer(
             $db: $db,
-            $table: $db.deviceEntities,
+            $table: $db.deviceAreaConfigs,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2817,28 +3208,29 @@ class $$AreaEntitiesTableAnnotationComposer
     return composer;
   }
 
-  Expression<T> deviceEntitiesRefs<T extends Object>(
-    Expression<T> Function($$DeviceEntitiesTableAnnotationComposer a) f,
+  Expression<T> deviceAreaConfigsRefs<T extends Object>(
+    Expression<T> Function($$DeviceAreaConfigsTableAnnotationComposer a) f,
   ) {
-    final $$DeviceEntitiesTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.deviceEntities,
-      getReferencedColumn: (t) => t.areaId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$DeviceEntitiesTableAnnotationComposer(
-            $db: $db,
-            $table: $db.deviceEntities,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
+    final $$DeviceAreaConfigsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.deviceAreaConfigs,
+          getReferencedColumn: (t) => t.areaId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer,
-          ),
-    );
+              }) => $$DeviceAreaConfigsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.deviceAreaConfigs,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
     return f(composer);
   }
 
@@ -2883,7 +3275,7 @@ class $$AreaEntitiesTableTableManager
           AreaEntity,
           PrefetchHooks Function({
             bool serverId,
-            bool deviceEntitiesRefs,
+            bool deviceAreaConfigsRefs,
             bool areaHomeConfigsRefs,
           })
         > {
@@ -2941,13 +3333,13 @@ class $$AreaEntitiesTableTableManager
           prefetchHooksCallback:
               ({
                 serverId = false,
-                deviceEntitiesRefs = false,
+                deviceAreaConfigsRefs = false,
                 areaHomeConfigsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
-                    if (deviceEntitiesRefs) db.deviceEntities,
+                    if (deviceAreaConfigsRefs) db.deviceAreaConfigs,
                     if (areaHomeConfigsRefs) db.areaHomeConfigs,
                   ],
                   addJoins:
@@ -2986,21 +3378,21 @@ class $$AreaEntitiesTableTableManager
                       },
                   getPrefetchedDataCallback: (items) async {
                     return [
-                      if (deviceEntitiesRefs)
+                      if (deviceAreaConfigsRefs)
                         await $_getPrefetchedData<
                           AreaEntity,
                           $AreaEntitiesTable,
-                          DeviceEntity
+                          DeviceAreaConfig
                         >(
                           currentTable: table,
                           referencedTable: $$AreaEntitiesTableReferences
-                              ._deviceEntitiesRefsTable(db),
+                              ._deviceAreaConfigsRefsTable(db),
                           managerFromTypedResult: (p0) =>
                               $$AreaEntitiesTableReferences(
                                 db,
                                 table,
                                 p0,
-                              ).deviceEntitiesRefs,
+                              ).deviceAreaConfigsRefs,
                           referencedItemsForCurrentItem:
                               (item, referencedItems) => referencedItems.where(
                                 (e) => e.areaId == item.id,
@@ -3050,7 +3442,7 @@ typedef $$AreaEntitiesTableProcessedTableManager =
       AreaEntity,
       PrefetchHooks Function({
         bool serverId,
-        bool deviceEntitiesRefs,
+        bool deviceAreaConfigsRefs,
         bool areaHomeConfigsRefs,
       })
     >;
@@ -3060,7 +3452,7 @@ typedef $$DeviceEntitiesTableCreateCompanionBuilder =
       required String haId,
       required String name,
       required String type,
-      required int areaId,
+      required int serverId,
     });
 typedef $$DeviceEntitiesTableUpdateCompanionBuilder =
     DeviceEntitiesCompanion Function({
@@ -3068,7 +3460,7 @@ typedef $$DeviceEntitiesTableUpdateCompanionBuilder =
       Value<String> haId,
       Value<String> name,
       Value<String> type,
-      Value<int> areaId,
+      Value<int> serverId,
     });
 
 final class $$DeviceEntitiesTableReferences
@@ -3079,22 +3471,46 @@ final class $$DeviceEntitiesTableReferences
     super.$_typedResult,
   );
 
-  static $AreaEntitiesTable _areaIdTable(_$AppDatabase db) =>
-      db.areaEntities.createAlias(
-        $_aliasNameGenerator(db.deviceEntities.areaId, db.areaEntities.id),
+  static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) =>
+      db.serverEntities.createAlias(
+        $_aliasNameGenerator(db.deviceEntities.serverId, db.serverEntities.id),
       );
 
-  $$AreaEntitiesTableProcessedTableManager get areaId {
-    final $_column = $_itemColumn<int>('area_id')!;
+  $$ServerEntitiesTableProcessedTableManager get serverId {
+    final $_column = $_itemColumn<int>('server_id')!;
 
-    final manager = $$AreaEntitiesTableTableManager(
+    final manager = $$ServerEntitiesTableTableManager(
       $_db,
-      $_db.areaEntities,
+      $_db.serverEntities,
     ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_areaIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_serverIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$DeviceAreaConfigsTable, List<DeviceAreaConfig>>
+  _deviceAreaConfigsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.deviceAreaConfigs,
+        aliasName: $_aliasNameGenerator(
+          db.deviceEntities.id,
+          db.deviceAreaConfigs.deviceId,
+        ),
+      );
+
+  $$DeviceAreaConfigsTableProcessedTableManager get deviceAreaConfigsRefs {
+    final manager = $$DeviceAreaConfigsTableTableManager(
+      $_db,
+      $_db.deviceAreaConfigs,
+    ).filter((f) => f.deviceId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _deviceAreaConfigsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
     );
   }
 
@@ -3152,20 +3568,20 @@ class $$DeviceEntitiesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  $$AreaEntitiesTableFilterComposer get areaId {
-    final $$AreaEntitiesTableFilterComposer composer = $composerBuilder(
+  $$ServerEntitiesTableFilterComposer get serverId {
+    final $$ServerEntitiesTableFilterComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.areaId,
-      referencedTable: $db.areaEntities,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
       getReferencedColumn: (t) => t.id,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$AreaEntitiesTableFilterComposer(
+          }) => $$ServerEntitiesTableFilterComposer(
             $db: $db,
-            $table: $db.areaEntities,
+            $table: $db.serverEntities,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3173,6 +3589,31 @@ class $$DeviceEntitiesTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> deviceAreaConfigsRefs(
+    Expression<bool> Function($$DeviceAreaConfigsTableFilterComposer f) f,
+  ) {
+    final $$DeviceAreaConfigsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.deviceAreaConfigs,
+      getReferencedColumn: (t) => t.deviceId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeviceAreaConfigsTableFilterComposer(
+            $db: $db,
+            $table: $db.deviceAreaConfigs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 
   Expression<bool> deviceHomeConfigsRefs(
@@ -3230,20 +3671,20 @@ class $$DeviceEntitiesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  $$AreaEntitiesTableOrderingComposer get areaId {
-    final $$AreaEntitiesTableOrderingComposer composer = $composerBuilder(
+  $$ServerEntitiesTableOrderingComposer get serverId {
+    final $$ServerEntitiesTableOrderingComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.areaId,
-      referencedTable: $db.areaEntities,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
       getReferencedColumn: (t) => t.id,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$AreaEntitiesTableOrderingComposer(
+          }) => $$ServerEntitiesTableOrderingComposer(
             $db: $db,
-            $table: $db.areaEntities,
+            $table: $db.serverEntities,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3275,20 +3716,20 @@ class $$DeviceEntitiesTableAnnotationComposer
   GeneratedColumn<String> get type =>
       $composableBuilder(column: $table.type, builder: (column) => column);
 
-  $$AreaEntitiesTableAnnotationComposer get areaId {
-    final $$AreaEntitiesTableAnnotationComposer composer = $composerBuilder(
+  $$ServerEntitiesTableAnnotationComposer get serverId {
+    final $$ServerEntitiesTableAnnotationComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.areaId,
-      referencedTable: $db.areaEntities,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
       getReferencedColumn: (t) => t.id,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$AreaEntitiesTableAnnotationComposer(
+          }) => $$ServerEntitiesTableAnnotationComposer(
             $db: $db,
-            $table: $db.areaEntities,
+            $table: $db.serverEntities,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3296,6 +3737,32 @@ class $$DeviceEntitiesTableAnnotationComposer
           ),
     );
     return composer;
+  }
+
+  Expression<T> deviceAreaConfigsRefs<T extends Object>(
+    Expression<T> Function($$DeviceAreaConfigsTableAnnotationComposer a) f,
+  ) {
+    final $$DeviceAreaConfigsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.deviceAreaConfigs,
+          getReferencedColumn: (t) => t.deviceId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$DeviceAreaConfigsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.deviceAreaConfigs,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
   }
 
   Expression<T> deviceHomeConfigsRefs<T extends Object>(
@@ -3338,7 +3805,11 @@ class $$DeviceEntitiesTableTableManager
           $$DeviceEntitiesTableUpdateCompanionBuilder,
           (DeviceEntity, $$DeviceEntitiesTableReferences),
           DeviceEntity,
-          PrefetchHooks Function({bool areaId, bool deviceHomeConfigsRefs})
+          PrefetchHooks Function({
+            bool serverId,
+            bool deviceAreaConfigsRefs,
+            bool deviceHomeConfigsRefs,
+          })
         > {
   $$DeviceEntitiesTableTableManager(
     _$AppDatabase db,
@@ -3359,13 +3830,13 @@ class $$DeviceEntitiesTableTableManager
                 Value<String> haId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> type = const Value.absent(),
-                Value<int> areaId = const Value.absent(),
+                Value<int> serverId = const Value.absent(),
               }) => DeviceEntitiesCompanion(
                 id: id,
                 haId: haId,
                 name: name,
                 type: type,
-                areaId: areaId,
+                serverId: serverId,
               ),
           createCompanionCallback:
               ({
@@ -3373,13 +3844,13 @@ class $$DeviceEntitiesTableTableManager
                 required String haId,
                 required String name,
                 required String type,
-                required int areaId,
+                required int serverId,
               }) => DeviceEntitiesCompanion.insert(
                 id: id,
                 haId: haId,
                 name: name,
                 type: type,
-                areaId: areaId,
+                serverId: serverId,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -3390,10 +3861,15 @@ class $$DeviceEntitiesTableTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({areaId = false, deviceHomeConfigsRefs = false}) {
+              ({
+                serverId = false,
+                deviceAreaConfigsRefs = false,
+                deviceHomeConfigsRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
+                    if (deviceAreaConfigsRefs) db.deviceAreaConfigs,
                     if (deviceHomeConfigsRefs) db.deviceHomeConfigs,
                   ],
                   addJoins:
@@ -3412,17 +3888,17 @@ class $$DeviceEntitiesTableTableManager
                           dynamic
                         >
                       >(state) {
-                        if (areaId) {
+                        if (serverId) {
                           state =
                               state.withJoin(
                                     currentTable: table,
-                                    currentColumn: table.areaId,
+                                    currentColumn: table.serverId,
                                     referencedTable:
                                         $$DeviceEntitiesTableReferences
-                                            ._areaIdTable(db),
+                                            ._serverIdTable(db),
                                     referencedColumn:
                                         $$DeviceEntitiesTableReferences
-                                            ._areaIdTable(db)
+                                            ._serverIdTable(db)
                                             .id,
                                   )
                                   as T;
@@ -3432,6 +3908,27 @@ class $$DeviceEntitiesTableTableManager
                       },
                   getPrefetchedDataCallback: (items) async {
                     return [
+                      if (deviceAreaConfigsRefs)
+                        await $_getPrefetchedData<
+                          DeviceEntity,
+                          $DeviceEntitiesTable,
+                          DeviceAreaConfig
+                        >(
+                          currentTable: table,
+                          referencedTable: $$DeviceEntitiesTableReferences
+                              ._deviceAreaConfigsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$DeviceEntitiesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).deviceAreaConfigsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.deviceId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                       if (deviceHomeConfigsRefs)
                         await $_getPrefetchedData<
                           DeviceEntity,
@@ -3473,7 +3970,395 @@ typedef $$DeviceEntitiesTableProcessedTableManager =
       $$DeviceEntitiesTableUpdateCompanionBuilder,
       (DeviceEntity, $$DeviceEntitiesTableReferences),
       DeviceEntity,
-      PrefetchHooks Function({bool areaId, bool deviceHomeConfigsRefs})
+      PrefetchHooks Function({
+        bool serverId,
+        bool deviceAreaConfigsRefs,
+        bool deviceHomeConfigsRefs,
+      })
+    >;
+typedef $$DeviceAreaConfigsTableCreateCompanionBuilder =
+    DeviceAreaConfigsCompanion Function({
+      Value<int> id,
+      required int deviceId,
+      required int areaId,
+    });
+typedef $$DeviceAreaConfigsTableUpdateCompanionBuilder =
+    DeviceAreaConfigsCompanion Function({
+      Value<int> id,
+      Value<int> deviceId,
+      Value<int> areaId,
+    });
+
+final class $$DeviceAreaConfigsTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $DeviceAreaConfigsTable,
+          DeviceAreaConfig
+        > {
+  $$DeviceAreaConfigsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $DeviceEntitiesTable _deviceIdTable(_$AppDatabase db) =>
+      db.deviceEntities.createAlias(
+        $_aliasNameGenerator(
+          db.deviceAreaConfigs.deviceId,
+          db.deviceEntities.id,
+        ),
+      );
+
+  $$DeviceEntitiesTableProcessedTableManager get deviceId {
+    final $_column = $_itemColumn<int>('device_id')!;
+
+    final manager = $$DeviceEntitiesTableTableManager(
+      $_db,
+      $_db.deviceEntities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_deviceIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $AreaEntitiesTable _areaIdTable(_$AppDatabase db) =>
+      db.areaEntities.createAlias(
+        $_aliasNameGenerator(db.deviceAreaConfigs.areaId, db.areaEntities.id),
+      );
+
+  $$AreaEntitiesTableProcessedTableManager get areaId {
+    final $_column = $_itemColumn<int>('area_id')!;
+
+    final manager = $$AreaEntitiesTableTableManager(
+      $_db,
+      $_db.areaEntities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_areaIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$DeviceAreaConfigsTableFilterComposer
+    extends Composer<_$AppDatabase, $DeviceAreaConfigsTable> {
+  $$DeviceAreaConfigsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$DeviceEntitiesTableFilterComposer get deviceId {
+    final $$DeviceEntitiesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.deviceId,
+      referencedTable: $db.deviceEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeviceEntitiesTableFilterComposer(
+            $db: $db,
+            $table: $db.deviceEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$AreaEntitiesTableFilterComposer get areaId {
+    final $$AreaEntitiesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.areaId,
+      referencedTable: $db.areaEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AreaEntitiesTableFilterComposer(
+            $db: $db,
+            $table: $db.areaEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DeviceAreaConfigsTableOrderingComposer
+    extends Composer<_$AppDatabase, $DeviceAreaConfigsTable> {
+  $$DeviceAreaConfigsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$DeviceEntitiesTableOrderingComposer get deviceId {
+    final $$DeviceEntitiesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.deviceId,
+      referencedTable: $db.deviceEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeviceEntitiesTableOrderingComposer(
+            $db: $db,
+            $table: $db.deviceEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$AreaEntitiesTableOrderingComposer get areaId {
+    final $$AreaEntitiesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.areaId,
+      referencedTable: $db.areaEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AreaEntitiesTableOrderingComposer(
+            $db: $db,
+            $table: $db.areaEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DeviceAreaConfigsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DeviceAreaConfigsTable> {
+  $$DeviceAreaConfigsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  $$DeviceEntitiesTableAnnotationComposer get deviceId {
+    final $$DeviceEntitiesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.deviceId,
+      referencedTable: $db.deviceEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeviceEntitiesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.deviceEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$AreaEntitiesTableAnnotationComposer get areaId {
+    final $$AreaEntitiesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.areaId,
+      referencedTable: $db.areaEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AreaEntitiesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.areaEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DeviceAreaConfigsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DeviceAreaConfigsTable,
+          DeviceAreaConfig,
+          $$DeviceAreaConfigsTableFilterComposer,
+          $$DeviceAreaConfigsTableOrderingComposer,
+          $$DeviceAreaConfigsTableAnnotationComposer,
+          $$DeviceAreaConfigsTableCreateCompanionBuilder,
+          $$DeviceAreaConfigsTableUpdateCompanionBuilder,
+          (DeviceAreaConfig, $$DeviceAreaConfigsTableReferences),
+          DeviceAreaConfig,
+          PrefetchHooks Function({bool deviceId, bool areaId})
+        > {
+  $$DeviceAreaConfigsTableTableManager(
+    _$AppDatabase db,
+    $DeviceAreaConfigsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DeviceAreaConfigsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DeviceAreaConfigsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DeviceAreaConfigsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> deviceId = const Value.absent(),
+                Value<int> areaId = const Value.absent(),
+              }) => DeviceAreaConfigsCompanion(
+                id: id,
+                deviceId: deviceId,
+                areaId: areaId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int deviceId,
+                required int areaId,
+              }) => DeviceAreaConfigsCompanion.insert(
+                id: id,
+                deviceId: deviceId,
+                areaId: areaId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$DeviceAreaConfigsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({deviceId = false, areaId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (deviceId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.deviceId,
+                                referencedTable:
+                                    $$DeviceAreaConfigsTableReferences
+                                        ._deviceIdTable(db),
+                                referencedColumn:
+                                    $$DeviceAreaConfigsTableReferences
+                                        ._deviceIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+                    if (areaId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.areaId,
+                                referencedTable:
+                                    $$DeviceAreaConfigsTableReferences
+                                        ._areaIdTable(db),
+                                referencedColumn:
+                                    $$DeviceAreaConfigsTableReferences
+                                        ._areaIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$DeviceAreaConfigsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DeviceAreaConfigsTable,
+      DeviceAreaConfig,
+      $$DeviceAreaConfigsTableFilterComposer,
+      $$DeviceAreaConfigsTableOrderingComposer,
+      $$DeviceAreaConfigsTableAnnotationComposer,
+      $$DeviceAreaConfigsTableCreateCompanionBuilder,
+      $$DeviceAreaConfigsTableUpdateCompanionBuilder,
+      (DeviceAreaConfig, $$DeviceAreaConfigsTableReferences),
+      DeviceAreaConfig,
+      PrefetchHooks Function({bool deviceId, bool areaId})
     >;
 typedef $$HomeViewConfigsTableCreateCompanionBuilder =
     HomeViewConfigsCompanion Function({Value<int> id, required int serverId});
@@ -4768,6 +5653,8 @@ class $AppDatabaseManager {
       $$AreaEntitiesTableTableManager(_db, _db.areaEntities);
   $$DeviceEntitiesTableTableManager get deviceEntities =>
       $$DeviceEntitiesTableTableManager(_db, _db.deviceEntities);
+  $$DeviceAreaConfigsTableTableManager get deviceAreaConfigs =>
+      $$DeviceAreaConfigsTableTableManager(_db, _db.deviceAreaConfigs);
   $$HomeViewConfigsTableTableManager get homeViewConfigs =>
       $$HomeViewConfigsTableTableManager(_db, _db.homeViewConfigs);
   $$AreaHomeConfigsTableTableManager get areaHomeConfigs =>

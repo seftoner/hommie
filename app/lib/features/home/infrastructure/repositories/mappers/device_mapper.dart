@@ -9,12 +9,12 @@ extension DeviceMapper on DeviceEntity {
 }
 
 extension DeviceDomainMapper on Device {
-  DeviceEntitiesCompanion toCompanion(int areaId) {
+  DeviceEntitiesCompanion toCompanion(int serverId) {
     return DeviceEntitiesCompanion(
       haId: Value(id),
       name: Value(name),
       type: Value(type),
-      areaId: Value(areaId),
+      serverId: Value(serverId),
     );
   }
 }

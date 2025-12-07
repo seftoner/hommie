@@ -65,7 +65,7 @@ class ServerEntities extends Table {
 ///
 /// **Relationships:**
 /// - Many-to-one with [ServerEntities] (cascade delete on server deletion)
-/// - One-to-many with [DeviceEntities] (cascade delete)
+/// - Many-to-many with [DeviceEntities] via [DeviceAreaConfigs] (cascade delete on configs)
 /// - Referenced by [AreaHomeConfigs] for home view positioning
 ///
 /// **Usage:**
@@ -79,6 +79,7 @@ class ServerEntities extends Table {
 /// - `haId` must be unique across all areas
 /// - Optional `background` and `image` for custom UI theming
 /// - Cascading delete: deleting a server removes all its areas
+/// - Cascading delete: deleting an area removes all its device associations via [DeviceAreaConfigs]
 ///
 /// **Example:**
 /// ```dart
@@ -117,20 +118,23 @@ class AreaEntities extends Table {
 /// (e.g., smart lights, TVs, switches, sensors).
 ///
 /// **Relationships:**
-/// - Many-to-one with [AreaEntities] (cascade delete on area deletion)
+/// - Many-to-one with [ServerEntities] (cascade delete on server deletion)
+/// - Many-to-many with [AreaEntities] via [DeviceAreaConfigs]
 /// - Referenced by [DeviceHomeConfigs] for home view display
 ///
 /// **Usage:**
 /// - Managed by `DriftDeviceRepository` in features/home
 /// - Synced from Home Assistant API
-/// - Joined with [AreaEntities] to get area information
+/// - Joined with [AreaEntities] via [DeviceAreaConfigs] to get area information
 /// - Filtered and displayed in home view based on configuration
+/// - Device persists even if removed from all areas
 ///
 /// **Key Features:**
 /// - `haId` is the unique entity ID from Home Assistant (e.g., "light.living_room_lamp")
 /// - `haId` must be unique across all devices
 /// - `type` indicates device domain (e.g., "light", "switch", "media_player")
-/// - Cascading delete: deleting an area removes all its devices
+/// - Device lifecycle independent of area assignments
+/// - Cascading delete: deleting a server removes all its devices
 ///
 /// **Example:**
 /// ```dart
@@ -138,7 +142,7 @@ class AreaEntities extends Table {
 ///   haId: Value('light.living_room_lamp'),
 ///   name: Value('Living Room Lamp'),
 ///   type: Value('light'),
-///   areaId: Value(1),
+///   serverId: Value(1),
 /// )
 /// ```
 class DeviceEntities extends Table {
@@ -154,10 +158,59 @@ class DeviceEntities extends Table {
   /// Device domain/type (e.g., "light", "switch", "media_player", "sensor")
   TextColumn get type => text()();
 
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all its devices
+  IntColumn get serverId =>
+      integer().references(ServerEntities, #id, onDelete: KeyAction.cascade)();
+}
+
+/// Database table for Device-Area associations.
+///
+/// **Junction Table:** Links devices to areas in a many-to-many relationship.
+/// Devices can exist without being assigned to any area, and areas can have
+/// multiple devices.
+///
+/// **Relationships:**
+/// - Many-to-one with [DeviceEntities] (cascade delete on device deletion)
+/// - Many-to-one with [AreaEntities] (cascade delete on area deletion)
+///
+/// **Usage:**
+/// - Managed by `DriftDeviceRepository` in features/home
+/// - Created when syncing device area assignments from Home Assistant
+/// - Allows devices to persist even when removed from an area
+/// - Used to join devices with areas when querying device locations
+///
+/// **Key Features:**
+/// - Unique constraint prevents duplicate device-area assignments
+/// - Cascading delete: deleting an area removes all its device associations
+/// - Cascading delete: deleting a device removes all its area associations
+/// - Device lifecycle is independent - device persists after all associations deleted
+///
+/// **Example:**
+/// ```dart
+/// DeviceAreaConfigsCompanion(
+///   deviceId: Value(1), // Living Room Lamp
+///   areaId: Value(1), // Living Room
+/// )
+/// ```
+class DeviceAreaConfigs extends Table {
+  /// Auto-incrementing primary key
+  IntColumn get id => integer().autoIncrement()();
+
+  /// Foreign key reference to [DeviceEntities]
+  /// Cascades: deleting a device removes all its area associations
+  IntColumn get deviceId =>
+      integer().references(DeviceEntities, #id, onDelete: KeyAction.cascade)();
+
   /// Foreign key reference to [AreaEntities]
-  /// Cascades: deleting an area deletes all its devices
+  /// Cascades: deleting an area removes all its device associations
   IntColumn get areaId =>
       integer().references(AreaEntities, #id, onDelete: KeyAction.cascade)();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {deviceId, areaId}, // Can't assign same device to same area twice
+  ];
 }
 
 /// Database table for Home View root configuration.
