@@ -52,7 +52,7 @@ void serverSessionCoordinator(Ref ref) {
   });
 }
 
-@Dependencies([authController])
+@Dependencies([serverConnectionManager, authController])
 class _ServerSessionHandler {
   _ServerSessionHandler(this._ref);
 
