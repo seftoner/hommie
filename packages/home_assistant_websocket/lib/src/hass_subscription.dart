@@ -30,11 +30,11 @@ class HassSubscription {
   }
 
   /// Disposes of the subscription and its resources.
-  void dispose() {
+  Future<void> dispose() async {
     if (!_streamController.isClosed) {
-      _streamController.close();
+      await _streamController.close();
     }
-    unsubscribe();
+    await unsubscribe();
   }
 
   /// Whether this subscription has been disposed.

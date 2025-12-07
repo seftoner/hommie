@@ -1714,7 +1714,7 @@ as String?,
 /// @nodoc
 mixin _$HassEventBase {
 
- Context get context; String get origin; String get timeFired;
+ Context get context; String get origin; String get time_fired;
 /// Create a copy of HassEventBase
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1725,16 +1725,16 @@ $HassEventBaseCopyWith<HassEventBase> get copyWith => _$HassEventBaseCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEventBase&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.timeFired, timeFired) || other.timeFired == timeFired));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEventBase&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.time_fired, time_fired) || other.time_fired == time_fired));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,context,origin,timeFired);
+int get hashCode => Object.hash(runtimeType,context,origin,time_fired);
 
 @override
 String toString() {
-  return 'HassEventBase(context: $context, origin: $origin, timeFired: $timeFired)';
+  return 'HassEventBase(context: $context, origin: $origin, time_fired: $time_fired)';
 }
 
 
@@ -1745,7 +1745,7 @@ abstract mixin class $HassEventBaseCopyWith<$Res>  {
   factory $HassEventBaseCopyWith(HassEventBase value, $Res Function(HassEventBase) _then) = _$HassEventBaseCopyWithImpl;
 @useResult
 $Res call({
- Context context, String origin, String timeFired
+ Context context, String origin, String time_fired
 });
 
 
@@ -1762,11 +1762,11 @@ class _$HassEventBaseCopyWithImpl<$Res>
 
 /// Create a copy of HassEventBase
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? context = null,Object? origin = null,Object? timeFired = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? context = null,Object? origin = null,Object? time_fired = null,}) {
   return _then(_self.copyWith(
 context: null == context ? _self.context : context // ignore: cast_nullable_to_non_nullable
 as Context,origin: null == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
-as String,timeFired: null == timeFired ? _self.timeFired : timeFired // ignore: cast_nullable_to_non_nullable
+as String,time_fired: null == time_fired ? _self.time_fired : time_fired // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -1861,10 +1861,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Context context,  String origin,  String timeFired)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Context context,  String origin,  String time_fired)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HassEventBase() when $default != null:
-return $default(_that.context,_that.origin,_that.timeFired);case _:
+return $default(_that.context,_that.origin,_that.time_fired);case _:
   return orElse();
 
 }
@@ -1882,10 +1882,10 @@ return $default(_that.context,_that.origin,_that.timeFired);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Context context,  String origin,  String timeFired)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Context context,  String origin,  String time_fired)  $default,) {final _that = this;
 switch (_that) {
 case _HassEventBase():
-return $default(_that.context,_that.origin,_that.timeFired);case _:
+return $default(_that.context,_that.origin,_that.time_fired);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1902,10 +1902,10 @@ return $default(_that.context,_that.origin,_that.timeFired);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Context context,  String origin,  String timeFired)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Context context,  String origin,  String time_fired)?  $default,) {final _that = this;
 switch (_that) {
 case _HassEventBase() when $default != null:
-return $default(_that.context,_that.origin,_that.timeFired);case _:
+return $default(_that.context,_that.origin,_that.time_fired);case _:
   return null;
 
 }
@@ -1917,12 +1917,12 @@ return $default(_that.context,_that.origin,_that.timeFired);case _:
 
 
 class _HassEventBase implements HassEventBase {
-  const _HassEventBase({required this.context, required this.origin, required this.timeFired});
+  const _HassEventBase({required this.context, required this.origin, required this.time_fired});
   
 
 @override final  Context context;
 @override final  String origin;
-@override final  String timeFired;
+@override final  String time_fired;
 
 /// Create a copy of HassEventBase
 /// with the given fields replaced by the non-null parameter values.
@@ -1934,16 +1934,16 @@ _$HassEventBaseCopyWith<_HassEventBase> get copyWith => __$HassEventBaseCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEventBase&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.timeFired, timeFired) || other.timeFired == timeFired));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEventBase&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.time_fired, time_fired) || other.time_fired == time_fired));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,context,origin,timeFired);
+int get hashCode => Object.hash(runtimeType,context,origin,time_fired);
 
 @override
 String toString() {
-  return 'HassEventBase(context: $context, origin: $origin, timeFired: $timeFired)';
+  return 'HassEventBase(context: $context, origin: $origin, time_fired: $time_fired)';
 }
 
 
@@ -1954,7 +1954,7 @@ abstract mixin class _$HassEventBaseCopyWith<$Res> implements $HassEventBaseCopy
   factory _$HassEventBaseCopyWith(_HassEventBase value, $Res Function(_HassEventBase) _then) = __$HassEventBaseCopyWithImpl;
 @override @useResult
 $Res call({
- Context context, String origin, String timeFired
+ Context context, String origin, String time_fired
 });
 
 
@@ -1971,11 +1971,11 @@ class __$HassEventBaseCopyWithImpl<$Res>
 
 /// Create a copy of HassEventBase
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? context = null,Object? origin = null,Object? timeFired = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? context = null,Object? origin = null,Object? time_fired = null,}) {
   return _then(_HassEventBase(
 context: null == context ? _self.context : context // ignore: cast_nullable_to_non_nullable
 as Context,origin: null == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
-as String,timeFired: null == timeFired ? _self.timeFired : timeFired // ignore: cast_nullable_to_non_nullable
+as String,time_fired: null == time_fired ? _self.time_fired : time_fired // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -1996,7 +1996,7 @@ $ContextCopyWith<$Res> get context {
 /// @nodoc
 mixin _$HassEvent {
 
- Context get context; String get origin; String get timeFired; String get eventType; Map<String, dynamic> get data;
+ Context get context; String get origin; String get time_fired; String get event_type; Map<String, dynamic> get data;
 /// Create a copy of HassEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2009,16 +2009,16 @@ $HassEventCopyWith<HassEvent> get copyWith => _$HassEventCopyWithImpl<HassEvent>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEvent&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.timeFired, timeFired) || other.timeFired == timeFired)&&(identical(other.eventType, eventType) || other.eventType == eventType)&&const DeepCollectionEquality().equals(other.data, data));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEvent&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.time_fired, time_fired) || other.time_fired == time_fired)&&(identical(other.event_type, event_type) || other.event_type == event_type)&&const DeepCollectionEquality().equals(other.data, data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,context,origin,timeFired,eventType,const DeepCollectionEquality().hash(data));
+int get hashCode => Object.hash(runtimeType,context,origin,time_fired,event_type,const DeepCollectionEquality().hash(data));
 
 @override
 String toString() {
-  return 'HassEvent(context: $context, origin: $origin, timeFired: $timeFired, eventType: $eventType, data: $data)';
+  return 'HassEvent(context: $context, origin: $origin, time_fired: $time_fired, event_type: $event_type, data: $data)';
 }
 
 
@@ -2029,7 +2029,7 @@ abstract mixin class $HassEventCopyWith<$Res>  {
   factory $HassEventCopyWith(HassEvent value, $Res Function(HassEvent) _then) = _$HassEventCopyWithImpl;
 @useResult
 $Res call({
- Context context, String origin, String timeFired, String eventType, Map<String, dynamic> data
+ Context context, String origin, String time_fired, String event_type, Map<String, dynamic> data
 });
 
 
@@ -2046,12 +2046,12 @@ class _$HassEventCopyWithImpl<$Res>
 
 /// Create a copy of HassEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? context = null,Object? origin = null,Object? timeFired = null,Object? eventType = null,Object? data = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? context = null,Object? origin = null,Object? time_fired = null,Object? event_type = null,Object? data = null,}) {
   return _then(_self.copyWith(
 context: null == context ? _self.context : context // ignore: cast_nullable_to_non_nullable
 as Context,origin: null == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
-as String,timeFired: null == timeFired ? _self.timeFired : timeFired // ignore: cast_nullable_to_non_nullable
-as String,eventType: null == eventType ? _self.eventType : eventType // ignore: cast_nullable_to_non_nullable
+as String,time_fired: null == time_fired ? _self.time_fired : time_fired // ignore: cast_nullable_to_non_nullable
+as String,event_type: null == event_type ? _self.event_type : event_type // ignore: cast_nullable_to_non_nullable
 as String,data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>,
   ));
@@ -2144,10 +2144,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Context context,  String origin,  String timeFired,  String eventType,  Map<String, dynamic> data)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Context context,  String origin,  String time_fired,  String event_type,  Map<String, dynamic> data)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HassEvent() when $default != null:
-return $default(_that.context,_that.origin,_that.timeFired,_that.eventType,_that.data);case _:
+return $default(_that.context,_that.origin,_that.time_fired,_that.event_type,_that.data);case _:
   return orElse();
 
 }
@@ -2165,10 +2165,10 @@ return $default(_that.context,_that.origin,_that.timeFired,_that.eventType,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Context context,  String origin,  String timeFired,  String eventType,  Map<String, dynamic> data)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Context context,  String origin,  String time_fired,  String event_type,  Map<String, dynamic> data)  $default,) {final _that = this;
 switch (_that) {
 case _HassEvent():
-return $default(_that.context,_that.origin,_that.timeFired,_that.eventType,_that.data);}
+return $default(_that.context,_that.origin,_that.time_fired,_that.event_type,_that.data);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -2182,10 +2182,10 @@ return $default(_that.context,_that.origin,_that.timeFired,_that.eventType,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Context context,  String origin,  String timeFired,  String eventType,  Map<String, dynamic> data)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Context context,  String origin,  String time_fired,  String event_type,  Map<String, dynamic> data)?  $default,) {final _that = this;
 switch (_that) {
 case _HassEvent() when $default != null:
-return $default(_that.context,_that.origin,_that.timeFired,_that.eventType,_that.data);case _:
+return $default(_that.context,_that.origin,_that.time_fired,_that.event_type,_that.data);case _:
   return null;
 
 }
@@ -2197,13 +2197,13 @@ return $default(_that.context,_that.origin,_that.timeFired,_that.eventType,_that
 @JsonSerializable()
 
 class _HassEvent implements HassEvent {
-   _HassEvent({required this.context, required this.origin, required this.timeFired, required this.eventType, required final  Map<String, dynamic> data}): _data = data;
+   _HassEvent({required this.context, required this.origin, required this.time_fired, required this.event_type, required final  Map<String, dynamic> data}): _data = data;
   factory _HassEvent.fromJson(Map<String, dynamic> json) => _$HassEventFromJson(json);
 
 @override final  Context context;
 @override final  String origin;
-@override final  String timeFired;
-@override final  String eventType;
+@override final  String time_fired;
+@override final  String event_type;
  final  Map<String, dynamic> _data;
 @override Map<String, dynamic> get data {
   if (_data is EqualUnmodifiableMapView) return _data;
@@ -2225,16 +2225,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEvent&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.timeFired, timeFired) || other.timeFired == timeFired)&&(identical(other.eventType, eventType) || other.eventType == eventType)&&const DeepCollectionEquality().equals(other._data, _data));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEvent&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.time_fired, time_fired) || other.time_fired == time_fired)&&(identical(other.event_type, event_type) || other.event_type == event_type)&&const DeepCollectionEquality().equals(other._data, _data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,context,origin,timeFired,eventType,const DeepCollectionEquality().hash(_data));
+int get hashCode => Object.hash(runtimeType,context,origin,time_fired,event_type,const DeepCollectionEquality().hash(_data));
 
 @override
 String toString() {
-  return 'HassEvent(context: $context, origin: $origin, timeFired: $timeFired, eventType: $eventType, data: $data)';
+  return 'HassEvent(context: $context, origin: $origin, time_fired: $time_fired, event_type: $event_type, data: $data)';
 }
 
 
@@ -2245,7 +2245,7 @@ abstract mixin class _$HassEventCopyWith<$Res> implements $HassEventCopyWith<$Re
   factory _$HassEventCopyWith(_HassEvent value, $Res Function(_HassEvent) _then) = __$HassEventCopyWithImpl;
 @override @useResult
 $Res call({
- Context context, String origin, String timeFired, String eventType, Map<String, dynamic> data
+ Context context, String origin, String time_fired, String event_type, Map<String, dynamic> data
 });
 
 
@@ -2262,12 +2262,12 @@ class __$HassEventCopyWithImpl<$Res>
 
 /// Create a copy of HassEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? context = null,Object? origin = null,Object? timeFired = null,Object? eventType = null,Object? data = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? context = null,Object? origin = null,Object? time_fired = null,Object? event_type = null,Object? data = null,}) {
   return _then(_HassEvent(
 context: null == context ? _self.context : context // ignore: cast_nullable_to_non_nullable
 as Context,origin: null == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
-as String,timeFired: null == timeFired ? _self.timeFired : timeFired // ignore: cast_nullable_to_non_nullable
-as String,eventType: null == eventType ? _self.eventType : eventType // ignore: cast_nullable_to_non_nullable
+as String,time_fired: null == time_fired ? _self.time_fired : time_fired // ignore: cast_nullable_to_non_nullable
+as String,event_type: null == event_type ? _self.event_type : event_type // ignore: cast_nullable_to_non_nullable
 as String,data: null == data ? _self._data : data // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>,
   ));

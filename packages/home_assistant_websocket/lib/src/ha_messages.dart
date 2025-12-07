@@ -103,6 +103,18 @@ class SubscribeEntitiesMessage extends HABaseMessage {
   }
 }
 
+class SubscribeEventsMessage extends HABaseMessage {
+  SubscribeEventsMessage(String? eventType) {
+    if (eventType != null) {
+      _payload['event_type'] = eventType;
+    }
+  }
+  @override
+  Map<String, dynamic> get _basePayload => <String, dynamic>{
+    'type': 'subscribe_events',
+  };
+}
+
 class UnsubscribeEventsMessage extends HABaseMessage {
   @override
   Map<String, dynamic> get _basePayload => <String, dynamic>{

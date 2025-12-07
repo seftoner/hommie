@@ -96,21 +96,12 @@ class ContextConverter implements JsonConverter<Context, Map<String, dynamic>> {
 }
 
 @freezed
-abstract class HassEventBase with _$HassEventBase {
-  const factory HassEventBase({
-    required Context context,
-    required String origin,
-    required String timeFired,
-  }) = _HassEventBase;
-}
-
-@freezed
 sealed class HassEvent with _$HassEvent {
   factory HassEvent({
     required Context context,
     required String origin,
-    required String timeFired,
-    required String eventType,
+    required String time_fired,
+    required String event_type,
     required Map<String, dynamic> data,
   }) = _HassEvent;
 

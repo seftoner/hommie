@@ -205,7 +205,7 @@ class HAConnection implements IHAConnection {
     if (subscription != null) {
       subscription.emit(event);
     } else {
-      _logger.error('Unknown subscription $id, unsubscribing');
+      _logger.warning('Unknown subscription $id, unsubscribing');
       sendMessage(
         UnsubscribeEventsMessage(subscriptionID: id),
       ).catchError((e) => _logger.error('Error unsubscribing: $e'));

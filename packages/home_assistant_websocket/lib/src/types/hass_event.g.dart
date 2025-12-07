@@ -89,8 +89,8 @@ Map<String, dynamic> _$ContextToJson(_Context instance) => <String, dynamic>{
 _HassEvent _$HassEventFromJson(Map<String, dynamic> json) => _HassEvent(
   context: Context.fromJson(json['context']),
   origin: json['origin'] as String,
-  timeFired: json['timeFired'] as String,
-  eventType: json['eventType'] as String,
+  time_fired: json['time_fired'] as String,
+  event_type: json['event_type'] as String,
   data: json['data'] as Map<String, dynamic>,
 );
 
@@ -98,8 +98,8 @@ Map<String, dynamic> _$HassEventToJson(_HassEvent instance) =>
     <String, dynamic>{
       'context': instance.context,
       'origin': instance.origin,
-      'timeFired': instance.timeFired,
-      'eventType': instance.eventType,
+      'time_fired': instance.time_fired,
+      'event_type': instance.event_type,
       'data': instance.data,
     };
 

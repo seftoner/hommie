@@ -37,6 +37,13 @@ class HACommands {
     return connection.sendMessage(ConfigMessage()).mapItem(HassConfig.fromJson);
   }
 
+  static HassSubscription subscribeEvents(
+    IHAConnection connection, [
+    String? eventType,
+  ]) {
+    return connection.subscribeMessage(SubscribeEventsMessage(eventType));
+  }
+
   static HassSubscription subscribeEntities(
     IHAConnection connection, [
     String? eventType,
