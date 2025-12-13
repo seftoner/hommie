@@ -44,10 +44,7 @@ class HACommands {
     return connection.subscribeMessage(SubscribeEventsMessage(eventType));
   }
 
-  static HassSubscription subscribeEntities(
-    IHAConnection connection, [
-    String? eventType,
-  ]) {
+  static HassSubscription subscribeEntities(IHAConnection connection) {
     return connection.subscribeMessage(SubscribeEntitiesMessage());
   }
 

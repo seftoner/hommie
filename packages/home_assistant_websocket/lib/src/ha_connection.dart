@@ -8,7 +8,6 @@ import 'ha_socket_state.dart';
 import 'hass_subscription.dart';
 import 'logger_interface.dart';
 import 'message_handler.dart';
-import 'types/web_socket_response.dart';
 
 /// Interface for Home Assistant websocket connection.
 abstract class IHAConnection {
@@ -23,12 +22,38 @@ abstract class IHAConnection {
   Future<void> close();
 }
 
+/// Internal pending entry stored per command/subscription id.
+sealed class _HaPending {
+  const _HaPending();
+}
+
+final class _HaPendingCommand extends _HaPending {
+  _HaPendingCommand(this.completer);
+
+  final Completer<dynamic> completer;
+  Timer? timeoutTimer;
+
+  void cancelTimeout() {
+    timeoutTimer?.cancel();
+    timeoutTimer = null;
+  }
+}
+
+final class _HaPendingSubscription extends _HaPending {
+  _HaPendingSubscription(this.subscription);
+
+  bool isActive = false;
+
+  final HassSubscription subscription;
+}
+
 /// Implementation of Home Assistant websocket connection.
 /// Handles connection management, message sending, and event subscriptions.
 /// Note: This class no longer handles reconnection logic - use ConnectionOrchestrator for that.
 class HAConnection implements IHAConnection {
   HASocket? _socket;
   StreamSubscription<dynamic>? _socketSubscription;
+  Future<void>? _closing;
 
   final HAConnectionOption _haConnectionOption;
   final HAMessageHandler _messageHandler;
@@ -48,8 +73,7 @@ class HAConnection implements IHAConnection {
 
   //Wonder why 2? this part from official code: socket may send 1 at the start to enable features
   int _commandID = 2;
-  final Map<int, Completer> _commands = {};
-  final Map<int, HassSubscription> _subscriptions = {};
+  final Map<int, _HaPending> _pending = {};
   int get _getCommandID => _commandID++;
 
   /// Establishes connection to Home Assistant.
@@ -90,16 +114,17 @@ class HAConnection implements IHAConnection {
       return Future.error(ConnectionClosedError('Connection is closed'));
     }
 
-    final completer = Completer<dynamic>();
     final id = _getCommandID;
-    _commands[id] = completer;
     message.id = id;
 
+    final pending = _HaPendingCommand(Completer<dynamic>());
+    _pending[id] = pending;
+
     // Set up timeout to prevent memory leaks from hanging commands
-    Timer(timeout, () {
-      final pendingCompleter = _commands.remove(id);
-      if (pendingCompleter != null && !pendingCompleter.isCompleted) {
-        pendingCompleter.completeError(
+    pending.timeoutTimer = Timer(timeout, () {
+      final entry = _pending.remove(id);
+      if (entry is _HaPendingCommand && !entry.completer.isCompleted) {
+        entry.completer.completeError(
           TimeoutException(
             'Command $id timed out after ${timeout.inSeconds}s',
             timeout,
@@ -110,22 +135,56 @@ class HAConnection implements IHAConnection {
 
     _socket!.sendMessage(message);
 
-    return completer.future;
+    return pending.completer.future;
   }
 
   @override
   Future<void> close() async {
-    _socketSubscription?.cancel();
-    await _socket?.close();
+    await _shutdown(initiatedBySocket: false);
+  }
 
-    // Clear all subscriptions to prevent memory leaks
-    for (final subscription in _subscriptions.values) {
-      subscription.dispose();
+  Future<void> _shutdown({required bool initiatedBySocket}) async {
+    if (_closing != null) {
+      return _closing!;
     }
-    _subscriptions.clear();
 
-    _connectionState.dispose();
-    _socket = null;
+    _logger.debug(
+      'Closing connection (${initiatedBySocket ? 'socket closed' : 'manual'})',
+    );
+
+    _closing = () async {
+      _socketSubscription?.cancel();
+      _socketSubscription = null;
+
+      if (!initiatedBySocket && _socket != null && !_socket!.isClosed) {
+        await _socket!.close();
+      }
+
+      _handlePendingCommands();
+      await _cleanupSubscriptions();
+
+      _commandID = 2;
+
+      final lastState = _socket?.state;
+      _socket = null;
+
+      if (initiatedBySocket) {
+        if (lastState case Disconnected(type: DisconnectionType.authFailure)) {
+          _connectionState.setState(lastState);
+        } else {
+          _connectionState.setState(const Disconnected());
+        }
+      } else {
+        _connectionState.setState(const Disconnected());
+        _connectionState.dispose();
+      }
+    }();
+
+    try {
+      await _closing;
+    } finally {
+      _closing = null;
+    }
   }
 
   @override
@@ -138,16 +197,21 @@ class HAConnection implements IHAConnection {
 
     final hassSubscription = HassSubscription(
       unsubscribe: () async {
-        if (!_socket!.isClosed) {
+        final entry = _pending[id];
+        final isActive = entry is _HaPendingSubscription && entry.isActive;
+
+        // Always remove locally first.
+        _pending.remove(id);
+
+        // Only unsubscribe on the server if the subscription was established.
+        if (isActive && _socket != null && _socket!.isClosed != true) {
           await sendMessage(UnsubscribeEventsMessage(subscriptionID: id));
         }
-        final removedSubscription = _subscriptions.remove(id);
-        removedSubscription?.dispose();
       },
       logger: _logger,
     );
 
-    _subscriptions[id] = hassSubscription;
+    _pending[id] = _HaPendingSubscription(hassSubscription);
 
     subscribeMessage.id = id;
     _socket!.sendMessage(subscribeMessage);
@@ -160,7 +224,7 @@ class HAConnection implements IHAConnection {
     _socketSubscription?.cancel();
     _socketSubscription = socket.stream.listen(
       _messageListener,
-      onDone: _handleClose,
+      onDone: () => _shutdown(initiatedBySocket: true),
       onError: _handleError,
     );
 
@@ -174,7 +238,13 @@ class HAConnection implements IHAConnection {
     try {
       final messages = _messageHandler.parseMessages(incomingMessage);
       for (final response in messages) {
-        _handleResponse(response);
+        _messageHandler.handleResponse(
+          response,
+          onPong: () => _handlePongResponse(response.id),
+          onEvent: (event) => _handleEventResponse(response.id, event),
+          onSuccess: (result) => _handleSuccessResponse(response.id, result),
+          onError: (error) => _handleErrorResponse(response.id, error),
+        );
       }
     } catch (e) {
       _logger.error('Failed to handle message: $e, message: $incomingMessage');
@@ -184,63 +254,58 @@ class HAConnection implements IHAConnection {
     }
   }
 
-  void _handleResponse(WebSocketResponse response) {
-    _messageHandler.handleResponse(
-      response,
-      onPong: () => _handlePongResponse(response.id),
-      onEvent: (event) => _handleEventResponse(response.id, event),
-      onSuccess: (result) => _handleSuccessResponse(response.id, result),
-      onError: (error) => _handleErrorResponse(response.id, error),
-    );
-  }
-
   void _handlePongResponse(int id) {
     _logger.debug('Receive pong');
-    final completer = _commands.remove(id);
-    completer?.complete();
+    final entry = _pending.remove(id);
+    if (entry is _HaPendingCommand) {
+      entry.cancelTimeout();
+      entry.completer.complete();
+    }
   }
 
   void _handleEventResponse(int id, dynamic event) {
-    final subscription = _subscriptions[id];
-    if (subscription != null) {
-      subscription.emit(event);
-    } else {
-      _logger.warning('Unknown subscription $id, unsubscribing');
-      sendMessage(
-        UnsubscribeEventsMessage(subscriptionID: id),
-      ).catchError((e) => _logger.error('Error unsubscribing: $e'));
+    final entry = _pending[id];
+    if (entry is _HaPendingSubscription) {
+      entry.subscription.emit(event);
+      return;
     }
+
+    _logger.warning('Unknown subscription $id, unsubscribing');
+    sendMessage(
+      UnsubscribeEventsMessage(subscriptionID: id),
+    ).catchError((e) => _logger.error('Error unsubscribing: $e'));
   }
 
   void _handleSuccessResponse(int id, dynamic result) {
-    final completer = _commands.remove(id);
-    completer?.complete(result);
+    final entry = _pending[id];
+    if (entry is _HaPendingCommand) {
+      _pending.remove(id);
+      entry.cancelTimeout();
+      entry.completer.complete(result);
+    }
+
+    if (entry is _HaPendingSubscription) {
+      entry.isActive = true;
+      return;
+    }
   }
 
   void _handleErrorResponse(int id, dynamic error) {
-    final completer = _commands.remove(id);
-    completer?.completeError(error);
-  }
+    final entry = _pending.remove(id);
 
-  void _handleClose() {
-    _logger.info('Connection closed 👋');
-    _commandID = 2;
-    _socketSubscription?.cancel();
-
-    _handlePendingCommands();
-
-    final lastState = _socket?.state;
-    _logger.debug('_handleClose: socket last state: $lastState');
-    _socket = null;
-
-    // Just set the state - let the orchestrator handle reconnection
-    if (lastState case Disconnected(type: DisconnectionType.authFailure)) {
-      _logger.debug('Preserving auth failure state');
-      _connectionState.setState(lastState);
-    } else {
-      _logger.debug('Setting generic disconnected state');
-      _connectionState.setState(const Disconnected());
+    if (entry is _HaPendingCommand) {
+      entry.cancelTimeout();
+      entry.completer.completeError(error);
+      return;
     }
+
+    if (entry is _HaPendingSubscription) {
+      // Subscribe failed: remove and dispose locally (no unsubscribe needed).
+      entry.subscription.dispose();
+      return;
+    }
+
+    _logger.warning('Received error for unknown id $id: $error');
   }
 
   void _handleError(dynamic error) {
@@ -248,14 +313,50 @@ class HAConnection implements IHAConnection {
 
     if (_socket?.state case Disconnected(type: DisconnectionType.authFailure)) {
       _connectionState.setState(_socket!.state);
-      close();
+      _shutdown(initiatedBySocket: true);
     }
   }
 
   void _handlePendingCommands() {
-    _commands.forEach((_, completer) {
-      completer.completeError('Connection lost 📡');
-    });
-    _commands.clear();
+    // Complete only command completers; leave subscriptions to _cleanupSubscriptions()
+    final entries = List<MapEntry<int, _HaPending>>.from(_pending.entries);
+    for (final e in entries) {
+      final entry = e.value;
+      if (entry is _HaPendingCommand) {
+        _pending.remove(e.key);
+        entry.cancelTimeout();
+        entry.completer.completeError('Connection lost 📡');
+      }
+    }
+  }
+
+  Future<void> _cleanupSubscriptions() async {
+    if (_pending.isEmpty) {
+      return;
+    }
+
+    // Copy subscriptions first, then remove them from the map to avoid concurrent modification.
+    final subscriptions = <HassSubscription>[];
+    final idsToRemove = <int>[];
+
+    for (final entry in _pending.entries) {
+      final pending = entry.value;
+      if (pending is _HaPendingSubscription) {
+        subscriptions.add(pending.subscription);
+        idsToRemove.add(entry.key);
+      }
+    }
+
+    for (final id in idsToRemove) {
+      _pending.remove(id);
+    }
+
+    for (final subscription in subscriptions) {
+      try {
+        await subscription.dispose();
+      } catch (e) {
+        _logger.warning('Failed to dispose subscription: $e');
+      }
+    }
   }
 }

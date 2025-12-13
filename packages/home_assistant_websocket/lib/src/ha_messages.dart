@@ -16,7 +16,7 @@ abstract class HABaseMessage {
     return _payload;
   }
 
-  String toJson() => jsonEncode(_payload);
+  String encodeToJson() => jsonEncode(_payload);
 
   @override
   String toString() => _payload.toString();

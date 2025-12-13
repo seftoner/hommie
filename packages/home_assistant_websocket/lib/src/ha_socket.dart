@@ -216,7 +216,7 @@ class HASocket {
   }
 
   void sendMessage(HABaseMessage message) {
-    final encodedData = message.toJson();
+    final encodedData = message.encodeToJson();
     _logger.trace('Sending message: $encodedData');
 
     _innerChanel.sink.add(encodedData);
