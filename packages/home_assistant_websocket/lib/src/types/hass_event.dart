@@ -19,7 +19,9 @@ sealed class EntityState with _$EntityState {
     @JsonKey(name: 's') String? state,
     @JsonKey(name: 'a') Map<String, dynamic>? attributes,
     @JsonKey(name: 'c') Context? context,
-    @JsonKey(name: 'ls') double? last_changed,
+    /** last_changed; if set, also applies to lu */
+    @JsonKey(name: 'lc') double? last_changed,
+    /** last_updated */
     @JsonKey(name: 'lu') double? last_updated,
   }) = _EntityState;
 
@@ -105,9 +107,11 @@ sealed class HassEvent with _$HassEvent {
     required Map<String, dynamic> data,
   }) = _HassEvent;
 
-  factory HassEvent.fromJson(Map<String, Object?> json) =>
+  factory HassEvent.fromJson(Map<String, dynamic> json) =>
       _$HassEventFromJson(json);
 }
+
+typedef HassEntityAttributeBase = Map<String, dynamic>;
 
 @freezed
 sealed class HassEntity with _$HassEntity {
@@ -124,21 +128,21 @@ sealed class HassEntity with _$HassEntity {
       _$HassEntityFromJson(json);
 }
 
-@freezed
-sealed class HassEntityAttributeBase with _$HassEntityAttributeBase {
-  const factory HassEntityAttributeBase({
-    String? friendly_name,
-    String? unit_of_measurement,
-    String? icon,
-    String? entity_picture,
-    num? supported_features,
-    bool? hidden,
-    bool? assumed_state,
-    String? device_class,
-    String? state_class,
-    bool? restored,
-  }) = _HassEntityAttributeBase;
+/// Convenience accessors for common Home Assistant entity attribute keys.
+extension HassEntityAttributesMapX on HassEntityAttributeBase {
+  String? get friendly_name => this['friendly_name'] as String?;
+  String? get unit_of_measurement => this['unit_of_measurement'] as String?;
+  String? get icon => this['icon'] as String?;
+  String? get entity_picture => this['entity_picture'] as String?;
 
-  factory HassEntityAttributeBase.fromJson(Map<String, dynamic> json) =>
-      _$HassEntityAttributeBaseFromJson(json);
+  num? get supported_features {
+    final v = this['supported_features'];
+    return v is num ? v : null;
+  }
+
+  bool? get hidden => this['hidden'] as bool?;
+  bool? get assumed_state => this['assumed_state'] as bool?;
+  String? get device_class => this['device_class'] as String?;
+  String? get state_class => this['state_class'] as String?;
+  bool? get restored => this['restored'] as bool?;
 }

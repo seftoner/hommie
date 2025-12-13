@@ -18,7 +18,7 @@ _EntityState _$EntityStateFromJson(Map<String, dynamic> json) => _EntityState(
   state: json['s'] as String?,
   attributes: json['a'] as Map<String, dynamic>?,
   context: json['c'] == null ? null : Context.fromJson(json['c']),
-  last_changed: (json['ls'] as num?)?.toDouble(),
+  last_changed: (json['lc'] as num?)?.toDouble(),
   last_updated: (json['lu'] as num?)?.toDouble(),
 );
 
@@ -27,7 +27,7 @@ Map<String, dynamic> _$EntityStateToJson(_EntityState instance) =>
       's': instance.state,
       'a': instance.attributes,
       'c': instance.context,
-      'ls': instance.last_changed,
+      'lc': instance.last_changed,
       'lu': instance.last_updated,
     };
 
@@ -108,9 +108,7 @@ _HassEntity _$HassEntityFromJson(Map<String, dynamic> json) => _HassEntity(
   state: json['state'] as String,
   last_changed: json['last_changed'] as String,
   last_updated: json['last_updated'] as String,
-  attributes: HassEntityAttributeBase.fromJson(
-    json['attributes'] as Map<String, dynamic>,
-  ),
+  attributes: json['attributes'] as Map<String, dynamic>,
   context: Context.fromJson(json['context']),
 );
 
@@ -123,33 +121,3 @@ Map<String, dynamic> _$HassEntityToJson(_HassEntity instance) =>
       'attributes': instance.attributes,
       'context': instance.context,
     };
-
-_HassEntityAttributeBase _$HassEntityAttributeBaseFromJson(
-  Map<String, dynamic> json,
-) => _HassEntityAttributeBase(
-  friendly_name: json['friendly_name'] as String?,
-  unit_of_measurement: json['unit_of_measurement'] as String?,
-  icon: json['icon'] as String?,
-  entity_picture: json['entity_picture'] as String?,
-  supported_features: json['supported_features'] as num?,
-  hidden: json['hidden'] as bool?,
-  assumed_state: json['assumed_state'] as bool?,
-  device_class: json['device_class'] as String?,
-  state_class: json['state_class'] as String?,
-  restored: json['restored'] as bool?,
-);
-
-Map<String, dynamic> _$HassEntityAttributeBaseToJson(
-  _HassEntityAttributeBase instance,
-) => <String, dynamic>{
-  'friendly_name': instance.friendly_name,
-  'unit_of_measurement': instance.unit_of_measurement,
-  'icon': instance.icon,
-  'entity_picture': instance.entity_picture,
-  'supported_features': instance.supported_features,
-  'hidden': instance.hidden,
-  'assumed_state': instance.assumed_state,
-  'device_class': instance.device_class,
-  'state_class': instance.state_class,
-  'restored': instance.restored,
-};

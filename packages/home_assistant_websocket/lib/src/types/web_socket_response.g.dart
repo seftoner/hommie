@@ -21,7 +21,7 @@ WebSocketEventResponse _$WebSocketEventResponseFromJson(
   Map<String, dynamic> json,
 ) => WebSocketEventResponse(
   id: (json['id'] as num).toInt(),
-  event: StatesUpdates.fromJson(json['event'] as Map<String, dynamic>),
+  event: json['event'],
   $type: json['runtimeType'] as String?,
 );
 
@@ -55,7 +55,6 @@ WebSocketResultResponseError _$WebSocketResultResponseErrorFromJson(
   Map<String, dynamic> json,
 ) => WebSocketResultResponseError(
   id: (json['id'] as num).toInt(),
-  success: json['success'] as bool? ?? false,
   error: HassError.fromJson(json['error'] as Map<String, dynamic>),
   $type: json['runtimeType'] as String?,
 );
@@ -64,7 +63,6 @@ Map<String, dynamic> _$WebSocketResultResponseErrorToJson(
   WebSocketResultResponseError instance,
 ) => <String, dynamic>{
   'id': instance.id,
-  'success': instance.success,
   'error': instance.error,
   'runtimeType': instance.$type,
 };

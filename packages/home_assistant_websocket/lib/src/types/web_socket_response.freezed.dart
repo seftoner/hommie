@@ -190,13 +190,13 @@ return resultError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int id)?  pong,TResult Function( int id,  StatesUpdates event)?  event,TResult Function( int id,  dynamic result,  bool success)?  resultSuccess,TResult Function( int id,  bool success,  HassError error)?  resultError,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int id)?  pong,TResult Function( int id,  dynamic event)?  event,TResult Function( int id,  dynamic result,  bool success)?  resultSuccess,TResult Function( int id,  HassError error)?  resultError,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case WebSocketPongResponse() when pong != null:
 return pong(_that.id);case WebSocketEventResponse() when event != null:
 return event(_that.id,_that.event);case WebSocketResultResponseSuccess() when resultSuccess != null:
 return resultSuccess(_that.id,_that.result,_that.success);case WebSocketResultResponseError() when resultError != null:
-return resultError(_that.id,_that.success,_that.error);case _:
+return resultError(_that.id,_that.error);case _:
   return orElse();
 
 }
@@ -214,13 +214,13 @@ return resultError(_that.id,_that.success,_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int id)  pong,required TResult Function( int id,  StatesUpdates event)  event,required TResult Function( int id,  dynamic result,  bool success)  resultSuccess,required TResult Function( int id,  bool success,  HassError error)  resultError,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int id)  pong,required TResult Function( int id,  dynamic event)  event,required TResult Function( int id,  dynamic result,  bool success)  resultSuccess,required TResult Function( int id,  HassError error)  resultError,}) {final _that = this;
 switch (_that) {
 case WebSocketPongResponse():
 return pong(_that.id);case WebSocketEventResponse():
 return event(_that.id,_that.event);case WebSocketResultResponseSuccess():
 return resultSuccess(_that.id,_that.result,_that.success);case WebSocketResultResponseError():
-return resultError(_that.id,_that.success,_that.error);}
+return resultError(_that.id,_that.error);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -234,13 +234,13 @@ return resultError(_that.id,_that.success,_that.error);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int id)?  pong,TResult? Function( int id,  StatesUpdates event)?  event,TResult? Function( int id,  dynamic result,  bool success)?  resultSuccess,TResult? Function( int id,  bool success,  HassError error)?  resultError,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int id)?  pong,TResult? Function( int id,  dynamic event)?  event,TResult? Function( int id,  dynamic result,  bool success)?  resultSuccess,TResult? Function( int id,  HassError error)?  resultError,}) {final _that = this;
 switch (_that) {
 case WebSocketPongResponse() when pong != null:
 return pong(_that.id);case WebSocketEventResponse() when event != null:
 return event(_that.id,_that.event);case WebSocketResultResponseSuccess() when resultSuccess != null:
 return resultSuccess(_that.id,_that.result,_that.success);case WebSocketResultResponseError() when resultError != null:
-return resultError(_that.id,_that.success,_that.error);case _:
+return resultError(_that.id,_that.error);case _:
   return null;
 
 }
@@ -329,7 +329,7 @@ class WebSocketEventResponse implements WebSocketResponse {
   factory WebSocketEventResponse.fromJson(Map<String, dynamic> json) => _$WebSocketEventResponseFromJson(json);
 
 @override final  int id;
- final  StatesUpdates event;
+ final  dynamic event;
 
 @JsonKey(name: 'runtimeType')
 final String $type;
@@ -348,12 +348,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketEventResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.event, event) || other.event == event));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketEventResponse&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.event, event));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,event);
+int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(event));
 
 @override
 String toString() {
@@ -368,11 +368,11 @@ abstract mixin class $WebSocketEventResponseCopyWith<$Res> implements $WebSocket
   factory $WebSocketEventResponseCopyWith(WebSocketEventResponse value, $Res Function(WebSocketEventResponse) _then) = _$WebSocketEventResponseCopyWithImpl;
 @override @useResult
 $Res call({
- int id, StatesUpdates event
+ int id, dynamic event
 });
 
 
-$StatesUpdatesCopyWith<$Res> get event;
+
 
 }
 /// @nodoc
@@ -385,24 +385,15 @@ class _$WebSocketEventResponseCopyWithImpl<$Res>
 
 /// Create a copy of WebSocketResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? event = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? event = freezed,}) {
   return _then(WebSocketEventResponse(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,event: null == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
-as StatesUpdates,
+as int,event: freezed == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
+as dynamic,
   ));
 }
 
-/// Create a copy of WebSocketResponse
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$StatesUpdatesCopyWith<$Res> get event {
-  
-  return $StatesUpdatesCopyWith<$Res>(_self.event, (value) {
-    return _then(_self.copyWith(event: value));
-  });
-}
+
 }
 
 /// @nodoc
@@ -486,11 +477,10 @@ as bool,
 @JsonSerializable()
 
 class WebSocketResultResponseError implements WebSocketResponse {
-  const WebSocketResultResponseError({required this.id, this.success = false, required this.error, final  String? $type}): $type = $type ?? 'resultError';
+  const WebSocketResultResponseError({required this.id, required this.error, final  String? $type}): $type = $type ?? 'resultError';
   factory WebSocketResultResponseError.fromJson(Map<String, dynamic> json) => _$WebSocketResultResponseErrorFromJson(json);
 
 @override final  int id;
-@JsonKey() final  bool success;
  final  HassError error;
 
 @JsonKey(name: 'runtimeType')
@@ -510,16 +500,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketResultResponseError&&(identical(other.id, id) || other.id == id)&&(identical(other.success, success) || other.success == success)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketResultResponseError&&(identical(other.id, id) || other.id == id)&&(identical(other.error, error) || other.error == error));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,success,error);
+int get hashCode => Object.hash(runtimeType,id,error);
 
 @override
 String toString() {
-  return 'WebSocketResponse.resultError(id: $id, success: $success, error: $error)';
+  return 'WebSocketResponse.resultError(id: $id, error: $error)';
 }
 
 
@@ -530,7 +520,7 @@ abstract mixin class $WebSocketResultResponseErrorCopyWith<$Res> implements $Web
   factory $WebSocketResultResponseErrorCopyWith(WebSocketResultResponseError value, $Res Function(WebSocketResultResponseError) _then) = _$WebSocketResultResponseErrorCopyWithImpl;
 @override @useResult
 $Res call({
- int id, bool success, HassError error
+ int id, HassError error
 });
 
 
@@ -547,11 +537,10 @@ class _$WebSocketResultResponseErrorCopyWithImpl<$Res>
 
 /// Create a copy of WebSocketResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? success = null,Object? error = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? error = null,}) {
   return _then(WebSocketResultResponseError(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
-as bool,error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as int,error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as HassError,
   ));
 }

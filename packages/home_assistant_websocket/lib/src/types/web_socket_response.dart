@@ -15,7 +15,7 @@ sealed class WebSocketResponse with _$WebSocketResponse {
 
   const factory WebSocketResponse.event({
     required int id,
-    required StatesUpdates event,
+    required dynamic event,
   }) = WebSocketEventResponse;
 
   const factory WebSocketResponse.resultSuccess({
@@ -26,7 +26,6 @@ sealed class WebSocketResponse with _$WebSocketResponse {
 
   const factory WebSocketResponse.resultError({
     required int id,
-    @Default(false) bool success,
     required HassError error,
   }) = WebSocketResultResponseError;
 
@@ -47,7 +46,7 @@ class WebSocketResponseConverter
         'type': 'event',
         'event': final Map<String, dynamic> event,
       } =>
-        WebSocketResponse.event(id: id, event: StatesUpdates.fromJson(event)),
+        WebSocketResponse.event(id: id, event: _parseEvent(event)),
       {
         'id': final int id,
         'type': 'result',
@@ -61,15 +60,21 @@ class WebSocketResponseConverter
         'error': final Map<String, dynamic> error,
         'success': false,
       } =>
-        WebSocketResponse.resultError(
-          id: id,
-          error: HassError.fromJson(error),
-          success: true,
-        ),
+        WebSocketResponse.resultError(id: id, error: HassError.fromJson(error)),
       _ => throw UnsupportedError(
         'Unsupported response type: ${json['type'] as String}',
       ),
     };
+  }
+
+  dynamic _parseEvent(Map<String, dynamic> event) {
+    // subscribe_events payload
+    if (event.containsKey('event_type')) {
+      return HassEvent.fromJson(event);
+    }
+
+    // subscribe_entities payload
+    return StatesUpdates.fromJson(event);
   }
 
   @override

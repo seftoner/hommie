@@ -278,7 +278,7 @@ as List<String>,
 /// @nodoc
 mixin _$EntityState {
 
-@JsonKey(name: 's') String? get state;@JsonKey(name: 'a') Map<String, dynamic>? get attributes;@JsonKey(name: 'c') Context? get context;@JsonKey(name: 'ls') double? get last_changed;@JsonKey(name: 'lu') double? get last_updated;
+@JsonKey(name: 's') String? get state;@JsonKey(name: 'a') Map<String, dynamic>? get attributes;@JsonKey(name: 'c') Context? get context;@JsonKey(name: 'lc') double? get last_changed;@JsonKey(name: 'lu') double? get last_updated;
 /// Create a copy of EntityState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -311,7 +311,7 @@ abstract mixin class $EntityStateCopyWith<$Res>  {
   factory $EntityStateCopyWith(EntityState value, $Res Function(EntityState) _then) = _$EntityStateCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 's') String? state,@JsonKey(name: 'a') Map<String, dynamic>? attributes,@JsonKey(name: 'c') Context? context,@JsonKey(name: 'ls') double? last_changed,@JsonKey(name: 'lu') double? last_updated
+@JsonKey(name: 's') String? state,@JsonKey(name: 'a') Map<String, dynamic>? attributes,@JsonKey(name: 'c') Context? context,@JsonKey(name: 'lc') double? last_changed,@JsonKey(name: 'lu') double? last_updated
 });
 
 
@@ -429,7 +429,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 's')  String? state, @JsonKey(name: 'a')  Map<String, dynamic>? attributes, @JsonKey(name: 'c')  Context? context, @JsonKey(name: 'ls')  double? last_changed, @JsonKey(name: 'lu')  double? last_updated)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 's')  String? state, @JsonKey(name: 'a')  Map<String, dynamic>? attributes, @JsonKey(name: 'c')  Context? context, @JsonKey(name: 'lc')  double? last_changed, @JsonKey(name: 'lu')  double? last_updated)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EntityState() when $default != null:
 return $default(_that.state,_that.attributes,_that.context,_that.last_changed,_that.last_updated);case _:
@@ -450,7 +450,7 @@ return $default(_that.state,_that.attributes,_that.context,_that.last_changed,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 's')  String? state, @JsonKey(name: 'a')  Map<String, dynamic>? attributes, @JsonKey(name: 'c')  Context? context, @JsonKey(name: 'ls')  double? last_changed, @JsonKey(name: 'lu')  double? last_updated)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 's')  String? state, @JsonKey(name: 'a')  Map<String, dynamic>? attributes, @JsonKey(name: 'c')  Context? context, @JsonKey(name: 'lc')  double? last_changed, @JsonKey(name: 'lu')  double? last_updated)  $default,) {final _that = this;
 switch (_that) {
 case _EntityState():
 return $default(_that.state,_that.attributes,_that.context,_that.last_changed,_that.last_updated);}
@@ -467,7 +467,7 @@ return $default(_that.state,_that.attributes,_that.context,_that.last_changed,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 's')  String? state, @JsonKey(name: 'a')  Map<String, dynamic>? attributes, @JsonKey(name: 'c')  Context? context, @JsonKey(name: 'ls')  double? last_changed, @JsonKey(name: 'lu')  double? last_updated)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 's')  String? state, @JsonKey(name: 'a')  Map<String, dynamic>? attributes, @JsonKey(name: 'c')  Context? context, @JsonKey(name: 'lc')  double? last_changed, @JsonKey(name: 'lu')  double? last_updated)?  $default,) {final _that = this;
 switch (_that) {
 case _EntityState() when $default != null:
 return $default(_that.state,_that.attributes,_that.context,_that.last_changed,_that.last_updated);case _:
@@ -482,7 +482,7 @@ return $default(_that.state,_that.attributes,_that.context,_that.last_changed,_t
 @JsonSerializable()
 
 class _EntityState implements EntityState {
-   _EntityState({@JsonKey(name: 's') this.state, @JsonKey(name: 'a') final  Map<String, dynamic>? attributes, @JsonKey(name: 'c') this.context, @JsonKey(name: 'ls') this.last_changed, @JsonKey(name: 'lu') this.last_updated}): _attributes = attributes;
+   _EntityState({@JsonKey(name: 's') this.state, @JsonKey(name: 'a') final  Map<String, dynamic>? attributes, @JsonKey(name: 'c') this.context, @JsonKey(name: 'lc') this.last_changed, @JsonKey(name: 'lu') this.last_updated}): _attributes = attributes;
   factory _EntityState.fromJson(Map<String, dynamic> json) => _$EntityStateFromJson(json);
 
 @override@JsonKey(name: 's') final  String? state;
@@ -496,7 +496,7 @@ class _EntityState implements EntityState {
 }
 
 @override@JsonKey(name: 'c') final  Context? context;
-@override@JsonKey(name: 'ls') final  double? last_changed;
+@override@JsonKey(name: 'lc') final  double? last_changed;
 @override@JsonKey(name: 'lu') final  double? last_updated;
 
 /// Create a copy of EntityState
@@ -532,7 +532,7 @@ abstract mixin class _$EntityStateCopyWith<$Res> implements $EntityStateCopyWith
   factory _$EntityStateCopyWith(_EntityState value, $Res Function(_EntityState) _then) = __$EntityStateCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 's') String? state,@JsonKey(name: 'a') Map<String, dynamic>? attributes,@JsonKey(name: 'c') Context? context,@JsonKey(name: 'ls') double? last_changed,@JsonKey(name: 'lu') double? last_updated
+@JsonKey(name: 's') String? state,@JsonKey(name: 'a') Map<String, dynamic>? attributes,@JsonKey(name: 'c') Context? context,@JsonKey(name: 'lc') double? last_changed,@JsonKey(name: 'lu') double? last_updated
 });
 
 
@@ -2021,12 +2021,12 @@ $HassEntityCopyWith<HassEntity> get copyWith => _$HassEntityCopyWithImpl<HassEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEntity&&(identical(other.entity_id, entity_id) || other.entity_id == entity_id)&&(identical(other.state, state) || other.state == state)&&(identical(other.last_changed, last_changed) || other.last_changed == last_changed)&&(identical(other.last_updated, last_updated) || other.last_updated == last_updated)&&(identical(other.attributes, attributes) || other.attributes == attributes)&&(identical(other.context, context) || other.context == context));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEntity&&(identical(other.entity_id, entity_id) || other.entity_id == entity_id)&&(identical(other.state, state) || other.state == state)&&(identical(other.last_changed, last_changed) || other.last_changed == last_changed)&&(identical(other.last_updated, last_updated) || other.last_updated == last_updated)&&const DeepCollectionEquality().equals(other.attributes, attributes)&&(identical(other.context, context) || other.context == context));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entity_id,state,last_changed,last_updated,attributes,context);
+int get hashCode => Object.hash(runtimeType,entity_id,state,last_changed,last_updated,const DeepCollectionEquality().hash(attributes),context);
 
 @override
 String toString() {
@@ -2045,7 +2045,7 @@ $Res call({
 });
 
 
-$HassEntityAttributeBaseCopyWith<$Res> get attributes;$ContextCopyWith<$Res> get context;
+$ContextCopyWith<$Res> get context;
 
 }
 /// @nodoc
@@ -2070,15 +2070,6 @@ as Context,
   ));
 }
 /// Create a copy of HassEntity
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$HassEntityAttributeBaseCopyWith<$Res> get attributes {
-  
-  return $HassEntityAttributeBaseCopyWith<$Res>(_self.attributes, (value) {
-    return _then(_self.copyWith(attributes: value));
-  });
-}/// Create a copy of HassEntity
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -2219,14 +2210,20 @@ return $default(_that.entity_id,_that.state,_that.last_changed,_that.last_update
 @JsonSerializable()
 
 class _HassEntity implements HassEntity {
-  const _HassEntity({required this.entity_id, required this.state, required this.last_changed, required this.last_updated, required this.attributes, required this.context});
+  const _HassEntity({required this.entity_id, required this.state, required this.last_changed, required this.last_updated, required final  HassEntityAttributeBase attributes, required this.context}): _attributes = attributes;
   factory _HassEntity.fromJson(Map<String, dynamic> json) => _$HassEntityFromJson(json);
 
 @override final  String entity_id;
 @override final  String state;
 @override final  String last_changed;
 @override final  String last_updated;
-@override final  HassEntityAttributeBase attributes;
+ final  HassEntityAttributeBase _attributes;
+@override HassEntityAttributeBase get attributes {
+  if (_attributes is EqualUnmodifiableMapView) return _attributes;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_attributes);
+}
+
 @override final  Context context;
 
 /// Create a copy of HassEntity
@@ -2242,12 +2239,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEntity&&(identical(other.entity_id, entity_id) || other.entity_id == entity_id)&&(identical(other.state, state) || other.state == state)&&(identical(other.last_changed, last_changed) || other.last_changed == last_changed)&&(identical(other.last_updated, last_updated) || other.last_updated == last_updated)&&(identical(other.attributes, attributes) || other.attributes == attributes)&&(identical(other.context, context) || other.context == context));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEntity&&(identical(other.entity_id, entity_id) || other.entity_id == entity_id)&&(identical(other.state, state) || other.state == state)&&(identical(other.last_changed, last_changed) || other.last_changed == last_changed)&&(identical(other.last_updated, last_updated) || other.last_updated == last_updated)&&const DeepCollectionEquality().equals(other._attributes, _attributes)&&(identical(other.context, context) || other.context == context));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entity_id,state,last_changed,last_updated,attributes,context);
+int get hashCode => Object.hash(runtimeType,entity_id,state,last_changed,last_updated,const DeepCollectionEquality().hash(_attributes),context);
 
 @override
 String toString() {
@@ -2266,7 +2263,7 @@ $Res call({
 });
 
 
-@override $HassEntityAttributeBaseCopyWith<$Res> get attributes;@override $ContextCopyWith<$Res> get context;
+@override $ContextCopyWith<$Res> get context;
 
 }
 /// @nodoc
@@ -2285,7 +2282,7 @@ entity_id: null == entity_id ? _self.entity_id : entity_id // ignore: cast_nulla
 as String,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
 as String,last_changed: null == last_changed ? _self.last_changed : last_changed // ignore: cast_nullable_to_non_nullable
 as String,last_updated: null == last_updated ? _self.last_updated : last_updated // ignore: cast_nullable_to_non_nullable
-as String,attributes: null == attributes ? _self.attributes : attributes // ignore: cast_nullable_to_non_nullable
+as String,attributes: null == attributes ? _self._attributes : attributes // ignore: cast_nullable_to_non_nullable
 as HassEntityAttributeBase,context: null == context ? _self.context : context // ignore: cast_nullable_to_non_nullable
 as Context,
   ));
@@ -2295,305 +2292,12 @@ as Context,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$HassEntityAttributeBaseCopyWith<$Res> get attributes {
-  
-  return $HassEntityAttributeBaseCopyWith<$Res>(_self.attributes, (value) {
-    return _then(_self.copyWith(attributes: value));
-  });
-}/// Create a copy of HassEntity
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
 $ContextCopyWith<$Res> get context {
   
   return $ContextCopyWith<$Res>(_self.context, (value) {
     return _then(_self.copyWith(context: value));
   });
 }
-}
-
-
-/// @nodoc
-mixin _$HassEntityAttributeBase {
-
- String? get friendly_name; String? get unit_of_measurement; String? get icon; String? get entity_picture; num? get supported_features; bool? get hidden; bool? get assumed_state; String? get device_class; String? get state_class; bool? get restored;
-/// Create a copy of HassEntityAttributeBase
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$HassEntityAttributeBaseCopyWith<HassEntityAttributeBase> get copyWith => _$HassEntityAttributeBaseCopyWithImpl<HassEntityAttributeBase>(this as HassEntityAttributeBase, _$identity);
-
-  /// Serializes this HassEntityAttributeBase to a JSON map.
-  Map<String, dynamic> toJson();
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEntityAttributeBase&&(identical(other.friendly_name, friendly_name) || other.friendly_name == friendly_name)&&(identical(other.unit_of_measurement, unit_of_measurement) || other.unit_of_measurement == unit_of_measurement)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.entity_picture, entity_picture) || other.entity_picture == entity_picture)&&(identical(other.supported_features, supported_features) || other.supported_features == supported_features)&&(identical(other.hidden, hidden) || other.hidden == hidden)&&(identical(other.assumed_state, assumed_state) || other.assumed_state == assumed_state)&&(identical(other.device_class, device_class) || other.device_class == device_class)&&(identical(other.state_class, state_class) || other.state_class == state_class)&&(identical(other.restored, restored) || other.restored == restored));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,friendly_name,unit_of_measurement,icon,entity_picture,supported_features,hidden,assumed_state,device_class,state_class,restored);
-
-@override
-String toString() {
-  return 'HassEntityAttributeBase(friendly_name: $friendly_name, unit_of_measurement: $unit_of_measurement, icon: $icon, entity_picture: $entity_picture, supported_features: $supported_features, hidden: $hidden, assumed_state: $assumed_state, device_class: $device_class, state_class: $state_class, restored: $restored)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $HassEntityAttributeBaseCopyWith<$Res>  {
-  factory $HassEntityAttributeBaseCopyWith(HassEntityAttributeBase value, $Res Function(HassEntityAttributeBase) _then) = _$HassEntityAttributeBaseCopyWithImpl;
-@useResult
-$Res call({
- String? friendly_name, String? unit_of_measurement, String? icon, String? entity_picture, num? supported_features, bool? hidden, bool? assumed_state, String? device_class, String? state_class, bool? restored
-});
-
-
-
-
-}
-/// @nodoc
-class _$HassEntityAttributeBaseCopyWithImpl<$Res>
-    implements $HassEntityAttributeBaseCopyWith<$Res> {
-  _$HassEntityAttributeBaseCopyWithImpl(this._self, this._then);
-
-  final HassEntityAttributeBase _self;
-  final $Res Function(HassEntityAttributeBase) _then;
-
-/// Create a copy of HassEntityAttributeBase
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? friendly_name = freezed,Object? unit_of_measurement = freezed,Object? icon = freezed,Object? entity_picture = freezed,Object? supported_features = freezed,Object? hidden = freezed,Object? assumed_state = freezed,Object? device_class = freezed,Object? state_class = freezed,Object? restored = freezed,}) {
-  return _then(_self.copyWith(
-friendly_name: freezed == friendly_name ? _self.friendly_name : friendly_name // ignore: cast_nullable_to_non_nullable
-as String?,unit_of_measurement: freezed == unit_of_measurement ? _self.unit_of_measurement : unit_of_measurement // ignore: cast_nullable_to_non_nullable
-as String?,icon: freezed == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String?,entity_picture: freezed == entity_picture ? _self.entity_picture : entity_picture // ignore: cast_nullable_to_non_nullable
-as String?,supported_features: freezed == supported_features ? _self.supported_features : supported_features // ignore: cast_nullable_to_non_nullable
-as num?,hidden: freezed == hidden ? _self.hidden : hidden // ignore: cast_nullable_to_non_nullable
-as bool?,assumed_state: freezed == assumed_state ? _self.assumed_state : assumed_state // ignore: cast_nullable_to_non_nullable
-as bool?,device_class: freezed == device_class ? _self.device_class : device_class // ignore: cast_nullable_to_non_nullable
-as String?,state_class: freezed == state_class ? _self.state_class : state_class // ignore: cast_nullable_to_non_nullable
-as String?,restored: freezed == restored ? _self.restored : restored // ignore: cast_nullable_to_non_nullable
-as bool?,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [HassEntityAttributeBase].
-extension HassEntityAttributeBasePatterns on HassEntityAttributeBase {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _HassEntityAttributeBase value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _HassEntityAttributeBase() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _HassEntityAttributeBase value)  $default,){
-final _that = this;
-switch (_that) {
-case _HassEntityAttributeBase():
-return $default(_that);}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _HassEntityAttributeBase value)?  $default,){
-final _that = this;
-switch (_that) {
-case _HassEntityAttributeBase() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? friendly_name,  String? unit_of_measurement,  String? icon,  String? entity_picture,  num? supported_features,  bool? hidden,  bool? assumed_state,  String? device_class,  String? state_class,  bool? restored)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _HassEntityAttributeBase() when $default != null:
-return $default(_that.friendly_name,_that.unit_of_measurement,_that.icon,_that.entity_picture,_that.supported_features,_that.hidden,_that.assumed_state,_that.device_class,_that.state_class,_that.restored);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? friendly_name,  String? unit_of_measurement,  String? icon,  String? entity_picture,  num? supported_features,  bool? hidden,  bool? assumed_state,  String? device_class,  String? state_class,  bool? restored)  $default,) {final _that = this;
-switch (_that) {
-case _HassEntityAttributeBase():
-return $default(_that.friendly_name,_that.unit_of_measurement,_that.icon,_that.entity_picture,_that.supported_features,_that.hidden,_that.assumed_state,_that.device_class,_that.state_class,_that.restored);}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? friendly_name,  String? unit_of_measurement,  String? icon,  String? entity_picture,  num? supported_features,  bool? hidden,  bool? assumed_state,  String? device_class,  String? state_class,  bool? restored)?  $default,) {final _that = this;
-switch (_that) {
-case _HassEntityAttributeBase() when $default != null:
-return $default(_that.friendly_name,_that.unit_of_measurement,_that.icon,_that.entity_picture,_that.supported_features,_that.hidden,_that.assumed_state,_that.device_class,_that.state_class,_that.restored);case _:
-  return null;
-
-}
-}
-
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _HassEntityAttributeBase implements HassEntityAttributeBase {
-  const _HassEntityAttributeBase({this.friendly_name, this.unit_of_measurement, this.icon, this.entity_picture, this.supported_features, this.hidden, this.assumed_state, this.device_class, this.state_class, this.restored});
-  factory _HassEntityAttributeBase.fromJson(Map<String, dynamic> json) => _$HassEntityAttributeBaseFromJson(json);
-
-@override final  String? friendly_name;
-@override final  String? unit_of_measurement;
-@override final  String? icon;
-@override final  String? entity_picture;
-@override final  num? supported_features;
-@override final  bool? hidden;
-@override final  bool? assumed_state;
-@override final  String? device_class;
-@override final  String? state_class;
-@override final  bool? restored;
-
-/// Create a copy of HassEntityAttributeBase
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$HassEntityAttributeBaseCopyWith<_HassEntityAttributeBase> get copyWith => __$HassEntityAttributeBaseCopyWithImpl<_HassEntityAttributeBase>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$HassEntityAttributeBaseToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEntityAttributeBase&&(identical(other.friendly_name, friendly_name) || other.friendly_name == friendly_name)&&(identical(other.unit_of_measurement, unit_of_measurement) || other.unit_of_measurement == unit_of_measurement)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.entity_picture, entity_picture) || other.entity_picture == entity_picture)&&(identical(other.supported_features, supported_features) || other.supported_features == supported_features)&&(identical(other.hidden, hidden) || other.hidden == hidden)&&(identical(other.assumed_state, assumed_state) || other.assumed_state == assumed_state)&&(identical(other.device_class, device_class) || other.device_class == device_class)&&(identical(other.state_class, state_class) || other.state_class == state_class)&&(identical(other.restored, restored) || other.restored == restored));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,friendly_name,unit_of_measurement,icon,entity_picture,supported_features,hidden,assumed_state,device_class,state_class,restored);
-
-@override
-String toString() {
-  return 'HassEntityAttributeBase(friendly_name: $friendly_name, unit_of_measurement: $unit_of_measurement, icon: $icon, entity_picture: $entity_picture, supported_features: $supported_features, hidden: $hidden, assumed_state: $assumed_state, device_class: $device_class, state_class: $state_class, restored: $restored)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$HassEntityAttributeBaseCopyWith<$Res> implements $HassEntityAttributeBaseCopyWith<$Res> {
-  factory _$HassEntityAttributeBaseCopyWith(_HassEntityAttributeBase value, $Res Function(_HassEntityAttributeBase) _then) = __$HassEntityAttributeBaseCopyWithImpl;
-@override @useResult
-$Res call({
- String? friendly_name, String? unit_of_measurement, String? icon, String? entity_picture, num? supported_features, bool? hidden, bool? assumed_state, String? device_class, String? state_class, bool? restored
-});
-
-
-
-
-}
-/// @nodoc
-class __$HassEntityAttributeBaseCopyWithImpl<$Res>
-    implements _$HassEntityAttributeBaseCopyWith<$Res> {
-  __$HassEntityAttributeBaseCopyWithImpl(this._self, this._then);
-
-  final _HassEntityAttributeBase _self;
-  final $Res Function(_HassEntityAttributeBase) _then;
-
-/// Create a copy of HassEntityAttributeBase
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? friendly_name = freezed,Object? unit_of_measurement = freezed,Object? icon = freezed,Object? entity_picture = freezed,Object? supported_features = freezed,Object? hidden = freezed,Object? assumed_state = freezed,Object? device_class = freezed,Object? state_class = freezed,Object? restored = freezed,}) {
-  return _then(_HassEntityAttributeBase(
-friendly_name: freezed == friendly_name ? _self.friendly_name : friendly_name // ignore: cast_nullable_to_non_nullable
-as String?,unit_of_measurement: freezed == unit_of_measurement ? _self.unit_of_measurement : unit_of_measurement // ignore: cast_nullable_to_non_nullable
-as String?,icon: freezed == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String?,entity_picture: freezed == entity_picture ? _self.entity_picture : entity_picture // ignore: cast_nullable_to_non_nullable
-as String?,supported_features: freezed == supported_features ? _self.supported_features : supported_features // ignore: cast_nullable_to_non_nullable
-as num?,hidden: freezed == hidden ? _self.hidden : hidden // ignore: cast_nullable_to_non_nullable
-as bool?,assumed_state: freezed == assumed_state ? _self.assumed_state : assumed_state // ignore: cast_nullable_to_non_nullable
-as bool?,device_class: freezed == device_class ? _self.device_class : device_class // ignore: cast_nullable_to_non_nullable
-as String?,state_class: freezed == state_class ? _self.state_class : state_class // ignore: cast_nullable_to_non_nullable
-as String?,restored: freezed == restored ? _self.restored : restored // ignore: cast_nullable_to_non_nullable
-as bool?,
-  ));
-}
-
-
 }
 
 // dart format on

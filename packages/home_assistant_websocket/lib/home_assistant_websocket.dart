@@ -13,5 +13,6 @@ export 'src/ha_socket.dart';
 export 'src/ha_socket_state.dart';
 export 'src/hass_subscription.dart';
 export 'src/logger_interface.dart';
+export 'src/types/hass_event.dart';
 export 'src/types/hass_service.dart';
 export 'src/types/hass_types.dart';

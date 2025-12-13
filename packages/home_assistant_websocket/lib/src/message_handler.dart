@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'types/hass_event.dart';
+
 import 'types/hass_types.dart';
 import 'types/web_socket_response.dart';
 
@@ -31,7 +31,7 @@ class HAMessageHandler {
   void handleResponse(
     WebSocketResponse response, {
     required Function() onPong,
-    required Function(StatesUpdates) onEvent,
+    required Function(dynamic) onEvent,
     required Function(dynamic) onSuccess,
     required Function(HassError) onError,
   }) {
