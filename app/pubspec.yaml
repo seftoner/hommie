@@ -63,6 +63,7 @@ dev_dependencies:
   go_router_builder: ^4.0.0
   integration_test:
     sdk: flutter
+  json_serializable: ^6.11.2
   mockito: ^5.4.6
   patrol: ^3.19.0
   patrol_finders: ^2.9.0
