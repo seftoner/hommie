@@ -18,6 +18,19 @@ Use natural language prompts for development tasks:
 
 ## Architecture Patterns
 
+### DDD requirement (main app)
+- The main app must follow **DDD / layered (clean) architecture** per feature:
+  `domain/` → `application/` → `infrastructure/` → `presentation/`.
+- Dependency direction must flow **inward**:
+  - `presentation` may depend on `application` and `domain`
+  - `application` may depend on `domain`
+  - `infrastructure` may depend on `domain` (implements domain interfaces) and may be wired via providers
+  - `domain` depends on **nothing** (no Flutter, no Riverpod, no platform code)
+- Avoid cross-layer leaks:
+  - No `presentation` imports in `domain`/`application`
+  - No `BuildContext`/widgets in `domain`/`application`
+  - Repositories are defined in `domain` (`I...Repository`) and implemented in `infrastructure`
+
 ### Domain Layer
 - **Entities:** `@freezed` classes with `@JsonSerializable(fieldRename: FieldRename.snake)`
 - **Repositories:** Abstract interface classes with `I` prefix. Can throw domain-specific exceptions
@@ -36,68 +49,6 @@ Use natural language prompts for development tasks:
 - **AsyncValue:** Use sealed pattern matching with `switch` statements
 - **Forms:** Use value objects for validation
 - **State:** Use `.select()` to minimize rebuilds
-
-## Code Examples
-
-**Domain Entity:**
-```dart
-@freezed
-class ServerEntity with _$ServerEntity {
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory ServerEntity({
-    @JsonKey(includeIfNull: false) String? id,
-    required String name,
-    required String url,
-  }) = _ServerEntity;
-  
-  factory ServerEntity.fromJson(Map<String, dynamic> json) => 
-    _$ServerEntityFromJson(json);
-}
-```
-
-**Repository Interface:**
-```dart
-abstract interface class IServerRepository {
-  Future<List<ServerEntity>> getServers();
-  Future<ServerEntity> createServer(ServerUrl url, ServerName name);
-  Future<void> deleteServer(String id);
-}
-```
-
-**Controller:**
-```dart
-@Riverpod(dependencies: [serverRepository])
-class CreateServerController extends _$CreateServerController {
-  @override
-  Future<ServerEntity?> build() async => null;
-  
-  Future<void> createServer(ServerUrl url, ServerName name) async {
-    state = const AsyncLoading();
-    try {
-      final repo = ref.read(serverRepositoryProvider);
-      final server = await repo.createServer(url, name);
-      state = AsyncData(server);
-    } catch (error, stackTrace) {
-      state = AsyncError(error, stackTrace);
-    }
-  }
-}
-```
-
-**UI Pattern:**
-```dart
-Widget build(BuildContext context, WidgetRef ref) {
-  final createState = ref.watch(createServerControllerProvider);
-  
-  return switch (createState) {
-    AsyncData(:final value) => value != null 
-      ? Text('Server created: ${value.name}')
-      : const SizedBox.shrink(),
-    AsyncError(:final error) => Text('Error: $error'),
-    AsyncLoading() => const CircularProgressIndicator(),
-  };
-}
-```
 
 ## Feature Development
 1. Create feature folder: domain/application/infrastructure/presentation
