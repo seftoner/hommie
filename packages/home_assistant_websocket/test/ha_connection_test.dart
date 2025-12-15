@@ -7,8 +7,8 @@ import 'package:home_assistant_websocket/src/connection/ha_connection_option.dar
 import 'package:home_assistant_websocket/src/connection/ha_socket_state.dart';
 import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
 import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
+import 'package:home_assistant_websocket/src/protocol/types/ha_subscription.dart';
 import 'package:home_assistant_websocket/src/protocol/types/hass_event.dart';
-import 'package:home_assistant_websocket/src/protocol/types/hass_subscription.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -167,7 +167,7 @@ void main() {
             await subscription.stream.first as StatesUpdates;
 
         // Assert
-        expect(subscription, isA<HassSubscription>());
+        expect(subscription, isA<HASubscription>());
         expect(subscriptionMessage.add?['light.test']!.state, equals('on'));
       },
     );
@@ -480,7 +480,7 @@ void main() {
         await disposeFuture;
 
         // Assert
-        expect(subscription, isA<HassSubscription>());
+        expect(subscription, isA<HASubscription>());
         expect(subscription.isDisposed, isTrue);
       },
     );

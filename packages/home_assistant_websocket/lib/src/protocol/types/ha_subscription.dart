@@ -4,14 +4,14 @@ import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
 
 /// Represents a subscription to Home Assistant events.
 /// Provides a stream of events and a way to unsubscribe.
-class HassSubscription {
+class HASubscription {
   late final StreamController<dynamic> _streamController;
   final HaLogger _logger;
 
   final Function() unsubscribe;
   Stream<dynamic> get stream => _streamController.stream;
 
-  HassSubscription({required this.unsubscribe, required HaLogger logger})
+  HASubscription({required this.unsubscribe, required HaLogger logger})
     : _logger = logger {
     _streamController = StreamController.broadcast();
     _streamController.onListen = () {

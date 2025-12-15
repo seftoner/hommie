@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:home_assistant_websocket/src/connection/ha_connection.dart';
 import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
 import 'package:home_assistant_websocket/src/protocol/types/ha_response.dart';
+import 'package:home_assistant_websocket/src/protocol/types/ha_subscription.dart';
 import 'package:home_assistant_websocket/src/protocol/types/hass_event.dart';
 import 'package:home_assistant_websocket/src/protocol/types/hass_service.dart';
-import 'package:home_assistant_websocket/src/protocol/types/hass_subscription.dart';
 import 'package:home_assistant_websocket/src/protocol/types/hass_types.dart';
 
 class HACommands {
@@ -32,14 +32,14 @@ class HACommands {
     return connection.sendMessage(ConfigMessage()).mapItem(HassConfig.fromJson);
   }
 
-  static HassSubscription subscribeEvents(
+  static HASubscription subscribeEvents(
     IHAConnection connection, [
     String? eventType,
   ]) {
     return connection.subscribeMessage(SubscribeEventsMessage(eventType));
   }
 
-  static HassSubscription subscribeEntities(IHAConnection connection) {
+  static HASubscription subscribeEntities(IHAConnection connection) {
     return connection.subscribeMessage(SubscribeEntitiesMessage());
   }
 

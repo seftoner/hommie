@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
 import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
 import 'package:home_assistant_websocket/src/protocol/types/ha_response.dart';
-import 'package:home_assistant_websocket/src/protocol/types/hass_subscription.dart';
+import 'package:home_assistant_websocket/src/protocol/types/ha_subscription.dart';
 
 import 'ha_connection_option.dart';
 import 'ha_connection_state.dart';
@@ -17,8 +17,8 @@ abstract class IHAConnection {
   HAResponse sendMessage(HAMessage message);
 
   /// Subscribes to Home Assistant events.
-  /// Returns a [HassSubscription] that can be used to receive events and unsubscribe.
-  HassSubscription subscribeMessage(HAMessage subscribeMessage);
+  /// Returns a [HASubscription] that can be used to receive events and unsubscribe.
+  HASubscription subscribeMessage(HAMessage subscribeMessage);
 
   /// Closes the connection.
   Future<void> close();
@@ -46,7 +46,7 @@ final class _HaPendingSubscription extends _HaPending {
 
   bool isActive = false;
 
-  final HassSubscription subscription;
+  final HASubscription subscription;
 }
 
 /// Implementation of Home Assistant websocket connection.
@@ -189,14 +189,14 @@ class HAConnection implements IHAConnection {
   }
 
   @override
-  HassSubscription subscribeMessage(HAMessage subscribeMessage) {
+  HASubscription subscribeMessage(HAMessage subscribeMessage) {
     if (_socket == null || _socket!.isClosed) {
       throw ConnectionClosedError('Connection is closed');
     }
 
     final id = _getCommandID;
 
-    final hassSubscription = HassSubscription(
+    final hassSubscription = HASubscription(
       unsubscribe: () async {
         final entry = _pending[id];
         final isActive = entry is _HaPendingSubscription && entry.isActive;
@@ -336,7 +336,7 @@ class HAConnection implements IHAConnection {
     }
 
     // Copy subscriptions first, then remove them from the map to avoid concurrent modification.
-    final subscriptions = <HassSubscription>[];
+    final subscriptions = <HASubscription>[];
     final idsToRemove = <int>[];
 
     for (final entry in _pending.entries) {
