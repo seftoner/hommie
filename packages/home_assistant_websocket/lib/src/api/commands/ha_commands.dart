@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:home_assistant_websocket/src/api/subsctibtions/hass_subscription.dart';
 import 'package:home_assistant_websocket/src/connection/ha_connection.dart';
 import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
 import 'package:home_assistant_websocket/src/protocol/types/ha_response.dart';
 import 'package:home_assistant_websocket/src/protocol/types/hass_event.dart';
 import 'package:home_assistant_websocket/src/protocol/types/hass_service.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_subscription.dart';
 import 'package:home_assistant_websocket/src/protocol/types/hass_types.dart';
 
 class HACommands {

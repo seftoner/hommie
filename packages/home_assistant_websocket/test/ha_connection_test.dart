@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:fake_async/fake_async.dart';
 import 'package:home_assistant_websocket/src/api/commands/ha_commands.dart';
-import 'package:home_assistant_websocket/src/api/subsctibtions/hass_subscription.dart';
 import 'package:home_assistant_websocket/src/connection/ha_connection.dart';
 import 'package:home_assistant_websocket/src/connection/ha_connection_option.dart';
 import 'package:home_assistant_websocket/src/connection/ha_socket_state.dart';
 import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
 import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
 import 'package:home_assistant_websocket/src/protocol/types/hass_event.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_subscription.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

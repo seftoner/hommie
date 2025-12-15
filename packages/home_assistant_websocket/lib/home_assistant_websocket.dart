@@ -5,7 +5,6 @@
 library home_assistant_websocket;
 
 export 'src/api/commands/ha_commands.dart';
-export 'src/api/subsctibtions/hass_subscription.dart';
 export 'src/auth/ha_auth_token.dart';
 export 'src/connection/connection_orchestrator.dart';
 export 'src/connection/ha_connection.dart';
@@ -17,4 +16,5 @@ export 'src/protocol/messages/ha_messages.dart';
 export 'src/protocol/types/ha_response.dart';
 export 'src/protocol/types/hass_event.dart';
 export 'src/protocol/types/hass_service.dart';
+export 'src/protocol/types/hass_subscription.dart';
 export 'src/protocol/types/hass_types.dart';

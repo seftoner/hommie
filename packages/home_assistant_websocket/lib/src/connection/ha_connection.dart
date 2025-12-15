@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:home_assistant_websocket/src/api/subsctibtions/hass_subscription.dart';
 import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
 import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
 import 'package:home_assistant_websocket/src/protocol/types/ha_response.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_subscription.dart';
 
 import 'ha_connection_option.dart';
 import 'ha_connection_state.dart';
