@@ -1,13 +1,12 @@
 import 'dart:async';
 
-import 'package:home_assistant_websocket/src/types/hass_event.dart';
-import 'package:home_assistant_websocket/src/types/hass_service.dart';
-import 'package:home_assistant_websocket/src/types/hass_types.dart';
-
-import 'future_mapping_extension.dart';
-import 'ha_connection.dart';
-import 'ha_messages.dart';
-import 'hass_subscription.dart';
+import 'package:home_assistant_websocket/src/api/subsctibtions/hass_subscription.dart';
+import 'package:home_assistant_websocket/src/connection/ha_connection.dart';
+import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
+import 'package:home_assistant_websocket/src/protocol/types/ha_response.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_event.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_service.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_types.dart';
 
 class HACommands {
   /// Returns a value indicating whether the operation was successful.
@@ -21,10 +20,6 @@ class HACommands {
     return connection
         .sendMessage(GetStatesMessage())
         .mapList(HassEntity.fromJson);
-  }
-
-  static Future<List<AreaEntity>> getAreas(IHAConnection connection) {
-    return connection.sendMessage(AreasMessage()).mapList(AreaEntity.fromJson);
   }
 
   static Future<HassUser> getUser(IHAConnection connection) {

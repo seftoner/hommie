@@ -278,7 +278,9 @@ as List<String>,
 /// @nodoc
 mixin _$EntityState {
 
-@JsonKey(name: 's') String? get state;@JsonKey(name: 'a') Map<String, dynamic>? get attributes;@JsonKey(name: 'c') Context? get context;@JsonKey(name: 'lc') double? get last_changed;@JsonKey(name: 'lu') double? get last_updated;
+@JsonKey(name: 's') String? get state;@JsonKey(name: 'a') Map<String, dynamic>? get attributes;@JsonKey(name: 'c') Context? get context;/** last_changed; if set, also applies to lu */
+@JsonKey(name: 'lc') double? get last_changed;/** last_updated */
+@JsonKey(name: 'lu') double? get last_updated;
 /// Create a copy of EntityState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -496,7 +498,9 @@ class _EntityState implements EntityState {
 }
 
 @override@JsonKey(name: 'c') final  Context? context;
+/** last_changed; if set, also applies to lu */
 @override@JsonKey(name: 'lc') final  double? last_changed;
+/** last_updated */
 @override@JsonKey(name: 'lu') final  double? last_updated;
 
 /// Create a copy of EntityState

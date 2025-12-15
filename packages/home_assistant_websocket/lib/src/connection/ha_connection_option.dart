@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'ha_auth_token.dart';
+import 'package:home_assistant_websocket/src/auth/ha_auth_token.dart';
+import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
+
 import 'ha_socket.dart';
 import 'ha_socket_state.dart';
-import 'logger_interface.dart';
 
 typedef FetchAuthTokenCallback = Future<HAAuthToken> Function();
 

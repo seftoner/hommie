@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:home_assistant_websocket/src/types/hass_event.dart';
-import 'package:home_assistant_websocket/src/types/hass_service.dart';
-import 'package:home_assistant_websocket/src/types/web_socket_response.dart';
+import 'package:home_assistant_websocket/src/protocol/responses/web_socket_response.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_event.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_service.dart';
 import 'package:test/test.dart';
 
 import 'utils/tests_helpers.dart';
@@ -24,7 +24,7 @@ void main() {
     );
   });
 
-  test('Event deserialization 2', () async {
+  test('Event with changes', () async {
     final testJson = await readJsonTestDataFromFile(
       'test/data_samples/event_with_changes.json',
     );

@@ -1,7 +1,9 @@
+typedef HAResponse = Future<dynamic>;
+
 typedef Json = Map<String, dynamic>;
 typedef JsonMapper<T> = T Function(Json);
 
-extension FutureMappingExtension on Future<dynamic> {
+extension HAResponseMappingExtension on HAResponse {
   Future<T> mapItem<T>(JsonMapper<T> fromJson) {
     return then((value) => fromJson(value));
   }

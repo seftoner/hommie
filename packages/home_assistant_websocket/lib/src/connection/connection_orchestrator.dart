@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:home_assistant_websocket/src/api/commands/ha_commands.dart';
+import 'package:home_assistant_websocket/src/connection/ha_socket_state.dart';
+import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
+
 import 'backoff.dart';
-import 'ha_commands.dart';
 import 'ha_connection.dart';
 import 'ha_connection_option.dart';
-import 'ha_socket_state.dart';
-import 'logger_interface.dart';
 
 /// Orchestrates connection lifecycle and reconnection logic.
 /// Operates HAConnection from the outside, managing its lifecycle.

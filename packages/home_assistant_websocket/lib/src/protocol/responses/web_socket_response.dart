@@ -1,9 +1,8 @@
 // ignore_for_file: avoid_redundant_argument_values
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'hass_event.dart';
-import 'hass_types.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_event.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_types.dart';
 
 part 'web_socket_response.freezed.dart';
 part 'web_socket_response.g.dart';

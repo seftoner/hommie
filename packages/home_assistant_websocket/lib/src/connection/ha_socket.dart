@@ -2,16 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_websocket/src/auth/ha_auth_handler.dart';
+import 'package:home_assistant_websocket/src/http/http_config.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
-
-import 'ha_auth_handler.dart';
-import 'ha_auth_token.dart';
-import 'ha_messages.dart';
-import 'ha_socket_state.dart';
-import 'http_config.dart';
-import 'logger_interface.dart';
 
 class HASocketConfig {
   final Uri wsUri;
@@ -215,8 +211,8 @@ class HASocket {
     _stateController.close();
   }
 
-  void sendMessage(HABaseMessage message) {
-    final encodedData = message.encodeToJson();
+  void sendMessage(HAMessage message, {int? id}) {
+    final encodedData = message.encodeToJson(id: id);
     _logger.trace('Sending message: $encodedData');
 
     _innerChanel.sink.add(encodedData);

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:home_assistant_websocket/src/ha_messages.dart';
-import 'package:home_assistant_websocket/src/ha_socket.dart';
-import 'package:home_assistant_websocket/src/ha_socket_state.dart';
+import 'package:home_assistant_websocket/src/connection/ha_socket.dart';
+import 'package:home_assistant_websocket/src/connection/ha_socket_state.dart';
+import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
 
 /// In-memory socket fake for deterministic `HAConnection` tests.
 ///
-/// - Records outbound [HABaseMessage]s.
+/// - Records outbound [HAMessage]s.
 /// - Allows injecting inbound server messages via [addIncoming].
 /// - Can simulate server-initiated close via [closeFromServer].
 final class FakeHASocket implements HASocket {
@@ -15,13 +15,12 @@ final class FakeHASocket implements HASocket {
     : _state = initialState,
       _stateController = StreamController<HASocketState>.broadcast(),
       _incomingController = StreamController<dynamic>.broadcast(),
-      _sentController = StreamController<HABaseMessage>.broadcast();
+      _sentController = StreamController<HAMessage>.broadcast();
 
   final StreamController<HASocketState> _stateController;
   final StreamController<dynamic> _incomingController;
-  final StreamController<HABaseMessage> _sentController;
-
-  final List<HABaseMessage> sentMessages = <HABaseMessage>[];
+  final StreamController<HAMessage> _sentController;
+  final List<HAMessage> sentMessages = <HAMessage>[];
 
   HASocketState _state;
 
@@ -74,10 +73,10 @@ final class FakeHASocket implements HASocket {
   }
 
   /// Waits for the next outbound message that matches [predicate].
-  Future<HABaseMessage> nextSentWhere(bool Function(HABaseMessage) predicate) {
-    final completer = Completer<HABaseMessage>();
+  Future<HAMessage> nextSentWhere(bool Function(HAMessage) predicate) {
+    final completer = Completer<HAMessage>();
 
-    late StreamSubscription<HABaseMessage> sub;
+    late StreamSubscription<HAMessage> sub;
     sub = _sentController.stream.listen((m) {
       if (predicate(m) && !completer.isCompleted) {
         completer.complete(m);
@@ -89,7 +88,7 @@ final class FakeHASocket implements HASocket {
     for (final m in sentMessages) {
       if (predicate(m)) {
         sub.cancel();
-        return Future<HABaseMessage>.value(m);
+        return Future<HAMessage>.value(m);
       }
     }
 
@@ -97,15 +96,35 @@ final class FakeHASocket implements HASocket {
   }
 
   @override
-  void sendMessage(HABaseMessage message) {
+  void sendMessage(HAMessage message, {int? id}) {
     // Record before any side-effects.
     sentMessages.add(message);
     if (!_sentController.isClosed) {
       _sentController.add(message);
     }
 
-    // Simulate Home Assistant behavior: invalid client message => server closes.
-    final type = message.payload['type'];
+    // Build payload the same way the real socket would.
+    JsonMap payload;
+    try {
+      payload = message.toPayload(id: id);
+    } on StateError catch (_) {
+      // Simulate HA behavior: invalid client message => server closes.
+      closeFromServer(
+        closeCode: 1002,
+        reason: 'Invalid client message: missing required id',
+        type: DisconnectionType.error,
+      );
+      return;
+    } catch (_) {
+      closeFromServer(
+        closeCode: 1002,
+        reason: 'Invalid client message: failed to build payload',
+        type: DisconnectionType.error,
+      );
+      return;
+    }
+
+    final type = payload['type'];
     if (type is! String || type.isEmpty) {
       closeFromServer(
         closeCode: 1002,

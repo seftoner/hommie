@@ -3,15 +3,14 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
-import 'package:home_assistant_websocket/src/ha_connection_option.dart' as _i8;
-import 'package:home_assistant_websocket/src/ha_messages.dart' as _i7;
-import 'package:home_assistant_websocket/src/ha_socket.dart' as _i3;
-import 'package:home_assistant_websocket/src/ha_socket_state.dart' as _i5;
-import 'package:home_assistant_websocket/src/logger_interface.dart' as _i2;
+import 'package:home_assistant_websocket/src/connection/ha_connection_option.dart'
+    as _i4;
+import 'package:home_assistant_websocket/src/connection/ha_socket.dart' as _i3;
+import 'package:home_assistant_websocket/src/logging/logger_interface.dart'
+    as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -38,72 +37,11 @@ class _FakeHASocket_1 extends _i1.SmartFake implements _i3.HASocket {
     : super(parent, parentInvocation);
 }
 
-/// A class which mocks [HASocket].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockHASocket extends _i1.Mock implements _i3.HASocket {
-  MockHASocket() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i4.Stream<_i5.HASocketState> get stateStream =>
-      (super.noSuchMethod(
-            Invocation.getter(#stateStream),
-            returnValue: _i4.Stream<_i5.HASocketState>.empty(),
-          )
-          as _i4.Stream<_i5.HASocketState>);
-
-  @override
-  _i5.HASocketState get state =>
-      (super.noSuchMethod(
-            Invocation.getter(#state),
-            returnValue: _i6.dummyValue<_i5.HASocketState>(
-              this,
-              Invocation.getter(#state),
-            ),
-          )
-          as _i5.HASocketState);
-
-  @override
-  _i4.Stream<dynamic> get stream =>
-      (super.noSuchMethod(
-            Invocation.getter(#stream),
-            returnValue: _i4.Stream<dynamic>.empty(),
-          )
-          as _i4.Stream<dynamic>);
-
-  @override
-  bool get isClosed =>
-      (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
-          as bool);
-
-  @override
-  bool get isAuthInvalid =>
-      (super.noSuchMethod(Invocation.getter(#isAuthInvalid), returnValue: false)
-          as bool);
-
-  @override
-  void sendMessage(_i7.HABaseMessage? message) => super.noSuchMethod(
-    Invocation.method(#sendMessage, [message]),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  _i4.Future<void> close() =>
-      (super.noSuchMethod(
-            Invocation.method(#close, []),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
-          )
-          as _i4.Future<void>);
-}
-
 /// A class which mocks [HAConnectionOption].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockHAConnectionOption extends _i1.Mock
-    implements _i8.HAConnectionOption {
+    implements _i4.HAConnectionOption {
   MockHAConnectionOption() {
     _i1.throwOnMissingStub(this);
   }
@@ -117,12 +55,12 @@ class MockHAConnectionOption extends _i1.Mock
           as _i2.HaLogger);
 
   @override
-  _i4.Future<_i3.HASocket> createSocket() =>
+  _i5.Future<_i3.HASocket> createSocket() =>
       (super.noSuchMethod(
             Invocation.method(#createSocket, []),
-            returnValue: _i4.Future<_i3.HASocket>.value(
+            returnValue: _i5.Future<_i3.HASocket>.value(
               _FakeHASocket_1(this, Invocation.method(#createSocket, [])),
             ),
           )
-          as _i4.Future<_i3.HASocket>);
+          as _i5.Future<_i3.HASocket>);
 }

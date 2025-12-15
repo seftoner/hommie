@@ -1,22 +1,24 @@
 import 'dart:async';
 
+import 'package:home_assistant_websocket/src/api/subsctibtions/hass_subscription.dart';
+import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
+import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
+import 'package:home_assistant_websocket/src/protocol/types/ha_response.dart';
+
 import 'ha_connection_option.dart';
 import 'ha_connection_state.dart';
-import 'ha_messages.dart';
 import 'ha_socket.dart';
 import 'ha_socket_state.dart';
-import 'hass_subscription.dart';
-import 'logger_interface.dart';
 import 'message_handler.dart';
 
 /// Interface for Home Assistant websocket connection.
 abstract class IHAConnection {
   /// Sends a message to Home Assistant and returns the response.
-  Future<dynamic> sendMessage(HABaseMessage message);
+  HAResponse sendMessage(HAMessage message);
 
   /// Subscribes to Home Assistant events.
   /// Returns a [HassSubscription] that can be used to receive events and unsubscribe.
-  HassSubscription subscribeMessage(HABaseMessage subscribeMessage);
+  HassSubscription subscribeMessage(HAMessage subscribeMessage);
 
   /// Closes the connection.
   Future<void> close();
@@ -105,8 +107,8 @@ class HAConnection implements IHAConnection {
   }
 
   @override
-  Future<dynamic> sendMessage(
-    HABaseMessage message, {
+  HAResponse sendMessage(
+    HAMessage message, {
     Duration timeout = const Duration(seconds: 15),
   }) async {
     // Replace assertion with runtime check for better error handling
@@ -115,7 +117,6 @@ class HAConnection implements IHAConnection {
     }
 
     final id = _getCommandID;
-    message.id = id;
 
     final pending = _HaPendingCommand(Completer<dynamic>());
     _pending[id] = pending;
@@ -133,7 +134,7 @@ class HAConnection implements IHAConnection {
       }
     });
 
-    _socket!.sendMessage(message);
+    _socket!.sendMessage(message, id: id);
 
     return pending.completer.future;
   }
@@ -188,7 +189,7 @@ class HAConnection implements IHAConnection {
   }
 
   @override
-  HassSubscription subscribeMessage(HABaseMessage subscribeMessage) {
+  HassSubscription subscribeMessage(HAMessage subscribeMessage) {
     if (_socket == null || _socket!.isClosed) {
       throw ConnectionClosedError('Connection is closed');
     }
@@ -213,8 +214,7 @@ class HAConnection implements IHAConnection {
 
     _pending[id] = _HaPendingSubscription(hassSubscription);
 
-    subscribeMessage.id = id;
-    _socket!.sendMessage(subscribeMessage);
+    _socket!.sendMessage(subscribeMessage, id: id);
     return hassSubscription;
   }
 

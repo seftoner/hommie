@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'logger_interface.dart';
+import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
 
 /// Represents a subscription to Home Assistant events.
 /// Provides a stream of events and a way to unsubscribe.

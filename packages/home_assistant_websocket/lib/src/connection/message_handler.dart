@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'types/hass_types.dart';
-import 'types/web_socket_response.dart';
+import 'package:home_assistant_websocket/src/protocol/responses/web_socket_response.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_types.dart';
 
 class HAMessageHandler {
   List<WebSocketResponse> parseMessages(dynamic rawMessage) {

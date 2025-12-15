@@ -1,6 +1,7 @@
+import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
+import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
+
 import 'ha_auth_token.dart';
-import 'ha_messages.dart';
-import 'logger_interface.dart';
 
 class HAAuthHandler {
   static const _authRequired = 'auth_required';
@@ -10,7 +11,7 @@ class HAAuthHandler {
   final HAAuthToken authToken;
   final HaLogger _logger;
   void Function(AuthResult)? onAuthResult;
-  void Function(HABaseMessage)? sendMessage;
+  void Function(HAMessage)? sendMessage;
 
   HAAuthHandler({
     required this.authToken,

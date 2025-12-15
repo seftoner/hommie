@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:fake_async/fake_async.dart';
-import 'package:home_assistant_websocket/src/ha_commands.dart';
-import 'package:home_assistant_websocket/src/ha_connection.dart';
-import 'package:home_assistant_websocket/src/ha_connection_option.dart';
-import 'package:home_assistant_websocket/src/ha_messages.dart';
-import 'package:home_assistant_websocket/src/ha_socket.dart';
-import 'package:home_assistant_websocket/src/ha_socket_state.dart';
-import 'package:home_assistant_websocket/src/hass_subscription.dart';
-import 'package:home_assistant_websocket/src/logger_interface.dart';
-import 'package:home_assistant_websocket/src/types/hass_event.dart';
+import 'package:home_assistant_websocket/src/api/commands/ha_commands.dart';
+import 'package:home_assistant_websocket/src/api/subsctibtions/hass_subscription.dart';
+import 'package:home_assistant_websocket/src/connection/ha_connection.dart';
+import 'package:home_assistant_websocket/src/connection/ha_connection_option.dart';
+import 'package:home_assistant_websocket/src/connection/ha_socket_state.dart';
+import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
+import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_event.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -17,12 +16,7 @@ import 'package:test/test.dart';
 import 'fakes/fake_ha_socket.dart';
 import 'ha_connection_test.mocks.dart';
 
-@GenerateMocks([
-  HASocket,
-  HAConnectionOption,
-  StreamController,
-  StreamSubscription<String>,
-])
+@GenerateMocks([HAConnectionOption])
 void main() {
   late MockHAConnectionOption mockOptions;
   late HAConnection connection;
@@ -93,10 +87,8 @@ void main() {
       // Act
       final resultFuture = HACommands.getStates(connection);
 
-      final sent = await fakeSocket.nextSentWhere(
-        (m) => m.payload['type'] == 'get_states',
-      );
-      final id = sent.payload['id'] as int;
+      await fakeSocket.nextSentWhere((m) => m is GetStatesMessage);
+      const id = 2;
 
       fakeSocket.addIncoming({
         'id': id,
@@ -125,9 +117,7 @@ void main() {
 
       // Assert
       expect(
-        fakeSocket.sentMessages
-            .where((m) => m.payload['type'] == 'get_states')
-            .length,
+        fakeSocket.sentMessages.where((m) => m is GetStatesMessage).length,
         1,
       );
       expect(result, isA<List<HassEntity>>());
@@ -147,10 +137,8 @@ void main() {
         // Act
         final subscription = HACommands.subscribeEntities(connection);
 
-        final sentSubscribe = await fakeSocket.nextSentWhere(
-          (m) => m.payload['type'] == 'subscribe_entities',
-        );
-        final subscriptionId = sentSubscribe.payload['id'] as int;
+        await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
+        const subscriptionId = 2;
 
         fakeSocket.addIncoming({
           'id': subscriptionId,
@@ -192,10 +180,8 @@ void main() {
 
         final subscription = HACommands.subscribeEntities(connection);
 
-        final sentSubscribe = await fakeSocket.nextSentWhere(
-          (m) => m.payload['type'] == 'subscribe_entities',
-        );
-        final subscriptionId = sentSubscribe.payload['id'] as int;
+        await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
+        const subscriptionId = 2;
 
         // ACK subscription
         fakeSocket.addIncoming({
@@ -208,15 +194,15 @@ void main() {
         // Allow the connection to process the ACK.
         await Future<void>.delayed(Duration.zero);
 
-        // Act: start dispose, then deliver unsubscribe ACK (id: 3), then await dispose.
+        // Act
         final disposeFuture = subscription.dispose();
 
-        final sentUnsubscribe = await fakeSocket.nextSentWhere(
+        await fakeSocket.nextSentWhere(
           (m) =>
-              m.payload['type'] == 'unsubscribe_events' &&
-              m.payload['subscription'] == subscriptionId,
+              m is UnsubscribeEventsMessage &&
+              (m).subscriptionID == subscriptionId,
         );
-        final unsubscribeCommandId = sentUnsubscribe.payload['id'] as int;
+        const unsubscribeCommandId = 3;
 
         // ACK unsubscribe
         fakeSocket.addIncoming({
@@ -240,10 +226,8 @@ void main() {
       final events = <dynamic>[];
       final streamSubscription = subscription.stream.listen(events.add);
 
-      final sentSubscribe = await fakeSocket.nextSentWhere(
-        (m) => m.payload['type'] == 'subscribe_entities',
-      );
-      final subscriptionId = sentSubscribe.payload['id'] as int;
+      await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
+      const subscriptionId = 2;
 
       // ACK subscription
       fakeSocket.addIncoming({
@@ -258,12 +242,13 @@ void main() {
       // Act - dispose subscription
       final disposeFuture = subscription.dispose();
 
-      final sentUnsubscribe = await fakeSocket.nextSentWhere(
+      await fakeSocket.nextSentWhere(
         (m) =>
-            m.payload['type'] == 'unsubscribe_events' &&
-            m.payload['subscription'] == subscriptionId,
+            m is UnsubscribeEventsMessage &&
+            (m).subscriptionID == subscriptionId,
       );
-      final unsubscribeCommandId = sentUnsubscribe.payload['id'] as int;
+      const unsubscribeCommandId = 3;
+
       fakeSocket.addIncoming({
         'id': unsubscribeCommandId,
         'type': 'result',
@@ -291,7 +276,6 @@ void main() {
         },
       });
 
-      // Allow any (unexpected) delivery.
       await Future<void>.delayed(Duration.zero);
 
       // Assert
@@ -308,17 +292,11 @@ void main() {
         final subscription1 = HACommands.subscribeEntities(connection);
         final subscription2 = HACommands.subscribeEntities(connection);
 
-        final sub1Msg = await fakeSocket.nextSentWhere(
-          (m) => m.payload['type'] == 'subscribe_entities',
-        );
-        final sub2Msg = await fakeSocket.nextSentWhere(
-          (m) =>
-              m.payload['type'] == 'subscribe_entities' &&
-              m.payload['id'] != sub1Msg.payload['id'],
-        );
+        await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
+        await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
 
-        final sub1Id = sub1Msg.payload['id'] as int;
-        final sub2Id = sub2Msg.payload['id'] as int;
+        const sub1Id = 2;
+        const sub2Id = 3;
 
         // ACK both subscriptions
         fakeSocket.addIncoming({
@@ -353,10 +331,8 @@ void main() {
 
         final subscription = HACommands.subscribeEntities(connection);
 
-        final sentSubscribe = await fakeSocket.nextSentWhere(
-          (m) => m.payload['type'] == 'subscribe_entities',
-        );
-        final subscriptionId = sentSubscribe.payload['id'] as int;
+        await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
+        const subscriptionId = 2;
 
         // Server rejects the subscription
         fakeSocket.addIncoming({
@@ -374,7 +350,7 @@ void main() {
         // No unsubscribe should be sent as part of cleanup for failed subscribe.
         expect(
           fakeSocket.sentMessages
-              .where((m) => m.payload['type'] == 'unsubscribe_events')
+              .where((m) => m is UnsubscribeEventsMessage)
               .toList(),
           isEmpty,
         );
@@ -403,11 +379,9 @@ void main() {
 
         // Assert: should attempt to unsubscribe from unknown subscription id
         final unsub = await fakeSocket.nextSentWhere(
-          (m) =>
-              m.payload['type'] == 'unsubscribe_events' &&
-              m.payload['subscription'] == 999,
+          (m) => m is UnsubscribeEventsMessage && (m).subscriptionID == 999,
         );
-        expect(unsub.payload['subscription'], 999);
+        expect((unsub as UnsubscribeEventsMessage).subscriptionID, 999);
       },
     );
 
@@ -419,10 +393,9 @@ void main() {
 
         final subscription = HACommands.subscribeEntities(connection);
 
-        final sentSubscribe = await fakeSocket.nextSentWhere(
-          (m) => m.payload['type'] == 'subscribe_entities',
-        );
-        final subscriptionId = sentSubscribe.payload['id'] as int;
+        await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
+        const subscriptionId = 2;
+
         fakeSocket.addIncoming({
           'id': subscriptionId,
           'type': 'result',
@@ -439,7 +412,6 @@ void main() {
           type: DisconnectionType.error,
         );
 
-        // Allow HAConnection to process onDone.
         await Future<void>.delayed(Duration.zero);
 
         final sentCountBeforeManualClose = fakeSocket.sentMessages.length;
@@ -451,13 +423,142 @@ void main() {
         expect(fakeSocket.sentMessages.length, sentCountBeforeManualClose);
         expect(
           fakeSocket.sentMessages
-              .where((m) => m.payload['type'] == 'unsubscribe_events')
+              .where((m) => m is UnsubscribeEventsMessage)
               .toList(),
           isEmpty,
         );
         expect(subscription.isDisposed, isTrue);
       },
     );
+
+    test(
+      'subscribeEvents should send subscribe_events with event_type and unsubscribe on dispose',
+      () async {
+        // Arrange
+        await connection.connect();
+
+        // Act
+        final subscription = HACommands.subscribeEvents(
+          connection,
+          'area_registry_updated',
+        );
+
+        await fakeSocket.nextSentWhere(
+          (m) =>
+              m is SubscribeEventsMessage &&
+              m.eventType == 'area_registry_updated',
+        );
+        const subscriptionId = 2;
+
+        // ACK subscription
+        fakeSocket.addIncoming({
+          'id': subscriptionId,
+          'type': 'result',
+          'success': true,
+          'result': null,
+        });
+
+        await Future<void>.delayed(Duration.zero);
+
+        final disposeFuture = subscription.dispose();
+
+        await fakeSocket.nextSentWhere(
+          (m) =>
+              m is UnsubscribeEventsMessage &&
+              m.subscriptionID == subscriptionId,
+        );
+        const unsubscribeCommandId = 3;
+
+        // ACK unsubscribe
+        fakeSocket.addIncoming({
+          'id': unsubscribeCommandId,
+          'type': 'result',
+          'success': true,
+          'result': null,
+        });
+
+        await disposeFuture;
+
+        // Assert
+        expect(subscription, isA<HassSubscription>());
+        expect(subscription.isDisposed, isTrue);
+      },
+    );
+
+    test('subscribeEvents should receive HassEvent payloads', () async {
+      // Arrange
+      await connection.connect();
+
+      final subscription = HACommands.subscribeEvents(
+        connection,
+        'area_registry_updated',
+      );
+
+      await fakeSocket.nextSentWhere(
+        (m) =>
+            m is SubscribeEventsMessage &&
+            m.eventType == 'area_registry_updated',
+      );
+      const subscriptionId = 2;
+
+      // ACK subscription
+      fakeSocket.addIncoming({
+        'id': subscriptionId,
+        'type': 'result',
+        'success': true,
+        'result': null,
+      });
+
+      // Emit event
+      fakeSocket.addIncoming({
+        'id': subscriptionId,
+        'type': 'event',
+        'event': {
+          'event_type': 'area_registry_updated',
+          'data': {
+            'action': 'create',
+            'area_id': 'living_room',
+            'name': 'Living Room',
+          },
+          'origin': 'LOCAL',
+          'time_fired': '2024-01-15T10:30:00.123456+00:00',
+          'context': {
+            'id': '01HKXXX123456789ABC',
+            'parent_id': null,
+            'user_id': 'user123',
+          },
+        },
+      });
+
+      final first = await subscription.stream.first;
+
+      // Assert
+      expect(first, isA<HassEvent>());
+      final event = first as HassEvent;
+      expect(event.event_type, equals('area_registry_updated'));
+      expect(event.origin, equals('LOCAL'));
+      expect(event.data['action'], equals('create'));
+      expect(event.data['area_id'], equals('living_room'));
+      expect(event.data['name'], equals('Living Room'));
+
+      final disposeFuture = subscription.dispose();
+
+      await fakeSocket.nextSentWhere(
+        (m) =>
+            m is UnsubscribeEventsMessage && m.subscriptionID == subscriptionId,
+      );
+      const unsubscribeCommandId = 3;
+
+      // ACK unsubscribe
+      fakeSocket.addIncoming({
+        'id': unsubscribeCommandId,
+        'type': 'result',
+        'success': true,
+        'result': null,
+      });
+
+      await disposeFuture;
+    });
   });
 
   group('Timeout & shutdown', () {
@@ -511,15 +612,28 @@ void main() {
     test('server closes connection on invalid client message', () async {
       await connection.connect();
 
-      final invalid = PingMessage();
-      invalid.payload.remove('type');
-
+      // Send a normal request, then simulate the server closing due to "invalid message".
       final future = connection.sendMessage(
-        invalid,
+        PingMessage(),
         timeout: const Duration(seconds: 30),
       );
+      final expectation = expectLater(
+        future,
+        throwsA(equals('Connection lost 📡')),
+      );
 
-      await expectLater(future, throwsA(equals('Connection lost 📡')));
+      await fakeSocket.nextSentWhere((m) => m is PingMessage);
+
+      await fakeSocket.closeFromServer(
+        closeCode: 1002,
+        reason: 'Invalid message',
+        type: DisconnectionType.error,
+      );
+
+      // Allow HAConnection to process onDone.
+      await Future<void>.delayed(Duration.zero);
+
+      await expectation;
       expect(connection.currentState, isA<Disconnected>());
     });
   });

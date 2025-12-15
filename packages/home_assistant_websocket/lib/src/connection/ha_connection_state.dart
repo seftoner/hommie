@@ -1,8 +1,9 @@
 import 'dart:async';
 
+import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
+
 import 'ha_socket.dart';
 import 'ha_socket_state.dart';
-import 'logger_interface.dart';
 
 class HAConnectionState {
   final StreamController<HASocketState> _controller;

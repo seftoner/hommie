@@ -14,33 +14,6 @@ Map<String, dynamic> _$ErrorToJson(_Error instance) => <String, dynamic>{
   'message': instance.message,
 };
 
-_AreaEntity _$AreaEntityFromJson(Map<String, dynamic> json) => _AreaEntity(
-  area_id: json['area_id'] as String,
-  name: json['name'] as String,
-  picture: json['picture'] as String?,
-  aliases: (json['aliases'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
-);
-
-Map<String, dynamic> _$AreaEntityToJson(_AreaEntity instance) =>
-    <String, dynamic>{
-      'area_id': instance.area_id,
-      'name': instance.name,
-      'picture': instance.picture,
-      'aliases': instance.aliases,
-    };
-
-_AreaEntityList _$AreaEntityListFromJson(Map<String, dynamic> json) =>
-    _AreaEntityList(
-      (json['areasList'] as List<dynamic>)
-          .map((e) => AreaEntity.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$AreaEntityListToJson(_AreaEntityList instance) =>
-    <String, dynamic>{'areasList': instance.areasList};
-
 _HassUser _$HassUserFromJson(Map<String, dynamic> json) => _HassUser(
   id: json['id'] as String,
   is_admin: json['is_admin'] as bool,
