@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
-class AppScaffoldPage extends ConsumerWidget {
+class AppScaffoldPage extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   const AppScaffoldPage({required this.navigationShell, super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: NavigationBar(

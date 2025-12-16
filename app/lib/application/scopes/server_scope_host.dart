@@ -24,6 +24,7 @@ class ServerScopeHost extends ConsumerWidget {
         }
 
         return ProviderScope(
+          key: ValueKey(server.id),
           overrides: [
             serverScopeIdProvider.overrideWith((innerRef) => server.id!),
             serverScopeServerProvider.overrideWith((innerRef) => server),
