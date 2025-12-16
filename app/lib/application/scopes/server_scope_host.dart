@@ -1,9 +1,9 @@
-/* import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
 import 'package:hommie/features/servers/application/active_server.dart';
-import 'package:hommie/services/networking/server_connection_manager.dart';
-import 'package:hommie/services/networking/server_scope_provider.dart';
 
 /// Hosts a nested [ProviderScope] that injects server-specific overrides for the
 /// currently selected Home Assistant server. When no server is active the
@@ -36,7 +36,7 @@ class ServerScopeHost extends ConsumerWidget {
           child: child,
         );
       },
-      loading: () => child,
+      loading: () => const SizedBox.shrink(),
       error: (error, stackTrace) {
         logger.e(
           'Failed to resolve active server: $error',
@@ -67,4 +67,3 @@ class NoActiveServerSelectedException implements Exception {
   @override
   String toString() => 'No active server configured.';
 }
- */

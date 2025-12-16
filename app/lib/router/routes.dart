@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hommie/application/scopes/server_scope_host.dart';
 import 'package:hommie/core/bootstrap/app_startup.dart';
 import 'package:hommie/features/auth/presentation/flows/add_server_flow.dart';
 import 'package:hommie/features/automation/presentation/automations_page.dart';
-import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
+import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/onboarding/presentation/flows/onboarding_flow.dart';
 import 'package:hommie/features/servers/presentation/screens/servers_page.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
@@ -138,12 +139,13 @@ class HomeShellBranchData extends StatefulShellBranchData {
   const HomeShellBranchData();
 }
 
+// ignore: provider_dependencies
 class HomeRouteData extends GoRouteData with $HomeRouteData {
   const HomeRouteData();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const HomePage();
+    return const ServerScopeHost(child: HomePage());
   }
 }
 

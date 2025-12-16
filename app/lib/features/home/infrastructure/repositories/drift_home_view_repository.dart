@@ -5,6 +5,8 @@ import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/features/home/domain/repositories/i_home_view_repository.dart';
 import 'package:hommie/features/home/infrastructure/repositories/mappers/area_mapper.dart';
 import 'package:hommie/features/home/infrastructure/repositories/mappers/device_mapper.dart';
+import 'package:hommie/features/servers/infrastructure/repositories/mappers/server_mapper.dart';
+
 import 'mappers/home_view_mapper.dart';
 
 class DriftHomeViewRepository implements IHomeViewRepository {
@@ -85,7 +87,11 @@ class DriftHomeViewRepository implements IHomeViewRepository {
       );
     }
 
-    return HomeViewConf(serverId: _serverId.toString(), areas: areas);
+    final serverEntity = await (_database.select(
+      _database.serverEntities,
+    )..where((s) => s.id.equals(_serverId))).getSingleOrNull();
+
+    return HomeViewConf(server: serverEntity!.toDomain(), areas: areas);
   }
 
   @override

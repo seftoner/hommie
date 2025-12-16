@@ -16,5 +16,5 @@ export 'src/protocol/messages/ha_messages.dart';
 export 'src/protocol/types/ha_response.dart';
 export 'src/protocol/types/hass_event.dart';
 export 'src/protocol/types/hass_service.dart';
-export 'src/protocol/types/hass_subscription.dart';
+export 'src/protocol/types/ha_subscription.dart';
 export 'src/protocol/types/hass_types.dart';

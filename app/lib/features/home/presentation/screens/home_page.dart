@@ -1,7 +1,11 @@
 import 'package:drag_arrange/drag_arrange.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/material.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
+import 'package:hommie/features/areas/application/areas_for_home_provider.dart';
+import 'package:hommie/features/areas/domain/entities/area.dart'
+    as areas_domain;
 import 'package:hommie/features/home/application/home_page_controller.dart';
 import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/router/routes.dart';
@@ -10,116 +14,92 @@ import 'package:hommie/ui/styles/spacings.dart';
 import 'package:hommie/ui/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
+@Dependencies([HomePageController, serverScopeServer, areasForHome])
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final homeState = ref.watch(homePageControllerProvider);
+    final serverName = ref.watch(
+      serverScopeServerProvider.select((s) => s.name),
+    );
+    final serverAreas = ref.watch(areasForHomeProvider);
 
     return Scaffold(
       key: K.home.page,
       body: switch (homeState) {
-        AsyncData(value: final state) => CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              title: state.isEditing
-                  ? const Text('Edit home view')
-                  : const Text('My home'),
-              centerTitle: false,
-              actions: [
-                if (state.isEditing && state.homeView != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: FilledButton(
-                      onPressed: () {
-                        ref
-                            .read(homePageControllerProvider.notifier)
-                            .toggleEditMode();
-                      },
-                      child: const Text('Done'),
-                    ),
-                  )
-                else
-                  MenuAnchor(
-                    builder: (context, controller, child) {
-                      return IconButton(
-                        onPressed: () {
-                          if (controller.isOpen) {
-                            controller.close();
-                          } else {
-                            controller.open();
-                          }
-                        },
-                        icon: const Icon(Symbols.more_vert_rounded),
-                      );
-                    },
-                    menuChildren: [
-                      MenuItemButton(
-                        key: K.appScaffold.settingsButton,
-                        trailingIcon: const Icon(Symbols.settings_rounded),
-                        child: const Text('Settings'),
-                        onPressed: () {
-                          const SettingsRouteData().push(context);
-                        },
-                      ),
-                      if (state.homeView != null) ...[
-                        MenuItemButton(
-                          trailingIcon: const Icon(Symbols.dashboard_rounded),
-                          child: const Text('Edit Home view'),
-                          onPressed: () {
-                            ref
-                                .read(homePageControllerProvider.notifier)
-                                .toggleEditMode();
-                          },
-                        ),
-                        MenuItemButton(
-                          trailingIcon: const Icon(
-                            Symbols.low_priority_rounded,
-                          ),
-                          child: const Text('Reorder Items'),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ],
-                  ),
-              ],
-              floating: true,
-              pinned: true,
-            ),
-            if (state.homeView == null)
-              const SliverFillRemaining(
-                child: Center(child: Text('No home view configured')),
-              )
-            else
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((context, areaIndex) {
-                    final areaConfig = state.homeView!.areas[areaIndex];
-                    final area = areaConfig.area;
-                    final devices = areaConfig.devices;
+        AsyncData(value: final state) => () {
+          final areas = switch (serverAreas) {
+            AsyncData(:final value) => value,
+            _ => const <areas_domain.Area>[],
+          };
+          final showTabs = areas.isNotEmpty;
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RoomGroup(
-                          roomName: area.name,
-                          enabled: !state.isEditing,
-                        ),
-                        HomeDevicesGridView(state: state, devices: devices),
-                        $h24,
-                      ],
-                    );
-                  }, childCount: state.homeView?.areas.length ?? 0),
-                ),
+          if (!showTabs) {
+            return CustomScrollView(
+              slivers: [
+                _buildSliverAppBar(context, ref, state, serverName),
+                ..._buildHomeViewSlivers(state, state.homeView?.areas),
+              ],
+            );
+          }
+
+          return DefaultTabController(
+            length: areas.length + 1,
+            child: NestedScrollView(
+              floatHeaderSlivers: true,
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      context,
+                    ),
+                    sliver: _buildSliverAppBar(
+                      context,
+                      ref,
+                      state,
+                      serverName,
+                      bottom: TabBar(
+                        isScrollable: true,
+                        tabs: [
+                          const Tab(text: 'Summary'),
+                          for (final area in areas) Tab(text: area.name),
+                        ],
+                      ),
+                    ),
+                  ),
+                ];
+              },
+              body: TabBarView(
+                children: [
+                  _HomeTabBody(
+                    key: const PageStorageKey('home.summary'),
+                    slivers: _buildHomeViewSlivers(
+                      state,
+                      state.homeView?.areas,
+                    ),
+                  ),
+                  for (final area in areas)
+                    _HomeTabBody(
+                      key: PageStorageKey('home.area.${area.id}'),
+                      slivers: _buildHomeViewSlivers(
+                        state,
+                        state.homeView?.areas
+                            .where((a) => a.area.id == area.id)
+                            .toList(growable: false),
+                      ),
+                    ),
+                ],
               ),
-          ],
-        ),
+            ),
+          );
+        }(),
         AsyncError(:final error) => Scaffold(
           appBar: AppBar(
-            title: const Text('My home'),
+            title: Text(serverName),
             actions: [
               MenuAnchor(
                 builder: (context, controller, child) {
@@ -151,7 +131,7 @@ class HomePage extends ConsumerWidget {
         ),
         _ => Scaffold(
           appBar: AppBar(
-            title: const Text('My home'),
+            title: Text(serverName),
             actions: [
               MenuAnchor(
                 builder: (context, controller, child) {
@@ -182,6 +162,131 @@ class HomePage extends ConsumerWidget {
           body: const Center(child: CircularProgressIndicator()),
         ),
       },
+    );
+  }
+}
+
+@Dependencies([HomePageController])
+SliverAppBar _buildSliverAppBar(
+  BuildContext context,
+  WidgetRef ref,
+  HomePageState state,
+  String serverName, {
+  PreferredSizeWidget? bottom,
+}) {
+  return SliverAppBar(
+    title: Text(serverName),
+    centerTitle: false,
+    actions: [
+      if (state.isEditing && state.homeView != null)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: FilledButton(
+            onPressed: () {
+              ref.read(homePageControllerProvider.notifier).toggleEditMode();
+            },
+            child: const Text('Done'),
+          ),
+        )
+      else
+        MenuAnchor(
+          builder: (context, controller, child) {
+            return IconButton(
+              onPressed: () {
+                if (controller.isOpen) {
+                  controller.close();
+                } else {
+                  controller.open();
+                }
+              },
+              icon: const Icon(Symbols.more_vert_rounded),
+            );
+          },
+          menuChildren: [
+            MenuItemButton(
+              key: K.appScaffold.settingsButton,
+              trailingIcon: const Icon(Symbols.settings_rounded),
+              child: const Text('Settings'),
+              onPressed: () {
+                const SettingsRouteData().push(context);
+              },
+            ),
+            if (state.homeView != null) ...[
+              MenuItemButton(
+                trailingIcon: const Icon(Symbols.dashboard_rounded),
+                child: const Text('Edit Home view'),
+                onPressed: () {
+                  ref
+                      .read(homePageControllerProvider.notifier)
+                      .toggleEditMode();
+                },
+              ),
+              MenuItemButton(
+                trailingIcon: const Icon(Symbols.low_priority_rounded),
+                child: const Text('Reorder Items'),
+                onPressed: () {},
+              ),
+            ],
+          ],
+        ),
+    ],
+    floating: true,
+    pinned: true,
+    bottom: bottom,
+  );
+}
+
+List<Widget> _buildHomeViewSlivers(
+  HomePageState state,
+  List<AreaHomeConf>? areas,
+) {
+  if (state.homeView == null) {
+    return const [
+      SliverFillRemaining(
+        child: Center(child: Text('No home view configured')),
+      ),
+    ];
+  }
+
+  final resolvedAreas = areas ?? const <AreaHomeConf>[];
+
+  return [
+    SliverPadding(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate((context, areaIndex) {
+          final areaConfig = resolvedAreas[areaIndex];
+          final area = areaConfig.area;
+          final devices = areaConfig.devices;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RoomGroup(roomName: area.name, enabled: !state.isEditing),
+              HomeDevicesGridView(state: state, devices: devices),
+              $h24,
+            ],
+          );
+        }, childCount: resolvedAreas.length),
+      ),
+    ),
+  ];
+}
+
+class _HomeTabBody extends StatelessWidget {
+  const _HomeTabBody({super.key, required this.slivers});
+
+  final List<Widget> slivers;
+
+  @override
+  Widget build(BuildContext context) {
+    final handle = NestedScrollView.sliverOverlapAbsorberHandleFor(context);
+
+    return CustomScrollView(
+      slivers: [
+        SliverOverlapInjector(handle: handle),
+        ...slivers.where((s) => s is! SliverOverlapInjector),
+      ],
     );
   }
 }

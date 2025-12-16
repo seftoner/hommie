@@ -1,6 +1,6 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/features/home/infrastructure/providers/home_view_repository_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_page_controller.g.dart';
 
@@ -26,7 +26,7 @@ class HomePageState {
   );
 }
 
-@riverpod
+@Riverpod(dependencies: [homeViewRepository])
 class HomePageController extends _$HomePageController {
   @override
   Future<HomePageState> build() async {

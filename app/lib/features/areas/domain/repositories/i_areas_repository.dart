@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:hommie/features/sync/domain/entities/registry/area_registry_entry.dart';
+import 'package:hommie/features/areas/domain/entities/area.dart';
 
 abstract class IAreasRepository {
-  Future<Either<Exception, List<AreaRegistryEntry>>> getAreas();
+  Future<Either<Exception, List<Area>>> getAreas();
 }
