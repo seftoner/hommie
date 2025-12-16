@@ -2,10 +2,6 @@ import 'package:drag_arrange/drag_arrange.dart';
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
-import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
-import 'package:hommie/features/areas/application/areas_for_home_provider.dart';
-import 'package:hommie/features/areas/domain/entities/area.dart'
-    as areas_domain;
 import 'package:hommie/features/home/application/home_page_controller.dart';
 import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/router/routes.dart';
@@ -16,39 +12,32 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([HomePageController, serverScopeServer, areasForHome])
+@Dependencies([HomePageController])
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final homeState = ref.watch(homePageControllerProvider);
-    final serverName = ref.watch(
-      serverScopeServerProvider.select((s) => s.name),
-    );
-    final serverAreas = ref.watch(areasForHomeProvider);
+    final fallbackTitle = homeState.asData?.value.serverName;
 
     return Scaffold(
       key: K.home.page,
       body: switch (homeState) {
         AsyncData(value: final state) => () {
-          final areas = switch (serverAreas) {
-            AsyncData(:final value) => value,
-            _ => const <areas_domain.Area>[],
-          };
-          final showTabs = areas.isNotEmpty;
+          final showTabs = state.tabs.length > 1;
 
           if (!showTabs) {
             return CustomScrollView(
               slivers: [
-                _buildSliverAppBar(context, ref, state, serverName),
+                _buildSliverAppBar(context, ref, state, state.serverName),
                 ..._buildHomeViewSlivers(state, state.homeView?.areas),
               ],
             );
           }
 
           return DefaultTabController(
-            length: areas.length + 1,
+            length: state.tabs.length,
             child: NestedScrollView(
               floatHeaderSlivers: true,
               headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -61,12 +50,15 @@ class HomePage extends ConsumerWidget {
                       context,
                       ref,
                       state,
-                      serverName,
+                      state.serverName,
                       bottom: TabBar(
                         isScrollable: true,
                         tabs: [
-                          const Tab(text: 'Summary'),
-                          for (final area in areas) Tab(text: area.name),
+                          for (final tab in state.tabs)
+                            switch (tab) {
+                              HomeSummaryTab() => const Tab(text: 'Summary'),
+                              HomeAreaTab(:final title) => Tab(text: title),
+                            },
                         ],
                       ),
                     ),
@@ -75,23 +67,25 @@ class HomePage extends ConsumerWidget {
               },
               body: TabBarView(
                 children: [
-                  _HomeTabBody(
-                    key: const PageStorageKey('home.summary'),
-                    slivers: _buildHomeViewSlivers(
-                      state,
-                      state.homeView?.areas,
-                    ),
-                  ),
-                  for (final area in areas)
-                    _HomeTabBody(
-                      key: PageStorageKey('home.area.${area.id}'),
-                      slivers: _buildHomeViewSlivers(
-                        state,
-                        state.homeView?.areas
-                            .where((a) => a.area.id == area.id)
-                            .toList(growable: false),
+                  for (final tab in state.tabs)
+                    switch (tab) {
+                      HomeSummaryTab() => _HomeTabBody(
+                        key: const PageStorageKey('home.summary'),
+                        slivers: _buildHomeViewSlivers(
+                          state,
+                          state.homeView?.areas,
+                        ),
                       ),
-                    ),
+                      HomeAreaTab(:final areaId) => _HomeTabBody(
+                        key: PageStorageKey('home.area.$areaId'),
+                        slivers: _buildHomeViewSlivers(
+                          state,
+                          state.homeView?.areas
+                              .where((a) => a.area.id == areaId)
+                              .toList(growable: false),
+                        ),
+                      ),
+                    },
                 ],
               ),
             ),
@@ -99,7 +93,7 @@ class HomePage extends ConsumerWidget {
         }(),
         AsyncError(:final error) => Scaffold(
           appBar: AppBar(
-            title: Text(serverName),
+            title: Text(fallbackTitle ?? 'Home'),
             actions: [
               MenuAnchor(
                 builder: (context, controller, child) {
@@ -131,7 +125,7 @@ class HomePage extends ConsumerWidget {
         ),
         _ => Scaffold(
           appBar: AppBar(
-            title: Text(serverName),
+            title: Text(fallbackTitle ?? 'Home'),
             actions: [
               MenuAnchor(
                 builder: (context, controller, child) {
