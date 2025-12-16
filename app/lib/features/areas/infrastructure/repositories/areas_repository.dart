@@ -3,6 +3,7 @@ import 'package:home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/areas/domain/entities/area.dart';
 import 'package:hommie/features/areas/domain/repositories/i_areas_repository.dart';
+import 'package:hommie/features/areas/infrastructure/entry/area_registry_entry.dart';
 
 final class AreasMessage extends HARequestMessage {
   const AreasMessage();
@@ -25,36 +26,32 @@ class AreasRepository implements IAreasRepository {
       logger.i('Get list of areas');
       final result = await _haWebsocketsConnection
           .sendMessage(const AreasMessage())
-          .mapList(_mapJsonToArea);
+          .mapList(AreaRegistryEntry.fromJson);
 
-      return Right(result);
+      return Right(result.toDomain());
     } catch (e) {
       return Left(Exception(e));
     }
   }
+}
 
-  Area _mapJsonToArea(JsonMap json) {
-    final id = json['area_id'];
-    final name = json['name'];
-
-    if (id is! String || name is! String) {
-      throw const FormatException('Invalid area payload');
-    }
-
-    final aliases = json['aliases'];
-    final labels = json['labels'];
-
+/// Maps infrastructure [AreaRegistryEntry] to domain [Area]
+extension AreaRegistryEntryMapper on AreaRegistryEntry {
+  Area toDomain() {
     return Area(
-      id: id,
+      id: areaId,
       name: name,
-      icon: json['icon'] as String?,
-      picture: json['picture'] as String?,
-      aliases: aliases is List
-          ? aliases.whereType<String>().toList(growable: false)
-          : const [],
-      labels: labels is List
-          ? labels.whereType<String>().toList(growable: false)
-          : const [],
+      icon: icon,
+      picture: picture,
+      aliases: aliases,
+      labels: labels,
     );
+  }
+}
+
+/// Maps a list of [AreaRegistryEntry] to a list of domain [Area]
+extension AreaRegistryEntryListMapper on List<AreaRegistryEntry> {
+  List<Area> toDomain() {
+    return map((entry) => entry.toDomain()).toList();
   }
 }

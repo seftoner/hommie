@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'registry_entry.dart';
+import 'package:hommie/features/sync/domain/entities/registry/registry_entry.dart';
 
 part 'area_registry_entry.freezed.dart';
 part 'area_registry_entry.g.dart';
@@ -30,9 +29,3 @@ sealed class AreaRegistryEntry with _$AreaRegistryEntry {
   factory AreaRegistryEntry.fromJson(Map<String, dynamic> json) =>
       _$AreaRegistryEntryFromJson(json);
 }
-
-/* Future<List<AreaRegistryEntry>> getAreas(IHAConnection connection) {
-  return connection
-      .sendMessage(AreasMessage())
-      .mapList(AreaRegistryEntry.fromJson);
-} */
