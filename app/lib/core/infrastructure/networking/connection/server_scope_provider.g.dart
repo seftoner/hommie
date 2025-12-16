@@ -54,13 +54,8 @@ const serverScopeConnectionProvider = ServerScopeConnectionProvider._();
 /// - Type-safe server context
 
 final class ServerScopeConnectionProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<HAConnection>,
-          HAConnection,
-          FutureOr<HAConnection>
-        >
-    with $FutureModifier<HAConnection>, $FutureProvider<HAConnection> {
+    extends $FunctionalProvider<IHAConnection, IHAConnection, IHAConnection>
+    with $Provider<IHAConnection> {
   /// A scoped provider that represents the connection for the current server context.
   ///
   /// This provider is designed to be overridden in a ProviderScope when the active
@@ -97,18 +92,25 @@ final class ServerScopeConnectionProvider
 
   @$internal
   @override
-  $FutureProviderElement<HAConnection> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
+  $ProviderElement<IHAConnection> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
-  FutureOr<HAConnection> create(Ref ref) {
+  IHAConnection create(Ref ref) {
     return serverScopeConnection(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IHAConnection value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<IHAConnection>(value),
+    );
   }
 }
 
 String _$serverScopeConnectionHash() =>
-    r'a52289ea974f47ad49442c1e7938f005aa98f42d';
+    r'a0970f1cd90cde6dc15bffced324f7ef955d665a';
 
 /// A scoped provider that represents the current server ID.
 ///

@@ -1,15 +1,10 @@
 import 'package:drift/drift.dart';
-import 'package:hommie/features/home/domain/entities/area.dart';
 import 'package:hommie/core/database/database.dart';
+import 'package:hommie/core/domain/entities/area.dart';
 
 extension AreaMapper on AreaEntity {
   Area toDomain() {
-    return Area(
-      id: haId,
-      name: name,
-      imageUrl: image,
-      backgroundUrl: background,
-    );
+    return Area(id: haId, name: name, picture: image);
   }
 }
 
@@ -18,8 +13,7 @@ extension AreaDomainMapper on Area {
     return AreaEntitiesCompanion(
       haId: Value(id),
       name: Value(name),
-      image: Value(imageUrl),
-      background: Value(backgroundUrl),
+      image: Value(picture),
       serverId: Value(serverId),
     );
   }

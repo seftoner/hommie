@@ -1,6 +1,4 @@
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/features/home/domain/entities/area.dart';
-import 'package:hommie/features/home/domain/entities/device.dart';
 import 'package:hommie/features/servers/domain/repositories/i_websocket_repository.dart';
 
 class WebSocketRepository implements IWebSocketRepository {
@@ -13,7 +11,7 @@ class WebSocketRepository implements IWebSocketRepository {
     return HACommands.getConfig(_connection);
   }
 
-  @override
+  /*   @override
   Future<List<Area>> getAreas() async {
     throw UnimplementedError();
     // final areas = await HACommands.getAreas(_connection);
@@ -25,7 +23,7 @@ class WebSocketRepository implements IWebSocketRepository {
     throw UnimplementedError();
     // final devices = await HACommands.getDevices(_connection);
     // return devices.map((device) => Device.fromHassDevice(device)).toList();
-  }
+  } */
 
   @override
   Future<bool> sendPing() async {

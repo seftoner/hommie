@@ -22,27 +22,23 @@ final class HomePageControllerProvider
         name: r'homePageControllerProvider',
         isAutoDispose: true,
         dependencies: const <ProviderOrFamily>[
-          homeViewRepositoryProvider,
           serverScopeServerProvider,
-          areasForHomeProvider,
+          homeViewRepositoryProvider,
+          areasRepositoryProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           HomePageControllerProvider.$allTransitiveDependencies0,
           HomePageControllerProvider.$allTransitiveDependencies1,
           HomePageControllerProvider.$allTransitiveDependencies2,
           HomePageControllerProvider.$allTransitiveDependencies3,
-          HomePageControllerProvider.$allTransitiveDependencies4,
         },
       );
 
-  static const $allTransitiveDependencies0 = homeViewRepositoryProvider;
-  static const $allTransitiveDependencies1 =
-      HomeViewRepositoryProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = areasForHomeProvider;
+  static const $allTransitiveDependencies0 = serverScopeServerProvider;
+  static const $allTransitiveDependencies1 = homeViewRepositoryProvider;
+  static const $allTransitiveDependencies2 = areasRepositoryProvider;
   static const $allTransitiveDependencies3 =
-      AreasForHomeProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies4 =
-      AreasForHomeProvider.$allTransitiveDependencies1;
+      AreasRepositoryProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$homePageControllerHash();
@@ -53,7 +49,7 @@ final class HomePageControllerProvider
 }
 
 String _$homePageControllerHash() =>
-    r'f0e14c7e608c56df778d32dfdf0c79d78d6342c9';
+    r'cf020488b4e5eaf26f55761d21ecc3cf677f4dc4';
 
 abstract class _$HomePageController extends $AsyncNotifier<HomePageState> {
   FutureOr<HomePageState> build();

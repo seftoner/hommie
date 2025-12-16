@@ -1,4 +1,4 @@
-import 'package:hommie/features/home/domain/entities/area.dart';
+import 'package:hommie/core/domain/entities/area.dart';
 
 abstract interface class IAreaRepository {
   Future<List<Area>> getAll();

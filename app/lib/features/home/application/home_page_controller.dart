@@ -1,5 +1,5 @@
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
-import 'package:hommie/features/areas/application/areas_for_home_provider.dart';
+import 'package:hommie/features/areas/infrastructure/areas_repository_providers.dart';
 import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/features/home/infrastructure/providers/home_view_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -51,7 +51,9 @@ class HomePageState {
   );
 }
 
-@Riverpod(dependencies: [homeViewRepository, serverScopeServer, areasForHome])
+@Riverpod(
+  dependencies: [serverScopeServer, homeViewRepository, areasRepository],
+)
 class HomePageController extends _$HomePageController {
   @override
   Future<HomePageState> build() async {
@@ -62,7 +64,14 @@ class HomePageController extends _$HomePageController {
 
     var tabs = const <HomeTab>[HomeSummaryTab()];
     try {
-      final areas = await ref.watch(areasForHomeProvider.future);
+      final areasResult = await ref.watch(areasRepositoryProvider).getAreas();
+
+      // Sort areas by name
+      final areas = areasResult.fold((error) => throw error, (areas) {
+        final sorted = [...areas]..sort((a, b) => a.name.compareTo(b.name));
+        return sorted;
+      });
+
       if (areas.isNotEmpty) {
         tabs = [
           const HomeSummaryTab(),
@@ -95,12 +104,4 @@ class HomePageController extends _$HomePageController {
       previousState.copyWith(isReordering: !previousState.isReordering),
     );
   }
-}
-
-class DeviceItem {
-  final String id;
-  final String name;
-  final bool isBig;
-
-  const DeviceItem({required this.id, required this.name, required this.isBig});
 }

@@ -1,20 +1,14 @@
-import 'package:hommie/features/home/domain/entities/area.dart';
+import 'package:hommie/core/domain/entities/area.dart';
 import 'package:hommie/features/home/domain/entities/device.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 
-enum DeviceDisplaySize {
-  small,
-  big,
-}
+enum DeviceDisplaySize { small, big }
 
 class HomeViewConf {
   final Server server;
   final List<AreaHomeConf> areas;
 
-  const HomeViewConf({
-    required this.server,
-    required this.areas,
-  });
+  const HomeViewConf({required this.server, required this.areas});
 }
 
 class AreaHomeConf {

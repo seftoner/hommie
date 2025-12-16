@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'providers.dart';
+part of 'areas_repository_providers.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -15,11 +15,11 @@ const areasRepositoryProvider = AreasRepositoryProvider._();
 final class AreasRepositoryProvider
     extends
         $FunctionalProvider<
-          AsyncValue<IAreasRepository>,
           IAreasRepository,
-          FutureOr<IAreasRepository>
+          IAreasRepository,
+          IAreasRepository
         >
-    with $FutureModifier<IAreasRepository>, $FutureProvider<IAreasRepository> {
+    with $Provider<IAreasRepository> {
   const AreasRepositoryProvider._()
     : super(
         from: null,
@@ -40,14 +40,21 @@ final class AreasRepositoryProvider
 
   @$internal
   @override
-  $FutureProviderElement<IAreasRepository> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
+  $ProviderElement<IAreasRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
-  FutureOr<IAreasRepository> create(Ref ref) {
+  IAreasRepository create(Ref ref) {
     return areasRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IAreasRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<IAreasRepository>(value),
+    );
   }
 }
 
-String _$areasRepositoryHash() => r'287271bd5eb4f9eb4743bffbc942bdac64d698a1';
+String _$areasRepositoryHash() => r'490cf21930068a58e5df11456c82f16dd0abf9e2';

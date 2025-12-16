@@ -25,7 +25,7 @@ part 'server_scope_provider.g.dart';
 /// - Clear dependency chain
 /// - Type-safe server context
 @Riverpod(dependencies: [])
-Future<HAConnection> serverScopeConnection(Ref ref) async {
+IHAConnection serverScopeConnection(Ref ref) {
   throw UnimplementedError(
     'serverScopeConnection must be overridden in a ProviderScope',
   );

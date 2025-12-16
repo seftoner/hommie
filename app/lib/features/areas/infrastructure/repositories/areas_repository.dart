@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:hommie/core/domain/entities/area.dart';
+import 'package:hommie/core/domain/repositories/i_areas_repository.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/features/areas/domain/entities/area.dart';
-import 'package:hommie/features/areas/domain/repositories/i_areas_repository.dart';
 import 'package:hommie/features/areas/infrastructure/entry/area_registry_entry.dart';
 
 final class AreasMessage extends HARequestMessage {
@@ -16,7 +16,7 @@ final class AreasMessage extends HARequestMessage {
 }
 
 class AreasRepository implements IAreasRepository {
-  final HAConnection _haWebsocketsConnection;
+  final IHAConnection _haWebsocketsConnection;
 
   AreasRepository(this._haWebsocketsConnection);
 

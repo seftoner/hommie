@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:hommie/core/database/database.dart';
+import 'package:hommie/core/domain/entities/area.dart';
 import 'package:hommie/features/home/domain/repositories/i_area_repository.dart';
-import 'package:hommie/features/home/domain/entities/area.dart';
 import 'package:hommie/features/home/infrastructure/repositories/mappers/area_mapper.dart';
 
 class DriftAreaRepository implements IAreaRepository {
