@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
+import 'package:hommie/core/infrastructure/networking/connection/unavailable_ha_connection.dart';
 import 'package:hommie/features/servers/application/active_server.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
@@ -32,19 +33,24 @@ class ServerScopeHost extends ConsumerWidget {
         return FutureBuilder(
           future: connectionFuture,
           builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            final connection = snapshot.data!;
+            final overrides = [
+              serverScopeIdProvider.overrideWith((_) => server.id!),
+              serverScopeServerProvider.overrideWith((_) => server),
+              serverScopeConnectionProvider.overrideWith((_) {
+                final connection = snapshot.data;
+                if (connection == null) {
+                  return UnavailableHAConnection(
+                    serverId: server.id!,
+                    cause: snapshot.error,
+                  );
+                }
+                return connection;
+              }),
+            ];
 
             return ProviderScope(
               key: ValueKey(server.id),
-              overrides: [
-                serverScopeIdProvider.overrideWith((_) => server.id!),
-                serverScopeServerProvider.overrideWith((_) => server),
-                serverScopeConnectionProvider.overrideWith((_) => connection),
-              ],
+              overrides: overrides,
               child: child,
             );
           },
@@ -93,3 +99,5 @@ class NoActiveServerSelectedException implements Exception {
   @override
   String toString() => 'No active server configured.';
 }
+
+// Connection unavailability is represented by UnavailableHAConnection.

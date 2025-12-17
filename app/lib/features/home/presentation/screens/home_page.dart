@@ -2,6 +2,7 @@ import 'package:drag_arrange/drag_arrange.dart';
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
+import 'package:hommie/features/areas/application/area_registry_sync_controller.dart';
 import 'package:hommie/features/home/application/home_page_controller.dart';
 import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/router/routes.dart';
@@ -12,12 +13,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([HomePageController])
+@Dependencies([AreaRegistrySyncController, HomePageController])
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Keep the local area cache in sync when connected.
+    ref.watch(areaRegistrySyncControllerProvider);
+
     final homeState = ref.watch(homePageControllerProvider);
     final fallbackTitle = homeState.asData?.value.serverName;
 

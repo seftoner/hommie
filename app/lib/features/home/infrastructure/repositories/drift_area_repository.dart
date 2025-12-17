@@ -10,62 +10,82 @@ class DriftAreaRepository implements IAreaRepository {
   DriftAreaRepository(this._database);
 
   @override
-  Future<List<Area>> getAll() async {
-    final areas = await _database.select(_database.areaEntities).get();
-    return areas.map((a) => a.toDomain()).toList();
-  }
-
-  @override
-  Future<Area?> getById(int id) async {
-    final area = await (_database.select(
-      _database.areaEntities,
-    )..where((a) => a.id.equals(id))).getSingleOrNull();
-    return area?.toDomain();
-  }
-
-  @override
-  Future<Area?> getByHaId(String haId) async {
-    final area = await (_database.select(
-      _database.areaEntities,
-    )..where((a) => a.haId.equals(haId))).getSingleOrNull();
-    return area?.toDomain();
-  }
-
-  @override
-  Future<void> save(Area area) async {
-    // Need to get the serverId - for now, we'll get the first server or throw
-    final server = await (_database.select(
-      _database.serverEntities,
-    )..where((s) => s.isActive.equals(true))).getSingleOrNull();
-
-    if (server == null) {
-      throw Exception('No active server found');
-    }
-
-    await _database.transaction(() async {
-      await _database
-          .into(_database.areaEntities)
-          .insert(
-            area.toCompanion(server.id),
-            mode: InsertMode.insertOrReplace,
-          );
-    });
-  }
-
-  @override
-  Future<void> delete(int id) async {
-    await _database.transaction(() async {
-      await (_database.delete(
-        _database.areaEntities,
-      )..where((a) => a.id.equals(id))).go();
-    });
+  Stream<List<Area>> watchByServer(int serverId) {
+    return (_database.select(_database.areaEntities)
+          ..where((a) => a.serverId.equals(serverId)))
+        .watch()
+        .map((rows) => rows.map((r) => r.toDomain()).toList());
   }
 
   @override
   Future<List<Area>> getByServer(int serverId) async {
-    final areas = await (_database.select(
+    final rows = await (_database.select(
       _database.areaEntities,
     )..where((a) => a.serverId.equals(serverId))).get();
-    return areas.map((a) => a.toDomain()).toList();
+    return rows.map((r) => r.toDomain()).toList();
+  }
+
+  @override
+  Future<Area?> getByHaId({required int serverId, required String haId}) async {
+    final row =
+        await (_database.select(_database.areaEntities)
+              ..where((a) => a.serverId.equals(serverId) & a.haId.equals(haId)))
+            .getSingleOrNull();
+    return row?.toDomain();
+  }
+
+  @override
+  Future<void> upsert({required int serverId, required Area area}) async {
+    await _database
+        .into(_database.areaEntities)
+        .insert(
+          area.toCompanion(serverId),
+          onConflict: DoUpdate(
+            (old) => area.toCompanion(serverId),
+            target: [
+              _database.areaEntities.serverId,
+              _database.areaEntities.haId,
+            ],
+          ),
+        );
+  }
+
+  @override
+  Future<void> syncAll({
+    required int serverId,
+    required List<Area> areas,
+  }) async {
+    await _database.transaction(() async {
+      final existing = await (_database.select(
+        _database.areaEntities,
+      )..where((a) => a.serverId.equals(serverId))).get();
+
+      final nextIds = areas.map((a) => a.id).toSet();
+
+      // Delete removed areas (cascades to home/device configs).
+      for (final row in existing) {
+        if (!nextIds.contains(row.haId)) {
+          await (_database.delete(
+            _database.areaEntities,
+          )..where((a) => a.id.equals(row.id))).go();
+        }
+      }
+
+      // Upsert current registry entries.
+      for (final area in areas) {
+        await _database
+            .into(_database.areaEntities)
+            .insert(
+              area.toCompanion(serverId),
+              onConflict: DoUpdate(
+                (old) => area.toCompanion(serverId),
+                target: [
+                  _database.areaEntities.serverId,
+                  _database.areaEntities.haId,
+                ],
+              ),
+            );
+      }
+    });
   }
 }

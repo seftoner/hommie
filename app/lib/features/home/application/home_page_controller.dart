@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:hommie/core/domain/entities/area.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
-import 'package:hommie/features/areas/infrastructure/areas_repository_providers.dart';
+import 'package:hommie/features/home/application/cached_areas_provider.dart';
 import 'package:hommie/features/home/domain/entities/home_view.dart';
+import 'package:hommie/features/home/infrastructure/providers/area_repository_provider.dart';
 import 'package:hommie/features/home/infrastructure/providers/home_view_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -51,43 +55,60 @@ class HomePageState {
   );
 }
 
-@Riverpod(
-  dependencies: [serverScopeServer, homeViewRepository, areasRepository],
-)
+@Riverpod(dependencies: [serverScopeServer, cachedAreas, homeViewRepository])
 class HomePageController extends _$HomePageController {
   @override
   Future<HomePageState> build() async {
     final server = ref.watch(serverScopeServerProvider);
+    final serverId = server.id!;
+
+    // Keep tabs + home view in sync with cached areas.
+    ref.listen<AsyncValue<List<Area>>>(cachedAreasProvider, (previous, next) {
+      next.whenData((areas) {
+        unawaited(_refreshFromAreas(areas));
+      });
+    });
 
     final repo = await ref.watch(homeViewRepositoryProvider.future);
     final homeView = await repo.get();
 
-    var tabs = const <HomeTab>[HomeSummaryTab()];
-    try {
-      final areasResult = await ref.watch(areasRepositoryProvider).getAreas();
-
-      // Sort areas by name
-      final areas = areasResult.fold((error) => throw error, (areas) {
-        final sorted = [...areas]..sort((a, b) => a.name.compareTo(b.name));
-        return sorted;
-      });
-
-      if (areas.isNotEmpty) {
-        tabs = [
-          const HomeSummaryTab(),
-          for (final area in areas)
-            HomeAreaTab(areaId: area.id, title: area.name),
-        ];
-      }
-    } catch (_) {
-      // Keep current behaviour: if areas can't be fetched, hide tabs.
-      tabs = const <HomeTab>[HomeSummaryTab()];
-    }
+    // Build tabs from cached local areas so Home can render offline.
+    final cachedAreas = await ref
+        .watch(areaRepositoryProvider)
+        .getByServer(serverId);
+    final tabs = _tabsFromAreas(cachedAreas);
 
     return HomePageState(
       serverName: server.name,
       homeView: homeView,
       tabs: tabs,
+    );
+  }
+
+  static List<HomeTab> _tabsFromAreas(List<Area> areas) {
+    if (areas.isEmpty) {
+      return const <HomeTab>[HomeSummaryTab()];
+    }
+
+    final sorted = [...areas]..sort((a, b) => a.name.compareTo(b.name));
+    return [
+      const HomeSummaryTab(),
+      for (final area in sorted) HomeAreaTab(areaId: area.id, title: area.name),
+    ];
+  }
+
+  Future<void> _refreshFromAreas(List<Area> areas) async {
+    final current = state.asData?.value;
+    if (current == null) {
+      return;
+    }
+
+    // Refresh home view too so area names stay in sync.
+    final repo = await ref.read(homeViewRepositoryProvider.future);
+    final homeView = await repo.get();
+
+    state = AsyncData(
+      current.copyWith(tabs: _tabsFromAreas(areas), homeView: homeView),
     );
   }
 

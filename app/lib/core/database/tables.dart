@@ -95,7 +95,7 @@ class AreaEntities extends Table {
   IntColumn get id => integer().autoIncrement()();
 
   /// Home Assistant unique identifier (e.g., "living_room")
-  TextColumn get haId => text().unique()();
+  TextColumn get haId => text()();
 
   /// Display name for the area (e.g., "Living Room")
   TextColumn get name => text()();
@@ -110,6 +110,11 @@ class AreaEntities extends Table {
   /// Cascades: deleting a server deletes all its areas
   IntColumn get serverId =>
       integer().references(ServerEntities, #id, onDelete: KeyAction.cascade)();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {serverId, haId},
+  ];
 }
 
 /// Database table for Home Assistant Device entities.
