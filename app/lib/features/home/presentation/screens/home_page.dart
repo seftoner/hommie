@@ -23,7 +23,7 @@ class HomePage extends ConsumerWidget {
     ref.watch(areaRegistrySyncControllerProvider);
 
     final homeState = ref.watch(homePageControllerProvider);
-    final fallbackTitle = homeState.asData?.value.serverName;
+    // final fallbackTitle = homeState.asData?.value.serverName;
 
     return Scaffold(
       key: K.home.page,
@@ -95,70 +95,8 @@ class HomePage extends ConsumerWidget {
             ),
           );
         }(),
-        AsyncError(:final error) => Scaffold(
-          appBar: AppBar(
-            title: Text(fallbackTitle ?? 'Home'),
-            actions: [
-              MenuAnchor(
-                builder: (context, controller, child) {
-                  return IconButton(
-                    onPressed: () {
-                      if (controller.isOpen) {
-                        controller.close();
-                      } else {
-                        controller.open();
-                      }
-                    },
-                    icon: const Icon(Icons.more_vert),
-                  );
-                },
-                menuChildren: [
-                  MenuItemButton(
-                    key: K.appScaffold.settingsButton,
-                    trailingIcon: const Icon(Icons.settings_outlined),
-                    child: const Text('Settings'),
-                    onPressed: () {
-                      const SettingsRouteData().push(context);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          body: Center(child: Text(error.toString())),
-        ),
-        _ => Scaffold(
-          appBar: AppBar(
-            title: Text(fallbackTitle ?? 'Home'),
-            actions: [
-              MenuAnchor(
-                builder: (context, controller, child) {
-                  return IconButton(
-                    onPressed: () {
-                      if (controller.isOpen) {
-                        controller.close();
-                      } else {
-                        controller.open();
-                      }
-                    },
-                    icon: const Icon(Symbols.more_vert_rounded),
-                  );
-                },
-                menuChildren: [
-                  MenuItemButton(
-                    key: K.appScaffold.settingsButton,
-                    trailingIcon: const Icon(Symbols.settings_rounded),
-                    child: const Text('Settings'),
-                    onPressed: () {
-                      const SettingsRouteData().push(context);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          body: const Center(child: CircularProgressIndicator()),
-        ),
+        AsyncError(:final error) => Text(error.toString()),
+        AsyncLoading() => const Center(child: CircularProgressIndicator()),
       },
     );
   }

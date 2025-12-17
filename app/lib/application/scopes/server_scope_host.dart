@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
-import 'package:hommie/core/infrastructure/networking/connection/unavailable_ha_connection.dart';
 import 'package:hommie/features/servers/application/active_server.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'server_scope_host.g.dart';
+
+@Riverpod(dependencies: [serverConnectionManager])
+Future<IHAConnection> getServerConnection(Ref ref, int serverId) async {
+  final connection = await ref
+      .read(serverConnectionManagerProvider)
+      .getConnection(serverId);
+
+  return connection;
+}
 
 /// Hosts a nested [ProviderScope] that injects server-specific overrides for the
 /// currently selected Home Assistant server. When no server is active the
 /// widget keeps the tree mounted without crashing consumers.
-@Dependencies([serverConnectionManager])
+@Dependencies([getServerConnection])
 class ServerScopeHost extends ConsumerWidget {
   const ServerScopeHost({super.key, required this.child});
 
@@ -26,26 +38,16 @@ class ServerScopeHost extends ConsumerWidget {
           return _FallbackScope(child: child);
         }
 
-        final connectionFuture = ref
-            .watch(serverConnectionManagerProvider)
-            .getConnection(server.id!);
+        final connectionAsync = ref.watch(
+          getServerConnectionProvider(server.id!),
+        );
 
-        return FutureBuilder(
-          future: connectionFuture,
-          builder: (context, snapshot) {
+        return connectionAsync.when(
+          data: (connection) {
             final overrides = [
               serverScopeIdProvider.overrideWith((_) => server.id!),
               serverScopeServerProvider.overrideWith((_) => server),
-              serverScopeConnectionProvider.overrideWith((_) {
-                final connection = snapshot.data;
-                if (connection == null) {
-                  return UnavailableHAConnection(
-                    serverId: server.id!,
-                    cause: snapshot.error,
-                  );
-                }
-                return connection;
-              }),
+              serverScopeConnectionProvider.overrideWith((_) => connection),
             ];
 
             return ProviderScope(
@@ -53,6 +55,15 @@ class ServerScopeHost extends ConsumerWidget {
               overrides: overrides,
               child: child,
             );
+          },
+          loading: () => const SizedBox.shrink(),
+          error: (error, stackTrace) {
+            logger.e(
+              'Failed to resolve server connection for ${server.id}: $error',
+              error: error,
+              stackTrace: stackTrace,
+            );
+            return const SizedBox.shrink();
           },
         );
       },
@@ -99,5 +110,3 @@ class NoActiveServerSelectedException implements Exception {
   @override
   String toString() => 'No active server configured.';
 }
-
-// Connection unavailability is represented by UnavailableHAConnection.
