@@ -36,6 +36,8 @@ final class ActiveServerSessionProvider
           ActiveServerSessionProvider.$allTransitiveDependencies4,
           ActiveServerSessionProvider.$allTransitiveDependencies5,
           ActiveServerSessionProvider.$allTransitiveDependencies6,
+          ActiveServerSessionProvider.$allTransitiveDependencies7,
+          ActiveServerSessionProvider.$allTransitiveDependencies8,
         },
       );
 
@@ -45,9 +47,13 @@ final class ActiveServerSessionProvider
   static const $allTransitiveDependencies2 = authControllerProvider;
   static const $allTransitiveDependencies3 =
       AuthControllerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies4 = activeServerProvider;
-  static const $allTransitiveDependencies5 = authStateProvider;
-  static const $allTransitiveDependencies6 = serverConnectionStateProvider;
+  static const $allTransitiveDependencies4 =
+      AuthControllerProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies5 =
+      AuthControllerProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies6 = activeServerProvider;
+  static const $allTransitiveDependencies7 = authStateProvider;
+  static const $allTransitiveDependencies8 = serverConnectionStateProvider;
 
   @override
   String debugGetCreateSourceHash() => _$activeServerSessionHash();

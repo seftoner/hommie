@@ -42,6 +42,8 @@ final class HubStatusProvider
           HubStatusProvider.$allTransitiveDependencies6,
           HubStatusProvider.$allTransitiveDependencies7,
           HubStatusProvider.$allTransitiveDependencies8,
+          HubStatusProvider.$allTransitiveDependencies9,
+          HubStatusProvider.$allTransitiveDependencies10,
         },
       );
 
@@ -60,7 +62,11 @@ final class HubStatusProvider
       ActiveServerSessionProvider.$allTransitiveDependencies5;
   static const $allTransitiveDependencies7 =
       ActiveServerSessionProvider.$allTransitiveDependencies6;
-  static const $allTransitiveDependencies8 = deviceInfoRepositoryProvider;
+  static const $allTransitiveDependencies8 =
+      ActiveServerSessionProvider.$allTransitiveDependencies7;
+  static const $allTransitiveDependencies9 =
+      ActiveServerSessionProvider.$allTransitiveDependencies8;
+  static const $allTransitiveDependencies10 = deviceInfoRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$hubStatusHash();

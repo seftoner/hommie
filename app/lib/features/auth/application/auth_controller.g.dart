@@ -23,21 +23,28 @@ final class AuthControllerProvider
         name: r'authControllerProvider',
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
+          loginFlowControllerProvider,
           websocketConfigRepositoryProvider,
           serverConnectionManagerProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: const <ProviderOrFamily>{
           AuthControllerProvider.$allTransitiveDependencies0,
           AuthControllerProvider.$allTransitiveDependencies1,
           AuthControllerProvider.$allTransitiveDependencies2,
-        ],
+          AuthControllerProvider.$allTransitiveDependencies3,
+          AuthControllerProvider.$allTransitiveDependencies4,
+        },
       );
 
-  static const $allTransitiveDependencies0 = websocketConfigRepositoryProvider;
+  static const $allTransitiveDependencies0 = loginFlowControllerProvider;
   static const $allTransitiveDependencies1 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies0;
+      LoginFlowControllerProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies2 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies1;
+      LoginFlowControllerProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies3 =
+      LoginFlowControllerProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies4 =
+      LoginFlowControllerProvider.$allTransitiveDependencies3;
 
   @override
   String debugGetCreateSourceHash() => _$authControllerHash();
@@ -61,4 +68,4 @@ final class AuthControllerProvider
   }
 }
 
-String _$authControllerHash() => r'32fbff39d39dc9a508d00b7542c52df539cf6f1f';
+String _$authControllerHash() => r'5dc8360244422af9e28a96c7008921b14c483b7e';
