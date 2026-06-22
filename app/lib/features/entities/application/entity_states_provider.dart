@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
-import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
+import 'package:hommie/application/session/active_server_session_controller.dart';
+import 'package:hommie/application/session/active_server_session_state.dart';
 import 'package:hommie/features/entities/domain/entities/entity_state_value.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -44,42 +44,60 @@ Map<String, EntityStateValue> applyStatesUpdate(
 ///
 /// Subscribes to `subscribe_entities` while connected and folds the compressed
 /// diffs into a map. Volatile — not persisted. Empty while disconnected.
-@Riverpod(dependencies: [serverScopeConnection])
+@Riverpod(dependencies: [ActiveServerSession])
 class EntityStates extends _$EntityStates {
   HASubscription? _sub;
   StreamSubscription<dynamic>? _events;
+  IHAConnection? _connection;
+  Map<String, EntityStateValue> _current = const {};
 
   @override
   Map<String, EntityStateValue> build() {
-    final connectionState = ref.watch(serverConnectionStateProvider);
+    final session = ref.watch(activeServerSessionProvider);
 
     ref.onDispose(() {
-      unawaited(_events?.cancel());
-      final sub = _sub;
-      if (sub != null && !sub.isDisposed) {
-        unawaited(sub.dispose());
-      }
+      unawaited(_stop());
     });
 
-    if (connectionState != HAServerConnectionState.connected) {
+    if (session is! OnlineServerSession) {
+      _current = const {};
+      unawaited(_stop());
       return const {};
     }
 
-    // Read the scoped connection only once connected — avoids touching the
-    // (overridden-per-server) provider while disconnected.
-    final connection = ref.watch(serverScopeConnectionProvider);
+    final connection = session.connection;
+    if (identical(_connection, connection) && _sub != null) {
+      return _current;
+    }
 
+    unawaited(_stop());
+    _connection = connection;
+    _current = const {};
     try {
       _sub = HACommands.subscribeEntities(connection);
       _events = _sub!.stream.listen((update) {
         if (update is StatesUpdates) {
-          state = applyStatesUpdate(state, update);
+          _current = applyStatesUpdate(_current, update);
+          state = _current;
         }
       });
     } catch (_) {
       // Offline / unavailable connection: leave state empty.
     }
 
-    return const {};
+    return _current;
+  }
+
+  Future<void> _stop() async {
+    final events = _events;
+    final sub = _sub;
+    _events = null;
+    _sub = null;
+    _connection = null;
+
+    await events?.cancel();
+    if (sub != null && !sub.isDisposed) {
+      await sub.dispose();
+    }
   }
 }
