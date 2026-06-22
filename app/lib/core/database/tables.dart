@@ -374,27 +374,70 @@ class DeviceHomeConfigs extends Table {
   ];
 }
 
-/// Generic Home Assistant entity cache (every domain).
+/// Database table for the generic Home Assistant entity cache (every domain).
 ///
-/// `entityId` is the HA entity_id (e.g. "light.kitchen"); `domain` is its prefix
-/// ("light"). `areaHaId` is the *resolved* HA area slug, stored denormalized (not
-/// an FK) so an area re-sync can never cascade-delete entities and so entity/area
-/// syncs stay order-independent — grouping is resolved at read time by matching
-/// `areaHaId` against `AreaEntities.haId`.
+/// **Primary Entity:** A cached snapshot of a Home Assistant *entity* (the
+/// universal controllable unit, e.g. "light.kitchen", "switch.fan"). Metadata
+/// only — live state (on/off, attributes) is not persisted here.
+///
+/// **Relationships:**
+/// - Many-to-one with [ServerEntities] (cascade delete on server deletion)
+/// - Soft, read-time link to [AreaEntities] via `areaHaId` (matched against
+///   [AreaEntities.haId]) — intentionally NOT a foreign key (see below)
+///
+/// **Usage:**
+/// - Managed by `DriftEntityRepository` in features/entities
+/// - Synced from Home Assistant's entity + device registries
+/// - Grouped by area for the Home view; rendered per-domain (lights first)
+///
+/// **Key Features:**
+/// - `entityId` is the HA entity_id (e.g. "light.kitchen"); `domain` is its
+///   prefix ("light"). Unique per server via `{serverId, entityId}`.
+/// - `areaHaId` is the *resolved* HA area slug, stored denormalized (not an FK)
+///   so an area re-sync can never cascade-delete entities and so the entity and
+///   area syncs stay order-independent — grouping is resolved at read time by
+///   matching `areaHaId` against [AreaEntities.haId].
+///
+/// **Example:**
+/// ```dart
+/// EntitiesCompanion.insert(
+///   entityId: 'light.kitchen',
+///   name: 'Kitchen',
+///   domain: 'light',
+///   serverId: 1,
+///   areaHaId: Value('kitchen'),
+/// )
+/// ```
 @DataClassName('EntityRow')
 class Entities extends Table {
+  /// Auto-incrementing primary key (local database ID)
   IntColumn get id => integer().autoIncrement()();
+
+  /// Home Assistant entity_id (e.g. "light.kitchen")
   TextColumn get entityId => text()();
+
+  /// Display name (resolved: name -> original_name -> entity_id)
   TextColumn get name => text()();
+
+  /// Entity domain, the entity_id prefix (e.g. "light", "switch")
   TextColumn get domain => text()();
+
+  /// HA device id this entity belongs to, if any (for the future device layer)
   TextColumn get deviceId => text().nullable()();
+
+  /// Resolved HA area slug (matches [AreaEntities.haId]); null when unassigned
   TextColumn get areaHaId => text().nullable()();
+
+  /// HA entity_category ("config"/"diagnostic"), if any; for future filtering
   TextColumn get entityCategory => text().nullable()();
+
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all its cached entities
   IntColumn get serverId =>
       integer().references(ServerEntities, #id, onDelete: KeyAction.cascade)();
 
   @override
   List<Set<Column>> get uniqueKeys => [
-    {serverId, entityId},
+    {serverId, entityId}, // Same entity can't appear twice per server
   ];
 }

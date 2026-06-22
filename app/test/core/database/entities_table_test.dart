@@ -25,6 +25,8 @@ void main() {
     final rows = await db.select(db.entities).get();
     expect(rows, hasLength(1));
     expect(rows.single.entityId, 'light.kitchen');
+    expect(rows.single.name, 'Kitchen');
+    expect(rows.single.domain, 'light');
     expect(rows.single.areaHaId, 'kitchen');
   });
 }
