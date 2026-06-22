@@ -66,7 +66,7 @@ final class ActiveServerSessionProvider
 }
 
 String _$activeServerSessionHash() =>
-    r'677f39e14d62727b2f72fa9d720f081fc4a524d6';
+    r'90a3d30901091de0bbbebe7ac7cd01c148df02cd';
 
 abstract class _$ActiveServerSession
     extends $Notifier<ActiveServerSessionState> {
