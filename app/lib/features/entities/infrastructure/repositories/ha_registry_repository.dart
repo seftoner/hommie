@@ -45,3 +45,37 @@ class DeviceRegistryRecord {
   factory DeviceRegistryRecord.fromJson(Map<String, dynamic> j) =>
       DeviceRegistryRecord(id: j['id'] as String, areaId: j['area_id'] as String?);
 }
+
+final class EntityRegistryListMessage extends HARequestMessage {
+  const EntityRegistryListMessage();
+
+  @override
+  String get type => 'config/entity_registry/list';
+
+  @override
+  JsonMap get body => const <String, dynamic>{};
+}
+
+final class DeviceRegistryListMessage extends HARequestMessage {
+  const DeviceRegistryListMessage();
+
+  @override
+  String get type => 'config/device_registry/list';
+
+  @override
+  JsonMap get body => const <String, dynamic>{};
+}
+
+class HaRegistryRepository {
+  final IHAConnection _connection;
+
+  HaRegistryRepository(this._connection);
+
+  Future<List<EntityRegistryRecord>> getEntities() => _connection
+      .sendMessage(const EntityRegistryListMessage())
+      .mapList(EntityRegistryRecord.fromJson);
+
+  Future<List<DeviceRegistryRecord>> getDevices() => _connection
+      .sendMessage(const DeviceRegistryListMessage())
+      .mapList(DeviceRegistryRecord.fromJson);
+}
