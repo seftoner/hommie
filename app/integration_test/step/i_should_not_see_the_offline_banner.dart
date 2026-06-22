@@ -4,14 +4,5 @@ import 'package:patrol/patrol.dart';
 
 /// Usage: I should not see the offline banner
 Future<void> iShouldNotSeeTheOfflineBanner(PatrolIntegrationTester $) async {
-  final timeout = DateTime.now().add(const Duration(seconds: 20));
-
-  while (DateTime.now().isBefore(timeout)) {
-    await $.pump(const Duration(milliseconds: 250));
-    if (!$.tester.any(find.byKey(K.common.offlineBanner))) {
-      return;
-    }
-  }
-
   expect($(K.common.offlineBanner), findsNothing);
 }

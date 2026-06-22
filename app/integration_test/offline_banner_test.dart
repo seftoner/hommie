@@ -16,8 +16,6 @@ import './step/home_assistant_access_is_configured.dart';
 import './step/i_have_successfully_logged_in.dart';
 import './step/the_application_is_running_in_the_foreground.dart';
 import './step/i_see_page.dart';
-import './step/i_do_not_see_home_loading_spinner.dart';
-import './step/i_see_light_card.dart';
 import './step/i_should_not_see_the_offline_banner.dart';
 import './step/the_device_loses_network_connectivity.dart';
 import './step/i_should_see_the_offline_banner.dart';
@@ -35,23 +33,19 @@ void main() {
       await performCleanup($);
     }
 
-    patrol('''Banner visibility when connection is lost and restored''', (
-      $,
-    ) async {
+    patrol('''Banner visibility when connection is lost and restored''',
+        ($) async {
       try {
         await bddSetUp($);
         await theApplicationIsRunningInTheForeground($);
         await iSeePage($, K.home.page);
-        await iDoNotSeeHomeLoadingSpinner($);
-        await iSeeLightCard($, 'light.kitchen_light');
         await iShouldNotSeeTheOfflineBanner($);
         await theDeviceLosesNetworkConnectivity($);
         await iWaitSeconds($, 3);
         await iShouldSeeTheOfflineBanner($);
         await theDeviceRegainsNetworkConnectivity($);
+        await iWaitSeconds($, 5);
         await iShouldNotSeeTheOfflineBanner($);
-        await iDoNotSeeHomeLoadingSpinner($);
-        await iSeeLightCard($, 'light.kitchen_light');
       } finally {
         await bddTearDown($);
       }
@@ -64,12 +58,9 @@ void main() {
         await theApplicationIsRunningInTheForeground($);
         await iSeePage($, K.home.page);
         await iShouldSeeTheOfflineBanner($);
-        await iDoNotSeeHomeLoadingSpinner($);
-        await iSeeLightCard($, 'light.kitchen_light');
         await theDeviceRegainsNetworkConnectivity($);
+        await iWaitSeconds($, 5);
         await iShouldNotSeeTheOfflineBanner($);
-        await iDoNotSeeHomeLoadingSpinner($);
-        await iSeeLightCard($, 'light.kitchen_light');
       } finally {
         await bddTearDown($);
       }

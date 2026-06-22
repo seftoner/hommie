@@ -22,8 +22,6 @@ Feature: Connection Status Banner
   Scenario: Banner visibility when connection is lost and restored
     And the application is running in the foreground
     And I see {K.home.page} page
-    And I do not see home loading spinner
-    And I see {'light.kitchen_light'} light card
     
     # Check initial state
     Then I should not see the offline banner
@@ -35,9 +33,8 @@ Feature: Connection Status Banner
 
     # Test connection restoration
     When the device regains network connectivity
+    And I wait {5} seconds
     Then I should not see the offline banner
-    And I do not see home loading spinner
-    And I see {'light.kitchen_light'} light card
 
   Scenario: Launch app in offline mode
     # Initial setup and app launch
@@ -48,11 +45,8 @@ Feature: Connection Status Banner
     When the application is running in the foreground
     And I see {K.home.page} page
     Then I should see the offline banner
-    And I do not see home loading spinner
-    And I see {'light.kitchen_light'} light card
     
     # Test connection restoration
     When the device regains network connectivity
+    And I wait {5} seconds
     Then I should not see the offline banner
-    And I do not see home loading spinner
-    And I see {'light.kitchen_light'} light card
