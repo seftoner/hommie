@@ -70,6 +70,13 @@ class _FakeConnection implements IHAConnection {
   }
 }
 
+class _SubscriptionFailureConnection extends _FakeConnection {
+  @override
+  HASubscription subscribeMessage(HAMessage subscribeMessage) {
+    throw Exception('subscription failed');
+  }
+}
+
 class _FakeAreaRepo implements IAreaRepository {
   int syncs = 0;
   List<Area> captured = const [];
@@ -191,6 +198,32 @@ void main() {
     final state = container.read(serverSyncCoordinatorProvider);
 
     expect(state, isA<SyncOfflineWithCache>());
+    expect(areaRepo.syncs, 0);
+    expect(entityRepo.syncs, 0);
+  });
+
+  test('surfaces subscription setup failures as sync failure', () async {
+    final areaRepo = _FakeAreaRepo();
+    final entityRepo = _FakeEntityRepo();
+    final container = ProviderContainer(
+      overrides: [
+        activeServerSessionProvider.overrideWithValue(
+          OnlineServerSession(
+            activeServer: const Server(id: 1, name: 'Home'),
+            connection: _SubscriptionFailureConnection(),
+          ),
+        ),
+        areaRepositoryProvider.overrideWithValue(areaRepo),
+        entityRepositoryProvider.overrideWithValue(entityRepo),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    container.listen(serverSyncCoordinatorProvider, (_, _) {});
+
+    final state = await waitForSync(container, (state) => state is SyncFailed);
+
+    expect(state, isA<SyncFailed>());
     expect(areaRepo.syncs, 0);
     expect(entityRepo.syncs, 0);
   });

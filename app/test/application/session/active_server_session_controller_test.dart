@@ -33,9 +33,10 @@ class _FakeConnection implements IHAConnection {
 }
 
 class _FakeConnectionManager implements IServerConnectionManager {
-  _FakeConnectionManager({this.completeImmediately = true});
+  _FakeConnectionManager({this.completeImmediately = true, this.error});
 
   final bool completeImmediately;
+  final Object? error;
   int? activeServerId;
   int opens = 0;
   final connection = _FakeConnection();
@@ -49,6 +50,10 @@ class _FakeConnectionManager implements IServerConnectionManager {
   @override
   Future<IHAConnection> getConnection(int serverId) {
     opens += 1;
+    final failure = error;
+    if (failure != null) {
+      return Future.error(failure);
+    }
     if (completeImmediately) {
       return Future.value(connection);
     }
@@ -246,6 +251,58 @@ void main() {
         container,
         (state) => state is AuthRevokedServerSession,
       );
+      expect(state, isA<AuthRevokedServerSession>());
+      expect(authController.signedOutServerIds, [1]);
+    },
+  );
+
+  test(
+    'maps auth failure during open to revoked session and signs out',
+    () async {
+      final authController = _FakeAuthController();
+      final manager = _FakeConnectionManager(
+        error: AuthenticationError('bad token'),
+      );
+      final container = makeContainer(
+        activeServer: server,
+        authState: AuthState.authenticated(credentials()),
+        connectionManager: manager,
+        authController: authController,
+      );
+      addTearDown(container.dispose);
+
+      final state = await waitForSession(
+        container,
+        (state) => state is AuthRevokedServerSession,
+      );
+
+      expect(state, isA<AuthRevokedServerSession>());
+      expect(authController.signedOutServerIds, [1]);
+    },
+  );
+
+  test(
+    'maps token resolution failure during open to revoked session and signs out',
+    () async {
+      final authController = _FakeAuthController();
+      final manager = _FakeConnectionManager(
+        error: ConnectionError(
+          'Failed to resolve token: AuthFailure.unauthenticated()',
+        ),
+      );
+      final container = makeContainer(
+        activeServer: server,
+        authState: AuthState.authenticated(credentials()),
+        connectionManager: manager,
+        authController: authController,
+      );
+      addTearDown(container.dispose);
+
+      final state = await waitForSession(
+        container,
+        (state) => state is AuthRevokedServerSession,
+      );
+
       expect(state, isA<AuthRevokedServerSession>());
       expect(authController.signedOutServerIds, [1]);
     },

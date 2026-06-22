@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:hommie/core/infrastructure/logging/logger.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
@@ -60,6 +61,7 @@ class LoginFlowController {
         websocketConfigRepositoryProvider(createdServer.id!).future,
       );
       final config = await configRepository.getConfig();
+      _ref.read(serverConnectionManagerProvider).disconnect(createdServer.id!);
 
       final updatedServer = await serverManager.addServer(
         createdServer.copyWith(
@@ -90,6 +92,8 @@ class LoginFlowController {
     required bool credentialsStored,
   }) async {
     final serverManager = _ref.read(serverManagerProvider);
+    _ref.read(serverConnectionManagerProvider).disconnect(serverId);
+
     if (credentialsStored) {
       try {
         await authRepository.signOut(serverId);
@@ -116,7 +120,11 @@ class LoginFlowController {
 
 @Riverpod(
   keepAlive: true,
-  dependencies: [authRepository, websocketConfigRepository],
+  dependencies: [
+    authRepository,
+    serverConnectionManager,
+    websocketConfigRepository,
+  ],
 )
 LoginFlowController loginFlowController(Ref ref) {
   return LoginFlowController(ref);

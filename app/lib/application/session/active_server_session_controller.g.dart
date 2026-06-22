@@ -50,7 +50,7 @@ final class ActiveServerSessionProvider
   static const $allTransitiveDependencies4 =
       AuthControllerProvider.$allTransitiveDependencies1;
   static const $allTransitiveDependencies5 =
-      AuthControllerProvider.$allTransitiveDependencies2;
+      AuthControllerProvider.$allTransitiveDependencies4;
   static const $allTransitiveDependencies6 = activeServerProvider;
   static const $allTransitiveDependencies7 = authStateProvider;
   static const $allTransitiveDependencies8 = serverConnectionStateProvider;
@@ -72,7 +72,7 @@ final class ActiveServerSessionProvider
 }
 
 String _$activeServerSessionHash() =>
-    r'90a3d30901091de0bbbebe7ac7cd01c148df02cd';
+    r'ba85b95bbf0908f4756cca661450083a343a99c9';
 
 abstract class _$ActiveServerSession
     extends $Notifier<ActiveServerSessionState> {

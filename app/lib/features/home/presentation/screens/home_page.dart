@@ -19,8 +19,13 @@ class HomePage extends ConsumerWidget {
     final state = ref.watch(homePageControllerProvider);
     final handledDomains = ref.watch(entityDomainHandlersProvider).keys.toSet();
     final showTabs = state.tabs.length > 1;
+    final hasRenderableEntities = state.sections.any(
+      (section) => section.entities.any(
+        (entity) => handledDomains.contains(entity.domain),
+      ),
+    );
 
-    if (state.syncFailure != null && state.sections.isEmpty) {
+    if (state.syncFailure != null && !hasRenderableEntities) {
       return Scaffold(
         key: K.home.page,
         appBar: AppBar(title: Text(state.serverName)),

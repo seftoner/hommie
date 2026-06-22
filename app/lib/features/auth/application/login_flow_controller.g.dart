@@ -29,6 +29,7 @@ final class LoginFlowControllerProvider
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
           authRepositoryProvider,
+          serverConnectionManagerProvider,
           websocketConfigRepositoryProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
@@ -40,11 +41,10 @@ final class LoginFlowControllerProvider
       );
 
   static const $allTransitiveDependencies0 = authRepositoryProvider;
-  static const $allTransitiveDependencies1 = websocketConfigRepositoryProvider;
+  static const $allTransitiveDependencies1 = serverConnectionManagerProvider;
   static const $allTransitiveDependencies2 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies3 =
-      WebsocketConfigRepositoryProvider.$allTransitiveDependencies1;
+      ServerConnectionManagerProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies3 = websocketConfigRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$loginFlowControllerHash();
@@ -70,4 +70,4 @@ final class LoginFlowControllerProvider
 }
 
 String _$loginFlowControllerHash() =>
-    r'8d9e2bd1f50b6b71fc964cc8fb554c07fefa3115';
+    r'8bc6588b4874ff77da96f70c73b7288ea0c98e84';

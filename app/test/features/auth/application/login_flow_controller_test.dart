@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:home_assistant_websocket/home_assistant_websocket.dart' as ha;
+import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/features/auth/application/login_flow_controller.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
@@ -51,12 +53,14 @@ void main() {
     'clears credentials and rolls back server when config fetch fails',
     () async {
       final serverManager = _FakeServerManager();
+      final connectionManager = _FakeConnectionManager();
       final authRepository = _FakeAuthRepository(
         loginResult: right(_credentials()),
       );
       final container = _container(
         serverManager: serverManager,
         authRepository: authRepository,
+        connectionManager: connectionManager,
         configRepository: _FakeConfigRepository(
           error: Exception('config failed'),
         ),
@@ -74,6 +78,7 @@ void main() {
       );
 
       expect(authRepository.signOutCalls, [1]);
+      expect(connectionManager.disconnectCalls, [1]);
       expect(serverManager.removed, [1]);
       expect(serverManager.activated, isNull);
     },
@@ -83,6 +88,7 @@ void main() {
     'updates server metadata and activates after successful login',
     () async {
       final serverManager = _FakeServerManager();
+      final connectionManager = _FakeConnectionManager();
       final authRepository = _FakeAuthRepository(
         loginResult: right(_credentials()),
       );
@@ -90,6 +96,7 @@ void main() {
       final container = _container(
         serverManager: serverManager,
         authRepository: authRepository,
+        connectionManager: connectionManager,
         configRepository: configRepository,
       );
       addTearDown(container.dispose);
@@ -103,6 +110,7 @@ void main() {
 
       expect(authRepository.loginCalls.single.serverId, 1);
       expect(authRepository.loginCalls.single.serverUrl, 'http://example.test');
+      expect(connectionManager.disconnectCalls, [1]);
       expect(serverManager.removed, isEmpty);
       expect(serverManager.activated, 1);
       expect(serverManager.added, hasLength(2));
@@ -117,6 +125,7 @@ void main() {
 ProviderContainer _container({
   required _FakeServerManager serverManager,
   required _FakeAuthRepository authRepository,
+  _FakeConnectionManager? connectionManager,
   _FakeConfigRepository? configRepository,
 }) {
   return ProviderContainer(
@@ -125,6 +134,9 @@ ProviderContainer _container({
       authRepositoryProvider.overrideWithValue(authRepository),
       websocketConfigRepositoryProvider.overrideWith(
         (_, _) => configRepository ?? _FakeConfigRepository(config: _config()),
+      ),
+      serverConnectionManagerProvider.overrideWithValue(
+        connectionManager ?? _FakeConnectionManager(),
       ),
     ],
   );
@@ -247,6 +259,29 @@ class _FakeAuthRepository implements IAuthRepository {
   Future<Either<AuthFailure, Unit>> signOut(int serverId) async {
     signOutCalls.add(serverId);
     return right(unit);
+  }
+}
+
+class _FakeConnectionManager implements IServerConnectionManager {
+  final disconnectCalls = <int>[];
+  int? activeServerId;
+
+  @override
+  void disconnect(int serverId) {
+    disconnectCalls.add(serverId);
+  }
+
+  @override
+  Future<ha.IHAConnection> getConnection(int serverId) {
+    throw UnimplementedError('Config repository is overridden in these tests.');
+  }
+
+  @override
+  Future<void> reconnect(int serverId) async {}
+
+  @override
+  void setActiveServer(int? serverId) {
+    activeServerId = serverId;
   }
 }
 

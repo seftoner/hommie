@@ -54,13 +54,12 @@ class _FakeFactory implements IHAConnectionFactory {
   }
 
   void completeOpening(_FakeOpening opening) {
-    final connection = opening.connection;
     opening.completer.complete(
       ManagedHAConnection(
-        connection: connection,
+        currentConnection: () => opening.currentConnection,
         currentState: opening.currentState,
         states: opening.stateController.stream,
-        close: connection.close,
+        close: opening.currentConnection.close,
       ),
     );
   }
@@ -89,7 +88,7 @@ class _FakeOpening {
   final int serverId;
   final completer = Completer<ManagedHAConnection>();
   final stateController = StreamController<HASocketState>.broadcast();
-  final connection = _FakeConnection();
+  _FakeConnection currentConnection = _FakeConnection();
   HASocketState currentState = const Authenticated();
   bool openingClosed = false;
 
@@ -191,6 +190,41 @@ void main() {
       HAServerConnectionState.unknown,
     ]);
   });
+
+  test(
+    'returns current managed connection after socket reconnect replaces it',
+    () async {
+      final factory = _FakeFactory();
+      final states = <HAServerConnectionState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setState: states.add,
+        resetState: () => states.add(HAServerConnectionState.unknown),
+      );
+
+      manager.setActiveServer(1);
+      final firstFuture = manager.getConnection(1);
+      factory.complete(1);
+      final first = await firstFuture;
+
+      final opening = factory._latestOpening(1);
+      final replacement = _FakeConnection();
+      opening.currentConnection = replacement;
+      factory.emit(1, const Reconnecting());
+      factory.emit(1, const Authenticated());
+
+      final second = await manager.getConnection(1);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(second, same(replacement));
+      expect(second, isNot(same(first)));
+      expect(states, [
+        HAServerConnectionState.connected,
+        HAServerConnectionState.reconnecting,
+        HAServerConnectionState.connected,
+      ]);
+    },
+  );
 
   test('switching active server cancels stale in-flight open', () async {
     final factory = _FakeFactory();

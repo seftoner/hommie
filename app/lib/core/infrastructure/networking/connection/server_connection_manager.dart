@@ -90,7 +90,11 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
 
     final resource = _resources[serverId];
     if (resource != null) {
-      return Future.value(resource.connection);
+      try {
+        return Future.value(resource.connection);
+      } catch (error, stackTrace) {
+        return Future.error(error, stackTrace);
+      }
     }
 
     final inFlight = _inFlight[serverId];

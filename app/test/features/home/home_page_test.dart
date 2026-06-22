@@ -40,6 +40,19 @@ class _SyncFailureHomeController extends HomePageController {
       const HomePageState(serverName: 'Home', syncFailure: Object());
 }
 
+class _SyncFailureWithEmptyAreaHomeController extends HomePageController {
+  @override
+  HomePageState build() => const HomePageState(
+    serverName: 'Home',
+    syncFailure: Object(),
+    tabs: [
+      HomeSummaryTab(),
+      HomeAreaTab(areaId: 'kitchen', title: 'Kitchen'),
+    ],
+    sections: [AreaSection(areaId: 'kitchen', title: 'Kitchen', entities: [])],
+  );
+}
+
 class _InitialSyncHomeController extends HomePageController {
   @override
   HomePageState build() =>
@@ -79,6 +92,26 @@ void main() {
 
     expect(find.text('Unable to sync Home Assistant data'), findsOneWidget);
   });
+
+  testWidgets(
+    'renders sync failure when cached areas have no renderable entities',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            homePageControllerProvider.overrideWith(
+              _SyncFailureWithEmptyAreaHomeController.new,
+            ),
+          ],
+          child: const MaterialApp(home: HomePage()),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('Unable to sync Home Assistant data'), findsOneWidget);
+      expect(find.text('No lights here yet'), findsNothing);
+    },
+  );
 
   testWidgets('keys initial home sync spinner', (tester) async {
     await tester.pumpWidget(

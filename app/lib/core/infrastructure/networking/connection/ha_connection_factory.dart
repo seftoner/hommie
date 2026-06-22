@@ -89,9 +89,11 @@ final class HAConnectionFactory implements IHAConnectionFactory {
       try {
         return await _ref.read(serverAuthTokenProvider(serverId).future);
       } on AuthFailure catch (failure) {
-        throw ConnectionError('Failed to resolve token: $failure');
+        throw AuthenticationError('Failed to resolve token: $failure');
       } on AuthFailureException catch (exception) {
-        throw ConnectionError('Failed to resolve token: ${exception.failure}');
+        throw AuthenticationError(
+          'Failed to resolve token: ${exception.failure}',
+        );
       }
     }
 
@@ -127,7 +129,15 @@ final class HAConnectionFactory implements IHAConnectionFactory {
     await stateSubscription.cancel();
 
     return ManagedHAConnection(
-      connection: connection,
+      currentConnection: () {
+        final current = orchestrator.connection;
+        if (current == null) {
+          throw ConnectionClosedError(
+            'Connection for server $serverId is not currently authenticated.',
+          );
+        }
+        return current;
+      },
       currentState: authenticatedState,
       states: orchestrator.state,
       close: orchestrator.close,

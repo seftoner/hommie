@@ -108,9 +108,9 @@ class ServerSyncCoordinator extends _$ServerSyncCoordinator {
     }
 
     _publish(const InitialSyncRunning());
-    await _subscribe(serverId, connection, revision);
 
     try {
+      await _subscribe(serverId, connection, revision);
       await _syncAreas(serverId, connection, revision);
       await _syncEntities(serverId, connection, revision);
       if (_isCurrent(serverId, connection, revision)) {
@@ -157,6 +157,7 @@ class ServerSyncCoordinator extends _$ServerSyncCoordinator {
       });
     } catch (_) {
       await _stopSubscriptions();
+      rethrow;
     }
   }
 
