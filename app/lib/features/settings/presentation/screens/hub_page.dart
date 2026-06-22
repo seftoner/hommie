@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
+import 'package:hommie/application/session/active_server_session_state.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/common/domain/entities/ha_version.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
@@ -48,7 +48,7 @@ class _HubStatusContent extends StatelessWidget {
             _HubInfoTile(
               title: 'Connected via',
               value: _connectionRoute(server),
-              subtitle: _connectionDescription(status.connectionState),
+              subtitle: _connectionDescription(status.sessionState),
             ),
             _HubInfoTile(
               title: 'Version',
@@ -56,7 +56,7 @@ class _HubStatusContent extends StatelessWidget {
             ),
             _HubInfoTile(
               title: 'WebSocket',
-              value: _connectionLabel(status.connectionState),
+              value: _connectionLabel(status.sessionState),
             ),
             _HubInfoTile(
               title: 'Logged in as',
@@ -73,7 +73,8 @@ class _HubStatusContent extends StatelessWidget {
             _HubInfoTile(
               title: 'Internal URL',
               value: _urlLabel(
-                server.internalUrl ?? server.baseUrl!.value.getOrElse((_) => ''),
+                server.internalUrl ??
+                    server.baseUrl!.value.getOrElse((_) => ''),
               ),
             ),
             _HubInfoTile(
@@ -210,36 +211,32 @@ class _EmptyHubStatusView extends StatelessWidget {
   }
 }
 
-String _connectionLabel(HAServerConnectionState state) {
+String _connectionLabel(ActiveServerSessionState state) {
   switch (state) {
-    case HAServerConnectionState.connected:
+    case OnlineServerSession():
       return 'Connected';
-    case HAServerConnectionState.connecting:
+    case ConnectingServerSession() || ResolvingServerSession():
       return 'Connecting';
-    case HAServerConnectionState.reconnecting:
-      return 'Reconnecting';
-    case HAServerConnectionState.authFailure:
+    case AuthRevokedServerSession():
       return 'Auth failure';
-    case HAServerConnectionState.disconnected:
+    case OfflineServerSession():
       return 'Disconnected';
-    case HAServerConnectionState.unknown:
+    case NoActiveServerSession():
       return 'Unknown';
   }
 }
 
-String _connectionDescription(HAServerConnectionState state) {
+String _connectionDescription(ActiveServerSessionState state) {
   switch (state) {
-    case HAServerConnectionState.connected:
+    case OnlineServerSession():
       return 'Connected to Home Assistant';
-    case HAServerConnectionState.connecting:
+    case ConnectingServerSession() || ResolvingServerSession():
       return 'Connecting to server...';
-    case HAServerConnectionState.reconnecting:
-      return 'Connection lost, attempting to reconnect';
-    case HAServerConnectionState.authFailure:
+    case AuthRevokedServerSession():
       return 'Authentication required';
-    case HAServerConnectionState.disconnected:
+    case OfflineServerSession():
       return 'Not connected to server';
-    case HAServerConnectionState.unknown:
+    case NoActiveServerSession():
       return 'Connection status unknown';
   }
 }

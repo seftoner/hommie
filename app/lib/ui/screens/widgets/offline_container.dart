@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
+import 'package:hommie/application/session/active_server_session_controller.dart';
+import 'package:hommie/application/session/active_server_session_state.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:hommie/ui/screens/widgets/offline_banner.dart';
 
@@ -12,7 +13,7 @@ class OfflineContainer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final showBanner = ref.watch(
-      serverConnectionStateProvider.select(_isConnectionDisrupted),
+      activeServerSessionProvider.select(_isConnectionDisrupted),
     );
 
     return Column(
@@ -31,9 +32,7 @@ class OfflineContainer extends ConsumerWidget {
     );
   }
 
-  static bool _isConnectionDisrupted(HAServerConnectionState state) {
-    return state == HAServerConnectionState.disconnected ||
-        state == HAServerConnectionState.reconnecting ||
-        state == HAServerConnectionState.connecting;
+  static bool _isConnectionDisrupted(ActiveServerSessionState state) {
+    return state is OfflineServerSession || state is ConnectingServerSession;
   }
 }
