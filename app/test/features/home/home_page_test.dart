@@ -7,6 +7,7 @@ import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/presentation/widgets/light_card.dart';
 import 'package:hommie/features/home/application/home_page_controller.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
+import 'package:hommie/ui/keys.dart';
 
 class _StubHomeController extends HomePageController {
   @override
@@ -37,6 +38,12 @@ class _SyncFailureHomeController extends HomePageController {
   @override
   HomePageState build() =>
       const HomePageState(serverName: 'Home', syncFailure: Object());
+}
+
+class _InitialSyncHomeController extends HomePageController {
+  @override
+  HomePageState build() =>
+      const HomePageState(serverName: 'Home', isInitialSyncing: true);
 }
 
 void main() {
@@ -71,5 +78,21 @@ void main() {
     await tester.pump();
 
     expect(find.text('Unable to sync Home Assistant data'), findsOneWidget);
+  });
+
+  testWidgets('keys initial home sync spinner', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          homePageControllerProvider.overrideWith(
+            _InitialSyncHomeController.new,
+          ),
+        ],
+        child: const MaterialApp(home: HomePage()),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byKey(K.home.loadingSpinner), findsOneWidget);
   });
 }

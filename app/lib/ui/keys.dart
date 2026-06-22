@@ -40,6 +40,7 @@ class HomeKeys {
   const HomeKeys();
 
   final page = const Key('hommiePage');
+  final loadingSpinner = const Key('homeLoadingSpinner');
   final settingsButton = const Key('settingsButton');
 }
 

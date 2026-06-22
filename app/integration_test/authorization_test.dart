@@ -19,6 +19,8 @@ import './step/i_enter_into_field.dart';
 import './step/i_see_credentials_web_view_form.dart';
 import './step/i_enter_credentials.dart';
 import './step/i_tap_on_login_button.dart';
+import './step/i_do_not_see_home_loading_spinner.dart';
+import './step/i_see_light_card.dart';
 import './step/home_assistant_access_is_configured.dart';
 import './step/i_have_successfully_logged_in.dart';
 import './step/i_tap_on_list_item.dart';
@@ -41,12 +43,17 @@ void main() {
         await iTapOnButton($, K.serversDiscovery.enterManuallyButton);
         await iSeePage($, K.manualAddress.page);
         await iEnterIntoField(
-            $, 'http://10.0.2.2:8123', K.manualAddress.addressField);
+          $,
+          'http://10.0.2.2:8123',
+          K.manualAddress.addressField,
+        );
         await iTapOnButton($, K.manualAddress.connectButton);
         await iSeeCredentialsWebViewForm($);
         await iEnterCredentials($, 'admin', 'yourpassword');
         await iTapOnLoginButton($);
         await iSeePage($, K.home.page);
+        await iDoNotSeeHomeLoadingSpinner($);
+        await iSeeLightCard($, 'light.kitchen_light');
       } finally {
         await bddTearDown($);
       }
@@ -56,6 +63,9 @@ void main() {
         await homeAssistantAccessIsConfigured($);
         await iHaveSuccessfullyLoggedIn($);
         await theApplicationIsRunningInTheForeground($);
+        await iSeePage($, K.home.page);
+        await iDoNotSeeHomeLoadingSpinner($);
+        await iSeeLightCard($, 'light.kitchen_light');
         await iTapOnButton($, K.appScaffold.settingsButton);
         await iSeePage($, K.settings.page);
         await iTapOnListItem($, K.settings.hubItem);
@@ -74,6 +84,8 @@ void main() {
         await iHaveSuccessfullyLoggedIn($);
         await theApplicationIsRunningInTheForeground($);
         await iSeePage($, K.home.page);
+        await iDoNotSeeHomeLoadingSpinner($);
+        await iSeeLightCard($, 'light.kitchen_light');
         await homeAssistantRevokesAccess($);
         await iShouldSeeTheOfflineBanner($);
         await iSeePage($, K.serversDiscovery.page);

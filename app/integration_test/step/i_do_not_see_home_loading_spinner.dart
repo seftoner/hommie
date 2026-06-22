@@ -2,16 +2,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:patrol/patrol.dart';
 
-/// Usage: I should not see the offline banner
-Future<void> iShouldNotSeeTheOfflineBanner(PatrolIntegrationTester $) async {
+Future<void> iDoNotSeeHomeLoadingSpinner(PatrolIntegrationTester $) async {
   final timeout = DateTime.now().add(const Duration(seconds: 20));
 
   while (DateTime.now().isBefore(timeout)) {
     await $.pump(const Duration(milliseconds: 250));
-    if (!$.tester.any(find.byKey(K.common.offlineBanner))) {
+    if (!$.tester.any(find.byKey(K.home.loadingSpinner))) {
       return;
     }
   }
 
-  expect($(K.common.offlineBanner), findsNothing);
+  expect(find.byKey(K.home.loadingSpinner), findsNothing);
 }

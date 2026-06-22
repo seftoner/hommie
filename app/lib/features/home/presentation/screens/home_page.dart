@@ -32,7 +32,9 @@ class HomePage extends ConsumerWidget {
       return Scaffold(
         key: K.home.page,
         appBar: AppBar(title: Text(state.serverName)),
-        body: const Center(child: CircularProgressIndicator()),
+        body: Center(
+          child: CircularProgressIndicator(key: K.home.loadingSpinner),
+        ),
       );
     }
 

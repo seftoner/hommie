@@ -29,11 +29,16 @@ Feature: Sign In
     When I enter {'admin'} {'yourpassword'} credentials
     And I tap on login button
     Then I see {K.home.page} page
+    And I do not see home loading spinner
+    And I see {'light.kitchen_light'} light card
 
   Scenario: Sign out
     Given home assistant access is configured    
     And I have successfully logged in   
     And the application is running in the foreground
+    And I see {K.home.page} page
+    And I do not see home loading spinner
+    And I see {'light.kitchen_light'} light card
     
     When I tap on {K.appScaffold.settingsButton} button  
     Then I see {K.settings.page} page  
@@ -49,6 +54,8 @@ Feature: Sign In
     And I have successfully logged in   
     And the application is running in the foreground
     And I see {K.home.page} page
+    And I do not see home loading spinner
+    And I see {'light.kitchen_light'} light card
     
     When home assistant revokes access
     Then I should see the offline banner
