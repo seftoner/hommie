@@ -2300,6 +2300,521 @@ class DeviceHomeConfigsCompanion extends UpdateCompanion<DeviceHomeConfig> {
   }
 }
 
+class $EntitiesTable extends Entities
+    with TableInfo<$EntitiesTable, EntityRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $EntitiesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _entityIdMeta = const VerificationMeta(
+    'entityId',
+  );
+  @override
+  late final GeneratedColumn<String> entityId = GeneratedColumn<String>(
+    'entity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _domainMeta = const VerificationMeta('domain');
+  @override
+  late final GeneratedColumn<String> domain = GeneratedColumn<String>(
+    'domain',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
+    'deviceId',
+  );
+  @override
+  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
+    'device_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _areaHaIdMeta = const VerificationMeta(
+    'areaHaId',
+  );
+  @override
+  late final GeneratedColumn<String> areaHaId = GeneratedColumn<String>(
+    'area_ha_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _entityCategoryMeta = const VerificationMeta(
+    'entityCategory',
+  );
+  @override
+  late final GeneratedColumn<String> entityCategory = GeneratedColumn<String>(
+    'entity_category',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _serverIdMeta = const VerificationMeta(
+    'serverId',
+  );
+  @override
+  late final GeneratedColumn<int> serverId = GeneratedColumn<int>(
+    'server_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES server_entities (id) ON DELETE CASCADE',
+    ),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    entityId,
+    name,
+    domain,
+    deviceId,
+    areaHaId,
+    entityCategory,
+    serverId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'entities';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<EntityRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('entity_id')) {
+      context.handle(
+        _entityIdMeta,
+        entityId.isAcceptableOrUnknown(data['entity_id']!, _entityIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_entityIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('domain')) {
+      context.handle(
+        _domainMeta,
+        domain.isAcceptableOrUnknown(data['domain']!, _domainMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_domainMeta);
+    }
+    if (data.containsKey('device_id')) {
+      context.handle(
+        _deviceIdMeta,
+        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
+      );
+    }
+    if (data.containsKey('area_ha_id')) {
+      context.handle(
+        _areaHaIdMeta,
+        areaHaId.isAcceptableOrUnknown(data['area_ha_id']!, _areaHaIdMeta),
+      );
+    }
+    if (data.containsKey('entity_category')) {
+      context.handle(
+        _entityCategoryMeta,
+        entityCategory.isAcceptableOrUnknown(
+          data['entity_category']!,
+          _entityCategoryMeta,
+        ),
+      );
+    }
+    if (data.containsKey('server_id')) {
+      context.handle(
+        _serverIdMeta,
+        serverId.isAcceptableOrUnknown(data['server_id']!, _serverIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_serverIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {serverId, entityId},
+  ];
+  @override
+  EntityRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return EntityRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      entityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entity_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      domain: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}domain'],
+      )!,
+      deviceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_id'],
+      ),
+      areaHaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}area_ha_id'],
+      ),
+      entityCategory: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entity_category'],
+      ),
+      serverId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}server_id'],
+      )!,
+    );
+  }
+
+  @override
+  $EntitiesTable createAlias(String alias) {
+    return $EntitiesTable(attachedDatabase, alias);
+  }
+}
+
+class EntityRow extends DataClass implements Insertable<EntityRow> {
+  final int id;
+  final String entityId;
+  final String name;
+  final String domain;
+  final String? deviceId;
+  final String? areaHaId;
+  final String? entityCategory;
+  final int serverId;
+  const EntityRow({
+    required this.id,
+    required this.entityId,
+    required this.name,
+    required this.domain,
+    this.deviceId,
+    this.areaHaId,
+    this.entityCategory,
+    required this.serverId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['entity_id'] = Variable<String>(entityId);
+    map['name'] = Variable<String>(name);
+    map['domain'] = Variable<String>(domain);
+    if (!nullToAbsent || deviceId != null) {
+      map['device_id'] = Variable<String>(deviceId);
+    }
+    if (!nullToAbsent || areaHaId != null) {
+      map['area_ha_id'] = Variable<String>(areaHaId);
+    }
+    if (!nullToAbsent || entityCategory != null) {
+      map['entity_category'] = Variable<String>(entityCategory);
+    }
+    map['server_id'] = Variable<int>(serverId);
+    return map;
+  }
+
+  EntitiesCompanion toCompanion(bool nullToAbsent) {
+    return EntitiesCompanion(
+      id: Value(id),
+      entityId: Value(entityId),
+      name: Value(name),
+      domain: Value(domain),
+      deviceId: deviceId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceId),
+      areaHaId: areaHaId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(areaHaId),
+      entityCategory: entityCategory == null && nullToAbsent
+          ? const Value.absent()
+          : Value(entityCategory),
+      serverId: Value(serverId),
+    );
+  }
+
+  factory EntityRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return EntityRow(
+      id: serializer.fromJson<int>(json['id']),
+      entityId: serializer.fromJson<String>(json['entityId']),
+      name: serializer.fromJson<String>(json['name']),
+      domain: serializer.fromJson<String>(json['domain']),
+      deviceId: serializer.fromJson<String?>(json['deviceId']),
+      areaHaId: serializer.fromJson<String?>(json['areaHaId']),
+      entityCategory: serializer.fromJson<String?>(json['entityCategory']),
+      serverId: serializer.fromJson<int>(json['serverId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'entityId': serializer.toJson<String>(entityId),
+      'name': serializer.toJson<String>(name),
+      'domain': serializer.toJson<String>(domain),
+      'deviceId': serializer.toJson<String?>(deviceId),
+      'areaHaId': serializer.toJson<String?>(areaHaId),
+      'entityCategory': serializer.toJson<String?>(entityCategory),
+      'serverId': serializer.toJson<int>(serverId),
+    };
+  }
+
+  EntityRow copyWith({
+    int? id,
+    String? entityId,
+    String? name,
+    String? domain,
+    Value<String?> deviceId = const Value.absent(),
+    Value<String?> areaHaId = const Value.absent(),
+    Value<String?> entityCategory = const Value.absent(),
+    int? serverId,
+  }) => EntityRow(
+    id: id ?? this.id,
+    entityId: entityId ?? this.entityId,
+    name: name ?? this.name,
+    domain: domain ?? this.domain,
+    deviceId: deviceId.present ? deviceId.value : this.deviceId,
+    areaHaId: areaHaId.present ? areaHaId.value : this.areaHaId,
+    entityCategory: entityCategory.present
+        ? entityCategory.value
+        : this.entityCategory,
+    serverId: serverId ?? this.serverId,
+  );
+  EntityRow copyWithCompanion(EntitiesCompanion data) {
+    return EntityRow(
+      id: data.id.present ? data.id.value : this.id,
+      entityId: data.entityId.present ? data.entityId.value : this.entityId,
+      name: data.name.present ? data.name.value : this.name,
+      domain: data.domain.present ? data.domain.value : this.domain,
+      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
+      areaHaId: data.areaHaId.present ? data.areaHaId.value : this.areaHaId,
+      entityCategory: data.entityCategory.present
+          ? data.entityCategory.value
+          : this.entityCategory,
+      serverId: data.serverId.present ? data.serverId.value : this.serverId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EntityRow(')
+          ..write('id: $id, ')
+          ..write('entityId: $entityId, ')
+          ..write('name: $name, ')
+          ..write('domain: $domain, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('areaHaId: $areaHaId, ')
+          ..write('entityCategory: $entityCategory, ')
+          ..write('serverId: $serverId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    entityId,
+    name,
+    domain,
+    deviceId,
+    areaHaId,
+    entityCategory,
+    serverId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is EntityRow &&
+          other.id == this.id &&
+          other.entityId == this.entityId &&
+          other.name == this.name &&
+          other.domain == this.domain &&
+          other.deviceId == this.deviceId &&
+          other.areaHaId == this.areaHaId &&
+          other.entityCategory == this.entityCategory &&
+          other.serverId == this.serverId);
+}
+
+class EntitiesCompanion extends UpdateCompanion<EntityRow> {
+  final Value<int> id;
+  final Value<String> entityId;
+  final Value<String> name;
+  final Value<String> domain;
+  final Value<String?> deviceId;
+  final Value<String?> areaHaId;
+  final Value<String?> entityCategory;
+  final Value<int> serverId;
+  const EntitiesCompanion({
+    this.id = const Value.absent(),
+    this.entityId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.domain = const Value.absent(),
+    this.deviceId = const Value.absent(),
+    this.areaHaId = const Value.absent(),
+    this.entityCategory = const Value.absent(),
+    this.serverId = const Value.absent(),
+  });
+  EntitiesCompanion.insert({
+    this.id = const Value.absent(),
+    required String entityId,
+    required String name,
+    required String domain,
+    this.deviceId = const Value.absent(),
+    this.areaHaId = const Value.absent(),
+    this.entityCategory = const Value.absent(),
+    required int serverId,
+  }) : entityId = Value(entityId),
+       name = Value(name),
+       domain = Value(domain),
+       serverId = Value(serverId);
+  static Insertable<EntityRow> custom({
+    Expression<int>? id,
+    Expression<String>? entityId,
+    Expression<String>? name,
+    Expression<String>? domain,
+    Expression<String>? deviceId,
+    Expression<String>? areaHaId,
+    Expression<String>? entityCategory,
+    Expression<int>? serverId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (entityId != null) 'entity_id': entityId,
+      if (name != null) 'name': name,
+      if (domain != null) 'domain': domain,
+      if (deviceId != null) 'device_id': deviceId,
+      if (areaHaId != null) 'area_ha_id': areaHaId,
+      if (entityCategory != null) 'entity_category': entityCategory,
+      if (serverId != null) 'server_id': serverId,
+    });
+  }
+
+  EntitiesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? entityId,
+    Value<String>? name,
+    Value<String>? domain,
+    Value<String?>? deviceId,
+    Value<String?>? areaHaId,
+    Value<String?>? entityCategory,
+    Value<int>? serverId,
+  }) {
+    return EntitiesCompanion(
+      id: id ?? this.id,
+      entityId: entityId ?? this.entityId,
+      name: name ?? this.name,
+      domain: domain ?? this.domain,
+      deviceId: deviceId ?? this.deviceId,
+      areaHaId: areaHaId ?? this.areaHaId,
+      entityCategory: entityCategory ?? this.entityCategory,
+      serverId: serverId ?? this.serverId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (entityId.present) {
+      map['entity_id'] = Variable<String>(entityId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (domain.present) {
+      map['domain'] = Variable<String>(domain.value);
+    }
+    if (deviceId.present) {
+      map['device_id'] = Variable<String>(deviceId.value);
+    }
+    if (areaHaId.present) {
+      map['area_ha_id'] = Variable<String>(areaHaId.value);
+    }
+    if (entityCategory.present) {
+      map['entity_category'] = Variable<String>(entityCategory.value);
+    }
+    if (serverId.present) {
+      map['server_id'] = Variable<int>(serverId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EntitiesCompanion(')
+          ..write('id: $id, ')
+          ..write('entityId: $entityId, ')
+          ..write('name: $name, ')
+          ..write('domain: $domain, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('areaHaId: $areaHaId, ')
+          ..write('entityCategory: $entityCategory, ')
+          ..write('serverId: $serverId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2316,6 +2831,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $DeviceHomeConfigsTable deviceHomeConfigs =
       $DeviceHomeConfigsTable(this);
+  late final $EntitiesTable entities = $EntitiesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2328,6 +2844,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     homeViewConfigs,
     areaHomeConfigs,
     deviceHomeConfigs,
+    entities,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -2393,6 +2910,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('device_home_configs', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'server_entities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('entities', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -2482,6 +3006,24 @@ final class $$ServerEntitiesTableReferences
     final cache = $_typedResult.readTableOrNull(
       _homeViewConfigsRefsTable($_db),
     );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$EntitiesTable, List<EntityRow>>
+  _entitiesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.entities,
+    aliasName: $_aliasNameGenerator(db.serverEntities.id, db.entities.serverId),
+  );
+
+  $$EntitiesTableProcessedTableManager get entitiesRefs {
+    final manager = $$EntitiesTableTableManager(
+      $_db,
+      $_db.entities,
+    ).filter((f) => f.serverId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_entitiesRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -2588,6 +3130,31 @@ class $$ServerEntitiesTableFilterComposer
           }) => $$HomeViewConfigsTableFilterComposer(
             $db: $db,
             $table: $db.homeViewConfigs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> entitiesRefs(
+    Expression<bool> Function($$EntitiesTableFilterComposer f) f,
+  ) {
+    final $$EntitiesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.entities,
+      getReferencedColumn: (t) => t.serverId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$EntitiesTableFilterComposer(
+            $db: $db,
+            $table: $db.entities,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2731,6 +3298,31 @@ class $$ServerEntitiesTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> entitiesRefs<T extends Object>(
+    Expression<T> Function($$EntitiesTableAnnotationComposer a) f,
+  ) {
+    final $$EntitiesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.entities,
+      getReferencedColumn: (t) => t.serverId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$EntitiesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.entities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$ServerEntitiesTableTableManager
@@ -2750,6 +3342,7 @@ class $$ServerEntitiesTableTableManager
             bool areaEntitiesRefs,
             bool deviceEntitiesRefs,
             bool homeViewConfigsRefs,
+            bool entitiesRefs,
           })
         > {
   $$ServerEntitiesTableTableManager(
@@ -2806,6 +3399,7 @@ class $$ServerEntitiesTableTableManager
                 areaEntitiesRefs = false,
                 deviceEntitiesRefs = false,
                 homeViewConfigsRefs = false,
+                entitiesRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -2813,6 +3407,7 @@ class $$ServerEntitiesTableTableManager
                     if (areaEntitiesRefs) db.areaEntities,
                     if (deviceEntitiesRefs) db.deviceEntities,
                     if (homeViewConfigsRefs) db.homeViewConfigs,
+                    if (entitiesRefs) db.entities,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -2880,6 +3475,27 @@ class $$ServerEntitiesTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (entitiesRefs)
+                        await $_getPrefetchedData<
+                          ServerEntity,
+                          $ServerEntitiesTable,
+                          EntityRow
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ServerEntitiesTableReferences
+                              ._entitiesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ServerEntitiesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).entitiesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.serverId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -2904,6 +3520,7 @@ typedef $$ServerEntitiesTableProcessedTableManager =
         bool areaEntitiesRefs,
         bool deviceEntitiesRefs,
         bool homeViewConfigsRefs,
+        bool entitiesRefs,
       })
     >;
 typedef $$AreaEntitiesTableCreateCompanionBuilder =
@@ -5646,6 +6263,378 @@ typedef $$DeviceHomeConfigsTableProcessedTableManager =
       DeviceHomeConfig,
       PrefetchHooks Function({bool deviceId, bool areaConfigId})
     >;
+typedef $$EntitiesTableCreateCompanionBuilder =
+    EntitiesCompanion Function({
+      Value<int> id,
+      required String entityId,
+      required String name,
+      required String domain,
+      Value<String?> deviceId,
+      Value<String?> areaHaId,
+      Value<String?> entityCategory,
+      required int serverId,
+    });
+typedef $$EntitiesTableUpdateCompanionBuilder =
+    EntitiesCompanion Function({
+      Value<int> id,
+      Value<String> entityId,
+      Value<String> name,
+      Value<String> domain,
+      Value<String?> deviceId,
+      Value<String?> areaHaId,
+      Value<String?> entityCategory,
+      Value<int> serverId,
+    });
+
+final class $$EntitiesTableReferences
+    extends BaseReferences<_$AppDatabase, $EntitiesTable, EntityRow> {
+  $$EntitiesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) =>
+      db.serverEntities.createAlias(
+        $_aliasNameGenerator(db.entities.serverId, db.serverEntities.id),
+      );
+
+  $$ServerEntitiesTableProcessedTableManager get serverId {
+    final $_column = $_itemColumn<int>('server_id')!;
+
+    final manager = $$ServerEntitiesTableTableManager(
+      $_db,
+      $_db.serverEntities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_serverIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$EntitiesTableFilterComposer
+    extends Composer<_$AppDatabase, $EntitiesTable> {
+  $$EntitiesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get entityId => $composableBuilder(
+    column: $table.entityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get domain => $composableBuilder(
+    column: $table.domain,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceId => $composableBuilder(
+    column: $table.deviceId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get areaHaId => $composableBuilder(
+    column: $table.areaHaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get entityCategory => $composableBuilder(
+    column: $table.entityCategory,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ServerEntitiesTableFilterComposer get serverId {
+    final $$ServerEntitiesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServerEntitiesTableFilterComposer(
+            $db: $db,
+            $table: $db.serverEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$EntitiesTableOrderingComposer
+    extends Composer<_$AppDatabase, $EntitiesTable> {
+  $$EntitiesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get entityId => $composableBuilder(
+    column: $table.entityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get domain => $composableBuilder(
+    column: $table.domain,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceId => $composableBuilder(
+    column: $table.deviceId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get areaHaId => $composableBuilder(
+    column: $table.areaHaId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get entityCategory => $composableBuilder(
+    column: $table.entityCategory,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ServerEntitiesTableOrderingComposer get serverId {
+    final $$ServerEntitiesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServerEntitiesTableOrderingComposer(
+            $db: $db,
+            $table: $db.serverEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$EntitiesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EntitiesTable> {
+  $$EntitiesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get entityId =>
+      $composableBuilder(column: $table.entityId, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get domain =>
+      $composableBuilder(column: $table.domain, builder: (column) => column);
+
+  GeneratedColumn<String> get deviceId =>
+      $composableBuilder(column: $table.deviceId, builder: (column) => column);
+
+  GeneratedColumn<String> get areaHaId =>
+      $composableBuilder(column: $table.areaHaId, builder: (column) => column);
+
+  GeneratedColumn<String> get entityCategory => $composableBuilder(
+    column: $table.entityCategory,
+    builder: (column) => column,
+  );
+
+  $$ServerEntitiesTableAnnotationComposer get serverId {
+    final $$ServerEntitiesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServerEntitiesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.serverEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$EntitiesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $EntitiesTable,
+          EntityRow,
+          $$EntitiesTableFilterComposer,
+          $$EntitiesTableOrderingComposer,
+          $$EntitiesTableAnnotationComposer,
+          $$EntitiesTableCreateCompanionBuilder,
+          $$EntitiesTableUpdateCompanionBuilder,
+          (EntityRow, $$EntitiesTableReferences),
+          EntityRow,
+          PrefetchHooks Function({bool serverId})
+        > {
+  $$EntitiesTableTableManager(_$AppDatabase db, $EntitiesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$EntitiesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EntitiesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EntitiesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> entityId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> domain = const Value.absent(),
+                Value<String?> deviceId = const Value.absent(),
+                Value<String?> areaHaId = const Value.absent(),
+                Value<String?> entityCategory = const Value.absent(),
+                Value<int> serverId = const Value.absent(),
+              }) => EntitiesCompanion(
+                id: id,
+                entityId: entityId,
+                name: name,
+                domain: domain,
+                deviceId: deviceId,
+                areaHaId: areaHaId,
+                entityCategory: entityCategory,
+                serverId: serverId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String entityId,
+                required String name,
+                required String domain,
+                Value<String?> deviceId = const Value.absent(),
+                Value<String?> areaHaId = const Value.absent(),
+                Value<String?> entityCategory = const Value.absent(),
+                required int serverId,
+              }) => EntitiesCompanion.insert(
+                id: id,
+                entityId: entityId,
+                name: name,
+                domain: domain,
+                deviceId: deviceId,
+                areaHaId: areaHaId,
+                entityCategory: entityCategory,
+                serverId: serverId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$EntitiesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({serverId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (serverId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.serverId,
+                                referencedTable: $$EntitiesTableReferences
+                                    ._serverIdTable(db),
+                                referencedColumn: $$EntitiesTableReferences
+                                    ._serverIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$EntitiesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $EntitiesTable,
+      EntityRow,
+      $$EntitiesTableFilterComposer,
+      $$EntitiesTableOrderingComposer,
+      $$EntitiesTableAnnotationComposer,
+      $$EntitiesTableCreateCompanionBuilder,
+      $$EntitiesTableUpdateCompanionBuilder,
+      (EntityRow, $$EntitiesTableReferences),
+      EntityRow,
+      PrefetchHooks Function({bool serverId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5664,4 +6653,6 @@ class $AppDatabaseManager {
       $$AreaHomeConfigsTableTableManager(_db, _db.areaHomeConfigs);
   $$DeviceHomeConfigsTableTableManager get deviceHomeConfigs =>
       $$DeviceHomeConfigsTableTableManager(_db, _db.deviceHomeConfigs);
+  $$EntitiesTableTableManager get entities =>
+      $$EntitiesTableTableManager(_db, _db.entities);
 }

@@ -373,3 +373,28 @@ class DeviceHomeConfigs extends Table {
     {areaConfigId, deviceId}, // Can't add same device twice
   ];
 }
+
+/// Generic Home Assistant entity cache (every domain).
+///
+/// `entityId` is the HA entity_id (e.g. "light.kitchen"); `domain` is its prefix
+/// ("light"). `areaHaId` is the *resolved* HA area slug, stored denormalized (not
+/// an FK) so an area re-sync can never cascade-delete entities and so entity/area
+/// syncs stay order-independent — grouping is resolved at read time by matching
+/// `areaHaId` against `AreaEntities.haId`.
+@DataClassName('EntityRow')
+class Entities extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get entityId => text()();
+  TextColumn get name => text()();
+  TextColumn get domain => text()();
+  TextColumn get deviceId => text().nullable()();
+  TextColumn get areaHaId => text().nullable()();
+  TextColumn get entityCategory => text().nullable()();
+  IntColumn get serverId =>
+      integer().references(ServerEntities, #id, onDelete: KeyAction.cascade)();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {serverId, entityId},
+  ];
+}
