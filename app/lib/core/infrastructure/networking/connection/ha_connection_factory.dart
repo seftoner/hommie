@@ -15,9 +15,16 @@ abstract interface class IHAConnectionFactory {
 }
 
 final class HAConnectionFactory implements IHAConnectionFactory {
-  const HAConnectionFactory(this._ref);
+  HAConnectionFactory(
+    this._ref, {
+    ConnectionOrchestrator Function(HAConnectionOption option)?
+    createOrchestrator,
+  }) : _createOrchestrator =
+           createOrchestrator ?? ((option) => ConnectionOrchestrator(option));
 
   final Ref _ref;
+  final ConnectionOrchestrator Function(HAConnectionOption option)
+  _createOrchestrator;
 
   @override
   HAConnectionOpening open(int serverId) {
@@ -103,7 +110,7 @@ final class HAConnectionFactory implements IHAConnectionFactory {
       customLogger: HaLoggerAdapter(logger),
     );
 
-    final orchestrator = ConnectionOrchestrator(connectionOption);
+    final orchestrator = _createOrchestrator(connectionOption);
     setOrchestrator(orchestrator);
 
     HASocketState? currentState;
@@ -120,11 +127,16 @@ final class HAConnectionFactory implements IHAConnectionFactory {
     }
 
     final connection = orchestrator.connection;
-    final authenticatedState = _authenticatedStateOrThrow(currentState);
     if (connection == null) {
+      _authenticatedStateOrThrow(currentState);
       await orchestrator.close();
       throw ConnectionError('Connection failed to establish');
     }
+
+    final state = currentState;
+    final authenticatedState = state is Authenticated
+        ? state
+        : const Authenticated();
 
     await stateSubscription.cancel();
 
