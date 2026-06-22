@@ -55,7 +55,7 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
   final void Function() _resetState;
 
   final Map<int, _ConnectionResource> _resources = {};
-  final Map<int, Future<IHAConnection>> _inFlight = {};
+  final Map<int, _OpeningResource> _inFlight = {};
   final Map<int, int> _versions = {};
 
   int? _activeServerId;
@@ -95,22 +95,27 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
 
     final inFlight = _inFlight[serverId];
     if (inFlight != null) {
-      return inFlight;
+      return inFlight.future;
     }
 
     final version = _versionOf(serverId);
-    final future = _open(serverId, version);
-    _inFlight[serverId] = future;
+    final opening = _factory.open(serverId);
+    final future = _open(serverId, version, opening);
+    _inFlight[serverId] = _OpeningResource(opening: opening, future: future);
     return future;
   }
 
-  Future<IHAConnection> _open(int serverId, int version) async {
+  Future<IHAConnection> _open(
+    int serverId,
+    int version,
+    HAConnectionOpening opening,
+  ) async {
     try {
-      final managed = await _factory.open(serverId);
+      final managed = await opening.future;
 
       if (_isDisposed || version != _versionOf(serverId)) {
         await managed.close();
-        throw StateError('Connection open was cancelled');
+        throw const ConnectionOpenCancelled();
       }
 
       late final StreamSubscription<HASocketState> subscription;
@@ -124,9 +129,15 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
       );
       _resources[serverId] = resource;
 
+      _handleConnectionState(serverId, managed.currentState, subscription);
+
       return managed.connection;
+    } on ConnectionOpenCancelled {
+      rethrow;
     } catch (error) {
-      if (_activeServerId == serverId && !_isDisposed) {
+      if (_activeServerId == serverId &&
+          version == _versionOf(serverId) &&
+          !_isDisposed) {
         if (_isAuthOrTokenError(error)) {
           _setState(HAServerConnectionState.authFailure);
         } else {
@@ -151,7 +162,7 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
   @override
   void disconnect(int serverId) {
     _bumpVersion(serverId);
-    _inFlight.remove(serverId);
+    _removeOpening(serverId);
     _removeResource(serverId);
 
     if (_activeServerId == serverId && !_isDisposed) {
@@ -173,14 +184,21 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
 
     for (final serverId in _inFlight.keys.toList()) {
       _bumpVersion(serverId);
+      _removeOpening(serverId);
     }
-    _inFlight.clear();
   }
 
   void _removeResource(int serverId) {
     final resource = _resources.remove(serverId);
     if (resource != null) {
       unawaited(resource.dispose());
+    }
+  }
+
+  void _removeOpening(int serverId) {
+    final opening = _inFlight.remove(serverId);
+    if (opening != null) {
+      unawaited(opening.close());
     }
   }
 
@@ -243,6 +261,15 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
   void _bumpVersion(int serverId) {
     _versions[serverId] = _versionOf(serverId) + 1;
   }
+}
+
+final class _OpeningResource {
+  const _OpeningResource({required this.opening, required this.future});
+
+  final HAConnectionOpening opening;
+  final Future<IHAConnection> future;
+
+  Future<void> close() => opening.close();
 }
 
 final class _ConnectionResource {

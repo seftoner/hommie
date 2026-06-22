@@ -27,34 +27,78 @@ class _FakeConnection implements IHAConnection {
 }
 
 class _FakeFactory implements IHAConnectionFactory {
-  int opens = 0;
-  final completers = <int, Completer<ManagedHAConnection>>{};
-  final stateControllers = <int, StreamController<HASocketState>>{};
-  final connections = <int, _FakeConnection>{};
+  final openings = <_FakeOpening>[];
+
+  int get opens => openings.length;
 
   @override
-  Future<ManagedHAConnection> open(int serverId) {
-    opens += 1;
-    final completer = Completer<ManagedHAConnection>();
-    completers[serverId] = completer;
-    stateControllers[serverId] = StreamController<HASocketState>.broadcast();
-    connections[serverId] = _FakeConnection();
-    return completer.future;
+  HAConnectionOpening open(int serverId) {
+    final opening = _FakeOpening(serverId);
+    openings.add(opening);
+    return HAConnectionOpening(
+      future: opening.completer.future,
+      close: opening.close,
+    );
   }
 
   void complete(int serverId) {
-    final connection = connections[serverId]!;
-    completers[serverId]!.complete(
+    completeOpening(_latestOpening(serverId));
+  }
+
+  void completeAt(int index) {
+    completeOpening(openings[index]);
+  }
+
+  void fail(int serverId, Object error) {
+    failOpening(_latestOpening(serverId), error);
+  }
+
+  void completeOpening(_FakeOpening opening) {
+    final connection = opening.connection;
+    opening.completer.complete(
       ManagedHAConnection(
         connection: connection,
-        states: stateControllers[serverId]!.stream,
+        currentState: opening.currentState,
+        states: opening.stateController.stream,
         close: connection.close,
       ),
     );
   }
 
+  void failOpening(_FakeOpening opening, Object error) {
+    opening.completer.completeError(error);
+  }
+
   void emit(int serverId, HASocketState state) {
-    stateControllers[serverId]!.add(state);
+    emitOpening(_latestOpening(serverId), state);
+  }
+
+  void emitOpening(_FakeOpening opening, HASocketState state) {
+    opening.currentState = state;
+    opening.stateController.add(state);
+  }
+
+  _FakeOpening _latestOpening(int serverId) {
+    return openings.lastWhere((opening) => opening.serverId == serverId);
+  }
+}
+
+class _FakeOpening {
+  _FakeOpening(this.serverId);
+
+  final int serverId;
+  final completer = Completer<ManagedHAConnection>();
+  final stateController = StreamController<HASocketState>.broadcast();
+  final connection = _FakeConnection();
+  HASocketState currentState = const Authenticated();
+  bool openingClosed = false;
+
+  Future<void> close() async {
+    openingClosed = true;
+    if (!completer.isCompleted) {
+      completer.completeError(const ConnectionOpenCancelled());
+    }
+    await stateController.close();
   }
 }
 
@@ -102,6 +146,29 @@ void main() {
     },
   );
 
+  test(
+    'uses authenticated state emitted during open to mark active server connected',
+    () async {
+      final factory = _FakeFactory();
+      final states = <HAServerConnectionState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setState: states.add,
+        resetState: () => states.add(HAServerConnectionState.unknown),
+      );
+
+      manager.setActiveServer(1);
+      final future = manager.getConnection(1);
+      factory.emit(1, const Authenticated());
+      factory.complete(1);
+
+      await future;
+      await Future<void>.delayed(Duration.zero);
+
+      expect(states, [HAServerConnectionState.connected]);
+    },
+  );
+
   test('stale events from a disconnected resource are ignored', () async {
     final factory = _FakeFactory();
     final states = <HAServerConnectionState>[];
@@ -119,7 +186,10 @@ void main() {
     manager.disconnect(1);
     factory.emit(1, const Authenticated());
 
-    expect(states, [HAServerConnectionState.unknown]);
+    expect(states, [
+      HAServerConnectionState.connected,
+      HAServerConnectionState.unknown,
+    ]);
   });
 
   test('switching active server cancels stale in-flight open', () async {
@@ -134,9 +204,83 @@ void main() {
     final staleOpen = manager.getConnection(1);
 
     manager.setActiveServer(2);
-    factory.complete(1);
 
-    await expectLater(staleOpen, throwsA(isA<StateError>()));
-    expect(factory.connections[1]!.closed, isTrue);
+    await expectLater(staleOpen, throwsA(isA<ConnectionOpenCancelled>()));
+    expect(factory.openings.single.openingClosed, isTrue);
+  });
+
+  test(
+    'cancelled stale same-server open does not publish disconnected',
+    () async {
+      final factory = _FakeFactory();
+      final states = <HAServerConnectionState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setState: states.add,
+        resetState: () => states.add(HAServerConnectionState.unknown),
+      );
+
+      manager.setActiveServer(1);
+      final staleOpen = manager.getConnection(1);
+      final staleOpenExpectation = expectLater(
+        staleOpen,
+        throwsA(isA<ConnectionOpenCancelled>()),
+      );
+
+      manager.disconnect(1);
+      final replacementOpen = manager.getConnection(1);
+
+      factory.completeAt(1);
+      await replacementOpen;
+
+      await staleOpenExpectation;
+
+      expect(states, isNot(contains(HAServerConnectionState.disconnected)));
+    },
+  );
+
+  test(
+    'auth errors during open publish auth failure for active server',
+    () async {
+      final factory = _FakeFactory();
+      final states = <HAServerConnectionState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setState: states.add,
+        resetState: () => states.add(HAServerConnectionState.unknown),
+      );
+
+      manager.setActiveServer(1);
+      final future = manager.getConnection(1);
+      final futureExpectation = expectLater(
+        future,
+        throwsA(isA<AuthenticationError>()),
+      );
+
+      factory.fail(1, AuthenticationError('bad token'));
+
+      await futureExpectation;
+      expect(states, [HAServerConnectionState.authFailure]);
+    },
+  );
+
+  test('dispose closes pending opens', () async {
+    final factory = _FakeFactory();
+    final manager = ServerConnectionManagerImpl(
+      factory: factory,
+      setState: (_) {},
+      resetState: () {},
+    );
+
+    final future = manager.getConnection(1);
+    final futureExpectation = expectLater(
+      future,
+      throwsA(isA<ConnectionOpenCancelled>()),
+    );
+
+    manager.dispose();
+
+    await futureExpectation;
+    expect(factory.openings.single.openingClosed, isTrue);
   });
 }
