@@ -52,7 +52,6 @@ class EntityStates extends _$EntityStates {
   @override
   Map<String, EntityStateValue> build() {
     final connectionState = ref.watch(serverConnectionStateProvider);
-    final connection = ref.watch(serverScopeConnectionProvider);
 
     ref.onDispose(() {
       unawaited(_events?.cancel());
@@ -65,6 +64,10 @@ class EntityStates extends _$EntityStates {
     if (connectionState != HAServerConnectionState.connected) {
       return const {};
     }
+
+    // Read the scoped connection only once connected — avoids touching the
+    // (overridden-per-server) provider while disconnected.
+    final connection = ref.watch(serverScopeConnectionProvider);
 
     try {
       _sub = HACommands.subscribeEntities(connection);

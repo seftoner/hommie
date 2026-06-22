@@ -67,7 +67,7 @@ final class EntityRegistrySyncControllerProvider
 }
 
 String _$entityRegistrySyncControllerHash() =>
-    r'932fa59d41c00a0924e82d4c8eb4a58afe51ea63';
+    r'99c3f8c2a2ca52d155f1d94cf936c6120e6bae2e';
 
 /// Keeps the local entity cache in sync with Home Assistant.
 /// Subscribes to entity_registry_updated and device_registry_updated; refreshes

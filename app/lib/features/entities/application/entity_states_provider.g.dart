@@ -59,7 +59,7 @@ final class EntityStatesProvider
   }
 }
 
-String _$entityStatesHash() => r'15b5a72e4eab7c78d65d3d901390e9a1257e94fc';
+String _$entityStatesHash() => r'02bd0029bab5bed9cf4f965ff2b60cddda6ea410';
 
 /// Live entity states for the active server, keyed by entity_id.
 ///
