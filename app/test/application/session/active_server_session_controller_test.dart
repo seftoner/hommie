@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
@@ -31,9 +33,13 @@ class _FakeConnection implements IHAConnection {
 }
 
 class _FakeConnectionManager implements IServerConnectionManager {
+  _FakeConnectionManager({this.completeImmediately = true});
+
+  final bool completeImmediately;
   int? activeServerId;
   int opens = 0;
   final connection = _FakeConnection();
+  final pending = <Completer<IHAConnection>>[];
 
   @override
   void setActiveServer(int? serverId) {
@@ -41,9 +47,15 @@ class _FakeConnectionManager implements IServerConnectionManager {
   }
 
   @override
-  Future<IHAConnection> getConnection(int serverId) async {
+  Future<IHAConnection> getConnection(int serverId) {
     opens += 1;
-    return connection;
+    if (completeImmediately) {
+      return Future.value(connection);
+    }
+
+    final completer = Completer<IHAConnection>();
+    pending.add(completer);
+    return completer.future;
   }
 
   @override
@@ -51,6 +63,10 @@ class _FakeConnectionManager implements IServerConnectionManager {
 
   @override
   void disconnect(int serverId) {}
+
+  void completeNext() {
+    pending.removeAt(0).complete(connection);
+  }
 }
 
 class _FakeAuthController implements AuthController {
@@ -97,6 +113,12 @@ class _FakeServerManager implements IServerManager {
   Future<void> removeServer(int id, {bool allowRemovingLast = false}) async {
     activeServer = null;
   }
+}
+
+class _AuthStateSource {
+  _AuthStateSource(this.value);
+
+  AuthState value;
 }
 
 void main() {
@@ -147,18 +169,20 @@ void main() {
   ProviderContainer makeContainer({
     required Server? activeServer,
     required AuthState authState,
+    _AuthStateSource? authStateSource,
     _FakeConnectionManager? connectionManager,
     _FakeAuthController? authController,
   }) {
     final manager = connectionManager ?? _FakeConnectionManager();
     final controller = authController ?? _FakeAuthController();
+    final source = authStateSource ?? _AuthStateSource(authState);
 
     return ProviderContainer(
       overrides: [
         serverManagerProvider.overrideWithValue(
           _FakeServerManager(activeServer),
         ),
-        authStateProvider.overrideWith((_) async => authState),
+        authStateProvider.overrideWith((_) => source.value),
         serverConnectionManagerProvider.overrideWithValue(manager),
         authControllerProvider.overrideWithValue(controller),
       ],
@@ -226,4 +250,85 @@ void main() {
       expect(authController.signedOutServerIds, [1]);
     },
   );
+
+  test(
+    'starts replacement open when same server authenticates again while old open is pending',
+    () async {
+      final manager = _FakeConnectionManager(completeImmediately: false);
+      final authStateSource = _AuthStateSource(
+        AuthState.authenticated(credentials()),
+      );
+      final container = makeContainer(
+        activeServer: server,
+        authState: authStateSource.value,
+        authStateSource: authStateSource,
+        connectionManager: manager,
+      );
+      addTearDown(container.dispose);
+
+      await waitForSession(
+        container,
+        (state) => state is ConnectingServerSession,
+      );
+      expect(manager.opens, 1);
+
+      authStateSource.value = const AuthState.unauthenticated();
+      container.invalidate(authStateProvider);
+      await waitForSession(
+        container,
+        (state) => state is NoActiveServerSession,
+      );
+
+      authStateSource.value = AuthState.authenticated(credentials());
+      container.invalidate(authStateProvider);
+      await waitForSession(
+        container,
+        (state) => state is ConnectingServerSession,
+      );
+
+      expect(manager.opens, 2);
+    },
+  );
+
+  test('connected transport state restores online session', () async {
+    final manager = _FakeConnectionManager();
+    final container = makeContainer(
+      activeServer: server,
+      authState: AuthState.authenticated(credentials()),
+      connectionManager: manager,
+    );
+    addTearDown(container.dispose);
+
+    await waitForSession(container, (state) => state is OnlineServerSession);
+
+    container.read(serverConnectionStateProvider.notifier).setDisconnected();
+    await waitForSession(container, (state) => state is OfflineServerSession);
+
+    container.read(serverConnectionStateProvider.notifier).setConnected();
+    await waitForSession(container, (state) => state is OnlineServerSession);
+  });
+
+  test('revoked auth state signs out once', () async {
+    final authController = _FakeAuthController();
+    final authStateSource = _AuthStateSource(const AuthState.revoked());
+    final container = makeContainer(
+      activeServer: server,
+      authState: authStateSource.value,
+      authStateSource: authStateSource,
+      authController: authController,
+    );
+    addTearDown(container.dispose);
+
+    await waitForSession(
+      container,
+      (state) => state is AuthRevokedServerSession,
+    );
+    await container.pump();
+
+    authStateSource.value = const AuthState.revoked();
+    container.invalidate(authStateProvider);
+    await container.pump();
+
+    expect(authController.signedOutServerIds, [1]);
+  });
 }

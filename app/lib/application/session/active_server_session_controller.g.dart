@@ -26,6 +26,7 @@ final class ActiveServerSessionProvider
           authControllerProvider,
           activeServerProvider,
           authStateProvider,
+          serverConnectionStateProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           ActiveServerSessionProvider.$allTransitiveDependencies0,
@@ -34,6 +35,7 @@ final class ActiveServerSessionProvider
           ActiveServerSessionProvider.$allTransitiveDependencies3,
           ActiveServerSessionProvider.$allTransitiveDependencies4,
           ActiveServerSessionProvider.$allTransitiveDependencies5,
+          ActiveServerSessionProvider.$allTransitiveDependencies6,
         },
       );
 
@@ -45,6 +47,7 @@ final class ActiveServerSessionProvider
       AuthControllerProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies4 = activeServerProvider;
   static const $allTransitiveDependencies5 = authStateProvider;
+  static const $allTransitiveDependencies6 = serverConnectionStateProvider;
 
   @override
   String debugGetCreateSourceHash() => _$activeServerSessionHash();
@@ -63,7 +66,7 @@ final class ActiveServerSessionProvider
 }
 
 String _$activeServerSessionHash() =>
-    r'ebba1de2391893108eedb0aaf34358a6bb4c30f2';
+    r'677f39e14d62727b2f72fa9d720f081fc4a524d6';
 
 abstract class _$ActiveServerSession
     extends $Notifier<ActiveServerSessionState> {

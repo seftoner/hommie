@@ -21,13 +21,16 @@ part 'active_server_session_controller.g.dart';
     authController,
     activeServer,
     authState,
+    ServerConnectionState,
   ],
 )
 class ActiveServerSession extends _$ActiveServerSession {
   Server? _activeServer;
   AuthState? _authState;
   ActiveServerSessionState? _lastSession;
-  int? _connectingServerId;
+  _ConnectionAttempt? _connectingAttempt;
+  final _signedOutServerIds = <int>{};
+  int _sessionRevision = 0;
   bool _signingOut = false;
 
   @override
@@ -41,16 +44,37 @@ class ActiveServerSession extends _$ActiveServerSession {
 
     switch ((activeServer, authState)) {
       case (AsyncData(value: final server), AsyncData(value: final auth)):
-        _activeServer = server;
-        _authState = auth;
+        _setInputs(server, auth);
         return _stateForCurrentInputs();
       case (AsyncError(), _) || (_, AsyncError()):
-        _activeServer = null;
-        _authState = null;
+        _setInputs(null, null);
         ref.read(serverConnectionManagerProvider).setActiveServer(null);
         return _remember(const NoActiveServerSession());
       case _:
+        _setInputs(null, null);
         return _remember(const ResolvingServerSession());
+    }
+  }
+
+  void _setInputs(Server? server, AuthState? auth) {
+    final previousServerId = _activeServer?.id;
+    final previousAuthType = _authState?.runtimeType;
+    final previousAuthenticated = _hasAuthenticatedSession;
+    final nextServerId = server?.id;
+    final nextAuthenticated = auth is Authenticated || auth is Refreshing;
+
+    _activeServer = server;
+    _authState = auth;
+
+    if (previousServerId != nextServerId ||
+        previousAuthType != auth?.runtimeType ||
+        previousAuthenticated != nextAuthenticated) {
+      _sessionRevision += 1;
+      _connectingAttempt = null;
+    }
+
+    if (nextServerId != null && nextAuthenticated) {
+      _signedOutServerIds.remove(nextServerId);
     }
   }
 
@@ -94,44 +118,60 @@ class ActiveServerSession extends _$ActiveServerSession {
 
   void _connect(Server server) {
     final serverId = server.id;
-    if (serverId == null || _connectingServerId == serverId) {
+    if (serverId == null) {
       return;
     }
 
-    _connectingServerId = serverId;
+    final revision = _sessionRevision;
+    final currentAttempt = _connectingAttempt;
+    if (currentAttempt != null &&
+        currentAttempt.serverId == serverId &&
+        currentAttempt.revision == revision) {
+      return;
+    }
+
+    _connectingAttempt = _ConnectionAttempt(
+      serverId: serverId,
+      revision: revision,
+    );
     ref.read(serverConnectionManagerProvider).setActiveServer(serverId);
-    unawaited(_open(server));
+    unawaited(_open(server, revision));
   }
 
-  Future<void> _open(Server server) async {
+  Future<void> _open(Server server, int revision) async {
     final serverId = server.id!;
     try {
       final connection = await ref
           .read(serverConnectionManagerProvider)
           .getConnection(serverId);
-      if (_activeServer?.id == serverId && _hasAuthenticatedSession) {
+      if (_isCurrent(serverId, revision) && _hasAuthenticatedSession) {
         _publish(
           OnlineServerSession(activeServer: server, connection: connection),
         );
       }
     } on ConnectionOpenCancelled {
-      if (_activeServer?.id == serverId) {
-        _publish(ConnectingServerSession(server));
-      }
+      return;
     } catch (error, stackTrace) {
       logger.w(
         'Failed to open active session for server $serverId',
         error: error,
         stackTrace: stackTrace,
       );
-      if (_activeServer?.id == serverId) {
+      if (_isCurrent(serverId, revision) && _hasAuthenticatedSession) {
         _publish(OfflineServerSession(activeServer: server, cause: error));
       }
     } finally {
-      if (_connectingServerId == serverId) {
-        _connectingServerId = null;
+      final currentAttempt = _connectingAttempt;
+      if (currentAttempt != null &&
+          currentAttempt.serverId == serverId &&
+          currentAttempt.revision == revision) {
+        _connectingAttempt = null;
       }
     }
+  }
+
+  bool _isCurrent(int serverId, int revision) {
+    return _sessionRevision == revision && _activeServer?.id == serverId;
   }
 
   bool get _hasAuthenticatedSession {
@@ -155,6 +195,9 @@ class ActiveServerSession extends _$ActiveServerSession {
       case HAServerConnectionState.connecting:
         _publish(ConnectingServerSession(server));
       case HAServerConnectionState.connected:
+        if (_hasAuthenticatedSession) {
+          _connect(server);
+        }
       case HAServerConnectionState.unknown:
         break;
     }
@@ -162,11 +205,14 @@ class ActiveServerSession extends _$ActiveServerSession {
 
   void _triggerSignOut(Server server) {
     final serverId = server.id;
-    if (serverId == null || _signingOut) {
+    if (serverId == null ||
+        _signingOut ||
+        _signedOutServerIds.contains(serverId)) {
       return;
     }
 
     _signingOut = true;
+    _signedOutServerIds.add(serverId);
     unawaited(() async {
       try {
         await ref.read(authControllerProvider).signOut(serverId);
@@ -175,4 +221,11 @@ class ActiveServerSession extends _$ActiveServerSession {
       }
     }());
   }
+}
+
+final class _ConnectionAttempt {
+  const _ConnectionAttempt({required this.serverId, required this.revision});
+
+  final int serverId;
+  final int revision;
 }
