@@ -20,7 +20,15 @@ class HomePage extends ConsumerWidget {
     final handledDomains = ref.watch(entityDomainHandlersProvider).keys.toSet();
     final showTabs = state.tabs.length > 1;
 
-    if (state.isSyncing && state.sections.isEmpty) {
+    if (state.syncFailure != null && state.sections.isEmpty) {
+      return Scaffold(
+        key: K.home.page,
+        appBar: AppBar(title: Text(state.serverName)),
+        body: const Center(child: Text('Unable to sync Home Assistant data')),
+      );
+    }
+
+    if (state.isInitialSyncing && state.sections.isEmpty) {
       return Scaffold(
         key: K.home.page,
         appBar: AppBar(title: Text(state.serverName)),

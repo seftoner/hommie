@@ -1,29 +1,37 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:hommie/application/session/active_server_session_controller.dart';
+import 'package:hommie/application/session/active_server_session_state.dart';
+import 'package:hommie/application/session/server_sync_coordinator.dart';
+import 'package:hommie/application/session/server_sync_state.dart';
 import 'package:hommie/core/domain/entities/area.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
-import 'package:hommie/features/areas/application/area_registry_sync_controller.dart';
 import 'package:hommie/features/entities/application/cached_entities_provider.dart';
-import 'package:hommie/features/entities/application/entity_registry_sync_controller.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/home/application/cached_areas_provider.dart';
 import 'package:hommie/features/home/application/home_page_controller.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 
-class _AreaSyncNoop extends AreaRegistrySyncController {
+class _FakeConnection implements IHAConnection {
   @override
-  void build() {}
-}
+  Future<void> close() async {}
 
-class _EntitySyncOk extends EntityRegistrySyncController {
   @override
-  EntitySyncStatus build() => EntitySyncStatus.success;
+  HAResponse sendMessage(HAMessage message) => Future.value(null);
+
+  @override
+  HASubscription subscribeMessage(HAMessage subscribeMessage) {
+    return HASubscription(logger: const NoOpLogger(), unsubscribe: () async {});
+  }
 }
 
 void main() {
   ProviderContainer makeContainer({
     required List<Area> areas,
     required List<HaEntity> entities,
+    ActiveServerSessionState? session,
+    ServerSyncState syncState = const SyncReady(),
   }) {
     return ProviderContainer(
       overrides: [
@@ -32,8 +40,14 @@ void main() {
         ),
         cachedAreasProvider.overrideWith((ref) => Stream.value(areas)),
         cachedEntitiesProvider.overrideWith((ref) => Stream.value(entities)),
-        areaRegistrySyncControllerProvider.overrideWith(_AreaSyncNoop.new),
-        entityRegistrySyncControllerProvider.overrideWith(_EntitySyncOk.new),
+        activeServerSessionProvider.overrideWithValue(
+          session ??
+              OnlineServerSession(
+                activeServer: const Server(id: 1, name: 'Home'),
+                connection: _FakeConnection(),
+              ),
+        ),
+        serverSyncCoordinatorProvider.overrideWithValue(syncState),
       ],
     );
   }
@@ -59,23 +73,20 @@ void main() {
 
     final state = container.read(homePageControllerProvider);
     expect(state.serverName, 'Home');
-    expect(state.tabs.whereType<HomeAreaTab>().map((t) => t.title), ['Kitchen']);
+    expect(state.tabs.whereType<HomeAreaTab>().map((t) => t.title), [
+      'Kitchen',
+    ]);
     expect(state.sections.first.entities.single.entityId, 'light.a');
-    expect(state.isSyncing, isFalse);
+    expect(state.isInitialSyncing, isFalse);
+    expect(state.isOffline, isFalse);
+    expect(state.syncFailure, isNull);
   });
 
-  test('isSyncing while entities empty and sync not finished', () async {
-    final container = ProviderContainer(
-      overrides: [
-        serverScopeServerProvider.overrideWithValue(
-          const Server(id: 1, name: 'Home'),
-        ),
-        cachedAreasProvider.overrideWith((ref) => Stream.value(const [])),
-        cachedEntitiesProvider.overrideWith((ref) => Stream.value(const [])),
-        areaRegistrySyncControllerProvider.overrideWith(_AreaSyncNoop.new),
-        // Default (real) entity sync starts in `syncing`/`notStarted`; stub it.
-        entityRegistrySyncControllerProvider.overrideWith(_EntitySyncing.new),
-      ],
+  test('isInitialSyncing while entities empty and initial sync runs', () async {
+    final container = makeContainer(
+      areas: const [],
+      entities: const [],
+      syncState: const InitialSyncRunning(),
     );
     addTearDown(container.dispose);
 
@@ -83,11 +94,51 @@ void main() {
     await Future<void>.delayed(const Duration(milliseconds: 20));
 
     final state = container.read(homePageControllerProvider);
-    expect(state.isSyncing, isTrue);
+    expect(state.isInitialSyncing, isTrue);
+    expect(state.isOffline, isFalse);
   });
-}
 
-class _EntitySyncing extends EntityRegistrySyncController {
-  @override
-  EntitySyncStatus build() => EntitySyncStatus.syncing;
+  test('keeps cached sections visible while offline', () async {
+    final container = makeContainer(
+      areas: [const Area(id: 'kitchen', name: 'Kitchen')],
+      entities: [
+        const HaEntity(
+          entityId: 'light.a',
+          domain: 'light',
+          name: 'A',
+          areaId: 'kitchen',
+        ),
+      ],
+      session: const OfflineServerSession(
+        activeServer: Server(id: 1, name: 'Home'),
+      ),
+      syncState: const SyncOfflineWithCache(),
+    );
+    addTearDown(container.dispose);
+
+    container.listen(homePageControllerProvider, (_, _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    final state = container.read(homePageControllerProvider);
+    expect(state.isOffline, isTrue);
+    expect(state.isInitialSyncing, isFalse);
+    expect(state.sections.first.entities.single.entityId, 'light.a');
+  });
+
+  test('captures sync failure while cache is empty', () async {
+    final failure = Object();
+    final container = makeContainer(
+      areas: const [],
+      entities: const [],
+      syncState: SyncFailed(failure),
+    );
+    addTearDown(container.dispose);
+
+    container.listen(homePageControllerProvider, (_, _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    final state = container.read(homePageControllerProvider);
+    expect(state.syncFailure, same(failure));
+    expect(state.isInitialSyncing, isFalse);
+  });
 }

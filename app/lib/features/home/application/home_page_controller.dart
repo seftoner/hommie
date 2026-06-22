@@ -1,8 +1,10 @@
+import 'package:hommie/application/session/active_server_session_controller.dart';
+import 'package:hommie/application/session/active_server_session_state.dart';
+import 'package:hommie/application/session/server_sync_coordinator.dart';
+import 'package:hommie/application/session/server_sync_state.dart';
 import 'package:hommie/core/domain/entities/area.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
-import 'package:hommie/features/areas/application/area_registry_sync_controller.dart';
 import 'package:hommie/features/entities/application/cached_entities_provider.dart';
-import 'package:hommie/features/entities/application/entity_registry_sync_controller.dart';
 import 'package:hommie/features/home/application/cached_areas_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,14 +30,18 @@ class HomePageState {
   final String serverName;
   final List<HomeTab> tabs;
   final List<AreaSection> sections; // all areas + trailing unassigned
-  final bool isSyncing; // first entity sync not finished and nothing cached yet
+  final bool isInitialSyncing;
+  final bool isOffline;
+  final Object? syncFailure;
 
   const HomePageState({
     this.isEditing = false,
     this.serverName = '',
     this.tabs = const [HomeSummaryTab()],
     this.sections = const [],
-    this.isSyncing = false,
+    this.isInitialSyncing = false,
+    this.isOffline = false,
+    this.syncFailure,
   });
 
   HomePageState copyWith({
@@ -43,13 +49,17 @@ class HomePageState {
     String? serverName,
     List<HomeTab>? tabs,
     List<AreaSection>? sections,
-    bool? isSyncing,
+    bool? isInitialSyncing,
+    bool? isOffline,
+    Object? syncFailure,
   }) => HomePageState(
     isEditing: isEditing ?? this.isEditing,
     serverName: serverName ?? this.serverName,
     tabs: tabs ?? this.tabs,
     sections: sections ?? this.sections,
-    isSyncing: isSyncing ?? this.isSyncing,
+    isInitialSyncing: isInitialSyncing ?? this.isInitialSyncing,
+    isOffline: isOffline ?? this.isOffline,
+    syncFailure: syncFailure ?? this.syncFailure,
   );
 
   /// Sections for a specific area tab (area sections only, never unassigned).
@@ -62,8 +72,8 @@ class HomePageState {
     serverScopeServer,
     cachedAreas,
     cachedEntities,
-    AreaRegistrySyncController,
-    EntityRegistrySyncController,
+    ActiveServerSession,
+    ServerSyncCoordinator,
   ],
 )
 class HomePageController extends _$HomePageController {
@@ -71,27 +81,31 @@ class HomePageController extends _$HomePageController {
 
   @override
   HomePageState build() {
-    // Keep both caches in sync while connected.
-    ref.watch(areaRegistrySyncControllerProvider);
-    final syncStatus = ref.watch(entityRegistrySyncControllerProvider);
-
     final server = ref.watch(serverScopeServerProvider);
-    final areas = ref.watch(cachedAreasProvider).asData?.value ?? const <Area>[];
+    final session = ref.watch(activeServerSessionProvider);
+    final syncState = ref.watch(serverSyncCoordinatorProvider);
+    final areas =
+        ref.watch(cachedAreasProvider).asData?.value ?? const <Area>[];
     final entities =
         ref.watch(cachedEntitiesProvider).asData?.value ?? const [];
 
     final sections = groupEntitiesByArea(areas, entities);
-    final isSyncing =
+    final isInitialSyncing =
         entities.isEmpty &&
-        (syncStatus == EntitySyncStatus.syncing ||
-            syncStatus == EntitySyncStatus.notStarted);
+        (syncState is InitialSyncRunning ||
+            session is ConnectingServerSession ||
+            session is ResolvingServerSession);
+    final isOffline = session is OfflineServerSession;
+    final syncFailure = syncState is SyncFailed ? syncState.error : null;
 
     return HomePageState(
       isEditing: _isEditing,
       serverName: server.name,
       tabs: _tabsFromAreas(areas),
       sections: sections,
-      isSyncing: isSyncing,
+      isInitialSyncing: isInitialSyncing,
+      isOffline: isOffline,
+      syncFailure: syncFailure,
     );
   }
 
