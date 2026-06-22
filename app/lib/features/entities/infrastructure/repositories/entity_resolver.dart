@@ -16,7 +16,9 @@ List<HaEntity> resolveEntities({
 
   final result = <HaEntity>[];
   for (final e in entities) {
-    if (e.disabled || e.hidden) continue;
+    if (e.disabled || e.hidden) {
+      continue;
+    }
     final domain = e.entityId.split('.').first;
     final area = e.areaId ?? (e.deviceId != null ? deviceAreaById[e.deviceId] : null);
     final name = e.name ?? e.originalName ?? e.entityId;

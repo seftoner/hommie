@@ -2529,13 +2529,29 @@ class $EntitiesTable extends Entities
 }
 
 class EntityRow extends DataClass implements Insertable<EntityRow> {
+  /// Auto-incrementing primary key (local database ID)
   final int id;
+
+  /// Home Assistant entity_id (e.g. "light.kitchen")
   final String entityId;
+
+  /// Display name (resolved: name -> original_name -> entity_id)
   final String name;
+
+  /// Entity domain, the entity_id prefix (e.g. "light", "switch")
   final String domain;
+
+  /// HA device id this entity belongs to, if any (for the future device layer)
   final String? deviceId;
+
+  /// Resolved HA area slug (matches [AreaEntities.haId]); null when unassigned
   final String? areaHaId;
+
+  /// HA entity_category ("config"/"diagnostic"), if any; for future filtering
   final String? entityCategory;
+
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all its cached entities
   final int serverId;
   const EntityRow({
     required this.id,
