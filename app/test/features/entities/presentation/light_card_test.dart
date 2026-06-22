@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
+import 'package:hommie/application/session/active_server_session_controller.dart';
+import 'package:hommie/application/session/active_server_session_state.dart';
 import 'package:hommie/features/entities/domain/entities/entity_state_value.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/presentation/widgets/light_card.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
 
 class _CapturingConnection implements IHAConnection {
   String? lastService;
@@ -29,7 +31,14 @@ void main() {
     final conn = _CapturingConnection();
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [serverScopeConnectionProvider.overrideWithValue(conn)],
+        overrides: [
+          activeServerSessionProvider.overrideWithValue(
+            OnlineServerSession(
+              activeServer: const Server(id: 1, name: 'Home'),
+              connection: conn,
+            ),
+          ),
+        ],
         child: const MaterialApp(
           home: Scaffold(
             body: LightCard(
