@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hommie/core/database/database.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/infrastructure/repositories/drift_entity_repository.dart';
-import 'package:drift/drift.dart' show Value;
 
 void main() {
   late AppDatabase db;
@@ -33,7 +32,12 @@ void main() {
   test('syncAll removes entities no longer present and upserts changes', () async {
     await repo.syncAll(serverId: serverId, entities: [light('light.a'), light('light.b')]);
     await repo.syncAll(serverId: serverId, entities: [
-      HaEntity(entityId: 'light.a', domain: 'light', name: 'Renamed', areaId: 'den'),
+      const HaEntity(
+        entityId: 'light.a',
+        domain: 'light',
+        name: 'Renamed',
+        areaId: 'den',
+      ),
     ]);
     final rows = await repo.getByServer(serverId);
     expect(rows, hasLength(1));

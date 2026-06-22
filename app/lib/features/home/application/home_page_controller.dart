@@ -1,11 +1,9 @@
-import 'dart:async';
-
 import 'package:hommie/core/domain/entities/area.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
+import 'package:hommie/features/areas/application/area_registry_sync_controller.dart';
+import 'package:hommie/features/entities/application/cached_entities_provider.dart';
+import 'package:hommie/features/entities/application/entity_registry_sync_controller.dart';
 import 'package:hommie/features/home/application/cached_areas_provider.dart';
-import 'package:hommie/features/home/domain/entities/home_view.dart';
-import 'package:hommie/features/home/infrastructure/providers/area_repository_provider.dart';
-import 'package:hommie/features/home/infrastructure/providers/home_view_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_page_controller.g.dart';
@@ -27,69 +25,80 @@ final class HomeAreaTab extends HomeTab {
 
 class HomePageState {
   final bool isEditing;
-  final bool isReordering;
-  final HomeViewConf? homeView;
   final String serverName;
   final List<HomeTab> tabs;
+  final List<AreaSection> sections; // all areas + trailing unassigned
+  final bool isSyncing; // first entity sync not finished and nothing cached yet
 
   const HomePageState({
     this.isEditing = false,
-    this.isReordering = false,
-    this.homeView,
     this.serverName = '',
     this.tabs = const [HomeSummaryTab()],
+    this.sections = const [],
+    this.isSyncing = false,
   });
 
   HomePageState copyWith({
     bool? isEditing,
-    bool? isReordering,
-    HomeViewConf? homeView,
     String? serverName,
     List<HomeTab>? tabs,
+    List<AreaSection>? sections,
+    bool? isSyncing,
   }) => HomePageState(
     isEditing: isEditing ?? this.isEditing,
-    isReordering: isReordering ?? this.isReordering,
-    homeView: homeView ?? this.homeView,
     serverName: serverName ?? this.serverName,
     tabs: tabs ?? this.tabs,
+    sections: sections ?? this.sections,
+    isSyncing: isSyncing ?? this.isSyncing,
   );
+
+  /// Sections for a specific area tab (area sections only, never unassigned).
+  List<AreaSection> sectionsForArea(String areaId) =>
+      sections.where((s) => s.areaId == areaId).toList();
 }
 
-@Riverpod(dependencies: [serverScopeServer, cachedAreas, homeViewRepository])
+@Riverpod(
+  dependencies: [
+    serverScopeServer,
+    cachedAreas,
+    cachedEntities,
+    AreaRegistrySyncController,
+    EntityRegistrySyncController,
+  ],
+)
 class HomePageController extends _$HomePageController {
+  bool _isEditing = false;
+
   @override
-  Future<HomePageState> build() async {
+  HomePageState build() {
+    // Keep both caches in sync while connected.
+    ref.watch(areaRegistrySyncControllerProvider);
+    final syncStatus = ref.watch(entityRegistrySyncControllerProvider);
+
     final server = ref.watch(serverScopeServerProvider);
-    final serverId = server.id!;
+    final areas = ref.watch(cachedAreasProvider).asData?.value ?? const <Area>[];
+    final entities =
+        ref.watch(cachedEntitiesProvider).asData?.value ?? const [];
 
-    // Keep tabs + home view in sync with cached areas.
-    ref.listen<AsyncValue<List<Area>>>(cachedAreasProvider, (previous, next) {
-      next.whenData((areas) {
-        unawaited(_refreshFromAreas(areas));
-      });
-    });
-
-    final repo = await ref.watch(homeViewRepositoryProvider.future);
-    final homeView = await repo.get();
-
-    // Build tabs from cached local areas so Home can render offline.
-    final cachedAreas = await ref
-        .watch(areaRepositoryProvider)
-        .getByServer(serverId);
-    final tabs = _tabsFromAreas(cachedAreas);
+    final sections = groupEntitiesByArea(areas, entities);
+    final isSyncing =
+        entities.isEmpty &&
+        (syncStatus == EntitySyncStatus.syncing ||
+            syncStatus == EntitySyncStatus.notStarted);
 
     return HomePageState(
+      isEditing: _isEditing,
       serverName: server.name,
-      homeView: homeView,
-      tabs: tabs,
+      tabs: _tabsFromAreas(areas),
+      sections: sections,
+      isSyncing: isSyncing,
     );
   }
 
   static List<HomeTab> _tabsFromAreas(List<Area> areas) {
     if (areas.isEmpty) {
-      return const <HomeTab>[HomeSummaryTab()];
+      return const [HomeSummaryTab()];
     }
-
     final sorted = [...areas]..sort((a, b) => a.name.compareTo(b.name));
     return [
       const HomeSummaryTab(),
@@ -97,32 +106,8 @@ class HomePageController extends _$HomePageController {
     ];
   }
 
-  Future<void> _refreshFromAreas(List<Area> areas) async {
-    final current = state.asData?.value;
-    if (current == null) {
-      return;
-    }
-
-    // Refresh home view too so area names stay in sync.
-    final repo = await ref.read(homeViewRepositoryProvider.future);
-    final homeView = await repo.get();
-
-    state = AsyncData(
-      current.copyWith(tabs: _tabsFromAreas(areas), homeView: homeView),
-    );
-  }
-
-  Future<void> toggleEditMode() async {
-    final previousState = await future;
-    state = AsyncData(
-      previousState.copyWith(isEditing: !previousState.isEditing),
-    );
-  }
-
-  Future<void> toggleReorderMode() async {
-    final previousState = await future;
-    state = AsyncData(
-      previousState.copyWith(isReordering: !previousState.isReordering),
-    );
+  void toggleEditMode() {
+    _isEditing = !_isEditing;
+    state = state.copyWith(isEditing: _isEditing);
   }
 }
