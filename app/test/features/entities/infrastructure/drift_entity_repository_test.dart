@@ -48,4 +48,19 @@ void main() {
     await repo.syncAll(serverId: serverId, entities: [light('light.a')]);
     expect(await future, hasLength(1));
   });
+
+  test('syncAll is scoped per server and does not touch other servers', () async {
+    final otherServerId = await db.into(db.serverEntities).insert(
+      ServerEntitiesCompanion.insert(name: 'Other', url: 'http://o:8123'),
+    );
+    await repo.syncAll(serverId: serverId, entities: [light('light.a')]);
+    await repo.syncAll(serverId: otherServerId, entities: [light('light.b')]);
+
+    // Re-sync server 1 to an empty set: server 2's entity must survive.
+    await repo.syncAll(serverId: serverId, entities: []);
+
+    expect(await repo.getByServer(serverId), isEmpty);
+    final other = await repo.getByServer(otherServerId);
+    expect(other.single.entityId, 'light.b');
+  });
 }
