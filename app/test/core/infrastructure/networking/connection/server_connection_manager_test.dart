@@ -185,6 +185,10 @@ void main() {
     manager.disconnect(1);
     factory.emit(1, const Authenticated());
 
+    expect(states, [HAServerConnectionState.connected]);
+
+    await Future<void>.delayed(Duration.zero);
+
     expect(states, [
       HAServerConnectionState.connected,
       HAServerConnectionState.unknown,
@@ -270,6 +274,66 @@ void main() {
       await staleOpenExpectation;
 
       expect(states, isNot(contains(HAServerConnectionState.disconnected)));
+    },
+  );
+
+  test('clearing active server defers connection state reset', () async {
+    final factory = _FakeFactory();
+    final states = <HAServerConnectionState>[];
+    final manager = ServerConnectionManagerImpl(
+      factory: factory,
+      setState: states.add,
+      resetState: () => states.add(HAServerConnectionState.unknown),
+    );
+
+    manager.setActiveServer(1);
+
+    manager.setActiveServer(null);
+
+    expect(states, isEmpty);
+
+    await Future<void>.delayed(Duration.zero);
+
+    expect(states, [HAServerConnectionState.unknown]);
+  });
+
+  test('stale deferred reset is ignored after active server changes', () async {
+    final factory = _FakeFactory();
+    final states = <HAServerConnectionState>[];
+    final manager = ServerConnectionManagerImpl(
+      factory: factory,
+      setState: states.add,
+      resetState: () => states.add(HAServerConnectionState.unknown),
+    );
+
+    manager.setActiveServer(1);
+    manager.setActiveServer(null);
+    manager.setActiveServer(2);
+
+    await Future<void>.delayed(Duration.zero);
+
+    expect(states, isEmpty);
+  });
+
+  test(
+    'stale deferred reset is ignored if same active server id returns',
+    () async {
+      final factory = _FakeFactory();
+      final states = <HAServerConnectionState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setState: states.add,
+        resetState: () => states.add(HAServerConnectionState.unknown),
+      );
+
+      manager.setActiveServer(1);
+      manager.disconnect(1);
+      manager.setActiveServer(2);
+      manager.setActiveServer(1);
+
+      await Future<void>.delayed(Duration.zero);
+
+      expect(states, isEmpty);
     },
   );
 

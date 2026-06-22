@@ -206,7 +206,13 @@ class HAConnection implements IHAConnection {
 
         // Only unsubscribe on the server if the subscription was established.
         if (isActive && _socket != null && _socket!.isClosed != true) {
-          await sendMessage(UnsubscribeEventsMessage(subscriptionID: id));
+          try {
+            await sendMessage(UnsubscribeEventsMessage(subscriptionID: id));
+          } catch (error) {
+            _logger.debug(
+              'Ignoring unsubscribe failure during cleanup: $error',
+            );
+          }
         }
       },
       logger: _logger,

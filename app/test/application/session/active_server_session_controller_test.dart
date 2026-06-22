@@ -213,6 +213,34 @@ void main() {
     expect(manager.opens, 0);
   });
 
+  test(
+    'does not mutate connection state provider while building no-server session',
+    () async {
+      final container = ProviderContainer(
+        overrides: [
+          serverManagerProvider.overrideWithValue(_FakeServerManager(null)),
+          authStateProvider.overrideWith(
+            (_) => const AuthState.unauthenticated(),
+          ),
+          authControllerProvider.overrideWithValue(_FakeAuthController()),
+        ],
+      );
+      addTearDown(container.dispose);
+      final connectionStateSubscription = container.listen(
+        serverConnectionStateProvider,
+        (_, _) {},
+      );
+      addTearDown(connectionStateSubscription.close);
+
+      final state = await waitForSession(
+        container,
+        (state) => state is NoActiveServerSession,
+      );
+
+      expect(state, isA<NoActiveServerSession>());
+    },
+  );
+
   test('opens active connection for authenticated active server', () async {
     final manager = _FakeConnectionManager();
     final container = makeContainer(

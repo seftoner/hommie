@@ -59,6 +59,7 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
   final Map<int, int> _versions = {};
 
   int? _activeServerId;
+  int _resetGeneration = 0;
   bool _isDisposed = false;
 
   @override
@@ -68,9 +69,10 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
     }
 
     _activeServerId = serverId;
+    _resetGeneration += 1;
 
     if (serverId == null && !_isDisposed) {
-      _resetState();
+      _scheduleResetState(expectedActiveServerId: null);
     }
 
     final staleServerIds = {..._resources.keys, ..._inFlight.keys};
@@ -170,7 +172,7 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
     _removeResource(serverId);
 
     if (_activeServerId == serverId && !_isDisposed) {
-      _resetState();
+      _scheduleResetState(expectedActiveServerId: serverId);
     }
   }
 
@@ -249,6 +251,19 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
         }
         break;
     }
+  }
+
+  void _scheduleResetState({required int? expectedActiveServerId}) {
+    final generation = ++_resetGeneration;
+    scheduleMicrotask(() {
+      if (_isDisposed ||
+          _resetGeneration != generation ||
+          _activeServerId != expectedActiveServerId) {
+        return;
+      }
+
+      _resetState();
+    });
   }
 
   bool _isAuthOrTokenError(Object error) {

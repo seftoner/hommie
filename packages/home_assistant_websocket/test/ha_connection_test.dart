@@ -284,6 +284,48 @@ void main() {
     });
 
     test(
+      'subscription dispose completes when socket closes before unsubscribe ack',
+      () async {
+        // Arrange
+        await connection.connect();
+
+        final subscription = HACommands.subscribeEntities(connection);
+
+        await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
+        const subscriptionId = 2;
+
+        fakeSocket.addIncoming({
+          'id': subscriptionId,
+          'type': 'result',
+          'success': true,
+          'result': null,
+        });
+
+        await Future<void>.delayed(Duration.zero);
+
+        // Act
+        final disposeFuture = subscription.dispose();
+
+        await fakeSocket.nextSentWhere(
+          (m) =>
+              m is UnsubscribeEventsMessage &&
+              (m).subscriptionID == subscriptionId,
+        );
+
+        await fakeSocket.closeFromServer(
+          closeCode: 1001,
+          reason: 'Server switch',
+          type: DisconnectionType.normal,
+        );
+
+        await disposeFuture;
+
+        // Assert
+        expect(subscription.isDisposed, isTrue);
+      },
+    );
+
+    test(
       'closing connection should dispose all active subscriptions',
       () async {
         // Arrange
