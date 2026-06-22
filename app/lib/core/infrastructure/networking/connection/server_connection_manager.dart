@@ -1,13 +1,11 @@
 import 'dart:async';
 
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/core/infrastructure/logging/ha_logger_adapter.dart';
-import 'package:hommie/core/infrastructure/logging/logger.dart';
+import 'package:hommie/core/infrastructure/networking/connection/ha_connection_factory.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
+import 'package:hommie/core/infrastructure/networking/connection/managed_ha_connection.dart';
 import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
 import 'package:hommie/core/infrastructure/networking/providers/server_config_provider.dart';
-import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
-import 'package:hommie/features/auth/infrastructure/providers/server_auth_token_provider.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,219 +13,252 @@ part 'server_connection_manager.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [serverConfig])
 IServerConnectionManager serverConnectionManager(Ref ref) {
-  final manager = _ServerConnectionManager(ref);
+  final stateNotifier = ref.read(serverConnectionStateProvider.notifier);
+  final manager = ServerConnectionManagerImpl(
+    factory: HAConnectionFactory(ref),
+    setState: (state) {
+      switch (state) {
+        case HAServerConnectionState.unknown:
+          stateNotifier.reset();
+        case HAServerConnectionState.connected:
+          stateNotifier.setConnected();
+        case HAServerConnectionState.disconnected:
+          stateNotifier.setDisconnected();
+        case HAServerConnectionState.connecting:
+          stateNotifier.setConnecting();
+        case HAServerConnectionState.reconnecting:
+          stateNotifier.setReconnecting();
+        case HAServerConnectionState.authFailure:
+          stateNotifier.setAuthFailure();
+      }
+    },
+    resetState: stateNotifier.reset,
+  );
 
-  ref.onDispose(() {
-    manager._disconnectAll();
-  });
+  ref.onDispose(manager.dispose);
 
   return manager;
 }
 
 @Dependencies([serverConfig])
-class _ServerConnectionManager implements IServerConnectionManager {
-  final _orchestrators = <int, ConnectionOrchestrator>{};
+final class ServerConnectionManagerImpl implements IServerConnectionManager {
+  ServerConnectionManagerImpl({
+    required IHAConnectionFactory factory,
+    required void Function(HAServerConnectionState state) setState,
+    required void Function() resetState,
+  }) : _factory = factory,
+       _setState = setState,
+       _resetState = resetState;
+
+  final IHAConnectionFactory _factory;
+  final void Function(HAServerConnectionState state) _setState;
+  final void Function() _resetState;
+
+  final Map<int, _ConnectionResource> _resources = {};
+  final Map<int, Future<IHAConnection>> _inFlight = {};
+  final Map<int, int> _versions = {};
+
   int? _activeServerId;
   bool _isDisposed = false;
-  final Ref _ref;
-
-  _ServerConnectionManager(this._ref);
 
   @override
-  void setActiveServer(int? newActiveServerId) {
-    if (_activeServerId == newActiveServerId) {
-      return; // No change
+  void setActiveServer(int? serverId) {
+    if (_activeServerId == serverId) {
+      return;
     }
 
-    final previousActiveServerId = _activeServerId;
-    _activeServerId = newActiveServerId;
+    _activeServerId = serverId;
 
-    logger.i(
-      'Active server changed from $previousActiveServerId to $newActiveServerId',
-    );
-
-    // If no active server, reset connection state
-    if (newActiveServerId == null && !_isDisposed) {
-      logger.i('No active server - resetting connection state');
-      _ref.read(serverConnectionStateProvider.notifier).reset();
+    if (serverId == null && !_isDisposed) {
+      _resetState();
     }
 
-    // Disconnect all inactive servers
-    for (final serverId in _orchestrators.keys.toList()) {
-      if (serverId != newActiveServerId) {
-        logger.i('Disconnecting inactive server: $serverId');
-        disconnect(serverId);
+    final staleServerIds = {..._resources.keys, ..._inFlight.keys};
+
+    for (final existingServerId in staleServerIds) {
+      if (existingServerId != serverId) {
+        disconnect(existingServerId);
+      }
+    }
+  }
+
+  @override
+  Future<IHAConnection> getConnection(int serverId) {
+    if (_isDisposed) {
+      return Future.error(StateError('ServerConnectionManager is disposed'));
+    }
+
+    final resource = _resources[serverId];
+    if (resource != null) {
+      return Future.value(resource.connection);
+    }
+
+    final inFlight = _inFlight[serverId];
+    if (inFlight != null) {
+      return inFlight;
+    }
+
+    final version = _versionOf(serverId);
+    final future = _open(serverId, version);
+    _inFlight[serverId] = future;
+    return future;
+  }
+
+  Future<IHAConnection> _open(int serverId, int version) async {
+    try {
+      final managed = await _factory.open(serverId);
+
+      if (_isDisposed || version != _versionOf(serverId)) {
+        await managed.close();
+        throw StateError('Connection open was cancelled');
+      }
+
+      late final StreamSubscription<HASocketState> subscription;
+      subscription = managed.states.listen((state) {
+        _handleConnectionState(serverId, state, subscription);
+      });
+
+      final resource = _ConnectionResource(
+        managed: managed,
+        subscription: subscription,
+      );
+      _resources[serverId] = resource;
+
+      return managed.connection;
+    } catch (error) {
+      if (_activeServerId == serverId && !_isDisposed) {
+        if (_isAuthOrTokenError(error)) {
+          _setState(HAServerConnectionState.authFailure);
+        } else {
+          _setState(HAServerConnectionState.disconnected);
+        }
+      }
+
+      rethrow;
+    } finally {
+      if (version == _versionOf(serverId)) {
+        _inFlight.remove(serverId);
       }
     }
   }
 
   @override
   Future<void> reconnect(int serverId) async {
-    logger.i('Starting reconnection for server $serverId');
-
-    // Disconnect existing connection
     disconnect(serverId);
-
-    try {
-      // Create new orchestrator and connect
-      await _createNewOrchestrator(serverId);
-      logger.i('Successfully reconnected to server $serverId');
-    } catch (e) {
-      logger.e('Reconnection failed for server $serverId: $e');
-    }
-  }
-
-  /// Gets a persistent connection for the specified server.
-  /// Each connection is managed by its own ConnectionOrchestrator which handles:
-  /// - Connection lifecycle (connect/disconnect/reconnect)
-  /// - Heartbeat monitoring and health checks
-  /// - Automatic reconnection with exponential backoff
-  /// - State management and event handling
-  @override
-  Future<HAConnection> getConnection(int serverId) async {
-    if (_orchestrators.containsKey(serverId)) {
-      final connection = _orchestrators[serverId]!.connection;
-      if (connection != null) {
-        return connection;
-      }
-    }
-    return _createNewOrchestrator(serverId);
+    await getConnection(serverId);
   }
 
   @override
   void disconnect(int serverId) {
-    logger.i('Disconnecting server $serverId');
+    _bumpVersion(serverId);
+    _inFlight.remove(serverId);
+    _removeResource(serverId);
 
-    // Close orchestrator (this will handle heartbeat cleanup internally)
-    _orchestrators[serverId]?.close();
-    _orchestrators.remove(serverId);
-
-    // Update global state only if this was the active server
     if (_activeServerId == serverId && !_isDisposed) {
-      _ref.read(serverConnectionStateProvider.notifier).reset();
+      _resetState();
     }
   }
 
   void dispose() {
-    _isDisposed = true;
-    _disconnectAll();
-  }
-
-  void _disconnectAll() {
-    for (final serverId in _orchestrators.keys.toList()) {
-      disconnect(serverId);
-    }
-  }
-
-  Future<HAConnection> _createNewOrchestrator(int serverId) async {
-    if (_isDisposed) {
-      throw Exception('ServerConnectionManager is disposed');
-    }
-
-    final server = await _ref.read(serverConfigProvider(serverId).future);
-    final serverUrl = Uri.parse(server.url);
-
-    // ignore: provider_dependencies
-    Future<HAAuthToken> fetchToken() async {
-      try {
-        return await _ref.read(serverAuthTokenProvider(serverId).future);
-      } on AuthFailure catch (failure) {
-        throw ConnectionError('Failed to resolve token: $failure');
-      }
-    }
-
-    final connOption = HAConnectionOption.withLogger(
-      serverUrl: serverUrl,
-      fetchAuthToken: fetchToken,
-      customLogger: HaLoggerAdapter(logger),
-    );
-
-    // Create orchestrator to manage the connection
-    final orchestrator = ConnectionOrchestrator(connOption);
-    _orchestrators[serverId] = orchestrator;
-
-    // Listen to connection state changes BEFORE starting connection
-    orchestrator.state.listen((state) {
-      _handleConnectionState(serverId, state);
-    });
-
-    try {
-      // Start the connection through orchestrator
-      await orchestrator.connect();
-
-      // Return the connection instance
-      final connection = orchestrator.connection;
-      if (connection == null) {
-        throw Exception('Connection failed to establish');
-      }
-
-      logger.i('Successfully created connection for server $serverId');
-      return connection;
-    } catch (e) {
-      logger.e('Connection failed for server $serverId: $e');
-
-      // Clean up orchestrator on failure
-      _orchestrators.remove(serverId);
-
-      // Update state only for active server
-      if (_activeServerId == serverId && !_isDisposed) {
-        // Determine the appropriate state based on error type
-        if (e.toString().contains('auth') || e.toString().contains('token')) {
-          _ref.read(serverConnectionStateProvider.notifier).setAuthFailure();
-        } else {
-          _ref.read(serverConnectionStateProvider.notifier).setDisconnected();
-        }
-      }
-
-      rethrow;
-    }
-  }
-
-  void _handleConnectionState(int serverId, HASocketState state) {
     if (_isDisposed) {
       return;
     }
 
-    logger.d(
-      'ServerConnectionManager received state for server $serverId: $state',
-    );
+    _isDisposed = true;
 
-    // Only update global connection state for the active server
-    final shouldUpdateGlobalState = _activeServerId == serverId;
-
-    if (shouldUpdateGlobalState) {
-      logger.i(
-        'Updating global connection state to: $state (active server: $serverId)',
-      );
+    for (final serverId in _resources.keys.toList()) {
+      _bumpVersion(serverId);
+      _removeResource(serverId);
     }
 
+    for (final serverId in _inFlight.keys.toList()) {
+      _bumpVersion(serverId);
+    }
+    _inFlight.clear();
+  }
+
+  void _removeResource(int serverId) {
+    final resource = _resources.remove(serverId);
+    if (resource != null) {
+      unawaited(resource.dispose());
+    }
+  }
+
+  void _handleConnectionState(
+    int serverId,
+    HASocketState state,
+    StreamSubscription<HASocketState> subscription,
+  ) {
+    if (_isDisposed) {
+      return;
+    }
+
+    final resource = _resources[serverId];
+    if (resource == null || !identical(resource.subscription, subscription)) {
+      return;
+    }
+
+    final shouldUpdateGlobalState = _activeServerId == serverId;
     switch (state) {
       case Disconnected(type: DisconnectionType.authFailure):
         if (shouldUpdateGlobalState) {
-          _ref.read(serverConnectionStateProvider.notifier).setAuthFailure();
+          _setState(HAServerConnectionState.authFailure);
         }
-        disconnect(serverId);
+        _removeResource(serverId);
         break;
       case Connecting():
         if (shouldUpdateGlobalState) {
-          _ref.read(serverConnectionStateProvider.notifier).setConnecting();
+          _setState(HAServerConnectionState.connecting);
         }
         break;
       case Authenticated():
         if (shouldUpdateGlobalState) {
-          _ref.read(serverConnectionStateProvider.notifier).setConnected();
+          _setState(HAServerConnectionState.connected);
         }
         break;
       case Reconnecting():
         if (shouldUpdateGlobalState) {
-          _ref.read(serverConnectionStateProvider.notifier).setReconnecting();
+          _setState(HAServerConnectionState.reconnecting);
         }
         break;
       case Disconnected():
         if (shouldUpdateGlobalState) {
-          _ref.read(serverConnectionStateProvider.notifier).setDisconnected();
+          _setState(HAServerConnectionState.disconnected);
         }
         break;
     }
+  }
+
+  bool _isAuthOrTokenError(Object error) {
+    if (error is AuthenticationError) {
+      return true;
+    }
+
+    final message = error.toString().toLowerCase();
+    return message.contains('auth') || message.contains('token');
+  }
+
+  int _versionOf(int serverId) => _versions[serverId] ?? 0;
+
+  void _bumpVersion(int serverId) {
+    _versions[serverId] = _versionOf(serverId) + 1;
+  }
+}
+
+final class _ConnectionResource {
+  const _ConnectionResource({
+    required this.managed,
+    required this.subscription,
+  });
+
+  final ManagedHAConnection managed;
+  final StreamSubscription<HASocketState> subscription;
+
+  IHAConnection get connection => managed.connection;
+
+  Future<void> dispose() async {
+    final closeFuture = managed.close();
+    await subscription.cancel();
+    await closeFuture;
   }
 }

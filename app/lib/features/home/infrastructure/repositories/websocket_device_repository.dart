@@ -10,7 +10,7 @@ import 'package:hommie/features/home/domain/repositories/i_device_repository.dar
 /// a placeholder that can be extended when device support is added.
 class WebSocketDeviceRepository implements IDeviceRepository {
   // ignore: unused_field
-  final HAConnection _connection;
+  final IHAConnection _connection;
 
   WebSocketDeviceRepository(this._connection);
 

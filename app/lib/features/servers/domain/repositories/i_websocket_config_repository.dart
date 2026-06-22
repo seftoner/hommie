@@ -9,7 +9,7 @@ abstract interface class IWebSocketConfigRepository {
 }
 
 class WebSocketConfigRepository implements IWebSocketConfigRepository {
-  final HAConnection _connection;
+  final IHAConnection _connection;
 
   WebSocketConfigRepository(this._connection);
 

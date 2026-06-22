@@ -2,7 +2,7 @@ import 'package:home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/features/servers/domain/repositories/i_websocket_repository.dart';
 
 class WebSocketRepository implements IWebSocketRepository {
-  final HAConnection _connection;
+  final IHAConnection _connection;
 
   WebSocketRepository(this._connection);
 
