@@ -75,7 +75,7 @@ final class ServerSyncCoordinatorProvider
 }
 
 String _$serverSyncCoordinatorHash() =>
-    r'f56b510fc502aa2a0c85fe2642799cb013d6ea57';
+    r'4cca575c38398bec9db1809ebc290f62f6e05338';
 
 abstract class _$ServerSyncCoordinator extends $Notifier<ServerSyncState> {
   ServerSyncState build();
