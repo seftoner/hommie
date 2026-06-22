@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hommie/features/entities/application/cached_entities_provider.dart';
+import 'package:hommie/features/entities/application/entity_states_provider.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/presentation/widgets/light_card.dart';
 import 'package:hommie/features/home/application/home_page_controller.dart';
@@ -44,6 +45,7 @@ void main() {
       ProviderScope(
         overrides: [
           homePageControllerProvider.overrideWith(_StubHomeController.new),
+          entityStatesProvider.overrideWithValue(const {}),
         ],
         child: const MaterialApp(home: HomePage()),
       ),
