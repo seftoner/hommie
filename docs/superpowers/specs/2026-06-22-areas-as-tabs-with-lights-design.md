@@ -1,4 +1,4 @@
-# Areas-as-tabs with lights (v1) — Design
+# Areas-as-tabs with a generic entity foundation (lights first) — Design
 
 Date: 2026-06-22
 Branch: `areas`
@@ -9,161 +9,185 @@ Status: Draft for review
 The Home screen shows **"No home view configured"** instead of areas. Root cause:
 the screen body renders from `HomePageState.homeView` (`HomeViewConf`), and
 `homeView` is **always null** because `DriftHomeViewRepository.save()` is never
-called anywhere — `get()` returns null, so `_buildHomeViewSlivers`
-(`home_page.dart`) short-circuits to the placeholder. Separately, no device/entity
-data is ever synced from Home Assistant, so even a populated home view would have
-nothing to show.
+called — `get()` returns null, so `_buildHomeViewSlivers` (`home_page.dart`)
+short-circuits to the placeholder. Separately, no entity/device data is ever synced
+from Home Assistant, so even a populated home view would have nothing to show.
 
 The area *registry* already syncs into Drift (`AreaRegistrySyncController`), but the
-screen never uses it for content — only, conditionally, for tab labels.
+screen never uses it for content.
 
-## Goal & scope (v1)
+## Goal
 
-- Render each HA **area** as a tab.
-- Inside an area tab: that area's **lights** (`light.*` entities) as on/off cards
-  with a working toggle.
-- A **Summary** tab: all areas stacked (each a `RoomGroup` header + its light grid),
-  followed by a trailing group of lights that have no area.
-- Cache lights in Drift for an offline list; overlay live on/off state.
+Build a **generic, domain-agnostic entity foundation** so the app can support many
+device types and entity operations over time, and render the first concrete domain —
+**lights** — on top of it:
+
+- Each HA **area** is a tab.
+- Inside a tab: the area's entities, rendered by per-domain widgets. **v1 registers
+  one domain handler: `light`** (on/off card + toggle). Other domains are cached but
+  not yet rendered.
+- A **Summary** tab: all areas stacked (each a `RoomGroup` header + its entities),
+  followed by a trailing group of entities that have no area.
+
+The design principle: **adding a new device type later = register a domain handler +
+a widget.** Sync, state, area-grouping, and the operation path never change again.
 
 ### Out of scope (later)
 
-- Brightness/color and non-light domains.
-- The full device ↔ entity hierarchy (richer per-device widgets).
-- User customization: reorder, tile sizes, edit mode, hiding/reassigning lights.
-  The `homeView*` tables and repository remain in place, untouched, for this future
-  feature.
+- Domains beyond `light` (switch, cover, climate, …) — just unregistered handlers.
+- The physical **device** layer (a `devices` table + device-grouping above entities).
+  We cache each entity's `deviceId` now so this slots in cleanly later.
+- User customization: reorder, tile sizes, edit mode, hiding/reassigning. The
+  `homeView*` and `DeviceEntities` tables stay in place, dormant, for this future work.
 
 ## Evaluation of the existing cache approach
 
-The current pattern — persist the HA registry in Drift and keep it live via a
-registry-updated subscription — is sound and worth extending. Issues found and
-addressed by this design:
+Persisting the HA registry in Drift and keeping it live via a registry-updated
+subscription is sound and worth generalizing. Issues found and addressed here:
 
-1. **Tabs built two ways.** `HomePageController.build()` does a one-shot
-   `getByServer()` *and* a `ref.listen(cachedAreasProvider, _refreshFromAreas)`. Two
-   paths that must agree. → Derive tabs from a single stream source.
-2. **Sync errors vanish silently.** `AreaRegistrySyncController._sync()` swallows
-   `getAreas()` failures. A failed first sync produces an empty screen with no signal.
-   → Surface a sync status.
+1. **Tabs built two ways** in `HomePageController.build()` (one-shot `getByServer()`
+   + a `ref.listen`). → Derive tabs from a single stream source.
+2. **Sync errors vanish silently** (`AreaRegistrySyncController._sync()` swallows
+   failures), producing an empty screen with no signal. → Surface a sync status.
 3. **Empty vs. not-yet-synced is indistinguishable.** → Distinguish loading from
-   synced-but-empty in the UI.
+   synced-but-empty.
 4. **Render coupled to the never-populated `homeView`.** → Decouple; render from
-   cached areas + cached lights + live state.
-5. **`server.id!` null-assert** (`home_page_controller.dart`) can crash. → Handle
-   gracefully.
-6. **State subscription can outlive its connection** on reconnect. → Live-state
-   provider depends on the scoped connection and re-subscribes when it changes.
+   cached areas + cached entities + live state.
+5. **`server.id!` null-assert** can crash. → Handle gracefully.
+6. **State subscription can outlive its connection** on reconnect. → State provider
+   depends on the scoped connection and re-subscribes when it changes.
 
-## Architecture & data flow
+## Architecture — generic entity layer
 
 ```
-HA WS ─┬─ area_registry ──► AreaRegistrySyncController ──► areaEntities (Drift)        [EXISTS]
-       ├─ entity + device registry ──► LightsSyncController ──► deviceEntities +        [NEW]
-       │                                                        deviceAreaConfigs (Drift)
-       └─ subscribeEntities ──► lightStatesProvider (in-memory Map<entityId,bool>)      [NEW]
+HA WS ─┬─ area_registry ────────────► AreaRegistrySyncController ──► areaEntities (Drift)   [EXISTS]
+       ├─ entity + device registry ─► EntityRegistrySyncController ──► entities (Drift)      [NEW]
+       └─ subscribeEntities ────────► entityStatesProvider                                   [NEW]
+                                       (in-memory Map<entityId, EntityState>)
 
-areaEntities (watch) ───────────────► tabs
-deviceEntities ⋈ deviceAreaConfigs (watch) + lightStates ─► per-area light VMs ─► HomePage
-card toggle ─► LightToggleController ─► callService(light.toggle)                       [NEW]
+areaEntities (watch) ──────────────────────────────► tabs
+entities (watch) grouped by area + entityStates ───► per-area entity VMs ─► HomePage
+   each entity rendered via EntityDomainHandler for its domain (v1: light only)
+card operation ─► EntityServiceController.call(entityId, service, data) ─► callService(...)   [NEW]
 ```
 
-Rendering is driven by **Drift watches + the live state map**, never by `homeView`.
+Five generic pieces; `light` is the only concrete plug-in in v1.
 
-## Persistence (reuse existing tables — no migration)
+### 1. Entity registry cache (generic) — `EntityRegistrySyncController`
 
-`DeviceEntities` is already entity-level (`haId = "light.living_room_lamp"`,
-`type = "light"`, `serverId`); `DeviceAreaConfigs` already maps device↔area.
+Mirrors `AreaRegistrySyncController`; domain-agnostic.
 
-- One `deviceEntities` row per light; one `deviceAreaConfigs` row mapping it to its
-  resolved area (lights with no area get no mapping row).
-- Extend `IDeviceRepository` + `DriftDeviceRepository`:
-  - `Future<void> syncAll({required int serverId, required List<Device> lights})` —
-    transactional diff (delete removed, upsert current, maintain area mapping),
-    mirroring `DriftAreaRepository.syncAll`.
-  - `Stream<List<Device>> watchByServer(int serverId)` (and/or `watchByArea`) for
-    reactive rendering.
-- Live on/off state is **not** persisted (volatile).
-
-## Lights sync — `LightsSyncController` (new)
-
-Mirrors `AreaRegistrySyncController`:
-
-- Gated on `serverConnectionStateProvider == HAServerConnectionState.connected`.
-- Subscribes to **`entity_registry_updated`** and **`device_registry_updated`**
-  (either triggers a re-sync); runs an initial sync on first connect; stops on
-  disconnect.
+- Gated on `serverConnectionStateProvider == connected`; subscribes to
+  **`entity_registry_updated`** and **`device_registry_updated`** (either triggers a
+  re-sync); initial sync on connect; stops on disconnect; surfaces a sync status
+  (no silent swallow).
 - Sync logic:
-  1. Fetch entity registry list + device registry list (two new request messages +
-     repository methods in infrastructure, paralleling `AreasMessage` /
-     `AreasRepository`).
-  2. Keep `light.*` entities.
-  3. Resolve area: `entity.areaId ?? device(entity.deviceId).areaId`.
-  4. Build `Device` list (id = entity_id, name = entity name → originalName →
-     friendly name fallback, type = "light", areaId = resolved or empty).
-  5. `deviceRepository.syncAll(serverId, lights)`.
-- Surfaces failures via a sync-status value (not silently swallowed).
+  1. Fetch entity registry list + device registry list (new request messages +
+     repository, paralleling `AreasMessage` / `AreasRepository`).
+  2. Keep **all non-disabled, non-hidden** entities (every domain).
+  3. Resolve `area = entity.areaId ?? device(entity.deviceId).areaId`.
+  4. Map to `HaEntity { entityId, domain, name, deviceId?, areaHaId? }`
+     (`domain` = entity_id prefix; `name` = entity name → originalName → friendly).
+  5. `entityRepository.syncAll(serverId, entities)` (transactional diff:
+     delete removed, upsert current).
 
-## Live state & toggle
+### 2. Entity state store (generic) — `entityStatesProvider`
 
-- `lightStatesProvider` — server-scoped (depends on `serverScopeConnection`):
-  `HACommands.subscribeEntities`, exposes `Map<entityId, bool isOn>` where
-  `isOn = state == 'on'`. Re-subscribes when the scoped connection changes.
-- `LightToggleController` — `HACommands.callService(domain:'light',
-  service:'toggle', target:{entity_id})`; optimistic flip with revert on failure;
-  truth reconciled from the subscription.
-- `DeviceWidget` receives real `isOn` + `onChanged` (currently hardcoded
-  `value: true` with empty callbacks). When state is unknown/offline → "unavailable",
-  toggle disabled.
+Server-scoped (depends on `serverScopeConnection`). `HACommands.subscribeEntities`
+→ `Map<entityId, EntityState { state, attributes }>`. Re-subscribes when the scoped
+connection changes. Live-only; not persisted.
 
-## Rendering changes
+### 3. Entity operations (generic) — `EntityServiceController`
 
-- `HomePageController`:
-  - Derive `tabs` from a single source — `watch(cachedAreasProvider)` — dropping the
-    dual one-shot read + listener.
-  - Expose per-area light view models from the device watch + the live state map.
-  - Remove the `server.id!` crash (handle missing id gracefully).
-- `home_page.dart`:
-  - Delete the `homeView == null → "No home view configured"` branch.
-  - **Summary tab**: every cached area as `RoomGroup` + its light grid (empty areas
-    show a "No lights here yet" empty state), then a trailing group of area-less
-    lights.
-  - **Area tab**: that area's lights (or empty state).
-  - Loading (first sync in progress) → spinner; synced-but-empty → friendly empty
-    state.
+`call(entityId, service, [data])` → `HACommands.callService(domain, service,
+target: entityId, serviceData: data)`. One path for every present and future
+operation. Optimistic where it makes sense (e.g. light toggle), reconciled by the
+state subscription.
+
+### 4. Domain capability registry (extensibility seam)
+
+`Map<String domain, EntityDomainHandler>` exposed via a provider.
+
+```
+abstract class EntityDomainHandler {
+  String get domain;                       // e.g. 'light'
+  Widget buildCard(HaEntity e, EntityState? s);  // delegates ops to EntityServiceController
+}
+```
+
+v1 registers only `LightDomainHandler` (`isOn = state == 'on'`; toggle →
+`EntityServiceController.call(e.entityId, 'toggle')`) rendering a `LightCard`.
+Adding a domain later = a new handler + widget; nothing else changes.
+
+### 5. Rendering (generic)
+
+- `HomePageController`: derive `tabs` from a single source — `watch(cachedAreas…)` —
+  and expose entities grouped by area (entity watch + state map). Remove the
+  `server.id!` crash.
+- `home_page.dart`: delete the `homeView == null → "No home view configured"`
+  branch. For each area: `RoomGroup` + a grid of its entities, where each entity is
+  rendered by its domain handler. **Entities whose domain has no registered handler
+  are skipped** (v1 → only lights appear). Empty areas show "No devices here yet".
+  Summary lists all areas + a trailing group of area-less entities. Loading → spinner;
+  synced-but-empty → friendly empty state.
+
+## Persistence — new generic `entities` table (no migration; app not in production)
+
+```
+Entities:
+  id        int autoIncrement PK
+  serverId  int  → ServerEntities(id) cascade
+  entityId  text                     // HA entity_id, e.g. "light.kitchen"
+  name      text
+  domain    text                     // "light", "switch", …
+  deviceId  text nullable            // HA device id (for the future device layer)
+  areaHaId  text nullable            // resolved area haId (denormalized; robust to area re-sync)
+  entityCategory text nullable       // for future render filtering
+  unique(serverId, entityId)
+```
+
+`areaHaId` is denormalized (matched against `areaEntities.haId`) so an area re-sync
+that deletes/recreates rows can't cascade-delete entities. New repository
+`IEntityRepository` + `DriftEntityRepository`:
+
+- `Future<void> syncAll({required int serverId, required List<HaEntity> entities})`
+  — transactional diff, mirroring `DriftAreaRepository.syncAll`.
+- `Stream<List<HaEntity>> watchByServer(int serverId)` for reactive rendering.
+
+The existing `DeviceEntities`/`DeviceAreaConfigs`/`homeView*` tables are left dormant
+for the future device + customization features.
 
 ## Edge cases
 
-- **Light with no area** → not in any area tab; appears in Summary's trailing group.
-- **Area with no lights** → tab shown with empty state.
-- **Offline** → cached lights still list; state map empty → cards "unavailable",
-  toggles disabled; tabs still render from the area cache.
-- **Reconnect / new connection object** → state provider re-subscribes; sync re-runs
-  on reconnect.
-- **First-ever launch, never synced** → loading state until first sync completes;
-  then areas/empty as appropriate.
-- **Sync failure** → surfaced via sync status; retried on next registry event /
-  reconnect.
+- **Entity with an unregistered domain** → cached, not rendered in v1.
+- **Entity with no area** → not in any area tab; appears in Summary's trailing group.
+- **Area with no (renderable) entities** → tab shown with empty state.
+- **Offline** → cached entity list still shows; state map empty → cards "unavailable",
+  operations disabled; tabs still render from the area cache.
+- **Reconnect / new connection object** → state provider re-subscribes; sync re-runs.
+- **First-ever launch** → loading until first sync completes.
+- **Sync failure** → surfaced via sync status; retried on next registry event / reconnect.
 
 ## Testing
 
-- `DriftDeviceRepository.syncAll`: add / remove / rename diff against in-memory Drift;
-  area mapping created/removed correctly.
+- `DriftEntityRepository.syncAll`: add / remove / rename diff against in-memory Drift.
 - Area resolution: `entity.areaId` wins over device; device fallback; no-area case.
-- `LightsSyncController`: sync-on-connect, stop-on-disconnect, re-sync on registry
-  event.
-- `LightToggleController`: optimistic update + revert on service-call failure.
-- Widget: tabs render from cached areas; lights render per area; empty-area empty
-  state; Summary shows area-less lights; toggle invokes the service.
+- `EntityRegistrySyncController`: sync-on-connect, stop-on-disconnect, re-sync on event;
+  disabled/hidden excluded.
+- `EntityServiceController`: builds correct `callService` args; light toggle optimistic
+  update + revert on failure.
+- Domain registry: light handler resolves; unknown domain skipped.
+- Widget: tabs from cached areas; lights render per area; empty-area empty state;
+  Summary shows area-less entities; toggle invokes the service.
 
 ## Phasing (for the implementation plan)
 
-1. Repository + persistence: `IDeviceRepository.syncAll` + `watch*`,
-   `DriftDeviceRepository` impl, tests.
+1. Domain + persistence: `HaEntity`/`EntityState`, `entities` Drift table,
+   `IEntityRepository` + `DriftEntityRepository` (`syncAll`, `watchByServer`) + tests.
 2. Registry fetch: entity + device registry messages/repositories; area resolution.
-3. `LightsSyncController` (+ sync status), wired into the Home screen like the area
-   sync controller.
-4. `lightStatesProvider` + `LightToggleController`.
-5. Rendering: `HomePageController` rework (single-source tabs + light VMs),
-   `home_page.dart` decoupled from `homeView`, real `DeviceWidget` state/toggle.
-6. Edge-case polish: loading/empty/offline/unavailable states.
+3. `EntityRegistrySyncController` (+ sync status), wired into Home like the area sync.
+4. `entityStatesProvider` + `EntityServiceController` (generic state + operations).
+5. Domain handler registry + `LightDomainHandler`/`LightCard`.
+6. Rendering: `HomePageController` rework (single-source tabs + entity-by-area VMs),
+   `home_page.dart` decoupled from `homeView`, entities rendered via handlers.
+7. Edge-case polish: loading/empty/offline/unavailable states.
