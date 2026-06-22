@@ -10,6 +10,32 @@
 
 ---
 
+## Branch Review Update - 2026-06-22
+
+Current branch: `codex/login-connection-architecture`.
+
+Implemented and verified:
+- Active connection acquisition is idempotent and cancellable through `HAConnectionOpening`.
+- `HAConnectionFactory` owns orchestrator construction and now tolerates authenticated connection state delivery lag after `connect()`.
+- `ActiveServerSessionController` owns the active long-lived websocket lifecycle and auth-revocation sign-out.
+- `ServerScopeHost` scopes the active server and only exposes a real websocket connection for online sessions.
+- `ServerSyncCoordinator` starts initial area/entity sync from `OnlineServerSession` and stops remote subscriptions when offline.
+- Feature controllers for Home, live entity states, entity services, hub status, and offline UI consume session/sync state instead of directly watching raw transport state.
+- `LoginFlowController` makes login rollback explicit and disconnects the temporary config connection before activating the server.
+- Unit/widget verification passed with `flutter analyze` and `flutter test`.
+
+Plan adjustments from review:
+- Auth and offline-banner integration scenarios must stay scoped to authentication and banner behavior. They should not assert specific entity cards.
+- Home sync readiness should be covered by Home controller/widget tests, and by a dedicated Home readiness integration scenario if end-to-end entity visibility is required.
+- This is still a dev build, so database schema changes should be regenerated directly instead of carrying Drift production migrations.
+- Keep the instant-auth crash regression in the plan: the factory must not fail login because the state-stream listener is behind the authenticated connection object.
+
+Open follow-up:
+- Add a dedicated Home sync readiness e2e scenario if we need Patrol coverage for "login/reconnect eventually produces synced Home content". Do not fold that assertion into auth or offline-banner tests.
+- Resolve the unrelated local edit in `app/lib/core/infrastructure/logging/logger.dart` before merge.
+
+---
+
 ## File Structure
 
 **Connection lifecycle:**
@@ -59,8 +85,8 @@
 - Modify: `app/integration_test/test_bundle.dart`.
 - Modify: `docker/scripts/hass-init.py`.
 - Modify: `app/integration_test/step/i_have_successfully_logged_in.dart`.
-- Create: `app/integration_test/step/i_see_light_card.dart`.
-- Create: `app/integration_test/step/i_do_not_see_home_loading_spinner.dart`.
+- Optional follow-up: `app/integration_test/step/i_see_light_card.dart` for a dedicated Home readiness scenario only.
+- Optional follow-up: `app/integration_test/step/i_do_not_see_home_loading_spinner.dart` for a dedicated Home readiness scenario only.
 - Modify: `app/integration_test/authorization.feature`.
 - Modify: `app/integration_test/offline_banner.feature`.
 - Regenerate generated BDD files if the repo's BDD generator is available; otherwise update generated Dart test files by mirroring feature edits.
@@ -2456,15 +2482,13 @@ git commit -m "refactor: retire legacy session coordinator"
 
 ---
 
-## Task 11: Strengthen Integration Tests For Session Readiness
+## Task 11: Keep Auth And Offline Integration Tests Scoped
 
 **Files:**
 - Modify: `app/integration_test/test_bundle.dart`
 - Modify: `docker/scripts/hass-init.py`
 - Modify: `app/lib/ui/keys.dart`
 - Modify: `app/lib/features/home/presentation/screens/home_page.dart`
-- Create: `app/integration_test/step/i_see_light_card.dart`
-- Create: `app/integration_test/step/i_do_not_see_home_loading_spinner.dart`
 - Modify: `app/integration_test/authorization.feature`
 - Modify: `app/integration_test/offline_banner.feature`
 - Modify generated integration test Dart files to match feature updates.
@@ -2485,23 +2509,33 @@ body: Center(
 ),
 ```
 
-- [ ] **Step 2: Add light card step**
+- [ ] **Step 2: Do not add entity-card assertions to auth/offline tests**
 
-Create `app/integration_test/step/i_see_light_card.dart`:
+Keep `authorization.feature` focused on route-level authentication flow:
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:patrol/patrol.dart';
-
-Future<void> iSeeLightCard(PatrolIntegrationTester $, String entityId) async {
-  await $(Key('light_card.$entityId')).waitUntilVisible();
-}
+```gherkin
+When I enter {'admin'} {'yourpassword'} credentials
+And I tap on login button
+Then I see {K.home.page} page
 ```
 
-- [ ] **Step 3: Add no-loading step**
+Keep `offline_banner.feature` focused on the banner state:
 
-Create `app/integration_test/step/i_do_not_see_home_loading_spinner.dart`:
+```gherkin
+When the device regains network connectivity
+And I wait {5} seconds
+Then I should not see the offline banner
+```
+
+Do not add `And I see {'light.kitchen_light'} light card` here. Entity rendering
+belongs in Home readiness coverage, not auth or banner tests.
+
+- [ ] **Step 3: Keep no-loading checks out of auth/offline scenarios**
+
+If a no-loading helper exists, reserve it for a dedicated Home readiness
+scenario. Do not call it from auth or offline-banner scenarios.
+
+The helper may look like this:
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
@@ -2606,9 +2640,11 @@ class _ServerManagerMock implements IServerManager {
 This makes every shortcut-login e2e scenario start from an explicit active server
 instead of relying on persisted state from another scenario.
 
-- [ ] **Step 6: Seed a deterministic HA fixture**
+- [ ] **Step 6: Seed deterministic HA fixture data only for Home readiness coverage**
 
-Modify `docker/scripts/hass-init.py` to write a template light config before Home Assistant starts. Add this helper:
+If a dedicated Home readiness integration scenario is added, modify
+`docker/scripts/hass-init.py` to write a template light config before Home
+Assistant starts. Add this helper:
 
 ```python
 def _write_test_fixture_config(config_dir: str) -> None:
@@ -2655,39 +2691,37 @@ to:
 await _create_default_areas(hass)
 ```
 
-- [ ] **Step 7: Add readiness assertions to feature files**
+- [ ] **Step 7: Verify auth/offline feature files remain scoped**
 
-In `authorization.feature`, after each `Then I see {K.home.page} page`, add:
+Check `authorization.feature`:
 
-```gherkin
-And I do not see home loading spinner
-And I see {'light.kitchen_light'} light card
+```bash
+rg "light card|home loading spinner" app/integration_test/authorization.feature
 ```
 
-In `offline_banner.feature`, after reconnect assertions, add:
+Expected: no matches.
 
-```gherkin
-And I do not see home loading spinner
-And I see {'light.kitchen_light'} light card
+Check `offline_banner.feature`:
+
+```bash
+rg "light card|home loading spinner" app/integration_test/offline_banner.feature
 ```
+
+Expected: no matches.
 
 - [ ] **Step 8: Update generated integration test Dart files**
 
-If the BDD generator command is available in this repo, run it. If it is not available, manually add imports and calls:
+If the BDD generator command is available in this repo, run it. If it is not
+available, manually mirror the scoped feature files in generated Dart:
 
 ```dart
-import './step/i_see_light_card.dart';
-import './step/i_do_not_see_home_loading_spinner.dart';
+import './step/i_should_not_see_the_offline_banner.dart';
 ```
 
-and add:
-
-```dart
-await iDoNotSeeHomeLoadingSpinner($);
-await iSeeLightCard($, 'light.kitchen_light');
-```
-
-after the matching Home/reconnect steps in `authorization_test.dart` and `offline_banner_test.dart`.
+The generated auth and offline Dart tests should mirror the scoped feature files:
+auth asserts the expected route, and offline asserts banner visibility only.
+They should not import or call `iSeeLightCard` or
+`iDoNotSeeHomeLoadingSpinner`.
 
 - [ ] **Step 9: Run static checks**
 
@@ -2703,8 +2737,95 @@ Expected: `No issues found!`
 
 ```bash
 git add app/integration_test app/lib/ui/keys.dart app/lib/features/home/presentation/screens/home_page.dart docker/scripts/hass-init.py
-git commit -m "test: assert home sync readiness in e2e"
+git commit -m "test: keep connection e2e scope focused"
 ```
+
+---
+
+## Task 11A: Optional Dedicated Home Sync Readiness E2E
+
+**Files:**
+- Create: `app/integration_test/home_readiness.feature`
+- Create: `app/integration_test/home_readiness_test.dart` or regenerate it from the feature.
+- Create or reuse: `app/integration_test/step/i_see_light_card.dart`
+- Create or reuse: `app/integration_test/step/i_do_not_see_home_loading_spinner.dart`
+- Modify: `app/integration_test/test_bundle.dart`
+- Modify: `docker/scripts/hass-init.py`
+
+- [ ] **Step 1: Add the dedicated scenario**
+
+Create `app/integration_test/home_readiness.feature`:
+
+```gherkin
+Feature: Home readiness
+  As a signed-in user
+  I want Home to finish initial sync
+  So that I can see my synced entities
+
+  After:
+    Then perform cleanup
+
+  Scenario: Home shows synced entities after login
+    Given home assistant access is configured
+    And I have successfully logged in
+    And the application is running in the foreground
+    Then I see {K.home.page} page
+    And I do not see home loading spinner
+    And I see {'light.kitchen_light'} light card
+```
+
+- [ ] **Step 2: Add or reuse the light-card step**
+
+Create `app/integration_test/step/i_see_light_card.dart` if it does not already
+exist:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:patrol/patrol.dart';
+
+Future<void> iSeeLightCard(PatrolIntegrationTester $, String entityId) async {
+  await $(Key('light_card.$entityId')).waitUntilVisible();
+}
+```
+
+- [ ] **Step 3: Add or reuse the no-loading step**
+
+Create `app/integration_test/step/i_do_not_see_home_loading_spinner.dart` if it
+does not already exist:
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:hommie/ui/keys.dart';
+import 'package:patrol/patrol.dart';
+
+Future<void> iDoNotSeeHomeLoadingSpinner(PatrolIntegrationTester $) async {
+  expect($(K.home.loadingSpinner), findsNothing);
+}
+```
+
+- [ ] **Step 4: Add fixture data and include the scenario**
+
+Use the deterministic Home Assistant fixture from Task 11 Step 6, then include
+`home_readiness_test.dart` in `app/integration_test/test_bundle.dart`.
+
+- [ ] **Step 5: Verify**
+
+Run from `app/`:
+
+```bash
+flutter analyze
+```
+
+Expected: `No issues found!`
+
+Run when Docker/device prerequisites are available:
+
+```bash
+patrol test -t integration_test/test_bundle.dart
+```
+
+Expected: auth, offline banner, and Home readiness scenarios pass.
 
 ---
 
@@ -2769,12 +2890,10 @@ patrol test -t integration_test/test_bundle.dart
 
 Expected:
 - fresh login reaches Home;
-- seeded light card is visible;
 - offline banner appears on network loss;
-- cached light remains visible offline;
 - banner disappears after reconnect;
-- seeded light remains visible after reconnect;
 - server-side revocation routes away from Home.
+- if Task 11A is implemented, seeded Home content is visible after initial sync.
 
 Clean up from repo root:
 
