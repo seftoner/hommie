@@ -34,6 +34,18 @@ class _ScopeProbe extends ConsumerWidget {
   }
 }
 
+class _ServerProbe extends ConsumerWidget {
+  const _ServerProbe();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final server = ref.watch(serverScopeServerProvider);
+    final id = ref.watch(serverScopeIdProvider);
+
+    return Text('${server.name}-$id');
+  }
+}
+
 void main() {
   testWidgets('injects scoped server and connection for online session', (
     tester,
@@ -55,7 +67,26 @@ void main() {
     expect(find.textContaining('Home-7'), findsOneWidget);
   });
 
-  testWidgets('does not mount child when session is not online', (
+  testWidgets('injects server scope without connection for offline session', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          activeServerSessionProvider.overrideWithValue(
+            const OfflineServerSession(
+              activeServer: Server(id: 7, name: 'Home'),
+            ),
+          ),
+        ],
+        child: const MaterialApp(home: ServerScopeHost(child: _ServerProbe())),
+      ),
+    );
+
+    expect(find.text('Home-7'), findsOneWidget);
+  });
+
+  testWidgets('does not mount child when no server session exists', (
     tester,
   ) async {
     await tester.pumpWidget(
