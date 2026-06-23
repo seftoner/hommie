@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:home_assistant_websocket/home_assistant_websocket.dart'
-    show AuthenticationError, ConnectionError;
+    show AuthenticationError;
 import 'package:hommie/application/session/active_server_session_state.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
+import 'package:hommie/core/infrastructure/networking/connection/connection_error_classification.dart';
 import 'package:hommie/core/infrastructure/networking/connection/managed_ha_connection.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
@@ -159,7 +160,7 @@ class ActiveServerSession extends _$ActiveServerSession {
         _triggerSignOut(server);
       }
     } catch (error, stackTrace) {
-      if (_isAuthOrTokenError(error) &&
+      if (isConnectionAuthenticationFailure(error) &&
           _isCurrent(serverId, revision) &&
           _hasAuthenticatedSession) {
         _publish(AuthRevokedServerSession(server));
@@ -192,19 +193,6 @@ class ActiveServerSession extends _$ActiveServerSession {
   bool get _hasAuthenticatedSession {
     final auth = _authState;
     return auth is Authenticated || auth is Refreshing;
-  }
-
-  bool _isAuthOrTokenError(Object error) {
-    if (error is AuthenticationError) {
-      return true;
-    }
-
-    if (error is! ConnectionError) {
-      return false;
-    }
-
-    final message = error.toString().toLowerCase();
-    return message.contains('auth') || message.contains('token');
   }
 
   void _handleTransportState(HAServerConnectionState transportState) {

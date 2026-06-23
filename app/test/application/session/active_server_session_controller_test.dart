@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/application/session/active_server_session_controller.dart';
 import 'package:hommie/application/session/active_server_session_state.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
@@ -18,6 +19,8 @@ import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../utils/tests_logger.dart';
 
 class _FakeConnection implements IHAConnection {
   @override
@@ -127,6 +130,8 @@ class _AuthStateSource {
 }
 
 void main() {
+  logger = testLogger;
+
   const server = Server(id: 1, name: 'Home');
 
   Future<ActiveServerSessionState> waitForSession(
@@ -333,6 +338,31 @@ void main() {
 
       expect(state, isA<AuthRevokedServerSession>());
       expect(authController.signedOutServerIds, [1]);
+    },
+  );
+
+  test(
+    'maps pre-authentication transport failure to offline session without signing out',
+    () async {
+      final authController = _FakeAuthController();
+      final manager = _FakeConnectionManager(
+        error: ConnectionError('Connection closed before authentication'),
+      );
+      final container = makeContainer(
+        activeServer: server,
+        authState: AuthState.authenticated(credentials()),
+        connectionManager: manager,
+        authController: authController,
+      );
+      addTearDown(container.dispose);
+
+      final state = await waitForSession(
+        container,
+        (state) => state is OfflineServerSession,
+      );
+
+      expect(state, isA<OfflineServerSession>());
+      expect(authController.signedOutServerIds, isEmpty);
     },
   );
 

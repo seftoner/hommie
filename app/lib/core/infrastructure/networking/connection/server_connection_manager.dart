@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:hommie/core/infrastructure/networking/connection/connection_error_classification.dart';
 import 'package:hommie/core/infrastructure/networking/connection/ha_connection_factory.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/connection/managed_ha_connection.dart';
@@ -144,7 +145,7 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
       if (_activeServerId == serverId &&
           version == _versionOf(serverId) &&
           !_isDisposed) {
-        if (_isAuthOrTokenError(error)) {
+        if (isConnectionAuthenticationFailure(error)) {
           _setState(HAServerConnectionState.authFailure);
         } else {
           _setState(HAServerConnectionState.disconnected);
@@ -264,15 +265,6 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
 
       _resetState();
     });
-  }
-
-  bool _isAuthOrTokenError(Object error) {
-    if (error is AuthenticationError) {
-      return true;
-    }
-
-    final message = error.toString().toLowerCase();
-    return message.contains('auth') || message.contains('token');
   }
 
   int _versionOf(int serverId) => _versions[serverId] ?? 0;

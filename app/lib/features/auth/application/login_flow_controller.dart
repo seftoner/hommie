@@ -52,19 +52,39 @@ class LoginFlowController {
         handler: handler,
       );
 
-      loginResult.match(
-        (failure) => throw LoginFlowException(failure),
-        (_) => credentialsStored = true,
+      final cancelled = await loginResult.match<Future<bool>>(
+        (failure) async {
+          if (failure is UserBrake) {
+            await _rollback(
+              serverId: createdServer!.id!,
+              authRepository: authRepository,
+              credentialsStored: credentialsStored,
+            );
+            createdServer = null;
+            return true;
+          }
+
+          throw LoginFlowException(failure);
+        },
+        (_) async {
+          credentialsStored = true;
+          return false;
+        },
       );
 
+      if (cancelled) {
+        return;
+      }
+
+      final server = createdServer!;
       final configRepository = await _ref.read(
-        websocketConfigRepositoryProvider(createdServer.id!).future,
+        websocketConfigRepositoryProvider(server.id!).future,
       );
       final config = await configRepository.getConfig();
-      _ref.read(serverConnectionManagerProvider).disconnect(createdServer.id!);
+      _ref.read(serverConnectionManagerProvider).disconnect(server.id!);
 
       final updatedServer = await serverManager.addServer(
-        createdServer.copyWith(
+        server.copyWith(
           name: config.location_name,
           version: HaVersion.fromString(config.version),
           internalUrl: config.internal_url,

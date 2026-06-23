@@ -362,6 +362,34 @@ void main() {
     },
   );
 
+  test(
+    'pre-authentication transport failures publish disconnected for active server',
+    () async {
+      final factory = _FakeFactory();
+      final states = <HAServerConnectionState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setState: states.add,
+        resetState: () => states.add(HAServerConnectionState.unknown),
+      );
+
+      manager.setActiveServer(1);
+      final future = manager.getConnection(1);
+      final futureExpectation = expectLater(
+        future,
+        throwsA(isA<ConnectionError>()),
+      );
+
+      factory.fail(
+        1,
+        ConnectionError('Connection closed before authentication'),
+      );
+
+      await futureExpectation;
+      expect(states, [HAServerConnectionState.disconnected]);
+    },
+  );
+
   test('dispose closes pending opens', () async {
     final factory = _FakeFactory();
     final manager = ServerConnectionManagerImpl(

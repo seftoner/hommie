@@ -50,6 +50,32 @@ void main() {
   });
 
   test(
+    'rolls back temporary server without throwing when user cancels OAuth',
+    () async {
+      final serverManager = _FakeServerManager();
+      final authRepository = _FakeAuthRepository(
+        loginResult: left(const AuthFailure.userBrake('cancelled')),
+      );
+      final container = _container(
+        serverManager: serverManager,
+        authRepository: authRepository,
+      );
+      addTearDown(container.dispose);
+
+      final controller = container.read(loginFlowControllerProvider);
+
+      await controller.login(
+        ServerUrl('http://example.test'),
+        handler: (_) async => const <String, String>{},
+      );
+
+      expect(serverManager.removed, [1]);
+      expect(serverManager.activated, isNull);
+      expect(authRepository.signOutCalls, isEmpty);
+    },
+  );
+
+  test(
     'clears credentials and rolls back server when config fetch fails',
     () async {
       final serverManager = _FakeServerManager();
