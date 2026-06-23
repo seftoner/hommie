@@ -56,3 +56,50 @@ List<AreaSection> groupEntitiesByArea(
 
   return sections;
 }
+
+/// Groups [entities] by Home Assistant entity domain/device type.
+List<AreaSection> groupEntitiesByType(List<HaEntity> entities) {
+  final sortedTypes = entities.map((e) => e.domain).toSet().toList()..sort();
+
+  return [
+    for (final type in sortedTypes)
+      AreaSection(
+        areaId: null,
+        title: _entityTypeGroupTitle(type),
+        entities: entities.where((e) => e.domain == type).toList(),
+      ),
+  ];
+}
+
+String _entityTypeGroupTitle(String type) {
+  const labels = {
+    'binary_sensor': 'Binary sensors',
+    'button': 'Buttons',
+    'climate': 'Climate',
+    'cover': 'Covers',
+    'fan': 'Fans',
+    'humidifier': 'Humidifiers',
+    'light': 'Lights',
+    'lock': 'Locks',
+    'media_player': 'Media players',
+    'notify': 'Notifications',
+    'number': 'Numbers',
+    'select': 'Selects',
+    'sensor': 'Sensors',
+    'switch': 'Switches',
+  };
+  final label = labels[type];
+  if (label != null) {
+    return label;
+  }
+
+  return '${_formatTypeTitle(type)}s';
+}
+
+String _formatTypeTitle(String type) {
+  final label = type.replaceAll('_', ' ');
+  if (label.isEmpty) {
+    return label;
+  }
+  return label[0].toUpperCase() + label.substring(1);
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/features/entities/application/cached_entities_provider.dart';
+import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/presentation/handlers/entity_domain_handler.dart';
 import 'package:hommie/features/entities/presentation/widgets/entity_card.dart';
 import 'package:hommie/features/home/application/home_page_controller.dart';
@@ -49,7 +50,10 @@ class HomePage extends ConsumerWidget {
         body: CustomScrollView(
           slivers: [
             _appBar(context, state),
-            ..._sectionSlivers(state.sections, handledDomains, summary: true),
+            ..._sectionSlivers(
+              groupEntitiesByType(_entitiesFromSections(state.sections)),
+              handledDomains,
+            ),
           ],
         ),
       );
@@ -84,17 +88,19 @@ class HomePage extends ConsumerWidget {
                   HomeSummaryTab() => CustomScrollView(
                     key: const PageStorageKey('home.summary'),
                     slivers: _sectionSlivers(
-                      state.sections,
+                      groupEntitiesByType(
+                        _entitiesFromSections(state.sections),
+                      ),
                       handledDomains,
-                      summary: true,
                     ),
                   ),
                   HomeAreaTab(:final areaId) => CustomScrollView(
                     key: PageStorageKey('home.area.$areaId'),
                     slivers: _sectionSlivers(
-                      state.sectionsForArea(areaId),
+                      groupEntitiesByType(
+                        _entitiesFromSections(state.sectionsForArea(areaId)),
+                      ),
                       handledDomains,
-                      summary: false,
                     ),
                   ),
                 },
@@ -130,9 +136,8 @@ class HomePage extends ConsumerWidget {
   /// registered handler (v1: lights). Empty areas show an empty state.
   List<Widget> _sectionSlivers(
     List<AreaSection> sections,
-    Set<String> handledDomains, {
-    required bool summary,
-  }) {
+    Set<String> handledDomains,
+  ) {
     final visible = [
       for (final section in sections)
         (
@@ -143,8 +148,8 @@ class HomePage extends ConsumerWidget {
         ),
     ];
 
-    final hasAny = visible.any((v) => v.entities.isNotEmpty);
-    if (!hasAny) {
+    final renderable = visible.where((v) => v.entities.isNotEmpty).toList();
+    if (renderable.isEmpty) {
       return const [
         SliverFillRemaining(
           hasScrollBody: false,
@@ -154,37 +159,35 @@ class HomePage extends ConsumerWidget {
     }
 
     return [
-      for (final v in visible)
+      for (final v in renderable)
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           sliver: SliverList.list(
             children: [
-              if (summary) RoomGroup(roomName: v.section.title),
-              if (v.entities.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text('No lights here yet'),
-                )
-              else
-                for (final entity in v.entities) EntityCard(entity: entity),
+              SectionGroup(title: v.section.title),
+              for (final entity in v.entities) EntityCard(entity: entity),
             ],
           ),
         ),
     ];
   }
+
+  List<HaEntity> _entitiesFromSections(List<AreaSection> sections) => [
+    for (final section in sections) ...section.entities,
+  ];
 }
 
-class RoomGroup extends StatelessWidget {
-  const RoomGroup({super.key, required this.roomName});
+class SectionGroup extends StatelessWidget {
+  const SectionGroup({super.key, required this.title});
 
-  final String roomName;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Text(
-        roomName,
+        title,
         style: context.fonts.titleMedium?.copyWith(
           color: context.colors.onSurfaceVariant,
         ),

@@ -35,6 +35,43 @@ class _StubHomeController extends HomePageController {
   );
 }
 
+class _MixedDomainHomeController extends HomePageController {
+  @override
+  HomePageState build() => const HomePageState(
+    serverName: 'Home',
+    tabs: [
+      HomeSummaryTab(),
+      HomeAreaTab(areaId: 'kitchen', title: 'Kitchen'),
+    ],
+    sections: [
+      AreaSection(
+        areaId: 'kitchen',
+        title: 'Kitchen',
+        entities: [
+          HaEntity(
+            entityId: 'light.a',
+            domain: 'light',
+            name: 'A',
+            areaId: 'kitchen',
+          ),
+          HaEntity(
+            entityId: 'sensor.a',
+            domain: 'sensor',
+            name: 'A',
+            areaId: 'kitchen',
+          ),
+          HaEntity(
+            entityId: 'switch.a',
+            domain: 'switch',
+            name: 'A',
+            areaId: 'kitchen',
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
 class _SyncFailureHomeController extends HomePageController {
   @override
   HomePageState build() =>
@@ -61,7 +98,7 @@ class _InitialSyncHomeController extends HomePageController {
 }
 
 void main() {
-  testWidgets('renders area tabs and a light card', (tester) async {
+  testWidgets('renders summary grouped by device type', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -79,9 +116,89 @@ void main() {
     );
     await tester.pump();
 
-    // 'Kitchen' appears both as a tab and a room-group header.
-    expect(find.text('Kitchen'), findsWidgets);
+    expect(find.text('Kitchen'), findsOneWidget);
+    expect(find.text('Lights'), findsOneWidget);
     expect(find.byType(LightCard), findsOneWidget);
+  });
+
+  testWidgets('renders area tab grouped by device type', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          commandAvailabilityProvider.overrideWithValue(
+            const CommandAvailability(
+              canSend: true,
+              reason: CommandAvailabilityReason.available,
+            ),
+          ),
+          homePageControllerProvider.overrideWith(_StubHomeController.new),
+          entityStatesProvider.overrideWithValue(const {}),
+        ],
+        child: const MaterialApp(home: HomePage()),
+      ),
+    );
+    await tester.pump();
+
+    await tester.tap(find.text('Kitchen'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Lights'), findsOneWidget);
+    expect(find.byType(LightCard), findsOneWidget);
+  });
+
+  testWidgets('hides unsupported type groups', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          commandAvailabilityProvider.overrideWithValue(
+            const CommandAvailability(
+              canSend: true,
+              reason: CommandAvailabilityReason.available,
+            ),
+          ),
+          homePageControllerProvider.overrideWith(
+            _MixedDomainHomeController.new,
+          ),
+          entityStatesProvider.overrideWithValue(const {}),
+        ],
+        child: const MaterialApp(home: HomePage()),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Lights'), findsOneWidget);
+    expect(find.text('Sensors'), findsNothing);
+    expect(find.text('Switches'), findsNothing);
+    expect(find.text('No lights here yet'), findsNothing);
+  });
+
+  testWidgets('hides unsupported type groups in area tabs', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          commandAvailabilityProvider.overrideWithValue(
+            const CommandAvailability(
+              canSend: true,
+              reason: CommandAvailabilityReason.available,
+            ),
+          ),
+          homePageControllerProvider.overrideWith(
+            _MixedDomainHomeController.new,
+          ),
+          entityStatesProvider.overrideWithValue(const {}),
+        ],
+        child: const MaterialApp(home: HomePage()),
+      ),
+    );
+    await tester.pump();
+
+    await tester.tap(find.text('Kitchen'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Lights'), findsOneWidget);
+    expect(find.text('Sensors'), findsNothing);
+    expect(find.text('Switches'), findsNothing);
+    expect(find.text('No lights here yet'), findsNothing);
   });
 
   testWidgets('renders empty sync failure state', (tester) async {
