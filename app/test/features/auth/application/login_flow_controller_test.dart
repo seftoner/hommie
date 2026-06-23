@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:home_assistant_websocket/home_assistant_websocket.dart' as ha;
+import 'package:home_assistant_client/home_assistant_client.dart' as ha;
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';

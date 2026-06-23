@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
 import 'package:hommie/features/entities/domain/entities/entity_state_value.dart';
 import 'package:riverpod/misc.dart';

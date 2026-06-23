@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/ha_connection_factory.dart';
 import 'package:hommie/core/infrastructure/networking/providers/server_config_provider.dart';

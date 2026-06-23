@@ -1,8 +1,8 @@
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:logger/logger.dart';
 
 /// Adapter that bridges the logger package's Logger with HaLogger interface.
-/// This allows the home_assistant_websocket package to use the app's logger
+/// This allows the home_assistant_client package to use the app's logger
 /// configuration including file output, custom formatting, and filtering.
 class HaLoggerAdapter implements HaLogger {
   final Logger _logger;

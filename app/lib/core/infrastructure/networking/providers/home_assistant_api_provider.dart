@@ -1,4 +1,4 @@
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/core/infrastructure/networking/http/http_client_provider.dart';
 import 'package:hommie/core/infrastructure/networking/providers/server_config_provider.dart';
 import 'package:hommie/features/auth/infrastructure/providers/server_auth_token_provider.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/features/entities/application/entity_states_provider.dart';
 import 'package:hommie/features/entities/domain/entities/entity_state_value.dart';
 

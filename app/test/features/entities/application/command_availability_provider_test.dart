@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
 import 'package:hommie/features/entities/application/command_availability_provider.dart';
 import 'package:riverpod/misc.dart';

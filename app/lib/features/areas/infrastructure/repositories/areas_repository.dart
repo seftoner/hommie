@@ -1,5 +1,5 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/core/domain/entities/area.dart';
 import 'package:hommie/core/domain/repositories/i_areas_repository.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';

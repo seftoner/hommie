@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/core/infrastructure/networking/connection/connection_error_classification.dart';
 import 'package:hommie/core/infrastructure/networking/connection/ha_connection_factory.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';

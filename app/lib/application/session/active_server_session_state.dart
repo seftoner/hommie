@@ -1,4 +1,4 @@
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 
 sealed class ActiveServerSessionState {

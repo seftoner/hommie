@@ -9,7 +9,7 @@ environment:
 resolution: workspace
 
 dependencies:
-  home_assistant_websocket:
+  home_assistant_client:
   computer:
   drag_arrange:
   battery_plus: ^7.0.0

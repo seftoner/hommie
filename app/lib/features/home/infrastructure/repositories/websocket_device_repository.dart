@@ -1,4 +1,4 @@
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/features/home/domain/entities/device.dart';
 import 'package:hommie/features/home/domain/repositories/i_device_repository.dart';
 

@@ -1,4 +1,4 @@
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:oauth2/oauth2.dart';
 
 class HAOAuth2Token implements HAAuthToken {
