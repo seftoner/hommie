@@ -8,7 +8,7 @@ Hommie is a Flutter multi-platform client for Home Assistant (iOS, Android, macO
 
 This repo is a **Dart pub workspace** (monorepo). The root `pubspec.yaml` declares the workspace members:
 - `app/` — the Flutter application (package name `hommie`). Almost all work happens here.
-- `packages/home_assistant_websocket` — HA WebSocket client (`IHAConnection`, messages, transport).
+- `packages/home_assistant_client` — HA REST and WebSocket client (`HomeAssistantApi`, `IHAConnection`, messages, transports).
 - `packages/computer` — isolate-based parallel task executor (used via `IParallelExecutor`).
 - `packages/drag_arrange` — drag-to-reorder UI widget.
 
@@ -64,21 +64,43 @@ Do not import `presentation` into `domain`/`application`, and keep `BuildContext
 
 Providers are generated via `@riverpod` / `@Riverpod(dependencies: [...])` and co-located with their feature. Declare dependencies explicitly so the scope-override machinery works. `app/lib/main.dart` boots the app inside a single `ProviderScope`; `bootstrap()` runs before `runApp`.
 
+### Home Assistant API and connection rules
+
+When adding Home Assistant features, follow `docs/home-assistant-feature-architecture.md`.
+Use the path that matches the feature:
+
+- REST-capable one-shot call: `homeAssistantApiProvider(serverId)` and
+  `api.<resource>.*(via: HATransport.rest)`.
+- Active-server WebSocket command/subscription:
+  `serverScopeConnectionProvider` and `HomeAssistantApi.fromConnection(connection)`.
+- Cached read: Drift/cache repositories scoped by `serverScopeIdProvider`; render
+  without a socket.
+- UI policy: projection providers such as `commandAvailabilityProvider` or
+  `hubStatusProvider`.
+
+Do not call `serverConnectionManagerProvider.getConnection()` from feature code,
+do not implement reconnect timers, and do not switch on raw socket/link/session
+state in ordinary widgets.
+
 ### Server-scoped providers (key pattern)
 
 The app supports multiple HA servers, one active at a time. Server-specific data must **not** read the active server directly — instead it depends on scoped providers that are overridden per active server:
 
 - `serverScopeId`, `serverScopeServer`, `serverScopeConnection` are placeholder providers meant to be **overridden** in a nested `ProviderScope`.
-- `app/lib/application/scopes/server_scope_host.dart` (`ServerScopeHost`) hosts that nested scope: it watches `activeServerProvider`, obtains an `IHAConnection` from `serverConnectionManagerProvider`, and injects the overrides. When no server is active it keeps the tree mounted with an unavailable connection rather than crashing consumers.
-- Feature controllers (e.g. `areasControllerProvider`, `homeDataControllerProvider`) depend on `serverScopeConnection` so they automatically rebuild when the active server switches.
+- `app/lib/application/scopes/server_scope_host.dart` (`ServerScopeHost`) hosts that nested scope: it watches `activeServerSessionProvider` and injects the active server plus the online connection when one exists. Offline scopes keep server id/server available and make `serverScopeConnectionProvider` throw `ServerScopeConnectionUnavailableException`.
+- Feature controllers depend on `serverScopeIdProvider`, `serverScopeServerProvider`, or `serverScopeConnectionProvider` so they automatically rebuild when the active server or active connection changes.
 
-When adding server-dependent data, depend on the `serverScope*` providers — never on `activeServer` directly.
+When adding server-dependent data, depend on the `serverScope*` providers -- never on `activeServer` directly.
 
 ### Connection & session lifecycle
 
-- `serverConnectionManagerProvider` owns WebSocket connections per server (`getConnection`, `invalidateConnection`).
-- `serverSessionCoordinatorProvider` (watched in `app.dart`) keeps the active session healthy: eagerly connects on auth, and on auth revocation (from credential refresh or socket transport) triggers sign-out to wipe that server.
-- Auth is an OAuth state machine (`authStateMachineProvider`, `activeAuthStateProvider`) with tokens stored in `flutter_secure_storage`. **Never log tokens or PII.**
+- `serverConnectionManagerProvider` owns the single active WebSocket resource and maps socket state into `serverLinkStateProvider`.
+- `activeServerSessionProvider` is a projection of active server, auth, and link state. Do not add cleanup, socket listeners, reconnect logic, or feature policy to it.
+- `ServerLifecycleController` owns destructive teardown: disconnect, clear credentials, delete cached home data, remove server, and activate the next server.
+- `AuthRevocationHandler` observes revoked sessions and delegates to `ServerLifecycleController`.
+- Auth is exposed through `authStateProvider`, which evaluates credentials for the
+  active server. Tokens are stored in `flutter_secure_storage`. **Never log tokens
+  or PII.**
 - `goRouterProvider` (`app/lib/router/`) is guard-based, gated on `BootStatusController` (boot sequence) + active server + auth state.
 
 ### Persistence — Drift

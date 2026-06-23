@@ -122,6 +122,25 @@ Add to `~/.gemini/settings.json` (global) or `.gemini/settings.json` (project):
 
 ## Complete Architecture Guide
 
+### Home Assistant API And Connection Rules
+
+When adding Home Assistant features, follow
+[`docs/home-assistant-feature-architecture.md`](home-assistant-feature-architecture.md).
+The short version:
+
+- REST-capable one-shot calls use `homeAssistantApiProvider(serverId)` and should
+  not require an active WebSocket connection.
+- Active-server WebSocket commands and subscriptions use
+  `serverScopeConnectionProvider` plus `HomeAssistantApi.fromConnection`.
+- Cached reads use Drift/cache repositories scoped by `serverScopeIdProvider` and
+  must render without a socket.
+- UI code reads projection providers such as `commandAvailabilityProvider` or
+  `hubStatusProvider`; ordinary widgets should not switch on raw session, link, or
+  socket state.
+- Feature code must not call `serverConnectionManagerProvider.getConnection()` or
+  implement reconnect timers. Connection ownership stays in the networking/session
+  infrastructure.
+
 ### Value Objects Implementation
 ```dart
 abstract class ValueObject<T> {
