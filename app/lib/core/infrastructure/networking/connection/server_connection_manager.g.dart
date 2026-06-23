@@ -59,4 +59,4 @@ final class ServerConnectionManagerProvider
 }
 
 String _$serverConnectionManagerHash() =>
-    r'b2e02c3a89fbfdea82da21ac977ce193815632c1';
+    r'2599a5badfe84f94f9d58bf69d7fd7df9606a00f';

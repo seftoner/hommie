@@ -8,9 +8,7 @@ part 'auth_state.freezed.dart';
 ///
 /// This sealed class hierarchy defines the authentication states:
 /// * [Initial] - The initial state before any authentication checks
-/// * [Authenticating] - Credentials are being acquired or refreshed
 /// * [Authenticated] - The user is successfully authenticated
-/// * [Refreshing] - The token is being refreshed while retaining the session
 /// * [Revoked] - The server invalidated the session and requires re-auth
 /// * [Unauthenticated] - No credentials are available for the server
 /// * [Failure] - Authentication process failed with a specific [AuthFailure]
@@ -22,10 +20,8 @@ sealed class AuthState with _$AuthState {
   const AuthState._();
   const factory AuthState.initial() = Initial;
   const factory AuthState.unauthenticated() = Unauthenticated;
-  const factory AuthState.authenticating() = Authenticating;
   const factory AuthState.authenticated(Credentials credentials) =
       Authenticated;
-  const factory AuthState.refreshing(Credentials credentials) = Refreshing;
   const factory AuthState.revoked({AuthFailure? failure}) = Revoked;
   const factory AuthState.failure(AuthFailure failure) = Failure;
 }

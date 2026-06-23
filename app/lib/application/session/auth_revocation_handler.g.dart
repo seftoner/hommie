@@ -35,7 +35,6 @@ final class AuthRevocationHandlerProvider
           AuthRevocationHandlerProvider.$allTransitiveDependencies5,
           AuthRevocationHandlerProvider.$allTransitiveDependencies6,
           AuthRevocationHandlerProvider.$allTransitiveDependencies7,
-          AuthRevocationHandlerProvider.$allTransitiveDependencies8,
         },
       );
 
@@ -48,12 +47,10 @@ final class AuthRevocationHandlerProvider
       ActiveServerSessionProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 =
-      ActiveServerSessionProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies6 = serverLifecycleControllerProvider;
-  static const $allTransitiveDependencies7 =
+  static const $allTransitiveDependencies5 = serverLifecycleControllerProvider;
+  static const $allTransitiveDependencies6 =
       ServerLifecycleControllerProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies8 =
+  static const $allTransitiveDependencies7 =
       ServerLifecycleControllerProvider.$allTransitiveDependencies3;
 
   @override

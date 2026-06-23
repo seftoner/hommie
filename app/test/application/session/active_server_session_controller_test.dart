@@ -5,20 +5,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/application/session/active_server_session_controller.dart';
 import 'package:hommie/application/session/active_server_session_state.dart';
-import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
-import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
+import 'package:hommie/core/infrastructure/networking/providers/server_link_state_provider.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/servers/application/active_server.dart';
-import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
+import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:oauth2/oauth2.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../utils/tests_logger.dart';
 
 class _FakeConnection implements IHAConnection {
   @override
@@ -34,51 +30,31 @@ class _FakeConnection implements IHAConnection {
 }
 
 class _FakeConnectionManager implements IServerConnectionManager {
-  _FakeConnectionManager({this.completeImmediately = true, this.error});
-
-  final bool completeImmediately;
-  final Object? error;
   int? activeServerId;
-  int opens = 0;
-  final connection = _FakeConnection();
-  final pending = <Completer<IHAConnection>>[];
+  int getConnectionCalls = 0;
+  final activeServerIds = <int?>[];
 
   @override
   void setActiveServer(int? serverId) {
     activeServerId = serverId;
+    activeServerIds.add(serverId);
   }
 
   @override
   Future<IHAConnection> getConnection(int serverId) {
-    opens += 1;
-    final failure = error;
-    if (failure != null) {
-      return Future.error(failure);
-    }
-    if (completeImmediately) {
-      return Future.value(connection);
-    }
-
-    final completer = Completer<IHAConnection>();
-    pending.add(completer);
-    return completer.future;
+    getConnectionCalls += 1;
+    throw UnimplementedError('ActiveServerSession must not open connections');
   }
-
-  @override
-  Future<void> reconnect(int serverId) async {}
 
   @override
   void disconnect(int serverId) {}
-
-  void completeNext() {
-    pending.removeAt(0).complete(connection);
-  }
 }
 
 class _FakeServerManager implements IServerManager {
   _FakeServerManager(this.activeServer);
 
   Server? activeServer;
+  final _activeServerController = StreamController<Server?>.broadcast();
 
   @override
   Future<Server> addServer(Server config) async => config;
@@ -92,7 +68,7 @@ class _FakeServerManager implements IServerManager {
   }
 
   @override
-  Stream<Server?> watchActiveServer() => const Stream<Server?>.empty();
+  Stream<Server?> watchActiveServer() => _activeServerController.stream;
 
   @override
   Future<Server?> activateServer(int id) async => activeServer;
@@ -103,52 +79,21 @@ class _FakeServerManager implements IServerManager {
   @override
   Future<void> removeServer(int id, {bool allowRemovingLast = false}) async {
     activeServer = null;
+    _activeServerController.add(activeServer);
   }
-}
 
-class _AuthStateSource {
-  _AuthStateSource(this.value);
+  void emitActiveServer(Server? server) {
+    activeServer = server;
+    _activeServerController.add(server);
+  }
 
-  AuthState value;
+  void dispose() {
+    _activeServerController.close();
+  }
 }
 
 void main() {
-  logger = testLogger;
-
   const server = Server(id: 1, name: 'Home');
-
-  Future<ActiveServerSessionState> waitForSession(
-    ProviderContainer container,
-    bool Function(ActiveServerSessionState state) matches,
-  ) async {
-    final activeServerSubscription = container.listen(
-      activeServerProvider,
-      (_, _) {},
-    );
-    try {
-      for (var i = 0; i < 20; i += 1) {
-        final state = container.read(activeServerSessionProvider);
-        if (matches(state)) {
-          return state;
-        }
-        await container.pump();
-      }
-
-      final state = container.read(activeServerSessionProvider);
-      final activeServer = container.read(activeServerProvider);
-      final managerActiveServer = await container
-          .read(serverManagerProvider)
-          .getActiveServer();
-      final authState = container.read(authStateProvider);
-      fail(
-        'Timed out waiting for session state. '
-        'Last state: $state, activeServer: $activeServer, '
-        'managerActiveServer: $managerActiveServer, authState: $authState',
-      );
-    } finally {
-      activeServerSubscription.close();
-    }
-  }
 
   Credentials credentials() {
     return Credentials(
@@ -162,21 +107,62 @@ void main() {
   ProviderContainer makeContainer({
     required Server? activeServer,
     required AuthState authState,
-    _AuthStateSource? authStateSource,
     _FakeConnectionManager? connectionManager,
+    _FakeServerManager? serverManager,
   }) {
     final manager = connectionManager ?? _FakeConnectionManager();
-    final source = authStateSource ?? _AuthStateSource(authState);
+    final servers = serverManager ?? _FakeServerManager(activeServer);
+    if (serverManager == null) {
+      addTearDown(servers.dispose);
+    }
 
     return ProviderContainer(
       overrides: [
-        serverManagerProvider.overrideWithValue(
-          _FakeServerManager(activeServer),
-        ),
-        authStateProvider.overrideWith((_) => source.value),
+        serverManagerProvider.overrideWithValue(servers),
+        authStateProvider.overrideWith((_) => authState),
         serverConnectionManagerProvider.overrideWithValue(manager),
       ],
     );
+  }
+
+  Future<ActiveServerSessionState> waitForSession(
+    ProviderContainer container,
+    bool Function(ActiveServerSessionState state) matches,
+  ) async {
+    for (var i = 0; i < 100; i += 1) {
+      final state = container.read(activeServerSessionProvider);
+      if (matches(state)) {
+        return state;
+      }
+      await container.pump();
+      await Future<void>.delayed(Duration.zero);
+    }
+
+    final state = container.read(activeServerSessionProvider);
+    final activeServer = container.read(activeServerProvider);
+    final authState = container.read(authStateProvider);
+    fail(
+      'Timed out waiting for session. '
+      'state: $state, activeServer: $activeServer, authState: $authState',
+    );
+  }
+
+  Future<ActiveServerSessionState> readSession(
+    ProviderContainer container,
+  ) async {
+    final activeServerSubscription = container.listen(
+      activeServerProvider,
+      (_, _) {},
+    );
+    try {
+      await container.read(activeServerProvider.future);
+      return waitForSession(
+        container,
+        (state) => state is! ResolvingServerSession,
+      );
+    } finally {
+      activeServerSubscription.close();
+    }
   }
 
   test('emits no active session when no server exists', () async {
@@ -188,44 +174,13 @@ void main() {
     );
     addTearDown(container.dispose);
 
-    final state = await waitForSession(
-      container,
-      (state) => state is NoActiveServerSession,
-    );
+    final state = await readSession(container);
 
     expect(state, isA<NoActiveServerSession>());
     expect(manager.activeServerId, isNull);
-    expect(manager.opens, 0);
   });
 
-  test(
-    'does not mutate connection state provider while building no-server session',
-    () async {
-      final container = ProviderContainer(
-        overrides: [
-          serverManagerProvider.overrideWithValue(_FakeServerManager(null)),
-          authStateProvider.overrideWith(
-            (_) => const AuthState.unauthenticated(),
-          ),
-        ],
-      );
-      addTearDown(container.dispose);
-      final connectionStateSubscription = container.listen(
-        serverConnectionStateProvider,
-        (_, _) {},
-      );
-      addTearDown(connectionStateSubscription.close);
-
-      final state = await waitForSession(
-        container,
-        (state) => state is NoActiveServerSession,
-      );
-
-      expect(state, isA<NoActiveServerSession>());
-    },
-  );
-
-  test('opens active connection for authenticated active server', () async {
+  test('maps authenticated idle link to connecting session', () async {
     final manager = _FakeConnectionManager();
     final container = makeContainer(
       activeServer: server,
@@ -234,139 +189,101 @@ void main() {
     );
     addTearDown(container.dispose);
 
-    final state = await waitForSession(
-      container,
-      (state) => state is OnlineServerSession,
-    );
-    expect(state, isA<OnlineServerSession>());
-    expect((state as OnlineServerSession).connection, same(manager.connection));
+    final state = await readSession(container);
+
+    expect(state, isA<ConnectingServerSession>());
+    expect((state as ConnectingServerSession).activeServer, server);
     expect(manager.activeServerId, 1);
-    expect(manager.opens, 1);
   });
 
-  test('maps auth failure connection state to revoked session', () async {
-    final container = makeContainer(
-      activeServer: server,
-      authState: AuthState.authenticated(credentials()),
-    );
-    addTearDown(container.dispose);
-
-    await waitForSession(container, (state) => state is OnlineServerSession);
-
-    container.read(serverConnectionStateProvider.notifier).setAuthFailure();
-
-    final state = await waitForSession(
-      container,
-      (state) => state is AuthRevokedServerSession,
-    );
-    expect(state, isA<AuthRevokedServerSession>());
-  });
-
-  test('maps auth failure during open to revoked session', () async {
-    final manager = _FakeConnectionManager(
-      error: AuthenticationError('bad token'),
-    );
+  test('maps authenticated connecting link to connecting session', () async {
+    final manager = _FakeConnectionManager();
     final container = makeContainer(
       activeServer: server,
       authState: AuthState.authenticated(credentials()),
       connectionManager: manager,
     );
     addTearDown(container.dispose);
+    container
+        .read(serverLinkStateProvider.notifier)
+        .set(const LinkConnecting(serverId: 1));
 
-    final state = await waitForSession(
-      container,
-      (state) => state is AuthRevokedServerSession,
-    );
+    final state = await readSession(container);
 
-    expect(state, isA<AuthRevokedServerSession>());
+    expect(state, isA<ConnectingServerSession>());
+    expect((state as ConnectingServerSession).activeServer, server);
+    expect(manager.activeServerId, 1);
   });
 
   test(
-    'maps token resolution failure during open to revoked session',
+    'maps authenticated online link to online session with link connection',
     () async {
-      final manager = _FakeConnectionManager(
-        error: ConnectionError(
-          'Failed to resolve token: AuthFailure.unauthenticated()',
-        ),
-      );
+      final manager = _FakeConnectionManager();
+      final connection = _FakeConnection();
       final container = makeContainer(
         activeServer: server,
         authState: AuthState.authenticated(credentials()),
         connectionManager: manager,
       );
       addTearDown(container.dispose);
+      container
+          .read(serverLinkStateProvider.notifier)
+          .set(LinkOnline(serverId: 1, connection: connection));
 
-      final state = await waitForSession(
-        container,
-        (state) => state is AuthRevokedServerSession,
-      );
+      final state = await readSession(container);
 
-      expect(state, isA<AuthRevokedServerSession>());
+      expect(state, isA<OnlineServerSession>());
+      expect((state as OnlineServerSession).activeServer, server);
+      expect(state.connection, same(connection));
+      expect(manager.activeServerId, 1);
     },
   );
 
+  test('maps authenticated reconnecting link to offline session', () async {
+    final manager = _FakeConnectionManager();
+    final container = makeContainer(
+      activeServer: server,
+      authState: AuthState.authenticated(credentials()),
+      connectionManager: manager,
+    );
+    addTearDown(container.dispose);
+    container
+        .read(serverLinkStateProvider.notifier)
+        .set(const LinkReconnecting(serverId: 1));
+
+    final state = await readSession(container);
+
+    expect(state, isA<OfflineServerSession>());
+    expect((state as OfflineServerSession).activeServer, server);
+    expect(state.cause, isNull);
+    expect(manager.activeServerId, 1);
+  });
+
   test(
-    'maps pre-authentication transport failure to offline session',
+    'maps authenticated offline link to offline session with cause',
     () async {
-      final manager = _FakeConnectionManager(
-        error: ConnectionError('Connection closed before authentication'),
-      );
+      final manager = _FakeConnectionManager();
+      final cause = StateError('network down');
       final container = makeContainer(
         activeServer: server,
         authState: AuthState.authenticated(credentials()),
         connectionManager: manager,
       );
       addTearDown(container.dispose);
+      container
+          .read(serverLinkStateProvider.notifier)
+          .set(LinkOffline(serverId: 1, cause: cause));
 
-      final state = await waitForSession(
-        container,
-        (state) => state is OfflineServerSession,
-      );
+      final state = await readSession(container);
 
       expect(state, isA<OfflineServerSession>());
+      expect((state as OfflineServerSession).activeServer, server);
+      expect(state.cause, same(cause));
+      expect(manager.activeServerId, 1);
     },
   );
 
-  test(
-    'starts replacement open when same server authenticates again while old open is pending',
-    () async {
-      final manager = _FakeConnectionManager(completeImmediately: false);
-      final authStateSource = _AuthStateSource(
-        AuthState.authenticated(credentials()),
-      );
-      final container = makeContainer(
-        activeServer: server,
-        authState: authStateSource.value,
-        authStateSource: authStateSource,
-        connectionManager: manager,
-      );
-      addTearDown(container.dispose);
-
-      await waitForSession(
-        container,
-        (state) => state is ConnectingServerSession,
-      );
-      expect(manager.opens, 1);
-
-      authStateSource.value = const AuthState.unauthenticated();
-      container.invalidate(authStateProvider);
-      await waitForSession(
-        container,
-        (state) => state is NoActiveServerSession,
-      );
-
-      authStateSource.value = AuthState.authenticated(credentials());
-      container.invalidate(authStateProvider);
-      await waitForSession(
-        container,
-        (state) => state is ConnectingServerSession,
-      );
-
-      expect(manager.opens, 2);
-    },
-  );
-
-  test('connected transport state restores online session', () async {
+  test('maps authenticated auth-failed link to revoked session', () async {
     final manager = _FakeConnectionManager();
     final container = makeContainer(
       activeServer: server,
@@ -374,33 +291,233 @@ void main() {
       connectionManager: manager,
     );
     addTearDown(container.dispose);
+    container
+        .read(serverLinkStateProvider.notifier)
+        .set(const LinkAuthFailed(serverId: 1));
 
-    await waitForSession(container, (state) => state is OnlineServerSession);
+    final state = await readSession(container);
 
-    container.read(serverConnectionStateProvider.notifier).setDisconnected();
-    await waitForSession(container, (state) => state is OfflineServerSession);
-
-    container.read(serverConnectionStateProvider.notifier).setConnected();
-    await waitForSession(container, (state) => state is OnlineServerSession);
+    expect(state, isA<AuthRevokedServerSession>());
+    expect((state as AuthRevokedServerSession).activeServer, server);
+    expect(manager.activeServerId, 1);
   });
 
   test(
     'revoked auth state maps to revoked session without cleanup side effects',
     () async {
-      final authStateSource = _AuthStateSource(const AuthState.revoked());
+      final manager = _FakeConnectionManager();
       final container = makeContainer(
         activeServer: server,
-        authState: authStateSource.value,
-        authStateSource: authStateSource,
+        authState: const AuthState.revoked(),
+        connectionManager: manager,
       );
       addTearDown(container.dispose);
 
-      final state = await waitForSession(
-        container,
-        (state) => state is AuthRevokedServerSession,
-      );
+      final state = await readSession(container);
 
       expect(state, isA<AuthRevokedServerSession>());
+      expect((state as AuthRevokedServerSession).activeServer, server);
+      expect(manager.activeServerId, 1);
+    },
+  );
+
+  test(
+    'unauthenticated auth state clears active server and maps to no active session',
+    () async {
+      final manager = _FakeConnectionManager();
+      final container = makeContainer(
+        activeServer: server,
+        authState: const AuthState.unauthenticated(),
+        connectionManager: manager,
+      );
+      addTearDown(container.dispose);
+
+      final state = await readSession(container);
+
+      expect(state, isA<NoActiveServerSession>());
+      expect(manager.activeServerId, isNull);
+    },
+  );
+
+  test('does not call getConnection while projecting online session', () async {
+    final manager = _FakeConnectionManager();
+    final connection = _FakeConnection();
+    final container = makeContainer(
+      activeServer: server,
+      authState: AuthState.authenticated(credentials()),
+      connectionManager: manager,
+    );
+    addTearDown(container.dispose);
+    container
+        .read(serverLinkStateProvider.notifier)
+        .set(LinkOnline(serverId: 1, connection: connection));
+
+    final state = await readSession(container);
+
+    expect(state, isA<OnlineServerSession>());
+    expect((state as OnlineServerSession).connection, same(connection));
+    expect(manager.getConnectionCalls, 0);
+  });
+
+  test('link state changes reproject session', () async {
+    final manager = _FakeConnectionManager();
+    final connection = _FakeConnection();
+    final container = makeContainer(
+      activeServer: server,
+      authState: AuthState.authenticated(credentials()),
+      connectionManager: manager,
+    );
+    addTearDown(container.dispose);
+
+    final connecting = await readSession(container);
+    expect(connecting, isA<ConnectingServerSession>());
+
+    container
+        .read(serverLinkStateProvider.notifier)
+        .set(LinkOnline(serverId: 1, connection: connection));
+    await container.pump();
+    final online = container.read(activeServerSessionProvider);
+
+    expect(online, isA<OnlineServerSession>());
+    expect((online as OnlineServerSession).connection, same(connection));
+    expect(manager.getConnectionCalls, 0);
+  });
+
+  test(
+    'stale online link from previous server projects new server connecting',
+    () async {
+      const nextServer = Server(id: 2, name: 'Cabin');
+      final serverManager = _FakeServerManager(server);
+      addTearDown(serverManager.dispose);
+      final connection = _FakeConnection();
+      final container = makeContainer(
+        activeServer: server,
+        authState: AuthState.authenticated(credentials()),
+        serverManager: serverManager,
+      );
+      addTearDown(container.dispose);
+      final activeServerSubscription = container.listen(
+        activeServerProvider,
+        (_, _) {},
+      );
+      final sessionSubscription = container.listen(
+        activeServerSessionProvider,
+        (_, _) {},
+      );
+      addTearDown(activeServerSubscription.close);
+      addTearDown(sessionSubscription.close);
+      container
+          .read(serverLinkStateProvider.notifier)
+          .set(LinkOnline(serverId: 1, connection: connection));
+
+      final online = await waitForSession(
+        container,
+        (state) => state is OnlineServerSession && state.server.id == 1,
+      );
+      expect(online, isA<OnlineServerSession>());
+
+      serverManager.emitActiveServer(nextServer);
+      container.invalidate(activeServerProvider);
+      container.invalidate(activeServerSessionProvider);
+      final switched = await waitForSession(
+        container,
+        (state) => state.server?.id == 2,
+      );
+
+      expect(switched, isA<ConnectingServerSession>());
+      expect((switched as ConnectingServerSession).activeServer, nextServer);
+    },
+  );
+
+  test(
+    'stale offline link from previous server projects new server connecting',
+    () async {
+      const nextServer = Server(id: 2, name: 'Cabin');
+      final serverManager = _FakeServerManager(server);
+      addTearDown(serverManager.dispose);
+      final container = makeContainer(
+        activeServer: server,
+        authState: AuthState.authenticated(credentials()),
+        serverManager: serverManager,
+      );
+      addTearDown(container.dispose);
+      final activeServerSubscription = container.listen(
+        activeServerProvider,
+        (_, _) {},
+      );
+      final sessionSubscription = container.listen(
+        activeServerSessionProvider,
+        (_, _) {},
+      );
+      addTearDown(activeServerSubscription.close);
+      addTearDown(sessionSubscription.close);
+      container
+          .read(serverLinkStateProvider.notifier)
+          .set(
+            LinkOffline(serverId: 1, cause: StateError('old server offline')),
+          );
+
+      final offline = await waitForSession(
+        container,
+        (state) => state is OfflineServerSession && state.server.id == 1,
+      );
+      expect(offline, isA<OfflineServerSession>());
+
+      serverManager.emitActiveServer(nextServer);
+      container.invalidate(activeServerProvider);
+      container.invalidate(activeServerSessionProvider);
+      final switched = await waitForSession(
+        container,
+        (state) => state.server?.id == 2,
+      );
+
+      expect(switched, isA<ConnectingServerSession>());
+      expect((switched as ConnectingServerSession).activeServer, nextServer);
+    },
+  );
+
+  test(
+    'stale auth failed link from previous server projects new server connecting',
+    () async {
+      const nextServer = Server(id: 2, name: 'Cabin');
+      final serverManager = _FakeServerManager(server);
+      addTearDown(serverManager.dispose);
+      final container = makeContainer(
+        activeServer: server,
+        authState: AuthState.authenticated(credentials()),
+        serverManager: serverManager,
+      );
+      addTearDown(container.dispose);
+      final activeServerSubscription = container.listen(
+        activeServerProvider,
+        (_, _) {},
+      );
+      final sessionSubscription = container.listen(
+        activeServerSessionProvider,
+        (_, _) {},
+      );
+      addTearDown(activeServerSubscription.close);
+      addTearDown(sessionSubscription.close);
+      container
+          .read(serverLinkStateProvider.notifier)
+          .set(const LinkAuthFailed(serverId: 1));
+
+      final revoked = await waitForSession(
+        container,
+        (state) => state is AuthRevokedServerSession && state.server.id == 1,
+      );
+      expect(revoked, isA<AuthRevokedServerSession>());
+
+      serverManager.emitActiveServer(nextServer);
+      container.invalidate(activeServerProvider);
+      container.invalidate(activeServerSessionProvider);
+      final switched = await waitForSession(
+        container,
+        (state) => state.server?.id == 2,
+      );
+
+      expect(switched, isA<ConnectingServerSession>());
+      expect((switched as ConnectingServerSession).activeServer, nextServer);
     },
   );
 }

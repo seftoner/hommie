@@ -41,7 +41,6 @@ final class HomePageControllerProvider
           HomePageControllerProvider.$allTransitiveDependencies9,
           HomePageControllerProvider.$allTransitiveDependencies10,
           HomePageControllerProvider.$allTransitiveDependencies11,
-          HomePageControllerProvider.$allTransitiveDependencies12,
         },
       );
 
@@ -59,13 +58,11 @@ final class HomePageControllerProvider
       ActiveServerSessionProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies8 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies9 =
-      ActiveServerSessionProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies10 = serverSyncCoordinatorProvider;
+  static const $allTransitiveDependencies9 = serverSyncCoordinatorProvider;
+  static const $allTransitiveDependencies10 =
+      ServerSyncCoordinatorProvider.$allTransitiveDependencies5;
   static const $allTransitiveDependencies11 =
       ServerSyncCoordinatorProvider.$allTransitiveDependencies6;
-  static const $allTransitiveDependencies12 =
-      ServerSyncCoordinatorProvider.$allTransitiveDependencies7;
 
   @override
   String debugGetCreateSourceHash() => _$homePageControllerHash();

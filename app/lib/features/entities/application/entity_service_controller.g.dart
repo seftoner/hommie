@@ -34,7 +34,6 @@ final class EntityServiceControllerProvider
           EntityServiceControllerProvider.$allTransitiveDependencies2,
           EntityServiceControllerProvider.$allTransitiveDependencies3,
           EntityServiceControllerProvider.$allTransitiveDependencies4,
-          EntityServiceControllerProvider.$allTransitiveDependencies5,
         },
       );
 
@@ -47,8 +46,6 @@ final class EntityServiceControllerProvider
       ActiveServerSessionProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 =
-      ActiveServerSessionProvider.$allTransitiveDependencies4;
 
   @override
   String debugGetCreateSourceHash() => _$entityServiceControllerHash();

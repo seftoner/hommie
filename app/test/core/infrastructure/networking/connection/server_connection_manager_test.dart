@@ -5,7 +5,7 @@ import 'package:home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/core/infrastructure/networking/connection/ha_connection_factory.dart';
 import 'package:hommie/core/infrastructure/networking/connection/managed_ha_connection.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
-import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
+import 'package:hommie/core/infrastructure/networking/providers/server_link_state_provider.dart';
 
 class _FakeConnection implements IHAConnection {
   bool closed = false;
@@ -103,14 +103,116 @@ class _FakeOpening {
 
 void main() {
   test(
+    'setActiveServer opens the active server and publishes online when complete',
+    () async {
+      final factory = _FakeFactory();
+      final states = <ServerLinkState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
+      );
+
+      manager.setActiveServer(1);
+
+      expect(factory.opens, 1);
+      expect(states.single, isA<LinkConnecting>());
+      expect(states.single.serverId, 1);
+
+      factory.complete(1);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkOnline,
+      ]);
+      expect(states.map((state) => state.serverId), [1, 1]);
+    },
+  );
+
+  test('getConnection rejects non-active server without opening', () async {
+    final factory = _FakeFactory();
+    final manager = ServerConnectionManagerImpl(
+      factory: factory,
+      setLinkState: (_) {},
+      resetLinkState: () {},
+    );
+
+    await expectLater(manager.getConnection(1), throwsStateError);
+
+    expect(factory.opens, 0);
+  });
+
+  test(
+    'setActiveServer does not duplicate opens while in-flight or connected',
+    () async {
+      final factory = _FakeFactory();
+      final states = <ServerLinkState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
+      );
+
+      manager.setActiveServer(1);
+      manager.setActiveServer(1);
+
+      expect(factory.opens, 1);
+
+      factory.complete(1);
+      await Future<void>.delayed(Duration.zero);
+      manager.setActiveServer(1);
+
+      expect(factory.opens, 1);
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkOnline,
+      ]);
+    },
+  );
+
+  test(
+    'reselecting same server before deferred reset replaces stale online link',
+    () async {
+      final factory = _FakeFactory();
+      final states = <ServerLinkState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
+      );
+
+      manager.setActiveServer(1);
+      factory.complete(1);
+      await Future<void>.delayed(Duration.zero);
+      final oldConnection = (states.last as LinkOnline).connection;
+
+      manager.setActiveServer(null);
+      manager.setActiveServer(1);
+
+      expect(states.last, isA<LinkConnecting>());
+      expect(states.last.serverId, 1);
+      expect(factory.opens, 2);
+      expect((oldConnection as _FakeConnection).closed, isTrue);
+
+      factory.complete(1);
+      await Future<void>.delayed(Duration.zero);
+
+      final online = states.last as LinkOnline;
+      expect(online.serverId, 1);
+      expect(online.connection, isNot(same(oldConnection)));
+    },
+  );
+
+  test(
     'shares one in-flight open for concurrent getConnection calls',
     () async {
       final factory = _FakeFactory();
-      final states = <HAServerConnectionState>[];
+      final states = <ServerLinkState>[];
       final manager = ServerConnectionManagerImpl(
         factory: factory,
-        setState: states.add,
-        resetState: () => states.add(HAServerConnectionState.unknown),
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
       );
 
       manager.setActiveServer(1);
@@ -130,8 +232,8 @@ void main() {
       final factory = _FakeFactory();
       final manager = ServerConnectionManagerImpl(
         factory: factory,
-        setState: (_) {},
-        resetState: () {},
+        setLinkState: (_) {},
+        resetLinkState: () {},
       );
 
       manager.setActiveServer(1);
@@ -149,11 +251,11 @@ void main() {
     'uses authenticated state emitted during open to mark active server connected',
     () async {
       final factory = _FakeFactory();
-      final states = <HAServerConnectionState>[];
+      final states = <ServerLinkState>[];
       final manager = ServerConnectionManagerImpl(
         factory: factory,
-        setState: states.add,
-        resetState: () => states.add(HAServerConnectionState.unknown),
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
       );
 
       manager.setActiveServer(1);
@@ -161,20 +263,148 @@ void main() {
       factory.emit(1, const Authenticated());
       factory.complete(1);
 
-      await future;
+      final connection = await future;
       await Future<void>.delayed(Duration.zero);
 
-      expect(states, [HAServerConnectionState.connected]);
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkOnline,
+      ]);
+      expect(states.map((state) => state.serverId), [1, 1]);
+      final state = states.last as LinkOnline;
+      expect(state.serverId, 1);
+      expect(state.connection, same(connection));
     },
   );
 
-  test('stale events from a disconnected resource are ignored', () async {
+  test(
+    'active server connecting socket state publishes connecting link state',
+    () async {
+      final factory = _FakeFactory();
+      final states = <ServerLinkState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
+      );
+
+      manager.setActiveServer(1);
+      final future = manager.getConnection(1);
+      factory.emit(1, const Connecting());
+      factory.complete(1);
+
+      await future;
+      factory.emit(1, const Authenticated());
+      await Future<void>.delayed(Duration.zero);
+
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkConnecting,
+        LinkOnline,
+      ]);
+      expect(states.map((state) => state.serverId), [1, 1, 1]);
+    },
+  );
+
+  test(
+    'active server auth failure socket disconnect publishes auth failed and removes resource',
+    () async {
+      final factory = _FakeFactory();
+      final states = <ServerLinkState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
+      );
+
+      manager.setActiveServer(1);
+      final firstOpen = manager.getConnection(1);
+      factory.complete(1);
+      await firstOpen;
+
+      factory.emit(1, const Disconnected(type: DisconnectionType.authFailure));
+      await Future<void>.delayed(Duration.zero);
+
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkOnline,
+        LinkAuthFailed,
+      ]);
+      expect(states.map((state) => state.serverId), [1, 1, 1]);
+
+      final secondOpen = manager.getConnection(1);
+
+      expect(factory.opens, 2);
+      factory.complete(1);
+      await secondOpen;
+    },
+  );
+
+  test(
+    'active server normal socket disconnect publishes offline link state',
+    () async {
+      final factory = _FakeFactory();
+      final states = <ServerLinkState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
+      );
+
+      manager.setActiveServer(1);
+      final future = manager.getConnection(1);
+      factory.complete(1);
+      await future;
+
+      factory.emit(1, const Disconnected());
+      await Future<void>.delayed(Duration.zero);
+
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkOnline,
+        LinkOffline,
+      ]);
+      expect(states.map((state) => state.serverId), [1, 1, 1]);
+    },
+  );
+
+  test('non-active server socket events do not publish link state', () async {
     final factory = _FakeFactory();
-    final states = <HAServerConnectionState>[];
+    final states = <ServerLinkState>[];
     final manager = ServerConnectionManagerImpl(
       factory: factory,
-      setState: states.add,
-      resetState: () => states.add(HAServerConnectionState.unknown),
+      setLinkState: states.add,
+      resetLinkState: () => states.add(const LinkIdle()),
+    );
+
+    manager.setActiveServer(1);
+    final future = manager.getConnection(1);
+    factory.complete(1);
+    await future;
+
+    manager.setActiveServer(2);
+
+    factory.emit(1, const Connecting());
+    factory.emit(1, const Reconnecting());
+    factory.emit(1, const Authenticated());
+    factory.emit(1, const Disconnected());
+    await Future<void>.delayed(Duration.zero);
+
+    expect(states.map((state) => state.runtimeType), [
+      LinkConnecting,
+      LinkOnline,
+      LinkConnecting,
+    ]);
+    expect(states.map((state) => state.serverId), [1, 1, 2]);
+  });
+
+  test('stale events from a disconnected resource are ignored', () async {
+    final factory = _FakeFactory();
+    final states = <ServerLinkState>[];
+    final manager = ServerConnectionManagerImpl(
+      factory: factory,
+      setLinkState: states.add,
+      resetLinkState: () => states.add(const LinkIdle()),
     );
 
     manager.setActiveServer(1);
@@ -185,25 +415,31 @@ void main() {
     manager.disconnect(1);
     factory.emit(1, const Authenticated());
 
-    expect(states, [HAServerConnectionState.connected]);
+    expect(states.map((state) => state.runtimeType), [
+      LinkConnecting,
+      LinkOnline,
+    ]);
+    expect(states.map((state) => state.serverId), [1, 1]);
 
     await Future<void>.delayed(Duration.zero);
 
-    expect(states, [
-      HAServerConnectionState.connected,
-      HAServerConnectionState.unknown,
+    expect(states.map((state) => state.runtimeType), [
+      LinkConnecting,
+      LinkOnline,
+      LinkIdle,
     ]);
+    expect(states.map((state) => state.serverId), [1, 1, null]);
   });
 
   test(
     'returns current managed connection after socket reconnect replaces it',
     () async {
       final factory = _FakeFactory();
-      final states = <HAServerConnectionState>[];
+      final states = <ServerLinkState>[];
       final manager = ServerConnectionManagerImpl(
         factory: factory,
-        setState: states.add,
-        resetState: () => states.add(HAServerConnectionState.unknown),
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
       );
 
       manager.setActiveServer(1);
@@ -222,11 +458,16 @@ void main() {
 
       expect(second, same(replacement));
       expect(second, isNot(same(first)));
-      expect(states, [
-        HAServerConnectionState.connected,
-        HAServerConnectionState.reconnecting,
-        HAServerConnectionState.connected,
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkOnline,
+        LinkReconnecting,
+        LinkOnline,
       ]);
+      expect(states.map((state) => state.serverId), [1, 1, 1, 1]);
+      final state = states.last as LinkOnline;
+      expect(state.serverId, 1);
+      expect(state.connection, same(replacement));
     },
   );
 
@@ -234,8 +475,8 @@ void main() {
     final factory = _FakeFactory();
     final manager = ServerConnectionManagerImpl(
       factory: factory,
-      setState: (_) {},
-      resetState: () {},
+      setLinkState: (_) {},
+      resetLinkState: () {},
     );
 
     manager.setActiveServer(1);
@@ -244,18 +485,18 @@ void main() {
     manager.setActiveServer(2);
 
     await expectLater(staleOpen, throwsA(isA<ConnectionOpenCancelled>()));
-    expect(factory.openings.single.openingClosed, isTrue);
+    expect(factory.openings.first.openingClosed, isTrue);
   });
 
   test(
     'cancelled stale same-server open does not publish disconnected',
     () async {
       final factory = _FakeFactory();
-      final states = <HAServerConnectionState>[];
+      final states = <ServerLinkState>[];
       final manager = ServerConnectionManagerImpl(
         factory: factory,
-        setState: states.add,
-        resetState: () => states.add(HAServerConnectionState.unknown),
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
       );
 
       manager.setActiveServer(1);
@@ -273,37 +514,41 @@ void main() {
 
       await staleOpenExpectation;
 
-      expect(states, isNot(contains(HAServerConnectionState.disconnected)));
+      expect(states, isNot(contains(isA<LinkOffline>())));
     },
   );
 
   test('clearing active server defers connection state reset', () async {
     final factory = _FakeFactory();
-    final states = <HAServerConnectionState>[];
+    final states = <ServerLinkState>[];
     final manager = ServerConnectionManagerImpl(
       factory: factory,
-      setState: states.add,
-      resetState: () => states.add(HAServerConnectionState.unknown),
+      setLinkState: states.add,
+      resetLinkState: () => states.add(const LinkIdle()),
     );
 
     manager.setActiveServer(1);
 
     manager.setActiveServer(null);
 
-    expect(states, isEmpty);
+    expect(states.map((state) => state.runtimeType), [LinkConnecting]);
+    expect(states.single.serverId, 1);
 
     await Future<void>.delayed(Duration.zero);
 
-    expect(states, [HAServerConnectionState.unknown]);
+    expect(states.map((state) => state.runtimeType), [
+      LinkConnecting,
+      LinkIdle,
+    ]);
   });
 
   test('stale deferred reset is ignored after active server changes', () async {
     final factory = _FakeFactory();
-    final states = <HAServerConnectionState>[];
+    final states = <ServerLinkState>[];
     final manager = ServerConnectionManagerImpl(
       factory: factory,
-      setState: states.add,
-      resetState: () => states.add(HAServerConnectionState.unknown),
+      setLinkState: states.add,
+      resetLinkState: () => states.add(const LinkIdle()),
     );
 
     manager.setActiveServer(1);
@@ -312,18 +557,22 @@ void main() {
 
     await Future<void>.delayed(Duration.zero);
 
-    expect(states, isEmpty);
+    expect(states.map((state) => state.runtimeType), [
+      LinkConnecting,
+      LinkConnecting,
+    ]);
+    expect(states.map((state) => state.serverId), [1, 2]);
   });
 
   test(
     'stale deferred reset is ignored if same active server id returns',
     () async {
       final factory = _FakeFactory();
-      final states = <HAServerConnectionState>[];
+      final states = <ServerLinkState>[];
       final manager = ServerConnectionManagerImpl(
         factory: factory,
-        setState: states.add,
-        resetState: () => states.add(HAServerConnectionState.unknown),
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
       );
 
       manager.setActiveServer(1);
@@ -333,7 +582,12 @@ void main() {
 
       await Future<void>.delayed(Duration.zero);
 
-      expect(states, isEmpty);
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkConnecting,
+        LinkConnecting,
+      ]);
+      expect(states.map((state) => state.serverId), [1, 2, 1]);
     },
   );
 
@@ -341,11 +595,11 @@ void main() {
     'auth errors during open publish auth failure for active server',
     () async {
       final factory = _FakeFactory();
-      final states = <HAServerConnectionState>[];
+      final states = <ServerLinkState>[];
       final manager = ServerConnectionManagerImpl(
         factory: factory,
-        setState: states.add,
-        resetState: () => states.add(HAServerConnectionState.unknown),
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
       );
 
       manager.setActiveServer(1);
@@ -358,7 +612,11 @@ void main() {
       factory.fail(1, AuthenticationError('bad token'));
 
       await futureExpectation;
-      expect(states, [HAServerConnectionState.authFailure]);
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkAuthFailed,
+      ]);
+      expect(states.map((state) => state.serverId), [1, 1]);
     },
   );
 
@@ -366,11 +624,11 @@ void main() {
     'pre-authentication transport failures publish disconnected for active server',
     () async {
       final factory = _FakeFactory();
-      final states = <HAServerConnectionState>[];
+      final states = <ServerLinkState>[];
       final manager = ServerConnectionManagerImpl(
         factory: factory,
-        setState: states.add,
-        resetState: () => states.add(HAServerConnectionState.unknown),
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
       );
 
       manager.setActiveServer(1);
@@ -380,13 +638,18 @@ void main() {
         throwsA(isA<ConnectionError>()),
       );
 
-      factory.fail(
-        1,
-        ConnectionError('Connection closed before authentication'),
-      );
+      final error = ConnectionError('Connection closed before authentication');
+      factory.fail(1, error);
 
       await futureExpectation;
-      expect(states, [HAServerConnectionState.disconnected]);
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkOffline,
+      ]);
+      expect(states.map((state) => state.serverId), [1, 1]);
+      final state = states.last as LinkOffline;
+      expect(state.serverId, 1);
+      expect(state.cause, same(error));
     },
   );
 
@@ -394,10 +657,11 @@ void main() {
     final factory = _FakeFactory();
     final manager = ServerConnectionManagerImpl(
       factory: factory,
-      setState: (_) {},
-      resetState: () {},
+      setLinkState: (_) {},
+      resetLinkState: () {},
     );
 
+    manager.setActiveServer(1);
     final future = manager.getConnection(1);
     final futureExpectation = expectLater(
       future,

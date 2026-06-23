@@ -5,8 +5,8 @@ import 'package:hommie/core/infrastructure/networking/connection/connection_erro
 import 'package:hommie/core/infrastructure/networking/connection/ha_connection_factory.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/connection/managed_ha_connection.dart';
-import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
 import 'package:hommie/core/infrastructure/networking/providers/server_config_provider.dart';
+import 'package:hommie/core/infrastructure/networking/providers/server_link_state_provider.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,26 +14,11 @@ part 'server_connection_manager.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [serverConfig])
 IServerConnectionManager serverConnectionManager(Ref ref) {
-  final stateNotifier = ref.read(serverConnectionStateProvider.notifier);
+  final linkState = ref.read(serverLinkStateProvider.notifier);
   final manager = ServerConnectionManagerImpl(
     factory: HAConnectionFactory(ref),
-    setState: (state) {
-      switch (state) {
-        case HAServerConnectionState.unknown:
-          stateNotifier.reset();
-        case HAServerConnectionState.connected:
-          stateNotifier.setConnected();
-        case HAServerConnectionState.disconnected:
-          stateNotifier.setDisconnected();
-        case HAServerConnectionState.connecting:
-          stateNotifier.setConnecting();
-        case HAServerConnectionState.reconnecting:
-          stateNotifier.setReconnecting();
-        case HAServerConnectionState.authFailure:
-          stateNotifier.setAuthFailure();
-      }
-    },
-    resetState: stateNotifier.reset,
+    setLinkState: linkState.set,
+    resetLinkState: linkState.reset,
   );
 
   ref.onDispose(manager.dispose);
@@ -45,15 +30,15 @@ IServerConnectionManager serverConnectionManager(Ref ref) {
 final class ServerConnectionManagerImpl implements IServerConnectionManager {
   ServerConnectionManagerImpl({
     required IHAConnectionFactory factory,
-    required void Function(HAServerConnectionState state) setState,
-    required void Function() resetState,
+    required void Function(ServerLinkState state) setLinkState,
+    required void Function() resetLinkState,
   }) : _factory = factory,
-       _setState = setState,
-       _resetState = resetState;
+       _setLinkState = setLinkState,
+       _resetLinkState = resetLinkState;
 
   final IHAConnectionFactory _factory;
-  final void Function(HAServerConnectionState state) _setState;
-  final void Function() _resetState;
+  final void Function(ServerLinkState state) _setLinkState;
+  final void Function() _resetLinkState;
 
   final Map<int, _ConnectionResource> _resources = {};
   final Map<int, _OpeningResource> _inFlight = {};
@@ -66,6 +51,9 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
   @override
   void setActiveServer(int? serverId) {
     if (_activeServerId == serverId) {
+      if (serverId != null) {
+        _ensureActiveConnection(serverId);
+      }
       return;
     }
 
@@ -83,12 +71,22 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
         disconnect(existingServerId);
       }
     }
+
+    if (serverId != null) {
+      _ensureActiveConnection(serverId);
+    }
   }
 
   @override
   Future<IHAConnection> getConnection(int serverId) {
     if (_isDisposed) {
       return Future.error(StateError('ServerConnectionManager is disposed'));
+    }
+
+    if (_activeServerId != serverId) {
+      return Future.error(
+        StateError('Server $serverId is not the active server.'),
+      );
     }
 
     final resource = _resources[serverId];
@@ -146,9 +144,9 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
           version == _versionOf(serverId) &&
           !_isDisposed) {
         if (isConnectionAuthenticationFailure(error)) {
-          _setState(HAServerConnectionState.authFailure);
+          _setLinkState(LinkAuthFailed(serverId: serverId));
         } else {
-          _setState(HAServerConnectionState.disconnected);
+          _setLinkState(LinkOffline(serverId: serverId, cause: error));
         }
       }
 
@@ -158,12 +156,6 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
         _inFlight.remove(serverId);
       }
     }
-  }
-
-  @override
-  Future<void> reconnect(int serverId) async {
-    disconnect(serverId);
-    await getConnection(serverId);
   }
 
   @override
@@ -227,28 +219,30 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
     switch (state) {
       case Disconnected(type: DisconnectionType.authFailure):
         if (shouldUpdateGlobalState) {
-          _setState(HAServerConnectionState.authFailure);
+          _setLinkState(LinkAuthFailed(serverId: serverId));
         }
         _removeResource(serverId);
         break;
       case Connecting():
         if (shouldUpdateGlobalState) {
-          _setState(HAServerConnectionState.connecting);
+          _setLinkState(LinkConnecting(serverId: serverId));
         }
         break;
       case Authenticated():
         if (shouldUpdateGlobalState) {
-          _setState(HAServerConnectionState.connected);
+          _setLinkState(
+            LinkOnline(serverId: serverId, connection: resource.connection),
+          );
         }
         break;
       case Reconnecting():
         if (shouldUpdateGlobalState) {
-          _setState(HAServerConnectionState.reconnecting);
+          _setLinkState(LinkReconnecting(serverId: serverId));
         }
         break;
       case Disconnected():
         if (shouldUpdateGlobalState) {
-          _setState(HAServerConnectionState.disconnected);
+          _setLinkState(LinkOffline(serverId: serverId));
         }
         break;
     }
@@ -263,8 +257,27 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
         return;
       }
 
-      _resetState();
+      _resetLinkState();
     });
+  }
+
+  void _ensureActiveConnection(int serverId) {
+    if (_isDisposed ||
+        _resources.containsKey(serverId) ||
+        _inFlight.containsKey(serverId)) {
+      return;
+    }
+
+    _setLinkState(LinkConnecting(serverId: serverId));
+    unawaited(_openActiveConnection(serverId));
+  }
+
+  Future<void> _openActiveConnection(int serverId) async {
+    try {
+      await getConnection(serverId);
+    } catch (_) {
+      // _open publishes LinkOffline/LinkAuthFailed for the active server.
+    }
   }
 
   int _versionOf(int serverId) => _versions[serverId] ?? 0;

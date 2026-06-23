@@ -136,7 +136,7 @@ void main() {
 
       expect(authRepository.loginCalls.single.serverId, 1);
       expect(authRepository.loginCalls.single.serverUrl, 'http://example.test');
-      expect(connectionManager.disconnectCalls, [1]);
+      expect(connectionManager.disconnectCalls, isEmpty);
       expect(serverManager.removed, isEmpty);
       expect(serverManager.activated, 1);
       expect(serverManager.added, hasLength(2));
@@ -301,9 +301,6 @@ class _FakeConnectionManager implements IServerConnectionManager {
   Future<ha.IHAConnection> getConnection(int serverId) {
     throw UnimplementedError('Config repository is overridden in these tests.');
   }
-
-  @override
-  Future<void> reconnect(int serverId) async {}
 
   @override
   void setActiveServer(int? serverId) {

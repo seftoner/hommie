@@ -34,7 +34,6 @@ final class ServerSyncCoordinatorProvider
           ServerSyncCoordinatorProvider.$allTransitiveDependencies4,
           ServerSyncCoordinatorProvider.$allTransitiveDependencies5,
           ServerSyncCoordinatorProvider.$allTransitiveDependencies6,
-          ServerSyncCoordinatorProvider.$allTransitiveDependencies7,
         },
       );
 
@@ -47,10 +46,8 @@ final class ServerSyncCoordinatorProvider
       ActiveServerSessionProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 =
-      ActiveServerSessionProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies6 = areaRepositoryProvider;
-  static const $allTransitiveDependencies7 = entityRepositoryProvider;
+  static const $allTransitiveDependencies5 = areaRepositoryProvider;
+  static const $allTransitiveDependencies6 = entityRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverSyncCoordinatorHash();

@@ -40,7 +40,6 @@ final class EntityStatesProvider
           EntityStatesProvider.$allTransitiveDependencies2,
           EntityStatesProvider.$allTransitiveDependencies3,
           EntityStatesProvider.$allTransitiveDependencies4,
-          EntityStatesProvider.$allTransitiveDependencies5,
         },
       );
 
@@ -53,8 +52,6 @@ final class EntityStatesProvider
       ActiveServerSessionProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 =
-      ActiveServerSessionProvider.$allTransitiveDependencies4;
 
   @override
   String debugGetCreateSourceHash() => _$entityStatesHash();

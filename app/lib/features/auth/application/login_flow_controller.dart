@@ -81,7 +81,6 @@ class LoginFlowController {
         websocketConfigRepositoryProvider(server.id!).future,
       );
       final config = await configRepository.getConfig();
-      _ref.read(serverConnectionManagerProvider).disconnect(server.id!);
 
       final updatedServer = await serverManager.addServer(
         server.copyWith(

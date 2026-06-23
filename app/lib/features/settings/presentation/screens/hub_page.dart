@@ -245,9 +245,7 @@ String _authLabel(AuthState state) {
   return state.map(
     initial: (_) => 'Checking credentials...',
     unauthenticated: (_) => 'Not authenticated',
-    authenticating: (_) => 'Authenticating...',
     authenticated: (_) => 'Authenticated',
-    refreshing: (_) => 'Refreshing session',
     revoked: (_) => 'Session revoked',
     failure: (value) => 'Auth failed: ${value.failure}',
   );

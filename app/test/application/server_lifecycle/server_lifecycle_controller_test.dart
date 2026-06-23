@@ -218,9 +218,6 @@ class _FakeConnectionManager implements IServerConnectionManager {
   }
 
   @override
-  Future<void> reconnect(int serverId) async {}
-
-  @override
   void setActiveServer(int? serverId) {}
 }
 
