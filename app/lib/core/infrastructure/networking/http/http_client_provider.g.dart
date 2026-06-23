@@ -50,3 +50,46 @@ final class HttpClientProvider
 }
 
 String _$httpClientHash() => r'93c2abbd5c09cf0a1ee118b362e22d2449134043';
+
+@ProviderFor(authRevocationHttpClient)
+const authRevocationHttpClientProvider = AuthRevocationHttpClientProvider._();
+
+final class AuthRevocationHttpClientProvider
+    extends
+        $FunctionalProvider<http.BaseClient, http.BaseClient, http.BaseClient>
+    with $Provider<http.BaseClient> {
+  const AuthRevocationHttpClientProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authRevocationHttpClientProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authRevocationHttpClientHash();
+
+  @$internal
+  @override
+  $ProviderElement<http.BaseClient> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  http.BaseClient create(Ref ref) {
+    return authRevocationHttpClient(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(http.BaseClient value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<http.BaseClient>(value),
+    );
+  }
+}
+
+String _$authRevocationHttpClientHash() =>
+    r'bef46f46a382a945217f4d8369807b7dee0e77e8';

@@ -24,3 +24,8 @@ http.BaseClient httpClient(Ref ref) {
 
   return httpClient;
 }
+
+@Riverpod(keepAlive: true)
+http.BaseClient authRevocationHttpClient(Ref ref) {
+  return TimeoutHttpClient(http.Client(), const Duration(milliseconds: 500));
+}

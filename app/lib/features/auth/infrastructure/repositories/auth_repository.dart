@@ -3,20 +3,25 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/features/auth/domain/repository/i_credential_repository.dart';
-import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:oauth2/oauth2.dart';
 import 'package:http/http.dart' as http;
+import 'package:oauth2/oauth2.dart';
 
 class AuthRepository implements IAuthRepository {
   final ICredentialRepository _credentialRepository;
   final http.Client _httpClient;
+  final http.Client _revocationHttpClient;
 
   final String _clientID = 'https://seftoner.github.io';
 
-  AuthRepository(this._credentialRepository, this._httpClient);
+  AuthRepository(
+    this._credentialRepository,
+    this._httpClient, {
+    http.Client? revocationHttpClient,
+  }) : _revocationHttpClient = revocationHttpClient ?? _httpClient;
 
   @override
   Future<Either<AuthFailure, Credentials>> login({
@@ -56,24 +61,35 @@ class AuthRepository implements IAuthRepository {
   Future<Either<AuthFailure, Unit>> signOut(int serverId) async {
     try {
       final credentials = await _credentialRepository.read(serverId);
-      final client = http.Client();
-      try {
-        //TODO: handle internet connection error
-        // In this case token will be alive
-        await client.post(
-          credentials!.tokenEndpoint!,
-          body: {'token': credentials.refreshToken, 'action': 'revoke'},
-        );
-      } on SocketException catch (e) {
-        logger.e('Token revocation failed: $e');
-      } finally {
-        client.close();
+      if (credentials != null) {
+        unawaited(_revokeToken(credentials));
       }
 
       await _credentialRepository.clear(serverId);
       return right(unit);
     } on PlatformException {
       return left(const AuthFailure.storage());
+    }
+  }
+
+  Future<void> _revokeToken(Credentials credentials) async {
+    try {
+      final tokenEndpoint = credentials.tokenEndpoint;
+      final refreshToken = credentials.refreshToken;
+      if (tokenEndpoint == null || refreshToken == null) {
+        return;
+      }
+
+      await _revocationHttpClient.post(
+        tokenEndpoint,
+        body: {'token': refreshToken, 'action': 'revoke'},
+      );
+    } on TimeoutException catch (e) {
+      logger.e('Token revocation timed out: $e');
+    } on SocketException catch (e) {
+      logger.e('Token revocation failed: $e');
+    } on http.ClientException catch (e) {
+      logger.e('Token revocation failed: $e');
     }
   }
 
