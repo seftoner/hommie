@@ -68,4 +68,4 @@ final class HubStatusProvider
   }
 }
 
-String _$hubStatusHash() => r'13aef3fc2036a803d986a235563c8735812e0e8e';
+String _$hubStatusHash() => r'34d87d184d3823cc56a20ea98988516feee2b4eb';

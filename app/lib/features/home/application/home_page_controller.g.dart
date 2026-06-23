@@ -25,7 +25,7 @@ final class HomePageControllerProvider
           serverScopeServerProvider,
           cachedAreasProvider,
           cachedEntitiesProvider,
-          activeServerSessionProvider,
+          homeConnectionLoadingProvider,
           serverSyncCoordinatorProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
@@ -41,6 +41,7 @@ final class HomePageControllerProvider
           HomePageControllerProvider.$allTransitiveDependencies9,
           HomePageControllerProvider.$allTransitiveDependencies10,
           HomePageControllerProvider.$allTransitiveDependencies11,
+          HomePageControllerProvider.$allTransitiveDependencies12,
         },
       );
 
@@ -49,19 +50,21 @@ final class HomePageControllerProvider
   static const $allTransitiveDependencies2 =
       CachedAreasProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies3 = cachedEntitiesProvider;
-  static const $allTransitiveDependencies4 = activeServerSessionProvider;
+  static const $allTransitiveDependencies4 = homeConnectionLoadingProvider;
   static const $allTransitiveDependencies5 =
-      ActiveServerSessionProvider.$allTransitiveDependencies0;
+      HomeConnectionLoadingProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies6 =
-      ActiveServerSessionProvider.$allTransitiveDependencies1;
+      HomeConnectionLoadingProvider.$allTransitiveDependencies1;
   static const $allTransitiveDependencies7 =
-      ActiveServerSessionProvider.$allTransitiveDependencies2;
+      HomeConnectionLoadingProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies8 =
-      ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies9 = serverSyncCoordinatorProvider;
-  static const $allTransitiveDependencies10 =
-      ServerSyncCoordinatorProvider.$allTransitiveDependencies5;
+      HomeConnectionLoadingProvider.$allTransitiveDependencies3;
+  static const $allTransitiveDependencies9 =
+      HomeConnectionLoadingProvider.$allTransitiveDependencies4;
+  static const $allTransitiveDependencies10 = serverSyncCoordinatorProvider;
   static const $allTransitiveDependencies11 =
+      ServerSyncCoordinatorProvider.$allTransitiveDependencies5;
+  static const $allTransitiveDependencies12 =
       ServerSyncCoordinatorProvider.$allTransitiveDependencies6;
 
   @override
@@ -81,7 +84,7 @@ final class HomePageControllerProvider
 }
 
 String _$homePageControllerHash() =>
-    r'a2fb0a15e6b9a1860d8e9c6a3df8cf17a4c8881c';
+    r'dc4168ebc95fabc877c1481e7ff38c4958898839';
 
 abstract class _$HomePageController extends $Notifier<HomePageState> {
   HomePageState build();

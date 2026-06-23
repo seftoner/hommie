@@ -44,7 +44,7 @@ class ServerScopeHost extends ConsumerWidget {
         serverScopeServerProvider.overrideWith((_) => activeServer),
         serverScopeConnectionProvider.overrideWith((_) {
           if (connection == null) {
-            throw const NoOnlineServerConnectionException();
+            throw const ServerScopeConnectionUnavailableException();
           }
           return connection;
         }),
@@ -52,11 +52,4 @@ class ServerScopeHost extends ConsumerWidget {
       child: child,
     );
   }
-}
-
-class NoOnlineServerConnectionException implements Exception {
-  const NoOnlineServerConnectionException();
-
-  @override
-  String toString() => 'The active server session is not online.';
 }

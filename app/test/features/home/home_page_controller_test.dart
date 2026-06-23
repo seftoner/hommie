@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/application/session/active_server_session_controller.dart';
-import 'package:hommie/application/session/active_server_session_state.dart';
+import 'package:hommie/application/session/session_status_projections.dart';
 import 'package:hommie/application/session/server_sync_coordinator.dart';
 import 'package:hommie/application/session/server_sync_state.dart';
 import 'package:hommie/core/domain/entities/area.dart';
@@ -13,25 +11,12 @@ import 'package:hommie/features/home/application/cached_areas_provider.dart';
 import 'package:hommie/features/home/application/home_page_controller.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 
-class _FakeConnection implements IHAConnection {
-  @override
-  Future<void> close() async {}
-
-  @override
-  HAResponse sendMessage(HAMessage message) => Future.value(null);
-
-  @override
-  HASubscription subscribeMessage(HAMessage subscribeMessage) {
-    return HASubscription(logger: const NoOpLogger(), unsubscribe: () async {});
-  }
-}
-
 void main() {
   ProviderContainer makeContainer({
     required List<Area> areas,
     required List<HaEntity> entities,
-    ActiveServerSessionState? session,
     ServerSyncState syncState = const SyncReady(),
+    bool homeConnectionLoading = false,
   }) {
     return ProviderContainer(
       overrides: [
@@ -40,14 +25,8 @@ void main() {
         ),
         cachedAreasProvider.overrideWith((ref) => Stream.value(areas)),
         cachedEntitiesProvider.overrideWith((ref) => Stream.value(entities)),
-        activeServerSessionProvider.overrideWithValue(
-          session ??
-              OnlineServerSession(
-                activeServer: const Server(id: 1, name: 'Home'),
-                connection: _FakeConnection(),
-              ),
-        ),
         serverSyncCoordinatorProvider.overrideWithValue(syncState),
+        homeConnectionLoadingProvider.overrideWithValue(homeConnectionLoading),
       ],
     );
   }
@@ -98,6 +77,26 @@ void main() {
     expect(state.isOffline, isFalse);
   });
 
+  test(
+    'isInitialSyncing while entities empty and connection is loading',
+    () async {
+      final container = makeContainer(
+        areas: const [],
+        entities: const [],
+        syncState: const SyncIdle(),
+        homeConnectionLoading: true,
+      );
+      addTearDown(container.dispose);
+
+      container.listen(homePageControllerProvider, (_, _) {});
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      final state = container.read(homePageControllerProvider);
+      expect(state.isInitialSyncing, isTrue);
+      expect(state.isOffline, isFalse);
+    },
+  );
+
   test('keeps cached sections visible while offline', () async {
     final container = makeContainer(
       areas: [const Area(id: 'kitchen', name: 'Kitchen')],
@@ -109,9 +108,6 @@ void main() {
           areaId: 'kitchen',
         ),
       ],
-      session: const OfflineServerSession(
-        activeServer: Server(id: 1, name: 'Home'),
-      ),
       syncState: const SyncOfflineWithCache(),
     );
     addTearDown(container.dispose);

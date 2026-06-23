@@ -31,6 +31,13 @@ IHAConnection serverScopeConnection(Ref ref) {
   );
 }
 
+class ServerScopeConnectionUnavailableException implements Exception {
+  const ServerScopeConnectionUnavailableException();
+
+  @override
+  String toString() => 'The scoped server connection is not available.';
+}
+
 /// A scoped provider that represents the current server ID.
 ///
 /// Like serverScopeConnection, this should be overridden in a ProviderScope

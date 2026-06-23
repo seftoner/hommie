@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hommie/features/entities/application/command_availability_provider.dart';
 import 'package:hommie/features/entities/application/entity_service_controller.dart';
 import 'package:hommie/features/entities/domain/entities/entity_state_value.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
@@ -49,6 +50,9 @@ class _LightCardState extends ConsumerState<LightCard> {
 
   @override
   Widget build(BuildContext context) {
+    final commandAvailability = ref.watch(commandAvailabilityProvider);
+    final canToggle = !_unavailable && commandAvailability.canSend;
+
     return Card(
       key: Key('light_card.${widget.entity.entityId}'),
       child: ListTile(
@@ -64,7 +68,7 @@ class _LightCardState extends ConsumerState<LightCard> {
         subtitle: Text(_unavailable ? 'Unavailable' : (_isOn ? 'On' : 'Off')),
         trailing: Switch(
           value: _isOn,
-          onChanged: _unavailable ? null : (_) => unawaited(_toggle()),
+          onChanged: canToggle ? (_) => unawaited(_toggle()) : null,
         ),
       ),
     );

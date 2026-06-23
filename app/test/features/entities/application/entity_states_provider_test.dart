@@ -1,10 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/application/session/active_server_session_controller.dart';
-import 'package:hommie/application/session/active_server_session_state.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
 import 'package:hommie/features/entities/application/entity_states_provider.dart';
-import 'package:hommie/features/servers/domain/entities/server.dart';
+import 'package:riverpod/misc.dart';
 
 class _FakeConnection implements IHAConnection {
   final subscriptions = <HASubscription>[];
@@ -26,12 +25,46 @@ class _FakeConnection implements IHAConnection {
   }
 }
 
+class _ThrowingSubscribeConnection implements IHAConnection {
+  @override
+  Future<void> close() async {}
+
+  @override
+  HAResponse sendMessage(HAMessage message) => Future.value(null);
+
+  @override
+  HASubscription subscribeMessage(HAMessage subscribeMessage) {
+    throw StateError('subscribe setup broke');
+  }
+}
+
+class _ClosedSubscribeConnection implements IHAConnection {
+  @override
+  Future<void> close() async {}
+
+  @override
+  HAResponse sendMessage(HAMessage message) => Future.value(null);
+
+  @override
+  HASubscription subscribeMessage(HAMessage subscribeMessage) {
+    throw ConnectionClosedError('subscribe connection closed');
+  }
+}
+
+Matcher _providerExceptionWith(Object exceptionMatcher) {
+  return isA<ProviderException>().having(
+    (error) => error.exception,
+    'exception',
+    exceptionMatcher,
+  );
+}
+
 void main() {
-  test('does not subscribe while session is offline', () {
+  test('does not subscribe when scoped connection is unavailable', () {
     final container = ProviderContainer(
       overrides: [
-        activeServerSessionProvider.overrideWithValue(
-          const OfflineServerSession(activeServer: Server(id: 1, name: 'Home')),
+        serverScopeConnectionProvider.overrideWith(
+          (_) => throw const ServerScopeConnectionUnavailableException(),
         ),
       ],
     );
@@ -43,14 +76,7 @@ void main() {
   test('subscribes and applies updates while session is online', () async {
     final connection = _FakeConnection();
     final container = ProviderContainer(
-      overrides: [
-        activeServerSessionProvider.overrideWithValue(
-          OnlineServerSession(
-            activeServer: const Server(id: 1, name: 'Home'),
-            connection: connection,
-          ),
-        ),
-      ],
+      overrides: [serverScopeConnectionProvider.overrideWithValue(connection)],
     );
     addTearDown(container.dispose);
 
@@ -65,5 +91,53 @@ void main() {
 
     final states = container.read(entityStatesProvider);
     expect(states['light.kitchen']?.state, 'on');
+  });
+
+  test('surfaces unrelated scoped connection provider failures', () {
+    final container = ProviderContainer(
+      overrides: [
+        serverScopeConnectionProvider.overrideWith(
+          (_) => throw StateError('provider wiring broke'),
+        ),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    expect(
+      () => container.read(entityStatesProvider),
+      throwsA(_providerExceptionWith(isStateError)),
+    );
+  });
+
+  test('surfaces unexpected subscribe setup failures', () {
+    final container = ProviderContainer(
+      overrides: [
+        serverScopeConnectionProvider.overrideWithValue(
+          _ThrowingSubscribeConnection(),
+        ),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    expect(
+      () => container.read(entityStatesProvider),
+      throwsA(_providerExceptionWith(isStateError)),
+    );
+  });
+
+  test('surfaces closed connection subscribe setup failures', () {
+    final container = ProviderContainer(
+      overrides: [
+        serverScopeConnectionProvider.overrideWithValue(
+          _ClosedSubscribeConnection(),
+        ),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    expect(
+      () => container.read(entityStatesProvider),
+      throwsA(_providerExceptionWith(isA<ConnectionClosedError>())),
+    );
   });
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hommie/features/entities/application/command_availability_provider.dart';
 import 'package:hommie/features/entities/application/entity_states_provider.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/presentation/widgets/entity_card.dart';
@@ -12,7 +13,15 @@ void main() {
   ) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [entityStatesProvider.overrideWithValue(const {})],
+        overrides: [
+          commandAvailabilityProvider.overrideWithValue(
+            const CommandAvailability(
+              canSend: true,
+              reason: CommandAvailabilityReason.available,
+            ),
+          ),
+          entityStatesProvider.overrideWithValue(const {}),
+        ],
         child: const MaterialApp(
           home: Scaffold(
             body: Column(

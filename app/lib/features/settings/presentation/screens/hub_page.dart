@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hommie/application/session/active_server_session_state.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/common/domain/entities/ha_version.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
@@ -20,9 +19,18 @@ class HubPage extends HookConsumerWidget {
       key: K.hub.page,
       appBar: AppBar(title: const Text('Hub')),
       body: hubStatus.when(
-        data: (status) => status.server == null
-            ? const _EmptyHubStatusView()
-            : _HubStatusContent(status: status),
+        data: (status) {
+          if (status.connectionStatus.kind ==
+              HubConnectionStatusKind.noActive) {
+            return const _EmptyHubStatusView();
+          }
+
+          if (status.server == null) {
+            return _HubConnectionStatusView(status: status.connectionStatus);
+          }
+
+          return _HubStatusContent(status: status);
+        },
         error: (error, _) => _HubStatusError(message: error.toString()),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
@@ -48,7 +56,7 @@ class _HubStatusContent extends StatelessWidget {
             _HubInfoTile(
               title: 'Connected via',
               value: _connectionRoute(server),
-              subtitle: _connectionDescription(status.sessionState),
+              subtitle: status.connectionStatus.description,
             ),
             _HubInfoTile(
               title: 'Version',
@@ -56,7 +64,7 @@ class _HubStatusContent extends StatelessWidget {
             ),
             _HubInfoTile(
               title: 'WebSocket',
-              value: _connectionLabel(status.sessionState),
+              value: status.connectionStatus.label,
             ),
             _HubInfoTile(
               title: 'Logged in as',
@@ -72,10 +80,7 @@ class _HubStatusContent extends StatelessWidget {
             _HubInfoTile(title: 'Device Name', value: status.deviceName),
             _HubInfoTile(
               title: 'Internal URL',
-              value: _urlLabel(
-                server.internalUrl ??
-                    server.baseUrl!.value.getOrElse((_) => ''),
-              ),
+              value: _urlLabel(_internalUrl(server)),
             ),
             _HubInfoTile(
               title: 'External URL',
@@ -146,6 +151,40 @@ class _HubInfoTile extends StatelessWidget {
   }
 }
 
+class _HubConnectionStatusView extends StatelessWidget {
+  const _HubConnectionStatusView({required this.status});
+
+  final HubConnectionStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Symbols.sync_rounded,
+              size: 56,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(height: 12),
+            Text(status.label, style: theme.textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text(
+              status.description,
+              style: theme.textTheme.bodySmall,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _HubStatusError extends StatelessWidget {
   const _HubStatusError({required this.message});
 
@@ -211,36 +250,6 @@ class _EmptyHubStatusView extends StatelessWidget {
   }
 }
 
-String _connectionLabel(ActiveServerSessionState state) {
-  switch (state) {
-    case OnlineServerSession():
-      return 'Connected';
-    case ConnectingServerSession() || ResolvingServerSession():
-      return 'Connecting';
-    case AuthRevokedServerSession():
-      return 'Auth failure';
-    case OfflineServerSession():
-      return 'Disconnected';
-    case NoActiveServerSession():
-      return 'Unknown';
-  }
-}
-
-String _connectionDescription(ActiveServerSessionState state) {
-  switch (state) {
-    case OnlineServerSession():
-      return 'Connected to Home Assistant';
-    case ConnectingServerSession() || ResolvingServerSession():
-      return 'Connecting to server...';
-    case AuthRevokedServerSession():
-      return 'Authentication required';
-    case OfflineServerSession():
-      return 'Not connected to server';
-    case NoActiveServerSession():
-      return 'Connection status unknown';
-  }
-}
-
 String _authLabel(AuthState state) {
   return state.map(
     initial: (_) => 'Checking credentials...',
@@ -259,7 +268,17 @@ String _versionLabel(HaVersion? version) {
   return '${version.major}.${version.minor}$patch';
 }
 
-String _urlLabel(String? url) => url ?? 'Not configured';
+String _urlLabel(String? url) {
+  if (url == null || url.isEmpty) {
+    return 'Not configured';
+  }
+
+  return url;
+}
+
+String? _internalUrl(Server server) {
+  return server.internalUrl ?? server.baseUrl?.value.getOrElse((_) => '');
+}
 
 String _connectionRoute(Server server) {
   if (server.internalUrl != null) {

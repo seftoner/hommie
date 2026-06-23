@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
-import 'package:hommie/application/session/active_server_session_controller.dart';
-import 'package:hommie/application/session/active_server_session_state.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
 import 'package:hommie/features/entities/domain/entities/entity_state_value.dart';
+import 'package:riverpod/misc.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'entity_states_provider.g.dart';
@@ -44,7 +44,7 @@ Map<String, EntityStateValue> applyStatesUpdate(
 ///
 /// Subscribes to `subscribe_entities` while connected and folds the compressed
 /// diffs into a map. Volatile — not persisted. Empty while disconnected.
-@Riverpod(dependencies: [ActiveServerSession])
+@Riverpod(dependencies: [serverScopeConnection])
 class EntityStates extends _$EntityStates {
   HASubscription? _sub;
   StreamSubscription<dynamic>? _events;
@@ -53,19 +53,22 @@ class EntityStates extends _$EntityStates {
 
   @override
   Map<String, EntityStateValue> build() {
-    final session = ref.watch(activeServerSessionProvider);
+    final IHAConnection connection;
+    try {
+      connection = ref.watch(serverScopeConnectionProvider);
+    } catch (error, stackTrace) {
+      if (_isServerScopeConnectionUnavailable(error)) {
+        _current = const {};
+        unawaited(_stop());
+        return const {};
+      }
+      _throwOriginalError(error, stackTrace);
+    }
 
     ref.onDispose(() {
       unawaited(_stop());
     });
 
-    if (session is! OnlineServerSession) {
-      _current = const {};
-      unawaited(_stop());
-      return const {};
-    }
-
-    final connection = session.connection;
     if (identical(_connection, connection) && _sub != null) {
       return _current;
     }
@@ -73,17 +76,13 @@ class EntityStates extends _$EntityStates {
     unawaited(_stop());
     _connection = connection;
     _current = const {};
-    try {
-      _sub = HACommands.subscribeEntities(connection);
-      _events = _sub!.stream.listen((update) {
-        if (update is StatesUpdates) {
-          _current = applyStatesUpdate(_current, update);
-          state = _current;
-        }
-      });
-    } catch (_) {
-      // Offline / unavailable connection: leave state empty.
-    }
+    _sub = HACommands.subscribeEntities(connection);
+    _events = _sub!.stream.listen((update) {
+      if (update is StatesUpdates) {
+        _current = applyStatesUpdate(_current, update);
+        state = _current;
+      }
+    });
 
     return _current;
   }
@@ -100,4 +99,21 @@ class EntityStates extends _$EntityStates {
       await sub.dispose();
     }
   }
+}
+
+bool _isServerScopeConnectionUnavailable(Object error) {
+  return switch (error) {
+    ServerScopeConnectionUnavailableException() => true,
+    ProviderException(:final exception) => _isServerScopeConnectionUnavailable(
+      exception,
+    ),
+    _ => false,
+  };
+}
+
+Never _throwOriginalError(Object error, StackTrace stackTrace) {
+  if (error case ProviderException(:final exception, :final stackTrace)) {
+    Error.throwWithStackTrace(exception, stackTrace);
+  }
+  Error.throwWithStackTrace(error, stackTrace);
 }

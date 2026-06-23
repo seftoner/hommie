@@ -1,5 +1,4 @@
-import 'package:hommie/application/session/active_server_session_controller.dart';
-import 'package:hommie/application/session/active_server_session_state.dart';
+import 'package:hommie/application/session/session_status_projections.dart';
 import 'package:hommie/application/session/server_sync_coordinator.dart';
 import 'package:hommie/application/session/server_sync_state.dart';
 import 'package:hommie/core/domain/entities/area.dart';
@@ -72,7 +71,7 @@ class HomePageState {
     serverScopeServer,
     cachedAreas,
     cachedEntities,
-    ActiveServerSession,
+    homeConnectionLoading,
     ServerSyncCoordinator,
   ],
 )
@@ -82,7 +81,7 @@ class HomePageController extends _$HomePageController {
   @override
   HomePageState build() {
     final server = ref.watch(serverScopeServerProvider);
-    final session = ref.watch(activeServerSessionProvider);
+    final connectionLoading = ref.watch(homeConnectionLoadingProvider);
     final syncState = ref.watch(serverSyncCoordinatorProvider);
     final areas =
         ref.watch(cachedAreasProvider).asData?.value ?? const <Area>[];
@@ -92,10 +91,8 @@ class HomePageController extends _$HomePageController {
     final sections = groupEntitiesByArea(areas, entities);
     final isInitialSyncing =
         entities.isEmpty &&
-        (syncState is InitialSyncRunning ||
-            session is ConnectingServerSession ||
-            session is ResolvingServerSession);
-    final isOffline = session is OfflineServerSession;
+        (syncState is InitialSyncRunning || connectionLoading);
+    final isOffline = syncState is SyncOfflineWithCache;
     final syncFailure = syncState is SyncFailed ? syncState.error : null;
 
     return HomePageState(

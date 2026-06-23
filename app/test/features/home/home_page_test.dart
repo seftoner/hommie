@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hommie/features/entities/application/cached_entities_provider.dart';
+import 'package:hommie/features/entities/application/command_availability_provider.dart';
 import 'package:hommie/features/entities/application/entity_states_provider.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/presentation/widgets/light_card.dart';
@@ -64,6 +65,12 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          commandAvailabilityProvider.overrideWithValue(
+            const CommandAvailability(
+              canSend: true,
+              reason: CommandAvailabilityReason.available,
+            ),
+          ),
           homePageControllerProvider.overrideWith(_StubHomeController.new),
           entityStatesProvider.overrideWithValue(const {}),
         ],

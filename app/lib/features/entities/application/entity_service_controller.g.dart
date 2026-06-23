@@ -27,25 +27,13 @@ final class EntityServiceControllerProvider
         retry: null,
         name: r'entityServiceControllerProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[activeServerSessionProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        dependencies: const <ProviderOrFamily>[serverScopeConnectionProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
           EntityServiceControllerProvider.$allTransitiveDependencies0,
-          EntityServiceControllerProvider.$allTransitiveDependencies1,
-          EntityServiceControllerProvider.$allTransitiveDependencies2,
-          EntityServiceControllerProvider.$allTransitiveDependencies3,
-          EntityServiceControllerProvider.$allTransitiveDependencies4,
-        },
+        ],
       );
 
-  static const $allTransitiveDependencies0 = activeServerSessionProvider;
-  static const $allTransitiveDependencies1 =
-      ActiveServerSessionProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
-      ActiveServerSessionProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 =
-      ActiveServerSessionProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
-      ActiveServerSessionProvider.$allTransitiveDependencies3;
+  static const $allTransitiveDependencies0 = serverScopeConnectionProvider;
 
   @override
   String debugGetCreateSourceHash() => _$entityServiceControllerHash();
@@ -71,4 +59,4 @@ final class EntityServiceControllerProvider
 }
 
 String _$entityServiceControllerHash() =>
-    r'94503cdda73e26f84eb3bb99e2d0ceea51f283a2';
+    r'61d33b3c013b0ab1b00b7d8658e22e937bc84091';
