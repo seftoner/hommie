@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:fake_async/fake_async.dart';
-import 'package:home_assistant_websocket/src/api/commands/ha_commands.dart';
+import 'package:home_assistant_websocket/src/api/home_assistant_api.dart';
 import 'package:home_assistant_websocket/src/connection/ha_connection.dart';
 import 'package:home_assistant_websocket/src/connection/ha_connection_option.dart';
 import 'package:home_assistant_websocket/src/connection/ha_socket_state.dart';
@@ -85,7 +85,9 @@ void main() {
       await connection.connect();
 
       // Act
-      final resultFuture = HACommands.getStates(connection);
+      final resultFuture = HomeAssistantApi.fromConnection(
+        connection,
+      ).states.list();
 
       await fakeSocket.nextSentWhere((m) => m is GetStatesMessage);
       const id = 2;
@@ -135,7 +137,9 @@ void main() {
         await connection.connect();
 
         // Act
-        final subscription = HACommands.subscribeEntities(connection);
+        final subscription = HomeAssistantApi.fromConnection(
+          connection,
+        ).entities.subscribe();
 
         await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
         const subscriptionId = 2;
@@ -178,7 +182,9 @@ void main() {
         // Arrange
         await connection.connect();
 
-        final subscription = HACommands.subscribeEntities(connection);
+        final subscription = HomeAssistantApi.fromConnection(
+          connection,
+        ).entities.subscribe();
 
         await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
         const subscriptionId = 2;
@@ -222,7 +228,9 @@ void main() {
       // Arrange
       await connection.connect();
 
-      final subscription = HACommands.subscribeEntities(connection);
+      final subscription = HomeAssistantApi.fromConnection(
+        connection,
+      ).entities.subscribe();
       final events = <dynamic>[];
       final streamSubscription = subscription.stream.listen(events.add);
 
@@ -289,7 +297,9 @@ void main() {
         // Arrange
         await connection.connect();
 
-        final subscription = HACommands.subscribeEntities(connection);
+        final subscription = HomeAssistantApi.fromConnection(
+          connection,
+        ).entities.subscribe();
 
         await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
         const subscriptionId = 2;
@@ -331,8 +341,9 @@ void main() {
         // Arrange
         await connection.connect();
 
-        final subscription1 = HACommands.subscribeEntities(connection);
-        final subscription2 = HACommands.subscribeEntities(connection);
+        final api = HomeAssistantApi.fromConnection(connection);
+        final subscription1 = api.entities.subscribe();
+        final subscription2 = api.entities.subscribe();
 
         await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
         await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
@@ -371,7 +382,9 @@ void main() {
         // Arrange
         await connection.connect();
 
-        final subscription = HACommands.subscribeEntities(connection);
+        final subscription = HomeAssistantApi.fromConnection(
+          connection,
+        ).entities.subscribe();
 
         await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
         const subscriptionId = 2;
@@ -433,7 +446,9 @@ void main() {
         // Arrange
         await connection.connect();
 
-        final subscription = HACommands.subscribeEntities(connection);
+        final subscription = HomeAssistantApi.fromConnection(
+          connection,
+        ).entities.subscribe();
 
         await fakeSocket.nextSentWhere((m) => m is SubscribeEntitiesMessage);
         const subscriptionId = 2;
@@ -480,10 +495,9 @@ void main() {
         await connection.connect();
 
         // Act
-        final subscription = HACommands.subscribeEvents(
+        final subscription = HomeAssistantApi.fromConnection(
           connection,
-          'area_registry_updated',
-        );
+        ).events.subscribe('area_registry_updated');
 
         await fakeSocket.nextSentWhere(
           (m) =>
@@ -531,10 +545,9 @@ void main() {
       // Arrange
       await connection.connect();
 
-      final subscription = HACommands.subscribeEvents(
+      final subscription = HomeAssistantApi.fromConnection(
         connection,
-        'area_registry_updated',
-      );
+      ).events.subscribe('area_registry_updated');
 
       await fakeSocket.nextSentWhere(
         (m) =>

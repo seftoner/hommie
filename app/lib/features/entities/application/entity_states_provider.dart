@@ -76,7 +76,7 @@ class EntityStates extends _$EntityStates {
     unawaited(_stop());
     _connection = connection;
     _current = const {};
-    _sub = HACommands.subscribeEntities(connection);
+    _sub = HomeAssistantApi.fromConnection(connection).entities.subscribe();
     _events = _sub!.stream.listen((update) {
       if (update is StatesUpdates) {
         _current = applyStatesUpdate(_current, update);

@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:home_assistant_websocket/home_assistant_websocket.dart' as ha;
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
+import 'package:hommie/core/infrastructure/networking/providers/home_assistant_api_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
 import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
@@ -9,7 +11,6 @@ import 'package:hommie/features/common/domain/entities/ha_version.dart';
 import 'package:hommie/features/common/domain/values/server_url.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
-import 'package:hommie/features/servers/infrastructure/providers/websocket_config_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'login_flow_controller.g.dart';
@@ -77,10 +78,8 @@ class LoginFlowController {
       }
 
       final server = createdServer!;
-      final configRepository = await _ref.read(
-        websocketConfigRepositoryProvider(server.id!).future,
-      );
-      final config = await configRepository.getConfig();
+      final api = await _ref.read(homeAssistantApiProvider(server.id!).future);
+      final config = await api.config.get(via: ha.HATransport.rest);
 
       final updatedServer = await serverManager.addServer(
         server.copyWith(
@@ -144,11 +143,7 @@ class LoginFlowController {
 
 @Riverpod(
   keepAlive: true,
-  dependencies: [
-    authRepository,
-    serverConnectionManager,
-    websocketConfigRepository,
-  ],
+  dependencies: [authRepository, serverConnectionManager, homeAssistantApi],
 )
 LoginFlowController loginFlowController(Ref ref) {
   return LoginFlowController(ref);

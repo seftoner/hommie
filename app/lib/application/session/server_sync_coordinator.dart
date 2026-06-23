@@ -133,18 +133,10 @@ class ServerSyncCoordinator extends _$ServerSyncCoordinator {
     int revision,
   ) async {
     try {
-      _areaSub = HACommands.subscribeEvents(
-        connection,
-        'area_registry_updated',
-      );
-      _entitySub = HACommands.subscribeEvents(
-        connection,
-        'entity_registry_updated',
-      );
-      _deviceSub = HACommands.subscribeEvents(
-        connection,
-        'device_registry_updated',
-      );
+      final api = HomeAssistantApi.fromConnection(connection);
+      _areaSub = api.events.subscribe('area_registry_updated');
+      _entitySub = api.events.subscribe('entity_registry_updated');
+      _deviceSub = api.events.subscribe('device_registry_updated');
 
       _areaEvents = _areaSub!.stream.listen((_) {
         unawaited(_refreshAreas(serverId, connection, revision));

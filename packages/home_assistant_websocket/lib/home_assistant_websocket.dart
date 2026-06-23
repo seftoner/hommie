@@ -4,7 +4,10 @@
 /// Home Assistant via WebSocket protocol.
 library home_assistant_websocket;
 
-export 'src/api/commands/ha_commands.dart';
+export 'src/api/home_assistant_api.dart';
+export 'src/api/ha_api_exceptions.dart';
+export 'src/api/transports/ha_rest_transport.dart';
+export 'src/api/transports/ha_websocket_transport.dart';
 export 'src/auth/ha_auth_token.dart';
 export 'src/connection/connection_orchestrator.dart';
 export 'src/connection/ha_connection.dart';

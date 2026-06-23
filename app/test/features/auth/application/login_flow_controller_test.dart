@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
@@ -5,6 +7,7 @@ import 'package:home_assistant_websocket/home_assistant_websocket.dart' as ha;
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
+import 'package:hommie/core/infrastructure/networking/providers/home_assistant_api_provider.dart';
 import 'package:hommie/features/auth/application/login_flow_controller.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
 import 'package:hommie/features/auth/domain/repository/i_auth_repository.dart';
@@ -12,9 +15,9 @@ import 'package:hommie/features/auth/infrastructure/providers/auth_repository_pr
 import 'package:hommie/features/common/domain/values/server_url.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
-import 'package:hommie/features/servers/domain/repositories/i_websocket_config_repository.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
-import 'package:hommie/features/servers/infrastructure/providers/websocket_config_repository_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:oauth2/oauth2.dart';
 
 import '../../../utils/tests_logger.dart';
@@ -92,9 +95,7 @@ void main() {
         serverManager: serverManager,
         authRepository: authRepository,
         connectionManager: connectionManager,
-        configRepository: _FakeConfigRepository(
-          error: Exception('config failed'),
-        ),
+        api: _api(error: Exception('config failed')),
       );
       addTearDown(container.dispose);
 
@@ -123,12 +124,11 @@ void main() {
       final authRepository = _FakeAuthRepository(
         loginResult: right(_credentials()),
       );
-      final configRepository = _FakeConfigRepository(config: _config());
       final container = _container(
         serverManager: serverManager,
         authRepository: authRepository,
         connectionManager: connectionManager,
-        configRepository: configRepository,
+        api: _api(config: _config()),
       );
       addTearDown(container.dispose);
 
@@ -157,19 +157,35 @@ ProviderContainer _container({
   required _FakeServerManager serverManager,
   required _FakeAuthRepository authRepository,
   _FakeConnectionManager? connectionManager,
-  _FakeConfigRepository? configRepository,
+  ha.HomeAssistantApi? api,
 }) {
   return ProviderContainer(
     overrides: [
       serverManagerProvider.overrideWithValue(serverManager),
       authRepositoryProvider.overrideWithValue(authRepository),
-      websocketConfigRepositoryProvider.overrideWith(
-        (_, _) => configRepository ?? _FakeConfigRepository(config: _config()),
+      homeAssistantApiProvider.overrideWith(
+        (_, _) async => api ?? _api(config: _config()),
       ),
       serverConnectionManagerProvider.overrideWithValue(
         connectionManager ?? _FakeConnectionManager(),
       ),
     ],
+  );
+}
+
+ha.HomeAssistantApi _api({ha.HassConfig? config, Exception? error}) {
+  return ha.HomeAssistantApi(
+    serverUri: Uri.parse('http://example.test'),
+    tokenProvider: () async => 'access-token',
+    httpClient: MockClient((request) async {
+      expect(request.method, 'GET');
+      expect(request.url, Uri.parse('http://example.test/api/config'));
+      expect(request.headers['authorization'], 'Bearer access-token');
+      if (error != null) {
+        throw error;
+      }
+      return http.Response(jsonEncode((config ?? _config()).toJson()), 200);
+    }),
   );
 }
 
@@ -318,20 +334,4 @@ class _LoginCall {
 
   final int serverId;
   final String serverUrl;
-}
-
-class _FakeConfigRepository implements IWebSocketConfigRepository {
-  _FakeConfigRepository({this.config, this.error});
-
-  final ha.HassConfig? config;
-  final Exception? error;
-
-  @override
-  Future<ha.HassConfig> getConfig() async {
-    final failure = error;
-    if (failure != null) {
-      throw failure;
-    }
-    return config!;
-  }
 }

@@ -30,11 +30,10 @@ class EntityServiceController {
     }
 
     final domain = domainOverride ?? entityId.split('.').first;
-    await HACommands.callService(
-      connection,
+    await HomeAssistantApi.fromConnection(connection).services.call(
       domain: domain,
       service: service,
-      target: entityId,
+      target: HATarget(entityIds: [entityId]),
       serviceData: data,
     );
   }

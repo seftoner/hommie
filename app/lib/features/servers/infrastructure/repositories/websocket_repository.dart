@@ -8,27 +8,13 @@ class WebSocketRepository implements IWebSocketRepository {
 
   @override
   Future<HassConfig> getConfig() async {
-    return HACommands.getConfig(_connection);
+    return HomeAssistantApi.fromConnection(_connection).config.get();
   }
-
-  /*   @override
-  Future<List<Area>> getAreas() async {
-    throw UnimplementedError();
-    // final areas = await HACommands.getAreas(_connection);
-    // return areas.map((area) => Area.fromHassArea(area)).toList();
-  }
-
-  @override
-  Future<List<Device>> getDevices() async {
-    throw UnimplementedError();
-    // final devices = await HACommands.getDevices(_connection);
-    // return devices.map((device) => Device.fromHassDevice(device)).toList();
-  } */
 
   @override
   Future<bool> sendPing() async {
     try {
-      await HACommands.pingServer(_connection);
+      await _connection.sendMessage(const PingMessage());
       return true;
     } catch (e) {
       return false;

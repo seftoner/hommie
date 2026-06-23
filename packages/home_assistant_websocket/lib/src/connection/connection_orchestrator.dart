@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:home_assistant_websocket/src/api/commands/ha_commands.dart';
 import 'package:home_assistant_websocket/src/connection/ha_socket_state.dart';
 import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
+import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
 
 import 'backoff.dart';
 import 'ha_connection.dart';
@@ -209,9 +209,9 @@ class ConnectionOrchestrator {
 
       try {
         // Use timeout for ping to detect stale connections
-        await HACommands.pingServer(
-          _connection!,
-        ).timeout(const Duration(seconds: 10));
+        await _connection!
+            .sendMessage(const PingMessage())
+            .timeout(const Duration(seconds: 10));
         _logger.debug('Ping successful');
       } catch (e) {
         _logger.error('Ping failed: $e');

@@ -34,6 +34,8 @@ final class AuthControllerProvider
           AuthControllerProvider.$allTransitiveDependencies4,
           AuthControllerProvider.$allTransitiveDependencies5,
           AuthControllerProvider.$allTransitiveDependencies6,
+          AuthControllerProvider.$allTransitiveDependencies7,
+          AuthControllerProvider.$allTransitiveDependencies8,
         },
       );
 
@@ -46,8 +48,12 @@ final class AuthControllerProvider
       LoginFlowControllerProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 =
       LoginFlowControllerProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 = serverLifecycleControllerProvider;
+  static const $allTransitiveDependencies5 =
+      LoginFlowControllerProvider.$allTransitiveDependencies4;
   static const $allTransitiveDependencies6 =
+      LoginFlowControllerProvider.$allTransitiveDependencies5;
+  static const $allTransitiveDependencies7 = serverLifecycleControllerProvider;
+  static const $allTransitiveDependencies8 =
       ServerLifecycleControllerProvider.$allTransitiveDependencies3;
 
   @override

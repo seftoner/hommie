@@ -34,7 +34,9 @@ void main() {
     final body = conn.sent!.body;
     expect(body['domain'], 'light');
     expect(body['service'], 'toggle');
-    expect(body['target'], {'entity_id': 'light.kitchen'});
+    expect(body['target'], {
+      'entity_id': ['light.kitchen'],
+    });
   });
 
   test('domainOverride and data are forwarded', () async {

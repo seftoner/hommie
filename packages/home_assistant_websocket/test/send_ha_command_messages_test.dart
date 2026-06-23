@@ -1,9 +1,11 @@
-import 'package:home_assistant_websocket/src/api/commands/ha_commands.dart';
+import 'package:home_assistant_websocket/src/api/home_assistant_api.dart';
 import 'package:home_assistant_websocket/src/connection/ha_connection.dart';
 import 'package:home_assistant_websocket/src/connection/ha_connection_option.dart';
 import 'package:home_assistant_websocket/src/connection/ha_socket_state.dart';
 import 'package:home_assistant_websocket/src/logging/logger_interface.dart';
 import 'package:home_assistant_websocket/src/protocol/messages/ha_messages.dart';
+import 'package:home_assistant_websocket/src/protocol/types/ha_response.dart';
+import 'package:home_assistant_websocket/src/protocol/types/hass_types.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -40,18 +42,18 @@ void main() {
     await connection.close();
   });
 
-  group('Home Assistant API Commands', () {
+  group('HomeAssistantApi over WebSocket', () {
     group('Service calls', () {
       test('successfully calls light service with parameters', () async {
         const commandId = 2;
-        final future = HACommands.callService(
-          connection,
-          domain: 'light',
-          service: 'turn_on',
-          serviceData: {'color_name': 'beige', 'brightness': '101'},
-          target: 'light.kitchen',
-          returnResponse: true,
-        );
+        final future = HomeAssistantApi.fromConnection(connection).services
+            .call(
+              domain: 'light',
+              service: 'turn_on',
+              serviceData: {'color_name': 'beige', 'brightness': '101'},
+              target: const HATarget(entityIds: ['light.kitchen']),
+              returnResponse: true,
+            );
 
         final sent = await fakeSocket.nextSentWhere(
           (m) => m is ServiceCallMessage,
@@ -64,7 +66,9 @@ void main() {
             'domain': 'light',
             'service': 'turn_on',
             'service_data': {'color_name': 'beige', 'brightness': '101'},
-            'target': {'entity_id': 'light.kitchen'},
+            'target': {
+              'entity_id': ['light.kitchen'],
+            },
             'return_response': true,
           }),
         );
@@ -91,33 +95,37 @@ void main() {
 
     group('Data retrieval', () {
       final testCases = [
-        /* (
-          name: 'Areas',
-          method: HACommands.getAreas,
-          type: 'config/area_registry/list',
-          file: 'get_areas_response.json',
-        ), */
         (
           name: 'User',
-          method: HACommands.getUser,
+          method: (HAConnection connection) {
+            return HomeAssistantApi.fromConnection(connection).websocket
+                .sendMessage(const CurrentUserMessage())
+                .mapItem(HassUser.fromJson);
+          },
           type: 'auth/current_user',
           file: 'get_user_response.json',
         ),
         (
           name: 'Config',
-          method: HACommands.getConfig,
+          method: (HAConnection connection) {
+            return HomeAssistantApi.fromConnection(connection).config.get();
+          },
           type: 'get_config',
           file: 'get_config_response.json',
         ),
         (
           name: 'Services',
-          method: HACommands.getServices,
+          method: (HAConnection connection) {
+            return HomeAssistantApi.fromConnection(connection).services.list();
+          },
           type: 'get_services',
           file: 'get_services_response.json',
         ),
         (
           name: 'States',
-          method: HACommands.getStates,
+          method: (HAConnection connection) {
+            return HomeAssistantApi.fromConnection(connection).states.list();
+          },
           type: 'get_states',
           file: 'get_states_response.json',
         ),

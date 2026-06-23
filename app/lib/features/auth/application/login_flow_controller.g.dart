@@ -30,13 +30,15 @@ final class LoginFlowControllerProvider
         dependencies: const <ProviderOrFamily>[
           authRepositoryProvider,
           serverConnectionManagerProvider,
-          websocketConfigRepositoryProvider,
+          homeAssistantApiProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           LoginFlowControllerProvider.$allTransitiveDependencies0,
           LoginFlowControllerProvider.$allTransitiveDependencies1,
           LoginFlowControllerProvider.$allTransitiveDependencies2,
           LoginFlowControllerProvider.$allTransitiveDependencies3,
+          LoginFlowControllerProvider.$allTransitiveDependencies4,
+          LoginFlowControllerProvider.$allTransitiveDependencies5,
         },
       );
 
@@ -44,7 +46,11 @@ final class LoginFlowControllerProvider
   static const $allTransitiveDependencies1 = serverConnectionManagerProvider;
   static const $allTransitiveDependencies2 =
       ServerConnectionManagerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies3 = websocketConfigRepositoryProvider;
+  static const $allTransitiveDependencies3 = homeAssistantApiProvider;
+  static const $allTransitiveDependencies4 =
+      HomeAssistantApiProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies5 =
+      HomeAssistantApiProvider.$allTransitiveDependencies2;
 
   @override
   String debugGetCreateSourceHash() => _$loginFlowControllerHash();
@@ -70,4 +76,4 @@ final class LoginFlowControllerProvider
 }
 
 String _$loginFlowControllerHash() =>
-    r'8bc6588b4874ff77da96f70c73b7288ea0c98e84';
+    r'acb584345d8e854589beac8d144b0268ad79b7ab';
