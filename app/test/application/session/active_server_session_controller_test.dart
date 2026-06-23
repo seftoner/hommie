@@ -5,7 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:home_assistant_websocket/home_assistant_websocket.dart';
 import 'package:hommie/application/session/active_server_session_controller.dart';
 import 'package:hommie/application/session/active_server_session_state.dart';
+import 'package:hommie/core/infrastructure/networking/connection/ha_connection_factory.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
+import 'package:hommie/core/infrastructure/networking/connection/managed_ha_connection.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/providers/server_link_state_provider.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
@@ -48,6 +50,24 @@ class _FakeConnectionManager implements IServerConnectionManager {
 
   @override
   void disconnect(int serverId) {}
+}
+
+class _NeverCompletingConnectionFactory implements IHAConnectionFactory {
+  int opens = 0;
+
+  @override
+  HAConnectionOpening open(int serverId) {
+    opens += 1;
+    final completer = Completer<ManagedHAConnection>();
+    return HAConnectionOpening(
+      future: completer.future,
+      close: () async {
+        if (!completer.isCompleted) {
+          completer.completeError(const ConnectionOpenCancelled());
+        }
+      },
+    );
+  }
 }
 
 class _FakeServerManager implements IServerManager {
@@ -195,6 +215,40 @@ void main() {
     expect((state as ConnectingServerSession).activeServer, server);
     expect(manager.activeServerId, 1);
   });
+
+  test(
+    'initializing authenticated session starts connection without provider mutation assertion',
+    () async {
+      final factory = _NeverCompletingConnectionFactory();
+      final serverManager = _FakeServerManager(server);
+      late final ServerConnectionManagerImpl connectionManager;
+      final container = ProviderContainer(
+        overrides: [
+          serverManagerProvider.overrideWithValue(serverManager),
+          authStateProvider.overrideWith(
+            (_) => AuthState.authenticated(credentials()),
+          ),
+          serverConnectionManagerProvider.overrideWith((ref) {
+            final linkState = ref.read(serverLinkStateProvider.notifier);
+            connectionManager = ServerConnectionManagerImpl(
+              factory: factory,
+              setLinkState: linkState.set,
+              resetLinkState: linkState.reset,
+            );
+            ref.onDispose(connectionManager.dispose);
+            return connectionManager;
+          }),
+        ],
+      );
+      addTearDown(serverManager.dispose);
+      addTearDown(container.dispose);
+
+      final state = await readSession(container);
+
+      expect(state, isA<ConnectingServerSession>());
+      expect(factory.opens, 1);
+    },
+  );
 
   test('maps authenticated connecting link to connecting session', () async {
     final manager = _FakeConnectionManager();

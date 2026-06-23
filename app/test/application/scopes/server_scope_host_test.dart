@@ -6,6 +6,7 @@ import 'package:hommie/application/scopes/server_scope_host.dart';
 import 'package:hommie/application/session/active_server_session_controller.dart';
 import 'package:hommie/application/session/active_server_session_state.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
+import 'package:hommie/features/entities/application/command_availability_provider.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 
 class _FakeConnection implements IHAConnection {
@@ -43,6 +44,36 @@ class _ServerProbe extends ConsumerWidget {
     final id = ref.watch(serverScopeIdProvider);
 
     return Text('${server.name}-$id');
+  }
+}
+
+class _CommandAvailabilityProbe extends ConsumerWidget {
+  const _CommandAvailabilityProbe();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final availability = ref.watch(commandAvailabilityProvider);
+
+    return Text(availability.canSend ? 'sendable' : 'disabled');
+  }
+}
+
+class _SessionSource {
+  _SessionSource(this.state);
+
+  ActiveServerSessionState state;
+}
+
+class _FakeActiveServerSession extends ActiveServerSession {
+  _FakeActiveServerSession(this.source);
+
+  final _SessionSource source;
+
+  @override
+  ActiveServerSessionState build() => source.state;
+
+  void emit(ActiveServerSessionState state) {
+    this.state = state;
   }
 }
 
@@ -102,4 +133,43 @@ void main() {
 
     expect(find.byType(_ScopeProbe), findsNothing);
   });
+
+  testWidgets(
+    'updates scoped connection when same server moves from offline to online',
+    (tester) async {
+      final source = _SessionSource(
+        const OfflineServerSession(activeServer: Server(id: 7, name: 'Home')),
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            activeServerSessionProvider.overrideWith(
+              () => _FakeActiveServerSession(source),
+            ),
+          ],
+          child: const MaterialApp(
+            home: ServerScopeHost(child: _CommandAvailabilityProbe()),
+          ),
+        ),
+      );
+
+      expect(find.text('disabled'), findsOneWidget);
+
+      final notifier =
+          ProviderScope.containerOf(
+                tester.element(find.byType(_CommandAvailabilityProbe)),
+              ).read(activeServerSessionProvider.notifier)
+              as _FakeActiveServerSession;
+      notifier.emit(
+        OnlineServerSession(
+          activeServer: const Server(id: 7, name: 'Home'),
+          connection: _FakeConnection(),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('sendable'), findsOneWidget);
+    },
+  );
 }

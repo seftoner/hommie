@@ -2,7 +2,6 @@
 
 Date: 2026-06-23
 Branch: `codex/login-connection-architecture`
-Status: Draft for review
 
 ## Purpose
 

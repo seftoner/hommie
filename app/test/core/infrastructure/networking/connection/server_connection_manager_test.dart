@@ -116,6 +116,10 @@ void main() {
       manager.setActiveServer(1);
 
       expect(factory.opens, 1);
+      expect(states, isEmpty);
+
+      await Future<void>.delayed(Duration.zero);
+
       expect(states.single, isA<LinkConnecting>());
       expect(states.single.serverId, 1);
 
@@ -158,6 +162,7 @@ void main() {
       manager.setActiveServer(1);
 
       expect(factory.opens, 1);
+      await Future<void>.delayed(Duration.zero);
 
       factory.complete(1);
       await Future<void>.delayed(Duration.zero);
@@ -183,12 +188,15 @@ void main() {
       );
 
       manager.setActiveServer(1);
+      await Future<void>.delayed(Duration.zero);
       factory.complete(1);
       await Future<void>.delayed(Duration.zero);
       final oldConnection = (states.last as LinkOnline).connection;
 
       manager.setActiveServer(null);
       manager.setActiveServer(1);
+
+      await Future<void>.delayed(Duration.zero);
 
       expect(states.last, isA<LinkConnecting>());
       expect(states.last.serverId, 1);
@@ -528,6 +536,7 @@ void main() {
     );
 
     manager.setActiveServer(1);
+    await Future<void>.delayed(Duration.zero);
 
     manager.setActiveServer(null);
 
@@ -557,11 +566,8 @@ void main() {
 
     await Future<void>.delayed(Duration.zero);
 
-    expect(states.map((state) => state.runtimeType), [
-      LinkConnecting,
-      LinkConnecting,
-    ]);
-    expect(states.map((state) => state.serverId), [1, 2]);
+    expect(states.map((state) => state.runtimeType), [LinkConnecting]);
+    expect(states.map((state) => state.serverId), [2]);
   });
 
   test(
@@ -582,12 +588,8 @@ void main() {
 
       await Future<void>.delayed(Duration.zero);
 
-      expect(states.map((state) => state.runtimeType), [
-        LinkConnecting,
-        LinkConnecting,
-        LinkConnecting,
-      ]);
-      expect(states.map((state) => state.serverId), [1, 2, 1]);
+      expect(states.map((state) => state.runtimeType), [LinkConnecting]);
+      expect(states.map((state) => state.serverId), [1]);
     },
   );
 

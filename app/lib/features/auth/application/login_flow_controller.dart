@@ -101,6 +101,11 @@ class LoginFlowController {
           credentialsStored: credentialsStored,
         );
       }
+      logger.e(
+        'Failed to complete login flow',
+        error: error,
+        stackTrace: stackTrace,
+      );
       Error.throwWithStackTrace(error, stackTrace);
     }
   }

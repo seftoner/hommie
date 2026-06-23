@@ -261,6 +261,19 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
     });
   }
 
+  void _scheduleConnectingState(int serverId) {
+    final generation = _resetGeneration;
+    scheduleMicrotask(() {
+      if (_isDisposed ||
+          _resetGeneration != generation ||
+          _activeServerId != serverId) {
+        return;
+      }
+
+      _setLinkState(LinkConnecting(serverId: serverId));
+    });
+  }
+
   void _ensureActiveConnection(int serverId) {
     if (_isDisposed ||
         _resources.containsKey(serverId) ||
@@ -268,7 +281,7 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
       return;
     }
 
-    _setLinkState(LinkConnecting(serverId: serverId));
+    _scheduleConnectingState(serverId);
     unawaited(_openActiveConnection(serverId));
   }
 

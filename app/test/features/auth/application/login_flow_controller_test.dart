@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:home_assistant_websocket/home_assistant_websocket.dart' as ha;
+import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/features/auth/application/login_flow_controller.dart';
@@ -16,7 +17,11 @@ import 'package:hommie/features/servers/infrastructure/providers/server_manager_
 import 'package:hommie/features/servers/infrastructure/providers/websocket_config_repository_provider.dart';
 import 'package:oauth2/oauth2.dart';
 
+import '../../../utils/tests_logger.dart';
+
 void main() {
+  logger = testLogger;
+
   test('rolls back temporary server when OAuth fails', () async {
     final serverManager = _FakeServerManager();
     final authRepository = _FakeAuthRepository(

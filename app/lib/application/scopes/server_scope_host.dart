@@ -38,7 +38,7 @@ class ServerScopeHost extends ConsumerWidget {
     }
 
     return ProviderScope(
-      key: ValueKey(serverId),
+      key: ValueKey((serverId, connection)),
       overrides: [
         serverScopeIdProvider.overrideWith((_) => serverId),
         serverScopeServerProvider.overrideWith((_) => activeServer),

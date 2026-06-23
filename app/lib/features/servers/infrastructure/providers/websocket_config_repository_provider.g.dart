@@ -38,10 +38,12 @@ final class WebsocketConfigRepositoryProvider
   }) : super(
          retry: null,
          name: r'websocketConfigRepositoryProvider',
-         isAutoDispose: true,
+         isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
+
+  static const $allTransitiveDependencies0 = serverConfigProvider;
 
   @override
   String debugGetCreateSourceHash() => _$websocketConfigRepositoryHash();
@@ -78,7 +80,7 @@ final class WebsocketConfigRepositoryProvider
 }
 
 String _$websocketConfigRepositoryHash() =>
-    r'5d33dca59fccb7aea357e5baa90513f77d20f98c';
+    r'6036a0e814f247a276505a205cd4295df9196c7e';
 
 /// Provides WebSocket config repository for server-level operations
 ///
@@ -90,9 +92,11 @@ final class WebsocketConfigRepositoryFamily extends $Family
     : super(
         retry: null,
         name: r'websocketConfigRepositoryProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
-        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[serverConfigProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          WebsocketConfigRepositoryProvider.$allTransitiveDependencies0,
+        ],
+        isAutoDispose: false,
       );
 
   /// Provides WebSocket config repository for server-level operations
