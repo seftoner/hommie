@@ -8,6 +8,17 @@
 
 **Tech Stack:** Flutter, Riverpod 3 codegen, Dart sealed classes/interfaces, existing Home Assistant websocket package, focused provider/controller tests.
 
+> **Phase A of** [`2026-06-23-connection-architecture-consolidation-design.md`](../specs/2026-06-23-connection-architecture-consolidation-design.md) (the A → B → C sequence). This phase removes destructive cleanup from `ActiveServerSession`. Task 2's edits to `_open` and `_handleTransportState` are **interim** — Phase B later rewrites `ActiveServerSession` as a pure projection and deletes those methods, so keep the Task 2 changes minimal and do not invest in hardening them.
+
+## Global Constraints
+
+- **Commits:** Conventional Commits — `<type>(<scope>): <description>`, imperative, lowercase, no trailing period. Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`.
+- **Codegen:** after any `@riverpod`/`@freezed`/annotation change, run `dart run build_runner build --delete-conflicting-outputs` from `app/` before tests. Compile errors referencing `*.g.dart`/`*.freezed.dart` mean stale codegen — rerun it.
+- **Security:** never log tokens or PII.
+- **Verification gate:** `flutter analyze` prints `No issues found!` and `flutter test` passes (only the pre-existing intentionally skipped tests) before a phase is considered done.
+- **Branch:** work happens on the current feature branch; `main` is protected (PRs only). Commit only when the user asks.
+- **Run location:** codegen/`pub get` from repo root; `flutter test`/`flutter run` from `app/`.
+
 ---
 
 ## File Structure
