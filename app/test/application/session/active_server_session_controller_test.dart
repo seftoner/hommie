@@ -9,10 +9,8 @@ import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/i_server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
-import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
-import 'package:hommie/features/common/domain/values/server_url.dart';
 import 'package:hommie/features/servers/application/active_server.dart';
 import 'package:hommie/features/servers/domain/i_server_manager.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
@@ -74,21 +72,6 @@ class _FakeConnectionManager implements IServerConnectionManager {
 
   void completeNext() {
     pending.removeAt(0).complete(connection);
-  }
-}
-
-class _FakeAuthController implements AuthController {
-  final signedOutServerIds = <int>[];
-
-  @override
-  Ref get ref => throw UnimplementedError();
-
-  @override
-  Future<void> login(ServerUrl serverUrl) async {}
-
-  @override
-  Future<void> signOut(int serverId) async {
-    signedOutServerIds.add(serverId);
   }
 }
 
@@ -181,10 +164,8 @@ void main() {
     required AuthState authState,
     _AuthStateSource? authStateSource,
     _FakeConnectionManager? connectionManager,
-    _FakeAuthController? authController,
   }) {
     final manager = connectionManager ?? _FakeConnectionManager();
-    final controller = authController ?? _FakeAuthController();
     final source = authStateSource ?? _AuthStateSource(authState);
 
     return ProviderContainer(
@@ -194,7 +175,6 @@ void main() {
         ),
         authStateProvider.overrideWith((_) => source.value),
         serverConnectionManagerProvider.overrideWithValue(manager),
-        authControllerProvider.overrideWithValue(controller),
       ],
     );
   }
@@ -227,7 +207,6 @@ void main() {
           authStateProvider.overrideWith(
             (_) => const AuthState.unauthenticated(),
           ),
-          authControllerProvider.overrideWithValue(_FakeAuthController()),
         ],
       );
       addTearDown(container.dispose);
@@ -265,59 +244,46 @@ void main() {
     expect(manager.opens, 1);
   });
 
-  test(
-    'maps auth failure connection state to revoked session and signs out',
-    () async {
-      final authController = _FakeAuthController();
-      final container = makeContainer(
-        activeServer: server,
-        authState: AuthState.authenticated(credentials()),
-        authController: authController,
-      );
-      addTearDown(container.dispose);
+  test('maps auth failure connection state to revoked session', () async {
+    final container = makeContainer(
+      activeServer: server,
+      authState: AuthState.authenticated(credentials()),
+    );
+    addTearDown(container.dispose);
 
-      await waitForSession(container, (state) => state is OnlineServerSession);
+    await waitForSession(container, (state) => state is OnlineServerSession);
 
-      container.read(serverConnectionStateProvider.notifier).setAuthFailure();
+    container.read(serverConnectionStateProvider.notifier).setAuthFailure();
 
-      final state = await waitForSession(
-        container,
-        (state) => state is AuthRevokedServerSession,
-      );
-      expect(state, isA<AuthRevokedServerSession>());
-      expect(authController.signedOutServerIds, [1]);
-    },
-  );
+    final state = await waitForSession(
+      container,
+      (state) => state is AuthRevokedServerSession,
+    );
+    expect(state, isA<AuthRevokedServerSession>());
+  });
 
-  test(
-    'maps auth failure during open to revoked session and signs out',
-    () async {
-      final authController = _FakeAuthController();
-      final manager = _FakeConnectionManager(
-        error: AuthenticationError('bad token'),
-      );
-      final container = makeContainer(
-        activeServer: server,
-        authState: AuthState.authenticated(credentials()),
-        connectionManager: manager,
-        authController: authController,
-      );
-      addTearDown(container.dispose);
+  test('maps auth failure during open to revoked session', () async {
+    final manager = _FakeConnectionManager(
+      error: AuthenticationError('bad token'),
+    );
+    final container = makeContainer(
+      activeServer: server,
+      authState: AuthState.authenticated(credentials()),
+      connectionManager: manager,
+    );
+    addTearDown(container.dispose);
 
-      final state = await waitForSession(
-        container,
-        (state) => state is AuthRevokedServerSession,
-      );
+    final state = await waitForSession(
+      container,
+      (state) => state is AuthRevokedServerSession,
+    );
 
-      expect(state, isA<AuthRevokedServerSession>());
-      expect(authController.signedOutServerIds, [1]);
-    },
-  );
+    expect(state, isA<AuthRevokedServerSession>());
+  });
 
   test(
-    'maps token resolution failure during open to revoked session and signs out',
+    'maps token resolution failure during open to revoked session',
     () async {
-      final authController = _FakeAuthController();
       final manager = _FakeConnectionManager(
         error: ConnectionError(
           'Failed to resolve token: AuthFailure.unauthenticated()',
@@ -327,7 +293,6 @@ void main() {
         activeServer: server,
         authState: AuthState.authenticated(credentials()),
         connectionManager: manager,
-        authController: authController,
       );
       addTearDown(container.dispose);
 
@@ -337,14 +302,12 @@ void main() {
       );
 
       expect(state, isA<AuthRevokedServerSession>());
-      expect(authController.signedOutServerIds, [1]);
     },
   );
 
   test(
-    'maps pre-authentication transport failure to offline session without signing out',
+    'maps pre-authentication transport failure to offline session',
     () async {
-      final authController = _FakeAuthController();
       final manager = _FakeConnectionManager(
         error: ConnectionError('Connection closed before authentication'),
       );
@@ -352,7 +315,6 @@ void main() {
         activeServer: server,
         authState: AuthState.authenticated(credentials()),
         connectionManager: manager,
-        authController: authController,
       );
       addTearDown(container.dispose);
 
@@ -362,7 +324,6 @@ void main() {
       );
 
       expect(state, isA<OfflineServerSession>());
-      expect(authController.signedOutServerIds, isEmpty);
     },
   );
 
@@ -423,27 +384,23 @@ void main() {
     await waitForSession(container, (state) => state is OnlineServerSession);
   });
 
-  test('revoked auth state signs out once', () async {
-    final authController = _FakeAuthController();
-    final authStateSource = _AuthStateSource(const AuthState.revoked());
-    final container = makeContainer(
-      activeServer: server,
-      authState: authStateSource.value,
-      authStateSource: authStateSource,
-      authController: authController,
-    );
-    addTearDown(container.dispose);
+  test(
+    'revoked auth state maps to revoked session without cleanup side effects',
+    () async {
+      final authStateSource = _AuthStateSource(const AuthState.revoked());
+      final container = makeContainer(
+        activeServer: server,
+        authState: authStateSource.value,
+        authStateSource: authStateSource,
+      );
+      addTearDown(container.dispose);
 
-    await waitForSession(
-      container,
-      (state) => state is AuthRevokedServerSession,
-    );
-    await container.pump();
+      final state = await waitForSession(
+        container,
+        (state) => state is AuthRevokedServerSession,
+      );
 
-    authStateSource.value = const AuthState.revoked();
-    container.invalidate(authStateProvider);
-    await container.pump();
-
-    expect(authController.signedOutServerIds, [1]);
-  });
+      expect(state, isA<AuthRevokedServerSession>());
+    },
+  );
 }

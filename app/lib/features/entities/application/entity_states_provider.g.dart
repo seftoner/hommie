@@ -41,10 +41,6 @@ final class EntityStatesProvider
           EntityStatesProvider.$allTransitiveDependencies3,
           EntityStatesProvider.$allTransitiveDependencies4,
           EntityStatesProvider.$allTransitiveDependencies5,
-          EntityStatesProvider.$allTransitiveDependencies6,
-          EntityStatesProvider.$allTransitiveDependencies7,
-          EntityStatesProvider.$allTransitiveDependencies8,
-          EntityStatesProvider.$allTransitiveDependencies9,
         },
       );
 
@@ -59,14 +55,6 @@ final class EntityStatesProvider
       ActiveServerSessionProvider.$allTransitiveDependencies3;
   static const $allTransitiveDependencies5 =
       ActiveServerSessionProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies6 =
-      ActiveServerSessionProvider.$allTransitiveDependencies5;
-  static const $allTransitiveDependencies7 =
-      ActiveServerSessionProvider.$allTransitiveDependencies6;
-  static const $allTransitiveDependencies8 =
-      ActiveServerSessionProvider.$allTransitiveDependencies7;
-  static const $allTransitiveDependencies9 =
-      ActiveServerSessionProvider.$allTransitiveDependencies8;
 
   @override
   String debugGetCreateSourceHash() => _$entityStatesHash();

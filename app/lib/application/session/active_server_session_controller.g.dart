@@ -23,7 +23,6 @@ final class ActiveServerSessionProvider
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
           serverConnectionManagerProvider,
-          authControllerProvider,
           activeServerProvider,
           authStateProvider,
           serverConnectionStateProvider,
@@ -34,26 +33,15 @@ final class ActiveServerSessionProvider
           ActiveServerSessionProvider.$allTransitiveDependencies2,
           ActiveServerSessionProvider.$allTransitiveDependencies3,
           ActiveServerSessionProvider.$allTransitiveDependencies4,
-          ActiveServerSessionProvider.$allTransitiveDependencies5,
-          ActiveServerSessionProvider.$allTransitiveDependencies6,
-          ActiveServerSessionProvider.$allTransitiveDependencies7,
-          ActiveServerSessionProvider.$allTransitiveDependencies8,
         },
       );
 
   static const $allTransitiveDependencies0 = serverConnectionManagerProvider;
   static const $allTransitiveDependencies1 =
       ServerConnectionManagerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = authControllerProvider;
-  static const $allTransitiveDependencies3 =
-      AuthControllerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies4 =
-      AuthControllerProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies5 =
-      AuthControllerProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies6 = activeServerProvider;
-  static const $allTransitiveDependencies7 = authStateProvider;
-  static const $allTransitiveDependencies8 = serverConnectionStateProvider;
+  static const $allTransitiveDependencies2 = activeServerProvider;
+  static const $allTransitiveDependencies3 = authStateProvider;
+  static const $allTransitiveDependencies4 = serverConnectionStateProvider;
 
   @override
   String debugGetCreateSourceHash() => _$activeServerSessionHash();
@@ -72,7 +60,7 @@ final class ActiveServerSessionProvider
 }
 
 String _$activeServerSessionHash() =>
-    r'ba85b95bbf0908f4756cca661450083a343a99c9';
+    r'38bb9f42f7bd2d0e077a80ac2d770321239c7fb2';
 
 abstract class _$ActiveServerSession
     extends $Notifier<ActiveServerSessionState> {

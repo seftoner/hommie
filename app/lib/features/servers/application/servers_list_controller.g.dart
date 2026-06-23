@@ -21,9 +21,27 @@ final class ServersListControllerProvider
         retry: null,
         name: r'serversListControllerProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: const <ProviderOrFamily>[
+          serverManagerProvider,
+          serverLifecycleControllerProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>{
+          ServersListControllerProvider.$allTransitiveDependencies0,
+          ServersListControllerProvider.$allTransitiveDependencies1,
+          ServersListControllerProvider.$allTransitiveDependencies2,
+          ServersListControllerProvider.$allTransitiveDependencies3,
+          ServersListControllerProvider.$allTransitiveDependencies4,
+        },
       );
+
+  static const $allTransitiveDependencies0 = serverManagerProvider;
+  static const $allTransitiveDependencies1 = serverLifecycleControllerProvider;
+  static const $allTransitiveDependencies2 =
+      ServerLifecycleControllerProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies3 =
+      ServerLifecycleControllerProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies4 =
+      ServerLifecycleControllerProvider.$allTransitiveDependencies2;
 
   @override
   String debugGetCreateSourceHash() => _$serversListControllerHash();
@@ -34,7 +52,7 @@ final class ServersListControllerProvider
 }
 
 String _$serversListControllerHash() =>
-    r'f5cc5d48d6fc06b2adeb4bf4c6f5a6e171c2ff8c';
+    r'd855c2e55fef7cf45b228f82eab3ef6bca6a101e';
 
 abstract class _$ServersListController extends $AsyncNotifier<List<Server>> {
   FutureOr<List<Server>> build();

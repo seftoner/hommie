@@ -24,8 +24,7 @@ final class AuthControllerProvider
         isAutoDispose: false,
         dependencies: const <ProviderOrFamily>[
           loginFlowControllerProvider,
-          websocketConfigRepositoryProvider,
-          serverConnectionManagerProvider,
+          serverLifecycleControllerProvider,
         ],
         $allTransitiveDependencies: const <ProviderOrFamily>{
           AuthControllerProvider.$allTransitiveDependencies0,
@@ -33,6 +32,8 @@ final class AuthControllerProvider
           AuthControllerProvider.$allTransitiveDependencies2,
           AuthControllerProvider.$allTransitiveDependencies3,
           AuthControllerProvider.$allTransitiveDependencies4,
+          AuthControllerProvider.$allTransitiveDependencies5,
+          AuthControllerProvider.$allTransitiveDependencies6,
         },
       );
 
@@ -45,6 +46,9 @@ final class AuthControllerProvider
       LoginFlowControllerProvider.$allTransitiveDependencies2;
   static const $allTransitiveDependencies4 =
       LoginFlowControllerProvider.$allTransitiveDependencies3;
+  static const $allTransitiveDependencies5 = serverLifecycleControllerProvider;
+  static const $allTransitiveDependencies6 =
+      ServerLifecycleControllerProvider.$allTransitiveDependencies3;
 
   @override
   String debugGetCreateSourceHash() => _$authControllerHash();
@@ -68,4 +72,4 @@ final class AuthControllerProvider
   }
 }
 
-String _$authControllerHash() => r'5dc8360244422af9e28a96c7008921b14c483b7e';
+String _$authControllerHash() => r'70a0440308e6403aecefe40c16c8b8f52e70b3d4';

@@ -8,7 +8,6 @@ import 'package:hommie/core/infrastructure/networking/connection/connection_erro
 import 'package:hommie/core/infrastructure/networking/connection/managed_ha_connection.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_connection_manager.dart';
 import 'package:hommie/core/infrastructure/networking/providers/connection_state_provider.dart';
-import 'package:hommie/features/auth/application/auth_controller.dart';
 import 'package:hommie/features/auth/application/auth_state.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/servers/application/active_server.dart';
@@ -21,7 +20,6 @@ part 'active_server_session_controller.g.dart';
   keepAlive: true,
   dependencies: [
     serverConnectionManager,
-    authController,
     activeServer,
     authState,
     ServerConnectionState,
@@ -32,9 +30,7 @@ class ActiveServerSession extends _$ActiveServerSession {
   AuthState? _authState;
   ActiveServerSessionState? _lastSession;
   _ConnectionAttempt? _connectingAttempt;
-  final _signedOutServerIds = <int>{};
   int _sessionRevision = 0;
-  bool _signingOut = false;
 
   @override
   ActiveServerSessionState build() {
@@ -75,10 +71,6 @@ class ActiveServerSession extends _$ActiveServerSession {
       _sessionRevision += 1;
       _connectingAttempt = null;
     }
-
-    if (nextServerId != null && nextAuthenticated) {
-      _signedOutServerIds.remove(nextServerId);
-    }
   }
 
   ActiveServerSessionState _stateForCurrentInputs() {
@@ -101,7 +93,6 @@ class ActiveServerSession extends _$ActiveServerSession {
     }
 
     if (auth is Revoked) {
-      _triggerSignOut(server);
       return _remember(AuthRevokedServerSession(server));
     }
 
@@ -157,14 +148,12 @@ class ActiveServerSession extends _$ActiveServerSession {
     } on AuthenticationError {
       if (_isCurrent(serverId, revision) && _hasAuthenticatedSession) {
         _publish(AuthRevokedServerSession(server));
-        _triggerSignOut(server);
       }
     } catch (error, stackTrace) {
       if (isConnectionAuthenticationFailure(error) &&
           _isCurrent(serverId, revision) &&
           _hasAuthenticatedSession) {
         _publish(AuthRevokedServerSession(server));
-        _triggerSignOut(server);
         return;
       }
 
@@ -204,7 +193,6 @@ class ActiveServerSession extends _$ActiveServerSession {
     switch (transportState) {
       case HAServerConnectionState.authFailure:
         _publish(AuthRevokedServerSession(server));
-        _triggerSignOut(server);
       case HAServerConnectionState.disconnected:
       case HAServerConnectionState.reconnecting:
         _publish(OfflineServerSession(activeServer: server));
@@ -217,25 +205,6 @@ class ActiveServerSession extends _$ActiveServerSession {
       case HAServerConnectionState.unknown:
         break;
     }
-  }
-
-  void _triggerSignOut(Server server) {
-    final serverId = server.id;
-    if (serverId == null ||
-        _signingOut ||
-        _signedOutServerIds.contains(serverId)) {
-      return;
-    }
-
-    _signingOut = true;
-    _signedOutServerIds.add(serverId);
-    unawaited(() async {
-      try {
-        await ref.read(authControllerProvider).signOut(serverId);
-      } finally {
-        _signingOut = false;
-      }
-    }());
   }
 }
 

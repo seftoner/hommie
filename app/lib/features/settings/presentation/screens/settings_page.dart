@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/features/auth/application/auth_controller.dart';
-import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
+import 'package:hommie/application/server_lifecycle/server_lifecycle_controller.dart';
 import 'package:hommie/router/routes.dart';
 import 'package:hommie/ui/keys.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:riverpod_annotation/experimental/scope.dart';
 
-@Dependencies([authController])
+@Dependencies([serverLifecycleController])
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
@@ -91,7 +90,7 @@ class SettingsPage extends ConsumerWidget {
   Future<void> _showSignOutDialog(BuildContext context, WidgetRef ref) {
     return showDialog(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
+      builder: (BuildContext dialogContext) => AlertDialog(
         key: K.hub.signOutAlert,
         title: const Text('Sign Out'),
         content: const Text(
@@ -99,7 +98,7 @@ class SettingsPage extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(dialogContext).pop(),
             child: const Text('Cancel'),
           ),
           TextButton(
@@ -108,20 +107,30 @@ class SettingsPage extends ConsumerWidget {
               foregroundColor: Theme.of(context).colorScheme.error,
             ),
             onPressed: () async {
-              Navigator.of(context).pop();
-              // Get the active server ID and use the serverAuthController
-              final serverManager = ref.read(serverManagerProvider);
-              final activeServer = await serverManager.getActiveServer();
-              if (activeServer != null) {
-                await ref
-                    .read(authControllerProvider)
-                    .signOut(activeServer.id!);
-              }
+              Navigator.of(dialogContext).pop();
+              await _signOut(context, ref);
             },
             child: const Text('Sign Out'),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _signOut(BuildContext context, WidgetRef ref) async {
+    try {
+      await ref.read(serverLifecycleControllerProvider).signOutActiveServer();
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to sign out: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+    }
   }
 }
