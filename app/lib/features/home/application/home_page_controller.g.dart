@@ -42,6 +42,8 @@ final class HomePageControllerProvider
           HomePageControllerProvider.$allTransitiveDependencies10,
           HomePageControllerProvider.$allTransitiveDependencies11,
           HomePageControllerProvider.$allTransitiveDependencies12,
+          HomePageControllerProvider.$allTransitiveDependencies13,
+          HomePageControllerProvider.$allTransitiveDependencies14,
         },
       );
 
@@ -49,23 +51,27 @@ final class HomePageControllerProvider
   static const $allTransitiveDependencies1 = cachedAreasProvider;
   static const $allTransitiveDependencies2 =
       CachedAreasProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies3 = cachedEntitiesProvider;
-  static const $allTransitiveDependencies4 = homeConnectionLoadingProvider;
-  static const $allTransitiveDependencies5 =
-      HomeConnectionLoadingProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies6 =
-      HomeConnectionLoadingProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies3 =
+      CachedAreasProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies4 =
+      CachedAreasProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies5 = cachedEntitiesProvider;
+  static const $allTransitiveDependencies6 = homeConnectionLoadingProvider;
   static const $allTransitiveDependencies7 =
-      HomeConnectionLoadingProvider.$allTransitiveDependencies2;
+      HomeConnectionLoadingProvider.$allTransitiveDependencies0;
   static const $allTransitiveDependencies8 =
-      HomeConnectionLoadingProvider.$allTransitiveDependencies3;
+      HomeConnectionLoadingProvider.$allTransitiveDependencies1;
   static const $allTransitiveDependencies9 =
-      HomeConnectionLoadingProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies10 = serverSyncCoordinatorProvider;
+      HomeConnectionLoadingProvider.$allTransitiveDependencies2;
+  static const $allTransitiveDependencies10 =
+      HomeConnectionLoadingProvider.$allTransitiveDependencies3;
   static const $allTransitiveDependencies11 =
-      ServerSyncCoordinatorProvider.$allTransitiveDependencies5;
-  static const $allTransitiveDependencies12 =
+      HomeConnectionLoadingProvider.$allTransitiveDependencies4;
+  static const $allTransitiveDependencies12 = serverSyncCoordinatorProvider;
+  static const $allTransitiveDependencies13 =
       ServerSyncCoordinatorProvider.$allTransitiveDependencies6;
+  static const $allTransitiveDependencies14 =
+      ServerSyncCoordinatorProvider.$allTransitiveDependencies7;
 
   @override
   String debugGetCreateSourceHash() => _$homePageControllerHash();

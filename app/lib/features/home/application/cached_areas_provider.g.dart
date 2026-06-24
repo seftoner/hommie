@@ -27,13 +27,21 @@ final class CachedAreasProvider
         retry: null,
         name: r'cachedAreasProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[serverScopeIdProvider],
+        dependencies: const <ProviderOrFamily>[
+          serverScopeIdProvider,
+          areasForServerProvider,
+        ],
         $allTransitiveDependencies: const <ProviderOrFamily>[
           CachedAreasProvider.$allTransitiveDependencies0,
+          CachedAreasProvider.$allTransitiveDependencies1,
+          CachedAreasProvider.$allTransitiveDependencies2,
         ],
       );
 
   static const $allTransitiveDependencies0 = serverScopeIdProvider;
+  static const $allTransitiveDependencies1 = areasForServerProvider;
+  static const $allTransitiveDependencies2 =
+      AreasForServerProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$cachedAreasHash();
@@ -49,4 +57,4 @@ final class CachedAreasProvider
   }
 }
 
-String _$cachedAreasHash() => r'122cb929d72ba55b39c1eed6a1dc154755ca1293';
+String _$cachedAreasHash() => r'476ceaa9d65727986ab8f59d1501fbbef4da18f8';

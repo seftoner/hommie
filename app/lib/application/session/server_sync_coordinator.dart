@@ -4,11 +4,10 @@ import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/application/session/active_server_session_controller.dart';
 import 'package:hommie/application/session/active_server_session_state.dart';
 import 'package:hommie/application/session/server_sync_state.dart';
-import 'package:hommie/core/domain/entities/area.dart';
-import 'package:hommie/features/areas/infrastructure/repositories/areas_repository.dart';
 import 'package:hommie/features/entities/infrastructure/providers/entity_repository_provider.dart';
 import 'package:hommie/features/entities/infrastructure/repositories/entity_resolver.dart';
 import 'package:hommie/features/entities/infrastructure/repositories/ha_registry_repository.dart';
+import 'package:hommie/features/home/application/area_registry_sync_service.dart';
 import 'package:hommie/features/home/infrastructure/providers/area_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -16,7 +15,12 @@ part 'server_sync_coordinator.g.dart';
 
 @Riverpod(
   keepAlive: true,
-  dependencies: [ActiveServerSession, areaRepository, entityRepository],
+  dependencies: [
+    ActiveServerSession,
+    areaRepository,
+    entityRepository,
+    areaRegistrySyncService,
+  ],
 )
 class ServerSyncCoordinator extends _$ServerSyncCoordinator {
   HASubscription? _areaSub;
@@ -194,20 +198,17 @@ class ServerSyncCoordinator extends _$ServerSyncCoordinator {
     IHAConnection connection,
     int revision,
   ) async {
-    final remote = AreasRepository(connection);
-    final result = await remote.getAreas();
-    final areas = result.match<List<Area>>(
-      (error) => throw error,
-      (areas) => areas,
-    );
-
     if (!_isCurrent(serverId, connection, revision)) {
       return;
     }
 
     await ref
-        .read(areaRepositoryProvider)
-        .syncAll(serverId: serverId, areas: areas);
+        .read(areaRegistrySyncServiceProvider)
+        .refresh(
+          serverId: serverId,
+          connection: connection,
+          shouldSync: () => _isCurrent(serverId, connection, revision),
+        );
   }
 
   Future<void> _syncEntities(
