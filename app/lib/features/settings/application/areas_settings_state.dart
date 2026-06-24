@@ -27,9 +27,8 @@ final class AreasSettingsUnavailable extends AreasSettingsFailure {
 }
 
 final class AreasSettingsCommandFailure extends AreasSettingsFailure {
-  const AreasSettingsCommandFailure(Object cause)
-    : cause = cause,
-      super('Failed to update areas: $cause');
+  const AreasSettingsCommandFailure(this.cause)
+    : super('Failed to update areas: $cause');
 
   final Object cause;
 }

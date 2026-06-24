@@ -14,7 +14,7 @@ class _FakeAreasSettingsController extends AreasSettingsController {
   _FakeAreasSettingsController({this.deleteCompleter, this.deleteFailure});
 
   final Completer<void>? deleteCompleter;
-  final Object? deleteFailure;
+  final Exception? deleteFailure;
   final deletedAreaIds = <String>[];
 
   @override
