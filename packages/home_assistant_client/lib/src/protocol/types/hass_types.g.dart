@@ -115,3 +115,35 @@ Map<String, dynamic> _$UnitSystemToJson(_UnitSystem instance) =>
       'wind_speed': instance.wind_speed,
       'accumulated_precipitation': instance.accumulated_precipitation,
     };
+
+_HassArea _$HassAreaFromJson(Map<String, dynamic> json) => _HassArea(
+  createdAt: (json['created_at'] as num?)?.toDouble() ?? 0,
+  modifiedAt: (json['modified_at'] as num?)?.toDouble() ?? 0,
+  areaId: json['area_id'] as String,
+  name: json['name'] as String,
+  floorId: json['floor_id'] as String?,
+  humidityEntityId: json['humidity_entity_id'] as String?,
+  icon: json['icon'] as String?,
+  picture: json['picture'] as String?,
+  temperatureEntityId: json['temperature_entity_id'] as String?,
+  aliases:
+      (json['aliases'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
+  labels:
+      (json['labels'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
+);
+
+Map<String, dynamic> _$HassAreaToJson(_HassArea instance) => <String, dynamic>{
+  'created_at': instance.createdAt,
+  'modified_at': instance.modifiedAt,
+  'area_id': instance.areaId,
+  'name': instance.name,
+  'floor_id': instance.floorId,
+  'humidity_entity_id': instance.humidityEntityId,
+  'icon': instance.icon,
+  'picture': instance.picture,
+  'temperature_entity_id': instance.temperatureEntityId,
+  'aliases': instance.aliases,
+  'labels': instance.labels,
+};

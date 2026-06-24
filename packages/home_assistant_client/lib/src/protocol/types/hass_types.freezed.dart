@@ -1191,4 +1191,303 @@ as String,
 
 }
 
+
+/// @nodoc
+mixin _$HassArea {
+
+ double get createdAt; double get modifiedAt; String get areaId; String get name; String? get floorId; String? get humidityEntityId; String? get icon; String? get picture; String? get temperatureEntityId; List<String> get aliases; List<String> get labels;
+/// Create a copy of HassArea
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$HassAreaCopyWith<HassArea> get copyWith => _$HassAreaCopyWithImpl<HassArea>(this as HassArea, _$identity);
+
+  /// Serializes this HassArea to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassArea&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&(identical(other.name, name) || other.name == name)&&(identical(other.floorId, floorId) || other.floorId == floorId)&&(identical(other.humidityEntityId, humidityEntityId) || other.humidityEntityId == humidityEntityId)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.picture, picture) || other.picture == picture)&&(identical(other.temperatureEntityId, temperatureEntityId) || other.temperatureEntityId == temperatureEntityId)&&const DeepCollectionEquality().equals(other.aliases, aliases)&&const DeepCollectionEquality().equals(other.labels, labels));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,createdAt,modifiedAt,areaId,name,floorId,humidityEntityId,icon,picture,temperatureEntityId,const DeepCollectionEquality().hash(aliases),const DeepCollectionEquality().hash(labels));
+
+@override
+String toString() {
+  return 'HassArea(createdAt: $createdAt, modifiedAt: $modifiedAt, areaId: $areaId, name: $name, floorId: $floorId, humidityEntityId: $humidityEntityId, icon: $icon, picture: $picture, temperatureEntityId: $temperatureEntityId, aliases: $aliases, labels: $labels)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $HassAreaCopyWith<$Res>  {
+  factory $HassAreaCopyWith(HassArea value, $Res Function(HassArea) _then) = _$HassAreaCopyWithImpl;
+@useResult
+$Res call({
+ double createdAt, double modifiedAt, String areaId, String name, String? floorId, String? humidityEntityId, String? icon, String? picture, String? temperatureEntityId, List<String> aliases, List<String> labels
+});
+
+
+
+
+}
+/// @nodoc
+class _$HassAreaCopyWithImpl<$Res>
+    implements $HassAreaCopyWith<$Res> {
+  _$HassAreaCopyWithImpl(this._self, this._then);
+
+  final HassArea _self;
+  final $Res Function(HassArea) _then;
+
+/// Create a copy of HassArea
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? createdAt = null,Object? modifiedAt = null,Object? areaId = null,Object? name = null,Object? floorId = freezed,Object? humidityEntityId = freezed,Object? icon = freezed,Object? picture = freezed,Object? temperatureEntityId = freezed,Object? aliases = null,Object? labels = null,}) {
+  return _then(_self.copyWith(
+createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as double,modifiedAt: null == modifiedAt ? _self.modifiedAt : modifiedAt // ignore: cast_nullable_to_non_nullable
+as double,areaId: null == areaId ? _self.areaId : areaId // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,floorId: freezed == floorId ? _self.floorId : floorId // ignore: cast_nullable_to_non_nullable
+as String?,humidityEntityId: freezed == humidityEntityId ? _self.humidityEntityId : humidityEntityId // ignore: cast_nullable_to_non_nullable
+as String?,icon: freezed == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
+as String?,picture: freezed == picture ? _self.picture : picture // ignore: cast_nullable_to_non_nullable
+as String?,temperatureEntityId: freezed == temperatureEntityId ? _self.temperatureEntityId : temperatureEntityId // ignore: cast_nullable_to_non_nullable
+as String?,aliases: null == aliases ? _self.aliases : aliases // ignore: cast_nullable_to_non_nullable
+as List<String>,labels: null == labels ? _self.labels : labels // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [HassArea].
+extension HassAreaPatterns on HassArea {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _HassArea value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _HassArea() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _HassArea value)  $default,){
+final _that = this;
+switch (_that) {
+case _HassArea():
+return $default(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _HassArea value)?  $default,){
+final _that = this;
+switch (_that) {
+case _HassArea() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double createdAt,  double modifiedAt,  String areaId,  String name,  String? floorId,  String? humidityEntityId,  String? icon,  String? picture,  String? temperatureEntityId,  List<String> aliases,  List<String> labels)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _HassArea() when $default != null:
+return $default(_that.createdAt,_that.modifiedAt,_that.areaId,_that.name,_that.floorId,_that.humidityEntityId,_that.icon,_that.picture,_that.temperatureEntityId,_that.aliases,_that.labels);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double createdAt,  double modifiedAt,  String areaId,  String name,  String? floorId,  String? humidityEntityId,  String? icon,  String? picture,  String? temperatureEntityId,  List<String> aliases,  List<String> labels)  $default,) {final _that = this;
+switch (_that) {
+case _HassArea():
+return $default(_that.createdAt,_that.modifiedAt,_that.areaId,_that.name,_that.floorId,_that.humidityEntityId,_that.icon,_that.picture,_that.temperatureEntityId,_that.aliases,_that.labels);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double createdAt,  double modifiedAt,  String areaId,  String name,  String? floorId,  String? humidityEntityId,  String? icon,  String? picture,  String? temperatureEntityId,  List<String> aliases,  List<String> labels)?  $default,) {final _that = this;
+switch (_that) {
+case _HassArea() when $default != null:
+return $default(_that.createdAt,_that.modifiedAt,_that.areaId,_that.name,_that.floorId,_that.humidityEntityId,_that.icon,_that.picture,_that.temperatureEntityId,_that.aliases,_that.labels);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class _HassArea implements HassArea {
+  const _HassArea({this.createdAt = 0, this.modifiedAt = 0, required this.areaId, required this.name, this.floorId, this.humidityEntityId, this.icon, this.picture, this.temperatureEntityId, final  List<String> aliases = const [], final  List<String> labels = const []}): _aliases = aliases,_labels = labels;
+  factory _HassArea.fromJson(Map<String, dynamic> json) => _$HassAreaFromJson(json);
+
+@override@JsonKey() final  double createdAt;
+@override@JsonKey() final  double modifiedAt;
+@override final  String areaId;
+@override final  String name;
+@override final  String? floorId;
+@override final  String? humidityEntityId;
+@override final  String? icon;
+@override final  String? picture;
+@override final  String? temperatureEntityId;
+ final  List<String> _aliases;
+@override@JsonKey() List<String> get aliases {
+  if (_aliases is EqualUnmodifiableListView) return _aliases;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_aliases);
+}
+
+ final  List<String> _labels;
+@override@JsonKey() List<String> get labels {
+  if (_labels is EqualUnmodifiableListView) return _labels;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_labels);
+}
+
+
+/// Create a copy of HassArea
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$HassAreaCopyWith<_HassArea> get copyWith => __$HassAreaCopyWithImpl<_HassArea>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$HassAreaToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassArea&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&(identical(other.name, name) || other.name == name)&&(identical(other.floorId, floorId) || other.floorId == floorId)&&(identical(other.humidityEntityId, humidityEntityId) || other.humidityEntityId == humidityEntityId)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.picture, picture) || other.picture == picture)&&(identical(other.temperatureEntityId, temperatureEntityId) || other.temperatureEntityId == temperatureEntityId)&&const DeepCollectionEquality().equals(other._aliases, _aliases)&&const DeepCollectionEquality().equals(other._labels, _labels));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,createdAt,modifiedAt,areaId,name,floorId,humidityEntityId,icon,picture,temperatureEntityId,const DeepCollectionEquality().hash(_aliases),const DeepCollectionEquality().hash(_labels));
+
+@override
+String toString() {
+  return 'HassArea(createdAt: $createdAt, modifiedAt: $modifiedAt, areaId: $areaId, name: $name, floorId: $floorId, humidityEntityId: $humidityEntityId, icon: $icon, picture: $picture, temperatureEntityId: $temperatureEntityId, aliases: $aliases, labels: $labels)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$HassAreaCopyWith<$Res> implements $HassAreaCopyWith<$Res> {
+  factory _$HassAreaCopyWith(_HassArea value, $Res Function(_HassArea) _then) = __$HassAreaCopyWithImpl;
+@override @useResult
+$Res call({
+ double createdAt, double modifiedAt, String areaId, String name, String? floorId, String? humidityEntityId, String? icon, String? picture, String? temperatureEntityId, List<String> aliases, List<String> labels
+});
+
+
+
+
+}
+/// @nodoc
+class __$HassAreaCopyWithImpl<$Res>
+    implements _$HassAreaCopyWith<$Res> {
+  __$HassAreaCopyWithImpl(this._self, this._then);
+
+  final _HassArea _self;
+  final $Res Function(_HassArea) _then;
+
+/// Create a copy of HassArea
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? createdAt = null,Object? modifiedAt = null,Object? areaId = null,Object? name = null,Object? floorId = freezed,Object? humidityEntityId = freezed,Object? icon = freezed,Object? picture = freezed,Object? temperatureEntityId = freezed,Object? aliases = null,Object? labels = null,}) {
+  return _then(_HassArea(
+createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as double,modifiedAt: null == modifiedAt ? _self.modifiedAt : modifiedAt // ignore: cast_nullable_to_non_nullable
+as double,areaId: null == areaId ? _self.areaId : areaId // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,floorId: freezed == floorId ? _self.floorId : floorId // ignore: cast_nullable_to_non_nullable
+as String?,humidityEntityId: freezed == humidityEntityId ? _self.humidityEntityId : humidityEntityId // ignore: cast_nullable_to_non_nullable
+as String?,icon: freezed == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
+as String?,picture: freezed == picture ? _self.picture : picture // ignore: cast_nullable_to_non_nullable
+as String?,temperatureEntityId: freezed == temperatureEntityId ? _self.temperatureEntityId : temperatureEntityId // ignore: cast_nullable_to_non_nullable
+as String?,aliases: null == aliases ? _self._aliases : aliases // ignore: cast_nullable_to_non_nullable
+as List<String>,labels: null == labels ? _self._labels : labels // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
+}
+
+
+}
+
 // dart format on
