@@ -4,17 +4,11 @@ import 'dart:io';
 import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'fakes/fake_ha_socket.dart';
-import 'send_ha_command_messages_test.mocks.dart';
+import 'helpers/websocket_harness.dart';
 
 void main() {
-  setUpAll(() {
-    provideDummy<HASocketState>(const Disconnected());
-  });
-
   group('HomeAssistantApi', () {
     test('config.get via REST calls GET /api/config', () async {
       final api = HomeAssistantApi(
@@ -38,7 +32,7 @@ void main() {
     test(
       'config.get via WebSocket sends get_config over wrapped connection',
       () async {
-        final harness = await _webSocketHarness();
+        final harness = await createWebSocketHarness();
         addTearDown(harness.close);
 
         final api = HomeAssistantApi.fromConnection(harness.connection);
@@ -57,7 +51,7 @@ void main() {
     );
 
     test('services.call via WebSocket preserves target payload', () async {
-      final harness = await _webSocketHarness();
+      final harness = await createWebSocketHarness();
       addTearDown(harness.close);
 
       final api = HomeAssistantApi.fromConnection(harness.connection);
@@ -88,7 +82,7 @@ void main() {
     });
 
     test('raw WebSocket send accepts arbitrary message maps', () async {
-      final harness = await _webSocketHarness();
+      final harness = await createWebSocketHarness();
       addTearDown(harness.close);
 
       final api = HomeAssistantApi.fromConnection(harness.connection);
@@ -119,7 +113,7 @@ void main() {
     });
 
     test('areas.list sends area registry list over WebSocket', () async {
-      final harness = await _webSocketHarness();
+      final harness = await createWebSocketHarness();
       addTearDown(harness.close);
 
       final api = HomeAssistantApi.fromConnection(harness.connection);
@@ -148,7 +142,7 @@ void main() {
     });
 
     test('areas.create sends area registry create over WebSocket', () async {
-      final harness = await _webSocketHarness();
+      final harness = await createWebSocketHarness();
       addTearDown(harness.close);
 
       final api = HomeAssistantApi.fromConnection(harness.connection);
@@ -174,7 +168,7 @@ void main() {
     });
 
     test('areas.rename sends area registry update over WebSocket', () async {
-      final harness = await _webSocketHarness();
+      final harness = await createWebSocketHarness();
       addTearDown(harness.close);
 
       final api = HomeAssistantApi.fromConnection(harness.connection);
@@ -201,7 +195,7 @@ void main() {
     });
 
     test('areas.delete sends area registry delete over WebSocket', () async {
-      final harness = await _webSocketHarness();
+      final harness = await createWebSocketHarness();
       addTearDown(harness.close);
 
       final api = HomeAssistantApi.fromConnection(harness.connection);
@@ -247,20 +241,6 @@ Map<String, dynamic> _areaJson({
   };
 }
 
-Future<_Harness> _webSocketHarness() async {
-  final options = MockHAConnectionOption();
-  final socket = FakeHASocket();
-
-  when(options.createSocket()).thenAnswer((_) async => socket);
-  when(options.logger).thenReturn(const NoOpLogger());
-
-  socket.setState(const Authenticated());
-
-  final connection = HAConnection(options);
-  await connection.connect();
-  return _Harness(connection: connection, socket: socket);
-}
-
 Future<Map<String, dynamic>> _sampleResponse(String name) async {
   final fileName = switch (name) {
     'get_config' => 'get_config_response.json',
@@ -276,13 +256,4 @@ Future<Map<String, dynamic>> _sampleResponse(String name) async {
 Future<dynamic> _sampleResult(String name) async {
   final response = await _sampleResponse(name);
   return response['result'];
-}
-
-final class _Harness {
-  const _Harness({required this.connection, required this.socket});
-
-  final HAConnection connection;
-  final FakeHASocket socket;
-
-  Future<void> close() => connection.close();
 }

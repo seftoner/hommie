@@ -1,41 +1,22 @@
 import 'package:home_assistant_client/src/api/home_assistant_api.dart';
 import 'package:home_assistant_client/src/connection/ha_connection.dart';
-import 'package:home_assistant_client/src/connection/ha_connection_option.dart';
-import 'package:home_assistant_client/src/connection/ha_socket_state.dart';
-import 'package:home_assistant_client/src/logging/logger_interface.dart';
 import 'package:home_assistant_client/src/protocol/messages/ha_messages.dart';
 import 'package:home_assistant_client/src/protocol/types/ha_response.dart';
 import 'package:home_assistant_client/src/protocol/types/hass_types.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'fakes/fake_ha_socket.dart';
-import 'send_ha_command_messages_test.mocks.dart';
+import 'helpers/websocket_harness.dart';
 import 'utils/tests_helpers.dart';
 
-@GenerateMocks([HAConnectionOption])
 void main() {
-  late MockHAConnectionOption mockOptions;
   late FakeHASocket fakeSocket;
   late HAConnection connection;
 
-  setUpAll(() {
-    provideDummy<HASocketState>(const Disconnected());
-  });
-
   setUp(() async {
-    mockOptions = MockHAConnectionOption();
-    fakeSocket = FakeHASocket();
-
-    when(mockOptions.createSocket()).thenAnswer((_) async => fakeSocket);
-    when(mockOptions.logger).thenReturn(const NoOpLogger());
-
-    // Keep the socket in an authenticated state for tests.
-    fakeSocket.setState(const Authenticated());
-
-    connection = HAConnection(mockOptions);
-    await connection.connect();
+    final harness = await createWebSocketHarness();
+    fakeSocket = harness.socket;
+    connection = harness.connection;
   });
 
   tearDown(() async {
