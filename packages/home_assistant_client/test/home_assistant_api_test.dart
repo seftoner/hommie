@@ -117,7 +117,134 @@ void main() {
         {'area_id': 'kitchen'},
       ]);
     });
+
+    test('areas.list sends area registry list over WebSocket', () async {
+      final harness = await _webSocketHarness();
+      addTearDown(harness.close);
+
+      final api = HomeAssistantApi.fromConnection(harness.connection);
+      final future = api.areas.list();
+
+      final sent = await harness.socket.nextSentWhere(
+        (message) => message is HARawWebSocketMessage,
+      );
+      expect(sent.toPayload(id: 2), {
+        'id': 2,
+        'type': 'config/area_registry/list',
+      });
+
+      harness.socket.addIncoming({
+        'id': 2,
+        'type': 'result',
+        'success': true,
+        'result': [_areaJson()],
+      });
+
+      final areas = await future;
+      expect(areas, hasLength(1));
+      expect(areas.single.areaId, 'kitchen');
+      expect(areas.single.name, 'Kitchen');
+      expect(areas.single.icon, 'mdi:silverware-fork-knife');
+    });
+
+    test('areas.create sends area registry create over WebSocket', () async {
+      final harness = await _webSocketHarness();
+      addTearDown(harness.close);
+
+      final api = HomeAssistantApi.fromConnection(harness.connection);
+      final future = api.areas.create(name: 'Office');
+
+      final sent = await harness.socket.nextSentWhere(
+        (message) => message is HARawWebSocketMessage,
+      );
+      expect(sent.toPayload(id: 2), {
+        'id': 2,
+        'type': 'config/area_registry/create',
+        'name': 'Office',
+      });
+
+      harness.socket.addIncoming({
+        'id': 2,
+        'type': 'result',
+        'success': true,
+        'result': _areaJson(areaId: 'office', name: 'Office'),
+      });
+
+      expect((await future).areaId, 'office');
+    });
+
+    test('areas.rename sends area registry update over WebSocket', () async {
+      final harness = await _webSocketHarness();
+      addTearDown(harness.close);
+
+      final api = HomeAssistantApi.fromConnection(harness.connection);
+      final future = api.areas.rename(areaId: 'office', name: 'Work room');
+
+      final sent = await harness.socket.nextSentWhere(
+        (message) => message is HARawWebSocketMessage,
+      );
+      expect(sent.toPayload(id: 2), {
+        'id': 2,
+        'type': 'config/area_registry/update',
+        'area_id': 'office',
+        'name': 'Work room',
+      });
+
+      harness.socket.addIncoming({
+        'id': 2,
+        'type': 'result',
+        'success': true,
+        'result': _areaJson(areaId: 'office', name: 'Work room'),
+      });
+
+      expect((await future).name, 'Work room');
+    });
+
+    test('areas.delete sends area registry delete over WebSocket', () async {
+      final harness = await _webSocketHarness();
+      addTearDown(harness.close);
+
+      final api = HomeAssistantApi.fromConnection(harness.connection);
+      final future = api.areas.delete(areaId: 'office');
+
+      final sent = await harness.socket.nextSentWhere(
+        (message) => message is HARawWebSocketMessage,
+      );
+      expect(sent.toPayload(id: 2), {
+        'id': 2,
+        'type': 'config/area_registry/delete',
+        'area_id': 'office',
+      });
+
+      harness.socket.addIncoming({
+        'id': 2,
+        'type': 'result',
+        'success': true,
+        'result': null,
+      });
+
+      await expectLater(future, completes);
+    });
   });
+}
+
+Map<String, dynamic> _areaJson({
+  String areaId = 'kitchen',
+  String name = 'Kitchen',
+}) {
+  return {
+    'created_at': 1710000000.0,
+    'modified_at': 1710000001.0,
+    'area_id': areaId,
+    'name': name,
+    'floor_id': null,
+    'humidity_entity_id': null,
+    'icon': 'mdi:silverware-fork-knife',
+    'picture': null,
+    'temperature_entity_id': null,
+    'aliases': <String>[],
+    'labels': <String>[],
+  };
 }
 
 Future<_Harness> _webSocketHarness() async {

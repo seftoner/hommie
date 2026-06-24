@@ -53,6 +53,7 @@ final class HomeAssistantApi {
   final HAWebSocketTransport websocket;
 
   late final HAConfigApi config;
+  late final HAAreasApi areas;
   late final HAStatesApi states;
   late final HAServicesApi services;
   late final HAEntitiesApi entities;
@@ -60,6 +61,7 @@ final class HomeAssistantApi {
 
   void _initResources() {
     config = HAConfigApi._(this);
+    areas = HAAreasApi._(this);
     states = HAStatesApi._(this);
     services = HAServicesApi._(this);
     entities = HAEntitiesApi._(this);
@@ -72,6 +74,48 @@ final class HomeAssistantApi {
 
   HAWebSocketTransport _requireWebSocket() {
     return websocket;
+  }
+}
+
+final class HAAreasApi {
+  const HAAreasApi._(this._api);
+
+  final HomeAssistantApi _api;
+
+  Future<List<HassArea>> list() async {
+    final payload = await _api._requireWebSocket().sendJson({
+      'type': 'config/area_registry/list',
+    });
+    return (payload as List<dynamic>)
+        .map((item) => HassArea.fromJson(item as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<HassArea> create({required String name}) async {
+    final payload = await _api._requireWebSocket().sendJson({
+      'type': 'config/area_registry/create',
+      'name': name,
+    });
+    return HassArea.fromJson(payload as Map<String, dynamic>);
+  }
+
+  Future<HassArea> rename({
+    required String areaId,
+    required String name,
+  }) async {
+    final payload = await _api._requireWebSocket().sendJson({
+      'type': 'config/area_registry/update',
+      'area_id': areaId,
+      'name': name,
+    });
+    return HassArea.fromJson(payload as Map<String, dynamic>);
+  }
+
+  Future<void> delete({required String areaId}) async {
+    await _api._requireWebSocket().sendJson({
+      'type': 'config/area_registry/delete',
+      'area_id': areaId,
+    });
   }
 }
 

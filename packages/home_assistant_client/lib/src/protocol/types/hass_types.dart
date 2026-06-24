@@ -86,3 +86,47 @@ sealed class UnitSystem with _$UnitSystem {
   factory UnitSystem.fromJson(Map<String, dynamic> json) =>
       _$UnitSystemFromJson(json);
 }
+
+final class HassArea {
+  const HassArea({
+    required this.createdAt,
+    required this.modifiedAt,
+    required this.areaId,
+    required this.name,
+    this.floorId,
+    this.humidityEntityId,
+    this.icon,
+    this.picture,
+    this.temperatureEntityId,
+    this.aliases = const [],
+    this.labels = const [],
+  });
+
+  final double createdAt;
+  final double modifiedAt;
+  final String areaId;
+  final String name;
+  final String? floorId;
+  final String? humidityEntityId;
+  final String? icon;
+  final String? picture;
+  final String? temperatureEntityId;
+  final List<String> aliases;
+  final List<String> labels;
+
+  factory HassArea.fromJson(Map<String, dynamic> json) {
+    return HassArea(
+      createdAt: (json['created_at'] as num?)?.toDouble() ?? 0,
+      modifiedAt: (json['modified_at'] as num?)?.toDouble() ?? 0,
+      areaId: json['area_id'] as String,
+      name: json['name'] as String,
+      floorId: json['floor_id'] as String?,
+      humidityEntityId: json['humidity_entity_id'] as String?,
+      icon: json['icon'] as String?,
+      picture: json['picture'] as String?,
+      temperatureEntityId: json['temperature_entity_id'] as String?,
+      aliases: (json['aliases'] as List<dynamic>? ?? const []).cast<String>(),
+      labels: (json['labels'] as List<dynamic>? ?? const []).cast<String>(),
+    );
+  }
+}
