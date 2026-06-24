@@ -40,6 +40,7 @@ from homeassistant.components.onboarding import (
 )
 from homeassistant.util.unit_system import METRIC_SYSTEM
 DEFAULT_AREAS = ("living_room", "kitchen", "bedroom")
+TEST_FIXTURE_MARKER = "# hommie integration test fixture"
 
 # mypy: allow-untyped-calls, allow-untyped-defs
 
@@ -70,6 +71,7 @@ def run(args: Sequence[str] | None) -> None:
 async def run_command(args: argparse.Namespace) -> None:
     """Run the command."""      
     hass = HomeAssistant(os.path.join(os.getcwd(), args.config))
+    _write_test_fixture_config(os.path.join(os.getcwd(), args.config))
     loader.async_setup(hass)
     
     # Load essential registries: area, device, entity, and issue registries
@@ -117,7 +119,7 @@ async def init_hass(
     await _setup_location_config(hass)
     
     # Create default areas using translations
-    # await _create_default_areas(hass)
+    await _create_default_areas(hass)
     
     # Initialize analytics and integrations
     await _initialize_analytics(hass)
@@ -162,6 +164,43 @@ async def _create_admin_user(hass: HomeAssistant, provider: hass_auth.HassAuthPr
     # await hass.auth._store._store.async_save(hass.auth._store._data_to_save())
 
     return user, credentials, username, password
+
+def _write_test_fixture_config(config_dir: str) -> None:
+    """Append deterministic entities used by integration tests."""
+    configuration_path = os.path.join(config_dir, "configuration.yaml")
+    existing = ""
+    if os.path.exists(configuration_path):
+        with open(configuration_path, "r", encoding="utf-8") as config_file:
+            existing = config_file.read()
+
+    if TEST_FIXTURE_MARKER in existing:
+        return
+
+    fixture = f"""
+
+{TEST_FIXTURE_MARKER}
+input_boolean:
+  kitchen_light_backing:
+    name: Kitchen Light Backing
+
+light:
+  - platform: template
+    lights:
+      kitchen_light:
+        unique_id: kitchen_light
+        friendly_name: Kitchen Light
+        value_template: "{{{{ is_state('input_boolean.kitchen_light_backing', 'on') }}}}"
+        turn_on:
+          service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.kitchen_light_backing
+        turn_off:
+          service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.kitchen_light_backing
+"""
+    with open(configuration_path, "a", encoding="utf-8") as config_file:
+        config_file.write(fixture)
 
 async def create_and_verify_token(hass: HomeAssistant, provider, user, credentials):
     """Create and verify token persistence."""

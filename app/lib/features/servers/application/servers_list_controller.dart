@@ -1,10 +1,11 @@
+import 'package:hommie/application/server_lifecycle/server_lifecycle_controller.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'servers_list_controller.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [serverManager, serverLifecycleController])
 class ServersListController extends _$ServersListController {
   @override
   Future<List<Server>> build() async {
@@ -30,8 +31,7 @@ class ServersListController extends _$ServersListController {
   }
 
   Future<void> removeServer(int serverId) async {
-    final serverManager = ref.read(serverManagerProvider);
-    await serverManager.removeServer(serverId);
+    await ref.read(serverLifecycleControllerProvider).deleteServer(serverId);
     await refresh();
   }
 }

@@ -1,13 +1,15 @@
-/* import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hommie/core/infrastructure/logging/logger.dart';
-import 'package:hommie/features/servers/application/active_server.dart';
-import 'package:hommie/services/networking/server_connection_manager.dart';
-import 'package:hommie/services/networking/server_scope_provider.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
+import 'package:hommie/application/session/active_server_session_controller.dart';
+import 'package:hommie/application/session/active_server_session_state.dart';
+import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
+import 'package:hommie/features/servers/domain/entities/server.dart';
+import 'package:riverpod_annotation/experimental/scope.dart';
 
 /// Hosts a nested [ProviderScope] that injects server-specific overrides for the
-/// currently selected Home Assistant server. When no server is active the
-/// widget keeps the tree mounted without crashing consumers.
+/// current Home Assistant server session.
+@Dependencies([ActiveServerSession])
 class ServerScopeHost extends ConsumerWidget {
   const ServerScopeHost({super.key, required this.child});
 
@@ -15,56 +17,39 @@ class ServerScopeHost extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activeServer = ref.watch(activeServerProvider);
+    final session = ref.watch(activeServerSessionProvider);
 
-    return activeServer.when(
-      data: (server) {
-        if (server == null) {
-          return ProviderScope(overrides: _fallbackOverrides, child: child);
-        }
+    return switch (session) {
+      OnlineServerSession(:final activeServer, :final connection) =>
+        _buildServerScope(activeServer, connection),
+      ConnectingServerSession(:final activeServer) ||
+      OfflineServerSession(:final activeServer) ||
+      AuthRevokedServerSession(
+        :final activeServer,
+      ) => _buildServerScope(activeServer, null),
+      _ => const SizedBox.shrink(),
+    };
+  }
 
-        return ProviderScope(
-          overrides: [
-            serverScopeIdProvider.overrideWith((innerRef) => server.id!),
-            serverScopeServerProvider.overrideWith((innerRef) => server),
-            serverScopeConnectionProvider.overrideWith(
-              (innerRef) => innerRef
-                  .watch(serverConnectionManagerProvider)
-                  .getConnection(server.id!),
-            ),
-          ],
-          child: child,
-        );
-      },
-      loading: () => child,
-      error: (error, stackTrace) {
-        logger.e(
-          'Failed to resolve active server: $error',
-          error: error,
-          stackTrace: stackTrace,
-        );
-        return ProviderScope(overrides: _fallbackOverrides, child: child);
-      },
+  Widget _buildServerScope(Server activeServer, IHAConnection? connection) {
+    final serverId = activeServer.id;
+    if (serverId == null) {
+      return const SizedBox.shrink();
+    }
+
+    return ProviderScope(
+      key: ValueKey((serverId, connection)),
+      overrides: [
+        serverScopeIdProvider.overrideWith((_) => serverId),
+        serverScopeServerProvider.overrideWith((_) => activeServer),
+        serverScopeConnectionProvider.overrideWith((_) {
+          if (connection == null) {
+            throw const ServerScopeConnectionUnavailableException();
+          }
+          return connection;
+        }),
+      ],
+      child: child,
     );
   }
 }
-
-final _fallbackOverrides = [
-  serverScopeIdProvider.overrideWith(
-    (ref) => throw const NoActiveServerSelectedException(),
-  ),
-  serverScopeServerProvider.overrideWith(
-    (ref) => throw const NoActiveServerSelectedException(),
-  ),
-  serverScopeConnectionProvider.overrideWith(
-    (ref) => Future.error(const NoActiveServerSelectedException()),
-  ),
-];
-
-class NoActiveServerSelectedException implements Exception {
-  const NoActiveServerSelectedException();
-
-  @override
-  String toString() => 'No active server configured.';
-}
- */

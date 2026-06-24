@@ -10,7 +10,7 @@ part of 'home_view_repository_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(homeViewRepository)
-const homeViewRepositoryProvider = HomeViewRepositoryProvider._();
+final homeViewRepositoryProvider = HomeViewRepositoryProvider._();
 
 final class HomeViewRepositoryProvider
     extends
@@ -22,16 +22,20 @@ final class HomeViewRepositoryProvider
     with
         $FutureModifier<IHomeViewRepository>,
         $FutureProvider<IHomeViewRepository> {
-  const HomeViewRepositoryProvider._()
+  HomeViewRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'homeViewRepositoryProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[serverScopeServerProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          HomeViewRepositoryProvider.$allTransitiveDependencies0,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = serverScopeServerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$homeViewRepositoryHash();
@@ -49,10 +53,10 @@ final class HomeViewRepositoryProvider
 }
 
 String _$homeViewRepositoryHash() =>
-    r'7b4ee71f267e059c446f4b6157a903f1c68bf8b3';
+    r'be412ec5d38b4f47f38cdc19e3441de4023efbff';
 
 @ProviderFor(homeViewRepositoryForServer)
-const homeViewRepositoryForServerProvider =
+final homeViewRepositoryForServerProvider =
     HomeViewRepositoryForServerFamily._();
 
 final class HomeViewRepositoryForServerProvider
@@ -63,7 +67,7 @@ final class HomeViewRepositoryForServerProvider
           IHomeViewRepository
         >
     with $Provider<IHomeViewRepository> {
-  const HomeViewRepositoryForServerProvider._({
+  HomeViewRepositoryForServerProvider._({
     required HomeViewRepositoryForServerFamily super.from,
     required int super.argument,
   }) : super(
@@ -121,7 +125,7 @@ String _$homeViewRepositoryForServerHash() =>
 
 final class HomeViewRepositoryForServerFamily extends $Family
     with $FunctionalFamilyOverride<IHomeViewRepository, int> {
-  const HomeViewRepositoryForServerFamily._()
+  HomeViewRepositoryForServerFamily._()
     : super(
         retry: null,
         name: r'homeViewRepositoryForServerProvider',

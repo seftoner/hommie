@@ -10,6 +10,11 @@ part 'auth_repository_provider.g.dart';
 IAuthRepository authRepository(Ref ref) {
   final credentialRepository = ref.read(credentialRepositoryProvider);
   final httpClient = ref.read(httpClientProvider);
+  final revocationHttpClient = ref.read(authRevocationHttpClientProvider);
 
-  return AuthRepository(credentialRepository, httpClient);
+  return AuthRepository(
+    credentialRepository,
+    httpClient,
+    revocationHttpClient: revocationHttpClient,
+  );
 }

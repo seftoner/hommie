@@ -10,7 +10,7 @@ part of 'ha_server_repository_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(haServerRepository)
-const haServerRepositoryProvider = HaServerRepositoryProvider._();
+final haServerRepositoryProvider = HaServerRepositoryProvider._();
 
 final class HaServerRepositoryProvider
     extends
@@ -20,7 +20,7 @@ final class HaServerRepositoryProvider
           IServerEntityRepository
         >
     with $Provider<IServerEntityRepository> {
-  const HaServerRepositoryProvider._()
+  HaServerRepositoryProvider._()
     : super(
         from: null,
         argument: null,

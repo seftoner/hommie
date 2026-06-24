@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
+// ignore_for_file: prefer_initializing_formals
+
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 
 /// Configuration for retry behavior

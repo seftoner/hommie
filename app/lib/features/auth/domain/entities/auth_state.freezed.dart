@@ -55,15 +55,13 @@ extension AuthStatePatterns on AuthState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Initial value)?  initial,TResult Function( Unauthenticated value)?  unauthenticated,TResult Function( Authenticating value)?  authenticating,TResult Function( Authenticated value)?  authenticated,TResult Function( Refreshing value)?  refreshing,TResult Function( Revoked value)?  revoked,TResult Function( Failure value)?  failure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Initial value)?  initial,TResult Function( Unauthenticated value)?  unauthenticated,TResult Function( Authenticated value)?  authenticated,TResult Function( Revoked value)?  revoked,TResult Function( Failure value)?  failure,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial(_that);case Unauthenticated() when unauthenticated != null:
-return unauthenticated(_that);case Authenticating() when authenticating != null:
-return authenticating(_that);case Authenticated() when authenticated != null:
-return authenticated(_that);case Refreshing() when refreshing != null:
-return refreshing(_that);case Revoked() when revoked != null:
+return unauthenticated(_that);case Authenticated() when authenticated != null:
+return authenticated(_that);case Revoked() when revoked != null:
 return revoked(_that);case Failure() when failure != null:
 return failure(_that);case _:
   return orElse();
@@ -83,15 +81,13 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Initial value)  initial,required TResult Function( Unauthenticated value)  unauthenticated,required TResult Function( Authenticating value)  authenticating,required TResult Function( Authenticated value)  authenticated,required TResult Function( Refreshing value)  refreshing,required TResult Function( Revoked value)  revoked,required TResult Function( Failure value)  failure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Initial value)  initial,required TResult Function( Unauthenticated value)  unauthenticated,required TResult Function( Authenticated value)  authenticated,required TResult Function( Revoked value)  revoked,required TResult Function( Failure value)  failure,}){
 final _that = this;
 switch (_that) {
 case Initial():
 return initial(_that);case Unauthenticated():
-return unauthenticated(_that);case Authenticating():
-return authenticating(_that);case Authenticated():
-return authenticated(_that);case Refreshing():
-return refreshing(_that);case Revoked():
+return unauthenticated(_that);case Authenticated():
+return authenticated(_that);case Revoked():
 return revoked(_that);case Failure():
 return failure(_that);}
 }
@@ -107,15 +103,13 @@ return failure(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Initial value)?  initial,TResult? Function( Unauthenticated value)?  unauthenticated,TResult? Function( Authenticating value)?  authenticating,TResult? Function( Authenticated value)?  authenticated,TResult? Function( Refreshing value)?  refreshing,TResult? Function( Revoked value)?  revoked,TResult? Function( Failure value)?  failure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Initial value)?  initial,TResult? Function( Unauthenticated value)?  unauthenticated,TResult? Function( Authenticated value)?  authenticated,TResult? Function( Revoked value)?  revoked,TResult? Function( Failure value)?  failure,}){
 final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial(_that);case Unauthenticated() when unauthenticated != null:
-return unauthenticated(_that);case Authenticating() when authenticating != null:
-return authenticating(_that);case Authenticated() when authenticated != null:
-return authenticated(_that);case Refreshing() when refreshing != null:
-return refreshing(_that);case Revoked() when revoked != null:
+return unauthenticated(_that);case Authenticated() when authenticated != null:
+return authenticated(_that);case Revoked() when revoked != null:
 return revoked(_that);case Failure() when failure != null:
 return failure(_that);case _:
   return null;
@@ -134,14 +128,12 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  unauthenticated,TResult Function()?  authenticating,TResult Function( Credentials credentials)?  authenticated,TResult Function( Credentials credentials)?  refreshing,TResult Function( AuthFailure? failure)?  revoked,TResult Function( AuthFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  unauthenticated,TResult Function( Credentials credentials)?  authenticated,TResult Function( AuthFailure? failure)?  revoked,TResult Function( AuthFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial();case Unauthenticated() when unauthenticated != null:
-return unauthenticated();case Authenticating() when authenticating != null:
-return authenticating();case Authenticated() when authenticated != null:
-return authenticated(_that.credentials);case Refreshing() when refreshing != null:
-return refreshing(_that.credentials);case Revoked() when revoked != null:
+return unauthenticated();case Authenticated() when authenticated != null:
+return authenticated(_that.credentials);case Revoked() when revoked != null:
 return revoked(_that.failure);case Failure() when failure != null:
 return failure(_that.failure);case _:
   return orElse();
@@ -161,14 +153,12 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  unauthenticated,required TResult Function()  authenticating,required TResult Function( Credentials credentials)  authenticated,required TResult Function( Credentials credentials)  refreshing,required TResult Function( AuthFailure? failure)  revoked,required TResult Function( AuthFailure failure)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  unauthenticated,required TResult Function( Credentials credentials)  authenticated,required TResult Function( AuthFailure? failure)  revoked,required TResult Function( AuthFailure failure)  failure,}) {final _that = this;
 switch (_that) {
 case Initial():
 return initial();case Unauthenticated():
-return unauthenticated();case Authenticating():
-return authenticating();case Authenticated():
-return authenticated(_that.credentials);case Refreshing():
-return refreshing(_that.credentials);case Revoked():
+return unauthenticated();case Authenticated():
+return authenticated(_that.credentials);case Revoked():
 return revoked(_that.failure);case Failure():
 return failure(_that.failure);}
 }
@@ -184,14 +174,12 @@ return failure(_that.failure);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  unauthenticated,TResult? Function()?  authenticating,TResult? Function( Credentials credentials)?  authenticated,TResult? Function( Credentials credentials)?  refreshing,TResult? Function( AuthFailure? failure)?  revoked,TResult? Function( AuthFailure failure)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  unauthenticated,TResult? Function( Credentials credentials)?  authenticated,TResult? Function( AuthFailure? failure)?  revoked,TResult? Function( AuthFailure failure)?  failure,}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial();case Unauthenticated() when unauthenticated != null:
-return unauthenticated();case Authenticating() when authenticating != null:
-return authenticating();case Authenticated() when authenticated != null:
-return authenticated(_that.credentials);case Refreshing() when refreshing != null:
-return refreshing(_that.credentials);case Revoked() when revoked != null:
+return unauthenticated();case Authenticated() when authenticated != null:
+return authenticated(_that.credentials);case Revoked() when revoked != null:
 return revoked(_that.failure);case Failure() when failure != null:
 return failure(_that.failure);case _:
   return null;
@@ -268,38 +256,6 @@ String toString() {
 /// @nodoc
 
 
-class Authenticating extends AuthState {
-  const Authenticating(): super._();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Authenticating);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'AuthState.authenticating()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
 class Authenticated extends AuthState {
   const Authenticated(this.credentials): super._();
   
@@ -355,72 +311,6 @@ class _$AuthenticatedCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? credentials = null,}) {
   return _then(Authenticated(
-null == credentials ? _self.credentials : credentials // ignore: cast_nullable_to_non_nullable
-as Credentials,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class Refreshing extends AuthState {
-  const Refreshing(this.credentials): super._();
-  
-
- final  Credentials credentials;
-
-/// Create a copy of AuthState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$RefreshingCopyWith<Refreshing> get copyWith => _$RefreshingCopyWithImpl<Refreshing>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Refreshing&&(identical(other.credentials, credentials) || other.credentials == credentials));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,credentials);
-
-@override
-String toString() {
-  return 'AuthState.refreshing(credentials: $credentials)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $RefreshingCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
-  factory $RefreshingCopyWith(Refreshing value, $Res Function(Refreshing) _then) = _$RefreshingCopyWithImpl;
-@useResult
-$Res call({
- Credentials credentials
-});
-
-
-
-
-}
-/// @nodoc
-class _$RefreshingCopyWithImpl<$Res>
-    implements $RefreshingCopyWith<$Res> {
-  _$RefreshingCopyWithImpl(this._self, this._then);
-
-  final Refreshing _self;
-  final $Res Function(Refreshing) _then;
-
-/// Create a copy of AuthState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? credentials = null,}) {
-  return _then(Refreshing(
 null == credentials ? _self.credentials : credentials // ignore: cast_nullable_to_non_nullable
 as Credentials,
   ));

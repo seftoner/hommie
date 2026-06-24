@@ -10,7 +10,7 @@ part of 'hub_status_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(hubStatus)
-const hubStatusProvider = HubStatusProvider._();
+final hubStatusProvider = HubStatusProvider._();
 
 final class HubStatusProvider
     extends
@@ -20,16 +20,38 @@ final class HubStatusProvider
           FutureOr<HubStatusState>
         >
     with $FutureModifier<HubStatusState>, $FutureProvider<HubStatusState> {
-  const HubStatusProvider._()
+  HubStatusProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'hubStatusProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[
+          activeServerSessionProvider,
+          authStateProvider,
+          deviceInfoRepositoryProvider,
+        ],
+        $allTransitiveDependencies: <ProviderOrFamily>{
+          HubStatusProvider.$allTransitiveDependencies0,
+          HubStatusProvider.$allTransitiveDependencies1,
+          HubStatusProvider.$allTransitiveDependencies2,
+          HubStatusProvider.$allTransitiveDependencies3,
+          HubStatusProvider.$allTransitiveDependencies4,
+          HubStatusProvider.$allTransitiveDependencies5,
+        },
       );
+
+  static final $allTransitiveDependencies0 = activeServerSessionProvider;
+  static final $allTransitiveDependencies1 =
+      ActiveServerSessionProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      ActiveServerSessionProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      ActiveServerSessionProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 =
+      ActiveServerSessionProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 = deviceInfoRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$hubStatusHash();
@@ -46,4 +68,4 @@ final class HubStatusProvider
   }
 }
 
-String _$hubStatusHash() => r'84b686da23f61e78b1b613375b6b08556b680f1e';
+String _$hubStatusHash() => r'34d87d184d3823cc56a20ea98988516feee2b4eb';

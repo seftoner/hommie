@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:hommie/core/database/database.dart';
-import 'package:hommie/features/home/domain/repositories/i_device_repository.dart';
 import 'package:hommie/features/home/domain/entities/device.dart' as domain;
+import 'package:hommie/features/home/domain/repositories/i_device_repository.dart';
 import 'package:hommie/features/home/infrastructure/repositories/mappers/device_mapper.dart';
 
 class DriftDeviceRepository implements IDeviceRepository {
@@ -11,11 +11,17 @@ class DriftDeviceRepository implements IDeviceRepository {
 
   @override
   Future<List<domain.Device>> getAll() async {
-    // Need to join with areas to get areaHaId
+    // Need to join with areas through DeviceAreaConfigs to get areaHaId
     final query = _database.select(_database.deviceEntities).join([
       leftOuterJoin(
+        _database.deviceAreaConfigs,
+        _database.deviceAreaConfigs.deviceId.equalsExp(
+          _database.deviceEntities.id,
+        ),
+      ),
+      leftOuterJoin(
         _database.areaEntities,
-        _database.areaEntities.id.equalsExp(_database.deviceEntities.areaId),
+        _database.areaEntities.id.equalsExp(_database.deviceAreaConfigs.areaId),
       ),
     ]);
 
@@ -34,9 +40,15 @@ class DriftDeviceRepository implements IDeviceRepository {
           _database.deviceEntities,
         )..where((d) => d.id.equals(id))).join([
           leftOuterJoin(
+            _database.deviceAreaConfigs,
+            _database.deviceAreaConfigs.deviceId.equalsExp(
+              _database.deviceEntities.id,
+            ),
+          ),
+          leftOuterJoin(
             _database.areaEntities,
             _database.areaEntities.id.equalsExp(
-              _database.deviceEntities.areaId,
+              _database.deviceAreaConfigs.areaId,
             ),
           ),
         ]);
@@ -58,9 +70,15 @@ class DriftDeviceRepository implements IDeviceRepository {
           _database.deviceEntities,
         )..where((d) => d.haId.equals(haId))).join([
           leftOuterJoin(
+            _database.deviceAreaConfigs,
+            _database.deviceAreaConfigs.deviceId.equalsExp(
+              _database.deviceEntities.id,
+            ),
+          ),
+          leftOuterJoin(
             _database.areaEntities,
             _database.areaEntities.id.equalsExp(
-              _database.deviceEntities.areaId,
+              _database.deviceAreaConfigs.areaId,
             ),
           ),
         ]);
@@ -77,17 +95,19 @@ class DriftDeviceRepository implements IDeviceRepository {
 
   @override
   Future<List<domain.Device>> getByArea(int areaId) async {
-    final query =
-        (_database.select(
-          _database.deviceEntities,
-        )..where((d) => d.areaId.equals(areaId))).join([
-          leftOuterJoin(
-            _database.areaEntities,
-            _database.areaEntities.id.equalsExp(
-              _database.deviceEntities.areaId,
-            ),
-          ),
-        ]);
+    final query = (_database.select(_database.deviceEntities)).join([
+      innerJoin(
+        _database.deviceAreaConfigs,
+        _database.deviceAreaConfigs.deviceId.equalsExp(
+              _database.deviceEntities.id,
+            ) &
+            _database.deviceAreaConfigs.areaId.equals(areaId),
+      ),
+      leftOuterJoin(
+        _database.areaEntities,
+        _database.areaEntities.id.equalsExp(_database.deviceAreaConfigs.areaId),
+      ),
+    ]);
 
     final results = await query.get();
     return results.map((row) {
@@ -109,10 +129,23 @@ class DriftDeviceRepository implements IDeviceRepository {
     }
 
     await _database.transaction(() async {
-      await _database
+      // Insert or update the device
+      final deviceId = await _database
           .into(_database.deviceEntities)
+          .insertReturning(
+            device.toCompanion(area.serverId),
+            mode: InsertMode.insertOrReplace,
+          )
+          .then((row) => row.id);
+
+      // Create or update the device-area association
+      await _database
+          .into(_database.deviceAreaConfigs)
           .insert(
-            device.toCompanion(area.id),
+            DeviceAreaConfigsCompanion(
+              deviceId: Value(deviceId),
+              areaId: Value(area.id),
+            ),
             mode: InsertMode.insertOrReplace,
           );
     });

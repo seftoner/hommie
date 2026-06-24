@@ -1,14 +1,14 @@
 import 'package:drift/drift.dart';
-import 'package:hommie/features/home/domain/entities/home_view.dart';
 import 'package:hommie/core/database/database.dart';
 import 'package:hommie/core/database/tables.dart' as db;
+import 'package:hommie/features/home/domain/entities/home_view.dart';
 
 // Note: For Drift, we'll need to manually join and construct these complex objects
 // in the repository since Drift doesn't have the same backlink concept as Isar
 
 extension HomeViewMapper on HomeViewConf {
   HomeViewConfigsCompanion toCompanion() {
-    return HomeViewConfigsCompanion(serverId: Value(int.parse(serverId)));
+    return HomeViewConfigsCompanion(serverId: Value(server.id!));
   }
 }
 

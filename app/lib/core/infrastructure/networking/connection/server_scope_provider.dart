@@ -1,4 +1,4 @@
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -25,10 +25,17 @@ part 'server_scope_provider.g.dart';
 /// - Clear dependency chain
 /// - Type-safe server context
 @Riverpod(dependencies: [])
-Future<HAConnection> serverScopeConnection(Ref ref) async {
+IHAConnection serverScopeConnection(Ref ref) {
   throw UnimplementedError(
     'serverScopeConnection must be overridden in a ProviderScope',
   );
+}
+
+class ServerScopeConnectionUnavailableException implements Exception {
+  const ServerScopeConnectionUnavailableException();
+
+  @override
+  String toString() => 'The scoped server connection is not available.';
 }
 
 /// A scoped provider that represents the current server ID.

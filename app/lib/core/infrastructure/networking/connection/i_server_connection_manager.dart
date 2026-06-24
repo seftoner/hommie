@@ -1,8 +1,9 @@
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 
 abstract interface class IServerConnectionManager {
-  Future<HAConnection> getConnection(int serverId);
-  Future<void> reconnect(int serverId);
+  Future<IHAConnection> getConnection(int serverId);
   void disconnect(int serverId);
+  void retryActiveConnection();
   void setActiveServer(int? serverId);
+  void setNetworkAvailable({required bool isAvailable});
 }

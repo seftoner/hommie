@@ -10,13 +10,13 @@ part of 'area_repository_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(areaRepository)
-const areaRepositoryProvider = AreaRepositoryProvider._();
+final areaRepositoryProvider = AreaRepositoryProvider._();
 
 final class AreaRepositoryProvider
     extends
         $FunctionalProvider<IAreaRepository, IAreaRepository, IAreaRepository>
     with $Provider<IAreaRepository> {
-  const AreaRepositoryProvider._()
+  AreaRepositoryProvider._()
     : super(
         from: null,
         argument: null,

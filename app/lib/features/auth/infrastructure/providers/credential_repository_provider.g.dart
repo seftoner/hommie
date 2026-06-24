@@ -10,7 +10,7 @@ part of 'credential_repository_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(credentialRepository)
-const credentialRepositoryProvider = CredentialRepositoryProvider._();
+final credentialRepositoryProvider = CredentialRepositoryProvider._();
 
 final class CredentialRepositoryProvider
     extends
@@ -20,7 +20,7 @@ final class CredentialRepositoryProvider
           ICredentialRepository
         >
     with $Provider<ICredentialRepository> {
-  const CredentialRepositoryProvider._()
+  CredentialRepositoryProvider._()
     : super(
         from: null,
         argument: null,

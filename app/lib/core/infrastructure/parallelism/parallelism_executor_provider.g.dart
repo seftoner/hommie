@@ -10,7 +10,7 @@ part of 'parallelism_executor_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(parallelismExecutor)
-const parallelismExecutorProvider = ParallelismExecutorProvider._();
+final parallelismExecutorProvider = ParallelismExecutorProvider._();
 
 final class ParallelismExecutorProvider
     extends
@@ -20,7 +20,7 @@ final class ParallelismExecutorProvider
           IParallelExecutor
         >
     with $Provider<IParallelExecutor> {
-  const ParallelismExecutorProvider._()
+  ParallelismExecutorProvider._()
     : super(
         from: null,
         argument: null,

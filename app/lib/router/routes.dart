@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hommie/application/scopes/server_scope_host.dart';
 import 'package:hommie/core/bootstrap/app_startup.dart';
 import 'package:hommie/features/auth/presentation/flows/add_server_flow.dart';
 import 'package:hommie/features/automation/presentation/automations_page.dart';
-import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/home/presentation/screens/app_scaffold_page.dart';
+import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/onboarding/presentation/flows/onboarding_flow.dart';
 import 'package:hommie/features/servers/presentation/screens/servers_page.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
+import 'package:hommie/features/settings/presentation/screens/areas_page.dart';
 import 'package:hommie/features/settings/presentation/screens/hub_page.dart';
 import 'package:hommie/features/settings/presentation/screens/logs_page.dart';
 import 'package:hommie/features/settings/presentation/screens/sensors_page.dart';
@@ -66,6 +68,7 @@ class AutomationsRouteData extends GoRouteData with $AutomationsRouteData {
     ),
     TypedGoRoute<LogsRouteData>(path: 'logs'),
     TypedGoRoute<AboutRouteData>(path: 'about'),
+    TypedGoRoute<AreasRouteData>(path: 'areas'),
     TypedGoRoute<SensorsRouteData>(path: 'sensors'),
   ],
 )
@@ -105,6 +108,15 @@ class SensorsRouteData extends GoRouteData with $SensorsRouteData {
   }
 }
 
+class AreasRouteData extends GoRouteData with $AreasRouteData {
+  const AreasRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const AreasPage();
+  }
+}
+
 class HubRouteData extends GoRouteData with $HubRouteData {
   const HubRouteData();
 
@@ -138,12 +150,13 @@ class HomeShellBranchData extends StatefulShellBranchData {
   const HomeShellBranchData();
 }
 
+// ignore: provider_dependencies
 class HomeRouteData extends GoRouteData with $HomeRouteData {
   const HomeRouteData();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const HomePage();
+    return const ServerScopeHost(child: HomePage());
   }
 }
 

@@ -10,7 +10,7 @@ part of 'logs_repository_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(logsRepository)
-const logsRepositoryProvider = LogsRepositoryProvider._();
+final logsRepositoryProvider = LogsRepositoryProvider._();
 
 final class LogsRepositoryProvider
     extends
@@ -20,7 +20,7 @@ final class LogsRepositoryProvider
           FutureOr<ILogsRepository>
         >
     with $FutureModifier<ILogsRepository>, $FutureProvider<ILogsRepository> {
-  const LogsRepositoryProvider._()
+  LogsRepositoryProvider._()
     : super(
         from: null,
         argument: null,

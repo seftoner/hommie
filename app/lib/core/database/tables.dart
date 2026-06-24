@@ -65,7 +65,7 @@ class ServerEntities extends Table {
 ///
 /// **Relationships:**
 /// - Many-to-one with [ServerEntities] (cascade delete on server deletion)
-/// - One-to-many with [DeviceEntities] (cascade delete)
+/// - Many-to-many with [DeviceEntities] via [DeviceAreaConfigs] (cascade delete on configs)
 /// - Referenced by [AreaHomeConfigs] for home view positioning
 ///
 /// **Usage:**
@@ -79,6 +79,7 @@ class ServerEntities extends Table {
 /// - `haId` must be unique across all areas
 /// - Optional `background` and `image` for custom UI theming
 /// - Cascading delete: deleting a server removes all its areas
+/// - Cascading delete: deleting an area removes all its device associations via [DeviceAreaConfigs]
 ///
 /// **Example:**
 /// ```dart
@@ -94,7 +95,7 @@ class AreaEntities extends Table {
   IntColumn get id => integer().autoIncrement()();
 
   /// Home Assistant unique identifier (e.g., "living_room")
-  TextColumn get haId => text().unique()();
+  TextColumn get haId => text()();
 
   /// Display name for the area (e.g., "Living Room")
   TextColumn get name => text()();
@@ -109,6 +110,11 @@ class AreaEntities extends Table {
   /// Cascades: deleting a server deletes all its areas
   IntColumn get serverId =>
       integer().references(ServerEntities, #id, onDelete: KeyAction.cascade)();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {serverId, haId},
+  ];
 }
 
 /// Database table for Home Assistant Device entities.
@@ -117,20 +123,23 @@ class AreaEntities extends Table {
 /// (e.g., smart lights, TVs, switches, sensors).
 ///
 /// **Relationships:**
-/// - Many-to-one with [AreaEntities] (cascade delete on area deletion)
+/// - Many-to-one with [ServerEntities] (cascade delete on server deletion)
+/// - Many-to-many with [AreaEntities] via [DeviceAreaConfigs]
 /// - Referenced by [DeviceHomeConfigs] for home view display
 ///
 /// **Usage:**
 /// - Managed by `DriftDeviceRepository` in features/home
 /// - Synced from Home Assistant API
-/// - Joined with [AreaEntities] to get area information
+/// - Joined with [AreaEntities] via [DeviceAreaConfigs] to get area information
 /// - Filtered and displayed in home view based on configuration
+/// - Device persists even if removed from all areas
 ///
 /// **Key Features:**
 /// - `haId` is the unique entity ID from Home Assistant (e.g., "light.living_room_lamp")
 /// - `haId` must be unique across all devices
 /// - `type` indicates device domain (e.g., "light", "switch", "media_player")
-/// - Cascading delete: deleting an area removes all its devices
+/// - Device lifecycle independent of area assignments
+/// - Cascading delete: deleting a server removes all its devices
 ///
 /// **Example:**
 /// ```dart
@@ -138,7 +147,7 @@ class AreaEntities extends Table {
 ///   haId: Value('light.living_room_lamp'),
 ///   name: Value('Living Room Lamp'),
 ///   type: Value('light'),
-///   areaId: Value(1),
+///   serverId: Value(1),
 /// )
 /// ```
 class DeviceEntities extends Table {
@@ -154,10 +163,59 @@ class DeviceEntities extends Table {
   /// Device domain/type (e.g., "light", "switch", "media_player", "sensor")
   TextColumn get type => text()();
 
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all its devices
+  IntColumn get serverId =>
+      integer().references(ServerEntities, #id, onDelete: KeyAction.cascade)();
+}
+
+/// Database table for Device-Area associations.
+///
+/// **Junction Table:** Links devices to areas in a many-to-many relationship.
+/// Devices can exist without being assigned to any area, and areas can have
+/// multiple devices.
+///
+/// **Relationships:**
+/// - Many-to-one with [DeviceEntities] (cascade delete on device deletion)
+/// - Many-to-one with [AreaEntities] (cascade delete on area deletion)
+///
+/// **Usage:**
+/// - Managed by `DriftDeviceRepository` in features/home
+/// - Created when syncing device area assignments from Home Assistant
+/// - Allows devices to persist even when removed from an area
+/// - Used to join devices with areas when querying device locations
+///
+/// **Key Features:**
+/// - Unique constraint prevents duplicate device-area assignments
+/// - Cascading delete: deleting an area removes all its device associations
+/// - Cascading delete: deleting a device removes all its area associations
+/// - Device lifecycle is independent - device persists after all associations deleted
+///
+/// **Example:**
+/// ```dart
+/// DeviceAreaConfigsCompanion(
+///   deviceId: Value(1), // Living Room Lamp
+///   areaId: Value(1), // Living Room
+/// )
+/// ```
+class DeviceAreaConfigs extends Table {
+  /// Auto-incrementing primary key
+  IntColumn get id => integer().autoIncrement()();
+
+  /// Foreign key reference to [DeviceEntities]
+  /// Cascades: deleting a device removes all its area associations
+  IntColumn get deviceId =>
+      integer().references(DeviceEntities, #id, onDelete: KeyAction.cascade)();
+
   /// Foreign key reference to [AreaEntities]
-  /// Cascades: deleting an area deletes all its devices
+  /// Cascades: deleting an area removes all its device associations
   IntColumn get areaId =>
       integer().references(AreaEntities, #id, onDelete: KeyAction.cascade)();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {deviceId, areaId}, // Can't assign same device to same area twice
+  ];
 }
 
 /// Database table for Home View root configuration.
@@ -313,5 +371,73 @@ class DeviceHomeConfigs extends Table {
   @override
   List<Set<Column>> get uniqueKeys => [
     {areaConfigId, deviceId}, // Can't add same device twice
+  ];
+}
+
+/// Database table for the generic Home Assistant entity cache (every domain).
+///
+/// **Primary Entity:** A cached snapshot of a Home Assistant *entity* (the
+/// universal controllable unit, e.g. "light.kitchen", "switch.fan"). Metadata
+/// only — live state (on/off, attributes) is not persisted here.
+///
+/// **Relationships:**
+/// - Many-to-one with [ServerEntities] (cascade delete on server deletion)
+/// - Soft, read-time link to [AreaEntities] via `areaHaId` (matched against
+///   [AreaEntities.haId]) — intentionally NOT a foreign key (see below)
+///
+/// **Usage:**
+/// - Managed by `DriftEntityRepository` in features/entities
+/// - Synced from Home Assistant's entity + device registries
+/// - Grouped by area for the Home view; rendered per-domain (lights first)
+///
+/// **Key Features:**
+/// - `entityId` is the HA entity_id (e.g. "light.kitchen"); `domain` is its
+///   prefix ("light"). Unique per server via `{serverId, entityId}`.
+/// - `areaHaId` is the *resolved* HA area slug, stored denormalized (not an FK)
+///   so an area re-sync can never cascade-delete entities and so the entity and
+///   area syncs stay order-independent — grouping is resolved at read time by
+///   matching `areaHaId` against [AreaEntities.haId].
+///
+/// **Example:**
+/// ```dart
+/// EntitiesCompanion.insert(
+///   entityId: 'light.kitchen',
+///   name: 'Kitchen',
+///   domain: 'light',
+///   serverId: 1,
+///   areaHaId: Value('kitchen'),
+/// )
+/// ```
+@DataClassName('EntityRow')
+class Entities extends Table {
+  /// Auto-incrementing primary key (local database ID)
+  IntColumn get id => integer().autoIncrement()();
+
+  /// Home Assistant entity_id (e.g. "light.kitchen")
+  TextColumn get entityId => text()();
+
+  /// Display name (resolved: name -> original_name -> entity_id)
+  TextColumn get name => text()();
+
+  /// Entity domain, the entity_id prefix (e.g. "light", "switch")
+  TextColumn get domain => text()();
+
+  /// HA device id this entity belongs to, if any (for the future device layer)
+  TextColumn get deviceId => text().nullable()();
+
+  /// Resolved HA area slug (matches [AreaEntities.haId]); null when unassigned
+  TextColumn get areaHaId => text().nullable()();
+
+  /// HA entity_category ("config"/"diagnostic"), if any; for future filtering
+  TextColumn get entityCategory => text().nullable()();
+
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all its cached entities
+  IntColumn get serverId =>
+      integer().references(ServerEntities, #id, onDelete: KeyAction.cascade)();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {serverId, entityId}, // Same entity can't appear twice per server
   ];
 }

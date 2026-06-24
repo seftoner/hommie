@@ -1,5 +1,7 @@
 import 'dart:async';
 
+// ignore_for_file: prefer_initializing_formals
+
 import 'package:hommie/features/mobile_companion/domain/repositories/i_sensors_repository.dart';
 import 'package:hommie/features/mobile_companion/i_sensor_provider.dart';
 import 'package:hommie/features/mobile_companion/sensors/sensor.dart';

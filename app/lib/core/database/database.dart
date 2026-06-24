@@ -11,9 +11,11 @@ part 'database.g.dart';
     ServerEntities,
     AreaEntities,
     DeviceEntities,
+    DeviceAreaConfigs,
     HomeViewConfigs,
     AreaHomeConfigs,
     DeviceHomeConfigs,
+    Entities,
   ],
 )
 class AppDatabase extends _$AppDatabase {

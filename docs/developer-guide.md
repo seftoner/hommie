@@ -11,7 +11,7 @@ Hommie is a Flutter (Dart 3.6+) multi‑platform client for Home Assistant focus
 - **Flutter SDK** ~3.27 (stable), Dart >=3.6 <4.0
 - **State Management**: Riverpod (codegen via `riverpod_generator`), hooks_riverpod, freezed, json_serializable
 - **Navigation**: go_router (+ builder)
-- **Data Persistence**: Isar (primary local cache), plus shared_preferences & secure storage
+- **Data Persistence**: Drift (SQLite, primary local cache), plus shared_preferences & secure storage
 - **Background & Tasks**: workmanager (Android), platform background APIs (planned iOS BGTaskScheduler)
 - **Networking**: http/dio (currently http + planned migration?), web_socket_channel, multicast_dns for discovery
 - **Auth & Security**: oauth2, flutter_secure_storage; tokens must never be logged
@@ -122,6 +122,27 @@ Add to `~/.gemini/settings.json` (global) or `.gemini/settings.json` (project):
 
 ## Complete Architecture Guide
 
+### Home Assistant API And Connection Rules
+
+When adding Home Assistant features, follow
+[`docs/home-assistant-feature-architecture.md`](home-assistant-feature-architecture.md).
+For endpoint-level Home Assistant REST, WebSocket, and mobile-app webhook
+research, see [`docs/home-assistant-api-research.md`](home-assistant-api-research.md).
+The short version:
+
+- REST-capable one-shot calls use `homeAssistantApiProvider(serverId)` and should
+  not require an active WebSocket connection.
+- Active-server WebSocket commands and subscriptions use
+  `serverScopeConnectionProvider` plus `HomeAssistantApi.fromConnection`.
+- Cached reads use Drift/cache repositories scoped by `serverScopeIdProvider` and
+  must render without a socket.
+- UI code reads projection providers such as `commandAvailabilityProvider` or
+  `hubStatusProvider`; ordinary widgets should not switch on raw session, link, or
+  socket state.
+- Feature code must not call `serverConnectionManagerProvider.getConnection()` or
+  implement reconnect timers. Connection ownership stays in the networking/session
+  infrastructure.
+
 ### Value Objects Implementation
 ```dart
 abstract class ValueObject<T> {
@@ -230,34 +251,29 @@ void navigateToServer(String id) {
 ## Data & Offline Strategy
 
 ### Caching Strategy
-- **Persist critical HA state locally** (Isar)
+- **Persist critical HA state locally** (Drift / SQLite)
 - **Reads should prefer local cache** then refresh in background (optimistic UI)
 - **If offline**, surface cached data + an offline banner
 - See existing offline banner test for implementation pattern
 
-### Isar Database Patterns
+### Drift Database Patterns
+Tables are declared in `app/lib/core/database/tables.dart` and registered on
+`AppDatabase` (`@DriftDatabase`) in `app/lib/core/database/database.dart`. Foreign
+keys are enabled (`PRAGMA foreign_keys = ON`) and relationships use cascade deletes.
+
 ```dart
-@collection
-class ServerEntityDb {
-  Id id = Isar.autoIncrement;
-  late String serverId;
-  late String name;
-  late String url;
-  DateTime? lastSeen;
-  
-  // Convert from domain entity
-  factory ServerEntityDb.fromDomain(ServerEntity entity) => ServerEntityDb()
-    ..serverId = entity.id ?? ''
-    ..name = entity.name
-    ..url = entity.url;
-    
-  // Convert to domain entity
-  ServerEntity toDomain() => ServerEntity(
-    id: serverId,
-    name: name,
-    url: url,
-  );
+class ServerEntities extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text()();
+  TextColumn get url => text()();
+  BoolColumn get isActive => boolean().withDefault(const Constant(false))();
+  TextColumn get version => text().nullable()();
 }
+```
+
+Map between Drift rows/companions and domain entities inside the feature's
+`infrastructure/` repository (e.g. `DriftServerRepository`); never expose Drift
+types from `domain/` or `application/`.
 ```
 
 ## Security & Secrets Management
@@ -519,7 +535,7 @@ Only perform searches when:
 - [Flutter Documentation](https://docs.flutter.dev/)
 - [Riverpod Documentation](https://riverpod.dev/)
 - [Go Router Documentation](https://pub.dev/packages/go_router)
-- [Isar Documentation](https://isar.dev/)
+- [Drift Documentation](https://drift.simonbinder.eu/)
 
 ### Project-Specific Docs
 - `docs/development_workflow.md` - Git workflow and PR process

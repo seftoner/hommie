@@ -1,0 +1,109 @@
+// ignore_for_file: invalid_annotation_target, non_constant_identifier_names, constant_identifier_names
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'hass_types.freezed.dart';
+part 'hass_types.g.dart';
+
+@freezed
+sealed class HassError with _$HassError {
+  const factory HassError({required String code, required String message}) =
+      _Error;
+
+  factory HassError.fromJson(Map<String, dynamic> json) =>
+      _$HassErrorFromJson(json);
+}
+
+@freezed
+abstract class HassUser with _$HassUser {
+  const factory HassUser({
+    required String id,
+    required bool is_admin,
+    required bool is_owner,
+    required String name,
+  }) = _HassUser;
+
+  factory HassUser.fromJson(Map<String, dynamic> json) =>
+      _$HassUserFromJson(json);
+}
+
+@JsonEnum(valueField: 'state')
+enum State {
+  NOT_RUNNING('NOT_RUNNING'),
+  STARTING('STARTING'),
+  RUNNING('RUNNING'),
+  STOPPING('STOPPING'),
+  FINAL_WRITE('FINAL_WRITE');
+
+  const State(this.state);
+  final String state;
+}
+
+@freezed
+sealed class HassConfig with _$HassConfig {
+  const factory HassConfig({
+    required double latitude,
+    required double longitude,
+    required double elevation,
+    required double radius,
+    required UnitSystem unit_system,
+    required String location_name,
+    required String time_zone,
+    required List<String> components,
+    required String config_dir,
+    required List<String> allowlist_external_dirs,
+    required List<String> allowlist_external_urls,
+    required String version,
+    required String config_source,
+    required bool recovery_mode,
+    required bool safe_mode,
+    // @StringEnum('NOT_RUNNING', 'STARTING', 'RUNNING', 'STOPPING', 'FINAL_WRITE')
+    required State state,
+    String? external_url,
+    String? internal_url,
+    List<String>? whitelist_external_dirs,
+    required String currency,
+    String? country,
+    required String language,
+  }) = _HassConfig;
+
+  factory HassConfig.fromJson(Map<String, dynamic> json) =>
+      _$HassConfigFromJson(json);
+}
+
+@freezed
+sealed class UnitSystem with _$UnitSystem {
+  const factory UnitSystem({
+    required String length,
+    required String mass,
+    required String volume,
+    required String temperature,
+    required String pressure,
+    required String wind_speed,
+    required String accumulated_precipitation,
+  }) = _UnitSystem;
+
+  factory UnitSystem.fromJson(Map<String, dynamic> json) =>
+      _$UnitSystemFromJson(json);
+}
+
+@freezed
+sealed class HassArea with _$HassArea {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory HassArea({
+    @Default(0) double createdAt,
+    @Default(0) double modifiedAt,
+    required String areaId,
+    required String name,
+    String? floorId,
+    String? humidityEntityId,
+    String? icon,
+    String? picture,
+    String? temperatureEntityId,
+    @Default([]) List<String> aliases,
+    @Default([]) List<String> labels,
+  }) = _HassArea;
+
+  factory HassArea.fromJson(Map<String, dynamic> json) =>
+      _$HassAreaFromJson(json);
+}

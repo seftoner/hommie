@@ -10,20 +10,68 @@ part of 'home_page_controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(HomePageController)
-const homePageControllerProvider = HomePageControllerProvider._();
+final homePageControllerProvider = HomePageControllerProvider._();
 
 final class HomePageControllerProvider
-    extends $AsyncNotifierProvider<HomePageController, HomePageState> {
-  const HomePageControllerProvider._()
+    extends $NotifierProvider<HomePageController, HomePageState> {
+  HomePageControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'homePageControllerProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[
+          serverScopeServerProvider,
+          cachedAreasProvider,
+          cachedEntitiesProvider,
+          homeConnectionLoadingProvider,
+          serverSyncCoordinatorProvider,
+        ],
+        $allTransitiveDependencies: <ProviderOrFamily>{
+          HomePageControllerProvider.$allTransitiveDependencies0,
+          HomePageControllerProvider.$allTransitiveDependencies1,
+          HomePageControllerProvider.$allTransitiveDependencies2,
+          HomePageControllerProvider.$allTransitiveDependencies3,
+          HomePageControllerProvider.$allTransitiveDependencies4,
+          HomePageControllerProvider.$allTransitiveDependencies5,
+          HomePageControllerProvider.$allTransitiveDependencies6,
+          HomePageControllerProvider.$allTransitiveDependencies7,
+          HomePageControllerProvider.$allTransitiveDependencies8,
+          HomePageControllerProvider.$allTransitiveDependencies9,
+          HomePageControllerProvider.$allTransitiveDependencies10,
+          HomePageControllerProvider.$allTransitiveDependencies11,
+          HomePageControllerProvider.$allTransitiveDependencies12,
+          HomePageControllerProvider.$allTransitiveDependencies13,
+          HomePageControllerProvider.$allTransitiveDependencies14,
+        },
       );
+
+  static final $allTransitiveDependencies0 = serverScopeServerProvider;
+  static final $allTransitiveDependencies1 = cachedAreasProvider;
+  static final $allTransitiveDependencies2 =
+      CachedAreasProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies3 =
+      CachedAreasProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies4 =
+      CachedAreasProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies5 = cachedEntitiesProvider;
+  static final $allTransitiveDependencies6 = homeConnectionLoadingProvider;
+  static final $allTransitiveDependencies7 =
+      HomeConnectionLoadingProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies8 =
+      HomeConnectionLoadingProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies9 =
+      HomeConnectionLoadingProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies10 =
+      HomeConnectionLoadingProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies11 =
+      HomeConnectionLoadingProvider.$allTransitiveDependencies4;
+  static final $allTransitiveDependencies12 = serverSyncCoordinatorProvider;
+  static final $allTransitiveDependencies13 =
+      ServerSyncCoordinatorProvider.$allTransitiveDependencies6;
+  static final $allTransitiveDependencies14 =
+      ServerSyncCoordinatorProvider.$allTransitiveDependencies7;
 
   @override
   String debugGetCreateSourceHash() => _$homePageControllerHash();
@@ -31,26 +79,33 @@ final class HomePageControllerProvider
   @$internal
   @override
   HomePageController create() => HomePageController();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(HomePageState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<HomePageState>(value),
+    );
+  }
 }
 
 String _$homePageControllerHash() =>
-    r'bbdf9eac152a8bae85fd5a6c3c4c9020514ae769';
+    r'dc4168ebc95fabc877c1481e7ff38c4958898839';
 
-abstract class _$HomePageController extends $AsyncNotifier<HomePageState> {
-  FutureOr<HomePageState> build();
+abstract class _$HomePageController extends $Notifier<HomePageState> {
+  HomePageState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
-    final ref = this.ref as $Ref<AsyncValue<HomePageState>, HomePageState>;
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<HomePageState, HomePageState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<HomePageState>, HomePageState>,
-              AsyncValue<HomePageState>,
+              AnyNotifier<HomePageState, HomePageState>,
+              HomePageState,
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

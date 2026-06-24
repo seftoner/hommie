@@ -10,11 +10,11 @@ part of 'sensors_controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(SensorsController)
-const sensorsControllerProvider = SensorsControllerProvider._();
+final sensorsControllerProvider = SensorsControllerProvider._();
 
 final class SensorsControllerProvider
     extends $AsyncNotifierProvider<SensorsController, List<Sensor>> {
-  const SensorsControllerProvider._()
+  SensorsControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -39,8 +39,7 @@ abstract class _$SensorsController extends $AsyncNotifier<List<Sensor>> {
   FutureOr<List<Sensor>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<List<Sensor>>, List<Sensor>>;
     final element =
         ref.element
@@ -50,6 +49,6 @@ abstract class _$SensorsController extends $AsyncNotifier<List<Sensor>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

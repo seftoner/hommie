@@ -27,7 +27,6 @@ GoRouter goRouter(Ref ref) {
       case AsyncData(value: final AuthState authState):
         switch (authState) {
           case Initial():
-          case Authenticating():
             router.go(const StartupRoute().location);
             break;
           case Unauthenticated():
@@ -36,7 +35,6 @@ GoRouter goRouter(Ref ref) {
             router.go(const OnboardingRoute().location);
             break;
           case Authenticated():
-          case Refreshing():
             router.go(const HomeRouteData().location);
             break;
         }

@@ -11,6 +11,7 @@ class Keys {
   static const home = HomeKeys();
   static const common = CommonKeys();
   static const settings = SettingsKeys();
+  static const areas = AreasKeys();
   static const hub = HubKeys();
   static const onboarding = OnboardingKeys();
 }
@@ -40,6 +41,7 @@ class HomeKeys {
   const HomeKeys();
 
   final page = const Key('hommiePage');
+  final loadingSpinner = const Key('homeLoadingSpinner');
   final settingsButton = const Key('settingsButton');
 }
 
@@ -56,10 +58,22 @@ class SettingsKeys {
 
   final page = const Key('settingsPage');
   final hubItem = const Key('hubListItem');
+  final areasItem = const Key('areasListItem');
   final sensorsItem = const Key('sensorsListItem');
   final nfcItem = const Key('nfcListItem');
   final logsItem = const Key('logsListItem');
   final aboutItem = const Key('aboutListItem');
+}
+
+class AreasKeys {
+  const AreasKeys();
+
+  final page = const Key('areasPage');
+  final createButton = const Key('areasCreateButton');
+  final nameField = const Key('areasNameField');
+  final saveButton = const Key('areasSaveButton');
+  final deleteDialog = const Key('areasDeleteDialog');
+  final deleteConfirmButton = const Key('areasDeleteConfirmButton');
 }
 
 class HubKeys {

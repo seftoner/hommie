@@ -1,4 +1,4 @@
-import 'package:home_assistant_websocket/home_assistant_websocket.dart';
+import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/features/home/domain/entities/device.dart';
 import 'package:hommie/features/home/domain/repositories/i_device_repository.dart';
 
@@ -10,7 +10,7 @@ import 'package:hommie/features/home/domain/repositories/i_device_repository.dar
 /// a placeholder that can be extended when device support is added.
 class WebSocketDeviceRepository implements IDeviceRepository {
   // ignore: unused_field
-  final HAConnection _connection;
+  final IHAConnection _connection;
 
   WebSocketDeviceRepository(this._connection);
 

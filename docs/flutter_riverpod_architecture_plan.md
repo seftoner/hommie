@@ -41,7 +41,7 @@ lib/
     servers/
     features/...         # Feature orchestrators, Riverpod-agnostic services
   infrastructure/
-    database/            # Isar schemas, DAOs, migrations
+    database/            # Drift tables, DAOs, migrations
     networking/          # REST/WS clients, DTO mappers
     persistence/         # Token store, cache adapters
     features/...         # Repository impls per feature
@@ -112,7 +112,7 @@ Events:
 
 # 6. Offline-First Data Flow (read/write paths)
 - **Reads:** UI → `FeatureViewModel` → `FeatureRepository(serverId)` →
-  1. Attempt cache (`Isar` via `cacheStoreProvider(serverId)`),
+  1. Attempt cache (`Drift` via `cacheStoreProvider(serverId)`),
   2. If stale, enqueue remote fetch with connectivity guard,
   3. Stream merged cache updates back to UI.
 - **Writes:** UI → `CommandUseCase` → `FeatureRepository(serverId)` →
@@ -174,9 +174,9 @@ abstract class LightsRepository {
 }
 ```
 ```dart
-// infrastructure/features/lights/isar_lights_repository.dart
-class IsarLightsRepository implements LightsRepository {
-  IsarLightsRepository(this._cache, this._client);
+// infrastructure/features/lights/drift_lights_repository.dart
+class DriftLightsRepository implements LightsRepository {
+  DriftLightsRepository(this._cache, this._client);
   final LightsCacheDao _cache;
   final LightsRestClient _client;
 
@@ -244,7 +244,7 @@ GoRoute(
 | Application | State machine golden tests (auth, connection, sync) | `state_machine_test`, fake providers |
 | Infrastructure | REST/WS integration against fake HA server | `package:http/testing`, custom WS harness |
 | Presentation | Widget & navigation tests with scoped providers | `flutter_test`, `golden_toolkit` |
-| Offline | Cache/outbox replay simulations | Isar in-memory adapter, time control |
+| Offline | Cache/outbox replay simulations | Drift in-memory (NativeDatabase.memory), time control |
 | E2E | `integration_test` with fake server & background task scheduler | Device/emulator farm |
 
 # 12. Migration Plan (Phased)

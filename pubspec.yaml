@@ -2,8 +2,8 @@ name: hommie_workspace
 publish_to: none
 
 environment:
-  sdk: ">=3.9.0 <4.0.0"
-  flutter: ^3.35.7
+  sdk: ">=3.12.2 <4.0.0"
+  flutter: ^3.44.3
 
 workspace:
   - app
@@ -11,4 +11,4 @@ workspace:
   # Third-party local packages
   - packages/computer
   - packages/drag_arrange
-  - packages/home_assistant_websocket
+  - packages/home_assistant_client
