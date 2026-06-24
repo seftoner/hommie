@@ -11,7 +11,7 @@ part of 'entity_domain_handler.dart';
 /// Registry of domain handlers keyed by domain. v1 registers only `light`.
 
 @ProviderFor(entityDomainHandlers)
-const entityDomainHandlersProvider = EntityDomainHandlersProvider._();
+final entityDomainHandlersProvider = EntityDomainHandlersProvider._();
 
 /// Registry of domain handlers keyed by domain. v1 registers only `light`.
 
@@ -24,7 +24,7 @@ final class EntityDomainHandlersProvider
         >
     with $Provider<Map<String, EntityDomainHandler>> {
   /// Registry of domain handlers keyed by domain. v1 registers only `light`.
-  const EntityDomainHandlersProvider._()
+  EntityDomainHandlersProvider._()
     : super(
         from: null,
         argument: null,

@@ -10,25 +10,25 @@ part of 'home_page_controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(HomePageController)
-const homePageControllerProvider = HomePageControllerProvider._();
+final homePageControllerProvider = HomePageControllerProvider._();
 
 final class HomePageControllerProvider
     extends $NotifierProvider<HomePageController, HomePageState> {
-  const HomePageControllerProvider._()
+  HomePageControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'homePageControllerProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           serverScopeServerProvider,
           cachedAreasProvider,
           cachedEntitiesProvider,
           homeConnectionLoadingProvider,
           serverSyncCoordinatorProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           HomePageControllerProvider.$allTransitiveDependencies0,
           HomePageControllerProvider.$allTransitiveDependencies1,
           HomePageControllerProvider.$allTransitiveDependencies2,
@@ -47,30 +47,30 @@ final class HomePageControllerProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = serverScopeServerProvider;
-  static const $allTransitiveDependencies1 = cachedAreasProvider;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies0 = serverScopeServerProvider;
+  static final $allTransitiveDependencies1 = cachedAreasProvider;
+  static final $allTransitiveDependencies2 =
       CachedAreasProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies3 =
+  static final $allTransitiveDependencies3 =
       CachedAreasProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies4 =
       CachedAreasProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies5 = cachedEntitiesProvider;
-  static const $allTransitiveDependencies6 = homeConnectionLoadingProvider;
-  static const $allTransitiveDependencies7 =
+  static final $allTransitiveDependencies5 = cachedEntitiesProvider;
+  static final $allTransitiveDependencies6 = homeConnectionLoadingProvider;
+  static final $allTransitiveDependencies7 =
       HomeConnectionLoadingProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies8 =
+  static final $allTransitiveDependencies8 =
       HomeConnectionLoadingProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies9 =
+  static final $allTransitiveDependencies9 =
       HomeConnectionLoadingProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies10 =
+  static final $allTransitiveDependencies10 =
       HomeConnectionLoadingProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies11 =
+  static final $allTransitiveDependencies11 =
       HomeConnectionLoadingProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies12 = serverSyncCoordinatorProvider;
-  static const $allTransitiveDependencies13 =
+  static final $allTransitiveDependencies12 = serverSyncCoordinatorProvider;
+  static final $allTransitiveDependencies13 =
       ServerSyncCoordinatorProvider.$allTransitiveDependencies6;
-  static const $allTransitiveDependencies14 =
+  static final $allTransitiveDependencies14 =
       ServerSyncCoordinatorProvider.$allTransitiveDependencies7;
 
   @override
@@ -96,8 +96,7 @@ abstract class _$HomePageController extends $Notifier<HomePageState> {
   HomePageState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<HomePageState, HomePageState>;
     final element =
         ref.element
@@ -107,6 +106,6 @@ abstract class _$HomePageController extends $Notifier<HomePageState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

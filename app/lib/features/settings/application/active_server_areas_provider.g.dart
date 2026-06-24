@@ -10,7 +10,7 @@ part of 'active_server_areas_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(activeServerAreas)
-const activeServerAreasProvider = ActiveServerAreasProvider._();
+final activeServerAreasProvider = ActiveServerAreasProvider._();
 
 final class ActiveServerAreasProvider
     extends
@@ -22,18 +22,18 @@ final class ActiveServerAreasProvider
     with
         $FutureModifier<ActiveServerAreasState>,
         $FutureProvider<ActiveServerAreasState> {
-  const ActiveServerAreasProvider._()
+  ActiveServerAreasProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'activeServerAreasProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           activeServerSessionProvider,
           areasForServerProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           ActiveServerAreasProvider.$allTransitiveDependencies0,
           ActiveServerAreasProvider.$allTransitiveDependencies1,
           ActiveServerAreasProvider.$allTransitiveDependencies2,
@@ -44,17 +44,17 @@ final class ActiveServerAreasProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = activeServerSessionProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = activeServerSessionProvider;
+  static final $allTransitiveDependencies1 =
       ActiveServerSessionProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies2 =
       ActiveServerSessionProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 =
+  static final $allTransitiveDependencies3 =
       ActiveServerSessionProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 = areasForServerProvider;
-  static const $allTransitiveDependencies6 =
+  static final $allTransitiveDependencies5 = areasForServerProvider;
+  static final $allTransitiveDependencies6 =
       AreasForServerProvider.$allTransitiveDependencies0;
 
   @override

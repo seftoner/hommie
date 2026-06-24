@@ -10,12 +10,12 @@ part of 'active_server.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(activeServer)
-const activeServerProvider = ActiveServerProvider._();
+final activeServerProvider = ActiveServerProvider._();
 
 final class ActiveServerProvider
     extends $FunctionalProvider<AsyncValue<Server?>, Server?, Stream<Server?>>
     with $FutureModifier<Server?>, $StreamProvider<Server?> {
-  const ActiveServerProvider._()
+  ActiveServerProvider._()
     : super(
         from: null,
         argument: null,

@@ -115,7 +115,7 @@ class _ServerManagerMock implements IServerManager {
   Future<Server?> getActiveServer() async => _active;
 
   @override
-  Future<List<Server>> getServers() async => [if (_active != null) _active!];
+  Future<List<Server>> getServers() async => [?_active];
 
   @override
   Stream<Server?> watchActiveServer() => _controller.stream;

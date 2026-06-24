@@ -10,7 +10,7 @@ part of 'command_availability_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(commandAvailability)
-const commandAvailabilityProvider = CommandAvailabilityProvider._();
+final commandAvailabilityProvider = CommandAvailabilityProvider._();
 
 final class CommandAvailabilityProvider
     extends
@@ -20,20 +20,20 @@ final class CommandAvailabilityProvider
           CommandAvailability
         >
     with $Provider<CommandAvailability> {
-  const CommandAvailabilityProvider._()
+  CommandAvailabilityProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'commandAvailabilityProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[serverScopeConnectionProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[serverScopeConnectionProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           CommandAvailabilityProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = serverScopeConnectionProvider;
+  static final $allTransitiveDependencies0 = serverScopeConnectionProvider;
 
   @override
   String debugGetCreateSourceHash() => _$commandAvailabilityHash();

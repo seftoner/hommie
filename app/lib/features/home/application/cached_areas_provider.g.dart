@@ -10,7 +10,7 @@ part of 'cached_areas_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(cachedAreas)
-const cachedAreasProvider = CachedAreasProvider._();
+final cachedAreasProvider = CachedAreasProvider._();
 
 final class CachedAreasProvider
     extends
@@ -20,27 +20,27 @@ final class CachedAreasProvider
           Stream<List<Area>>
         >
     with $FutureModifier<List<Area>>, $StreamProvider<List<Area>> {
-  const CachedAreasProvider._()
+  CachedAreasProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'cachedAreasProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           serverScopeIdProvider,
           areasForServerProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           CachedAreasProvider.$allTransitiveDependencies0,
           CachedAreasProvider.$allTransitiveDependencies1,
           CachedAreasProvider.$allTransitiveDependencies2,
         ],
       );
 
-  static const $allTransitiveDependencies0 = serverScopeIdProvider;
-  static const $allTransitiveDependencies1 = areasForServerProvider;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies0 = serverScopeIdProvider;
+  static final $allTransitiveDependencies1 = areasForServerProvider;
+  static final $allTransitiveDependencies2 =
       AreasForServerProvider.$allTransitiveDependencies0;
 
   @override

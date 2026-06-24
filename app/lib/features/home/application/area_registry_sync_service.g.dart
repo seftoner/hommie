@@ -10,7 +10,7 @@ part of 'area_registry_sync_service.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(areaRegistrySyncService)
-const areaRegistrySyncServiceProvider = AreaRegistrySyncServiceProvider._();
+final areaRegistrySyncServiceProvider = AreaRegistrySyncServiceProvider._();
 
 final class AreaRegistrySyncServiceProvider
     extends
@@ -20,20 +20,20 @@ final class AreaRegistrySyncServiceProvider
           AreaRegistrySyncService
         >
     with $Provider<AreaRegistrySyncService> {
-  const AreaRegistrySyncServiceProvider._()
+  AreaRegistrySyncServiceProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'areaRegistrySyncServiceProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[areaRepositoryProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[areaRepositoryProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           AreaRegistrySyncServiceProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = areaRepositoryProvider;
+  static final $allTransitiveDependencies0 = areaRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$areaRegistrySyncServiceHash();

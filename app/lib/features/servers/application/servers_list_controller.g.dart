@@ -10,22 +10,22 @@ part of 'servers_list_controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ServersListController)
-const serversListControllerProvider = ServersListControllerProvider._();
+final serversListControllerProvider = ServersListControllerProvider._();
 
 final class ServersListControllerProvider
     extends $AsyncNotifierProvider<ServersListController, List<Server>> {
-  const ServersListControllerProvider._()
+  ServersListControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'serversListControllerProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           serverManagerProvider,
           serverLifecycleControllerProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           ServersListControllerProvider.$allTransitiveDependencies0,
           ServersListControllerProvider.$allTransitiveDependencies1,
           ServersListControllerProvider.$allTransitiveDependencies2,
@@ -34,13 +34,13 @@ final class ServersListControllerProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = serverManagerProvider;
-  static const $allTransitiveDependencies1 = serverLifecycleControllerProvider;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies0 = serverManagerProvider;
+  static final $allTransitiveDependencies1 = serverLifecycleControllerProvider;
+  static final $allTransitiveDependencies2 =
       ServerLifecycleControllerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies3 =
+  static final $allTransitiveDependencies3 =
       ServerLifecycleControllerProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies4 =
       ServerLifecycleControllerProvider.$allTransitiveDependencies2;
 
   @override
@@ -58,8 +58,7 @@ abstract class _$ServersListController extends $AsyncNotifier<List<Server>> {
   FutureOr<List<Server>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<List<Server>>, List<Server>>;
     final element =
         ref.element
@@ -69,6 +68,6 @@ abstract class _$ServersListController extends $AsyncNotifier<List<Server>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

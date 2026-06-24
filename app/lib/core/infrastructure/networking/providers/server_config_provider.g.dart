@@ -10,12 +10,12 @@ part of 'server_config_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(serverConfig)
-const serverConfigProvider = ServerConfigFamily._();
+final serverConfigProvider = ServerConfigFamily._();
 
 final class ServerConfigProvider
     extends $FunctionalProvider<AsyncValue<Server>, Server, FutureOr<Server>>
     with $FutureModifier<Server>, $FutureProvider<Server> {
-  const ServerConfigProvider._({
+  ServerConfigProvider._({
     required ServerConfigFamily super.from,
     required int super.argument,
   }) : super(
@@ -62,12 +62,12 @@ String _$serverConfigHash() => r'0350c6de12d9c0d61ee474c926979fac49e8c87e';
 
 final class ServerConfigFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Server>, int> {
-  const ServerConfigFamily._()
+  ServerConfigFamily._()
     : super(
         retry: null,
         name: r'serverConfigProvider',
-        dependencies: const <ProviderOrFamily>[],
-        $allTransitiveDependencies: const <ProviderOrFamily>[],
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
         isAutoDispose: false,
       );
 

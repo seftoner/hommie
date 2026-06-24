@@ -11,9 +11,11 @@ import 'offline_banner_test.dart' as offline_banner_test;
 // END: GENERATED TEST IMPORTS
 
 Future<void> main() async {
-  final nativeAutomator = NativeAutomator(config: NativeAutomatorConfig());
-  await nativeAutomator.initialize();
-  PatrolBinding.ensureInitialized(NativeAutomatorConfig())
+  final platformAutomator = PlatformAutomator(
+    config: PlatformAutomatorConfig.defaultConfig(),
+  );
+  await platformAutomator.initialize();
+  PatrolBinding.ensureInitialized(platformAutomator)
     ..workaroundDebugDefaultTargetPlatformOverride =
         debugDefaultTargetPlatformOverride;
 

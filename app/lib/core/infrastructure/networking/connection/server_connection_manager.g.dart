@@ -10,7 +10,7 @@ part of 'server_connection_manager.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(serverConnectionManager)
-const serverConnectionManagerProvider = ServerConnectionManagerProvider._();
+final serverConnectionManagerProvider = ServerConnectionManagerProvider._();
 
 final class ServerConnectionManagerProvider
     extends
@@ -20,20 +20,20 @@ final class ServerConnectionManagerProvider
           IServerConnectionManager
         >
     with $Provider<IServerConnectionManager> {
-  const ServerConnectionManagerProvider._()
+  ServerConnectionManagerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'serverConnectionManagerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[serverConfigProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[serverConfigProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           ServerConnectionManagerProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = serverConfigProvider;
+  static final $allTransitiveDependencies0 = serverConfigProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverConnectionManagerHash();

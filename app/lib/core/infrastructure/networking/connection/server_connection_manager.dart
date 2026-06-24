@@ -1,5 +1,7 @@
 import 'dart:async';
 
+// ignore_for_file: prefer_initializing_formals
+
 import 'package:home_assistant_client/home_assistant_client.dart';
 import 'package:hommie/core/infrastructure/networking/connection/connection_error_classification.dart';
 import 'package:hommie/core/infrastructure/networking/connection/ha_connection_factory.dart';

@@ -15,7 +15,7 @@ jobs:
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v4.1
         with:
-          version: 3.35.7
+          version: 3.44.3
           cache: true
           channel: stable
 

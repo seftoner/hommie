@@ -1,5 +1,7 @@
 import 'dart:async';
 
+// ignore_for_file: prefer_initializing_formals
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:home_assistant_client/home_assistant_client.dart';

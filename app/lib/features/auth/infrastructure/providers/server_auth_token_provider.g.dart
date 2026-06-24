@@ -10,7 +10,7 @@ part of 'server_auth_token_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(serverAuthToken)
-const serverAuthTokenProvider = ServerAuthTokenFamily._();
+final serverAuthTokenProvider = ServerAuthTokenFamily._();
 
 final class ServerAuthTokenProvider
     extends
@@ -20,7 +20,7 @@ final class ServerAuthTokenProvider
           FutureOr<HAOAuth2Token>
         >
     with $FutureModifier<HAOAuth2Token>, $FutureProvider<HAOAuth2Token> {
-  const ServerAuthTokenProvider._({
+  ServerAuthTokenProvider._({
     required ServerAuthTokenFamily super.from,
     required int super.argument,
   }) : super(
@@ -68,7 +68,7 @@ String _$serverAuthTokenHash() => r'6af2aafd01444307219e88d440ed355423dc115c';
 
 final class ServerAuthTokenFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<HAOAuth2Token>, int> {
-  const ServerAuthTokenFamily._()
+  ServerAuthTokenFamily._()
     : super(
         retry: null,
         name: r'serverAuthTokenProvider',

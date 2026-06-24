@@ -13,7 +13,7 @@ part of 'auth_state.dart';
 /// scope) changes.
 
 @ProviderFor(authState)
-const authStateProvider = AuthStateProvider._();
+final authStateProvider = AuthStateProvider._();
 
 /// Server-scoped auth state machine represented as a stream. Consumers receive a
 /// new [AuthState] every time the active server (and therefore credential
@@ -30,7 +30,7 @@ final class AuthStateProvider
   /// Server-scoped auth state machine represented as a stream. Consumers receive a
   /// new [AuthState] every time the active server (and therefore credential
   /// scope) changes.
-  const AuthStateProvider._()
+  AuthStateProvider._()
     : super(
         from: null,
         argument: null,

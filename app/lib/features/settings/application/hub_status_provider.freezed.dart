@@ -344,7 +344,7 @@ $HubConnectionStatusCopyWith<$Res> get connectionStatus {
 @override
 @pragma('vm:prefer-inline')
 $AuthStateCopyWith<$Res> get authState {
-  
+
   return $AuthStateCopyWith<$Res>(_self.authState, (value) {
     return _then(_self.copyWith(authState: value));
   });
@@ -481,7 +481,7 @@ return $default(_that.connectionStatus,_that.authState,_that.deviceName);case _:
 
 class _HubStatusState implements HubStatusState {
   const _HubStatusState({required this.connectionStatus, required this.authState, required this.deviceName});
-  
+
 
 @override final  HubConnectionStatus connectionStatus;
 @override final  AuthState authState;

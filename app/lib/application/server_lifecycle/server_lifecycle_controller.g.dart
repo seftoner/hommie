@@ -10,7 +10,7 @@ part of 'server_lifecycle_controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(serverLifecycleController)
-const serverLifecycleControllerProvider = ServerLifecycleControllerProvider._();
+final serverLifecycleControllerProvider = ServerLifecycleControllerProvider._();
 
 final class ServerLifecycleControllerProvider
     extends
@@ -20,19 +20,19 @@ final class ServerLifecycleControllerProvider
           IServerLifecycleController
         >
     with $Provider<IServerLifecycleController> {
-  const ServerLifecycleControllerProvider._()
+  ServerLifecycleControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'serverLifecycleControllerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           serverConnectionManagerProvider,
           authRepositoryProvider,
           serverManagerProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           ServerLifecycleControllerProvider.$allTransitiveDependencies0,
           ServerLifecycleControllerProvider.$allTransitiveDependencies1,
           ServerLifecycleControllerProvider.$allTransitiveDependencies2,
@@ -40,11 +40,11 @@ final class ServerLifecycleControllerProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = serverConnectionManagerProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = serverConnectionManagerProvider;
+  static final $allTransitiveDependencies1 =
       ServerConnectionManagerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = authRepositoryProvider;
-  static const $allTransitiveDependencies3 = serverManagerProvider;
+  static final $allTransitiveDependencies2 = authRepositoryProvider;
+  static final $allTransitiveDependencies3 = serverManagerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverLifecycleControllerHash();

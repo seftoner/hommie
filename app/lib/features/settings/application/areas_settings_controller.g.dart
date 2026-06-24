@@ -10,22 +10,22 @@ part of 'areas_settings_controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(AreasSettingsController)
-const areasSettingsControllerProvider = AreasSettingsControllerProvider._();
+final areasSettingsControllerProvider = AreasSettingsControllerProvider._();
 
 final class AreasSettingsControllerProvider
     extends $AsyncNotifierProvider<AreasSettingsController, void> {
-  const AreasSettingsControllerProvider._()
+  AreasSettingsControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'areasSettingsControllerProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           activeServerSessionProvider,
           areaRegistrySyncServiceProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           AreasSettingsControllerProvider.$allTransitiveDependencies0,
           AreasSettingsControllerProvider.$allTransitiveDependencies1,
           AreasSettingsControllerProvider.$allTransitiveDependencies2,
@@ -36,17 +36,17 @@ final class AreasSettingsControllerProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = activeServerSessionProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = activeServerSessionProvider;
+  static final $allTransitiveDependencies1 =
       ActiveServerSessionProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies2 =
       ActiveServerSessionProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 =
+  static final $allTransitiveDependencies3 =
       ActiveServerSessionProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 = areaRegistrySyncServiceProvider;
-  static const $allTransitiveDependencies6 =
+  static final $allTransitiveDependencies5 = areaRegistrySyncServiceProvider;
+  static final $allTransitiveDependencies6 =
       AreaRegistrySyncServiceProvider.$allTransitiveDependencies0;
 
   @override
@@ -64,8 +64,7 @@ abstract class _$AreasSettingsController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<void>, void>;
     final element =
         ref.element
@@ -75,6 +74,6 @@ abstract class _$AreasSettingsController extends $AsyncNotifier<void> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    return element.handleCreate(ref, build);
   }
 }

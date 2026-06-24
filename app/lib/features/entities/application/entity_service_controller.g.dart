@@ -10,7 +10,7 @@ part of 'entity_service_controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(entityServiceController)
-const entityServiceControllerProvider = EntityServiceControllerProvider._();
+final entityServiceControllerProvider = EntityServiceControllerProvider._();
 
 final class EntityServiceControllerProvider
     extends
@@ -20,20 +20,20 @@ final class EntityServiceControllerProvider
           EntityServiceController
         >
     with $Provider<EntityServiceController> {
-  const EntityServiceControllerProvider._()
+  EntityServiceControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'entityServiceControllerProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[serverScopeConnectionProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[serverScopeConnectionProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           EntityServiceControllerProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = serverScopeConnectionProvider;
+  static final $allTransitiveDependencies0 = serverScopeConnectionProvider;
 
   @override
   String debugGetCreateSourceHash() => _$entityServiceControllerHash();

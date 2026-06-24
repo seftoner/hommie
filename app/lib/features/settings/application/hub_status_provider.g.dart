@@ -10,7 +10,7 @@ part of 'hub_status_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(hubStatus)
-const hubStatusProvider = HubStatusProvider._();
+final hubStatusProvider = HubStatusProvider._();
 
 final class HubStatusProvider
     extends
@@ -20,19 +20,19 @@ final class HubStatusProvider
           FutureOr<HubStatusState>
         >
     with $FutureModifier<HubStatusState>, $FutureProvider<HubStatusState> {
-  const HubStatusProvider._()
+  HubStatusProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'hubStatusProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           activeServerSessionProvider,
           authStateProvider,
           deviceInfoRepositoryProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           HubStatusProvider.$allTransitiveDependencies0,
           HubStatusProvider.$allTransitiveDependencies1,
           HubStatusProvider.$allTransitiveDependencies2,
@@ -42,16 +42,16 @@ final class HubStatusProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = activeServerSessionProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = activeServerSessionProvider;
+  static final $allTransitiveDependencies1 =
       ActiveServerSessionProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies2 =
       ActiveServerSessionProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 =
+  static final $allTransitiveDependencies3 =
       ActiveServerSessionProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 = deviceInfoRepositoryProvider;
+  static final $allTransitiveDependencies5 = deviceInfoRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$hubStatusHash();

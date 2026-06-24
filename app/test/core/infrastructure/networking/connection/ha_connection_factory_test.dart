@@ -87,7 +87,7 @@ void main() {
       final factoryProvider = Provider(
         (ref) =>
             HAConnectionFactory(ref, createOrchestrator: (_) => orchestrator),
-        dependencies: const [serverConfigProvider],
+        dependencies: [serverConfigProvider],
       );
       final container = ProviderContainer(
         overrides: [

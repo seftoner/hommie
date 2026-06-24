@@ -11,7 +11,7 @@ part of 'cached_entities_provider.dart';
 /// Reactive list of cached entities for the active server.
 
 @ProviderFor(cachedEntities)
-const cachedEntitiesProvider = CachedEntitiesProvider._();
+final cachedEntitiesProvider = CachedEntitiesProvider._();
 
 /// Reactive list of cached entities for the active server.
 
@@ -24,20 +24,20 @@ final class CachedEntitiesProvider
         >
     with $FutureModifier<List<HaEntity>>, $StreamProvider<List<HaEntity>> {
   /// Reactive list of cached entities for the active server.
-  const CachedEntitiesProvider._()
+  CachedEntitiesProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'cachedEntitiesProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[serverScopeIdProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[serverScopeIdProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           CachedEntitiesProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = serverScopeIdProvider;
+  static final $allTransitiveDependencies0 = serverScopeIdProvider;
 
   @override
   String debugGetCreateSourceHash() => _$cachedEntitiesHash();

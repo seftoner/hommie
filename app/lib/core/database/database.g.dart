@@ -2965,10 +2965,7 @@ final class $$ServerEntitiesTableReferences
   static MultiTypedResultKey<$AreaEntitiesTable, List<AreaEntity>>
   _areaEntitiesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.areaEntities,
-    aliasName: $_aliasNameGenerator(
-      db.serverEntities.id,
-      db.areaEntities.serverId,
-    ),
+    aliasName: 'server_entities__id__area_entities__server_id',
   );
 
   $$AreaEntitiesTableProcessedTableManager get areaEntitiesRefs {
@@ -2986,10 +2983,7 @@ final class $$ServerEntitiesTableReferences
   static MultiTypedResultKey<$DeviceEntitiesTable, List<DeviceEntity>>
   _deviceEntitiesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.deviceEntities,
-    aliasName: $_aliasNameGenerator(
-      db.serverEntities.id,
-      db.deviceEntities.serverId,
-    ),
+    aliasName: 'server_entities__id__device_entities__server_id',
   );
 
   $$DeviceEntitiesTableProcessedTableManager get deviceEntitiesRefs {
@@ -3007,10 +3001,7 @@ final class $$ServerEntitiesTableReferences
   static MultiTypedResultKey<$HomeViewConfigsTable, List<HomeViewConfig>>
   _homeViewConfigsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.homeViewConfigs,
-    aliasName: $_aliasNameGenerator(
-      db.serverEntities.id,
-      db.homeViewConfigs.serverId,
-    ),
+    aliasName: 'server_entities__id__home_view_configs__server_id',
   );
 
   $$HomeViewConfigsTableProcessedTableManager get homeViewConfigsRefs {
@@ -3030,7 +3021,7 @@ final class $$ServerEntitiesTableReferences
   static MultiTypedResultKey<$EntitiesTable, List<EntityRow>>
   _entitiesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.entities,
-    aliasName: $_aliasNameGenerator(db.serverEntities.id, db.entities.serverId),
+    aliasName: 'server_entities__id__entities__server_id',
   );
 
   $$EntitiesTableProcessedTableManager get entitiesRefs {
@@ -3562,10 +3553,9 @@ final class $$AreaEntitiesTableReferences
     extends BaseReferences<_$AppDatabase, $AreaEntitiesTable, AreaEntity> {
   $$AreaEntitiesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) =>
-      db.serverEntities.createAlias(
-        $_aliasNameGenerator(db.areaEntities.serverId, db.serverEntities.id),
-      );
+  static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) => db
+      .serverEntities
+      .createAlias('area_entities__server_id__server_entities__id');
 
   $$ServerEntitiesTableProcessedTableManager get serverId {
     final $_column = $_itemColumn<int>('server_id')!;
@@ -3585,10 +3575,7 @@ final class $$AreaEntitiesTableReferences
   _deviceAreaConfigsRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
         db.deviceAreaConfigs,
-        aliasName: $_aliasNameGenerator(
-          db.areaEntities.id,
-          db.deviceAreaConfigs.areaId,
-        ),
+        aliasName: 'area_entities__id__device_area_configs__area_id',
       );
 
   $$DeviceAreaConfigsTableProcessedTableManager get deviceAreaConfigsRefs {
@@ -3608,10 +3595,7 @@ final class $$AreaEntitiesTableReferences
   static MultiTypedResultKey<$AreaHomeConfigsTable, List<AreaHomeConfig>>
   _areaHomeConfigsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.areaHomeConfigs,
-    aliasName: $_aliasNameGenerator(
-      db.areaEntities.id,
-      db.areaHomeConfigs.areaId,
-    ),
+    aliasName: 'area_entities__id__area_home_configs__area_id',
   );
 
   $$AreaHomeConfigsTableProcessedTableManager get areaHomeConfigsRefs {
@@ -4107,10 +4091,9 @@ final class $$DeviceEntitiesTableReferences
     super.$_typedResult,
   );
 
-  static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) =>
-      db.serverEntities.createAlias(
-        $_aliasNameGenerator(db.deviceEntities.serverId, db.serverEntities.id),
-      );
+  static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) => db
+      .serverEntities
+      .createAlias('device_entities__server_id__server_entities__id');
 
   $$ServerEntitiesTableProcessedTableManager get serverId {
     final $_column = $_itemColumn<int>('server_id')!;
@@ -4130,10 +4113,7 @@ final class $$DeviceEntitiesTableReferences
   _deviceAreaConfigsRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
         db.deviceAreaConfigs,
-        aliasName: $_aliasNameGenerator(
-          db.deviceEntities.id,
-          db.deviceAreaConfigs.deviceId,
-        ),
+        aliasName: 'device_entities__id__device_area_configs__device_id',
       );
 
   $$DeviceAreaConfigsTableProcessedTableManager get deviceAreaConfigsRefs {
@@ -4154,10 +4134,7 @@ final class $$DeviceEntitiesTableReferences
   _deviceHomeConfigsRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
         db.deviceHomeConfigs,
-        aliasName: $_aliasNameGenerator(
-          db.deviceEntities.id,
-          db.deviceHomeConfigs.deviceId,
-        ),
+        aliasName: 'device_entities__id__device_home_configs__device_id',
       );
 
   $$DeviceHomeConfigsTableProcessedTableManager get deviceHomeConfigsRefs {
@@ -4638,13 +4615,9 @@ final class $$DeviceAreaConfigsTableReferences
     super.$_typedResult,
   );
 
-  static $DeviceEntitiesTable _deviceIdTable(_$AppDatabase db) =>
-      db.deviceEntities.createAlias(
-        $_aliasNameGenerator(
-          db.deviceAreaConfigs.deviceId,
-          db.deviceEntities.id,
-        ),
-      );
+  static $DeviceEntitiesTable _deviceIdTable(_$AppDatabase db) => db
+      .deviceEntities
+      .createAlias('device_area_configs__device_id__device_entities__id');
 
   $$DeviceEntitiesTableProcessedTableManager get deviceId {
     final $_column = $_itemColumn<int>('device_id')!;
@@ -4660,10 +4633,8 @@ final class $$DeviceAreaConfigsTableReferences
     );
   }
 
-  static $AreaEntitiesTable _areaIdTable(_$AppDatabase db) =>
-      db.areaEntities.createAlias(
-        $_aliasNameGenerator(db.deviceAreaConfigs.areaId, db.areaEntities.id),
-      );
+  static $AreaEntitiesTable _areaIdTable(_$AppDatabase db) => db.areaEntities
+      .createAlias('device_area_configs__area_id__area_entities__id');
 
   $$AreaEntitiesTableProcessedTableManager get areaId {
     final $_column = $_itemColumn<int>('area_id')!;
@@ -5010,10 +4981,9 @@ final class $$HomeViewConfigsTableReferences
     super.$_typedResult,
   );
 
-  static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) =>
-      db.serverEntities.createAlias(
-        $_aliasNameGenerator(db.homeViewConfigs.serverId, db.serverEntities.id),
-      );
+  static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) => db
+      .serverEntities
+      .createAlias('home_view_configs__server_id__server_entities__id');
 
   $$ServerEntitiesTableProcessedTableManager get serverId {
     final $_column = $_itemColumn<int>('server_id')!;
@@ -5032,10 +5002,7 @@ final class $$HomeViewConfigsTableReferences
   static MultiTypedResultKey<$AreaHomeConfigsTable, List<AreaHomeConfig>>
   _areaHomeConfigsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.areaHomeConfigs,
-    aliasName: $_aliasNameGenerator(
-      db.homeViewConfigs.id,
-      db.areaHomeConfigs.homeConfigId,
-    ),
+    aliasName: 'home_view_configs__id__area_home_configs__home_config_id',
   );
 
   $$AreaHomeConfigsTableProcessedTableManager get areaHomeConfigsRefs {
@@ -5369,10 +5336,8 @@ final class $$AreaHomeConfigsTableReferences
     super.$_typedResult,
   );
 
-  static $AreaEntitiesTable _areaIdTable(_$AppDatabase db) =>
-      db.areaEntities.createAlias(
-        $_aliasNameGenerator(db.areaHomeConfigs.areaId, db.areaEntities.id),
-      );
+  static $AreaEntitiesTable _areaIdTable(_$AppDatabase db) => db.areaEntities
+      .createAlias('area_home_configs__area_id__area_entities__id');
 
   $$AreaEntitiesTableProcessedTableManager get areaId {
     final $_column = $_itemColumn<int>('area_id')!;
@@ -5388,13 +5353,9 @@ final class $$AreaHomeConfigsTableReferences
     );
   }
 
-  static $HomeViewConfigsTable _homeConfigIdTable(_$AppDatabase db) =>
-      db.homeViewConfigs.createAlias(
-        $_aliasNameGenerator(
-          db.areaHomeConfigs.homeConfigId,
-          db.homeViewConfigs.id,
-        ),
-      );
+  static $HomeViewConfigsTable _homeConfigIdTable(_$AppDatabase db) => db
+      .homeViewConfigs
+      .createAlias('area_home_configs__home_config_id__home_view_configs__id');
 
   $$HomeViewConfigsTableProcessedTableManager get homeConfigId {
     final $_column = $_itemColumn<int>('home_config_id')!;
@@ -5414,10 +5375,7 @@ final class $$AreaHomeConfigsTableReferences
   _deviceHomeConfigsRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
         db.deviceHomeConfigs,
-        aliasName: $_aliasNameGenerator(
-          db.areaHomeConfigs.id,
-          db.deviceHomeConfigs.areaConfigId,
-        ),
+        aliasName: 'area_home_configs__id__device_home_configs__area_config_id',
       );
 
   $$DeviceHomeConfigsTableProcessedTableManager get deviceHomeConfigsRefs {
@@ -5883,13 +5841,9 @@ final class $$DeviceHomeConfigsTableReferences
     super.$_typedResult,
   );
 
-  static $DeviceEntitiesTable _deviceIdTable(_$AppDatabase db) =>
-      db.deviceEntities.createAlias(
-        $_aliasNameGenerator(
-          db.deviceHomeConfigs.deviceId,
-          db.deviceEntities.id,
-        ),
-      );
+  static $DeviceEntitiesTable _deviceIdTable(_$AppDatabase db) => db
+      .deviceEntities
+      .createAlias('device_home_configs__device_id__device_entities__id');
 
   $$DeviceEntitiesTableProcessedTableManager get deviceId {
     final $_column = $_itemColumn<int>('device_id')!;
@@ -5907,10 +5861,7 @@ final class $$DeviceHomeConfigsTableReferences
 
   static $AreaHomeConfigsTable _areaConfigIdTable(_$AppDatabase db) =>
       db.areaHomeConfigs.createAlias(
-        $_aliasNameGenerator(
-          db.deviceHomeConfigs.areaConfigId,
-          db.areaHomeConfigs.id,
-        ),
+        'device_home_configs__area_config_id__area_home_configs__id',
       );
 
   $$AreaHomeConfigsTableProcessedTableManager get areaConfigId {
@@ -6307,9 +6258,7 @@ final class $$EntitiesTableReferences
   $$EntitiesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) =>
-      db.serverEntities.createAlias(
-        $_aliasNameGenerator(db.entities.serverId, db.serverEntities.id),
-      );
+      db.serverEntities.createAlias('entities__server_id__server_entities__id');
 
   $$ServerEntitiesTableProcessedTableManager get serverId {
     final $_column = $_itemColumn<int>('server_id')!;

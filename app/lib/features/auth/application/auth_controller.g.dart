@@ -10,23 +10,23 @@ part of 'auth_controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(authController)
-const authControllerProvider = AuthControllerProvider._();
+final authControllerProvider = AuthControllerProvider._();
 
 final class AuthControllerProvider
     extends $FunctionalProvider<AuthController, AuthController, AuthController>
     with $Provider<AuthController> {
-  const AuthControllerProvider._()
+  AuthControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'authControllerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           loginFlowControllerProvider,
           serverLifecycleControllerProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           AuthControllerProvider.$allTransitiveDependencies0,
           AuthControllerProvider.$allTransitiveDependencies1,
           AuthControllerProvider.$allTransitiveDependencies2,
@@ -39,21 +39,21 @@ final class AuthControllerProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = loginFlowControllerProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = loginFlowControllerProvider;
+  static final $allTransitiveDependencies1 =
       LoginFlowControllerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies2 =
       LoginFlowControllerProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 =
+  static final $allTransitiveDependencies3 =
       LoginFlowControllerProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies4 =
       LoginFlowControllerProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 =
+  static final $allTransitiveDependencies5 =
       LoginFlowControllerProvider.$allTransitiveDependencies4;
-  static const $allTransitiveDependencies6 =
+  static final $allTransitiveDependencies6 =
       LoginFlowControllerProvider.$allTransitiveDependencies5;
-  static const $allTransitiveDependencies7 = serverLifecycleControllerProvider;
-  static const $allTransitiveDependencies8 =
+  static final $allTransitiveDependencies7 = serverLifecycleControllerProvider;
+  static final $allTransitiveDependencies8 =
       ServerLifecycleControllerProvider.$allTransitiveDependencies3;
 
   @override

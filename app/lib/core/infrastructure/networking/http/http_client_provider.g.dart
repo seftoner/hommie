@@ -10,13 +10,13 @@ part of 'http_client_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(httpClient)
-const httpClientProvider = HttpClientProvider._();
+final httpClientProvider = HttpClientProvider._();
 
 final class HttpClientProvider
     extends
         $FunctionalProvider<http.BaseClient, http.BaseClient, http.BaseClient>
     with $Provider<http.BaseClient> {
-  const HttpClientProvider._()
+  HttpClientProvider._()
     : super(
         from: null,
         argument: null,
@@ -52,13 +52,13 @@ final class HttpClientProvider
 String _$httpClientHash() => r'93c2abbd5c09cf0a1ee118b362e22d2449134043';
 
 @ProviderFor(authRevocationHttpClient)
-const authRevocationHttpClientProvider = AuthRevocationHttpClientProvider._();
+final authRevocationHttpClientProvider = AuthRevocationHttpClientProvider._();
 
 final class AuthRevocationHttpClientProvider
     extends
         $FunctionalProvider<http.BaseClient, http.BaseClient, http.BaseClient>
     with $Provider<http.BaseClient> {
-  const AuthRevocationHttpClientProvider._()
+  AuthRevocationHttpClientProvider._()
     : super(
         from: null,
         argument: null,

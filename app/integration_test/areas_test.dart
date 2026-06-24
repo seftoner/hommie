@@ -49,10 +49,7 @@ void main() {
         await iCreateArea($, HassAreaManager.initialName);
         await homeAssistantShouldHaveArea($, HassAreaManager.initialName);
         await iRenameArea(
-          $,
-          HassAreaManager.initialName,
-          HassAreaManager.renamedName,
-        );
+            $, HassAreaManager.initialName, HassAreaManager.renamedName);
         await homeAssistantShouldHaveArea($, HassAreaManager.renamedName);
         await homeAssistantShouldNotHaveArea($, HassAreaManager.initialName);
         await iDeleteArea($, HassAreaManager.renamedName);

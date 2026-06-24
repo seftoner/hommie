@@ -10,12 +10,12 @@ part of 'server_manager_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(serverManager)
-const serverManagerProvider = ServerManagerProvider._();
+final serverManagerProvider = ServerManagerProvider._();
 
 final class ServerManagerProvider
     extends $FunctionalProvider<IServerManager, IServerManager, IServerManager>
     with $Provider<IServerManager> {
-  const ServerManagerProvider._()
+  ServerManagerProvider._()
     : super(
         from: null,
         argument: null,

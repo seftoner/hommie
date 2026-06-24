@@ -10,20 +10,20 @@ part of 'session_status_projections.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(offlineBannerVisibility)
-const offlineBannerVisibilityProvider = OfflineBannerVisibilityProvider._();
+final offlineBannerVisibilityProvider = OfflineBannerVisibilityProvider._();
 
 final class OfflineBannerVisibilityProvider
     extends $FunctionalProvider<bool, bool, bool>
     with $Provider<bool> {
-  const OfflineBannerVisibilityProvider._()
+  OfflineBannerVisibilityProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'offlineBannerVisibilityProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[activeServerSessionProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        dependencies: <ProviderOrFamily>[activeServerSessionProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>{
           OfflineBannerVisibilityProvider.$allTransitiveDependencies0,
           OfflineBannerVisibilityProvider.$allTransitiveDependencies1,
           OfflineBannerVisibilityProvider.$allTransitiveDependencies2,
@@ -32,14 +32,14 @@ final class OfflineBannerVisibilityProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = activeServerSessionProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = activeServerSessionProvider;
+  static final $allTransitiveDependencies1 =
       ActiveServerSessionProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies2 =
       ActiveServerSessionProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 =
+  static final $allTransitiveDependencies3 =
       ActiveServerSessionProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
 
   @override
@@ -68,20 +68,20 @@ String _$offlineBannerVisibilityHash() =>
     r'57f04c16b5875ebedaf2ce953391580528d473f9';
 
 @ProviderFor(homeConnectionLoading)
-const homeConnectionLoadingProvider = HomeConnectionLoadingProvider._();
+final homeConnectionLoadingProvider = HomeConnectionLoadingProvider._();
 
 final class HomeConnectionLoadingProvider
     extends $FunctionalProvider<bool, bool, bool>
     with $Provider<bool> {
-  const HomeConnectionLoadingProvider._()
+  HomeConnectionLoadingProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'homeConnectionLoadingProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[activeServerSessionProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        dependencies: <ProviderOrFamily>[activeServerSessionProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>{
           HomeConnectionLoadingProvider.$allTransitiveDependencies0,
           HomeConnectionLoadingProvider.$allTransitiveDependencies1,
           HomeConnectionLoadingProvider.$allTransitiveDependencies2,
@@ -90,14 +90,14 @@ final class HomeConnectionLoadingProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = activeServerSessionProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = activeServerSessionProvider;
+  static final $allTransitiveDependencies1 =
       ActiveServerSessionProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies2 =
       ActiveServerSessionProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 =
+  static final $allTransitiveDependencies3 =
       ActiveServerSessionProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
 
   @override

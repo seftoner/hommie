@@ -14,7 +14,7 @@ part of 'entity_states_provider.dart';
 /// diffs into a map. Volatile — not persisted. Empty while disconnected.
 
 @ProviderFor(EntityStates)
-const entityStatesProvider = EntityStatesProvider._();
+final entityStatesProvider = EntityStatesProvider._();
 
 /// Live entity states for the active server, keyed by entity_id.
 ///
@@ -26,20 +26,20 @@ final class EntityStatesProvider
   ///
   /// Subscribes to `subscribe_entities` while connected and folds the compressed
   /// diffs into a map. Volatile — not persisted. Empty while disconnected.
-  const EntityStatesProvider._()
+  EntityStatesProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'entityStatesProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[serverScopeConnectionProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[serverScopeConnectionProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           EntityStatesProvider.$allTransitiveDependencies0,
         ],
       );
 
-  static const $allTransitiveDependencies0 = serverScopeConnectionProvider;
+  static final $allTransitiveDependencies0 = serverScopeConnectionProvider;
 
   @override
   String debugGetCreateSourceHash() => _$entityStatesHash();
@@ -59,7 +59,7 @@ final class EntityStatesProvider
   }
 }
 
-String _$entityStatesHash() => r'8c68338db912ab810eee66e59a090aa54a098d30';
+String _$entityStatesHash() => r'd42aea7469fd2967e643374400521fd356d6f3a7';
 
 /// Live entity states for the active server, keyed by entity_id.
 ///
@@ -70,8 +70,7 @@ abstract class _$EntityStates extends $Notifier<Map<String, EntityStateValue>> {
   Map<String, EntityStateValue> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref =
         this.ref
             as $Ref<
@@ -89,6 +88,6 @@ abstract class _$EntityStates extends $Notifier<Map<String, EntityStateValue>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

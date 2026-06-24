@@ -10,7 +10,7 @@ part of 'server_credentials_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(serverCredentials)
-const serverCredentialsProvider = ServerCredentialsFamily._();
+final serverCredentialsProvider = ServerCredentialsFamily._();
 
 final class ServerCredentialsProvider
     extends
@@ -20,7 +20,7 @@ final class ServerCredentialsProvider
           FutureOr<Credentials>
         >
     with $FutureModifier<Credentials>, $FutureProvider<Credentials> {
-  const ServerCredentialsProvider._({
+  ServerCredentialsProvider._({
     required ServerCredentialsFamily super.from,
     required int super.argument,
   }) : super(
@@ -68,7 +68,7 @@ String _$serverCredentialsHash() => r'a2ed9b2e36d017999b5e3fc505de172c528bf0f5';
 
 final class ServerCredentialsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Credentials>, int> {
-  const ServerCredentialsFamily._()
+  ServerCredentialsFamily._()
     : super(
         retry: null,
         name: r'serverCredentialsProvider',

@@ -10,23 +10,23 @@ part of 'auth_revocation_handler.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(authRevocationHandler)
-const authRevocationHandlerProvider = AuthRevocationHandlerProvider._();
+final authRevocationHandlerProvider = AuthRevocationHandlerProvider._();
 
 final class AuthRevocationHandlerProvider
     extends $FunctionalProvider<void, void, void>
     with $Provider<void> {
-  const AuthRevocationHandlerProvider._()
+  AuthRevocationHandlerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'authRevocationHandlerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           activeServerSessionProvider,
           serverLifecycleControllerProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           AuthRevocationHandlerProvider.$allTransitiveDependencies0,
           AuthRevocationHandlerProvider.$allTransitiveDependencies1,
           AuthRevocationHandlerProvider.$allTransitiveDependencies2,
@@ -38,19 +38,19 @@ final class AuthRevocationHandlerProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = activeServerSessionProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = activeServerSessionProvider;
+  static final $allTransitiveDependencies1 =
       ActiveServerSessionProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies2 =
       ActiveServerSessionProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 =
+  static final $allTransitiveDependencies3 =
       ActiveServerSessionProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 = serverLifecycleControllerProvider;
-  static const $allTransitiveDependencies6 =
+  static final $allTransitiveDependencies5 = serverLifecycleControllerProvider;
+  static final $allTransitiveDependencies6 =
       ServerLifecycleControllerProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies7 =
+  static final $allTransitiveDependencies7 =
       ServerLifecycleControllerProvider.$allTransitiveDependencies3;
 
   @override

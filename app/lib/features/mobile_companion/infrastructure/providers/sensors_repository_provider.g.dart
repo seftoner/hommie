@@ -10,7 +10,7 @@ part of 'sensors_repository_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(sensorsRepository)
-const sensorsRepositoryProvider = SensorsRepositoryProvider._();
+final sensorsRepositoryProvider = SensorsRepositoryProvider._();
 
 final class SensorsRepositoryProvider
     extends
@@ -20,7 +20,7 @@ final class SensorsRepositoryProvider
           ISensorsRepository
         >
     with $Provider<ISensorsRepository> {
-  const SensorsRepositoryProvider._()
+  SensorsRepositoryProvider._()
     : super(
         from: null,
         argument: null,

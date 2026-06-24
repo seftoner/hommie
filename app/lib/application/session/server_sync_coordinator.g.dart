@@ -10,24 +10,24 @@ part of 'server_sync_coordinator.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ServerSyncCoordinator)
-const serverSyncCoordinatorProvider = ServerSyncCoordinatorProvider._();
+final serverSyncCoordinatorProvider = ServerSyncCoordinatorProvider._();
 
 final class ServerSyncCoordinatorProvider
     extends $NotifierProvider<ServerSyncCoordinator, ServerSyncState> {
-  const ServerSyncCoordinatorProvider._()
+  ServerSyncCoordinatorProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'serverSyncCoordinatorProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           activeServerSessionProvider,
           areaRepositoryProvider,
           entityRepositoryProvider,
           areaRegistrySyncServiceProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           ServerSyncCoordinatorProvider.$allTransitiveDependencies0,
           ServerSyncCoordinatorProvider.$allTransitiveDependencies1,
           ServerSyncCoordinatorProvider.$allTransitiveDependencies2,
@@ -39,18 +39,18 @@ final class ServerSyncCoordinatorProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = activeServerSessionProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = activeServerSessionProvider;
+  static final $allTransitiveDependencies1 =
       ActiveServerSessionProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies2 =
       ActiveServerSessionProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies3 =
+  static final $allTransitiveDependencies3 =
       ActiveServerSessionProvider.$allTransitiveDependencies2;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
-  static const $allTransitiveDependencies5 = areaRepositoryProvider;
-  static const $allTransitiveDependencies6 = entityRepositoryProvider;
-  static const $allTransitiveDependencies7 = areaRegistrySyncServiceProvider;
+  static final $allTransitiveDependencies5 = areaRepositoryProvider;
+  static final $allTransitiveDependencies6 = entityRepositoryProvider;
+  static final $allTransitiveDependencies7 = areaRegistrySyncServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverSyncCoordinatorHash();
@@ -75,8 +75,7 @@ abstract class _$ServerSyncCoordinator extends $Notifier<ServerSyncState> {
   ServerSyncState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<ServerSyncState, ServerSyncState>;
     final element =
         ref.element
@@ -86,6 +85,6 @@ abstract class _$ServerSyncCoordinator extends $Notifier<ServerSyncState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

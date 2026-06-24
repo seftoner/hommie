@@ -90,7 +90,7 @@ class _FakeServerManager implements IServerManager {
 
   @override
   Future<List<Server>> getServers() async {
-    return [if (activeServer != null) activeServer!];
+    return [?activeServer];
   }
 
   @override

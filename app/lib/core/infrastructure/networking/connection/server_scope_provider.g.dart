@@ -30,7 +30,7 @@ part of 'server_scope_provider.dart';
 /// - Type-safe server context
 
 @ProviderFor(serverScopeConnection)
-const serverScopeConnectionProvider = ServerScopeConnectionProvider._();
+final serverScopeConnectionProvider = ServerScopeConnectionProvider._();
 
 /// A scoped provider that represents the connection for the current server context.
 ///
@@ -76,15 +76,15 @@ final class ServerScopeConnectionProvider
   /// - All dependent providers automatically update
   /// - Clear dependency chain
   /// - Type-safe server context
-  const ServerScopeConnectionProvider._()
+  ServerScopeConnectionProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'serverScopeConnectionProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[],
-        $allTransitiveDependencies: const <ProviderOrFamily>[],
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -118,7 +118,7 @@ String _$serverScopeConnectionHash() =>
 /// to provide the current server context.
 
 @ProviderFor(serverScopeId)
-const serverScopeIdProvider = ServerScopeIdProvider._();
+final serverScopeIdProvider = ServerScopeIdProvider._();
 
 /// A scoped provider that represents the current server ID.
 ///
@@ -131,15 +131,15 @@ final class ServerScopeIdProvider extends $FunctionalProvider<int, int, int>
   ///
   /// Like serverScopeConnection, this should be overridden in a ProviderScope
   /// to provide the current server context.
-  const ServerScopeIdProvider._()
+  ServerScopeIdProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'serverScopeIdProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[],
-        $allTransitiveDependencies: const <ProviderOrFamily>[],
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -171,7 +171,7 @@ String _$serverScopeIdHash() => r'1ec1108c0391b713f03b9131cb7fba1c11fba9b9';
 /// This provides access to the full server configuration in the current scope.
 
 @ProviderFor(serverScopeServer)
-const serverScopeServerProvider = ServerScopeServerProvider._();
+final serverScopeServerProvider = ServerScopeServerProvider._();
 
 /// A scoped provider that represents the current server object.
 ///
@@ -183,15 +183,15 @@ final class ServerScopeServerProvider
   /// A scoped provider that represents the current server object.
   ///
   /// This provides access to the full server configuration in the current scope.
-  const ServerScopeServerProvider._()
+  ServerScopeServerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'serverScopeServerProvider',
         isAutoDispose: true,
-        dependencies: const <ProviderOrFamily>[],
-        $allTransitiveDependencies: const <ProviderOrFamily>[],
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override

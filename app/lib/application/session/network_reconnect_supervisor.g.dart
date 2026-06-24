@@ -10,34 +10,34 @@ part of 'network_reconnect_supervisor.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(networkReconnectSupervisor)
-const networkReconnectSupervisorProvider =
+final networkReconnectSupervisorProvider =
     NetworkReconnectSupervisorProvider._();
 
 final class NetworkReconnectSupervisorProvider
     extends $FunctionalProvider<void, void, void>
     with $Provider<void> {
-  const NetworkReconnectSupervisorProvider._()
+  NetworkReconnectSupervisorProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'networkReconnectSupervisorProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           serverConnectionManagerProvider,
           networkReachabilityProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           NetworkReconnectSupervisorProvider.$allTransitiveDependencies0,
           NetworkReconnectSupervisorProvider.$allTransitiveDependencies1,
           NetworkReconnectSupervisorProvider.$allTransitiveDependencies2,
         ],
       );
 
-  static const $allTransitiveDependencies0 = serverConnectionManagerProvider;
-  static const $allTransitiveDependencies1 =
+  static final $allTransitiveDependencies0 = serverConnectionManagerProvider;
+  static final $allTransitiveDependencies1 =
       ServerConnectionManagerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies2 = networkReachabilityProvider;
+  static final $allTransitiveDependencies2 = networkReachabilityProvider;
 
   @override
   String debugGetCreateSourceHash() => _$networkReconnectSupervisorHash();

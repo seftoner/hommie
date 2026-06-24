@@ -10,7 +10,7 @@ part of 'network_reachability_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(networkReachability)
-const networkReachabilityProvider = NetworkReachabilityProvider._();
+final networkReachabilityProvider = NetworkReachabilityProvider._();
 
 final class NetworkReachabilityProvider
     extends
@@ -20,7 +20,7 @@ final class NetworkReachabilityProvider
           INetworkReachabilityRepository
         >
     with $Provider<INetworkReachabilityRepository> {
-  const NetworkReachabilityProvider._()
+  NetworkReachabilityProvider._()
     : super(
         from: null,
         argument: null,

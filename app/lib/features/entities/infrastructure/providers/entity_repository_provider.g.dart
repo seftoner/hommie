@@ -10,7 +10,7 @@ part of 'entity_repository_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(entityRepository)
-const entityRepositoryProvider = EntityRepositoryProvider._();
+final entityRepositoryProvider = EntityRepositoryProvider._();
 
 final class EntityRepositoryProvider
     extends
@@ -20,7 +20,7 @@ final class EntityRepositoryProvider
           IEntityRepository
         >
     with $Provider<IEntityRepository> {
-  const EntityRepositoryProvider._()
+  EntityRepositoryProvider._()
     : super(
         from: null,
         argument: null,

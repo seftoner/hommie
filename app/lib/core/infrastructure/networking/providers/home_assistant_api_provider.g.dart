@@ -10,7 +10,7 @@ part of 'home_assistant_api_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(homeAssistantApi)
-const homeAssistantApiProvider = HomeAssistantApiFamily._();
+final homeAssistantApiProvider = HomeAssistantApiFamily._();
 
 final class HomeAssistantApiProvider
     extends
@@ -20,7 +20,7 @@ final class HomeAssistantApiProvider
           FutureOr<HomeAssistantApi>
         >
     with $FutureModifier<HomeAssistantApi>, $FutureProvider<HomeAssistantApi> {
-  const HomeAssistantApiProvider._({
+  HomeAssistantApiProvider._({
     required HomeAssistantApiFamily super.from,
     required int super.argument,
   }) : super(
@@ -31,9 +31,9 @@ final class HomeAssistantApiProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = serverConfigProvider;
-  static const $allTransitiveDependencies1 = serverAuthTokenProvider;
-  static const $allTransitiveDependencies2 = httpClientProvider;
+  static final $allTransitiveDependencies0 = serverConfigProvider;
+  static final $allTransitiveDependencies1 = serverAuthTokenProvider;
+  static final $allTransitiveDependencies2 = httpClientProvider;
 
   @override
   String debugGetCreateSourceHash() => _$homeAssistantApiHash();
@@ -72,16 +72,16 @@ String _$homeAssistantApiHash() => r'810729372c214c5e920d2b0dc2b68a478e6234fe';
 
 final class HomeAssistantApiFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<HomeAssistantApi>, int> {
-  const HomeAssistantApiFamily._()
+  HomeAssistantApiFamily._()
     : super(
         retry: null,
         name: r'homeAssistantApiProvider',
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           serverConfigProvider,
           serverAuthTokenProvider,
           httpClientProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>[
           HomeAssistantApiProvider.$allTransitiveDependencies0,
           HomeAssistantApiProvider.$allTransitiveDependencies1,
           HomeAssistantApiProvider.$allTransitiveDependencies2,

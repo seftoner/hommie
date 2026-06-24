@@ -10,7 +10,7 @@ part of 'areas_for_server_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(areasForServer)
-const areasForServerProvider = AreasForServerFamily._();
+final areasForServerProvider = AreasForServerFamily._();
 
 final class AreasForServerProvider
     extends
@@ -20,7 +20,7 @@ final class AreasForServerProvider
           Stream<List<Area>>
         >
     with $FutureModifier<List<Area>>, $StreamProvider<List<Area>> {
-  const AreasForServerProvider._({
+  AreasForServerProvider._({
     required AreasForServerFamily super.from,
     required int super.argument,
   }) : super(
@@ -31,7 +31,7 @@ final class AreasForServerProvider
          $allTransitiveDependencies: null,
        );
 
-  static const $allTransitiveDependencies0 = areaRepositoryProvider;
+  static final $allTransitiveDependencies0 = areaRepositoryProvider;
 
   @override
   String debugGetCreateSourceHash() => _$areasForServerHash();
@@ -69,12 +69,12 @@ String _$areasForServerHash() => r'6385afe49edb87355920b653014d9bce6cf40caf';
 
 final class AreasForServerFamily extends $Family
     with $FunctionalFamilyOverride<Stream<List<Area>>, int> {
-  const AreasForServerFamily._()
+  AreasForServerFamily._()
     : super(
         retry: null,
         name: r'areasForServerProvider',
-        dependencies: const <ProviderOrFamily>[areaRepositoryProvider],
-        $allTransitiveDependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[areaRepositoryProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
           AreasForServerProvider.$allTransitiveDependencies0,
         ],
         isAutoDispose: true,

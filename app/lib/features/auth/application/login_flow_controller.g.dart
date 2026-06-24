@@ -10,7 +10,7 @@ part of 'login_flow_controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(loginFlowController)
-const loginFlowControllerProvider = LoginFlowControllerProvider._();
+final loginFlowControllerProvider = LoginFlowControllerProvider._();
 
 final class LoginFlowControllerProvider
     extends
@@ -20,19 +20,19 @@ final class LoginFlowControllerProvider
           LoginFlowController
         >
     with $Provider<LoginFlowController> {
-  const LoginFlowControllerProvider._()
+  LoginFlowControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'loginFlowControllerProvider',
         isAutoDispose: false,
-        dependencies: const <ProviderOrFamily>[
+        dependencies: <ProviderOrFamily>[
           authRepositoryProvider,
           serverConnectionManagerProvider,
           homeAssistantApiProvider,
         ],
-        $allTransitiveDependencies: const <ProviderOrFamily>{
+        $allTransitiveDependencies: <ProviderOrFamily>{
           LoginFlowControllerProvider.$allTransitiveDependencies0,
           LoginFlowControllerProvider.$allTransitiveDependencies1,
           LoginFlowControllerProvider.$allTransitiveDependencies2,
@@ -42,14 +42,14 @@ final class LoginFlowControllerProvider
         },
       );
 
-  static const $allTransitiveDependencies0 = authRepositoryProvider;
-  static const $allTransitiveDependencies1 = serverConnectionManagerProvider;
-  static const $allTransitiveDependencies2 =
+  static final $allTransitiveDependencies0 = authRepositoryProvider;
+  static final $allTransitiveDependencies1 = serverConnectionManagerProvider;
+  static final $allTransitiveDependencies2 =
       ServerConnectionManagerProvider.$allTransitiveDependencies0;
-  static const $allTransitiveDependencies3 = homeAssistantApiProvider;
-  static const $allTransitiveDependencies4 =
+  static final $allTransitiveDependencies3 = homeAssistantApiProvider;
+  static final $allTransitiveDependencies4 =
       HomeAssistantApiProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies5 =
+  static final $allTransitiveDependencies5 =
       HomeAssistantApiProvider.$allTransitiveDependencies2;
 
   @override

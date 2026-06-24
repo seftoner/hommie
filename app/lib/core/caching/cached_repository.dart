@@ -1,5 +1,7 @@
 import 'dart:async';
 
+// ignore_for_file: prefer_initializing_formals
+
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 
 /// A generic caching wrapper for repositories that provides automatic caching

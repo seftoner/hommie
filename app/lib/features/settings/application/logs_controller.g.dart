@@ -10,11 +10,11 @@ part of 'logs_controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(LogsController)
-const logsControllerProvider = LogsControllerProvider._();
+final logsControllerProvider = LogsControllerProvider._();
 
 final class LogsControllerProvider
     extends $AsyncNotifierProvider<LogsController, void> {
-  const LogsControllerProvider._()
+  LogsControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -39,8 +39,7 @@ abstract class _$LogsController extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<void>, void>;
     final element =
         ref.element
@@ -50,6 +49,6 @@ abstract class _$LogsController extends $AsyncNotifier<void> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    return element.handleCreate(ref, build);
   }
 }
