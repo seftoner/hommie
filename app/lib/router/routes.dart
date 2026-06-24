@@ -9,6 +9,7 @@ import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/features/onboarding/presentation/flows/onboarding_flow.dart';
 import 'package:hommie/features/servers/presentation/screens/servers_page.dart';
 import 'package:hommie/features/settings/presentation/screens/about_page.dart';
+import 'package:hommie/features/settings/presentation/screens/areas_page.dart';
 import 'package:hommie/features/settings/presentation/screens/hub_page.dart';
 import 'package:hommie/features/settings/presentation/screens/logs_page.dart';
 import 'package:hommie/features/settings/presentation/screens/sensors_page.dart';
@@ -67,6 +68,7 @@ class AutomationsRouteData extends GoRouteData with $AutomationsRouteData {
     ),
     TypedGoRoute<LogsRouteData>(path: 'logs'),
     TypedGoRoute<AboutRouteData>(path: 'about'),
+    TypedGoRoute<AreasRouteData>(path: 'areas'),
     TypedGoRoute<SensorsRouteData>(path: 'sensors'),
   ],
 )
@@ -103,6 +105,15 @@ class SensorsRouteData extends GoRouteData with $SensorsRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const SensorsPage();
+  }
+}
+
+class AreasRouteData extends GoRouteData with $AreasRouteData {
+  const AreasRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const AreasPage();
   }
 }
 

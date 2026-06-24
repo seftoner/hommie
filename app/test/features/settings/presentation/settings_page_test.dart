@@ -26,6 +26,25 @@ class _FakeServerLifecycleController implements IServerLifecycleController {
 }
 
 void main() {
+  testWidgets('shows areas row without subtitle', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          serverLifecycleControllerProvider.overrideWithValue(
+            _FakeServerLifecycleController(),
+          ),
+        ],
+        child: const MaterialApp(home: SettingsPage()),
+      ),
+    );
+
+    expect(find.text('Areas'), findsOneWidget);
+    expect(
+      find.text('Create, rename, and delete Home Assistant areas'),
+      findsNothing,
+    );
+  });
+
   testWidgets('shows snackbar when sign out fails', (tester) async {
     final lifecycle = _FakeServerLifecycleController(
       signOutFailure: Exception('boom'),
@@ -40,7 +59,9 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byKey(K.hub.signOutButton));
+    await tester.drag(find.byType(ListView), const Offset(0, -260));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(K.hub.signOutButton).first);
     await tester.pumpAndSettle();
 
     await tester.tap(find.widgetWithText(TextButton, 'Sign Out'));

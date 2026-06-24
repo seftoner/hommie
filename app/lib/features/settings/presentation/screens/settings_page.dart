@@ -35,6 +35,13 @@ class SettingsPage extends ConsumerWidget {
           ),
           const Divider(),
           ListTile(
+            leading: const Icon(Symbols.home_work_rounded),
+            title: const Text('Areas'),
+            trailing: const Icon(Symbols.chevron_right_rounded),
+            onTap: () => const AreasRouteData().push(context),
+          ),
+          const Divider(),
+          ListTile(
             key: K.settings.sensorsItem,
             leading: const Icon(Symbols.sensors_rounded),
             title: const Text('Sensors'),

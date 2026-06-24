@@ -95,6 +95,7 @@ RouteBase get $settingsRouteData => GoRouteData.$route(
     ),
     GoRouteData.$route(path: 'logs', factory: $LogsRouteData._fromState),
     GoRouteData.$route(path: 'about', factory: $AboutRouteData._fromState),
+    GoRouteData.$route(path: 'areas', factory: $AreasRouteData._fromState),
     GoRouteData.$route(path: 'sensors', factory: $SensorsRouteData._fromState),
   ],
 );
@@ -208,6 +209,27 @@ mixin $AboutRouteData on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/settings/about');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $AreasRouteData on GoRouteData {
+  static AreasRouteData _fromState(GoRouterState state) =>
+      const AreasRouteData();
+
+  @override
+  String get location => GoRouteData.$location('/settings/areas');
 
   @override
   void go(BuildContext context) => context.go(location);
