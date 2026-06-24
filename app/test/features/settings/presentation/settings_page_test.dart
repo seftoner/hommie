@@ -39,6 +39,7 @@ void main() {
     );
 
     expect(find.text('Areas'), findsOneWidget);
+    expect(find.byKey(K.settings.areasItem), findsOneWidget);
     expect(
       find.text('Create, rename, and delete Home Assistant areas'),
       findsNothing,

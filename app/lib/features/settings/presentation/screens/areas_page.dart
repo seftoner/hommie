@@ -4,6 +4,7 @@ import 'package:hommie/core/domain/entities/area.dart';
 import 'package:hommie/features/settings/application/active_server_areas_provider.dart';
 import 'package:hommie/features/settings/application/areas_settings_controller.dart';
 import 'package:hommie/features/settings/application/areas_settings_state.dart';
+import 'package:hommie/ui/keys.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class AreasPage extends ConsumerWidget {
@@ -20,10 +21,12 @@ class AreasPage extends ConsumerWidget {
     };
 
     return Scaffold(
+      key: K.areas.page,
       appBar: AppBar(
         title: const Text('Areas'),
         actions: [
           IconButton(
+            key: K.areas.createButton,
             tooltip: 'Create area',
             icon: const Icon(Symbols.add_rounded),
             onPressed: canEdit ? () => _showCreateDialog(context, ref) : null,
@@ -171,6 +174,7 @@ class _DeleteAreaDialogState extends State<_DeleteAreaDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      key: K.areas.deleteDialog,
       title: const Text('Delete area'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -194,6 +198,7 @@ class _DeleteAreaDialogState extends State<_DeleteAreaDialog> {
           child: const Text('Cancel'),
         ),
         TextButton(
+          key: K.areas.deleteConfirmButton,
           style: TextButton.styleFrom(
             foregroundColor: Theme.of(context).colorScheme.error,
           ),
@@ -262,6 +267,7 @@ Future<void> _showAreaNameDialog({
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
+                key: K.areas.nameField,
                 controller: controller,
                 autofocus: true,
                 decoration: const InputDecoration(labelText: 'Name'),
@@ -297,6 +303,7 @@ Future<void> _showAreaNameDialog({
               child: const Text('Cancel'),
             ),
             TextButton(
+              key: K.areas.saveButton,
               onPressed: canSave
                   ? () => _submitAreaName(
                       dialogContext: dialogContext,

@@ -126,6 +126,8 @@ Add to `~/.gemini/settings.json` (global) or `.gemini/settings.json` (project):
 
 When adding Home Assistant features, follow
 [`docs/home-assistant-feature-architecture.md`](home-assistant-feature-architecture.md).
+For endpoint-level Home Assistant REST, WebSocket, and mobile-app webhook
+research, see [`docs/home-assistant-api-research.md`](home-assistant-api-research.md).
 The short version:
 
 - REST-capable one-shot calls use `homeAssistantApiProvider(serverId)` and should

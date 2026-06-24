@@ -35,6 +35,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           const Divider(),
           ListTile(
+            key: K.settings.areasItem,
             leading: const Icon(Symbols.home_work_rounded),
             title: const Text('Areas'),
             trailing: const Icon(Symbols.chevron_right_rounded),

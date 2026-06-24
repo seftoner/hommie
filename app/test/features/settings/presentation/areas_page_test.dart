@@ -8,6 +8,7 @@ import 'package:hommie/features/settings/application/active_server_areas_provide
 import 'package:hommie/features/settings/application/areas_settings_controller.dart';
 import 'package:hommie/features/settings/application/areas_settings_state.dart';
 import 'package:hommie/features/settings/presentation/screens/areas_page.dart';
+import 'package:hommie/ui/keys.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class _FakeAreasSettingsController extends AreasSettingsController {
@@ -57,6 +58,8 @@ void main() {
 
     expect(find.text('Kitchen'), findsOneWidget);
     expect(find.text('Office'), findsOneWidget);
+    expect(find.byKey(K.areas.page), findsOneWidget);
+    expect(find.byKey(K.areas.createButton), findsOneWidget);
     expect(find.byIcon(Symbols.add_rounded), findsOneWidget);
 
     final addButton = tester.widget<IconButton>(
@@ -64,6 +67,12 @@ void main() {
     );
     expect(addButton.onPressed, isNotNull);
     expect(addButton.tooltip, 'Create area');
+
+    await tester.tap(find.byKey(K.areas.createButton));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(K.areas.nameField), findsOneWidget);
+    expect(find.byKey(K.areas.saveButton), findsOneWidget);
   });
 
   testWidgets('is read-only while offline', (tester) async {
@@ -111,6 +120,8 @@ void main() {
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
 
+    expect(find.byKey(K.areas.deleteDialog), findsOneWidget);
+    expect(find.byKey(K.areas.deleteConfirmButton), findsOneWidget);
     expect(
       find.text(
         'Delete area "Kitchen"? Devices and entities will not be deleted.',
