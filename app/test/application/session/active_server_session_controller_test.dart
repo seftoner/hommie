@@ -50,6 +50,12 @@ class _FakeConnectionManager implements IServerConnectionManager {
 
   @override
   void disconnect(int serverId) {}
+
+  @override
+  void retryActiveConnection() {}
+
+  @override
+  void setNetworkAvailable({required bool isAvailable}) {}
 }
 
 class _NeverCompletingConnectionFactory implements IHAConnectionFactory {

@@ -38,6 +38,9 @@ class _FakeFactory implements IHAConnectionFactory {
     return HAConnectionOpening(
       future: opening.completer.future,
       close: opening.close,
+      retryNow: () => opening.openingRetryCalls += 1,
+      setNetworkAvailable: ({required isAvailable}) =>
+          opening.openingNetworkAvailability.add(isAvailable),
     );
   }
 
@@ -60,6 +63,9 @@ class _FakeFactory implements IHAConnectionFactory {
         currentState: opening.currentState,
         states: opening.stateController.stream,
         close: opening.currentConnection.close,
+        retryNow: () => opening.managedRetryCalls += 1,
+        setNetworkAvailable: ({required isAvailable}) =>
+            opening.managedNetworkAvailability.add(isAvailable),
       ),
     );
   }
@@ -91,6 +97,10 @@ class _FakeOpening {
   _FakeConnection currentConnection = _FakeConnection();
   HASocketState currentState = const Authenticated();
   bool openingClosed = false;
+  int openingRetryCalls = 0;
+  int managedRetryCalls = 0;
+  final openingNetworkAvailability = <bool>[];
+  final managedNetworkAvailability = <bool>[];
 
   Future<void> close() async {
     openingClosed = true;
@@ -675,4 +685,69 @@ void main() {
     await futureExpectation;
     expect(factory.openings.single.openingClosed, isTrue);
   });
+
+  test(
+    'retryActiveConnection forwards retry to active managed connection',
+    () async {
+      final factory = _FakeFactory();
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setLinkState: (_) {},
+        resetLinkState: () {},
+      );
+
+      manager.setActiveServer(1);
+      final future = manager.getConnection(1);
+      factory.complete(1);
+      await future;
+
+      manager.retryActiveConnection();
+
+      expect(factory.openings.single.managedRetryCalls, 1);
+    },
+  );
+
+  test('retryActiveConnection forwards retry to in-flight opening', () {
+    final factory = _FakeFactory();
+    final manager = ServerConnectionManagerImpl(
+      factory: factory,
+      setLinkState: (_) {},
+      resetLinkState: () {},
+    );
+
+    manager.setActiveServer(1);
+
+    manager.retryActiveConnection();
+
+    expect(factory.openings.single.openingRetryCalls, 1);
+  });
+
+  test(
+    'setNetworkAvailable forwards network state to opening and resource',
+    () async {
+      final factory = _FakeFactory();
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setLinkState: (_) {},
+        resetLinkState: () {},
+      );
+
+      manager.setActiveServer(1);
+      final opening = factory.openings.single;
+
+      manager.setNetworkAvailable(isAvailable: false);
+
+      expect(opening.openingNetworkAvailability, [true, false]);
+
+      final future = manager.getConnection(1);
+      factory.complete(1);
+      await future;
+
+      expect(opening.managedNetworkAvailability, [false]);
+
+      manager.setNetworkAvailable(isAvailable: true);
+
+      expect(opening.managedNetworkAvailability, [false, true]);
+    },
+  );
 }

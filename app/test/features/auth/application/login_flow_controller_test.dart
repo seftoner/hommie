@@ -327,6 +327,12 @@ class _FakeConnectionManager implements IServerConnectionManager {
   void setActiveServer(int? serverId) {
     activeServerId = serverId;
   }
+
+  @override
+  void retryActiveConnection() {}
+
+  @override
+  void setNetworkAvailable({required bool isAvailable}) {}
 }
 
 class _LoginCall {

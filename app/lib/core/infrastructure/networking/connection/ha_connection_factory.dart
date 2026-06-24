@@ -74,7 +74,13 @@ final class HAConnectionFactory implements IHAConnectionFactory {
           }),
     );
 
-    return HAConnectionOpening(future: completer.future, close: closeOpening);
+    return HAConnectionOpening(
+      future: completer.future,
+      close: closeOpening,
+      retryNow: () => orchestrator?.retryNow(),
+      setNetworkAvailable: ({required isAvailable}) =>
+          orchestrator?.setNetworkAvailable(isAvailable: isAvailable),
+    );
   }
 
   Future<ManagedHAConnection> _openManaged(
@@ -153,6 +159,8 @@ final class HAConnectionFactory implements IHAConnectionFactory {
       currentState: authenticatedState,
       states: orchestrator.state,
       close: orchestrator.close,
+      retryNow: orchestrator.retryNow,
+      setNetworkAvailable: orchestrator.setNetworkAvailable,
     );
   }
 

@@ -47,6 +47,7 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
   int? _activeServerId;
   int _resetGeneration = 0;
   bool _isDisposed = false;
+  bool _networkAvailable = true;
 
   @override
   void setActiveServer(int? serverId) {
@@ -105,6 +106,7 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
 
     final version = _versionOf(serverId);
     final opening = _factory.open(serverId);
+    opening.setNetworkAvailable?.call(isAvailable: _networkAvailable);
     final future = _open(serverId, version, opening);
     _inFlight[serverId] = _OpeningResource(opening: opening, future: future);
     return future;
@@ -133,6 +135,7 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
         subscription: subscription,
       );
       _resources[serverId] = resource;
+      managed.setNetworkAvailable?.call(isAvailable: _networkAvailable);
 
       _handleConnectionState(serverId, managed.currentState, subscription);
 
@@ -166,6 +169,49 @@ final class ServerConnectionManagerImpl implements IServerConnectionManager {
 
     if (_activeServerId == serverId && !_isDisposed) {
       _scheduleResetState(expectedActiveServerId: serverId);
+    }
+  }
+
+  @override
+  void retryActiveConnection() {
+    final serverId = _activeServerId;
+    if (_isDisposed || serverId == null || !_networkAvailable) {
+      return;
+    }
+
+    final resource = _resources[serverId];
+    if (resource != null) {
+      resource.retryNow();
+      return;
+    }
+
+    final opening = _inFlight[serverId];
+    if (opening != null) {
+      opening.retryNow();
+      return;
+    }
+
+    _ensureActiveConnection(serverId);
+  }
+
+  @override
+  void setNetworkAvailable({required bool isAvailable}) {
+    if (_isDisposed || _networkAvailable == isAvailable) {
+      return;
+    }
+
+    _networkAvailable = isAvailable;
+
+    for (final opening in _inFlight.values) {
+      opening.setNetworkAvailable(isAvailable: isAvailable);
+    }
+
+    for (final resource in _resources.values) {
+      resource.setNetworkAvailable(isAvailable: isAvailable);
+    }
+
+    if (isAvailable) {
+      retryActiveConnection();
     }
   }
 
@@ -307,6 +353,10 @@ final class _OpeningResource {
   final Future<IHAConnection> future;
 
   Future<void> close() => opening.close();
+  void retryNow() => opening.retryNow?.call();
+  void setNetworkAvailable({required bool isAvailable}) {
+    opening.setNetworkAvailable?.call(isAvailable: isAvailable);
+  }
 }
 
 final class _ConnectionResource {
@@ -319,6 +369,11 @@ final class _ConnectionResource {
   final StreamSubscription<HASocketState> subscription;
 
   IHAConnection get connection => managed.connection;
+
+  void retryNow() => managed.retryNow?.call();
+  void setNetworkAvailable({required bool isAvailable}) {
+    managed.setNetworkAvailable?.call(isAvailable: isAvailable);
+  }
 
   Future<void> dispose() async {
     final closeFuture = managed.close();

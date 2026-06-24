@@ -20,18 +20,15 @@ class ConnectionOrchestrator {
   Timer? _heartbeatTimer;
   bool _isDisposed = false;
   bool _reconnectRequested = false;
+  bool _networkAvailable = true;
+  bool _authenticationFailed = false;
   Timer? _reconnectTimer;
 
   // Create our own state stream controller
   final StreamController<HASocketState> _stateController =
       StreamController<HASocketState>.broadcast();
   ConnectionOrchestrator(this._connectionOption, [Backoff? backoff])
-    : _backoff =
-          backoff ??
-          BinaryExponentialBackoff(
-            initial: const Duration(seconds: 1),
-            maximumStep: 7,
-          ),
+    : _backoff = backoff ?? MobileReconnectBackoff(),
       _logger = _connectionOption.logger;
 
   /// Stream of connection state changes.
@@ -47,9 +44,56 @@ class ConnectionOrchestrator {
     }
 
     _reconnectRequested = false;
+    _authenticationFailed = false;
     _backoff.reset(); // Reset only for user-initiated connections
 
     await _attemptConnection();
+  }
+
+  /// Updates the device-level network availability signal.
+  ///
+  /// Reconnect attempts are paused while no network is available. When the
+  /// network returns, any disconnected non-auth-failed connection retries
+  /// immediately instead of waiting for the previous backoff delay.
+  void setNetworkAvailable({required bool isAvailable}) {
+    if (_isDisposed || _networkAvailable == isAvailable) {
+      return;
+    }
+
+    _networkAvailable = isAvailable;
+    if (!isAvailable) {
+      _cancelReconnectTimer();
+      _reconnectRequested = false;
+      return;
+    }
+
+    retryNow();
+  }
+
+  /// Attempts reconnection immediately when the orchestrator is disconnected.
+  ///
+  /// This is intended for mobile recovery signals such as app resume, network
+  /// returning, or a user action while the offline banner is visible.
+  void retryNow() {
+    final connection = _connection;
+    if (_isDisposed || !_networkAvailable || _authenticationFailed) {
+      return;
+    }
+
+    if (connection != null) {
+      unawaited(_stateSubscription?.cancel());
+      _stateSubscription = null;
+      unawaited(connection.close());
+      _connection = null;
+    }
+
+    _cancelReconnectTimer();
+    _reconnectRequested = false;
+
+    if (!_stateController.isClosed) {
+      _stateController.add(const Reconnecting());
+    }
+    unawaited(_attemptConnection());
   }
 
   /// Closes the connection and stops reconnection attempts.
@@ -57,8 +101,7 @@ class ConnectionOrchestrator {
     _isDisposed = true;
     _reconnectRequested = false;
 
-    _reconnectTimer?.cancel();
-    _reconnectTimer = null;
+    _cancelReconnectTimer();
 
     _stopHeartbeat();
 
@@ -74,7 +117,10 @@ class ConnectionOrchestrator {
   }
 
   Future<void> _attemptConnection() async {
-    if (_isDisposed || _connection != null) {
+    if (_isDisposed ||
+        _authenticationFailed ||
+        !_networkAvailable ||
+        _connection != null) {
       return;
     }
 
@@ -93,6 +139,7 @@ class ConnectionOrchestrator {
       _connection = HAConnection(_connectionOption);
 
       // Monitor its state
+      await _stateSubscription?.cancel();
       _stateSubscription = _connection!.state.listen(_handleStateChange);
 
       await _connection!.connect();
@@ -135,13 +182,16 @@ class ConnectionOrchestrator {
           'Connection authenticated - resetting backoff and starting heartbeat',
         );
         _backoff.reset(); // Reset backoff on successful connection
+        _authenticationFailed = false;
         _startHeartbeat(); // Start heartbeat monitoring
         break;
 
       case Disconnected(type: DisconnectionType.authFailure):
         _logger.error('Authentication failed - stopping reconnection attempts');
         _reconnectRequested = false;
+        _authenticationFailed = true;
         _stopHeartbeat();
+        _cancelReconnectTimer();
         break;
 
       case Disconnected():
@@ -159,9 +209,13 @@ class ConnectionOrchestrator {
   }
 
   void _scheduleReconnect() {
-    if (_isDisposed || _reconnectRequested || _reconnectTimer != null) {
+    if (_isDisposed ||
+        _authenticationFailed ||
+        !_networkAvailable ||
+        _reconnectRequested ||
+        _reconnectTimer != null) {
       _logger.debug(
-        'Skipping reconnection scheduling: disposed=$_isDisposed, requested=$_reconnectRequested, timer=${_reconnectTimer != null}',
+        'Skipping reconnection scheduling: disposed=$_isDisposed, authFailed=$_authenticationFailed, network=$_networkAvailable, requested=$_reconnectRequested, timer=${_reconnectTimer != null}',
       );
       return;
     }
@@ -187,6 +241,11 @@ class ConnectionOrchestrator {
         );
       }
     });
+  }
+
+  void _cancelReconnectTimer() {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = null;
   }
 
   void _startHeartbeat() {

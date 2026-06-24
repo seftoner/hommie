@@ -219,6 +219,12 @@ class _FakeConnectionManager implements IServerConnectionManager {
 
   @override
   void setActiveServer(int? serverId) {}
+
+  @override
+  void retryActiveConnection() {}
+
+  @override
+  void setNetworkAvailable({required bool isAvailable}) {}
 }
 
 class _FakeAuthRepository implements IAuthRepository {

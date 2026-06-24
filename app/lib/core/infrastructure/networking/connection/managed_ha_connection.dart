@@ -6,21 +6,32 @@ final class ManagedHAConnection {
     required this.currentState,
     required this.states,
     required this.close,
+    this.retryNow,
+    this.setNetworkAvailable,
   });
 
   final IHAConnection Function() currentConnection;
   final HASocketState currentState;
   final Stream<HASocketState> states;
   final Future<void> Function() close;
+  final void Function()? retryNow;
+  final void Function({required bool isAvailable})? setNetworkAvailable;
 
   IHAConnection get connection => currentConnection();
 }
 
 final class HAConnectionOpening {
-  const HAConnectionOpening({required this.future, required this.close});
+  const HAConnectionOpening({
+    required this.future,
+    required this.close,
+    this.retryNow,
+    this.setNetworkAvailable,
+  });
 
   final Future<ManagedHAConnection> future;
   final Future<void> Function() close;
+  final void Function()? retryNow;
+  final void Function({required bool isAvailable})? setNetworkAvailable;
 }
 
 final class ConnectionOpenCancelled implements Exception {

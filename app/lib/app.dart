@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hommie/application/session/active_server_session_controller.dart';
 import 'package:hommie/application/session/auth_revocation_handler.dart';
+import 'package:hommie/application/session/network_reconnect_supervisor.dart';
 import 'package:hommie/router/router.dart';
 import 'package:hommie/ui/screens/widgets/offline_container.dart';
 import 'package:hommie/ui/styles/theme.dart';
@@ -44,6 +45,7 @@ class _ServiceInitializer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(activeServerSessionProvider);
     ref.watch(authRevocationHandlerProvider);
+    ref.watch(networkReconnectSupervisorProvider);
     return child;
   }
 }
