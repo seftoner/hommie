@@ -194,11 +194,17 @@ class _DeleteAreaDialogState extends State<_DeleteAreaDialog> {
           child: const Text('Cancel'),
         ),
         TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).colorScheme.error,
+          ),
           onPressed: _deleting ? null : _delete,
           child: _deleting
-              ? const SizedBox.square(
+              ? SizedBox.square(
                   dimension: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                 )
               : const Text('Delete'),
         ),
