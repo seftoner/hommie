@@ -93,4 +93,24 @@ void main() {
     expect(result[1].name, 'Office RGBW Lights');
     expect(result[2].name, 'Y');
   });
+
+  test('name falls back to device name for generic entity names', () {
+    final result = resolveEntities(
+      entities: const [
+        EntityRegistryRecord(
+          id: 'reg-bed-light',
+          entityId: 'light.bed_light',
+          uniqueId: 'uid-bed-light',
+          platform: 'test',
+          originalName: 'Light',
+          deviceId: 'dev-bed-light',
+        ),
+      ],
+      devices: const [
+        DeviceRegistryRecord(id: 'dev-bed-light', name: '!Special bed light!'),
+      ],
+    );
+
+    expect(result.single.name, '!Special bed light!');
+  });
 }

@@ -13,6 +13,9 @@ List<HaEntity> resolveEntities({
   final deviceAreaById = <String, String?>{
     for (final d in devices) d.id: d.areaId,
   };
+  final deviceNameById = <String, String?>{
+    for (final d in devices) d.id: _deviceDisplayName(d),
+  };
 
   final result = <HaEntity>[];
   for (final e in entities) {
@@ -23,6 +26,7 @@ List<HaEntity> resolveEntities({
       name: e.name,
       originalName: e.originalName,
       entityId: e.entityId,
+      deviceName: e.deviceId != null ? deviceNameById[e.deviceId] : null,
     );
     result.add(
       HaEntity(
@@ -41,4 +45,22 @@ List<HaEntity> resolveEntities({
     );
   }
   return result;
+}
+
+String? _deviceDisplayName(DeviceRegistryRecord device) {
+  return _firstNonBlank(device.nameByUser, device.name);
+}
+
+String? _firstNonBlank(String? first, String? second) {
+  final trimmedFirst = first?.trim();
+  if (trimmedFirst != null && trimmedFirst.isNotEmpty) {
+    return trimmedFirst;
+  }
+
+  final trimmedSecond = second?.trim();
+  if (trimmedSecond != null && trimmedSecond.isNotEmpty) {
+    return trimmedSecond;
+  }
+
+  return null;
 }

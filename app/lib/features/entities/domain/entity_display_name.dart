@@ -14,10 +14,22 @@ String resolveEntityRegistryDisplayName({
   required String? name,
   required String? originalName,
   required String entityId,
+  String? deviceName,
 }) {
-  return _blankToNull(name) ??
-      _blankToNull(originalName) ??
-      _displayNameFromEntityId(entityId);
+  final customName = _blankToNull(name);
+  if (customName != null) {
+    return customName;
+  }
+
+  final fallbackDeviceName = _blankToNull(deviceName);
+  final fallbackOriginalName = _blankToNull(originalName);
+  if (fallbackDeviceName != null &&
+      (fallbackOriginalName == null ||
+          _isGenericOriginalName(fallbackOriginalName, entityId))) {
+    return fallbackDeviceName;
+  }
+
+  return fallbackOriginalName ?? _displayNameFromEntityId(entityId);
 }
 
 String? _blankToNull(String? value) {
@@ -39,6 +51,25 @@ String _displayNameFromEntityId(String entityId) {
       .toList();
   if (words.isEmpty) {
     return entityId;
+  }
+  return words.join(' ');
+}
+
+bool _isGenericOriginalName(String originalName, String entityId) {
+  final domain = entityId.contains('.')
+      ? entityId.substring(0, entityId.indexOf('.'))
+      : entityId;
+  return originalName.toLowerCase() == _formatDomain(domain).toLowerCase();
+}
+
+String _formatDomain(String domain) {
+  final words = domain
+      .split(RegExp(r'[_\s]+'))
+      .where((word) => word.isNotEmpty)
+      .map(_formatWord)
+      .toList();
+  if (words.isEmpty) {
+    return domain;
   }
   return words.join(' ');
 }

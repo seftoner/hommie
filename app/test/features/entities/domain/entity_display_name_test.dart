@@ -31,6 +31,30 @@ void main() {
   });
 
   test(
+    'uses device name when entity name is blank and original name is generic',
+    () {
+      expect(
+        resolveEntityRegistryDisplayName(
+          name: null,
+          originalName: 'Light',
+          entityId: 'light.bed_light',
+          deviceName: '!Special bed light!',
+        ),
+        '!Special bed light!',
+      );
+      expect(
+        resolveEntityRegistryDisplayName(
+          name: 'Custom light',
+          originalName: 'Light',
+          entityId: 'light.bed_light',
+          deviceName: '!Special bed light!',
+        ),
+        'Custom light',
+      );
+    },
+  );
+
+  test(
     'resolves cached entity display name when name still contains entity id',
     () {
       expect(
