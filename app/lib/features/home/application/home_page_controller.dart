@@ -4,9 +4,11 @@ import 'package:hommie/application/session/server_sync_state.dart';
 import 'package:hommie/core/domain/entities/area.dart';
 import 'package:hommie/core/infrastructure/networking/connection/server_scope_provider.dart';
 import 'package:hommie/features/entities/application/cached_entities_provider.dart';
-import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/home/application/cached_areas_provider.dart';
+import 'package:hommie/features/home/application/cached_devices_provider.dart';
 import 'package:hommie/features/home/application/device_tile_projection.dart';
+import 'package:hommie/features/home/application/home_tile_overrides_provider.dart';
+import 'package:hommie/features/home/domain/entities/device.dart';
 import 'package:hommie/features/home/domain/entities/home_tile.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -93,6 +95,8 @@ class HomeDeviceSection {
     serverScopeServer,
     cachedAreas,
     cachedEntities,
+    cachedDevices,
+    homeTileOverrides,
     homeConnectionLoading,
     ServerSyncCoordinator,
   ],
@@ -109,12 +113,17 @@ class HomePageController extends _$HomePageController {
         ref.watch(cachedAreasProvider).asData?.value ?? const <Area>[];
     final entities =
         ref.watch(cachedEntitiesProvider).asData?.value ?? const [];
+    final devices =
+        ref.watch(cachedDevicesProvider).asData?.value ?? const <Device>[];
+    final overrides =
+        ref.watch(homeTileOverridesProvider).asData?.value ??
+        const <HomeTileOverride>[];
 
     final sections = groupEntitiesByArea(areas, entities);
     final deviceTiles = projectDeviceTiles(
-      devices: _devicesFromEntities(entities),
+      devices: _haDevicesFromRegistry(devices),
       entities: entities,
-      overrides: const [],
+      overrides: overrides,
     );
     final deviceSections = _groupDeviceTilesByArea(areas, deviceTiles);
     final isInitialSyncing =
@@ -152,43 +161,16 @@ class HomePageController extends _$HomePageController {
   }
 }
 
-List<HaDevice> _devicesFromEntities(List<HaEntity> entities) {
-  final entitiesByDeviceId = <String, List<HaEntity>>{};
-  for (final entity in entities) {
-    final deviceId = entity.deviceId;
-    if (deviceId == null) {
-      continue;
-    }
-    entitiesByDeviceId.putIfAbsent(deviceId, () => []).add(entity);
-  }
-
+List<HaDevice> _haDevicesFromRegistry(List<Device> devices) {
   return [
-    for (final entry in entitiesByDeviceId.entries)
+    for (final device in devices)
       HaDevice(
-        id: entry.key,
-        name: _deviceNameFromEntities(entry.value),
-        areaId: _deviceAreaFromEntities(entry.value),
+        id: device.id,
+        name: device.nameByUser ?? device.name,
+        areaId: device.areaId,
+        disabled: device.disabled,
       ),
   ];
-}
-
-String _deviceNameFromEntities(List<HaEntity> entities) {
-  final userFacing = entities.where(
-    (entity) =>
-        entity.entityCategory != 'config' &&
-        entity.entityCategory != 'diagnostic',
-  );
-  final preferred = userFacing.isNotEmpty ? userFacing : entities;
-  return preferred.first.name;
-}
-
-String? _deviceAreaFromEntities(List<HaEntity> entities) {
-  for (final entity in entities) {
-    if (entity.areaId != null) {
-      return entity.areaId;
-    }
-  }
-  return null;
 }
 
 List<HomeDeviceSection> _groupDeviceTilesByArea(

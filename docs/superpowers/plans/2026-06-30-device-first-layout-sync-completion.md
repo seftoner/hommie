@@ -32,7 +32,7 @@
 - Test: `app/test/features/home/infrastructure/drift_device_repository_test.dart`
 - Test: `app/test/application/session/server_sync_coordinator_test.dart`
 
-- [ ] **Step 1: Write failing database/repository tests**
+- [x] **Step 1: Write failing database/repository tests**
 
 Add tests proving:
 
@@ -110,7 +110,7 @@ test('syncRegistry upserts devices by stable HA id', () async {
 });
 ```
 
-- [ ] **Step 2: Run RED tests**
+- [x] **Step 2: Run RED tests**
 
 ```bash
 flutter test app/test/core/database/entities_table_test.dart app/test/features/home/infrastructure/drift_device_repository_test.dart
@@ -118,12 +118,12 @@ flutter test app/test/core/database/entities_table_test.dart app/test/features/h
 
 Expected: FAIL because `DeviceEntities` lacks HA metadata columns and repository sync API.
 
-- [ ] **Step 3: Extend schema and domain**
+- [x] **Step 3: Extend schema and domain**
 
 Add nullable `areaHaId`, `nameByUser`, `manufacturer`, `model`, and boolean `disabled` to `DeviceEntities`.
 Extend `Device` with optional metadata fields while preserving existing constructor call sites.
 
-- [ ] **Step 4: Add repository sync/read APIs**
+- [x] **Step 4: Add repository sync/read APIs**
 
 Extend `IDeviceRepository` and `DriftDeviceRepository` with:
 
@@ -138,11 +138,11 @@ Future<void> syncRegistry({
 
 `syncRegistry` must delete only registry rows missing from the latest HA device registry for that server. It must upsert by `{serverId, haId}`.
 
-- [ ] **Step 5: Wire sync coordinator**
+- [x] **Step 5: Wire sync coordinator**
 
 After `remote.getDevices()`, map `DeviceRegistryRecord` to `Device` and call `deviceRepository.syncRegistry(...)` before entity resolution. Keep entity resolution using the remote `DeviceRegistryRecord` list.
 
-- [ ] **Step 6: Generate code and run tests**
+- [x] **Step 6: Generate code and run tests**
 
 ```bash
 dart run build_runner build
@@ -150,7 +150,7 @@ dart format app/lib app/test
 flutter test app/test/core/database/entities_table_test.dart app/test/features/home/infrastructure/drift_device_repository_test.dart app/test/application/session/server_sync_coordinator_test.dart
 ```
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add app/lib/core/database/tables.dart app/lib/core/database/database.g.dart app/lib/features/home/domain/entities/device.dart app/lib/features/home/domain/repositories/i_device_repository.dart app/lib/features/home/infrastructure/repositories/mappers/device_mapper.dart app/lib/features/home/infrastructure/repositories/drift_device_repository.dart app/lib/application/session/server_sync_coordinator.dart app/test/core/database/entities_table_test.dart app/test/features/home/infrastructure/drift_device_repository_test.dart app/test/application/session/server_sync_coordinator_test.dart
@@ -168,15 +168,15 @@ git commit -m "Mirror HA device registry metadata"
 - Create: `app/lib/features/home/infrastructure/providers/home_tile_override_repository_provider.dart`
 - Test: `app/test/features/home/infrastructure/drift_home_tile_override_repository_test.dart`
 
-- [ ] **Step 1: Write RED tests**
+- [x] **Step 1: Write RED tests**
 
 Test that overrides persist `kind`, `targetId`, `areaId`, `size`, `order`, `hidden`, `primaryEntityRegistryId`, and last-known snapshots. Test that upserting an override for a moved area keeps size but changes `areaId/order` only when explicitly saved by Hommie.
 
-- [ ] **Step 2: Add `HomeTileOverrides` Drift table**
+- [x] **Step 2: Add `HomeTileOverrides` Drift table**
 
 Use `{serverId, kind, targetId}` as identity. Store order as nullable int and `areaHaId` as nullable text. Store `lastKnownAreaHaId`, `lastKnownName`, `lastKnownDomain`.
 
-- [ ] **Step 3: Implement repository**
+- [x] **Step 3: Implement repository**
 
 Repository API:
 
@@ -194,7 +194,7 @@ Future<void> remove({
 });
 ```
 
-- [ ] **Step 4: Generate code, run focused tests, commit**
+- [x] **Step 4: Generate code, run focused tests, commit**
 
 ```bash
 dart run build_runner build
@@ -211,15 +211,15 @@ git commit -m "Persist home tile layout overrides"
 - Modify: `app/lib/features/home/application/home_page_controller.dart`
 - Test: `app/test/features/home/home_page_controller_test.dart`
 
-- [ ] **Step 1: Write RED controller tests**
+- [x] **Step 1: Write RED controller tests**
 
 Verify `HomePageState.deviceSections` uses cached device names/areas/disabled state from `DeviceRepository.watchByServer`, applies persisted overrides, and creates missing tiles for override targets absent from registry.
 
-- [ ] **Step 2: Implement providers and controller wiring**
+- [x] **Step 2: Implement providers and controller wiring**
 
 Watch cached devices and overrides in `HomePageController`. Replace temporary `_devicesFromEntities` fallback with actual mirrored devices. Keep the fallback only for tests or empty device mirror if necessary, but prefer real device rows.
 
-- [ ] **Step 3: Run home tests and commit**
+- [x] **Step 3: Run home tests and commit**
 
 ```bash
 flutter test app/test/features/home/home_page_controller_test.dart app/test/features/home/application/device_tile_projection_test.dart
