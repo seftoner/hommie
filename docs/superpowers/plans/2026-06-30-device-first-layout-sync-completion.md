@@ -234,11 +234,11 @@ git commit -m "Project home tiles from mirrored devices"
 - Create: `app/lib/features/home/application/home_tile_rebind_controller.dart`
 - Test: `app/test/features/home/application/home_tile_rebind_controller_test.dart`
 
-- [ ] **Step 1: Write RED tests**
+- [x] **Step 1: Write RED tests**
 
 Verify that a missing device override can be rebound to a current device id, preserving size and placing it at the end of the target's current area. Verify remove deletes only the local override.
 
-- [ ] **Step 2: Implement controller**
+- [x] **Step 2: Implement controller**
 
 Controller methods:
 
@@ -254,7 +254,7 @@ Future<void> removeTile({
 });
 ```
 
-- [ ] **Step 3: Run tests and commit**
+- [x] **Step 3: Run tests and commit**
 
 ```bash
 flutter test app/test/features/home/application/home_tile_rebind_controller_test.dart
