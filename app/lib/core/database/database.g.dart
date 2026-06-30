@@ -800,7 +800,6 @@ class $DeviceEntitiesTable extends DeviceEntities
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
@@ -889,6 +888,10 @@ class $DeviceEntitiesTable extends DeviceEntities
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {serverId, haId},
+  ];
+  @override
   DeviceEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return DeviceEntity(
@@ -925,7 +928,7 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
   /// Auto-incrementing primary key (local database ID)
   final int id;
 
-  /// Home Assistant entity ID (e.g., "light.living_room_lamp")
+  /// Home Assistant device registry ID
   final String haId;
 
   /// Display name for the device (e.g., "Living Room Lamp")
@@ -2319,6 +2322,39 @@ class $EntitiesTable extends Entities
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
+  static const VerificationMeta _registryIdMeta = const VerificationMeta(
+    'registryId',
+  );
+  @override
+  late final GeneratedColumn<String> registryId = GeneratedColumn<String>(
+    'registry_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _uniqueIdMeta = const VerificationMeta(
+    'uniqueId',
+  );
+  @override
+  late final GeneratedColumn<String> uniqueId = GeneratedColumn<String>(
+    'unique_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _platformMeta = const VerificationMeta(
+    'platform',
+  );
+  @override
+  late final GeneratedColumn<String> platform = GeneratedColumn<String>(
+    'platform',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _entityIdMeta = const VerificationMeta(
     'entityId',
   );
@@ -2381,6 +2417,34 @@ class $EntitiesTable extends Entities
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _disabledMeta = const VerificationMeta(
+    'disabled',
+  );
+  @override
+  late final GeneratedColumn<bool> disabled = GeneratedColumn<bool>(
+    'disabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("disabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _hiddenMeta = const VerificationMeta('hidden');
+  @override
+  late final GeneratedColumn<bool> hidden = GeneratedColumn<bool>(
+    'hidden',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("hidden" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _serverIdMeta = const VerificationMeta(
     'serverId',
   );
@@ -2398,12 +2462,17 @@ class $EntitiesTable extends Entities
   @override
   List<GeneratedColumn> get $columns => [
     id,
+    registryId,
+    uniqueId,
+    platform,
     entityId,
     name,
     domain,
     deviceId,
     areaHaId,
     entityCategory,
+    disabled,
+    hidden,
     serverId,
   ];
   @override
@@ -2420,6 +2489,30 @@ class $EntitiesTable extends Entities
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('registry_id')) {
+      context.handle(
+        _registryIdMeta,
+        registryId.isAcceptableOrUnknown(data['registry_id']!, _registryIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_registryIdMeta);
+    }
+    if (data.containsKey('unique_id')) {
+      context.handle(
+        _uniqueIdMeta,
+        uniqueId.isAcceptableOrUnknown(data['unique_id']!, _uniqueIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_uniqueIdMeta);
+    }
+    if (data.containsKey('platform')) {
+      context.handle(
+        _platformMeta,
+        platform.isAcceptableOrUnknown(data['platform']!, _platformMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_platformMeta);
     }
     if (data.containsKey('entity_id')) {
       context.handle(
@@ -2466,6 +2559,18 @@ class $EntitiesTable extends Entities
         ),
       );
     }
+    if (data.containsKey('disabled')) {
+      context.handle(
+        _disabledMeta,
+        disabled.isAcceptableOrUnknown(data['disabled']!, _disabledMeta),
+      );
+    }
+    if (data.containsKey('hidden')) {
+      context.handle(
+        _hiddenMeta,
+        hidden.isAcceptableOrUnknown(data['hidden']!, _hiddenMeta),
+      );
+    }
     if (data.containsKey('server_id')) {
       context.handle(
         _serverIdMeta,
@@ -2481,7 +2586,7 @@ class $EntitiesTable extends Entities
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-    {serverId, entityId},
+    {serverId, registryId},
   ];
   @override
   EntityRow map(Map<String, dynamic> data, {String? tablePrefix}) {
@@ -2490,6 +2595,18 @@ class $EntitiesTable extends Entities
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
+      )!,
+      registryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}registry_id'],
+      )!,
+      uniqueId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}unique_id'],
+      )!,
+      platform: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}platform'],
       )!,
       entityId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -2515,6 +2632,14 @@ class $EntitiesTable extends Entities
         DriftSqlType.string,
         data['${effectivePrefix}entity_category'],
       ),
+      disabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}disabled'],
+      )!,
+      hidden: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}hidden'],
+      )!,
       serverId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}server_id'],
@@ -2532,7 +2657,16 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   /// Auto-incrementing primary key (local database ID)
   final int id;
 
-  /// Home Assistant entity_id (e.g. "light.kitchen")
+  /// Stable Home Assistant entity registry id
+  final String registryId;
+
+  /// Integration-provided unique id from HA's entity registry
+  final String uniqueId;
+
+  /// HA integration/platform that owns this entity
+  final String platform;
+
+  /// Current Home Assistant entity_id (e.g. "light.kitchen")
   final String entityId;
 
   /// Display name (resolved: name -> original_name -> entity_id)
@@ -2550,23 +2684,37 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   /// HA entity_category ("config"/"diagnostic"), if any; for future filtering
   final String? entityCategory;
 
+  /// Whether HA marks this entity disabled
+  final bool disabled;
+
+  /// Whether HA marks this entity hidden from Lovelace-style presentation
+  final bool hidden;
+
   /// Foreign key reference to [ServerEntities]
   /// Cascades: deleting a server deletes all its cached entities
   final int serverId;
   const EntityRow({
     required this.id,
+    required this.registryId,
+    required this.uniqueId,
+    required this.platform,
     required this.entityId,
     required this.name,
     required this.domain,
     this.deviceId,
     this.areaHaId,
     this.entityCategory,
+    required this.disabled,
+    required this.hidden,
     required this.serverId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['registry_id'] = Variable<String>(registryId);
+    map['unique_id'] = Variable<String>(uniqueId);
+    map['platform'] = Variable<String>(platform);
     map['entity_id'] = Variable<String>(entityId);
     map['name'] = Variable<String>(name);
     map['domain'] = Variable<String>(domain);
@@ -2579,6 +2727,8 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     if (!nullToAbsent || entityCategory != null) {
       map['entity_category'] = Variable<String>(entityCategory);
     }
+    map['disabled'] = Variable<bool>(disabled);
+    map['hidden'] = Variable<bool>(hidden);
     map['server_id'] = Variable<int>(serverId);
     return map;
   }
@@ -2586,6 +2736,9 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   EntitiesCompanion toCompanion(bool nullToAbsent) {
     return EntitiesCompanion(
       id: Value(id),
+      registryId: Value(registryId),
+      uniqueId: Value(uniqueId),
+      platform: Value(platform),
       entityId: Value(entityId),
       name: Value(name),
       domain: Value(domain),
@@ -2598,6 +2751,8 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
       entityCategory: entityCategory == null && nullToAbsent
           ? const Value.absent()
           : Value(entityCategory),
+      disabled: Value(disabled),
+      hidden: Value(hidden),
       serverId: Value(serverId),
     );
   }
@@ -2609,12 +2764,17 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return EntityRow(
       id: serializer.fromJson<int>(json['id']),
+      registryId: serializer.fromJson<String>(json['registryId']),
+      uniqueId: serializer.fromJson<String>(json['uniqueId']),
+      platform: serializer.fromJson<String>(json['platform']),
       entityId: serializer.fromJson<String>(json['entityId']),
       name: serializer.fromJson<String>(json['name']),
       domain: serializer.fromJson<String>(json['domain']),
       deviceId: serializer.fromJson<String?>(json['deviceId']),
       areaHaId: serializer.fromJson<String?>(json['areaHaId']),
       entityCategory: serializer.fromJson<String?>(json['entityCategory']),
+      disabled: serializer.fromJson<bool>(json['disabled']),
+      hidden: serializer.fromJson<bool>(json['hidden']),
       serverId: serializer.fromJson<int>(json['serverId']),
     );
   }
@@ -2623,27 +2783,40 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'registryId': serializer.toJson<String>(registryId),
+      'uniqueId': serializer.toJson<String>(uniqueId),
+      'platform': serializer.toJson<String>(platform),
       'entityId': serializer.toJson<String>(entityId),
       'name': serializer.toJson<String>(name),
       'domain': serializer.toJson<String>(domain),
       'deviceId': serializer.toJson<String?>(deviceId),
       'areaHaId': serializer.toJson<String?>(areaHaId),
       'entityCategory': serializer.toJson<String?>(entityCategory),
+      'disabled': serializer.toJson<bool>(disabled),
+      'hidden': serializer.toJson<bool>(hidden),
       'serverId': serializer.toJson<int>(serverId),
     };
   }
 
   EntityRow copyWith({
     int? id,
+    String? registryId,
+    String? uniqueId,
+    String? platform,
     String? entityId,
     String? name,
     String? domain,
     Value<String?> deviceId = const Value.absent(),
     Value<String?> areaHaId = const Value.absent(),
     Value<String?> entityCategory = const Value.absent(),
+    bool? disabled,
+    bool? hidden,
     int? serverId,
   }) => EntityRow(
     id: id ?? this.id,
+    registryId: registryId ?? this.registryId,
+    uniqueId: uniqueId ?? this.uniqueId,
+    platform: platform ?? this.platform,
     entityId: entityId ?? this.entityId,
     name: name ?? this.name,
     domain: domain ?? this.domain,
@@ -2652,11 +2825,18 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     entityCategory: entityCategory.present
         ? entityCategory.value
         : this.entityCategory,
+    disabled: disabled ?? this.disabled,
+    hidden: hidden ?? this.hidden,
     serverId: serverId ?? this.serverId,
   );
   EntityRow copyWithCompanion(EntitiesCompanion data) {
     return EntityRow(
       id: data.id.present ? data.id.value : this.id,
+      registryId: data.registryId.present
+          ? data.registryId.value
+          : this.registryId,
+      uniqueId: data.uniqueId.present ? data.uniqueId.value : this.uniqueId,
+      platform: data.platform.present ? data.platform.value : this.platform,
       entityId: data.entityId.present ? data.entityId.value : this.entityId,
       name: data.name.present ? data.name.value : this.name,
       domain: data.domain.present ? data.domain.value : this.domain,
@@ -2665,6 +2845,8 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
       entityCategory: data.entityCategory.present
           ? data.entityCategory.value
           : this.entityCategory,
+      disabled: data.disabled.present ? data.disabled.value : this.disabled,
+      hidden: data.hidden.present ? data.hidden.value : this.hidden,
       serverId: data.serverId.present ? data.serverId.value : this.serverId,
     );
   }
@@ -2673,12 +2855,17 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   String toString() {
     return (StringBuffer('EntityRow(')
           ..write('id: $id, ')
+          ..write('registryId: $registryId, ')
+          ..write('uniqueId: $uniqueId, ')
+          ..write('platform: $platform, ')
           ..write('entityId: $entityId, ')
           ..write('name: $name, ')
           ..write('domain: $domain, ')
           ..write('deviceId: $deviceId, ')
           ..write('areaHaId: $areaHaId, ')
           ..write('entityCategory: $entityCategory, ')
+          ..write('disabled: $disabled, ')
+          ..write('hidden: $hidden, ')
           ..write('serverId: $serverId')
           ..write(')'))
         .toString();
@@ -2687,12 +2874,17 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   @override
   int get hashCode => Object.hash(
     id,
+    registryId,
+    uniqueId,
+    platform,
     entityId,
     name,
     domain,
     deviceId,
     areaHaId,
     entityCategory,
+    disabled,
+    hidden,
     serverId,
   );
   @override
@@ -2700,87 +2892,130 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
       identical(this, other) ||
       (other is EntityRow &&
           other.id == this.id &&
+          other.registryId == this.registryId &&
+          other.uniqueId == this.uniqueId &&
+          other.platform == this.platform &&
           other.entityId == this.entityId &&
           other.name == this.name &&
           other.domain == this.domain &&
           other.deviceId == this.deviceId &&
           other.areaHaId == this.areaHaId &&
           other.entityCategory == this.entityCategory &&
+          other.disabled == this.disabled &&
+          other.hidden == this.hidden &&
           other.serverId == this.serverId);
 }
 
 class EntitiesCompanion extends UpdateCompanion<EntityRow> {
   final Value<int> id;
+  final Value<String> registryId;
+  final Value<String> uniqueId;
+  final Value<String> platform;
   final Value<String> entityId;
   final Value<String> name;
   final Value<String> domain;
   final Value<String?> deviceId;
   final Value<String?> areaHaId;
   final Value<String?> entityCategory;
+  final Value<bool> disabled;
+  final Value<bool> hidden;
   final Value<int> serverId;
   const EntitiesCompanion({
     this.id = const Value.absent(),
+    this.registryId = const Value.absent(),
+    this.uniqueId = const Value.absent(),
+    this.platform = const Value.absent(),
     this.entityId = const Value.absent(),
     this.name = const Value.absent(),
     this.domain = const Value.absent(),
     this.deviceId = const Value.absent(),
     this.areaHaId = const Value.absent(),
     this.entityCategory = const Value.absent(),
+    this.disabled = const Value.absent(),
+    this.hidden = const Value.absent(),
     this.serverId = const Value.absent(),
   });
   EntitiesCompanion.insert({
     this.id = const Value.absent(),
+    required String registryId,
+    required String uniqueId,
+    required String platform,
     required String entityId,
     required String name,
     required String domain,
     this.deviceId = const Value.absent(),
     this.areaHaId = const Value.absent(),
     this.entityCategory = const Value.absent(),
+    this.disabled = const Value.absent(),
+    this.hidden = const Value.absent(),
     required int serverId,
-  }) : entityId = Value(entityId),
+  }) : registryId = Value(registryId),
+       uniqueId = Value(uniqueId),
+       platform = Value(platform),
+       entityId = Value(entityId),
        name = Value(name),
        domain = Value(domain),
        serverId = Value(serverId);
   static Insertable<EntityRow> custom({
     Expression<int>? id,
+    Expression<String>? registryId,
+    Expression<String>? uniqueId,
+    Expression<String>? platform,
     Expression<String>? entityId,
     Expression<String>? name,
     Expression<String>? domain,
     Expression<String>? deviceId,
     Expression<String>? areaHaId,
     Expression<String>? entityCategory,
+    Expression<bool>? disabled,
+    Expression<bool>? hidden,
     Expression<int>? serverId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (registryId != null) 'registry_id': registryId,
+      if (uniqueId != null) 'unique_id': uniqueId,
+      if (platform != null) 'platform': platform,
       if (entityId != null) 'entity_id': entityId,
       if (name != null) 'name': name,
       if (domain != null) 'domain': domain,
       if (deviceId != null) 'device_id': deviceId,
       if (areaHaId != null) 'area_ha_id': areaHaId,
       if (entityCategory != null) 'entity_category': entityCategory,
+      if (disabled != null) 'disabled': disabled,
+      if (hidden != null) 'hidden': hidden,
       if (serverId != null) 'server_id': serverId,
     });
   }
 
   EntitiesCompanion copyWith({
     Value<int>? id,
+    Value<String>? registryId,
+    Value<String>? uniqueId,
+    Value<String>? platform,
     Value<String>? entityId,
     Value<String>? name,
     Value<String>? domain,
     Value<String?>? deviceId,
     Value<String?>? areaHaId,
     Value<String?>? entityCategory,
+    Value<bool>? disabled,
+    Value<bool>? hidden,
     Value<int>? serverId,
   }) {
     return EntitiesCompanion(
       id: id ?? this.id,
+      registryId: registryId ?? this.registryId,
+      uniqueId: uniqueId ?? this.uniqueId,
+      platform: platform ?? this.platform,
       entityId: entityId ?? this.entityId,
       name: name ?? this.name,
       domain: domain ?? this.domain,
       deviceId: deviceId ?? this.deviceId,
       areaHaId: areaHaId ?? this.areaHaId,
       entityCategory: entityCategory ?? this.entityCategory,
+      disabled: disabled ?? this.disabled,
+      hidden: hidden ?? this.hidden,
       serverId: serverId ?? this.serverId,
     );
   }
@@ -2790,6 +3025,15 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (registryId.present) {
+      map['registry_id'] = Variable<String>(registryId.value);
+    }
+    if (uniqueId.present) {
+      map['unique_id'] = Variable<String>(uniqueId.value);
+    }
+    if (platform.present) {
+      map['platform'] = Variable<String>(platform.value);
     }
     if (entityId.present) {
       map['entity_id'] = Variable<String>(entityId.value);
@@ -2809,6 +3053,12 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
     if (entityCategory.present) {
       map['entity_category'] = Variable<String>(entityCategory.value);
     }
+    if (disabled.present) {
+      map['disabled'] = Variable<bool>(disabled.value);
+    }
+    if (hidden.present) {
+      map['hidden'] = Variable<bool>(hidden.value);
+    }
     if (serverId.present) {
       map['server_id'] = Variable<int>(serverId.value);
     }
@@ -2819,12 +3069,17 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
   String toString() {
     return (StringBuffer('EntitiesCompanion(')
           ..write('id: $id, ')
+          ..write('registryId: $registryId, ')
+          ..write('uniqueId: $uniqueId, ')
+          ..write('platform: $platform, ')
           ..write('entityId: $entityId, ')
           ..write('name: $name, ')
           ..write('domain: $domain, ')
           ..write('deviceId: $deviceId, ')
           ..write('areaHaId: $areaHaId, ')
           ..write('entityCategory: $entityCategory, ')
+          ..write('disabled: $disabled, ')
+          ..write('hidden: $hidden, ')
           ..write('serverId: $serverId')
           ..write(')'))
         .toString();
@@ -6233,23 +6488,33 @@ typedef $$DeviceHomeConfigsTableProcessedTableManager =
 typedef $$EntitiesTableCreateCompanionBuilder =
     EntitiesCompanion Function({
       Value<int> id,
+      required String registryId,
+      required String uniqueId,
+      required String platform,
       required String entityId,
       required String name,
       required String domain,
       Value<String?> deviceId,
       Value<String?> areaHaId,
       Value<String?> entityCategory,
+      Value<bool> disabled,
+      Value<bool> hidden,
       required int serverId,
     });
 typedef $$EntitiesTableUpdateCompanionBuilder =
     EntitiesCompanion Function({
       Value<int> id,
+      Value<String> registryId,
+      Value<String> uniqueId,
+      Value<String> platform,
       Value<String> entityId,
       Value<String> name,
       Value<String> domain,
       Value<String?> deviceId,
       Value<String?> areaHaId,
       Value<String?> entityCategory,
+      Value<bool> disabled,
+      Value<bool> hidden,
       Value<int> serverId,
     });
 
@@ -6289,6 +6554,21 @@ class $$EntitiesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get registryId => $composableBuilder(
+    column: $table.registryId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get uniqueId => $composableBuilder(
+    column: $table.uniqueId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get platform => $composableBuilder(
+    column: $table.platform,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get entityId => $composableBuilder(
     column: $table.entityId,
     builder: (column) => ColumnFilters(column),
@@ -6316,6 +6596,16 @@ class $$EntitiesTableFilterComposer
 
   ColumnFilters<String> get entityCategory => $composableBuilder(
     column: $table.entityCategory,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get disabled => $composableBuilder(
+    column: $table.disabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get hidden => $composableBuilder(
+    column: $table.hidden,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6357,6 +6647,21 @@ class $$EntitiesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get registryId => $composableBuilder(
+    column: $table.registryId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get uniqueId => $composableBuilder(
+    column: $table.uniqueId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get platform => $composableBuilder(
+    column: $table.platform,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get entityId => $composableBuilder(
     column: $table.entityId,
     builder: (column) => ColumnOrderings(column),
@@ -6384,6 +6689,16 @@ class $$EntitiesTableOrderingComposer
 
   ColumnOrderings<String> get entityCategory => $composableBuilder(
     column: $table.entityCategory,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get disabled => $composableBuilder(
+    column: $table.disabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get hidden => $composableBuilder(
+    column: $table.hidden,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -6423,6 +6738,17 @@ class $$EntitiesTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
+  GeneratedColumn<String> get registryId => $composableBuilder(
+    column: $table.registryId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get uniqueId =>
+      $composableBuilder(column: $table.uniqueId, builder: (column) => column);
+
+  GeneratedColumn<String> get platform =>
+      $composableBuilder(column: $table.platform, builder: (column) => column);
+
   GeneratedColumn<String> get entityId =>
       $composableBuilder(column: $table.entityId, builder: (column) => column);
 
@@ -6442,6 +6768,12 @@ class $$EntitiesTableAnnotationComposer
     column: $table.entityCategory,
     builder: (column) => column,
   );
+
+  GeneratedColumn<bool> get disabled =>
+      $composableBuilder(column: $table.disabled, builder: (column) => column);
+
+  GeneratedColumn<bool> get hidden =>
+      $composableBuilder(column: $table.hidden, builder: (column) => column);
 
   $$ServerEntitiesTableAnnotationComposer get serverId {
     final $$ServerEntitiesTableAnnotationComposer composer = $composerBuilder(
@@ -6496,41 +6828,61 @@ class $$EntitiesTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
+                Value<String> registryId = const Value.absent(),
+                Value<String> uniqueId = const Value.absent(),
+                Value<String> platform = const Value.absent(),
                 Value<String> entityId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> domain = const Value.absent(),
                 Value<String?> deviceId = const Value.absent(),
                 Value<String?> areaHaId = const Value.absent(),
                 Value<String?> entityCategory = const Value.absent(),
+                Value<bool> disabled = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
                 Value<int> serverId = const Value.absent(),
               }) => EntitiesCompanion(
                 id: id,
+                registryId: registryId,
+                uniqueId: uniqueId,
+                platform: platform,
                 entityId: entityId,
                 name: name,
                 domain: domain,
                 deviceId: deviceId,
                 areaHaId: areaHaId,
                 entityCategory: entityCategory,
+                disabled: disabled,
+                hidden: hidden,
                 serverId: serverId,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
+                required String registryId,
+                required String uniqueId,
+                required String platform,
                 required String entityId,
                 required String name,
                 required String domain,
                 Value<String?> deviceId = const Value.absent(),
                 Value<String?> areaHaId = const Value.absent(),
                 Value<String?> entityCategory = const Value.absent(),
+                Value<bool> disabled = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
                 required int serverId,
               }) => EntitiesCompanion.insert(
                 id: id,
+                registryId: registryId,
+                uniqueId: uniqueId,
+                platform: platform,
                 entityId: entityId,
                 name: name,
                 domain: domain,
                 deviceId: deviceId,
                 areaHaId: areaHaId,
                 entityCategory: entityCategory,
+                disabled: disabled,
+                hidden: hidden,
                 serverId: serverId,
               ),
           withReferenceMapper: (p0) => p0

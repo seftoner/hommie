@@ -11,7 +11,8 @@ class DriftEntityRepository implements IEntityRepository {
 
   @override
   Stream<List<HaEntity>> watchByServer(int serverId) {
-    return (_database.select(_database.entities)..where((e) => e.serverId.equals(serverId)))
+    return (_database.select(_database.entities)
+          ..where((e) => e.serverId.equals(serverId)))
         .watch()
         .map((rows) => rows.map((r) => r.toDomain()).toList());
   }
@@ -34,10 +35,10 @@ class DriftEntityRepository implements IEntityRepository {
         _database.entities,
       )..where((e) => e.serverId.equals(serverId))).get();
 
-      final nextIds = entities.map((e) => e.entityId).toSet();
+      final nextIds = entities.map((e) => e.registryId).toSet();
 
       for (final row in existing) {
-        if (!nextIds.contains(row.entityId)) {
+        if (!nextIds.contains(row.registryId)) {
           await (_database.delete(
             _database.entities,
           )..where((e) => e.id.equals(row.id))).go();
@@ -51,7 +52,10 @@ class DriftEntityRepository implements IEntityRepository {
               entity.toCompanion(serverId),
               onConflict: DoUpdate(
                 (old) => entity.toCompanion(serverId),
-                target: [_database.entities.serverId, _database.entities.entityId],
+                target: [
+                  _database.entities.serverId,
+                  _database.entities.registryId,
+                ],
               ),
             );
       }
