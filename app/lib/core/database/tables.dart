@@ -124,29 +124,30 @@ class AreaEntities extends Table {
 ///
 /// **Relationships:**
 /// - Many-to-one with [ServerEntities] (cascade delete on server deletion)
-/// - Many-to-many with [AreaEntities] via [DeviceAreaConfigs]
+/// - Legacy many-to-many with [AreaEntities] via [DeviceAreaConfigs]
 /// - Referenced by [DeviceHomeConfigs] for home view display
 ///
 /// **Usage:**
 /// - Managed by `DriftDeviceRepository` in features/home
 /// - Synced from Home Assistant API
-/// - Joined with [AreaEntities] via [DeviceAreaConfigs] to get area information
+/// - Stores HA registry `area_id` directly in `areaHaId`
 /// - Filtered and displayed in home view based on configuration
 /// - Device persists even if removed from all areas
 ///
 /// **Key Features:**
 /// - `haId` is the Home Assistant device registry id
 /// - `haId` must be unique per server
-/// - `type` indicates device domain (e.g., "light", "switch", "media_player")
+/// - `type` is a coarse display hint; HA device registry itself does not own
+///   an entity domain
 /// - Device lifecycle independent of area assignments
 /// - Cascading delete: deleting a server removes all its devices
 ///
 /// **Example:**
 /// ```dart
 /// DeviceEntitiesCompanion(
-///   haId: Value('light.living_room_lamp'),
+///   haId: Value('device-registry-id'),
 ///   name: Value('Living Room Lamp'),
-///   type: Value('light'),
+///   type: Value('device'),
 ///   serverId: Value(1),
 /// )
 /// ```
@@ -162,6 +163,21 @@ class DeviceEntities extends Table {
 
   /// Device domain/type (e.g., "light", "switch", "media_player", "sensor")
   TextColumn get type => text()();
+
+  /// HA area slug from the device registry; null when unassigned
+  TextColumn get areaHaId => text().nullable()();
+
+  /// HA user-overridden device name, if any
+  TextColumn get nameByUser => text().nullable()();
+
+  /// Device manufacturer from HA registry metadata
+  TextColumn get manufacturer => text().nullable()();
+
+  /// Device model from HA registry metadata
+  TextColumn get model => text().nullable()();
+
+  /// Whether HA marks this device disabled
+  BoolColumn get disabled => boolean().withDefault(const Constant(false))();
 
   /// Foreign key reference to [ServerEntities]
   /// Cascades: deleting a server deletes all its devices

@@ -29,8 +29,24 @@ class DriftDeviceRepository implements IDeviceRepository {
     return results.map((row) {
       final device = row.readTable(_database.deviceEntities);
       final area = row.readTableOrNull(_database.areaEntities);
-      return device.toDomain(area?.haId ?? '');
+      return device.toDomain(area?.haId);
     }).toList();
+  }
+
+  @override
+  Stream<List<domain.Device>> watchByServer(int serverId) {
+    return (_database.select(_database.deviceEntities)
+          ..where((d) => d.serverId.equals(serverId)))
+        .watch()
+        .map((rows) => rows.map((row) => row.toDomain()).toList());
+  }
+
+  @override
+  Future<List<domain.Device>> getByServer(int serverId) async {
+    final rows = await (_database.select(
+      _database.deviceEntities,
+    )..where((d) => d.serverId.equals(serverId))).get();
+    return rows.map((row) => row.toDomain()).toList();
   }
 
   @override
@@ -60,37 +76,41 @@ class DriftDeviceRepository implements IDeviceRepository {
 
     final device = result.readTable(_database.deviceEntities);
     final area = result.readTableOrNull(_database.areaEntities);
-    return device.toDomain(area?.haId ?? '');
+    return device.toDomain(area?.haId);
   }
 
   @override
-  Future<domain.Device?> getByHaId(String haId) async {
+  Future<domain.Device?> getByHaId({
+    required int serverId,
+    required String haId,
+  }) async {
     final query =
-        (_database.select(
-          _database.deviceEntities,
-        )..where((d) => d.haId.equals(haId))).join([
-          leftOuterJoin(
-            _database.deviceAreaConfigs,
-            _database.deviceAreaConfigs.deviceId.equalsExp(
-              _database.deviceEntities.id,
-            ),
-          ),
-          leftOuterJoin(
-            _database.areaEntities,
-            _database.areaEntities.id.equalsExp(
-              _database.deviceAreaConfigs.areaId,
-            ),
-          ),
-        ]);
+        (_database.select(_database.deviceEntities)
+              ..where((d) => d.serverId.equals(serverId) & d.haId.equals(haId)))
+            .join([
+              leftOuterJoin(
+                _database.deviceAreaConfigs,
+                _database.deviceAreaConfigs.deviceId.equalsExp(
+                  _database.deviceEntities.id,
+                ),
+              ),
+              leftOuterJoin(
+                _database.areaEntities,
+                _database.areaEntities.id.equalsExp(
+                  _database.deviceAreaConfigs.areaId,
+                ),
+              ),
+            ]);
 
-    final result = await query.getSingleOrNull();
-    if (result == null) {
+    final results = await query.get();
+    if (results.isEmpty) {
       return null;
     }
 
+    final result = results.first;
     final device = result.readTable(_database.deviceEntities);
     final area = result.readTableOrNull(_database.areaEntities);
-    return device.toDomain(area?.haId ?? '');
+    return device.toDomain(area?.haId);
   }
 
   @override
@@ -113,19 +133,60 @@ class DriftDeviceRepository implements IDeviceRepository {
     return results.map((row) {
       final device = row.readTable(_database.deviceEntities);
       final area = row.readTableOrNull(_database.areaEntities);
-      return device.toDomain(area?.haId ?? '');
+      return device.toDomain(area?.haId);
     }).toList();
+  }
+
+  @override
+  Future<void> syncRegistry({
+    required int serverId,
+    required List<domain.Device> devices,
+  }) async {
+    await _database.transaction(() async {
+      final existing = await (_database.select(
+        _database.deviceEntities,
+      )..where((d) => d.serverId.equals(serverId))).get();
+
+      final nextIds = devices.map((device) => device.id).toSet();
+      for (final row in existing) {
+        if (!nextIds.contains(row.haId)) {
+          await (_database.delete(
+            _database.deviceEntities,
+          )..where((d) => d.id.equals(row.id))).go();
+        }
+      }
+
+      for (final device in devices) {
+        await _database
+            .into(_database.deviceEntities)
+            .insert(
+              device.toCompanion(serverId),
+              onConflict: DoUpdate(
+                (old) => device.toCompanion(serverId),
+                target: [
+                  _database.deviceEntities.serverId,
+                  _database.deviceEntities.haId,
+                ],
+              ),
+            );
+      }
+    });
   }
 
   @override
   Future<void> save(domain.Device device) async {
     // Need to find the area's DB ID from its haId
+    final areaId = device.areaId;
+    if (areaId == null) {
+      throw Exception('Cannot save unassigned device ${device.id}');
+    }
+
     final area = await (_database.select(
       _database.areaEntities,
-    )..where((a) => a.haId.equals(device.areaId))).getSingleOrNull();
+    )..where((a) => a.haId.equals(areaId))).getSingleOrNull();
 
     if (area == null) {
-      throw Exception('Area with haId ${device.areaId} not found');
+      throw Exception('Area with haId $areaId not found');
     }
 
     await _database.transaction(() async {

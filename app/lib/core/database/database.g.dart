@@ -819,6 +819,63 @@ class $DeviceEntitiesTable extends DeviceEntities
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _areaHaIdMeta = const VerificationMeta(
+    'areaHaId',
+  );
+  @override
+  late final GeneratedColumn<String> areaHaId = GeneratedColumn<String>(
+    'area_ha_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _nameByUserMeta = const VerificationMeta(
+    'nameByUser',
+  );
+  @override
+  late final GeneratedColumn<String> nameByUser = GeneratedColumn<String>(
+    'name_by_user',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _manufacturerMeta = const VerificationMeta(
+    'manufacturer',
+  );
+  @override
+  late final GeneratedColumn<String> manufacturer = GeneratedColumn<String>(
+    'manufacturer',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _modelMeta = const VerificationMeta('model');
+  @override
+  late final GeneratedColumn<String> model = GeneratedColumn<String>(
+    'model',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _disabledMeta = const VerificationMeta(
+    'disabled',
+  );
+  @override
+  late final GeneratedColumn<bool> disabled = GeneratedColumn<bool>(
+    'disabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("disabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _serverIdMeta = const VerificationMeta(
     'serverId',
   );
@@ -834,7 +891,18 @@ class $DeviceEntitiesTable extends DeviceEntities
     ),
   );
   @override
-  List<GeneratedColumn> get $columns => [id, haId, name, type, serverId];
+  List<GeneratedColumn> get $columns => [
+    id,
+    haId,
+    name,
+    type,
+    areaHaId,
+    nameByUser,
+    manufacturer,
+    model,
+    disabled,
+    serverId,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -874,6 +942,42 @@ class $DeviceEntitiesTable extends DeviceEntities
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
+    if (data.containsKey('area_ha_id')) {
+      context.handle(
+        _areaHaIdMeta,
+        areaHaId.isAcceptableOrUnknown(data['area_ha_id']!, _areaHaIdMeta),
+      );
+    }
+    if (data.containsKey('name_by_user')) {
+      context.handle(
+        _nameByUserMeta,
+        nameByUser.isAcceptableOrUnknown(
+          data['name_by_user']!,
+          _nameByUserMeta,
+        ),
+      );
+    }
+    if (data.containsKey('manufacturer')) {
+      context.handle(
+        _manufacturerMeta,
+        manufacturer.isAcceptableOrUnknown(
+          data['manufacturer']!,
+          _manufacturerMeta,
+        ),
+      );
+    }
+    if (data.containsKey('model')) {
+      context.handle(
+        _modelMeta,
+        model.isAcceptableOrUnknown(data['model']!, _modelMeta),
+      );
+    }
+    if (data.containsKey('disabled')) {
+      context.handle(
+        _disabledMeta,
+        disabled.isAcceptableOrUnknown(data['disabled']!, _disabledMeta),
+      );
+    }
     if (data.containsKey('server_id')) {
       context.handle(
         _serverIdMeta,
@@ -911,6 +1015,26 @@ class $DeviceEntitiesTable extends DeviceEntities
         DriftSqlType.string,
         data['${effectivePrefix}type'],
       )!,
+      areaHaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}area_ha_id'],
+      ),
+      nameByUser: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name_by_user'],
+      ),
+      manufacturer: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}manufacturer'],
+      ),
+      model: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}model'],
+      ),
+      disabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}disabled'],
+      )!,
       serverId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}server_id'],
@@ -937,6 +1061,21 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
   /// Device domain/type (e.g., "light", "switch", "media_player", "sensor")
   final String type;
 
+  /// HA area slug from the device registry; null when unassigned
+  final String? areaHaId;
+
+  /// HA user-overridden device name, if any
+  final String? nameByUser;
+
+  /// Device manufacturer from HA registry metadata
+  final String? manufacturer;
+
+  /// Device model from HA registry metadata
+  final String? model;
+
+  /// Whether HA marks this device disabled
+  final bool disabled;
+
   /// Foreign key reference to [ServerEntities]
   /// Cascades: deleting a server deletes all its devices
   final int serverId;
@@ -945,6 +1084,11 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
     required this.haId,
     required this.name,
     required this.type,
+    this.areaHaId,
+    this.nameByUser,
+    this.manufacturer,
+    this.model,
+    required this.disabled,
     required this.serverId,
   });
   @override
@@ -954,6 +1098,19 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
     map['ha_id'] = Variable<String>(haId);
     map['name'] = Variable<String>(name);
     map['type'] = Variable<String>(type);
+    if (!nullToAbsent || areaHaId != null) {
+      map['area_ha_id'] = Variable<String>(areaHaId);
+    }
+    if (!nullToAbsent || nameByUser != null) {
+      map['name_by_user'] = Variable<String>(nameByUser);
+    }
+    if (!nullToAbsent || manufacturer != null) {
+      map['manufacturer'] = Variable<String>(manufacturer);
+    }
+    if (!nullToAbsent || model != null) {
+      map['model'] = Variable<String>(model);
+    }
+    map['disabled'] = Variable<bool>(disabled);
     map['server_id'] = Variable<int>(serverId);
     return map;
   }
@@ -964,6 +1121,19 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       haId: Value(haId),
       name: Value(name),
       type: Value(type),
+      areaHaId: areaHaId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(areaHaId),
+      nameByUser: nameByUser == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nameByUser),
+      manufacturer: manufacturer == null && nullToAbsent
+          ? const Value.absent()
+          : Value(manufacturer),
+      model: model == null && nullToAbsent
+          ? const Value.absent()
+          : Value(model),
+      disabled: Value(disabled),
       serverId: Value(serverId),
     );
   }
@@ -978,6 +1148,11 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       haId: serializer.fromJson<String>(json['haId']),
       name: serializer.fromJson<String>(json['name']),
       type: serializer.fromJson<String>(json['type']),
+      areaHaId: serializer.fromJson<String?>(json['areaHaId']),
+      nameByUser: serializer.fromJson<String?>(json['nameByUser']),
+      manufacturer: serializer.fromJson<String?>(json['manufacturer']),
+      model: serializer.fromJson<String?>(json['model']),
+      disabled: serializer.fromJson<bool>(json['disabled']),
       serverId: serializer.fromJson<int>(json['serverId']),
     );
   }
@@ -989,6 +1164,11 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       'haId': serializer.toJson<String>(haId),
       'name': serializer.toJson<String>(name),
       'type': serializer.toJson<String>(type),
+      'areaHaId': serializer.toJson<String?>(areaHaId),
+      'nameByUser': serializer.toJson<String?>(nameByUser),
+      'manufacturer': serializer.toJson<String?>(manufacturer),
+      'model': serializer.toJson<String?>(model),
+      'disabled': serializer.toJson<bool>(disabled),
       'serverId': serializer.toJson<int>(serverId),
     };
   }
@@ -998,12 +1178,22 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
     String? haId,
     String? name,
     String? type,
+    Value<String?> areaHaId = const Value.absent(),
+    Value<String?> nameByUser = const Value.absent(),
+    Value<String?> manufacturer = const Value.absent(),
+    Value<String?> model = const Value.absent(),
+    bool? disabled,
     int? serverId,
   }) => DeviceEntity(
     id: id ?? this.id,
     haId: haId ?? this.haId,
     name: name ?? this.name,
     type: type ?? this.type,
+    areaHaId: areaHaId.present ? areaHaId.value : this.areaHaId,
+    nameByUser: nameByUser.present ? nameByUser.value : this.nameByUser,
+    manufacturer: manufacturer.present ? manufacturer.value : this.manufacturer,
+    model: model.present ? model.value : this.model,
+    disabled: disabled ?? this.disabled,
     serverId: serverId ?? this.serverId,
   );
   DeviceEntity copyWithCompanion(DeviceEntitiesCompanion data) {
@@ -1012,6 +1202,15 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       haId: data.haId.present ? data.haId.value : this.haId,
       name: data.name.present ? data.name.value : this.name,
       type: data.type.present ? data.type.value : this.type,
+      areaHaId: data.areaHaId.present ? data.areaHaId.value : this.areaHaId,
+      nameByUser: data.nameByUser.present
+          ? data.nameByUser.value
+          : this.nameByUser,
+      manufacturer: data.manufacturer.present
+          ? data.manufacturer.value
+          : this.manufacturer,
+      model: data.model.present ? data.model.value : this.model,
+      disabled: data.disabled.present ? data.disabled.value : this.disabled,
       serverId: data.serverId.present ? data.serverId.value : this.serverId,
     );
   }
@@ -1023,13 +1222,29 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
           ..write('haId: $haId, ')
           ..write('name: $name, ')
           ..write('type: $type, ')
+          ..write('areaHaId: $areaHaId, ')
+          ..write('nameByUser: $nameByUser, ')
+          ..write('manufacturer: $manufacturer, ')
+          ..write('model: $model, ')
+          ..write('disabled: $disabled, ')
           ..write('serverId: $serverId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, haId, name, type, serverId);
+  int get hashCode => Object.hash(
+    id,
+    haId,
+    name,
+    type,
+    areaHaId,
+    nameByUser,
+    manufacturer,
+    model,
+    disabled,
+    serverId,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1038,6 +1253,11 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
           other.haId == this.haId &&
           other.name == this.name &&
           other.type == this.type &&
+          other.areaHaId == this.areaHaId &&
+          other.nameByUser == this.nameByUser &&
+          other.manufacturer == this.manufacturer &&
+          other.model == this.model &&
+          other.disabled == this.disabled &&
           other.serverId == this.serverId);
 }
 
@@ -1046,12 +1266,22 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
   final Value<String> haId;
   final Value<String> name;
   final Value<String> type;
+  final Value<String?> areaHaId;
+  final Value<String?> nameByUser;
+  final Value<String?> manufacturer;
+  final Value<String?> model;
+  final Value<bool> disabled;
   final Value<int> serverId;
   const DeviceEntitiesCompanion({
     this.id = const Value.absent(),
     this.haId = const Value.absent(),
     this.name = const Value.absent(),
     this.type = const Value.absent(),
+    this.areaHaId = const Value.absent(),
+    this.nameByUser = const Value.absent(),
+    this.manufacturer = const Value.absent(),
+    this.model = const Value.absent(),
+    this.disabled = const Value.absent(),
     this.serverId = const Value.absent(),
   });
   DeviceEntitiesCompanion.insert({
@@ -1059,6 +1289,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
     required String haId,
     required String name,
     required String type,
+    this.areaHaId = const Value.absent(),
+    this.nameByUser = const Value.absent(),
+    this.manufacturer = const Value.absent(),
+    this.model = const Value.absent(),
+    this.disabled = const Value.absent(),
     required int serverId,
   }) : haId = Value(haId),
        name = Value(name),
@@ -1069,6 +1304,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
     Expression<String>? haId,
     Expression<String>? name,
     Expression<String>? type,
+    Expression<String>? areaHaId,
+    Expression<String>? nameByUser,
+    Expression<String>? manufacturer,
+    Expression<String>? model,
+    Expression<bool>? disabled,
     Expression<int>? serverId,
   }) {
     return RawValuesInsertable({
@@ -1076,6 +1316,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
       if (haId != null) 'ha_id': haId,
       if (name != null) 'name': name,
       if (type != null) 'type': type,
+      if (areaHaId != null) 'area_ha_id': areaHaId,
+      if (nameByUser != null) 'name_by_user': nameByUser,
+      if (manufacturer != null) 'manufacturer': manufacturer,
+      if (model != null) 'model': model,
+      if (disabled != null) 'disabled': disabled,
       if (serverId != null) 'server_id': serverId,
     });
   }
@@ -1085,6 +1330,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
     Value<String>? haId,
     Value<String>? name,
     Value<String>? type,
+    Value<String?>? areaHaId,
+    Value<String?>? nameByUser,
+    Value<String?>? manufacturer,
+    Value<String?>? model,
+    Value<bool>? disabled,
     Value<int>? serverId,
   }) {
     return DeviceEntitiesCompanion(
@@ -1092,6 +1342,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
       haId: haId ?? this.haId,
       name: name ?? this.name,
       type: type ?? this.type,
+      areaHaId: areaHaId ?? this.areaHaId,
+      nameByUser: nameByUser ?? this.nameByUser,
+      manufacturer: manufacturer ?? this.manufacturer,
+      model: model ?? this.model,
+      disabled: disabled ?? this.disabled,
       serverId: serverId ?? this.serverId,
     );
   }
@@ -1111,6 +1366,21 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
     if (type.present) {
       map['type'] = Variable<String>(type.value);
     }
+    if (areaHaId.present) {
+      map['area_ha_id'] = Variable<String>(areaHaId.value);
+    }
+    if (nameByUser.present) {
+      map['name_by_user'] = Variable<String>(nameByUser.value);
+    }
+    if (manufacturer.present) {
+      map['manufacturer'] = Variable<String>(manufacturer.value);
+    }
+    if (model.present) {
+      map['model'] = Variable<String>(model.value);
+    }
+    if (disabled.present) {
+      map['disabled'] = Variable<bool>(disabled.value);
+    }
     if (serverId.present) {
       map['server_id'] = Variable<int>(serverId.value);
     }
@@ -1124,6 +1394,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
           ..write('haId: $haId, ')
           ..write('name: $name, ')
           ..write('type: $type, ')
+          ..write('areaHaId: $areaHaId, ')
+          ..write('nameByUser: $nameByUser, ')
+          ..write('manufacturer: $manufacturer, ')
+          ..write('model: $model, ')
+          ..write('disabled: $disabled, ')
           ..write('serverId: $serverId')
           ..write(')'))
         .toString();
@@ -4327,6 +4602,11 @@ typedef $$DeviceEntitiesTableCreateCompanionBuilder =
       required String haId,
       required String name,
       required String type,
+      Value<String?> areaHaId,
+      Value<String?> nameByUser,
+      Value<String?> manufacturer,
+      Value<String?> model,
+      Value<bool> disabled,
       required int serverId,
     });
 typedef $$DeviceEntitiesTableUpdateCompanionBuilder =
@@ -4335,6 +4615,11 @@ typedef $$DeviceEntitiesTableUpdateCompanionBuilder =
       Value<String> haId,
       Value<String> name,
       Value<String> type,
+      Value<String?> areaHaId,
+      Value<String?> nameByUser,
+      Value<String?> manufacturer,
+      Value<String?> model,
+      Value<bool> disabled,
       Value<int> serverId,
     });
 
@@ -4433,6 +4718,31 @@ class $$DeviceEntitiesTableFilterComposer
 
   ColumnFilters<String> get type => $composableBuilder(
     column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get areaHaId => $composableBuilder(
+    column: $table.areaHaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nameByUser => $composableBuilder(
+    column: $table.nameByUser,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get manufacturer => $composableBuilder(
+    column: $table.manufacturer,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get model => $composableBuilder(
+    column: $table.model,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get disabled => $composableBuilder(
+    column: $table.disabled,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4539,6 +4849,31 @@ class $$DeviceEntitiesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get areaHaId => $composableBuilder(
+    column: $table.areaHaId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get nameByUser => $composableBuilder(
+    column: $table.nameByUser,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get manufacturer => $composableBuilder(
+    column: $table.manufacturer,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get model => $composableBuilder(
+    column: $table.model,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get disabled => $composableBuilder(
+    column: $table.disabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$ServerEntitiesTableOrderingComposer get serverId {
     final $$ServerEntitiesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -4583,6 +4918,25 @@ class $$DeviceEntitiesTableAnnotationComposer
 
   GeneratedColumn<String> get type =>
       $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get areaHaId =>
+      $composableBuilder(column: $table.areaHaId, builder: (column) => column);
+
+  GeneratedColumn<String> get nameByUser => $composableBuilder(
+    column: $table.nameByUser,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get manufacturer => $composableBuilder(
+    column: $table.manufacturer,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get model =>
+      $composableBuilder(column: $table.model, builder: (column) => column);
+
+  GeneratedColumn<bool> get disabled =>
+      $composableBuilder(column: $table.disabled, builder: (column) => column);
 
   $$ServerEntitiesTableAnnotationComposer get serverId {
     final $$ServerEntitiesTableAnnotationComposer composer = $composerBuilder(
@@ -4698,12 +5052,22 @@ class $$DeviceEntitiesTableTableManager
                 Value<String> haId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> type = const Value.absent(),
+                Value<String?> areaHaId = const Value.absent(),
+                Value<String?> nameByUser = const Value.absent(),
+                Value<String?> manufacturer = const Value.absent(),
+                Value<String?> model = const Value.absent(),
+                Value<bool> disabled = const Value.absent(),
                 Value<int> serverId = const Value.absent(),
               }) => DeviceEntitiesCompanion(
                 id: id,
                 haId: haId,
                 name: name,
                 type: type,
+                areaHaId: areaHaId,
+                nameByUser: nameByUser,
+                manufacturer: manufacturer,
+                model: model,
+                disabled: disabled,
                 serverId: serverId,
               ),
           createCompanionCallback:
@@ -4712,12 +5076,22 @@ class $$DeviceEntitiesTableTableManager
                 required String haId,
                 required String name,
                 required String type,
+                Value<String?> areaHaId = const Value.absent(),
+                Value<String?> nameByUser = const Value.absent(),
+                Value<String?> manufacturer = const Value.absent(),
+                Value<String?> model = const Value.absent(),
+                Value<bool> disabled = const Value.absent(),
                 required int serverId,
               }) => DeviceEntitiesCompanion.insert(
                 id: id,
                 haId: haId,
                 name: name,
                 type: type,
+                areaHaId: areaHaId,
+                nameByUser: nameByUser,
+                manufacturer: manufacturer,
+                model: model,
+                disabled: disabled,
                 serverId: serverId,
               ),
           withReferenceMapper: (p0) => p0

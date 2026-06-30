@@ -8,7 +8,9 @@ import 'package:hommie/features/entities/infrastructure/providers/entity_reposit
 import 'package:hommie/features/entities/infrastructure/repositories/entity_resolver.dart';
 import 'package:hommie/features/entities/infrastructure/repositories/ha_registry_repository.dart';
 import 'package:hommie/features/home/application/area_registry_sync_service.dart';
+import 'package:hommie/features/home/domain/entities/device.dart';
 import 'package:hommie/features/home/infrastructure/providers/area_repository_provider.dart';
+import 'package:hommie/features/home/infrastructure/providers/device_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_sync_coordinator.g.dart';
@@ -18,6 +20,7 @@ part 'server_sync_coordinator.g.dart';
   dependencies: [
     ActiveServerSession,
     areaRepository,
+    deviceRepository,
     entityRepository,
     areaRegistrySyncService,
   ],
@@ -226,6 +229,12 @@ class ServerSyncCoordinator extends _$ServerSyncCoordinator {
 
     final resolved = resolveEntities(entities: entities, devices: devices);
     await ref
+        .read(deviceRepositoryProvider)
+        .syncRegistry(
+          serverId: serverId,
+          devices: devices.map(_deviceFromRegistryRecord).toList(),
+        );
+    await ref
         .read(entityRepositoryProvider)
         .syncAll(serverId: serverId, entities: resolved);
   }
@@ -265,4 +274,16 @@ class ServerSyncCoordinator extends _$ServerSyncCoordinator {
       }
     }
   }
+}
+
+Device _deviceFromRegistryRecord(DeviceRegistryRecord record) {
+  return Device(
+    id: record.id,
+    name: record.name ?? record.nameByUser ?? record.id,
+    areaId: record.areaId,
+    nameByUser: record.nameByUser,
+    manufacturer: record.manufacturer,
+    model: record.model,
+    disabled: record.disabled,
+  );
 }

@@ -44,6 +44,7 @@ final class HomePageControllerProvider
           HomePageControllerProvider.$allTransitiveDependencies12,
           HomePageControllerProvider.$allTransitiveDependencies13,
           HomePageControllerProvider.$allTransitiveDependencies14,
+          HomePageControllerProvider.$allTransitiveDependencies15,
         },
       );
 
@@ -72,6 +73,8 @@ final class HomePageControllerProvider
       ServerSyncCoordinatorProvider.$allTransitiveDependencies6;
   static final $allTransitiveDependencies14 =
       ServerSyncCoordinatorProvider.$allTransitiveDependencies7;
+  static final $allTransitiveDependencies15 =
+      ServerSyncCoordinatorProvider.$allTransitiveDependencies8;
 
   @override
   String debugGetCreateSourceHash() => _$homePageControllerHash();
@@ -90,7 +93,7 @@ final class HomePageControllerProvider
 }
 
 String _$homePageControllerHash() =>
-    r'dc4168ebc95fabc877c1481e7ff38c4958898839';
+    r'092c5931f050a3551b837029c71dd257f7b88359';
 
 abstract class _$HomePageController extends $Notifier<HomePageState> {
   HomePageState build();

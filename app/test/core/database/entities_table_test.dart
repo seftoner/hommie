@@ -78,4 +78,39 @@ void main() {
     final devices = await db.select(db.deviceEntities).get();
     expect(devices, hasLength(2));
   });
+
+  test('device registry rows persist HA metadata', () async {
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(db.close);
+
+    final serverId = await db
+        .into(db.serverEntities)
+        .insert(
+          ServerEntitiesCompanion.insert(name: 'Home', url: 'http://h:8123'),
+        );
+
+    await db
+        .into(db.deviceEntities)
+        .insert(
+          DeviceEntitiesCompanion.insert(
+            haId: 'device-1',
+            name: 'Hue bulb',
+            type: 'light',
+            serverId: serverId,
+            areaHaId: const Value('kitchen'),
+            nameByUser: const Value('Counter lamp'),
+            manufacturer: const Value('Signify'),
+            model: const Value('LCA001'),
+            disabled: const Value(true),
+          ),
+        );
+
+    final row = await db.select(db.deviceEntities).getSingle();
+    expect(row.haId, 'device-1');
+    expect(row.areaHaId, 'kitchen');
+    expect(row.nameByUser, 'Counter lamp');
+    expect(row.manufacturer, 'Signify');
+    expect(row.model, 'LCA001');
+    expect(row.disabled, isTrue);
+  });
 }
