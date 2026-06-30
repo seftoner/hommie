@@ -1,10 +1,11 @@
+import 'package:hommie/features/entities/domain/entity_display_name.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/infrastructure/repositories/ha_registry_repository.dart';
 
 /// Turns registry rows into cached [HaEntity]s:
 /// - resolves area as entity.area_id ?? device.area_id,
 /// - derives domain from the entity_id prefix,
-/// - name fallback: name -> original_name -> entity_id.
+/// - name fallback: name -> original_name -> HA-like label from entity_id.
 List<HaEntity> resolveEntities({
   required List<EntityRegistryRecord> entities,
   required List<DeviceRegistryRecord> devices,
@@ -18,7 +19,11 @@ List<HaEntity> resolveEntities({
     final domain = e.entityId.split('.').first;
     final area =
         e.areaId ?? (e.deviceId != null ? deviceAreaById[e.deviceId] : null);
-    final name = e.name ?? e.originalName ?? e.entityId;
+    final name = resolveEntityRegistryDisplayName(
+      name: e.name,
+      originalName: e.originalName,
+      entityId: e.entityId,
+    );
     result.add(
       HaEntity(
         registryId: e.id,

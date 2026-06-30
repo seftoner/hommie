@@ -88,7 +88,7 @@ class _MissingAndDisabledTileHomeController extends HomePageController {
           HomeTile(
             kind: HomeTileKind.device,
             targetId: 'dev-disabled',
-            name: 'Disabled lamp',
+            name: 'light.disabled_lamp',
             areaId: null,
             size: HomeTileSize.small,
             order: 0,
@@ -98,7 +98,7 @@ class _MissingAndDisabledTileHomeController extends HomePageController {
                 registryId: 'reg-disabled-light',
                 entityId: 'light.disabled_lamp',
                 domain: 'light',
-                name: 'Disabled lamp',
+                name: 'light.disabled_lamp',
                 deviceId: 'dev-disabled',
               ),
             ],
@@ -106,7 +106,7 @@ class _MissingAndDisabledTileHomeController extends HomePageController {
           HomeTile(
             kind: HomeTileKind.device,
             targetId: 'dev-unavailable',
-            name: 'Offline lamp',
+            name: 'light.offline_lamp',
             areaId: null,
             size: HomeTileSize.small,
             order: 1,
@@ -116,7 +116,7 @@ class _MissingAndDisabledTileHomeController extends HomePageController {
                 registryId: 'reg-offline-light',
                 entityId: 'light.offline_lamp',
                 domain: 'light',
-                name: 'Offline lamp',
+                name: 'light.offline_lamp',
                 deviceId: 'dev-unavailable',
               ),
             ],
@@ -317,9 +317,11 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.text('Disabled lamp'), findsOneWidget);
+    expect(find.text('Disabled Lamp'), findsOneWidget);
+    expect(find.text('light.disabled_lamp'), findsNothing);
     expect(find.text('Disabled'), findsOneWidget);
-    expect(find.text('Offline lamp'), findsOneWidget);
+    expect(find.text('Offline Lamp'), findsOneWidget);
+    expect(find.text('light.offline_lamp'), findsNothing);
     expect(find.text('Unavailable'), findsOneWidget);
     expect(find.text('Old lamp'), findsOneWidget);
     expect(find.text('Missing'), findsOneWidget);

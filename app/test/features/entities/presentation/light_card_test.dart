@@ -86,6 +86,38 @@ void main() {
     expect(switchWidget.onChanged, isNull);
   });
 
+  testWidgets('renders shared display name instead of raw entity id', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          commandAvailabilityProvider.overrideWithValue(
+            const CommandAvailability(
+              canSend: true,
+              reason: CommandAvailabilityReason.available,
+            ),
+          ),
+        ],
+        child: const MaterialApp(
+          home: Scaffold(
+            body: LightCard(
+              entity: HaEntity(
+                entityId: 'light.kitchen_lights',
+                domain: 'light',
+                name: 'light.kitchen_lights',
+              ),
+              state: EntityStateValue(state: 'on'),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Kitchen Lights'), findsOneWidget);
+    expect(find.text('light.kitchen_lights'), findsNothing);
+  });
+
   testWidgets(
     'command unavailable disables the switch while state is present',
     (tester) async {

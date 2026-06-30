@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hommie/features/entities/domain/entity_display_name.dart';
+import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/presentation/widgets/entity_card.dart';
 import 'package:hommie/features/home/domain/entities/home_tile.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
@@ -19,7 +21,7 @@ class HomeTileCard extends StatelessWidget {
       key: Key('home_tile.${tile.kind.name}.${tile.targetId}'),
       child: ListTile(
         leading: Icon(_icon, color: Theme.of(context).disabledColor),
-        title: Text(tile.name, maxLines: 1, overflow: TextOverflow.ellipsis),
+        title: Text(_title, maxLines: 1, overflow: TextOverflow.ellipsis),
         subtitle: Text(_statusLabel),
         trailing: tile.resolution == HomeTileResolution.missing
             ? Wrap(
@@ -47,4 +49,19 @@ class HomeTileCard extends StatelessWidget {
     HomeTileResolution.unavailable => 'Unavailable',
     HomeTileResolution.active => 'Ready',
   };
+
+  String get _title {
+    if (tile.resolution == HomeTileResolution.missing) {
+      return tile.name;
+    }
+    final entity = _firstDisplayEntity;
+    if (entity != null) {
+      return resolveEntityDisplayName(entity);
+    }
+    return tile.name;
+  }
+
+  HaEntity? get _firstDisplayEntity =>
+      tile.primaryEntity ??
+      (tile.secondaryEntities.isEmpty ? null : tile.secondaryEntities.first);
 }

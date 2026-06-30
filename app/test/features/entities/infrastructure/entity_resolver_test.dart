@@ -62,7 +62,7 @@ void main() {
     expect(result.singleWhere((e) => e.entityId == 'light.e').hidden, isTrue);
   });
 
-  test('name falls back original_name then entity_id', () {
+  test('name falls back original_name then entity id display label', () {
     final result = resolveEntities(
       entities: [
         const EntityRegistryRecord(
@@ -71,6 +71,14 @@ void main() {
           uniqueId: 'uid-x',
           platform: 'test',
           originalName: 'X',
+        ),
+        const EntityRegistryRecord(
+          id: 'reg-rgbw',
+          entityId: 'light.office_rgbw_lights',
+          uniqueId: 'uid-rgbw',
+          platform: 'test',
+          name: '',
+          originalName: '',
         ),
         const EntityRegistryRecord(
           id: 'reg-y',
@@ -82,6 +90,7 @@ void main() {
       devices: const [],
     );
     expect(result[0].name, 'X');
-    expect(result[1].name, 'light.y');
+    expect(result[1].name, 'Office RGBW Lights');
+    expect(result[2].name, 'Y');
   });
 }
