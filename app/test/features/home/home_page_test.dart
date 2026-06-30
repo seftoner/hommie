@@ -7,6 +7,7 @@ import 'package:hommie/features/entities/application/entity_states_provider.dart
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/presentation/widgets/light_card.dart';
 import 'package:hommie/features/home/application/home_page_controller.dart';
+import 'package:hommie/features/home/domain/entities/home_tile.dart';
 import 'package:hommie/features/home/presentation/screens/home_page.dart';
 import 'package:hommie/ui/keys.dart';
 
@@ -28,6 +29,87 @@ class _StubHomeController extends HomePageController {
             domain: 'light',
             name: 'A',
             areaId: 'kitchen',
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+class _DeviceTileHomeController extends HomePageController {
+  @override
+  HomePageState build() => const HomePageState(
+    serverName: 'Home',
+    tabs: [
+      HomeSummaryTab(),
+      HomeAreaTab(areaId: 'kitchen', title: 'Kitchen'),
+    ],
+    sections: [],
+    deviceSections: [
+      HomeDeviceSection(
+        areaId: 'kitchen',
+        title: 'Kitchen',
+        tiles: [
+          HomeTile(
+            kind: HomeTileKind.device,
+            targetId: 'dev-lamp',
+            name: 'Counter lamp',
+            areaId: 'kitchen',
+            size: HomeTileSize.small,
+            order: 0,
+            resolution: HomeTileResolution.active,
+            primaryEntity: HaEntity(
+              registryId: 'reg-light',
+              entityId: 'light.kitchen_lamp',
+              domain: 'light',
+              name: 'Kitchen lamp',
+              areaId: 'kitchen',
+              deviceId: 'dev-lamp',
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+class _MissingAndDisabledTileHomeController extends HomePageController {
+  @override
+  HomePageState build() => const HomePageState(
+    serverName: 'Home',
+    tabs: [HomeSummaryTab()],
+    sections: [],
+    deviceSections: [
+      HomeDeviceSection(
+        areaId: null,
+        title: 'Unassigned',
+        tiles: [
+          HomeTile(
+            kind: HomeTileKind.device,
+            targetId: 'dev-disabled',
+            name: 'Disabled lamp',
+            areaId: null,
+            size: HomeTileSize.small,
+            order: 0,
+            resolution: HomeTileResolution.disabled,
+          ),
+          HomeTile(
+            kind: HomeTileKind.device,
+            targetId: 'dev-unavailable',
+            name: 'Offline lamp',
+            areaId: null,
+            size: HomeTileSize.small,
+            order: 1,
+            resolution: HomeTileResolution.unavailable,
+          ),
+          HomeTile(
+            kind: HomeTileKind.device,
+            targetId: 'dev-missing',
+            name: 'Old lamp',
+            areaId: null,
+            size: HomeTileSize.large,
+            order: 2,
+            resolution: HomeTileResolution.missing,
           ),
         ],
       ),
@@ -98,6 +180,84 @@ class _InitialSyncHomeController extends HomePageController {
 }
 
 void main() {
+  testWidgets('renders summary from device tile sections', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          commandAvailabilityProvider.overrideWithValue(
+            const CommandAvailability(
+              canSend: true,
+              reason: CommandAvailabilityReason.available,
+            ),
+          ),
+          homePageControllerProvider.overrideWith(
+            _DeviceTileHomeController.new,
+          ),
+          entityStatesProvider.overrideWithValue(const {}),
+        ],
+        child: const MaterialApp(home: HomePage()),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Kitchen'), findsWidgets);
+    expect(find.byType(LightCard), findsOneWidget);
+    expect(find.text('No lights here yet'), findsNothing);
+  });
+
+  testWidgets('renders area tab from device tile sections', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          commandAvailabilityProvider.overrideWithValue(
+            const CommandAvailability(
+              canSend: true,
+              reason: CommandAvailabilityReason.available,
+            ),
+          ),
+          homePageControllerProvider.overrideWith(
+            _DeviceTileHomeController.new,
+          ),
+          entityStatesProvider.overrideWithValue(const {}),
+        ],
+        child: const MaterialApp(home: HomePage()),
+      ),
+    );
+    await tester.pump();
+
+    await tester.tap(find.widgetWithText(Tab, 'Kitchen'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LightCard), findsOneWidget);
+    expect(find.text('No lights here yet'), findsNothing);
+  });
+
+  testWidgets('renders disabled and missing tiles as non-command cards', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          homePageControllerProvider.overrideWith(
+            _MissingAndDisabledTileHomeController.new,
+          ),
+        ],
+        child: const MaterialApp(home: HomePage()),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Disabled lamp'), findsOneWidget);
+    expect(find.text('Disabled'), findsOneWidget);
+    expect(find.text('Offline lamp'), findsOneWidget);
+    expect(find.text('Unavailable'), findsOneWidget);
+    expect(find.text('Old lamp'), findsOneWidget);
+    expect(find.text('Missing'), findsOneWidget);
+    expect(find.text('Rebind'), findsOneWidget);
+    expect(find.text('Remove'), findsOneWidget);
+    expect(find.byType(Switch), findsNothing);
+  });
+
   testWidgets('renders summary grouped by device type', (tester) async {
     await tester.pumpWidget(
       ProviderScope(

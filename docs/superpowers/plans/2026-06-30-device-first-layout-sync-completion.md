@@ -269,15 +269,15 @@ git commit -m "Add home tile rebind actions"
 - Create: `app/lib/features/home/presentation/widgets/home_tile_card.dart`
 - Test: `app/test/features/home/home_page_test.dart`
 
-- [ ] **Step 1: Write RED widget tests**
+- [x] **Step 1: Write RED widget tests**
 
 Verify summary and area tabs render device tiles grouped by device sections. Verify disabled tiles render as non-command cards, and missing tiles render `Rebind` and `Remove` actions. Keep entity card rendering only as a fallback for device-less explicit entity tiles.
 
-- [ ] **Step 2: Implement device tile card**
+- [x] **Step 2: Implement device tile card**
 
 Render active tiles through the primary entity where possible. Render disabled/unavailable/missing as non-command cards. Missing tiles expose Rebind and Remove buttons but can use placeholder callbacks until a full picker UI exists.
 
-- [ ] **Step 3: Run home tests and commit**
+- [x] **Step 3: Run home tests and commit**
 
 ```bash
 flutter test app/test/features/home
