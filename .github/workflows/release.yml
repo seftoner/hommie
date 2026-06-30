@@ -16,7 +16,7 @@ jobs:
       
       - name: Get Previous tag
         id: previoustag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
+        uses: WyriHaximus/github-action-get-previous-tag@v2
         with:
           fallback: 1.0.0
 
@@ -29,14 +29,14 @@ jobs:
           default_bump: patch
 
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v4.1
+        uses: flutter-actions/setup-flutter@v4.2
         with:
           version: 3.44.3
           cache: true
           channel: stable
 
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1.7.1
+        uses: dart-lang/setup-dart@v1.7.2
         with:
           sdk: 3.12.2
 
