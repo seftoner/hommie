@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hommie/features/entities/application/cached_entities_provider.dart';
 import 'package:hommie/features/entities/application/command_availability_provider.dart';
 import 'package:hommie/features/entities/application/entity_states_provider.dart';
+import 'package:hommie/features/entities/domain/entities/entity_state_value.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/presentation/widgets/light_card.dart';
 import 'package:hommie/features/home/application/home_page_controller.dart';
@@ -92,6 +93,15 @@ class _MissingAndDisabledTileHomeController extends HomePageController {
             size: HomeTileSize.small,
             order: 0,
             resolution: HomeTileResolution.disabled,
+            secondaryEntities: [
+              HaEntity(
+                registryId: 'reg-disabled-light',
+                entityId: 'light.disabled_lamp',
+                domain: 'light',
+                name: 'Disabled lamp',
+                deviceId: 'dev-disabled',
+              ),
+            ],
           ),
           HomeTile(
             kind: HomeTileKind.device,
@@ -101,6 +111,15 @@ class _MissingAndDisabledTileHomeController extends HomePageController {
             size: HomeTileSize.small,
             order: 1,
             resolution: HomeTileResolution.unavailable,
+            secondaryEntities: [
+              HaEntity(
+                registryId: 'reg-offline-light',
+                entityId: 'light.offline_lamp',
+                domain: 'light',
+                name: 'Offline lamp',
+                deviceId: 'dev-unavailable',
+              ),
+            ],
           ),
           HomeTile(
             kind: HomeTileKind.device,
@@ -110,6 +129,57 @@ class _MissingAndDisabledTileHomeController extends HomePageController {
             size: HomeTileSize.large,
             order: 2,
             resolution: HomeTileResolution.missing,
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+class _UnsupportedUnavailableTileHomeController extends HomePageController {
+  @override
+  HomePageState build() => const HomePageState(
+    serverName: 'Home',
+    tabs: [HomeSummaryTab()],
+    sections: [],
+    deviceSections: [
+      HomeDeviceSection(
+        areaId: null,
+        title: 'Unassigned',
+        tiles: [
+          HomeTile(
+            kind: HomeTileKind.device,
+            targetId: 'dev-light',
+            name: 'Lamp',
+            areaId: null,
+            size: HomeTileSize.small,
+            order: 0,
+            resolution: HomeTileResolution.active,
+            primaryEntity: HaEntity(
+              registryId: 'reg-light',
+              entityId: 'light.lamp',
+              domain: 'light',
+              name: 'Lamp',
+              deviceId: 'dev-light',
+            ),
+          ),
+          HomeTile(
+            kind: HomeTileKind.device,
+            targetId: 'dev-update',
+            name: 'Demo Update with Progress',
+            areaId: null,
+            size: HomeTileSize.small,
+            order: 1,
+            resolution: HomeTileResolution.unavailable,
+            secondaryEntities: [
+              HaEntity(
+                registryId: 'reg-update',
+                entityId: 'update.demo_update',
+                domain: 'update',
+                name: 'Demo Update with Progress',
+                deviceId: 'dev-update',
+              ),
+            ],
           ),
         ],
       ),
@@ -256,6 +326,35 @@ void main() {
     expect(find.text('Rebind'), findsOneWidget);
     expect(find.text('Remove'), findsOneWidget);
     expect(find.byType(Switch), findsNothing);
+  });
+
+  testWidgets('does not render unsupported unavailable device tiles', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          commandAvailabilityProvider.overrideWithValue(
+            const CommandAvailability(
+              canSend: true,
+              reason: CommandAvailabilityReason.available,
+            ),
+          ),
+          homePageControllerProvider.overrideWith(
+            _UnsupportedUnavailableTileHomeController.new,
+          ),
+          entityStatesProvider.overrideWithValue(const {
+            'light.lamp': EntityStateValue(state: 'on'),
+          }),
+        ],
+        child: const MaterialApp(home: HomePage()),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byType(LightCard), findsOneWidget);
+    expect(find.text('Demo Update with Progress'), findsNothing);
+    expect(find.text('Unavailable'), findsNothing);
   });
 
   testWidgets('renders summary grouped by device type', (tester) async {

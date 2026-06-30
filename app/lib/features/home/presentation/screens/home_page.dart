@@ -173,13 +173,23 @@ class HomePage extends ConsumerWidget {
   }
 
   bool _isRenderableTile(HomeTile tile, Set<String> handledDomains) {
-    if (tile.resolution != HomeTileResolution.active) {
+    if (tile.resolution == HomeTileResolution.missing) {
       return true;
     }
 
+    return _hasHandledEntity(tile, handledDomains);
+  }
+
+  bool _hasHandledEntity(HomeTile tile, Set<String> handledDomains) {
     final primaryEntity = tile.primaryEntity;
-    return primaryEntity != null &&
-        handledDomains.contains(primaryEntity.domain);
+    if (primaryEntity != null &&
+        handledDomains.contains(primaryEntity.domain)) {
+      return true;
+    }
+
+    return tile.secondaryEntities.any(
+      (entity) => handledDomains.contains(entity.domain),
+    );
   }
 
   SliverAppBar _appBar(
