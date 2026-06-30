@@ -665,6 +665,73 @@ void main() {
     },
   );
 
+  test(
+    'token resolution connection failures publish offline for active server',
+    () async {
+      final factory = _FakeFactory();
+      final states = <ServerLinkState>[];
+      final manager = ServerConnectionManagerImpl(
+        factory: factory,
+        setLinkState: states.add,
+        resetLinkState: () => states.add(const LinkIdle()),
+      );
+
+      manager.setActiveServer(1);
+      final future = manager.getConnection(1);
+      final futureExpectation = expectLater(
+        future,
+        throwsA(isA<ConnectionError>()),
+      );
+
+      final error = ConnectionError(
+        'Failed to resolve token: AuthFailure.connection()',
+      );
+      factory.fail(1, error);
+
+      await futureExpectation;
+      expect(states.map((state) => state.runtimeType), [
+        LinkConnecting,
+        LinkOffline,
+      ]);
+      expect(states.map((state) => state.serverId), [1, 1]);
+      final state = states.last as LinkOffline;
+      expect(state.serverId, 1);
+      expect(state.cause, same(error));
+    },
+  );
+
+  test('missing local credentials publish offline for active server', () async {
+    final factory = _FakeFactory();
+    final states = <ServerLinkState>[];
+    final manager = ServerConnectionManagerImpl(
+      factory: factory,
+      setLinkState: states.add,
+      resetLinkState: () => states.add(const LinkIdle()),
+    );
+
+    manager.setActiveServer(1);
+    final future = manager.getConnection(1);
+    final futureExpectation = expectLater(
+      future,
+      throwsA(isA<ConnectionError>()),
+    );
+
+    final error = ConnectionError(
+      'Failed to resolve token: AuthFailure.missingCredentials()',
+    );
+    factory.fail(1, error);
+
+    await futureExpectation;
+    expect(states.map((state) => state.runtimeType), [
+      LinkConnecting,
+      LinkOffline,
+    ]);
+    expect(states.map((state) => state.serverId), [1, 1]);
+    final state = states.last as LinkOffline;
+    expect(state.serverId, 1);
+    expect(state.cause, same(error));
+  });
+
   test('dispose closes pending opens', () async {
     final factory = _FakeFactory();
     final manager = ServerConnectionManagerImpl(

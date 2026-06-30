@@ -23,6 +23,7 @@ class ConnectionOrchestrator {
   bool _networkAvailable = true;
   bool _authenticationFailed = false;
   Timer? _reconnectTimer;
+  HASocketState? _currentState;
 
   // Create our own state stream controller
   final StreamController<HASocketState> _stateController =
@@ -36,6 +37,9 @@ class ConnectionOrchestrator {
 
   /// Current connection instance (if any).
   HAConnection? get connection => _connection;
+
+  /// Most recent state observed from the active connection.
+  HASocketState? get currentState => _currentState;
 
   /// Starts initial connection.
   Future<void> connect() async {
@@ -143,6 +147,10 @@ class ConnectionOrchestrator {
       _stateSubscription = _connection!.state.listen(_handleStateChange);
 
       await _connection!.connect();
+      if (_connection?.currentState case final terminalState?
+          when terminalState is Disconnected) {
+        _handleStateChange(terminalState);
+      }
     } catch (e) {
       _logger.error('Unexpected connection attempt failure: $e');
 
@@ -171,6 +179,8 @@ class ConnectionOrchestrator {
       'ConnectionOrchestrator received state: $state (type: ${state.runtimeType})',
     );
 
+    _currentState = state;
+
     // Forward state changes to our controller so external listeners get notified
     if (!_stateController.isClosed) {
       _stateController.add(state);
@@ -190,6 +200,7 @@ class ConnectionOrchestrator {
         _logger.error('Authentication failed - stopping reconnection attempts');
         _reconnectRequested = false;
         _authenticationFailed = true;
+        _connection = null;
         _stopHeartbeat();
         _cancelReconnectTimer();
         break;

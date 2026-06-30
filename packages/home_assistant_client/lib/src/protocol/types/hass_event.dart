@@ -52,6 +52,62 @@ sealed class StatesUpdates with _$StatesUpdates {
       _$StatesUpdatesFromJson(json);
 }
 
+/// Applies a compressed `subscribe_entities` update onto the current entity
+/// state snapshot.
+Map<String, EntityState> applyStatesUpdate(
+  Map<String, EntityState> current,
+  StatesUpdates update,
+) {
+  final next = Map<String, EntityState>.from(current);
+
+  update.add?.forEach((entityId, entityState) {
+    next[entityId] = entityState;
+  });
+
+  update.remove?.forEach(next.remove);
+
+  update.change?.forEach((entityId, diff) {
+    final entityState = next[entityId];
+    if (entityState == null) {
+      return;
+    }
+
+    next[entityId] = _applyEntityDiff(entityState, diff);
+  });
+
+  return next;
+}
+
+EntityState _applyEntityDiff(EntityState current, EntityDiff diff) {
+  final toAdd = diff.add;
+  final toRemove = diff.remove;
+  final hasAttributeChanges =
+      toAdd?.attributes != null || (toRemove?.a.isNotEmpty ?? false);
+
+  final attributes = hasAttributeChanges
+      ? <String, dynamic>{...?current.attributes}
+      : current.attributes;
+
+  if (toAdd?.attributes case final addedAttributes?) {
+    attributes?.addAll(addedAttributes);
+  }
+
+  if (toRemove case final remove?) {
+    for (final key in remove.a) {
+      attributes?.remove(key);
+    }
+  }
+
+  return EntityState(
+    state: toAdd?.state ?? current.state,
+    attributes: attributes,
+    context: toAdd?.context ?? current.context,
+    last_changed: toAdd?.last_changed ?? current.last_changed,
+    last_updated:
+        toAdd?.last_changed ?? toAdd?.last_updated ?? current.last_updated,
+  );
+}
+
 @freezed
 sealed class CallServiceResponse with _$CallServiceResponse {
   factory CallServiceResponse({required Context context, dynamic response}) =

@@ -93,6 +93,50 @@ void main() {
     expect(states['light.kitchen']?.state, 'on');
   });
 
+  test('applies attribute removals from compressed state diffs', () async {
+    final connection = _FakeConnection();
+    final container = ProviderContainer(
+      overrides: [serverScopeConnectionProvider.overrideWithValue(connection)],
+    );
+    addTearDown(container.dispose);
+
+    container.listen(entityStatesProvider, (_, _) {});
+
+    connection.subscriptions.single.emit(
+      StatesUpdates(
+        add: {
+          'climate.thermostat': EntityState(
+            state: 'heat',
+            attributes: {
+              'aux_heat': 'on',
+              'current_temperature': 20.5,
+              'friendly_name': 'Thermostat',
+            },
+          ),
+        },
+      ),
+    );
+    await container.pump();
+
+    connection.subscriptions.single.emit(
+      StatesUpdates(
+        change: {
+          'climate.thermostat': EntityDiff(
+            remove: EntityStateRemove(['aux_heat']),
+          ),
+        },
+      ),
+    );
+    await container.pump();
+
+    final states = container.read(entityStatesProvider);
+    expect(states['climate.thermostat']?.state, 'heat');
+    expect(states['climate.thermostat']?.attributes, {
+      'current_temperature': 20.5,
+      'friendly_name': 'Thermostat',
+    });
+  });
+
   test('surfaces unrelated scoped connection provider failures', () {
     final container = ProviderContainer(
       overrides: [
@@ -125,7 +169,7 @@ void main() {
     );
   });
 
-  test('surfaces closed connection subscribe setup failures', () {
+  test('returns empty when connection closes before subscribe setup', () {
     final container = ProviderContainer(
       overrides: [
         serverScopeConnectionProvider.overrideWithValue(
@@ -135,9 +179,6 @@ void main() {
     );
     addTearDown(container.dispose);
 
-    expect(
-      () => container.read(entityStatesProvider),
-      throwsA(_providerExceptionWith(isA<ConnectionClosedError>())),
-    );
+    expect(container.read(entityStatesProvider), isEmpty);
   });
 }
