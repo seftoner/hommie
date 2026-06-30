@@ -6,6 +6,7 @@ import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/core/infrastructure/networking/connection/managed_ha_connection.dart';
 import 'package:hommie/core/infrastructure/networking/providers/server_config_provider.dart';
 import 'package:hommie/features/auth/domain/entities/auth_failure.dart';
+import 'package:hommie/features/auth/infrastructure/providers/auth_repository_provider.dart';
 import 'package:hommie/features/auth/infrastructure/providers/server_auth_token_provider.dart';
 import 'package:hommie/features/auth/infrastructure/providers/server_credentials_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -100,13 +101,14 @@ final class HAConnectionFactory implements IHAConnectionFactory {
     // ignore: provider_dependencies
     Future<HAAuthToken> fetchToken() async {
       try {
-        return await _ref.read(serverAuthTokenProvider(serverId).future);
+        final result = await _ref
+            .read(authRepositoryProvider)
+            .getCredentials(serverId);
+        return result.match(_throwTokenFailure, authTokenFromCredentials);
       } on AuthFailure catch (failure) {
-        throw AuthenticationError('Failed to resolve token: $failure');
+        _throwTokenFailure(failure);
       } on AuthFailureException catch (exception) {
-        throw AuthenticationError(
-          'Failed to resolve token: ${exception.failure}',
-        );
+        _throwTokenFailure(exception.failure);
       }
     }
 
@@ -132,14 +134,14 @@ final class HAConnectionFactory implements IHAConnectionFactory {
       throw const ConnectionOpenCancelled();
     }
 
+    final state = currentState ?? orchestrator.currentState;
     final connection = orchestrator.connection;
-    if (connection == null) {
-      _authenticatedStateOrThrow(currentState);
+    if (connection == null || state is Disconnected) {
+      final failure = _connectionOpenError(state);
       await orchestrator.close();
-      throw ConnectionError('Connection failed to establish');
+      throw failure;
     }
 
-    final state = currentState;
     final authenticatedState = state is Authenticated
         ? state
         : const Authenticated();
@@ -164,20 +166,33 @@ final class HAConnectionFactory implements IHAConnectionFactory {
     );
   }
 
-  HASocketState _authenticatedStateOrThrow(HASocketState? state) {
+  Never _throwTokenFailure(AuthFailure failure) {
+    switch (failure) {
+      case InvalidToken():
+        throw AuthenticationError('Failed to resolve token: $failure');
+      case MissingCredentials() ||
+          Connection() ||
+          ServerFailure() ||
+          Storage() ||
+          UserBrake():
+        throw ConnectionError('Failed to resolve token: $failure');
+    }
+  }
+
+  Exception _connectionOpenError(HASocketState? state) {
     switch (state) {
       case Authenticated():
-        return state;
+        return ConnectionError('Connection failed to establish');
       case Disconnected(type: DisconnectionType.authFailure, :final reason):
-        throw AuthenticationError(reason ?? 'Authentication failed');
+        return AuthenticationError(reason ?? 'Authentication failed');
       case Disconnected(:final reason, :final error):
-        throw ConnectionError(
+        return ConnectionError(
           reason ?? error?.toString() ?? 'Connection failed to establish',
         );
       case Connecting() || Reconnecting():
-        throw ConnectionError('Connection did not authenticate');
+        return ConnectionError('Connection did not authenticate');
       case null:
-        throw ConnectionError('Connection did not report a state');
+        return ConnectionError('Connection did not report a state');
     }
   }
 }

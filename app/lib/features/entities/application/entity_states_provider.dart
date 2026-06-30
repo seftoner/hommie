@@ -8,38 +8,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'entity_states_provider.g.dart';
 
-/// Applies a compressed [StatesUpdates] (subscribe_entities payload) onto the
-/// current entity-state map and returns the new map.
-Map<String, EntityStateValue> applyStatesUpdate(
-  Map<String, EntityStateValue> current,
-  StatesUpdates update,
-) {
-  final next = Map<String, EntityStateValue>.from(current);
-
-  update.add?.forEach((entityId, es) {
-    next[entityId] = EntityStateValue(
-      state: es.state ?? 'unknown',
-      attributes: es.attributes ?? const {},
-    );
-  });
-
-  update.change?.forEach((entityId, diff) {
-    final plus = diff.add;
-    if (plus == null) {
-      return;
-    }
-    final cur = next[entityId];
-    next[entityId] = EntityStateValue(
-      state: plus.state ?? cur?.state ?? 'unknown',
-      attributes: {...?cur?.attributes, ...?plus.attributes},
-    );
-  });
-
-  update.remove?.forEach(next.remove);
-
-  return next;
-}
-
 /// Live entity states for the active server, keyed by entity_id.
 ///
 /// Subscribes to `subscribe_entities` while connected and folds the compressed
@@ -49,7 +17,7 @@ class EntityStates extends _$EntityStates {
   HASubscription? _sub;
   StreamSubscription<dynamic>? _events;
   IHAConnection? _connection;
-  Map<String, EntityStateValue> _current = const {};
+  Map<String, EntityState> _current = const {};
 
   @override
   Map<String, EntityStateValue> build() {
@@ -70,21 +38,27 @@ class EntityStates extends _$EntityStates {
     });
 
     if (identical(_connection, connection) && _sub != null) {
-      return _current;
+      return _toStateValues(_current);
     }
 
     unawaited(_stop());
     _connection = connection;
     _current = const {};
-    _sub = HomeAssistantApi.fromConnection(connection).entities.subscribe();
+    try {
+      _sub = HomeAssistantApi.fromConnection(connection).entities.subscribe();
+    } on ConnectionClosedError {
+      unawaited(_stop());
+      return const {};
+    }
+
     _events = _sub!.stream.listen((update) {
       if (update is StatesUpdates) {
         _current = applyStatesUpdate(_current, update);
-        state = _current;
+        state = _toStateValues(_current);
       }
     });
 
-    return _current;
+    return _toStateValues(_current);
   }
 
   Future<void> _stop() async {
@@ -99,6 +73,18 @@ class EntityStates extends _$EntityStates {
       await sub.dispose();
     }
   }
+}
+
+Map<String, EntityStateValue> _toStateValues(Map<String, EntityState> states) {
+  return states.map(
+    (entityId, entityState) => MapEntry(
+      entityId,
+      EntityStateValue(
+        state: entityState.state ?? 'unknown',
+        attributes: entityState.attributes ?? const {},
+      ),
+    ),
+  );
 }
 
 bool _isServerScopeConnectionUnavailable(Object error) {

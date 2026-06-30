@@ -10,6 +10,5 @@ bool isConnectionAuthenticationFailure(Object error) {
   }
 
   final message = error.toString().toLowerCase();
-  return message.contains('failed to resolve token') ||
-      message.contains('authfailure.');
+  return message.contains('authfailure.invalidtoken');
 }
