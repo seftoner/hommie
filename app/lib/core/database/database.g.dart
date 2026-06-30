@@ -2578,6 +2578,773 @@ class DeviceHomeConfigsCompanion extends UpdateCompanion<DeviceHomeConfig> {
   }
 }
 
+class $HomeTileOverridesTable extends HomeTileOverrides
+    with TableInfo<$HomeTileOverridesTable, HomeTileOverrideRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HomeTileOverridesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _targetIdMeta = const VerificationMeta(
+    'targetId',
+  );
+  @override
+  late final GeneratedColumn<String> targetId = GeneratedColumn<String>(
+    'target_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _areaHaIdMeta = const VerificationMeta(
+    'areaHaId',
+  );
+  @override
+  late final GeneratedColumn<String> areaHaId = GeneratedColumn<String>(
+    'area_ha_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sizeMeta = const VerificationMeta('size');
+  @override
+  late final GeneratedColumn<String> size = GeneratedColumn<String>(
+    'size',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+    'order',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hiddenMeta = const VerificationMeta('hidden');
+  @override
+  late final GeneratedColumn<bool> hidden = GeneratedColumn<bool>(
+    'hidden',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("hidden" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _primaryEntityRegistryIdMeta =
+      const VerificationMeta('primaryEntityRegistryId');
+  @override
+  late final GeneratedColumn<String> primaryEntityRegistryId =
+      GeneratedColumn<String>(
+        'primary_entity_registry_id',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _lastKnownNameMeta = const VerificationMeta(
+    'lastKnownName',
+  );
+  @override
+  late final GeneratedColumn<String> lastKnownName = GeneratedColumn<String>(
+    'last_known_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastKnownAreaHaIdMeta = const VerificationMeta(
+    'lastKnownAreaHaId',
+  );
+  @override
+  late final GeneratedColumn<String> lastKnownAreaHaId =
+      GeneratedColumn<String>(
+        'last_known_area_ha_id',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _lastKnownDomainMeta = const VerificationMeta(
+    'lastKnownDomain',
+  );
+  @override
+  late final GeneratedColumn<String> lastKnownDomain = GeneratedColumn<String>(
+    'last_known_domain',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _serverIdMeta = const VerificationMeta(
+    'serverId',
+  );
+  @override
+  late final GeneratedColumn<int> serverId = GeneratedColumn<int>(
+    'server_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES server_entities (id) ON DELETE CASCADE',
+    ),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    kind,
+    targetId,
+    areaHaId,
+    size,
+    order,
+    hidden,
+    primaryEntityRegistryId,
+    lastKnownName,
+    lastKnownAreaHaId,
+    lastKnownDomain,
+    serverId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'home_tile_overrides';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HomeTileOverrideRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('target_id')) {
+      context.handle(
+        _targetIdMeta,
+        targetId.isAcceptableOrUnknown(data['target_id']!, _targetIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_targetIdMeta);
+    }
+    if (data.containsKey('area_ha_id')) {
+      context.handle(
+        _areaHaIdMeta,
+        areaHaId.isAcceptableOrUnknown(data['area_ha_id']!, _areaHaIdMeta),
+      );
+    }
+    if (data.containsKey('size')) {
+      context.handle(
+        _sizeMeta,
+        size.isAcceptableOrUnknown(data['size']!, _sizeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sizeMeta);
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+        _orderMeta,
+        order.isAcceptableOrUnknown(data['order']!, _orderMeta),
+      );
+    }
+    if (data.containsKey('hidden')) {
+      context.handle(
+        _hiddenMeta,
+        hidden.isAcceptableOrUnknown(data['hidden']!, _hiddenMeta),
+      );
+    }
+    if (data.containsKey('primary_entity_registry_id')) {
+      context.handle(
+        _primaryEntityRegistryIdMeta,
+        primaryEntityRegistryId.isAcceptableOrUnknown(
+          data['primary_entity_registry_id']!,
+          _primaryEntityRegistryIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_known_name')) {
+      context.handle(
+        _lastKnownNameMeta,
+        lastKnownName.isAcceptableOrUnknown(
+          data['last_known_name']!,
+          _lastKnownNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_known_area_ha_id')) {
+      context.handle(
+        _lastKnownAreaHaIdMeta,
+        lastKnownAreaHaId.isAcceptableOrUnknown(
+          data['last_known_area_ha_id']!,
+          _lastKnownAreaHaIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_known_domain')) {
+      context.handle(
+        _lastKnownDomainMeta,
+        lastKnownDomain.isAcceptableOrUnknown(
+          data['last_known_domain']!,
+          _lastKnownDomainMeta,
+        ),
+      );
+    }
+    if (data.containsKey('server_id')) {
+      context.handle(
+        _serverIdMeta,
+        serverId.isAcceptableOrUnknown(data['server_id']!, _serverIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_serverIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {serverId, kind, targetId},
+  ];
+  @override
+  HomeTileOverrideRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HomeTileOverrideRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      targetId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}target_id'],
+      )!,
+      areaHaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}area_ha_id'],
+      ),
+      size: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}size'],
+      )!,
+      order: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}order'],
+      ),
+      hidden: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}hidden'],
+      )!,
+      primaryEntityRegistryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}primary_entity_registry_id'],
+      ),
+      lastKnownName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_known_name'],
+      ),
+      lastKnownAreaHaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_known_area_ha_id'],
+      ),
+      lastKnownDomain: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_known_domain'],
+      ),
+      serverId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}server_id'],
+      )!,
+    );
+  }
+
+  @override
+  $HomeTileOverridesTable createAlias(String alias) {
+    return $HomeTileOverridesTable(attachedDatabase, alias);
+  }
+}
+
+class HomeTileOverrideRow extends DataClass
+    implements Insertable<HomeTileOverrideRow> {
+  /// Auto-incrementing primary key
+  final int id;
+
+  /// Tile target kind: "device" or "entity"
+  final String kind;
+
+  /// Stable HA target id: device_id for device tiles, entity registry id for
+  /// entity tiles
+  final String targetId;
+
+  /// HA area slug where the saved order applies; null for unassigned
+  final String? areaHaId;
+
+  /// Tile size: "small" or "large"
+  final String size;
+
+  /// Hommie-owned order in the current area; null means append
+  final int? order;
+
+  /// Local hidden/suppressed state
+  final bool hidden;
+
+  /// Optional device primary entity override by HA entity registry id
+  final String? primaryEntityRegistryId;
+
+  /// Snapshot used for missing tile recovery
+  final String? lastKnownName;
+
+  /// Snapshot used for missing tile recovery
+  final String? lastKnownAreaHaId;
+
+  /// Snapshot used for missing tile recovery
+  final String? lastKnownDomain;
+
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all local overrides for that server
+  final int serverId;
+  const HomeTileOverrideRow({
+    required this.id,
+    required this.kind,
+    required this.targetId,
+    this.areaHaId,
+    required this.size,
+    this.order,
+    required this.hidden,
+    this.primaryEntityRegistryId,
+    this.lastKnownName,
+    this.lastKnownAreaHaId,
+    this.lastKnownDomain,
+    required this.serverId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['kind'] = Variable<String>(kind);
+    map['target_id'] = Variable<String>(targetId);
+    if (!nullToAbsent || areaHaId != null) {
+      map['area_ha_id'] = Variable<String>(areaHaId);
+    }
+    map['size'] = Variable<String>(size);
+    if (!nullToAbsent || order != null) {
+      map['order'] = Variable<int>(order);
+    }
+    map['hidden'] = Variable<bool>(hidden);
+    if (!nullToAbsent || primaryEntityRegistryId != null) {
+      map['primary_entity_registry_id'] = Variable<String>(
+        primaryEntityRegistryId,
+      );
+    }
+    if (!nullToAbsent || lastKnownName != null) {
+      map['last_known_name'] = Variable<String>(lastKnownName);
+    }
+    if (!nullToAbsent || lastKnownAreaHaId != null) {
+      map['last_known_area_ha_id'] = Variable<String>(lastKnownAreaHaId);
+    }
+    if (!nullToAbsent || lastKnownDomain != null) {
+      map['last_known_domain'] = Variable<String>(lastKnownDomain);
+    }
+    map['server_id'] = Variable<int>(serverId);
+    return map;
+  }
+
+  HomeTileOverridesCompanion toCompanion(bool nullToAbsent) {
+    return HomeTileOverridesCompanion(
+      id: Value(id),
+      kind: Value(kind),
+      targetId: Value(targetId),
+      areaHaId: areaHaId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(areaHaId),
+      size: Value(size),
+      order: order == null && nullToAbsent
+          ? const Value.absent()
+          : Value(order),
+      hidden: Value(hidden),
+      primaryEntityRegistryId: primaryEntityRegistryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(primaryEntityRegistryId),
+      lastKnownName: lastKnownName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastKnownName),
+      lastKnownAreaHaId: lastKnownAreaHaId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastKnownAreaHaId),
+      lastKnownDomain: lastKnownDomain == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastKnownDomain),
+      serverId: Value(serverId),
+    );
+  }
+
+  factory HomeTileOverrideRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HomeTileOverrideRow(
+      id: serializer.fromJson<int>(json['id']),
+      kind: serializer.fromJson<String>(json['kind']),
+      targetId: serializer.fromJson<String>(json['targetId']),
+      areaHaId: serializer.fromJson<String?>(json['areaHaId']),
+      size: serializer.fromJson<String>(json['size']),
+      order: serializer.fromJson<int?>(json['order']),
+      hidden: serializer.fromJson<bool>(json['hidden']),
+      primaryEntityRegistryId: serializer.fromJson<String?>(
+        json['primaryEntityRegistryId'],
+      ),
+      lastKnownName: serializer.fromJson<String?>(json['lastKnownName']),
+      lastKnownAreaHaId: serializer.fromJson<String?>(
+        json['lastKnownAreaHaId'],
+      ),
+      lastKnownDomain: serializer.fromJson<String?>(json['lastKnownDomain']),
+      serverId: serializer.fromJson<int>(json['serverId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'kind': serializer.toJson<String>(kind),
+      'targetId': serializer.toJson<String>(targetId),
+      'areaHaId': serializer.toJson<String?>(areaHaId),
+      'size': serializer.toJson<String>(size),
+      'order': serializer.toJson<int?>(order),
+      'hidden': serializer.toJson<bool>(hidden),
+      'primaryEntityRegistryId': serializer.toJson<String?>(
+        primaryEntityRegistryId,
+      ),
+      'lastKnownName': serializer.toJson<String?>(lastKnownName),
+      'lastKnownAreaHaId': serializer.toJson<String?>(lastKnownAreaHaId),
+      'lastKnownDomain': serializer.toJson<String?>(lastKnownDomain),
+      'serverId': serializer.toJson<int>(serverId),
+    };
+  }
+
+  HomeTileOverrideRow copyWith({
+    int? id,
+    String? kind,
+    String? targetId,
+    Value<String?> areaHaId = const Value.absent(),
+    String? size,
+    Value<int?> order = const Value.absent(),
+    bool? hidden,
+    Value<String?> primaryEntityRegistryId = const Value.absent(),
+    Value<String?> lastKnownName = const Value.absent(),
+    Value<String?> lastKnownAreaHaId = const Value.absent(),
+    Value<String?> lastKnownDomain = const Value.absent(),
+    int? serverId,
+  }) => HomeTileOverrideRow(
+    id: id ?? this.id,
+    kind: kind ?? this.kind,
+    targetId: targetId ?? this.targetId,
+    areaHaId: areaHaId.present ? areaHaId.value : this.areaHaId,
+    size: size ?? this.size,
+    order: order.present ? order.value : this.order,
+    hidden: hidden ?? this.hidden,
+    primaryEntityRegistryId: primaryEntityRegistryId.present
+        ? primaryEntityRegistryId.value
+        : this.primaryEntityRegistryId,
+    lastKnownName: lastKnownName.present
+        ? lastKnownName.value
+        : this.lastKnownName,
+    lastKnownAreaHaId: lastKnownAreaHaId.present
+        ? lastKnownAreaHaId.value
+        : this.lastKnownAreaHaId,
+    lastKnownDomain: lastKnownDomain.present
+        ? lastKnownDomain.value
+        : this.lastKnownDomain,
+    serverId: serverId ?? this.serverId,
+  );
+  HomeTileOverrideRow copyWithCompanion(HomeTileOverridesCompanion data) {
+    return HomeTileOverrideRow(
+      id: data.id.present ? data.id.value : this.id,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      targetId: data.targetId.present ? data.targetId.value : this.targetId,
+      areaHaId: data.areaHaId.present ? data.areaHaId.value : this.areaHaId,
+      size: data.size.present ? data.size.value : this.size,
+      order: data.order.present ? data.order.value : this.order,
+      hidden: data.hidden.present ? data.hidden.value : this.hidden,
+      primaryEntityRegistryId: data.primaryEntityRegistryId.present
+          ? data.primaryEntityRegistryId.value
+          : this.primaryEntityRegistryId,
+      lastKnownName: data.lastKnownName.present
+          ? data.lastKnownName.value
+          : this.lastKnownName,
+      lastKnownAreaHaId: data.lastKnownAreaHaId.present
+          ? data.lastKnownAreaHaId.value
+          : this.lastKnownAreaHaId,
+      lastKnownDomain: data.lastKnownDomain.present
+          ? data.lastKnownDomain.value
+          : this.lastKnownDomain,
+      serverId: data.serverId.present ? data.serverId.value : this.serverId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HomeTileOverrideRow(')
+          ..write('id: $id, ')
+          ..write('kind: $kind, ')
+          ..write('targetId: $targetId, ')
+          ..write('areaHaId: $areaHaId, ')
+          ..write('size: $size, ')
+          ..write('order: $order, ')
+          ..write('hidden: $hidden, ')
+          ..write('primaryEntityRegistryId: $primaryEntityRegistryId, ')
+          ..write('lastKnownName: $lastKnownName, ')
+          ..write('lastKnownAreaHaId: $lastKnownAreaHaId, ')
+          ..write('lastKnownDomain: $lastKnownDomain, ')
+          ..write('serverId: $serverId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    kind,
+    targetId,
+    areaHaId,
+    size,
+    order,
+    hidden,
+    primaryEntityRegistryId,
+    lastKnownName,
+    lastKnownAreaHaId,
+    lastKnownDomain,
+    serverId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HomeTileOverrideRow &&
+          other.id == this.id &&
+          other.kind == this.kind &&
+          other.targetId == this.targetId &&
+          other.areaHaId == this.areaHaId &&
+          other.size == this.size &&
+          other.order == this.order &&
+          other.hidden == this.hidden &&
+          other.primaryEntityRegistryId == this.primaryEntityRegistryId &&
+          other.lastKnownName == this.lastKnownName &&
+          other.lastKnownAreaHaId == this.lastKnownAreaHaId &&
+          other.lastKnownDomain == this.lastKnownDomain &&
+          other.serverId == this.serverId);
+}
+
+class HomeTileOverridesCompanion extends UpdateCompanion<HomeTileOverrideRow> {
+  final Value<int> id;
+  final Value<String> kind;
+  final Value<String> targetId;
+  final Value<String?> areaHaId;
+  final Value<String> size;
+  final Value<int?> order;
+  final Value<bool> hidden;
+  final Value<String?> primaryEntityRegistryId;
+  final Value<String?> lastKnownName;
+  final Value<String?> lastKnownAreaHaId;
+  final Value<String?> lastKnownDomain;
+  final Value<int> serverId;
+  const HomeTileOverridesCompanion({
+    this.id = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.targetId = const Value.absent(),
+    this.areaHaId = const Value.absent(),
+    this.size = const Value.absent(),
+    this.order = const Value.absent(),
+    this.hidden = const Value.absent(),
+    this.primaryEntityRegistryId = const Value.absent(),
+    this.lastKnownName = const Value.absent(),
+    this.lastKnownAreaHaId = const Value.absent(),
+    this.lastKnownDomain = const Value.absent(),
+    this.serverId = const Value.absent(),
+  });
+  HomeTileOverridesCompanion.insert({
+    this.id = const Value.absent(),
+    required String kind,
+    required String targetId,
+    this.areaHaId = const Value.absent(),
+    required String size,
+    this.order = const Value.absent(),
+    this.hidden = const Value.absent(),
+    this.primaryEntityRegistryId = const Value.absent(),
+    this.lastKnownName = const Value.absent(),
+    this.lastKnownAreaHaId = const Value.absent(),
+    this.lastKnownDomain = const Value.absent(),
+    required int serverId,
+  }) : kind = Value(kind),
+       targetId = Value(targetId),
+       size = Value(size),
+       serverId = Value(serverId);
+  static Insertable<HomeTileOverrideRow> custom({
+    Expression<int>? id,
+    Expression<String>? kind,
+    Expression<String>? targetId,
+    Expression<String>? areaHaId,
+    Expression<String>? size,
+    Expression<int>? order,
+    Expression<bool>? hidden,
+    Expression<String>? primaryEntityRegistryId,
+    Expression<String>? lastKnownName,
+    Expression<String>? lastKnownAreaHaId,
+    Expression<String>? lastKnownDomain,
+    Expression<int>? serverId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (kind != null) 'kind': kind,
+      if (targetId != null) 'target_id': targetId,
+      if (areaHaId != null) 'area_ha_id': areaHaId,
+      if (size != null) 'size': size,
+      if (order != null) 'order': order,
+      if (hidden != null) 'hidden': hidden,
+      if (primaryEntityRegistryId != null)
+        'primary_entity_registry_id': primaryEntityRegistryId,
+      if (lastKnownName != null) 'last_known_name': lastKnownName,
+      if (lastKnownAreaHaId != null) 'last_known_area_ha_id': lastKnownAreaHaId,
+      if (lastKnownDomain != null) 'last_known_domain': lastKnownDomain,
+      if (serverId != null) 'server_id': serverId,
+    });
+  }
+
+  HomeTileOverridesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? kind,
+    Value<String>? targetId,
+    Value<String?>? areaHaId,
+    Value<String>? size,
+    Value<int?>? order,
+    Value<bool>? hidden,
+    Value<String?>? primaryEntityRegistryId,
+    Value<String?>? lastKnownName,
+    Value<String?>? lastKnownAreaHaId,
+    Value<String?>? lastKnownDomain,
+    Value<int>? serverId,
+  }) {
+    return HomeTileOverridesCompanion(
+      id: id ?? this.id,
+      kind: kind ?? this.kind,
+      targetId: targetId ?? this.targetId,
+      areaHaId: areaHaId ?? this.areaHaId,
+      size: size ?? this.size,
+      order: order ?? this.order,
+      hidden: hidden ?? this.hidden,
+      primaryEntityRegistryId:
+          primaryEntityRegistryId ?? this.primaryEntityRegistryId,
+      lastKnownName: lastKnownName ?? this.lastKnownName,
+      lastKnownAreaHaId: lastKnownAreaHaId ?? this.lastKnownAreaHaId,
+      lastKnownDomain: lastKnownDomain ?? this.lastKnownDomain,
+      serverId: serverId ?? this.serverId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (targetId.present) {
+      map['target_id'] = Variable<String>(targetId.value);
+    }
+    if (areaHaId.present) {
+      map['area_ha_id'] = Variable<String>(areaHaId.value);
+    }
+    if (size.present) {
+      map['size'] = Variable<String>(size.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    if (hidden.present) {
+      map['hidden'] = Variable<bool>(hidden.value);
+    }
+    if (primaryEntityRegistryId.present) {
+      map['primary_entity_registry_id'] = Variable<String>(
+        primaryEntityRegistryId.value,
+      );
+    }
+    if (lastKnownName.present) {
+      map['last_known_name'] = Variable<String>(lastKnownName.value);
+    }
+    if (lastKnownAreaHaId.present) {
+      map['last_known_area_ha_id'] = Variable<String>(lastKnownAreaHaId.value);
+    }
+    if (lastKnownDomain.present) {
+      map['last_known_domain'] = Variable<String>(lastKnownDomain.value);
+    }
+    if (serverId.present) {
+      map['server_id'] = Variable<int>(serverId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HomeTileOverridesCompanion(')
+          ..write('id: $id, ')
+          ..write('kind: $kind, ')
+          ..write('targetId: $targetId, ')
+          ..write('areaHaId: $areaHaId, ')
+          ..write('size: $size, ')
+          ..write('order: $order, ')
+          ..write('hidden: $hidden, ')
+          ..write('primaryEntityRegistryId: $primaryEntityRegistryId, ')
+          ..write('lastKnownName: $lastKnownName, ')
+          ..write('lastKnownAreaHaId: $lastKnownAreaHaId, ')
+          ..write('lastKnownDomain: $lastKnownDomain, ')
+          ..write('serverId: $serverId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $EntitiesTable extends Entities
     with TableInfo<$EntitiesTable, EntityRow> {
   @override
@@ -3377,6 +4144,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $DeviceHomeConfigsTable deviceHomeConfigs =
       $DeviceHomeConfigsTable(this);
+  late final $HomeTileOverridesTable homeTileOverrides =
+      $HomeTileOverridesTable(this);
   late final $EntitiesTable entities = $EntitiesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -3390,6 +4159,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     homeViewConfigs,
     areaHomeConfigs,
     deviceHomeConfigs,
+    homeTileOverrides,
     entities,
   ];
   @override
@@ -3456,6 +4226,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('device_home_configs', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'server_entities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('home_tile_overrides', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -3542,6 +4319,27 @@ final class $$ServerEntitiesTableReferences
 
     final cache = $_typedResult.readTableOrNull(
       _homeViewConfigsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$HomeTileOverridesTable, List<HomeTileOverrideRow>>
+  _homeTileOverridesRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.homeTileOverrides,
+        aliasName: 'server_entities__id__home_tile_overrides__server_id',
+      );
+
+  $$HomeTileOverridesTableProcessedTableManager get homeTileOverridesRefs {
+    final manager = $$HomeTileOverridesTableTableManager(
+      $_db,
+      $_db.homeTileOverrides,
+    ).filter((f) => f.serverId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _homeTileOverridesRefsTable($_db),
     );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
@@ -3667,6 +4465,31 @@ class $$ServerEntitiesTableFilterComposer
           }) => $$HomeViewConfigsTableFilterComposer(
             $db: $db,
             $table: $db.homeViewConfigs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> homeTileOverridesRefs(
+    Expression<bool> Function($$HomeTileOverridesTableFilterComposer f) f,
+  ) {
+    final $$HomeTileOverridesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.homeTileOverrides,
+      getReferencedColumn: (t) => t.serverId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$HomeTileOverridesTableFilterComposer(
+            $db: $db,
+            $table: $db.homeTileOverrides,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3836,6 +4659,32 @@ class $$ServerEntitiesTableAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> homeTileOverridesRefs<T extends Object>(
+    Expression<T> Function($$HomeTileOverridesTableAnnotationComposer a) f,
+  ) {
+    final $$HomeTileOverridesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.homeTileOverrides,
+          getReferencedColumn: (t) => t.serverId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$HomeTileOverridesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.homeTileOverrides,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
   Expression<T> entitiesRefs<T extends Object>(
     Expression<T> Function($$EntitiesTableAnnotationComposer a) f,
   ) {
@@ -3879,6 +4728,7 @@ class $$ServerEntitiesTableTableManager
             bool areaEntitiesRefs,
             bool deviceEntitiesRefs,
             bool homeViewConfigsRefs,
+            bool homeTileOverridesRefs,
             bool entitiesRefs,
           })
         > {
@@ -3936,6 +4786,7 @@ class $$ServerEntitiesTableTableManager
                 areaEntitiesRefs = false,
                 deviceEntitiesRefs = false,
                 homeViewConfigsRefs = false,
+                homeTileOverridesRefs = false,
                 entitiesRefs = false,
               }) {
                 return PrefetchHooks(
@@ -3944,6 +4795,7 @@ class $$ServerEntitiesTableTableManager
                     if (areaEntitiesRefs) db.areaEntities,
                     if (deviceEntitiesRefs) db.deviceEntities,
                     if (homeViewConfigsRefs) db.homeViewConfigs,
+                    if (homeTileOverridesRefs) db.homeTileOverrides,
                     if (entitiesRefs) db.entities,
                   ],
                   addJoins: null,
@@ -4012,6 +4864,27 @@ class $$ServerEntitiesTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (homeTileOverridesRefs)
+                        await $_getPrefetchedData<
+                          ServerEntity,
+                          $ServerEntitiesTable,
+                          HomeTileOverrideRow
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ServerEntitiesTableReferences
+                              ._homeTileOverridesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ServerEntitiesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).homeTileOverridesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.serverId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                       if (entitiesRefs)
                         await $_getPrefetchedData<
                           ServerEntity,
@@ -4057,6 +4930,7 @@ typedef $$ServerEntitiesTableProcessedTableManager =
         bool areaEntitiesRefs,
         bool deviceEntitiesRefs,
         bool homeViewConfigsRefs,
+        bool homeTileOverridesRefs,
         bool entitiesRefs,
       })
     >;
@@ -6859,6 +7733,475 @@ typedef $$DeviceHomeConfigsTableProcessedTableManager =
       DeviceHomeConfig,
       PrefetchHooks Function({bool deviceId, bool areaConfigId})
     >;
+typedef $$HomeTileOverridesTableCreateCompanionBuilder =
+    HomeTileOverridesCompanion Function({
+      Value<int> id,
+      required String kind,
+      required String targetId,
+      Value<String?> areaHaId,
+      required String size,
+      Value<int?> order,
+      Value<bool> hidden,
+      Value<String?> primaryEntityRegistryId,
+      Value<String?> lastKnownName,
+      Value<String?> lastKnownAreaHaId,
+      Value<String?> lastKnownDomain,
+      required int serverId,
+    });
+typedef $$HomeTileOverridesTableUpdateCompanionBuilder =
+    HomeTileOverridesCompanion Function({
+      Value<int> id,
+      Value<String> kind,
+      Value<String> targetId,
+      Value<String?> areaHaId,
+      Value<String> size,
+      Value<int?> order,
+      Value<bool> hidden,
+      Value<String?> primaryEntityRegistryId,
+      Value<String?> lastKnownName,
+      Value<String?> lastKnownAreaHaId,
+      Value<String?> lastKnownDomain,
+      Value<int> serverId,
+    });
+
+final class $$HomeTileOverridesTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $HomeTileOverridesTable,
+          HomeTileOverrideRow
+        > {
+  $$HomeTileOverridesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) => db
+      .serverEntities
+      .createAlias('home_tile_overrides__server_id__server_entities__id');
+
+  $$ServerEntitiesTableProcessedTableManager get serverId {
+    final $_column = $_itemColumn<int>('server_id')!;
+
+    final manager = $$ServerEntitiesTableTableManager(
+      $_db,
+      $_db.serverEntities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_serverIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$HomeTileOverridesTableFilterComposer
+    extends Composer<_$AppDatabase, $HomeTileOverridesTable> {
+  $$HomeTileOverridesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get targetId => $composableBuilder(
+    column: $table.targetId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get areaHaId => $composableBuilder(
+    column: $table.areaHaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get size => $composableBuilder(
+    column: $table.size,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get order => $composableBuilder(
+    column: $table.order,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get hidden => $composableBuilder(
+    column: $table.hidden,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get primaryEntityRegistryId => $composableBuilder(
+    column: $table.primaryEntityRegistryId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastKnownName => $composableBuilder(
+    column: $table.lastKnownName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastKnownAreaHaId => $composableBuilder(
+    column: $table.lastKnownAreaHaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastKnownDomain => $composableBuilder(
+    column: $table.lastKnownDomain,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ServerEntitiesTableFilterComposer get serverId {
+    final $$ServerEntitiesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServerEntitiesTableFilterComposer(
+            $db: $db,
+            $table: $db.serverEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$HomeTileOverridesTableOrderingComposer
+    extends Composer<_$AppDatabase, $HomeTileOverridesTable> {
+  $$HomeTileOverridesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get targetId => $composableBuilder(
+    column: $table.targetId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get areaHaId => $composableBuilder(
+    column: $table.areaHaId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get size => $composableBuilder(
+    column: $table.size,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get order => $composableBuilder(
+    column: $table.order,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get hidden => $composableBuilder(
+    column: $table.hidden,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get primaryEntityRegistryId => $composableBuilder(
+    column: $table.primaryEntityRegistryId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastKnownName => $composableBuilder(
+    column: $table.lastKnownName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastKnownAreaHaId => $composableBuilder(
+    column: $table.lastKnownAreaHaId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastKnownDomain => $composableBuilder(
+    column: $table.lastKnownDomain,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ServerEntitiesTableOrderingComposer get serverId {
+    final $$ServerEntitiesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServerEntitiesTableOrderingComposer(
+            $db: $db,
+            $table: $db.serverEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$HomeTileOverridesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HomeTileOverridesTable> {
+  $$HomeTileOverridesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get targetId =>
+      $composableBuilder(column: $table.targetId, builder: (column) => column);
+
+  GeneratedColumn<String> get areaHaId =>
+      $composableBuilder(column: $table.areaHaId, builder: (column) => column);
+
+  GeneratedColumn<String> get size =>
+      $composableBuilder(column: $table.size, builder: (column) => column);
+
+  GeneratedColumn<int> get order =>
+      $composableBuilder(column: $table.order, builder: (column) => column);
+
+  GeneratedColumn<bool> get hidden =>
+      $composableBuilder(column: $table.hidden, builder: (column) => column);
+
+  GeneratedColumn<String> get primaryEntityRegistryId => $composableBuilder(
+    column: $table.primaryEntityRegistryId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get lastKnownName => $composableBuilder(
+    column: $table.lastKnownName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get lastKnownAreaHaId => $composableBuilder(
+    column: $table.lastKnownAreaHaId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get lastKnownDomain => $composableBuilder(
+    column: $table.lastKnownDomain,
+    builder: (column) => column,
+  );
+
+  $$ServerEntitiesTableAnnotationComposer get serverId {
+    final $$ServerEntitiesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServerEntitiesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.serverEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$HomeTileOverridesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HomeTileOverridesTable,
+          HomeTileOverrideRow,
+          $$HomeTileOverridesTableFilterComposer,
+          $$HomeTileOverridesTableOrderingComposer,
+          $$HomeTileOverridesTableAnnotationComposer,
+          $$HomeTileOverridesTableCreateCompanionBuilder,
+          $$HomeTileOverridesTableUpdateCompanionBuilder,
+          (HomeTileOverrideRow, $$HomeTileOverridesTableReferences),
+          HomeTileOverrideRow,
+          PrefetchHooks Function({bool serverId})
+        > {
+  $$HomeTileOverridesTableTableManager(
+    _$AppDatabase db,
+    $HomeTileOverridesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HomeTileOverridesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HomeTileOverridesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HomeTileOverridesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> targetId = const Value.absent(),
+                Value<String?> areaHaId = const Value.absent(),
+                Value<String> size = const Value.absent(),
+                Value<int?> order = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
+                Value<String?> primaryEntityRegistryId = const Value.absent(),
+                Value<String?> lastKnownName = const Value.absent(),
+                Value<String?> lastKnownAreaHaId = const Value.absent(),
+                Value<String?> lastKnownDomain = const Value.absent(),
+                Value<int> serverId = const Value.absent(),
+              }) => HomeTileOverridesCompanion(
+                id: id,
+                kind: kind,
+                targetId: targetId,
+                areaHaId: areaHaId,
+                size: size,
+                order: order,
+                hidden: hidden,
+                primaryEntityRegistryId: primaryEntityRegistryId,
+                lastKnownName: lastKnownName,
+                lastKnownAreaHaId: lastKnownAreaHaId,
+                lastKnownDomain: lastKnownDomain,
+                serverId: serverId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String kind,
+                required String targetId,
+                Value<String?> areaHaId = const Value.absent(),
+                required String size,
+                Value<int?> order = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
+                Value<String?> primaryEntityRegistryId = const Value.absent(),
+                Value<String?> lastKnownName = const Value.absent(),
+                Value<String?> lastKnownAreaHaId = const Value.absent(),
+                Value<String?> lastKnownDomain = const Value.absent(),
+                required int serverId,
+              }) => HomeTileOverridesCompanion.insert(
+                id: id,
+                kind: kind,
+                targetId: targetId,
+                areaHaId: areaHaId,
+                size: size,
+                order: order,
+                hidden: hidden,
+                primaryEntityRegistryId: primaryEntityRegistryId,
+                lastKnownName: lastKnownName,
+                lastKnownAreaHaId: lastKnownAreaHaId,
+                lastKnownDomain: lastKnownDomain,
+                serverId: serverId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$HomeTileOverridesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({serverId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (serverId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.serverId,
+                                referencedTable:
+                                    $$HomeTileOverridesTableReferences
+                                        ._serverIdTable(db),
+                                referencedColumn:
+                                    $$HomeTileOverridesTableReferences
+                                        ._serverIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$HomeTileOverridesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HomeTileOverridesTable,
+      HomeTileOverrideRow,
+      $$HomeTileOverridesTableFilterComposer,
+      $$HomeTileOverridesTableOrderingComposer,
+      $$HomeTileOverridesTableAnnotationComposer,
+      $$HomeTileOverridesTableCreateCompanionBuilder,
+      $$HomeTileOverridesTableUpdateCompanionBuilder,
+      (HomeTileOverrideRow, $$HomeTileOverridesTableReferences),
+      HomeTileOverrideRow,
+      PrefetchHooks Function({bool serverId})
+    >;
 typedef $$EntitiesTableCreateCompanionBuilder =
     EntitiesCompanion Function({
       Value<int> id,
@@ -7344,6 +8687,8 @@ class $AppDatabaseManager {
       $$AreaHomeConfigsTableTableManager(_db, _db.areaHomeConfigs);
   $$DeviceHomeConfigsTableTableManager get deviceHomeConfigs =>
       $$DeviceHomeConfigsTableTableManager(_db, _db.deviceHomeConfigs);
+  $$HomeTileOverridesTableTableManager get homeTileOverrides =>
+      $$HomeTileOverridesTableTableManager(_db, _db.homeTileOverrides);
   $$EntitiesTableTableManager get entities =>
       $$EntitiesTableTableManager(_db, _db.entities);
 }

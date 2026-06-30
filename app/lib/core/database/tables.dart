@@ -395,6 +395,58 @@ class DeviceHomeConfigs extends Table {
   ];
 }
 
+/// Local Hommie-owned presentation overrides for home tiles.
+///
+/// This table deliberately does not foreign-key `targetId` to HA device/entity
+/// registry rows. Overrides must survive removed registry targets so Hommie can
+/// render missing tiles with rebind/remove actions.
+@DataClassName('HomeTileOverrideRow')
+class HomeTileOverrides extends Table {
+  /// Auto-incrementing primary key
+  IntColumn get id => integer().autoIncrement()();
+
+  /// Tile target kind: "device" or "entity"
+  TextColumn get kind => text()();
+
+  /// Stable HA target id: device_id for device tiles, entity registry id for
+  /// entity tiles
+  TextColumn get targetId => text()();
+
+  /// HA area slug where the saved order applies; null for unassigned
+  TextColumn get areaHaId => text().nullable()();
+
+  /// Tile size: "small" or "large"
+  TextColumn get size => text()();
+
+  /// Hommie-owned order in the current area; null means append
+  IntColumn get order => integer().nullable()();
+
+  /// Local hidden/suppressed state
+  BoolColumn get hidden => boolean().withDefault(const Constant(false))();
+
+  /// Optional device primary entity override by HA entity registry id
+  TextColumn get primaryEntityRegistryId => text().nullable()();
+
+  /// Snapshot used for missing tile recovery
+  TextColumn get lastKnownName => text().nullable()();
+
+  /// Snapshot used for missing tile recovery
+  TextColumn get lastKnownAreaHaId => text().nullable()();
+
+  /// Snapshot used for missing tile recovery
+  TextColumn get lastKnownDomain => text().nullable()();
+
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all local overrides for that server
+  IntColumn get serverId =>
+      integer().references(ServerEntities, #id, onDelete: KeyAction.cascade)();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {serverId, kind, targetId},
+  ];
+}
+
 /// Database table for the generic Home Assistant entity cache (every domain).
 ///
 /// **Primary Entity:** A cached snapshot of a Home Assistant *entity* (the
