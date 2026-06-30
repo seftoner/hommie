@@ -61,6 +61,62 @@ void main() {
     expect(state.syncFailure, isNull);
   });
 
+  test(
+    'exposes generated device tile sections beside entity sections',
+    () async {
+      final container = makeContainer(
+        areas: [const Area(id: 'kitchen', name: 'Kitchen')],
+        entities: const [
+          HaEntity(
+            registryId: 'reg-light',
+            uniqueId: 'uid-light',
+            platform: 'hue',
+            entityId: 'light.kitchen_lamp',
+            domain: 'light',
+            name: 'Kitchen lamp',
+            deviceId: 'dev-lamp',
+            areaId: 'kitchen',
+          ),
+          HaEntity(
+            registryId: 'reg-signal',
+            uniqueId: 'uid-signal',
+            platform: 'hue',
+            entityId: 'sensor.kitchen_lamp_signal',
+            domain: 'sensor',
+            name: 'Signal',
+            deviceId: 'dev-lamp',
+            areaId: 'kitchen',
+            entityCategory: 'diagnostic',
+          ),
+          HaEntity(
+            registryId: 'reg-scene',
+            uniqueId: 'uid-scene',
+            platform: 'scene',
+            entityId: 'scene.movie_time',
+            domain: 'scene',
+            name: 'Movie time',
+            areaId: 'kitchen',
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      container.listen(homePageControllerProvider, (_, _) {});
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      final state = container.read(homePageControllerProvider);
+      expect(state.sections.first.entities, hasLength(3));
+      expect(state.deviceSections, hasLength(1));
+      expect(state.deviceSections.single.areaId, 'kitchen');
+      expect(state.deviceSections.single.tiles, hasLength(1));
+      expect(state.deviceSections.single.tiles.single.targetId, 'dev-lamp');
+      expect(
+        state.deviceSections.single.tiles.single.primaryEntity?.registryId,
+        'reg-light',
+      );
+    },
+  );
+
   test('isInitialSyncing while entities empty and initial sync runs', () async {
     final container = makeContainer(
       areas: const [],
