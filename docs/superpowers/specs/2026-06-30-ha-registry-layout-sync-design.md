@@ -1,8 +1,8 @@
 # Home Assistant device-first registry layout sync - Design
 
 Date: 2026-06-30
-Branch: `main`
-Status: Draft for review
+Branch: `codex/device-first-layout-sync`
+Status: Accepted; implementation in progress
 
 ## Problem
 
