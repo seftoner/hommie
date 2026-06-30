@@ -3,30 +3,84 @@ import 'package:hommie/features/entities/infrastructure/repositories/entity_reso
 import 'package:hommie/features/entities/infrastructure/repositories/ha_registry_repository.dart';
 
 void main() {
-  test('resolves entity area then device area; drops disabled/hidden', () {
+  test('resolves area and preserves disabled/hidden metadata', () {
     final entities = [
-      const EntityRegistryRecord(entityId: 'light.a', areaId: 'kitchen'), // direct
-      const EntityRegistryRecord(entityId: 'light.b', deviceId: 'dev1'), // via device
-      const EntityRegistryRecord(entityId: 'light.c'), // no area
-      const EntityRegistryRecord(entityId: 'light.d', disabled: true),
-      const EntityRegistryRecord(entityId: 'light.e', hidden: true),
+      const EntityRegistryRecord(
+        id: 'reg-a',
+        entityId: 'light.a',
+        uniqueId: 'uid-a',
+        platform: 'test',
+        areaId: 'kitchen',
+      ), // direct
+      const EntityRegistryRecord(
+        id: 'reg-b',
+        entityId: 'light.b',
+        uniqueId: 'uid-b',
+        platform: 'test',
+        deviceId: 'dev1',
+      ), // via device
+      const EntityRegistryRecord(
+        id: 'reg-c',
+        entityId: 'light.c',
+        uniqueId: 'uid-c',
+        platform: 'test',
+      ), // no area
+      const EntityRegistryRecord(
+        id: 'reg-d',
+        entityId: 'light.d',
+        uniqueId: 'uid-d',
+        platform: 'test',
+        disabled: true,
+      ),
+      const EntityRegistryRecord(
+        id: 'reg-e',
+        entityId: 'light.e',
+        uniqueId: 'uid-e',
+        platform: 'test',
+        hidden: true,
+      ),
     ];
     final devices = [const DeviceRegistryRecord(id: 'dev1', areaId: 'den')];
 
     final result = resolveEntities(entities: entities, devices: devices);
 
-    expect(result.map((e) => e.entityId), ['light.a', 'light.b', 'light.c']);
+    expect(result.map((e) => e.entityId), [
+      'light.a',
+      'light.b',
+      'light.c',
+      'light.d',
+      'light.e',
+    ]);
+    expect(result[0].registryId, 'reg-a');
+    expect(result[0].uniqueId, 'uid-a');
+    expect(result[0].platform, 'test');
     expect(result[0].areaId, 'kitchen');
     expect(result[0].domain, 'light');
     expect(result[1].areaId, 'den'); // device fallback
     expect(result[2].areaId, isNull);
+    expect(result.singleWhere((e) => e.entityId == 'light.d').disabled, isTrue);
+    expect(result.singleWhere((e) => e.entityId == 'light.e').hidden, isTrue);
   });
 
   test('name falls back original_name then entity_id', () {
-    final result = resolveEntities(entities: [
-      const EntityRegistryRecord(entityId: 'light.x', originalName: 'X'),
-      const EntityRegistryRecord(entityId: 'light.y'),
-    ], devices: const []);
+    final result = resolveEntities(
+      entities: [
+        const EntityRegistryRecord(
+          id: 'reg-x',
+          entityId: 'light.x',
+          uniqueId: 'uid-x',
+          platform: 'test',
+          originalName: 'X',
+        ),
+        const EntityRegistryRecord(
+          id: 'reg-y',
+          entityId: 'light.y',
+          uniqueId: 'uid-y',
+          platform: 'test',
+        ),
+      ],
+      devices: const [],
+    );
     expect(result[0].name, 'X');
     expect(result[1].name, 'light.y');
   });
