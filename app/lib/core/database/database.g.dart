@@ -800,7 +800,6 @@ class $DeviceEntitiesTable extends DeviceEntities
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
@@ -820,6 +819,63 @@ class $DeviceEntitiesTable extends DeviceEntities
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _areaHaIdMeta = const VerificationMeta(
+    'areaHaId',
+  );
+  @override
+  late final GeneratedColumn<String> areaHaId = GeneratedColumn<String>(
+    'area_ha_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _nameByUserMeta = const VerificationMeta(
+    'nameByUser',
+  );
+  @override
+  late final GeneratedColumn<String> nameByUser = GeneratedColumn<String>(
+    'name_by_user',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _manufacturerMeta = const VerificationMeta(
+    'manufacturer',
+  );
+  @override
+  late final GeneratedColumn<String> manufacturer = GeneratedColumn<String>(
+    'manufacturer',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _modelMeta = const VerificationMeta('model');
+  @override
+  late final GeneratedColumn<String> model = GeneratedColumn<String>(
+    'model',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _disabledMeta = const VerificationMeta(
+    'disabled',
+  );
+  @override
+  late final GeneratedColumn<bool> disabled = GeneratedColumn<bool>(
+    'disabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("disabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _serverIdMeta = const VerificationMeta(
     'serverId',
   );
@@ -835,7 +891,18 @@ class $DeviceEntitiesTable extends DeviceEntities
     ),
   );
   @override
-  List<GeneratedColumn> get $columns => [id, haId, name, type, serverId];
+  List<GeneratedColumn> get $columns => [
+    id,
+    haId,
+    name,
+    type,
+    areaHaId,
+    nameByUser,
+    manufacturer,
+    model,
+    disabled,
+    serverId,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -875,6 +942,42 @@ class $DeviceEntitiesTable extends DeviceEntities
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
+    if (data.containsKey('area_ha_id')) {
+      context.handle(
+        _areaHaIdMeta,
+        areaHaId.isAcceptableOrUnknown(data['area_ha_id']!, _areaHaIdMeta),
+      );
+    }
+    if (data.containsKey('name_by_user')) {
+      context.handle(
+        _nameByUserMeta,
+        nameByUser.isAcceptableOrUnknown(
+          data['name_by_user']!,
+          _nameByUserMeta,
+        ),
+      );
+    }
+    if (data.containsKey('manufacturer')) {
+      context.handle(
+        _manufacturerMeta,
+        manufacturer.isAcceptableOrUnknown(
+          data['manufacturer']!,
+          _manufacturerMeta,
+        ),
+      );
+    }
+    if (data.containsKey('model')) {
+      context.handle(
+        _modelMeta,
+        model.isAcceptableOrUnknown(data['model']!, _modelMeta),
+      );
+    }
+    if (data.containsKey('disabled')) {
+      context.handle(
+        _disabledMeta,
+        disabled.isAcceptableOrUnknown(data['disabled']!, _disabledMeta),
+      );
+    }
     if (data.containsKey('server_id')) {
       context.handle(
         _serverIdMeta,
@@ -888,6 +991,10 @@ class $DeviceEntitiesTable extends DeviceEntities
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {serverId, haId},
+  ];
   @override
   DeviceEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -908,6 +1015,26 @@ class $DeviceEntitiesTable extends DeviceEntities
         DriftSqlType.string,
         data['${effectivePrefix}type'],
       )!,
+      areaHaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}area_ha_id'],
+      ),
+      nameByUser: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name_by_user'],
+      ),
+      manufacturer: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}manufacturer'],
+      ),
+      model: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}model'],
+      ),
+      disabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}disabled'],
+      )!,
       serverId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}server_id'],
@@ -925,7 +1052,7 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
   /// Auto-incrementing primary key (local database ID)
   final int id;
 
-  /// Home Assistant entity ID (e.g., "light.living_room_lamp")
+  /// Home Assistant device registry ID
   final String haId;
 
   /// Display name for the device (e.g., "Living Room Lamp")
@@ -933,6 +1060,21 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
 
   /// Device domain/type (e.g., "light", "switch", "media_player", "sensor")
   final String type;
+
+  /// HA area slug from the device registry; null when unassigned
+  final String? areaHaId;
+
+  /// HA user-overridden device name, if any
+  final String? nameByUser;
+
+  /// Device manufacturer from HA registry metadata
+  final String? manufacturer;
+
+  /// Device model from HA registry metadata
+  final String? model;
+
+  /// Whether HA marks this device disabled
+  final bool disabled;
 
   /// Foreign key reference to [ServerEntities]
   /// Cascades: deleting a server deletes all its devices
@@ -942,6 +1084,11 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
     required this.haId,
     required this.name,
     required this.type,
+    this.areaHaId,
+    this.nameByUser,
+    this.manufacturer,
+    this.model,
+    required this.disabled,
     required this.serverId,
   });
   @override
@@ -951,6 +1098,19 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
     map['ha_id'] = Variable<String>(haId);
     map['name'] = Variable<String>(name);
     map['type'] = Variable<String>(type);
+    if (!nullToAbsent || areaHaId != null) {
+      map['area_ha_id'] = Variable<String>(areaHaId);
+    }
+    if (!nullToAbsent || nameByUser != null) {
+      map['name_by_user'] = Variable<String>(nameByUser);
+    }
+    if (!nullToAbsent || manufacturer != null) {
+      map['manufacturer'] = Variable<String>(manufacturer);
+    }
+    if (!nullToAbsent || model != null) {
+      map['model'] = Variable<String>(model);
+    }
+    map['disabled'] = Variable<bool>(disabled);
     map['server_id'] = Variable<int>(serverId);
     return map;
   }
@@ -961,6 +1121,19 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       haId: Value(haId),
       name: Value(name),
       type: Value(type),
+      areaHaId: areaHaId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(areaHaId),
+      nameByUser: nameByUser == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nameByUser),
+      manufacturer: manufacturer == null && nullToAbsent
+          ? const Value.absent()
+          : Value(manufacturer),
+      model: model == null && nullToAbsent
+          ? const Value.absent()
+          : Value(model),
+      disabled: Value(disabled),
       serverId: Value(serverId),
     );
   }
@@ -975,6 +1148,11 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       haId: serializer.fromJson<String>(json['haId']),
       name: serializer.fromJson<String>(json['name']),
       type: serializer.fromJson<String>(json['type']),
+      areaHaId: serializer.fromJson<String?>(json['areaHaId']),
+      nameByUser: serializer.fromJson<String?>(json['nameByUser']),
+      manufacturer: serializer.fromJson<String?>(json['manufacturer']),
+      model: serializer.fromJson<String?>(json['model']),
+      disabled: serializer.fromJson<bool>(json['disabled']),
       serverId: serializer.fromJson<int>(json['serverId']),
     );
   }
@@ -986,6 +1164,11 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       'haId': serializer.toJson<String>(haId),
       'name': serializer.toJson<String>(name),
       'type': serializer.toJson<String>(type),
+      'areaHaId': serializer.toJson<String?>(areaHaId),
+      'nameByUser': serializer.toJson<String?>(nameByUser),
+      'manufacturer': serializer.toJson<String?>(manufacturer),
+      'model': serializer.toJson<String?>(model),
+      'disabled': serializer.toJson<bool>(disabled),
       'serverId': serializer.toJson<int>(serverId),
     };
   }
@@ -995,12 +1178,22 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
     String? haId,
     String? name,
     String? type,
+    Value<String?> areaHaId = const Value.absent(),
+    Value<String?> nameByUser = const Value.absent(),
+    Value<String?> manufacturer = const Value.absent(),
+    Value<String?> model = const Value.absent(),
+    bool? disabled,
     int? serverId,
   }) => DeviceEntity(
     id: id ?? this.id,
     haId: haId ?? this.haId,
     name: name ?? this.name,
     type: type ?? this.type,
+    areaHaId: areaHaId.present ? areaHaId.value : this.areaHaId,
+    nameByUser: nameByUser.present ? nameByUser.value : this.nameByUser,
+    manufacturer: manufacturer.present ? manufacturer.value : this.manufacturer,
+    model: model.present ? model.value : this.model,
+    disabled: disabled ?? this.disabled,
     serverId: serverId ?? this.serverId,
   );
   DeviceEntity copyWithCompanion(DeviceEntitiesCompanion data) {
@@ -1009,6 +1202,15 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
       haId: data.haId.present ? data.haId.value : this.haId,
       name: data.name.present ? data.name.value : this.name,
       type: data.type.present ? data.type.value : this.type,
+      areaHaId: data.areaHaId.present ? data.areaHaId.value : this.areaHaId,
+      nameByUser: data.nameByUser.present
+          ? data.nameByUser.value
+          : this.nameByUser,
+      manufacturer: data.manufacturer.present
+          ? data.manufacturer.value
+          : this.manufacturer,
+      model: data.model.present ? data.model.value : this.model,
+      disabled: data.disabled.present ? data.disabled.value : this.disabled,
       serverId: data.serverId.present ? data.serverId.value : this.serverId,
     );
   }
@@ -1020,13 +1222,29 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
           ..write('haId: $haId, ')
           ..write('name: $name, ')
           ..write('type: $type, ')
+          ..write('areaHaId: $areaHaId, ')
+          ..write('nameByUser: $nameByUser, ')
+          ..write('manufacturer: $manufacturer, ')
+          ..write('model: $model, ')
+          ..write('disabled: $disabled, ')
           ..write('serverId: $serverId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, haId, name, type, serverId);
+  int get hashCode => Object.hash(
+    id,
+    haId,
+    name,
+    type,
+    areaHaId,
+    nameByUser,
+    manufacturer,
+    model,
+    disabled,
+    serverId,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1035,6 +1253,11 @@ class DeviceEntity extends DataClass implements Insertable<DeviceEntity> {
           other.haId == this.haId &&
           other.name == this.name &&
           other.type == this.type &&
+          other.areaHaId == this.areaHaId &&
+          other.nameByUser == this.nameByUser &&
+          other.manufacturer == this.manufacturer &&
+          other.model == this.model &&
+          other.disabled == this.disabled &&
           other.serverId == this.serverId);
 }
 
@@ -1043,12 +1266,22 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
   final Value<String> haId;
   final Value<String> name;
   final Value<String> type;
+  final Value<String?> areaHaId;
+  final Value<String?> nameByUser;
+  final Value<String?> manufacturer;
+  final Value<String?> model;
+  final Value<bool> disabled;
   final Value<int> serverId;
   const DeviceEntitiesCompanion({
     this.id = const Value.absent(),
     this.haId = const Value.absent(),
     this.name = const Value.absent(),
     this.type = const Value.absent(),
+    this.areaHaId = const Value.absent(),
+    this.nameByUser = const Value.absent(),
+    this.manufacturer = const Value.absent(),
+    this.model = const Value.absent(),
+    this.disabled = const Value.absent(),
     this.serverId = const Value.absent(),
   });
   DeviceEntitiesCompanion.insert({
@@ -1056,6 +1289,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
     required String haId,
     required String name,
     required String type,
+    this.areaHaId = const Value.absent(),
+    this.nameByUser = const Value.absent(),
+    this.manufacturer = const Value.absent(),
+    this.model = const Value.absent(),
+    this.disabled = const Value.absent(),
     required int serverId,
   }) : haId = Value(haId),
        name = Value(name),
@@ -1066,6 +1304,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
     Expression<String>? haId,
     Expression<String>? name,
     Expression<String>? type,
+    Expression<String>? areaHaId,
+    Expression<String>? nameByUser,
+    Expression<String>? manufacturer,
+    Expression<String>? model,
+    Expression<bool>? disabled,
     Expression<int>? serverId,
   }) {
     return RawValuesInsertable({
@@ -1073,6 +1316,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
       if (haId != null) 'ha_id': haId,
       if (name != null) 'name': name,
       if (type != null) 'type': type,
+      if (areaHaId != null) 'area_ha_id': areaHaId,
+      if (nameByUser != null) 'name_by_user': nameByUser,
+      if (manufacturer != null) 'manufacturer': manufacturer,
+      if (model != null) 'model': model,
+      if (disabled != null) 'disabled': disabled,
       if (serverId != null) 'server_id': serverId,
     });
   }
@@ -1082,6 +1330,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
     Value<String>? haId,
     Value<String>? name,
     Value<String>? type,
+    Value<String?>? areaHaId,
+    Value<String?>? nameByUser,
+    Value<String?>? manufacturer,
+    Value<String?>? model,
+    Value<bool>? disabled,
     Value<int>? serverId,
   }) {
     return DeviceEntitiesCompanion(
@@ -1089,6 +1342,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
       haId: haId ?? this.haId,
       name: name ?? this.name,
       type: type ?? this.type,
+      areaHaId: areaHaId ?? this.areaHaId,
+      nameByUser: nameByUser ?? this.nameByUser,
+      manufacturer: manufacturer ?? this.manufacturer,
+      model: model ?? this.model,
+      disabled: disabled ?? this.disabled,
       serverId: serverId ?? this.serverId,
     );
   }
@@ -1108,6 +1366,21 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
     if (type.present) {
       map['type'] = Variable<String>(type.value);
     }
+    if (areaHaId.present) {
+      map['area_ha_id'] = Variable<String>(areaHaId.value);
+    }
+    if (nameByUser.present) {
+      map['name_by_user'] = Variable<String>(nameByUser.value);
+    }
+    if (manufacturer.present) {
+      map['manufacturer'] = Variable<String>(manufacturer.value);
+    }
+    if (model.present) {
+      map['model'] = Variable<String>(model.value);
+    }
+    if (disabled.present) {
+      map['disabled'] = Variable<bool>(disabled.value);
+    }
     if (serverId.present) {
       map['server_id'] = Variable<int>(serverId.value);
     }
@@ -1121,6 +1394,11 @@ class DeviceEntitiesCompanion extends UpdateCompanion<DeviceEntity> {
           ..write('haId: $haId, ')
           ..write('name: $name, ')
           ..write('type: $type, ')
+          ..write('areaHaId: $areaHaId, ')
+          ..write('nameByUser: $nameByUser, ')
+          ..write('manufacturer: $manufacturer, ')
+          ..write('model: $model, ')
+          ..write('disabled: $disabled, ')
           ..write('serverId: $serverId')
           ..write(')'))
         .toString();
@@ -2300,6 +2578,773 @@ class DeviceHomeConfigsCompanion extends UpdateCompanion<DeviceHomeConfig> {
   }
 }
 
+class $HomeTileOverridesTable extends HomeTileOverrides
+    with TableInfo<$HomeTileOverridesTable, HomeTileOverrideRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HomeTileOverridesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _targetIdMeta = const VerificationMeta(
+    'targetId',
+  );
+  @override
+  late final GeneratedColumn<String> targetId = GeneratedColumn<String>(
+    'target_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _areaHaIdMeta = const VerificationMeta(
+    'areaHaId',
+  );
+  @override
+  late final GeneratedColumn<String> areaHaId = GeneratedColumn<String>(
+    'area_ha_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sizeMeta = const VerificationMeta('size');
+  @override
+  late final GeneratedColumn<String> size = GeneratedColumn<String>(
+    'size',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+    'order',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hiddenMeta = const VerificationMeta('hidden');
+  @override
+  late final GeneratedColumn<bool> hidden = GeneratedColumn<bool>(
+    'hidden',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("hidden" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _primaryEntityRegistryIdMeta =
+      const VerificationMeta('primaryEntityRegistryId');
+  @override
+  late final GeneratedColumn<String> primaryEntityRegistryId =
+      GeneratedColumn<String>(
+        'primary_entity_registry_id',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _lastKnownNameMeta = const VerificationMeta(
+    'lastKnownName',
+  );
+  @override
+  late final GeneratedColumn<String> lastKnownName = GeneratedColumn<String>(
+    'last_known_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastKnownAreaHaIdMeta = const VerificationMeta(
+    'lastKnownAreaHaId',
+  );
+  @override
+  late final GeneratedColumn<String> lastKnownAreaHaId =
+      GeneratedColumn<String>(
+        'last_known_area_ha_id',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _lastKnownDomainMeta = const VerificationMeta(
+    'lastKnownDomain',
+  );
+  @override
+  late final GeneratedColumn<String> lastKnownDomain = GeneratedColumn<String>(
+    'last_known_domain',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _serverIdMeta = const VerificationMeta(
+    'serverId',
+  );
+  @override
+  late final GeneratedColumn<int> serverId = GeneratedColumn<int>(
+    'server_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES server_entities (id) ON DELETE CASCADE',
+    ),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    kind,
+    targetId,
+    areaHaId,
+    size,
+    order,
+    hidden,
+    primaryEntityRegistryId,
+    lastKnownName,
+    lastKnownAreaHaId,
+    lastKnownDomain,
+    serverId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'home_tile_overrides';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HomeTileOverrideRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('target_id')) {
+      context.handle(
+        _targetIdMeta,
+        targetId.isAcceptableOrUnknown(data['target_id']!, _targetIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_targetIdMeta);
+    }
+    if (data.containsKey('area_ha_id')) {
+      context.handle(
+        _areaHaIdMeta,
+        areaHaId.isAcceptableOrUnknown(data['area_ha_id']!, _areaHaIdMeta),
+      );
+    }
+    if (data.containsKey('size')) {
+      context.handle(
+        _sizeMeta,
+        size.isAcceptableOrUnknown(data['size']!, _sizeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sizeMeta);
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+        _orderMeta,
+        order.isAcceptableOrUnknown(data['order']!, _orderMeta),
+      );
+    }
+    if (data.containsKey('hidden')) {
+      context.handle(
+        _hiddenMeta,
+        hidden.isAcceptableOrUnknown(data['hidden']!, _hiddenMeta),
+      );
+    }
+    if (data.containsKey('primary_entity_registry_id')) {
+      context.handle(
+        _primaryEntityRegistryIdMeta,
+        primaryEntityRegistryId.isAcceptableOrUnknown(
+          data['primary_entity_registry_id']!,
+          _primaryEntityRegistryIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_known_name')) {
+      context.handle(
+        _lastKnownNameMeta,
+        lastKnownName.isAcceptableOrUnknown(
+          data['last_known_name']!,
+          _lastKnownNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_known_area_ha_id')) {
+      context.handle(
+        _lastKnownAreaHaIdMeta,
+        lastKnownAreaHaId.isAcceptableOrUnknown(
+          data['last_known_area_ha_id']!,
+          _lastKnownAreaHaIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_known_domain')) {
+      context.handle(
+        _lastKnownDomainMeta,
+        lastKnownDomain.isAcceptableOrUnknown(
+          data['last_known_domain']!,
+          _lastKnownDomainMeta,
+        ),
+      );
+    }
+    if (data.containsKey('server_id')) {
+      context.handle(
+        _serverIdMeta,
+        serverId.isAcceptableOrUnknown(data['server_id']!, _serverIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_serverIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {serverId, kind, targetId},
+  ];
+  @override
+  HomeTileOverrideRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HomeTileOverrideRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      targetId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}target_id'],
+      )!,
+      areaHaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}area_ha_id'],
+      ),
+      size: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}size'],
+      )!,
+      order: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}order'],
+      ),
+      hidden: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}hidden'],
+      )!,
+      primaryEntityRegistryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}primary_entity_registry_id'],
+      ),
+      lastKnownName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_known_name'],
+      ),
+      lastKnownAreaHaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_known_area_ha_id'],
+      ),
+      lastKnownDomain: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_known_domain'],
+      ),
+      serverId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}server_id'],
+      )!,
+    );
+  }
+
+  @override
+  $HomeTileOverridesTable createAlias(String alias) {
+    return $HomeTileOverridesTable(attachedDatabase, alias);
+  }
+}
+
+class HomeTileOverrideRow extends DataClass
+    implements Insertable<HomeTileOverrideRow> {
+  /// Auto-incrementing primary key
+  final int id;
+
+  /// Tile target kind: "device" or "entity"
+  final String kind;
+
+  /// Stable HA target id: device_id for device tiles, entity registry id for
+  /// entity tiles
+  final String targetId;
+
+  /// HA area slug where the saved order applies; null for unassigned
+  final String? areaHaId;
+
+  /// Tile size: "small" or "large"
+  final String size;
+
+  /// Hommie-owned order in the current area; null means append
+  final int? order;
+
+  /// Local hidden/suppressed state
+  final bool hidden;
+
+  /// Optional device primary entity override by HA entity registry id
+  final String? primaryEntityRegistryId;
+
+  /// Snapshot used for missing tile recovery
+  final String? lastKnownName;
+
+  /// Snapshot used for missing tile recovery
+  final String? lastKnownAreaHaId;
+
+  /// Snapshot used for missing tile recovery
+  final String? lastKnownDomain;
+
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all local overrides for that server
+  final int serverId;
+  const HomeTileOverrideRow({
+    required this.id,
+    required this.kind,
+    required this.targetId,
+    this.areaHaId,
+    required this.size,
+    this.order,
+    required this.hidden,
+    this.primaryEntityRegistryId,
+    this.lastKnownName,
+    this.lastKnownAreaHaId,
+    this.lastKnownDomain,
+    required this.serverId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['kind'] = Variable<String>(kind);
+    map['target_id'] = Variable<String>(targetId);
+    if (!nullToAbsent || areaHaId != null) {
+      map['area_ha_id'] = Variable<String>(areaHaId);
+    }
+    map['size'] = Variable<String>(size);
+    if (!nullToAbsent || order != null) {
+      map['order'] = Variable<int>(order);
+    }
+    map['hidden'] = Variable<bool>(hidden);
+    if (!nullToAbsent || primaryEntityRegistryId != null) {
+      map['primary_entity_registry_id'] = Variable<String>(
+        primaryEntityRegistryId,
+      );
+    }
+    if (!nullToAbsent || lastKnownName != null) {
+      map['last_known_name'] = Variable<String>(lastKnownName);
+    }
+    if (!nullToAbsent || lastKnownAreaHaId != null) {
+      map['last_known_area_ha_id'] = Variable<String>(lastKnownAreaHaId);
+    }
+    if (!nullToAbsent || lastKnownDomain != null) {
+      map['last_known_domain'] = Variable<String>(lastKnownDomain);
+    }
+    map['server_id'] = Variable<int>(serverId);
+    return map;
+  }
+
+  HomeTileOverridesCompanion toCompanion(bool nullToAbsent) {
+    return HomeTileOverridesCompanion(
+      id: Value(id),
+      kind: Value(kind),
+      targetId: Value(targetId),
+      areaHaId: areaHaId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(areaHaId),
+      size: Value(size),
+      order: order == null && nullToAbsent
+          ? const Value.absent()
+          : Value(order),
+      hidden: Value(hidden),
+      primaryEntityRegistryId: primaryEntityRegistryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(primaryEntityRegistryId),
+      lastKnownName: lastKnownName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastKnownName),
+      lastKnownAreaHaId: lastKnownAreaHaId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastKnownAreaHaId),
+      lastKnownDomain: lastKnownDomain == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastKnownDomain),
+      serverId: Value(serverId),
+    );
+  }
+
+  factory HomeTileOverrideRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HomeTileOverrideRow(
+      id: serializer.fromJson<int>(json['id']),
+      kind: serializer.fromJson<String>(json['kind']),
+      targetId: serializer.fromJson<String>(json['targetId']),
+      areaHaId: serializer.fromJson<String?>(json['areaHaId']),
+      size: serializer.fromJson<String>(json['size']),
+      order: serializer.fromJson<int?>(json['order']),
+      hidden: serializer.fromJson<bool>(json['hidden']),
+      primaryEntityRegistryId: serializer.fromJson<String?>(
+        json['primaryEntityRegistryId'],
+      ),
+      lastKnownName: serializer.fromJson<String?>(json['lastKnownName']),
+      lastKnownAreaHaId: serializer.fromJson<String?>(
+        json['lastKnownAreaHaId'],
+      ),
+      lastKnownDomain: serializer.fromJson<String?>(json['lastKnownDomain']),
+      serverId: serializer.fromJson<int>(json['serverId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'kind': serializer.toJson<String>(kind),
+      'targetId': serializer.toJson<String>(targetId),
+      'areaHaId': serializer.toJson<String?>(areaHaId),
+      'size': serializer.toJson<String>(size),
+      'order': serializer.toJson<int?>(order),
+      'hidden': serializer.toJson<bool>(hidden),
+      'primaryEntityRegistryId': serializer.toJson<String?>(
+        primaryEntityRegistryId,
+      ),
+      'lastKnownName': serializer.toJson<String?>(lastKnownName),
+      'lastKnownAreaHaId': serializer.toJson<String?>(lastKnownAreaHaId),
+      'lastKnownDomain': serializer.toJson<String?>(lastKnownDomain),
+      'serverId': serializer.toJson<int>(serverId),
+    };
+  }
+
+  HomeTileOverrideRow copyWith({
+    int? id,
+    String? kind,
+    String? targetId,
+    Value<String?> areaHaId = const Value.absent(),
+    String? size,
+    Value<int?> order = const Value.absent(),
+    bool? hidden,
+    Value<String?> primaryEntityRegistryId = const Value.absent(),
+    Value<String?> lastKnownName = const Value.absent(),
+    Value<String?> lastKnownAreaHaId = const Value.absent(),
+    Value<String?> lastKnownDomain = const Value.absent(),
+    int? serverId,
+  }) => HomeTileOverrideRow(
+    id: id ?? this.id,
+    kind: kind ?? this.kind,
+    targetId: targetId ?? this.targetId,
+    areaHaId: areaHaId.present ? areaHaId.value : this.areaHaId,
+    size: size ?? this.size,
+    order: order.present ? order.value : this.order,
+    hidden: hidden ?? this.hidden,
+    primaryEntityRegistryId: primaryEntityRegistryId.present
+        ? primaryEntityRegistryId.value
+        : this.primaryEntityRegistryId,
+    lastKnownName: lastKnownName.present
+        ? lastKnownName.value
+        : this.lastKnownName,
+    lastKnownAreaHaId: lastKnownAreaHaId.present
+        ? lastKnownAreaHaId.value
+        : this.lastKnownAreaHaId,
+    lastKnownDomain: lastKnownDomain.present
+        ? lastKnownDomain.value
+        : this.lastKnownDomain,
+    serverId: serverId ?? this.serverId,
+  );
+  HomeTileOverrideRow copyWithCompanion(HomeTileOverridesCompanion data) {
+    return HomeTileOverrideRow(
+      id: data.id.present ? data.id.value : this.id,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      targetId: data.targetId.present ? data.targetId.value : this.targetId,
+      areaHaId: data.areaHaId.present ? data.areaHaId.value : this.areaHaId,
+      size: data.size.present ? data.size.value : this.size,
+      order: data.order.present ? data.order.value : this.order,
+      hidden: data.hidden.present ? data.hidden.value : this.hidden,
+      primaryEntityRegistryId: data.primaryEntityRegistryId.present
+          ? data.primaryEntityRegistryId.value
+          : this.primaryEntityRegistryId,
+      lastKnownName: data.lastKnownName.present
+          ? data.lastKnownName.value
+          : this.lastKnownName,
+      lastKnownAreaHaId: data.lastKnownAreaHaId.present
+          ? data.lastKnownAreaHaId.value
+          : this.lastKnownAreaHaId,
+      lastKnownDomain: data.lastKnownDomain.present
+          ? data.lastKnownDomain.value
+          : this.lastKnownDomain,
+      serverId: data.serverId.present ? data.serverId.value : this.serverId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HomeTileOverrideRow(')
+          ..write('id: $id, ')
+          ..write('kind: $kind, ')
+          ..write('targetId: $targetId, ')
+          ..write('areaHaId: $areaHaId, ')
+          ..write('size: $size, ')
+          ..write('order: $order, ')
+          ..write('hidden: $hidden, ')
+          ..write('primaryEntityRegistryId: $primaryEntityRegistryId, ')
+          ..write('lastKnownName: $lastKnownName, ')
+          ..write('lastKnownAreaHaId: $lastKnownAreaHaId, ')
+          ..write('lastKnownDomain: $lastKnownDomain, ')
+          ..write('serverId: $serverId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    kind,
+    targetId,
+    areaHaId,
+    size,
+    order,
+    hidden,
+    primaryEntityRegistryId,
+    lastKnownName,
+    lastKnownAreaHaId,
+    lastKnownDomain,
+    serverId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HomeTileOverrideRow &&
+          other.id == this.id &&
+          other.kind == this.kind &&
+          other.targetId == this.targetId &&
+          other.areaHaId == this.areaHaId &&
+          other.size == this.size &&
+          other.order == this.order &&
+          other.hidden == this.hidden &&
+          other.primaryEntityRegistryId == this.primaryEntityRegistryId &&
+          other.lastKnownName == this.lastKnownName &&
+          other.lastKnownAreaHaId == this.lastKnownAreaHaId &&
+          other.lastKnownDomain == this.lastKnownDomain &&
+          other.serverId == this.serverId);
+}
+
+class HomeTileOverridesCompanion extends UpdateCompanion<HomeTileOverrideRow> {
+  final Value<int> id;
+  final Value<String> kind;
+  final Value<String> targetId;
+  final Value<String?> areaHaId;
+  final Value<String> size;
+  final Value<int?> order;
+  final Value<bool> hidden;
+  final Value<String?> primaryEntityRegistryId;
+  final Value<String?> lastKnownName;
+  final Value<String?> lastKnownAreaHaId;
+  final Value<String?> lastKnownDomain;
+  final Value<int> serverId;
+  const HomeTileOverridesCompanion({
+    this.id = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.targetId = const Value.absent(),
+    this.areaHaId = const Value.absent(),
+    this.size = const Value.absent(),
+    this.order = const Value.absent(),
+    this.hidden = const Value.absent(),
+    this.primaryEntityRegistryId = const Value.absent(),
+    this.lastKnownName = const Value.absent(),
+    this.lastKnownAreaHaId = const Value.absent(),
+    this.lastKnownDomain = const Value.absent(),
+    this.serverId = const Value.absent(),
+  });
+  HomeTileOverridesCompanion.insert({
+    this.id = const Value.absent(),
+    required String kind,
+    required String targetId,
+    this.areaHaId = const Value.absent(),
+    required String size,
+    this.order = const Value.absent(),
+    this.hidden = const Value.absent(),
+    this.primaryEntityRegistryId = const Value.absent(),
+    this.lastKnownName = const Value.absent(),
+    this.lastKnownAreaHaId = const Value.absent(),
+    this.lastKnownDomain = const Value.absent(),
+    required int serverId,
+  }) : kind = Value(kind),
+       targetId = Value(targetId),
+       size = Value(size),
+       serverId = Value(serverId);
+  static Insertable<HomeTileOverrideRow> custom({
+    Expression<int>? id,
+    Expression<String>? kind,
+    Expression<String>? targetId,
+    Expression<String>? areaHaId,
+    Expression<String>? size,
+    Expression<int>? order,
+    Expression<bool>? hidden,
+    Expression<String>? primaryEntityRegistryId,
+    Expression<String>? lastKnownName,
+    Expression<String>? lastKnownAreaHaId,
+    Expression<String>? lastKnownDomain,
+    Expression<int>? serverId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (kind != null) 'kind': kind,
+      if (targetId != null) 'target_id': targetId,
+      if (areaHaId != null) 'area_ha_id': areaHaId,
+      if (size != null) 'size': size,
+      if (order != null) 'order': order,
+      if (hidden != null) 'hidden': hidden,
+      if (primaryEntityRegistryId != null)
+        'primary_entity_registry_id': primaryEntityRegistryId,
+      if (lastKnownName != null) 'last_known_name': lastKnownName,
+      if (lastKnownAreaHaId != null) 'last_known_area_ha_id': lastKnownAreaHaId,
+      if (lastKnownDomain != null) 'last_known_domain': lastKnownDomain,
+      if (serverId != null) 'server_id': serverId,
+    });
+  }
+
+  HomeTileOverridesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? kind,
+    Value<String>? targetId,
+    Value<String?>? areaHaId,
+    Value<String>? size,
+    Value<int?>? order,
+    Value<bool>? hidden,
+    Value<String?>? primaryEntityRegistryId,
+    Value<String?>? lastKnownName,
+    Value<String?>? lastKnownAreaHaId,
+    Value<String?>? lastKnownDomain,
+    Value<int>? serverId,
+  }) {
+    return HomeTileOverridesCompanion(
+      id: id ?? this.id,
+      kind: kind ?? this.kind,
+      targetId: targetId ?? this.targetId,
+      areaHaId: areaHaId ?? this.areaHaId,
+      size: size ?? this.size,
+      order: order ?? this.order,
+      hidden: hidden ?? this.hidden,
+      primaryEntityRegistryId:
+          primaryEntityRegistryId ?? this.primaryEntityRegistryId,
+      lastKnownName: lastKnownName ?? this.lastKnownName,
+      lastKnownAreaHaId: lastKnownAreaHaId ?? this.lastKnownAreaHaId,
+      lastKnownDomain: lastKnownDomain ?? this.lastKnownDomain,
+      serverId: serverId ?? this.serverId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (targetId.present) {
+      map['target_id'] = Variable<String>(targetId.value);
+    }
+    if (areaHaId.present) {
+      map['area_ha_id'] = Variable<String>(areaHaId.value);
+    }
+    if (size.present) {
+      map['size'] = Variable<String>(size.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    if (hidden.present) {
+      map['hidden'] = Variable<bool>(hidden.value);
+    }
+    if (primaryEntityRegistryId.present) {
+      map['primary_entity_registry_id'] = Variable<String>(
+        primaryEntityRegistryId.value,
+      );
+    }
+    if (lastKnownName.present) {
+      map['last_known_name'] = Variable<String>(lastKnownName.value);
+    }
+    if (lastKnownAreaHaId.present) {
+      map['last_known_area_ha_id'] = Variable<String>(lastKnownAreaHaId.value);
+    }
+    if (lastKnownDomain.present) {
+      map['last_known_domain'] = Variable<String>(lastKnownDomain.value);
+    }
+    if (serverId.present) {
+      map['server_id'] = Variable<int>(serverId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HomeTileOverridesCompanion(')
+          ..write('id: $id, ')
+          ..write('kind: $kind, ')
+          ..write('targetId: $targetId, ')
+          ..write('areaHaId: $areaHaId, ')
+          ..write('size: $size, ')
+          ..write('order: $order, ')
+          ..write('hidden: $hidden, ')
+          ..write('primaryEntityRegistryId: $primaryEntityRegistryId, ')
+          ..write('lastKnownName: $lastKnownName, ')
+          ..write('lastKnownAreaHaId: $lastKnownAreaHaId, ')
+          ..write('lastKnownDomain: $lastKnownDomain, ')
+          ..write('serverId: $serverId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $EntitiesTable extends Entities
     with TableInfo<$EntitiesTable, EntityRow> {
   @override
@@ -2318,6 +3363,39 @@ class $EntitiesTable extends Entities
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'PRIMARY KEY AUTOINCREMENT',
     ),
+  );
+  static const VerificationMeta _registryIdMeta = const VerificationMeta(
+    'registryId',
+  );
+  @override
+  late final GeneratedColumn<String> registryId = GeneratedColumn<String>(
+    'registry_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _uniqueIdMeta = const VerificationMeta(
+    'uniqueId',
+  );
+  @override
+  late final GeneratedColumn<String> uniqueId = GeneratedColumn<String>(
+    'unique_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _platformMeta = const VerificationMeta(
+    'platform',
+  );
+  @override
+  late final GeneratedColumn<String> platform = GeneratedColumn<String>(
+    'platform',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _entityIdMeta = const VerificationMeta(
     'entityId',
@@ -2381,6 +3459,34 @@ class $EntitiesTable extends Entities
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _disabledMeta = const VerificationMeta(
+    'disabled',
+  );
+  @override
+  late final GeneratedColumn<bool> disabled = GeneratedColumn<bool>(
+    'disabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("disabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _hiddenMeta = const VerificationMeta('hidden');
+  @override
+  late final GeneratedColumn<bool> hidden = GeneratedColumn<bool>(
+    'hidden',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("hidden" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _serverIdMeta = const VerificationMeta(
     'serverId',
   );
@@ -2398,12 +3504,17 @@ class $EntitiesTable extends Entities
   @override
   List<GeneratedColumn> get $columns => [
     id,
+    registryId,
+    uniqueId,
+    platform,
     entityId,
     name,
     domain,
     deviceId,
     areaHaId,
     entityCategory,
+    disabled,
+    hidden,
     serverId,
   ];
   @override
@@ -2420,6 +3531,30 @@ class $EntitiesTable extends Entities
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('registry_id')) {
+      context.handle(
+        _registryIdMeta,
+        registryId.isAcceptableOrUnknown(data['registry_id']!, _registryIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_registryIdMeta);
+    }
+    if (data.containsKey('unique_id')) {
+      context.handle(
+        _uniqueIdMeta,
+        uniqueId.isAcceptableOrUnknown(data['unique_id']!, _uniqueIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_uniqueIdMeta);
+    }
+    if (data.containsKey('platform')) {
+      context.handle(
+        _platformMeta,
+        platform.isAcceptableOrUnknown(data['platform']!, _platformMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_platformMeta);
     }
     if (data.containsKey('entity_id')) {
       context.handle(
@@ -2466,6 +3601,18 @@ class $EntitiesTable extends Entities
         ),
       );
     }
+    if (data.containsKey('disabled')) {
+      context.handle(
+        _disabledMeta,
+        disabled.isAcceptableOrUnknown(data['disabled']!, _disabledMeta),
+      );
+    }
+    if (data.containsKey('hidden')) {
+      context.handle(
+        _hiddenMeta,
+        hidden.isAcceptableOrUnknown(data['hidden']!, _hiddenMeta),
+      );
+    }
     if (data.containsKey('server_id')) {
       context.handle(
         _serverIdMeta,
@@ -2481,7 +3628,7 @@ class $EntitiesTable extends Entities
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-    {serverId, entityId},
+    {serverId, registryId},
   ];
   @override
   EntityRow map(Map<String, dynamic> data, {String? tablePrefix}) {
@@ -2490,6 +3637,18 @@ class $EntitiesTable extends Entities
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
+      )!,
+      registryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}registry_id'],
+      )!,
+      uniqueId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}unique_id'],
+      )!,
+      platform: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}platform'],
       )!,
       entityId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -2515,6 +3674,14 @@ class $EntitiesTable extends Entities
         DriftSqlType.string,
         data['${effectivePrefix}entity_category'],
       ),
+      disabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}disabled'],
+      )!,
+      hidden: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}hidden'],
+      )!,
       serverId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}server_id'],
@@ -2532,7 +3699,16 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   /// Auto-incrementing primary key (local database ID)
   final int id;
 
-  /// Home Assistant entity_id (e.g. "light.kitchen")
+  /// Stable Home Assistant entity registry id
+  final String registryId;
+
+  /// Integration-provided unique id from HA's entity registry
+  final String uniqueId;
+
+  /// HA integration/platform that owns this entity
+  final String platform;
+
+  /// Current Home Assistant entity_id (e.g. "light.kitchen")
   final String entityId;
 
   /// Display name (resolved: name -> original_name -> entity_id)
@@ -2550,23 +3726,37 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   /// HA entity_category ("config"/"diagnostic"), if any; for future filtering
   final String? entityCategory;
 
+  /// Whether HA marks this entity disabled
+  final bool disabled;
+
+  /// Whether HA marks this entity hidden from Lovelace-style presentation
+  final bool hidden;
+
   /// Foreign key reference to [ServerEntities]
   /// Cascades: deleting a server deletes all its cached entities
   final int serverId;
   const EntityRow({
     required this.id,
+    required this.registryId,
+    required this.uniqueId,
+    required this.platform,
     required this.entityId,
     required this.name,
     required this.domain,
     this.deviceId,
     this.areaHaId,
     this.entityCategory,
+    required this.disabled,
+    required this.hidden,
     required this.serverId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['registry_id'] = Variable<String>(registryId);
+    map['unique_id'] = Variable<String>(uniqueId);
+    map['platform'] = Variable<String>(platform);
     map['entity_id'] = Variable<String>(entityId);
     map['name'] = Variable<String>(name);
     map['domain'] = Variable<String>(domain);
@@ -2579,6 +3769,8 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     if (!nullToAbsent || entityCategory != null) {
       map['entity_category'] = Variable<String>(entityCategory);
     }
+    map['disabled'] = Variable<bool>(disabled);
+    map['hidden'] = Variable<bool>(hidden);
     map['server_id'] = Variable<int>(serverId);
     return map;
   }
@@ -2586,6 +3778,9 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   EntitiesCompanion toCompanion(bool nullToAbsent) {
     return EntitiesCompanion(
       id: Value(id),
+      registryId: Value(registryId),
+      uniqueId: Value(uniqueId),
+      platform: Value(platform),
       entityId: Value(entityId),
       name: Value(name),
       domain: Value(domain),
@@ -2598,6 +3793,8 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
       entityCategory: entityCategory == null && nullToAbsent
           ? const Value.absent()
           : Value(entityCategory),
+      disabled: Value(disabled),
+      hidden: Value(hidden),
       serverId: Value(serverId),
     );
   }
@@ -2609,12 +3806,17 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return EntityRow(
       id: serializer.fromJson<int>(json['id']),
+      registryId: serializer.fromJson<String>(json['registryId']),
+      uniqueId: serializer.fromJson<String>(json['uniqueId']),
+      platform: serializer.fromJson<String>(json['platform']),
       entityId: serializer.fromJson<String>(json['entityId']),
       name: serializer.fromJson<String>(json['name']),
       domain: serializer.fromJson<String>(json['domain']),
       deviceId: serializer.fromJson<String?>(json['deviceId']),
       areaHaId: serializer.fromJson<String?>(json['areaHaId']),
       entityCategory: serializer.fromJson<String?>(json['entityCategory']),
+      disabled: serializer.fromJson<bool>(json['disabled']),
+      hidden: serializer.fromJson<bool>(json['hidden']),
       serverId: serializer.fromJson<int>(json['serverId']),
     );
   }
@@ -2623,27 +3825,40 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'registryId': serializer.toJson<String>(registryId),
+      'uniqueId': serializer.toJson<String>(uniqueId),
+      'platform': serializer.toJson<String>(platform),
       'entityId': serializer.toJson<String>(entityId),
       'name': serializer.toJson<String>(name),
       'domain': serializer.toJson<String>(domain),
       'deviceId': serializer.toJson<String?>(deviceId),
       'areaHaId': serializer.toJson<String?>(areaHaId),
       'entityCategory': serializer.toJson<String?>(entityCategory),
+      'disabled': serializer.toJson<bool>(disabled),
+      'hidden': serializer.toJson<bool>(hidden),
       'serverId': serializer.toJson<int>(serverId),
     };
   }
 
   EntityRow copyWith({
     int? id,
+    String? registryId,
+    String? uniqueId,
+    String? platform,
     String? entityId,
     String? name,
     String? domain,
     Value<String?> deviceId = const Value.absent(),
     Value<String?> areaHaId = const Value.absent(),
     Value<String?> entityCategory = const Value.absent(),
+    bool? disabled,
+    bool? hidden,
     int? serverId,
   }) => EntityRow(
     id: id ?? this.id,
+    registryId: registryId ?? this.registryId,
+    uniqueId: uniqueId ?? this.uniqueId,
+    platform: platform ?? this.platform,
     entityId: entityId ?? this.entityId,
     name: name ?? this.name,
     domain: domain ?? this.domain,
@@ -2652,11 +3867,18 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
     entityCategory: entityCategory.present
         ? entityCategory.value
         : this.entityCategory,
+    disabled: disabled ?? this.disabled,
+    hidden: hidden ?? this.hidden,
     serverId: serverId ?? this.serverId,
   );
   EntityRow copyWithCompanion(EntitiesCompanion data) {
     return EntityRow(
       id: data.id.present ? data.id.value : this.id,
+      registryId: data.registryId.present
+          ? data.registryId.value
+          : this.registryId,
+      uniqueId: data.uniqueId.present ? data.uniqueId.value : this.uniqueId,
+      platform: data.platform.present ? data.platform.value : this.platform,
       entityId: data.entityId.present ? data.entityId.value : this.entityId,
       name: data.name.present ? data.name.value : this.name,
       domain: data.domain.present ? data.domain.value : this.domain,
@@ -2665,6 +3887,8 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
       entityCategory: data.entityCategory.present
           ? data.entityCategory.value
           : this.entityCategory,
+      disabled: data.disabled.present ? data.disabled.value : this.disabled,
+      hidden: data.hidden.present ? data.hidden.value : this.hidden,
       serverId: data.serverId.present ? data.serverId.value : this.serverId,
     );
   }
@@ -2673,12 +3897,17 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   String toString() {
     return (StringBuffer('EntityRow(')
           ..write('id: $id, ')
+          ..write('registryId: $registryId, ')
+          ..write('uniqueId: $uniqueId, ')
+          ..write('platform: $platform, ')
           ..write('entityId: $entityId, ')
           ..write('name: $name, ')
           ..write('domain: $domain, ')
           ..write('deviceId: $deviceId, ')
           ..write('areaHaId: $areaHaId, ')
           ..write('entityCategory: $entityCategory, ')
+          ..write('disabled: $disabled, ')
+          ..write('hidden: $hidden, ')
           ..write('serverId: $serverId')
           ..write(')'))
         .toString();
@@ -2687,12 +3916,17 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
   @override
   int get hashCode => Object.hash(
     id,
+    registryId,
+    uniqueId,
+    platform,
     entityId,
     name,
     domain,
     deviceId,
     areaHaId,
     entityCategory,
+    disabled,
+    hidden,
     serverId,
   );
   @override
@@ -2700,87 +3934,130 @@ class EntityRow extends DataClass implements Insertable<EntityRow> {
       identical(this, other) ||
       (other is EntityRow &&
           other.id == this.id &&
+          other.registryId == this.registryId &&
+          other.uniqueId == this.uniqueId &&
+          other.platform == this.platform &&
           other.entityId == this.entityId &&
           other.name == this.name &&
           other.domain == this.domain &&
           other.deviceId == this.deviceId &&
           other.areaHaId == this.areaHaId &&
           other.entityCategory == this.entityCategory &&
+          other.disabled == this.disabled &&
+          other.hidden == this.hidden &&
           other.serverId == this.serverId);
 }
 
 class EntitiesCompanion extends UpdateCompanion<EntityRow> {
   final Value<int> id;
+  final Value<String> registryId;
+  final Value<String> uniqueId;
+  final Value<String> platform;
   final Value<String> entityId;
   final Value<String> name;
   final Value<String> domain;
   final Value<String?> deviceId;
   final Value<String?> areaHaId;
   final Value<String?> entityCategory;
+  final Value<bool> disabled;
+  final Value<bool> hidden;
   final Value<int> serverId;
   const EntitiesCompanion({
     this.id = const Value.absent(),
+    this.registryId = const Value.absent(),
+    this.uniqueId = const Value.absent(),
+    this.platform = const Value.absent(),
     this.entityId = const Value.absent(),
     this.name = const Value.absent(),
     this.domain = const Value.absent(),
     this.deviceId = const Value.absent(),
     this.areaHaId = const Value.absent(),
     this.entityCategory = const Value.absent(),
+    this.disabled = const Value.absent(),
+    this.hidden = const Value.absent(),
     this.serverId = const Value.absent(),
   });
   EntitiesCompanion.insert({
     this.id = const Value.absent(),
+    required String registryId,
+    required String uniqueId,
+    required String platform,
     required String entityId,
     required String name,
     required String domain,
     this.deviceId = const Value.absent(),
     this.areaHaId = const Value.absent(),
     this.entityCategory = const Value.absent(),
+    this.disabled = const Value.absent(),
+    this.hidden = const Value.absent(),
     required int serverId,
-  }) : entityId = Value(entityId),
+  }) : registryId = Value(registryId),
+       uniqueId = Value(uniqueId),
+       platform = Value(platform),
+       entityId = Value(entityId),
        name = Value(name),
        domain = Value(domain),
        serverId = Value(serverId);
   static Insertable<EntityRow> custom({
     Expression<int>? id,
+    Expression<String>? registryId,
+    Expression<String>? uniqueId,
+    Expression<String>? platform,
     Expression<String>? entityId,
     Expression<String>? name,
     Expression<String>? domain,
     Expression<String>? deviceId,
     Expression<String>? areaHaId,
     Expression<String>? entityCategory,
+    Expression<bool>? disabled,
+    Expression<bool>? hidden,
     Expression<int>? serverId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (registryId != null) 'registry_id': registryId,
+      if (uniqueId != null) 'unique_id': uniqueId,
+      if (platform != null) 'platform': platform,
       if (entityId != null) 'entity_id': entityId,
       if (name != null) 'name': name,
       if (domain != null) 'domain': domain,
       if (deviceId != null) 'device_id': deviceId,
       if (areaHaId != null) 'area_ha_id': areaHaId,
       if (entityCategory != null) 'entity_category': entityCategory,
+      if (disabled != null) 'disabled': disabled,
+      if (hidden != null) 'hidden': hidden,
       if (serverId != null) 'server_id': serverId,
     });
   }
 
   EntitiesCompanion copyWith({
     Value<int>? id,
+    Value<String>? registryId,
+    Value<String>? uniqueId,
+    Value<String>? platform,
     Value<String>? entityId,
     Value<String>? name,
     Value<String>? domain,
     Value<String?>? deviceId,
     Value<String?>? areaHaId,
     Value<String?>? entityCategory,
+    Value<bool>? disabled,
+    Value<bool>? hidden,
     Value<int>? serverId,
   }) {
     return EntitiesCompanion(
       id: id ?? this.id,
+      registryId: registryId ?? this.registryId,
+      uniqueId: uniqueId ?? this.uniqueId,
+      platform: platform ?? this.platform,
       entityId: entityId ?? this.entityId,
       name: name ?? this.name,
       domain: domain ?? this.domain,
       deviceId: deviceId ?? this.deviceId,
       areaHaId: areaHaId ?? this.areaHaId,
       entityCategory: entityCategory ?? this.entityCategory,
+      disabled: disabled ?? this.disabled,
+      hidden: hidden ?? this.hidden,
       serverId: serverId ?? this.serverId,
     );
   }
@@ -2790,6 +4067,15 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (registryId.present) {
+      map['registry_id'] = Variable<String>(registryId.value);
+    }
+    if (uniqueId.present) {
+      map['unique_id'] = Variable<String>(uniqueId.value);
+    }
+    if (platform.present) {
+      map['platform'] = Variable<String>(platform.value);
     }
     if (entityId.present) {
       map['entity_id'] = Variable<String>(entityId.value);
@@ -2809,6 +4095,12 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
     if (entityCategory.present) {
       map['entity_category'] = Variable<String>(entityCategory.value);
     }
+    if (disabled.present) {
+      map['disabled'] = Variable<bool>(disabled.value);
+    }
+    if (hidden.present) {
+      map['hidden'] = Variable<bool>(hidden.value);
+    }
     if (serverId.present) {
       map['server_id'] = Variable<int>(serverId.value);
     }
@@ -2819,12 +4111,17 @@ class EntitiesCompanion extends UpdateCompanion<EntityRow> {
   String toString() {
     return (StringBuffer('EntitiesCompanion(')
           ..write('id: $id, ')
+          ..write('registryId: $registryId, ')
+          ..write('uniqueId: $uniqueId, ')
+          ..write('platform: $platform, ')
           ..write('entityId: $entityId, ')
           ..write('name: $name, ')
           ..write('domain: $domain, ')
           ..write('deviceId: $deviceId, ')
           ..write('areaHaId: $areaHaId, ')
           ..write('entityCategory: $entityCategory, ')
+          ..write('disabled: $disabled, ')
+          ..write('hidden: $hidden, ')
           ..write('serverId: $serverId')
           ..write(')'))
         .toString();
@@ -2847,6 +4144,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $DeviceHomeConfigsTable deviceHomeConfigs =
       $DeviceHomeConfigsTable(this);
+  late final $HomeTileOverridesTable homeTileOverrides =
+      $HomeTileOverridesTable(this);
   late final $EntitiesTable entities = $EntitiesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -2860,6 +4159,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     homeViewConfigs,
     areaHomeConfigs,
     deviceHomeConfigs,
+    homeTileOverrides,
     entities,
   ];
   @override
@@ -2926,6 +4226,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('device_home_configs', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'server_entities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('home_tile_overrides', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -3012,6 +4319,27 @@ final class $$ServerEntitiesTableReferences
 
     final cache = $_typedResult.readTableOrNull(
       _homeViewConfigsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$HomeTileOverridesTable, List<HomeTileOverrideRow>>
+  _homeTileOverridesRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.homeTileOverrides,
+        aliasName: 'server_entities__id__home_tile_overrides__server_id',
+      );
+
+  $$HomeTileOverridesTableProcessedTableManager get homeTileOverridesRefs {
+    final manager = $$HomeTileOverridesTableTableManager(
+      $_db,
+      $_db.homeTileOverrides,
+    ).filter((f) => f.serverId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _homeTileOverridesRefsTable($_db),
     );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
@@ -3137,6 +4465,31 @@ class $$ServerEntitiesTableFilterComposer
           }) => $$HomeViewConfigsTableFilterComposer(
             $db: $db,
             $table: $db.homeViewConfigs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> homeTileOverridesRefs(
+    Expression<bool> Function($$HomeTileOverridesTableFilterComposer f) f,
+  ) {
+    final $$HomeTileOverridesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.homeTileOverrides,
+      getReferencedColumn: (t) => t.serverId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$HomeTileOverridesTableFilterComposer(
+            $db: $db,
+            $table: $db.homeTileOverrides,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3306,6 +4659,32 @@ class $$ServerEntitiesTableAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> homeTileOverridesRefs<T extends Object>(
+    Expression<T> Function($$HomeTileOverridesTableAnnotationComposer a) f,
+  ) {
+    final $$HomeTileOverridesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.homeTileOverrides,
+          getReferencedColumn: (t) => t.serverId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$HomeTileOverridesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.homeTileOverrides,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
   Expression<T> entitiesRefs<T extends Object>(
     Expression<T> Function($$EntitiesTableAnnotationComposer a) f,
   ) {
@@ -3349,6 +4728,7 @@ class $$ServerEntitiesTableTableManager
             bool areaEntitiesRefs,
             bool deviceEntitiesRefs,
             bool homeViewConfigsRefs,
+            bool homeTileOverridesRefs,
             bool entitiesRefs,
           })
         > {
@@ -3406,6 +4786,7 @@ class $$ServerEntitiesTableTableManager
                 areaEntitiesRefs = false,
                 deviceEntitiesRefs = false,
                 homeViewConfigsRefs = false,
+                homeTileOverridesRefs = false,
                 entitiesRefs = false,
               }) {
                 return PrefetchHooks(
@@ -3414,6 +4795,7 @@ class $$ServerEntitiesTableTableManager
                     if (areaEntitiesRefs) db.areaEntities,
                     if (deviceEntitiesRefs) db.deviceEntities,
                     if (homeViewConfigsRefs) db.homeViewConfigs,
+                    if (homeTileOverridesRefs) db.homeTileOverrides,
                     if (entitiesRefs) db.entities,
                   ],
                   addJoins: null,
@@ -3482,6 +4864,27 @@ class $$ServerEntitiesTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (homeTileOverridesRefs)
+                        await $_getPrefetchedData<
+                          ServerEntity,
+                          $ServerEntitiesTable,
+                          HomeTileOverrideRow
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ServerEntitiesTableReferences
+                              ._homeTileOverridesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ServerEntitiesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).homeTileOverridesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.serverId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                       if (entitiesRefs)
                         await $_getPrefetchedData<
                           ServerEntity,
@@ -3527,6 +4930,7 @@ typedef $$ServerEntitiesTableProcessedTableManager =
         bool areaEntitiesRefs,
         bool deviceEntitiesRefs,
         bool homeViewConfigsRefs,
+        bool homeTileOverridesRefs,
         bool entitiesRefs,
       })
     >;
@@ -4072,6 +5476,11 @@ typedef $$DeviceEntitiesTableCreateCompanionBuilder =
       required String haId,
       required String name,
       required String type,
+      Value<String?> areaHaId,
+      Value<String?> nameByUser,
+      Value<String?> manufacturer,
+      Value<String?> model,
+      Value<bool> disabled,
       required int serverId,
     });
 typedef $$DeviceEntitiesTableUpdateCompanionBuilder =
@@ -4080,6 +5489,11 @@ typedef $$DeviceEntitiesTableUpdateCompanionBuilder =
       Value<String> haId,
       Value<String> name,
       Value<String> type,
+      Value<String?> areaHaId,
+      Value<String?> nameByUser,
+      Value<String?> manufacturer,
+      Value<String?> model,
+      Value<bool> disabled,
       Value<int> serverId,
     });
 
@@ -4178,6 +5592,31 @@ class $$DeviceEntitiesTableFilterComposer
 
   ColumnFilters<String> get type => $composableBuilder(
     column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get areaHaId => $composableBuilder(
+    column: $table.areaHaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nameByUser => $composableBuilder(
+    column: $table.nameByUser,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get manufacturer => $composableBuilder(
+    column: $table.manufacturer,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get model => $composableBuilder(
+    column: $table.model,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get disabled => $composableBuilder(
+    column: $table.disabled,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4284,6 +5723,31 @@ class $$DeviceEntitiesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get areaHaId => $composableBuilder(
+    column: $table.areaHaId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get nameByUser => $composableBuilder(
+    column: $table.nameByUser,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get manufacturer => $composableBuilder(
+    column: $table.manufacturer,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get model => $composableBuilder(
+    column: $table.model,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get disabled => $composableBuilder(
+    column: $table.disabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$ServerEntitiesTableOrderingComposer get serverId {
     final $$ServerEntitiesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -4328,6 +5792,25 @@ class $$DeviceEntitiesTableAnnotationComposer
 
   GeneratedColumn<String> get type =>
       $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get areaHaId =>
+      $composableBuilder(column: $table.areaHaId, builder: (column) => column);
+
+  GeneratedColumn<String> get nameByUser => $composableBuilder(
+    column: $table.nameByUser,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get manufacturer => $composableBuilder(
+    column: $table.manufacturer,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get model =>
+      $composableBuilder(column: $table.model, builder: (column) => column);
+
+  GeneratedColumn<bool> get disabled =>
+      $composableBuilder(column: $table.disabled, builder: (column) => column);
 
   $$ServerEntitiesTableAnnotationComposer get serverId {
     final $$ServerEntitiesTableAnnotationComposer composer = $composerBuilder(
@@ -4443,12 +5926,22 @@ class $$DeviceEntitiesTableTableManager
                 Value<String> haId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> type = const Value.absent(),
+                Value<String?> areaHaId = const Value.absent(),
+                Value<String?> nameByUser = const Value.absent(),
+                Value<String?> manufacturer = const Value.absent(),
+                Value<String?> model = const Value.absent(),
+                Value<bool> disabled = const Value.absent(),
                 Value<int> serverId = const Value.absent(),
               }) => DeviceEntitiesCompanion(
                 id: id,
                 haId: haId,
                 name: name,
                 type: type,
+                areaHaId: areaHaId,
+                nameByUser: nameByUser,
+                manufacturer: manufacturer,
+                model: model,
+                disabled: disabled,
                 serverId: serverId,
               ),
           createCompanionCallback:
@@ -4457,12 +5950,22 @@ class $$DeviceEntitiesTableTableManager
                 required String haId,
                 required String name,
                 required String type,
+                Value<String?> areaHaId = const Value.absent(),
+                Value<String?> nameByUser = const Value.absent(),
+                Value<String?> manufacturer = const Value.absent(),
+                Value<String?> model = const Value.absent(),
+                Value<bool> disabled = const Value.absent(),
                 required int serverId,
               }) => DeviceEntitiesCompanion.insert(
                 id: id,
                 haId: haId,
                 name: name,
                 type: type,
+                areaHaId: areaHaId,
+                nameByUser: nameByUser,
+                manufacturer: manufacturer,
+                model: model,
+                disabled: disabled,
                 serverId: serverId,
               ),
           withReferenceMapper: (p0) => p0
@@ -6230,26 +7733,505 @@ typedef $$DeviceHomeConfigsTableProcessedTableManager =
       DeviceHomeConfig,
       PrefetchHooks Function({bool deviceId, bool areaConfigId})
     >;
+typedef $$HomeTileOverridesTableCreateCompanionBuilder =
+    HomeTileOverridesCompanion Function({
+      Value<int> id,
+      required String kind,
+      required String targetId,
+      Value<String?> areaHaId,
+      required String size,
+      Value<int?> order,
+      Value<bool> hidden,
+      Value<String?> primaryEntityRegistryId,
+      Value<String?> lastKnownName,
+      Value<String?> lastKnownAreaHaId,
+      Value<String?> lastKnownDomain,
+      required int serverId,
+    });
+typedef $$HomeTileOverridesTableUpdateCompanionBuilder =
+    HomeTileOverridesCompanion Function({
+      Value<int> id,
+      Value<String> kind,
+      Value<String> targetId,
+      Value<String?> areaHaId,
+      Value<String> size,
+      Value<int?> order,
+      Value<bool> hidden,
+      Value<String?> primaryEntityRegistryId,
+      Value<String?> lastKnownName,
+      Value<String?> lastKnownAreaHaId,
+      Value<String?> lastKnownDomain,
+      Value<int> serverId,
+    });
+
+final class $$HomeTileOverridesTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $HomeTileOverridesTable,
+          HomeTileOverrideRow
+        > {
+  $$HomeTileOverridesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ServerEntitiesTable _serverIdTable(_$AppDatabase db) => db
+      .serverEntities
+      .createAlias('home_tile_overrides__server_id__server_entities__id');
+
+  $$ServerEntitiesTableProcessedTableManager get serverId {
+    final $_column = $_itemColumn<int>('server_id')!;
+
+    final manager = $$ServerEntitiesTableTableManager(
+      $_db,
+      $_db.serverEntities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_serverIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$HomeTileOverridesTableFilterComposer
+    extends Composer<_$AppDatabase, $HomeTileOverridesTable> {
+  $$HomeTileOverridesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get targetId => $composableBuilder(
+    column: $table.targetId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get areaHaId => $composableBuilder(
+    column: $table.areaHaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get size => $composableBuilder(
+    column: $table.size,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get order => $composableBuilder(
+    column: $table.order,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get hidden => $composableBuilder(
+    column: $table.hidden,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get primaryEntityRegistryId => $composableBuilder(
+    column: $table.primaryEntityRegistryId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastKnownName => $composableBuilder(
+    column: $table.lastKnownName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastKnownAreaHaId => $composableBuilder(
+    column: $table.lastKnownAreaHaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastKnownDomain => $composableBuilder(
+    column: $table.lastKnownDomain,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ServerEntitiesTableFilterComposer get serverId {
+    final $$ServerEntitiesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServerEntitiesTableFilterComposer(
+            $db: $db,
+            $table: $db.serverEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$HomeTileOverridesTableOrderingComposer
+    extends Composer<_$AppDatabase, $HomeTileOverridesTable> {
+  $$HomeTileOverridesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get targetId => $composableBuilder(
+    column: $table.targetId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get areaHaId => $composableBuilder(
+    column: $table.areaHaId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get size => $composableBuilder(
+    column: $table.size,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get order => $composableBuilder(
+    column: $table.order,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get hidden => $composableBuilder(
+    column: $table.hidden,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get primaryEntityRegistryId => $composableBuilder(
+    column: $table.primaryEntityRegistryId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastKnownName => $composableBuilder(
+    column: $table.lastKnownName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastKnownAreaHaId => $composableBuilder(
+    column: $table.lastKnownAreaHaId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastKnownDomain => $composableBuilder(
+    column: $table.lastKnownDomain,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ServerEntitiesTableOrderingComposer get serverId {
+    final $$ServerEntitiesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServerEntitiesTableOrderingComposer(
+            $db: $db,
+            $table: $db.serverEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$HomeTileOverridesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HomeTileOverridesTable> {
+  $$HomeTileOverridesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get targetId =>
+      $composableBuilder(column: $table.targetId, builder: (column) => column);
+
+  GeneratedColumn<String> get areaHaId =>
+      $composableBuilder(column: $table.areaHaId, builder: (column) => column);
+
+  GeneratedColumn<String> get size =>
+      $composableBuilder(column: $table.size, builder: (column) => column);
+
+  GeneratedColumn<int> get order =>
+      $composableBuilder(column: $table.order, builder: (column) => column);
+
+  GeneratedColumn<bool> get hidden =>
+      $composableBuilder(column: $table.hidden, builder: (column) => column);
+
+  GeneratedColumn<String> get primaryEntityRegistryId => $composableBuilder(
+    column: $table.primaryEntityRegistryId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get lastKnownName => $composableBuilder(
+    column: $table.lastKnownName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get lastKnownAreaHaId => $composableBuilder(
+    column: $table.lastKnownAreaHaId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get lastKnownDomain => $composableBuilder(
+    column: $table.lastKnownDomain,
+    builder: (column) => column,
+  );
+
+  $$ServerEntitiesTableAnnotationComposer get serverId {
+    final $$ServerEntitiesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.serverId,
+      referencedTable: $db.serverEntities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServerEntitiesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.serverEntities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$HomeTileOverridesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HomeTileOverridesTable,
+          HomeTileOverrideRow,
+          $$HomeTileOverridesTableFilterComposer,
+          $$HomeTileOverridesTableOrderingComposer,
+          $$HomeTileOverridesTableAnnotationComposer,
+          $$HomeTileOverridesTableCreateCompanionBuilder,
+          $$HomeTileOverridesTableUpdateCompanionBuilder,
+          (HomeTileOverrideRow, $$HomeTileOverridesTableReferences),
+          HomeTileOverrideRow,
+          PrefetchHooks Function({bool serverId})
+        > {
+  $$HomeTileOverridesTableTableManager(
+    _$AppDatabase db,
+    $HomeTileOverridesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HomeTileOverridesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HomeTileOverridesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HomeTileOverridesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> targetId = const Value.absent(),
+                Value<String?> areaHaId = const Value.absent(),
+                Value<String> size = const Value.absent(),
+                Value<int?> order = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
+                Value<String?> primaryEntityRegistryId = const Value.absent(),
+                Value<String?> lastKnownName = const Value.absent(),
+                Value<String?> lastKnownAreaHaId = const Value.absent(),
+                Value<String?> lastKnownDomain = const Value.absent(),
+                Value<int> serverId = const Value.absent(),
+              }) => HomeTileOverridesCompanion(
+                id: id,
+                kind: kind,
+                targetId: targetId,
+                areaHaId: areaHaId,
+                size: size,
+                order: order,
+                hidden: hidden,
+                primaryEntityRegistryId: primaryEntityRegistryId,
+                lastKnownName: lastKnownName,
+                lastKnownAreaHaId: lastKnownAreaHaId,
+                lastKnownDomain: lastKnownDomain,
+                serverId: serverId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String kind,
+                required String targetId,
+                Value<String?> areaHaId = const Value.absent(),
+                required String size,
+                Value<int?> order = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
+                Value<String?> primaryEntityRegistryId = const Value.absent(),
+                Value<String?> lastKnownName = const Value.absent(),
+                Value<String?> lastKnownAreaHaId = const Value.absent(),
+                Value<String?> lastKnownDomain = const Value.absent(),
+                required int serverId,
+              }) => HomeTileOverridesCompanion.insert(
+                id: id,
+                kind: kind,
+                targetId: targetId,
+                areaHaId: areaHaId,
+                size: size,
+                order: order,
+                hidden: hidden,
+                primaryEntityRegistryId: primaryEntityRegistryId,
+                lastKnownName: lastKnownName,
+                lastKnownAreaHaId: lastKnownAreaHaId,
+                lastKnownDomain: lastKnownDomain,
+                serverId: serverId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$HomeTileOverridesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({serverId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (serverId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.serverId,
+                                referencedTable:
+                                    $$HomeTileOverridesTableReferences
+                                        ._serverIdTable(db),
+                                referencedColumn:
+                                    $$HomeTileOverridesTableReferences
+                                        ._serverIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$HomeTileOverridesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HomeTileOverridesTable,
+      HomeTileOverrideRow,
+      $$HomeTileOverridesTableFilterComposer,
+      $$HomeTileOverridesTableOrderingComposer,
+      $$HomeTileOverridesTableAnnotationComposer,
+      $$HomeTileOverridesTableCreateCompanionBuilder,
+      $$HomeTileOverridesTableUpdateCompanionBuilder,
+      (HomeTileOverrideRow, $$HomeTileOverridesTableReferences),
+      HomeTileOverrideRow,
+      PrefetchHooks Function({bool serverId})
+    >;
 typedef $$EntitiesTableCreateCompanionBuilder =
     EntitiesCompanion Function({
       Value<int> id,
+      required String registryId,
+      required String uniqueId,
+      required String platform,
       required String entityId,
       required String name,
       required String domain,
       Value<String?> deviceId,
       Value<String?> areaHaId,
       Value<String?> entityCategory,
+      Value<bool> disabled,
+      Value<bool> hidden,
       required int serverId,
     });
 typedef $$EntitiesTableUpdateCompanionBuilder =
     EntitiesCompanion Function({
       Value<int> id,
+      Value<String> registryId,
+      Value<String> uniqueId,
+      Value<String> platform,
       Value<String> entityId,
       Value<String> name,
       Value<String> domain,
       Value<String?> deviceId,
       Value<String?> areaHaId,
       Value<String?> entityCategory,
+      Value<bool> disabled,
+      Value<bool> hidden,
       Value<int> serverId,
     });
 
@@ -6289,6 +8271,21 @@ class $$EntitiesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get registryId => $composableBuilder(
+    column: $table.registryId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get uniqueId => $composableBuilder(
+    column: $table.uniqueId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get platform => $composableBuilder(
+    column: $table.platform,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get entityId => $composableBuilder(
     column: $table.entityId,
     builder: (column) => ColumnFilters(column),
@@ -6316,6 +8313,16 @@ class $$EntitiesTableFilterComposer
 
   ColumnFilters<String> get entityCategory => $composableBuilder(
     column: $table.entityCategory,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get disabled => $composableBuilder(
+    column: $table.disabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get hidden => $composableBuilder(
+    column: $table.hidden,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6357,6 +8364,21 @@ class $$EntitiesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get registryId => $composableBuilder(
+    column: $table.registryId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get uniqueId => $composableBuilder(
+    column: $table.uniqueId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get platform => $composableBuilder(
+    column: $table.platform,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get entityId => $composableBuilder(
     column: $table.entityId,
     builder: (column) => ColumnOrderings(column),
@@ -6384,6 +8406,16 @@ class $$EntitiesTableOrderingComposer
 
   ColumnOrderings<String> get entityCategory => $composableBuilder(
     column: $table.entityCategory,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get disabled => $composableBuilder(
+    column: $table.disabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get hidden => $composableBuilder(
+    column: $table.hidden,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -6423,6 +8455,17 @@ class $$EntitiesTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
+  GeneratedColumn<String> get registryId => $composableBuilder(
+    column: $table.registryId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get uniqueId =>
+      $composableBuilder(column: $table.uniqueId, builder: (column) => column);
+
+  GeneratedColumn<String> get platform =>
+      $composableBuilder(column: $table.platform, builder: (column) => column);
+
   GeneratedColumn<String> get entityId =>
       $composableBuilder(column: $table.entityId, builder: (column) => column);
 
@@ -6442,6 +8485,12 @@ class $$EntitiesTableAnnotationComposer
     column: $table.entityCategory,
     builder: (column) => column,
   );
+
+  GeneratedColumn<bool> get disabled =>
+      $composableBuilder(column: $table.disabled, builder: (column) => column);
+
+  GeneratedColumn<bool> get hidden =>
+      $composableBuilder(column: $table.hidden, builder: (column) => column);
 
   $$ServerEntitiesTableAnnotationComposer get serverId {
     final $$ServerEntitiesTableAnnotationComposer composer = $composerBuilder(
@@ -6496,41 +8545,61 @@ class $$EntitiesTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
+                Value<String> registryId = const Value.absent(),
+                Value<String> uniqueId = const Value.absent(),
+                Value<String> platform = const Value.absent(),
                 Value<String> entityId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> domain = const Value.absent(),
                 Value<String?> deviceId = const Value.absent(),
                 Value<String?> areaHaId = const Value.absent(),
                 Value<String?> entityCategory = const Value.absent(),
+                Value<bool> disabled = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
                 Value<int> serverId = const Value.absent(),
               }) => EntitiesCompanion(
                 id: id,
+                registryId: registryId,
+                uniqueId: uniqueId,
+                platform: platform,
                 entityId: entityId,
                 name: name,
                 domain: domain,
                 deviceId: deviceId,
                 areaHaId: areaHaId,
                 entityCategory: entityCategory,
+                disabled: disabled,
+                hidden: hidden,
                 serverId: serverId,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
+                required String registryId,
+                required String uniqueId,
+                required String platform,
                 required String entityId,
                 required String name,
                 required String domain,
                 Value<String?> deviceId = const Value.absent(),
                 Value<String?> areaHaId = const Value.absent(),
                 Value<String?> entityCategory = const Value.absent(),
+                Value<bool> disabled = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
                 required int serverId,
               }) => EntitiesCompanion.insert(
                 id: id,
+                registryId: registryId,
+                uniqueId: uniqueId,
+                platform: platform,
                 entityId: entityId,
                 name: name,
                 domain: domain,
                 deviceId: deviceId,
                 areaHaId: areaHaId,
                 entityCategory: entityCategory,
+                disabled: disabled,
+                hidden: hidden,
                 serverId: serverId,
               ),
           withReferenceMapper: (p0) => p0
@@ -6618,6 +8687,8 @@ class $AppDatabaseManager {
       $$AreaHomeConfigsTableTableManager(_db, _db.areaHomeConfigs);
   $$DeviceHomeConfigsTableTableManager get deviceHomeConfigs =>
       $$DeviceHomeConfigsTableTableManager(_db, _db.deviceHomeConfigs);
+  $$HomeTileOverridesTableTableManager get homeTileOverrides =>
+      $$HomeTileOverridesTableTableManager(_db, _db.homeTileOverrides);
   $$EntitiesTableTableManager get entities =>
       $$EntitiesTableTableManager(_db, _db.entities);
 }

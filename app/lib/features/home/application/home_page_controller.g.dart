@@ -25,6 +25,8 @@ final class HomePageControllerProvider
           serverScopeServerProvider,
           cachedAreasProvider,
           cachedEntitiesProvider,
+          cachedDevicesProvider,
+          homeTileOverridesProvider,
           homeConnectionLoadingProvider,
           serverSyncCoordinatorProvider,
         ],
@@ -44,6 +46,9 @@ final class HomePageControllerProvider
           HomePageControllerProvider.$allTransitiveDependencies12,
           HomePageControllerProvider.$allTransitiveDependencies13,
           HomePageControllerProvider.$allTransitiveDependencies14,
+          HomePageControllerProvider.$allTransitiveDependencies15,
+          HomePageControllerProvider.$allTransitiveDependencies16,
+          HomePageControllerProvider.$allTransitiveDependencies17,
         },
       );
 
@@ -56,22 +61,26 @@ final class HomePageControllerProvider
   static final $allTransitiveDependencies4 =
       CachedAreasProvider.$allTransitiveDependencies2;
   static final $allTransitiveDependencies5 = cachedEntitiesProvider;
-  static final $allTransitiveDependencies6 = homeConnectionLoadingProvider;
-  static final $allTransitiveDependencies7 =
-      HomeConnectionLoadingProvider.$allTransitiveDependencies0;
-  static final $allTransitiveDependencies8 =
-      HomeConnectionLoadingProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies6 = cachedDevicesProvider;
+  static final $allTransitiveDependencies7 = homeTileOverridesProvider;
+  static final $allTransitiveDependencies8 = homeConnectionLoadingProvider;
   static final $allTransitiveDependencies9 =
-      HomeConnectionLoadingProvider.$allTransitiveDependencies2;
+      HomeConnectionLoadingProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies10 =
-      HomeConnectionLoadingProvider.$allTransitiveDependencies3;
+      HomeConnectionLoadingProvider.$allTransitiveDependencies1;
   static final $allTransitiveDependencies11 =
-      HomeConnectionLoadingProvider.$allTransitiveDependencies4;
-  static final $allTransitiveDependencies12 = serverSyncCoordinatorProvider;
+      HomeConnectionLoadingProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies12 =
+      HomeConnectionLoadingProvider.$allTransitiveDependencies3;
   static final $allTransitiveDependencies13 =
+      HomeConnectionLoadingProvider.$allTransitiveDependencies4;
+  static final $allTransitiveDependencies14 = serverSyncCoordinatorProvider;
+  static final $allTransitiveDependencies15 =
       ServerSyncCoordinatorProvider.$allTransitiveDependencies6;
-  static final $allTransitiveDependencies14 =
+  static final $allTransitiveDependencies16 =
       ServerSyncCoordinatorProvider.$allTransitiveDependencies7;
+  static final $allTransitiveDependencies17 =
+      ServerSyncCoordinatorProvider.$allTransitiveDependencies8;
 
   @override
   String debugGetCreateSourceHash() => _$homePageControllerHash();
@@ -90,7 +99,7 @@ final class HomePageControllerProvider
 }
 
 String _$homePageControllerHash() =>
-    r'dc4168ebc95fabc877c1481e7ff38c4958898839';
+    r'62ede5295849dcc806899231a34fefb0a7783c05';
 
 abstract class _$HomePageController extends $Notifier<HomePageState> {
   HomePageState build();

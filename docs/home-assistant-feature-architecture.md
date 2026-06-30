@@ -18,9 +18,10 @@ Before writing code, classify the feature into one of these paths:
 | Remote sync into cache | A coordinator that owns fetch/subscription and writes Drift cache | UI widgets reading WebSocket payloads directly |
 | UI connection policy | `commandAvailabilityProvider` or a screen-specific projection | Raw `ActiveServerSessionState`, `ServerLinkState`, or socket state in widgets |
 
-If a feature seems to need two paths, split it. Example: a light card reads cached
-entity metadata from Drift, overlays live state from `entityStatesProvider`, and
-sends commands through `EntityServiceController`.
+If a feature seems to need two paths, split it. Example: a device tile reads
+cached device/entity registry metadata from Drift, overlays live entity state
+from `entityStatesProvider`, and sends commands through a controller that
+resolves the current `entity_id` at call time.
 
 ## Ownership Rules
 
@@ -140,6 +141,24 @@ For data that should survive offline mode, use a coordinator pattern:
 6. UI reads cache and a small sync-status projection, not remote payload streams.
 
 `ServerSyncCoordinator` is the reference implementation for registry data.
+
+## Registry-Backed Home Projections
+
+Home rendering should use three layers:
+
+1. **Registry mirror**: Drift rows synced from Home Assistant areas, devices, and
+   entities by `ServerSyncCoordinator`.
+2. **Local tile overrides**: Hommie-owned size, order, hidden/suppressed state,
+   and primary-entity override.
+3. **Live state overlay**: transient entity state from a scoped subscription.
+
+The default home projection is device-first. A visible tile normally binds to HA
+`device_id`, computes a primary entity from that device's entities, and resolves
+the current `entity_id` only when sending a command. Entity tiles are reserved
+for device-less things such as scenes, scripts, helpers, groups, and explicit
+entity-specific controls.
+
+Feature widgets must read this projection, not raw registry payloads.
 
 ## UI Policy
 

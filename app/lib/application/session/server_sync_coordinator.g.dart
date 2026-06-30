@@ -24,6 +24,7 @@ final class ServerSyncCoordinatorProvider
         dependencies: <ProviderOrFamily>[
           activeServerSessionProvider,
           areaRepositoryProvider,
+          deviceRepositoryProvider,
           entityRepositoryProvider,
           areaRegistrySyncServiceProvider,
         ],
@@ -36,6 +37,7 @@ final class ServerSyncCoordinatorProvider
           ServerSyncCoordinatorProvider.$allTransitiveDependencies5,
           ServerSyncCoordinatorProvider.$allTransitiveDependencies6,
           ServerSyncCoordinatorProvider.$allTransitiveDependencies7,
+          ServerSyncCoordinatorProvider.$allTransitiveDependencies8,
         },
       );
 
@@ -49,8 +51,9 @@ final class ServerSyncCoordinatorProvider
   static final $allTransitiveDependencies4 =
       ActiveServerSessionProvider.$allTransitiveDependencies3;
   static final $allTransitiveDependencies5 = areaRepositoryProvider;
-  static final $allTransitiveDependencies6 = entityRepositoryProvider;
-  static final $allTransitiveDependencies7 = areaRegistrySyncServiceProvider;
+  static final $allTransitiveDependencies6 = deviceRepositoryProvider;
+  static final $allTransitiveDependencies7 = entityRepositoryProvider;
+  static final $allTransitiveDependencies8 = areaRegistrySyncServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$serverSyncCoordinatorHash();
@@ -69,7 +72,7 @@ final class ServerSyncCoordinatorProvider
 }
 
 String _$serverSyncCoordinatorHash() =>
-    r'dc50e7eb856588fa4c97b7e2d83a67ea31b36a3d';
+    r'5945b7da7d5c78184877888b18d8fbdaa2b52480';
 
 abstract class _$ServerSyncCoordinator extends $Notifier<ServerSyncState> {
   ServerSyncState build();

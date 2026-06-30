@@ -60,6 +60,29 @@ Always run these from repo root unless stated.
 ### Troubleshooting
 If generated files are missing or stale (compile errors referencing *.g.dart / *.freezed.dart / router files), rerun step 3.
 
+#### macOS CocoaPods / Patrol gotcha
+
+`patrol` does not currently support Flutter's Swift Package Manager flow for macOS, so the app still needs CocoaPods for macOS builds. If `flutter run -d macos` prints:
+
+```text
+The following plugins do not support Swift Package Manager for macos:
+  - patrol
+Warning: CocoaPods is installed but broken. Skipping pod install.
+```
+
+first run CocoaPods directly so it shows the real error:
+
+```bash
+cd app
+flutter pub get
+cd macos
+pod install
+cd ..
+flutter build macos --debug
+```
+
+If `pod --version` fails, reinstall CocoaPods (`brew reinstall cocoapods` when using Homebrew). If `pod install` succeeds but Xcode warns that CocoaPods did not set the Runner base configuration, check that `app/macos/Runner/Configs/Debug.xcconfig`, `Release.xcconfig`, and `Profile.xcconfig` include the corresponding `Pods-Runner.*.xcconfig` files and that the Runner target points at those configuration files.
+
 ## Complete Testing Guide
 
 ### Unit & Widget Tests

@@ -11,7 +11,10 @@ import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/domain/repositories/i_entity_repository.dart';
 import 'package:hommie/features/entities/infrastructure/providers/entity_repository_provider.dart';
 import 'package:hommie/features/home/domain/repositories/i_area_repository.dart';
+import 'package:hommie/features/home/domain/entities/device.dart';
+import 'package:hommie/features/home/domain/repositories/i_device_repository.dart';
 import 'package:hommie/features/home/infrastructure/providers/area_repository_provider.dart';
+import 'package:hommie/features/home/infrastructure/providers/device_repository_provider.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 
 import '../../utils/tests_logger.dart';
@@ -42,18 +45,32 @@ class _FakeConnection implements IHAConnection {
         message.type == 'config/entity_registry/list') {
       return Future.value([
         {
+          'id': 'entity-reg-kitchen',
+          'unique_id': 'uid-kitchen-light',
+          'platform': 'test',
           'entity_id': 'light.kitchen',
           'name': 'Kitchen',
           'disabled_by': null,
           'hidden_by': null,
           'area_id': 'kitchen',
+          'device_id': 'device-kitchen',
         },
       ]);
     }
 
     if (message is HARequestMessage &&
         message.type == 'config/device_registry/list') {
-      return Future.value(<dynamic>[]);
+      return Future.value([
+        {
+          'id': 'device-kitchen',
+          'area_id': 'kitchen',
+          'name': 'Hue bulb',
+          'name_by_user': 'Counter lamp',
+          'manufacturer': 'Signify',
+          'model': 'LCA001',
+          'disabled_by': null,
+        },
+      ]);
     }
 
     return Future.value(null);
@@ -132,6 +149,56 @@ class _FakeEntityRepo implements IEntityRepository {
   Stream<List<HaEntity>> watchByServer(int serverId) => Stream.value(captured);
 }
 
+class _FakeDeviceRepo implements IDeviceRepository {
+  int syncs = 0;
+  List<Device> captured = const [];
+
+  @override
+  Future<void> delete(int id) async {}
+
+  @override
+  Future<List<Device>> getAll() async => captured;
+
+  @override
+  Future<Device?> getByHaId({
+    required int serverId,
+    required String haId,
+  }) async {
+    for (final device in captured) {
+      if (device.id == haId) {
+        return device;
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<Device?> getById(int id) async => null;
+
+  @override
+  Future<List<Device>> getByArea(int areaId) async => captured;
+
+  @override
+  Future<List<Device>> getByServer(int serverId) async => captured;
+
+  @override
+  Future<void> save(Device device) async {
+    captured = [...captured.where((item) => item.id != device.id), device];
+  }
+
+  @override
+  Future<void> syncRegistry({
+    required int serverId,
+    required List<Device> devices,
+  }) async {
+    syncs += 1;
+    captured = devices;
+  }
+
+  @override
+  Stream<List<Device>> watchByServer(int serverId) => Stream.value(captured);
+}
+
 void main() {
   logger = testLogger;
 
@@ -154,6 +221,7 @@ void main() {
   test('runs initial sync when session is online', () async {
     final areaRepo = _FakeAreaRepo();
     final entityRepo = _FakeEntityRepo();
+    final deviceRepo = _FakeDeviceRepo();
     final connection = _FakeConnection();
     final container = ProviderContainer(
       overrides: [
@@ -165,6 +233,7 @@ void main() {
         ),
         areaRepositoryProvider.overrideWithValue(areaRepo),
         entityRepositoryProvider.overrideWithValue(entityRepo),
+        deviceRepositoryProvider.overrideWithValue(deviceRepo),
       ],
     );
     addTearDown(container.dispose);
@@ -178,12 +247,17 @@ void main() {
     expect(areaRepo.captured.single.name, 'Kitchen');
     expect(entityRepo.syncs, 1);
     expect(entityRepo.captured.single.entityId, 'light.kitchen');
+    expect(deviceRepo.syncs, 1);
+    expect(deviceRepo.captured.single.id, 'device-kitchen');
+    expect(deviceRepo.captured.single.name, 'Hue bulb');
+    expect(deviceRepo.captured.single.nameByUser, 'Counter lamp');
     expect(connection.subscriptions.length, 3);
   });
 
   test('does not start remote sync while offline', () async {
     final areaRepo = _FakeAreaRepo();
     final entityRepo = _FakeEntityRepo();
+    final deviceRepo = _FakeDeviceRepo();
     final container = ProviderContainer(
       overrides: [
         activeServerSessionProvider.overrideWithValue(
@@ -191,6 +265,7 @@ void main() {
         ),
         areaRepositoryProvider.overrideWithValue(areaRepo),
         entityRepositoryProvider.overrideWithValue(entityRepo),
+        deviceRepositoryProvider.overrideWithValue(deviceRepo),
       ],
     );
     addTearDown(container.dispose);
@@ -200,11 +275,13 @@ void main() {
     expect(state, isA<SyncOfflineWithCache>());
     expect(areaRepo.syncs, 0);
     expect(entityRepo.syncs, 0);
+    expect(deviceRepo.syncs, 0);
   });
 
   test('surfaces subscription setup failures as sync failure', () async {
     final areaRepo = _FakeAreaRepo();
     final entityRepo = _FakeEntityRepo();
+    final deviceRepo = _FakeDeviceRepo();
     final container = ProviderContainer(
       overrides: [
         activeServerSessionProvider.overrideWithValue(
@@ -215,6 +292,7 @@ void main() {
         ),
         areaRepositoryProvider.overrideWithValue(areaRepo),
         entityRepositoryProvider.overrideWithValue(entityRepo),
+        deviceRepositoryProvider.overrideWithValue(deviceRepo),
       ],
     );
     addTearDown(container.dispose);
@@ -226,5 +304,6 @@ void main() {
     expect(state, isA<SyncFailed>());
     expect(areaRepo.syncs, 0);
     expect(entityRepo.syncs, 0);
+    expect(deviceRepo.syncs, 0);
   });
 }

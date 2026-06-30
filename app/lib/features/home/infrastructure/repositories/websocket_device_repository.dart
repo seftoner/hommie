@@ -25,6 +25,20 @@ class WebSocketDeviceRepository implements IDeviceRepository {
   }
 
   @override
+  Stream<List<Device>> watchByServer(int serverId) {
+    throw UnimplementedError(
+      'Device watching via WebSocket API not yet implemented.',
+    );
+  }
+
+  @override
+  Future<List<Device>> getByServer(int serverId) async {
+    throw UnimplementedError(
+      'Device listing by server via WebSocket API not yet implemented.',
+    );
+  }
+
+  @override
   Future<Device?> getById(int id) async {
     throw UnimplementedError(
       'Device get by ID via WebSocket API not yet implemented.',
@@ -32,7 +46,10 @@ class WebSocketDeviceRepository implements IDeviceRepository {
   }
 
   @override
-  Future<Device?> getByHaId(String haId) async {
+  Future<Device?> getByHaId({
+    required int serverId,
+    required String haId,
+  }) async {
     throw UnimplementedError(
       'Device get by HA ID via WebSocket API not yet implemented.',
     );
@@ -43,6 +60,14 @@ class WebSocketDeviceRepository implements IDeviceRepository {
     throw UnimplementedError(
       'Device listing by area via WebSocket API not yet implemented.',
     );
+  }
+
+  @override
+  Future<void> syncRegistry({
+    required int serverId,
+    required List<Device> devices,
+  }) async {
+    throw UnsupportedError('WebSocket API does not support syncing devices');
   }
 
   @override

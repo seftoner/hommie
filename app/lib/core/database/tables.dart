@@ -124,29 +124,30 @@ class AreaEntities extends Table {
 ///
 /// **Relationships:**
 /// - Many-to-one with [ServerEntities] (cascade delete on server deletion)
-/// - Many-to-many with [AreaEntities] via [DeviceAreaConfigs]
+/// - Legacy many-to-many with [AreaEntities] via [DeviceAreaConfigs]
 /// - Referenced by [DeviceHomeConfigs] for home view display
 ///
 /// **Usage:**
 /// - Managed by `DriftDeviceRepository` in features/home
 /// - Synced from Home Assistant API
-/// - Joined with [AreaEntities] via [DeviceAreaConfigs] to get area information
+/// - Stores HA registry `area_id` directly in `areaHaId`
 /// - Filtered and displayed in home view based on configuration
 /// - Device persists even if removed from all areas
 ///
 /// **Key Features:**
-/// - `haId` is the unique entity ID from Home Assistant (e.g., "light.living_room_lamp")
-/// - `haId` must be unique across all devices
-/// - `type` indicates device domain (e.g., "light", "switch", "media_player")
+/// - `haId` is the Home Assistant device registry id
+/// - `haId` must be unique per server
+/// - `type` is a coarse display hint; HA device registry itself does not own
+///   an entity domain
 /// - Device lifecycle independent of area assignments
 /// - Cascading delete: deleting a server removes all its devices
 ///
 /// **Example:**
 /// ```dart
 /// DeviceEntitiesCompanion(
-///   haId: Value('light.living_room_lamp'),
+///   haId: Value('device-registry-id'),
 ///   name: Value('Living Room Lamp'),
-///   type: Value('light'),
+///   type: Value('device'),
 ///   serverId: Value(1),
 /// )
 /// ```
@@ -154,8 +155,8 @@ class DeviceEntities extends Table {
   /// Auto-incrementing primary key (local database ID)
   IntColumn get id => integer().autoIncrement()();
 
-  /// Home Assistant entity ID (e.g., "light.living_room_lamp")
-  TextColumn get haId => text().unique()();
+  /// Home Assistant device registry ID
+  TextColumn get haId => text()();
 
   /// Display name for the device (e.g., "Living Room Lamp")
   TextColumn get name => text()();
@@ -163,10 +164,30 @@ class DeviceEntities extends Table {
   /// Device domain/type (e.g., "light", "switch", "media_player", "sensor")
   TextColumn get type => text()();
 
+  /// HA area slug from the device registry; null when unassigned
+  TextColumn get areaHaId => text().nullable()();
+
+  /// HA user-overridden device name, if any
+  TextColumn get nameByUser => text().nullable()();
+
+  /// Device manufacturer from HA registry metadata
+  TextColumn get manufacturer => text().nullable()();
+
+  /// Device model from HA registry metadata
+  TextColumn get model => text().nullable()();
+
+  /// Whether HA marks this device disabled
+  BoolColumn get disabled => boolean().withDefault(const Constant(false))();
+
   /// Foreign key reference to [ServerEntities]
   /// Cascades: deleting a server deletes all its devices
   IntColumn get serverId =>
       integer().references(ServerEntities, #id, onDelete: KeyAction.cascade)();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {serverId, haId},
+  ];
 }
 
 /// Database table for Device-Area associations.
@@ -374,6 +395,58 @@ class DeviceHomeConfigs extends Table {
   ];
 }
 
+/// Local Hommie-owned presentation overrides for home tiles.
+///
+/// This table deliberately does not foreign-key `targetId` to HA device/entity
+/// registry rows. Overrides must survive removed registry targets so Hommie can
+/// render missing tiles with rebind/remove actions.
+@DataClassName('HomeTileOverrideRow')
+class HomeTileOverrides extends Table {
+  /// Auto-incrementing primary key
+  IntColumn get id => integer().autoIncrement()();
+
+  /// Tile target kind: "device" or "entity"
+  TextColumn get kind => text()();
+
+  /// Stable HA target id: device_id for device tiles, entity registry id for
+  /// entity tiles
+  TextColumn get targetId => text()();
+
+  /// HA area slug where the saved order applies; null for unassigned
+  TextColumn get areaHaId => text().nullable()();
+
+  /// Tile size: "small" or "large"
+  TextColumn get size => text()();
+
+  /// Hommie-owned order in the current area; null means append
+  IntColumn get order => integer().nullable()();
+
+  /// Local hidden/suppressed state
+  BoolColumn get hidden => boolean().withDefault(const Constant(false))();
+
+  /// Optional device primary entity override by HA entity registry id
+  TextColumn get primaryEntityRegistryId => text().nullable()();
+
+  /// Snapshot used for missing tile recovery
+  TextColumn get lastKnownName => text().nullable()();
+
+  /// Snapshot used for missing tile recovery
+  TextColumn get lastKnownAreaHaId => text().nullable()();
+
+  /// Snapshot used for missing tile recovery
+  TextColumn get lastKnownDomain => text().nullable()();
+
+  /// Foreign key reference to [ServerEntities]
+  /// Cascades: deleting a server deletes all local overrides for that server
+  IntColumn get serverId =>
+      integer().references(ServerEntities, #id, onDelete: KeyAction.cascade)();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {serverId, kind, targetId},
+  ];
+}
+
 /// Database table for the generic Home Assistant entity cache (every domain).
 ///
 /// **Primary Entity:** A cached snapshot of a Home Assistant *entity* (the
@@ -391,8 +464,9 @@ class DeviceHomeConfigs extends Table {
 /// - Grouped by area for the Home view; rendered per-domain (lights first)
 ///
 /// **Key Features:**
-/// - `entityId` is the HA entity_id (e.g. "light.kitchen"); `domain` is its
-///   prefix ("light"). Unique per server via `{serverId, entityId}`.
+/// - `registryId` is the stable HA entity registry id used as identity.
+/// - `entityId` is the current HA entity_id (e.g. "light.kitchen"); `domain`
+///   is its prefix ("light"). The value can change after HA renames.
 /// - `areaHaId` is the *resolved* HA area slug, stored denormalized (not an FK)
 ///   so an area re-sync can never cascade-delete entities and so the entity and
 ///   area syncs stay order-independent — grouping is resolved at read time by
@@ -401,6 +475,9 @@ class DeviceHomeConfigs extends Table {
 /// **Example:**
 /// ```dart
 /// EntitiesCompanion.insert(
+///   registryId: 'entity-reg-1',
+///   uniqueId: 'hue-abc',
+///   platform: 'hue',
 ///   entityId: 'light.kitchen',
 ///   name: 'Kitchen',
 ///   domain: 'light',
@@ -413,7 +490,16 @@ class Entities extends Table {
   /// Auto-incrementing primary key (local database ID)
   IntColumn get id => integer().autoIncrement()();
 
-  /// Home Assistant entity_id (e.g. "light.kitchen")
+  /// Stable Home Assistant entity registry id
+  TextColumn get registryId => text()();
+
+  /// Integration-provided unique id from HA's entity registry
+  TextColumn get uniqueId => text()();
+
+  /// HA integration/platform that owns this entity
+  TextColumn get platform => text()();
+
+  /// Current Home Assistant entity_id (e.g. "light.kitchen")
   TextColumn get entityId => text()();
 
   /// Display name (resolved: name -> original_name -> entity_id)
@@ -431,6 +517,12 @@ class Entities extends Table {
   /// HA entity_category ("config"/"diagnostic"), if any; for future filtering
   TextColumn get entityCategory => text().nullable()();
 
+  /// Whether HA marks this entity disabled
+  BoolColumn get disabled => boolean().withDefault(const Constant(false))();
+
+  /// Whether HA marks this entity hidden from Lovelace-style presentation
+  BoolColumn get hidden => boolean().withDefault(const Constant(false))();
+
   /// Foreign key reference to [ServerEntities]
   /// Cascades: deleting a server deletes all its cached entities
   IntColumn get serverId =>
@@ -438,6 +530,6 @@ class Entities extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-    {serverId, entityId}, // Same entity can't appear twice per server
+    {serverId, registryId}, // Same registry entry can't appear twice per server
   ];
 }

@@ -6,6 +6,7 @@ import 'package:hommie/features/entities/application/command_availability_provid
 import 'package:hommie/features/entities/application/entity_service_controller.dart';
 import 'package:hommie/features/entities/domain/entities/entity_state_value.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
+import 'package:hommie/features/entities/domain/entity_display_name.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 /// On/off card for a `light` entity with an optimistic toggle.
@@ -61,7 +62,7 @@ class _LightCardState extends ConsumerState<LightCard> {
           color: _isOn ? Colors.amber : Theme.of(context).disabledColor,
         ),
         title: Text(
-          widget.entity.name,
+          resolveEntityDisplayName(widget.entity),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
