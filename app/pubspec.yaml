@@ -14,7 +14,7 @@ dependencies:
   drag_arrange: ^0.0.3
   battery_plus: ^7.0.0
   connectivity_plus: ^7.1.1
-  device_info_plus: ^13.1.0
+  device_info_plus: ^13.2.0
   share_plus: ^13.1.0
   network_info_plus: ^8.1.0
   logger: ^2.7.0
