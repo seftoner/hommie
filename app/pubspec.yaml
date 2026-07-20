@@ -49,7 +49,7 @@ dependencies:
 
   workmanager: ^0.9.0+3
   flow_builder: ^0.1.0
-  drift: ^2.34.0
+  drift: ^2.34.2
   drift_flutter: ^0.3.0
 
 dev_dependencies:
