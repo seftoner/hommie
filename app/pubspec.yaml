@@ -13,9 +13,9 @@ dependencies:
   computer: ^3.3.0
   drag_arrange: ^0.0.3
   battery_plus: ^7.1.1
-  connectivity_plus: ^7.1.1
+  connectivity_plus: ^7.3.0
   device_info_plus: ^13.1.0
-  share_plus: ^13.1.0
+  share_plus: ^13.2.1
   network_info_plus: ^8.1.0
   logger: ^2.7.0
   flutter:
@@ -49,7 +49,7 @@ dependencies:
 
   workmanager: ^0.9.0+3
   flow_builder: ^0.1.0
-  drift: ^2.34.0
+  drift: ^2.34.2
   drift_flutter: ^0.3.0
 
 dev_dependencies:

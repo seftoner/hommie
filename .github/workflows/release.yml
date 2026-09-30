@@ -10,7 +10,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       
@@ -22,21 +22,21 @@ jobs:
 
       - name: Bump version and push tag
         id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
+        uses: mathieudutour/github-tag-action@v7
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: main
           default_bump: patch
 
       - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v4.2
+        uses: flutter-actions/setup-flutter@v4.3
         with:
           version: 3.44.3
           cache: true
           channel: stable
 
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@v1.7.2
+        uses: dart-lang/setup-dart@v1.8.1
         with:
           sdk: 3.12.2
 
@@ -48,7 +48,7 @@ jobs:
         run: flutter build web
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
