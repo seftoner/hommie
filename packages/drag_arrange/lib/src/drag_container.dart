@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'drag_callbacks.dart';
 import 'drag_item.dart';
@@ -299,7 +299,7 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
                           List<T?> candidateData,
                           List<dynamic> rejectedData,
                         ) {
-                          return Container(color: Colors.transparent);
+                          return Container(color: const Color(0x00000000));
                         },
                   ),
                 ),
@@ -339,7 +339,7 @@ class _DragContainerState<T extends DragListItem> extends State<DragContainer> {
                           List<T?> candidateData,
                           List<dynamic> rejectedData,
                         ) {
-                          return Container(color: Colors.transparent);
+                          return Container(color: const Color(0x00000000));
                         },
                   ),
                 ),

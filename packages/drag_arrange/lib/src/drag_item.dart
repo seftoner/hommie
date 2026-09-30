@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/widgets.dart';
 
 import 'drag_notification.dart';
 
@@ -90,7 +89,9 @@ class _DragAnimRender extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, _AnimRenderObject renderObject) {
+    BuildContext context,
+    _AnimRenderObject renderObject,
+  ) {
     if (isExecute && renderObject.update != update) {
       renderObject.markNeedsLayout();
     }
@@ -117,8 +118,9 @@ class _AnimRenderObject extends RenderShiftedBox {
     if (child == null) {
       return constraints.constrain(const Size(0, 0));
     }
-    final BoxConstraints innerConstraints =
-        constraints.deflate(EdgeInsets.zero);
+    final BoxConstraints innerConstraints = constraints.deflate(
+      EdgeInsets.zero,
+    );
     final Size childSize = child!.getDryLayout(innerConstraints);
     return constraints.constrain(Size(childSize.width, childSize.height));
   }
@@ -130,20 +132,20 @@ class _AnimRenderObject extends RenderShiftedBox {
       size = constraints.constrain(const Size(0, 0));
       return;
     }
-    final BoxConstraints innerConstraints =
-        constraints.deflate(EdgeInsets.zero);
+    final BoxConstraints innerConstraints = constraints.deflate(
+      EdgeInsets.zero,
+    );
     child!.layout(innerConstraints, parentUsesSize: true);
     final BoxParentData childParentData = child!.parentData! as BoxParentData;
     childParentData.offset = const Offset(0, 0);
-    size = constraints.constrain(Size(
-      child!.size.width,
-      child!.size.height,
-    ));
+    size = constraints.constrain(Size(child!.size.width, child!.size.height));
   }
 
   void setStart(EdgeInsetsGeometry? begin, EdgeInsetsGeometry? end) {
-    renderAnimManage.tweenOffset =
-        EdgeInsetsGeometryTween(begin: begin, end: end);
+    renderAnimManage.tweenOffset = EdgeInsetsGeometryTween(
+      begin: begin,
+      end: end,
+    );
     change?.call();
   }
 
@@ -152,36 +154,52 @@ class _AnimRenderObject extends RenderShiftedBox {
     if (child != null) {
       final BoxParentData childParentData = child!.parentData! as BoxParentData;
       final Offset position = childParentData.offset + offset;
-      renderAnimManage.currentOffset ??=
-          EdgeInsets.only(left: position.dx, top: position.dy);
+      renderAnimManage.currentOffset ??= EdgeInsets.only(
+        left: position.dx,
+        top: position.dy,
+      );
       if (renderAnimManage.controller.isAnimating &&
           renderAnimManage.tweenOffset != null) {
-        final EdgeInsets geometry = renderAnimManage.tweenOffset!
-            .evaluate(renderAnimManage.animation) as EdgeInsets;
+        final EdgeInsets geometry = renderAnimManage.tweenOffset!.evaluate(
+          renderAnimManage.animation,
+        ) as EdgeInsets;
         context.paintChild(child!, Offset(geometry.left, geometry.top));
         if (renderAnimManage.currentOffset!.left != position.dx ||
             renderAnimManage.currentOffset!.top != position.dy) {
           setStart(
-              geometry, EdgeInsets.only(left: position.dx, top: position.dy));
+            geometry,
+            EdgeInsets.only(left: position.dx, top: position.dy),
+          );
         }
-        renderAnimManage.currentOffset =
-            EdgeInsets.only(left: position.dx, top: position.dy);
+        renderAnimManage.currentOffset = EdgeInsets.only(
+          left: position.dx,
+          top: position.dy,
+        );
       } else {
         if (isExecute &&
             renderAnimManage.currentOffset != null &&
             (renderAnimManage.currentOffset!.left != position.dx ||
                 renderAnimManage.currentOffset!.top != position.dy)) {
           context.paintChild(
-              child!,
-              Offset(renderAnimManage.currentOffset!.left,
-                  renderAnimManage.currentOffset!.top));
-          setStart(renderAnimManage.currentOffset,
-              EdgeInsets.only(left: position.dx, top: position.dy));
-          renderAnimManage.currentOffset =
-              EdgeInsets.only(left: position.dx, top: position.dy);
+            child!,
+            Offset(
+              renderAnimManage.currentOffset!.left,
+              renderAnimManage.currentOffset!.top,
+            ),
+          );
+          setStart(
+            renderAnimManage.currentOffset,
+            EdgeInsets.only(left: position.dx, top: position.dy),
+          );
+          renderAnimManage.currentOffset = EdgeInsets.only(
+            left: position.dx,
+            top: position.dy,
+          );
         } else {
-          renderAnimManage.currentOffset =
-              EdgeInsets.only(left: position.dx, top: position.dy);
+          renderAnimManage.currentOffset = EdgeInsets.only(
+            left: position.dx,
+            top: position.dy,
+          );
 
           context.paintChild(child!, position);
         }

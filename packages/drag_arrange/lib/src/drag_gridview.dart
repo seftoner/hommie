@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter/widgets.dart';
+
 import 'drag_container.dart';
 import 'drag_notification.dart';
 import 'models.dart';
 import 'drag_scrollview_base.dart';
+import 'staggered_grid/staggered_grid.dart';
+import 'staggered_grid/staggered_grid_tile.dart';
 
 /// Grid view implementation
 class DragGridView extends DragScrollViewBase {
@@ -60,9 +62,7 @@ class _ReorderableGridViewState extends State<DragGridView> {
     }
   }
 
-  Widget buildContainer({
-    required Widget Function(List<Widget>) buildItems,
-  }) {
+  Widget buildContainer({required Widget Function(List<Widget>) buildItems}) {
     return DragContainer(
       isDrag: widget.enableReordering,
       scrollDirection: widget.scrollViewOptions.scrollDirection,
@@ -97,7 +97,8 @@ class _ReorderableGridViewState extends State<DragGridView> {
           );
         } else {
           throw FlutterError(
-              'Item should be one of GridItem or GridExtentItem but it was ${element.runtimeType}');
+            'Item should be one of GridItem or GridExtentItem but it was ${element.runtimeType}',
+          );
         }
       },
       dataList: _children,

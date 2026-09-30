@@ -11,7 +11,7 @@ resolution: workspace
 dependencies:
   home_assistant_client: ^0.1.0
   computer: ^3.3.0
-  drag_arrange: ^0.0.3
+  drag_arrange: ^0.1.0
   battery_plus: ^7.1.1
   connectivity_plus: ^7.3.0
   device_info_plus: ^13.2.0

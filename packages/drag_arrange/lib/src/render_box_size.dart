@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class RenderBoxSize extends StatefulWidget {
   const RenderBoxSize(this.child, this.onChangeSize, {super.key});
@@ -29,10 +29,11 @@ class RenderBoxSizeState extends State<RenderBoxSize> {
   @override
   Widget build(BuildContext context) {
     return NotificationListener<SizeChangedLayoutNotification>(
-        onNotification: (SizeChangedLayoutNotification notification) {
-          onChangeSize();
-          return true;
-        },
-        child: widget.child);
+      onNotification: (SizeChangedLayoutNotification notification) {
+        onChangeSize();
+        return true;
+      },
+      child: widget.child,
+    );
   }
 }

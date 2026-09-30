@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// A widget that listens to scroll notifications and provides a static property
 /// to check whether a scroll action is in progress.
