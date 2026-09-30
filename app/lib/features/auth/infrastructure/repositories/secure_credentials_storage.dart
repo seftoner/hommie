@@ -34,14 +34,14 @@ class SecureCredentialRepository implements ICredentialRepository {
   }
 
   @override
-  Future<void> save(int serverId, Credentials credentials) {
-    _cachedCredentials[serverId] = credentials;
-    //BUG: apply force delete, cause write is not re-writing a new value
-    _storage.delete(key: _credentialKey(serverId));
-    return _storage.write(
+  Future<void> save(int serverId, Credentials credentials) async {
+    _cachedCredentials.remove(serverId);
+    await _storage.delete(key: _credentialKey(serverId));
+    await _storage.write(
       key: _credentialKey(serverId),
       value: credentials.toJson(),
     );
+    _cachedCredentials[serverId] = credentials;
   }
 
   @override

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'entity_registry_options.dart';
@@ -9,6 +9,7 @@ part of 'entity_registry_options.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $SensorEntityOptionsCopyWith<SensorEntityOptions> get copyWith => _$SensorEntity
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SensorEntityOptions&&(identical(other.displayPrecision, displayPrecision) || other.displayPrecision == displayPrecision)&&(identical(other.suggestedDisplayPrecision, suggestedDisplayPrecision) || other.suggestedDisplayPrecision == suggestedDisplayPrecision)&&(identical(other.unitOfMeasurement, unitOfMeasurement) || other.unitOfMeasurement == unitOfMeasurement));
+  final _this = this as SensorEntityOptions;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SensorEntityOptions&&(identical(other.displayPrecision, _this.displayPrecision) || other.displayPrecision == _this.displayPrecision)&&(identical(other.suggestedDisplayPrecision, _this.suggestedDisplayPrecision) || other.suggestedDisplayPrecision == _this.suggestedDisplayPrecision)&&(identical(other.unitOfMeasurement, _this.unitOfMeasurement) || other.unitOfMeasurement == _this.unitOfMeasurement));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,displayPrecision,suggestedDisplayPrecision,unitOfMeasurement);
+int get hashCode {
+  final _this = this as SensorEntityOptions;
+  return Object.hash(runtimeType,_this.displayPrecision,_this.suggestedDisplayPrecision,_this.unitOfMeasurement);
+}
 
 @override
 String toString() {
-  return 'SensorEntityOptions(displayPrecision: $displayPrecision, suggestedDisplayPrecision: $suggestedDisplayPrecision, unitOfMeasurement: $unitOfMeasurement)';
+  final _this = this as SensorEntityOptions;
+  return 'SensorEntityOptions(displayPrecision: ${_this.displayPrecision}, suggestedDisplayPrecision: ${_this.suggestedDisplayPrecision}, unitOfMeasurement: ${_this.unitOfMeasurement})';
 }
 
 
@@ -66,7 +72,7 @@ class _$SensorEntityOptionsCopyWithImpl<$Res>
 /// Create a copy of SensorEntityOptions
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? displayPrecision = freezed,Object? suggestedDisplayPrecision = freezed,Object? unitOfMeasurement = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(SensorEntityOptions(
 displayPrecision: freezed == displayPrecision ? _self.displayPrecision : displayPrecision // ignore: cast_nullable_to_non_nullable
 as int?,suggestedDisplayPrecision: freezed == suggestedDisplayPrecision ? _self.suggestedDisplayPrecision : suggestedDisplayPrecision // ignore: cast_nullable_to_non_nullable
 as int?,unitOfMeasurement: freezed == unitOfMeasurement ? _self.unitOfMeasurement : unitOfMeasurement // ignore: cast_nullable_to_non_nullable
@@ -225,16 +231,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SensorEntityOptions&&(identical(other.displayPrecision, displayPrecision) || other.displayPrecision == displayPrecision)&&(identical(other.suggestedDisplayPrecision, suggestedDisplayPrecision) || other.suggestedDisplayPrecision == suggestedDisplayPrecision)&&(identical(other.unitOfMeasurement, unitOfMeasurement) || other.unitOfMeasurement == unitOfMeasurement));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SensorEntityOptions&&(identical(other.displayPrecision, displayPrecision) || other.displayPrecision == displayPrecision)&&(identical(other.suggestedDisplayPrecision, suggestedDisplayPrecision) || other.suggestedDisplayPrecision == suggestedDisplayPrecision)&&(identical(other.unitOfMeasurement, unitOfMeasurement) || other.unitOfMeasurement == unitOfMeasurement));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,displayPrecision,suggestedDisplayPrecision,unitOfMeasurement);
+int get hashCode {
+    return Object.hash(runtimeType,displayPrecision,suggestedDisplayPrecision,unitOfMeasurement);
+}
 
 @override
 String toString() {
-  return 'SensorEntityOptions(displayPrecision: $displayPrecision, suggestedDisplayPrecision: $suggestedDisplayPrecision, unitOfMeasurement: $unitOfMeasurement)';
+    return 'SensorEntityOptions(displayPrecision: $displayPrecision, suggestedDisplayPrecision: $suggestedDisplayPrecision, unitOfMeasurement: $unitOfMeasurement)';
 }
 
 
@@ -291,16 +299,21 @@ $NumberEntityOptionsCopyWith<NumberEntityOptions> get copyWith => _$NumberEntity
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NumberEntityOptions&&(identical(other.unitOfMeasurement, unitOfMeasurement) || other.unitOfMeasurement == unitOfMeasurement));
+  final _this = this as NumberEntityOptions;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NumberEntityOptions&&(identical(other.unitOfMeasurement, _this.unitOfMeasurement) || other.unitOfMeasurement == _this.unitOfMeasurement));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,unitOfMeasurement);
+int get hashCode {
+  final _this = this as NumberEntityOptions;
+  return Object.hash(runtimeType,_this.unitOfMeasurement);
+}
 
 @override
 String toString() {
-  return 'NumberEntityOptions(unitOfMeasurement: $unitOfMeasurement)';
+  final _this = this as NumberEntityOptions;
+  return 'NumberEntityOptions(unitOfMeasurement: ${_this.unitOfMeasurement})';
 }
 
 
@@ -329,7 +342,7 @@ class _$NumberEntityOptionsCopyWithImpl<$Res>
 /// Create a copy of NumberEntityOptions
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? unitOfMeasurement = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(NumberEntityOptions(
 unitOfMeasurement: freezed == unitOfMeasurement ? _self.unitOfMeasurement : unitOfMeasurement // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -484,16 +497,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NumberEntityOptions&&(identical(other.unitOfMeasurement, unitOfMeasurement) || other.unitOfMeasurement == unitOfMeasurement));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _NumberEntityOptions&&(identical(other.unitOfMeasurement, unitOfMeasurement) || other.unitOfMeasurement == unitOfMeasurement));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,unitOfMeasurement);
+int get hashCode {
+    return Object.hash(runtimeType,unitOfMeasurement);
+}
 
 @override
 String toString() {
-  return 'NumberEntityOptions(unitOfMeasurement: $unitOfMeasurement)';
+    return 'NumberEntityOptions(unitOfMeasurement: $unitOfMeasurement)';
 }
 
 
@@ -548,16 +563,21 @@ $LockEntityOptionsCopyWith<LockEntityOptions> get copyWith => _$LockEntityOption
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LockEntityOptions&&(identical(other.defaultCode, defaultCode) || other.defaultCode == defaultCode));
+  final _this = this as LockEntityOptions;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LockEntityOptions&&(identical(other.defaultCode, _this.defaultCode) || other.defaultCode == _this.defaultCode));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,defaultCode);
+int get hashCode {
+  final _this = this as LockEntityOptions;
+  return Object.hash(runtimeType,_this.defaultCode);
+}
 
 @override
 String toString() {
-  return 'LockEntityOptions(defaultCode: $defaultCode)';
+  final _this = this as LockEntityOptions;
+  return 'LockEntityOptions(defaultCode: ${_this.defaultCode})';
 }
 
 
@@ -586,7 +606,7 @@ class _$LockEntityOptionsCopyWithImpl<$Res>
 /// Create a copy of LockEntityOptions
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? defaultCode = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(LockEntityOptions(
 defaultCode: freezed == defaultCode ? _self.defaultCode : defaultCode // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -741,16 +761,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LockEntityOptions&&(identical(other.defaultCode, defaultCode) || other.defaultCode == defaultCode));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _LockEntityOptions&&(identical(other.defaultCode, defaultCode) || other.defaultCode == defaultCode));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,defaultCode);
+int get hashCode {
+    return Object.hash(runtimeType,defaultCode);
+}
 
 @override
 String toString() {
-  return 'LockEntityOptions(defaultCode: $defaultCode)';
+    return 'LockEntityOptions(defaultCode: $defaultCode)';
 }
 
 
@@ -805,16 +827,21 @@ $AlarmControlPanelEntityOptionsCopyWith<AlarmControlPanelEntityOptions> get copy
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AlarmControlPanelEntityOptions&&(identical(other.defaultCode, defaultCode) || other.defaultCode == defaultCode));
+  final _this = this as AlarmControlPanelEntityOptions;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AlarmControlPanelEntityOptions&&(identical(other.defaultCode, _this.defaultCode) || other.defaultCode == _this.defaultCode));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,defaultCode);
+int get hashCode {
+  final _this = this as AlarmControlPanelEntityOptions;
+  return Object.hash(runtimeType,_this.defaultCode);
+}
 
 @override
 String toString() {
-  return 'AlarmControlPanelEntityOptions(defaultCode: $defaultCode)';
+  final _this = this as AlarmControlPanelEntityOptions;
+  return 'AlarmControlPanelEntityOptions(defaultCode: ${_this.defaultCode})';
 }
 
 
@@ -843,7 +870,7 @@ class _$AlarmControlPanelEntityOptionsCopyWithImpl<$Res>
 /// Create a copy of AlarmControlPanelEntityOptions
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? defaultCode = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(AlarmControlPanelEntityOptions(
 defaultCode: freezed == defaultCode ? _self.defaultCode : defaultCode // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -998,16 +1025,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AlarmControlPanelEntityOptions&&(identical(other.defaultCode, defaultCode) || other.defaultCode == defaultCode));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AlarmControlPanelEntityOptions&&(identical(other.defaultCode, defaultCode) || other.defaultCode == defaultCode));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,defaultCode);
+int get hashCode {
+    return Object.hash(runtimeType,defaultCode);
+}
 
 @override
 String toString() {
-  return 'AlarmControlPanelEntityOptions(defaultCode: $defaultCode)';
+    return 'AlarmControlPanelEntityOptions(defaultCode: $defaultCode)';
 }
 
 
@@ -1062,16 +1091,21 @@ $WeatherEntityOptionsCopyWith<WeatherEntityOptions> get copyWith => _$WeatherEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WeatherEntityOptions&&(identical(other.precipitationUnit, precipitationUnit) || other.precipitationUnit == precipitationUnit)&&(identical(other.pressureUnit, pressureUnit) || other.pressureUnit == pressureUnit)&&(identical(other.temperatureUnit, temperatureUnit) || other.temperatureUnit == temperatureUnit)&&(identical(other.visibilityUnit, visibilityUnit) || other.visibilityUnit == visibilityUnit)&&(identical(other.windSpeedUnit, windSpeedUnit) || other.windSpeedUnit == windSpeedUnit));
+  final _this = this as WeatherEntityOptions;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WeatherEntityOptions&&(identical(other.precipitationUnit, _this.precipitationUnit) || other.precipitationUnit == _this.precipitationUnit)&&(identical(other.pressureUnit, _this.pressureUnit) || other.pressureUnit == _this.pressureUnit)&&(identical(other.temperatureUnit, _this.temperatureUnit) || other.temperatureUnit == _this.temperatureUnit)&&(identical(other.visibilityUnit, _this.visibilityUnit) || other.visibilityUnit == _this.visibilityUnit)&&(identical(other.windSpeedUnit, _this.windSpeedUnit) || other.windSpeedUnit == _this.windSpeedUnit));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,precipitationUnit,pressureUnit,temperatureUnit,visibilityUnit,windSpeedUnit);
+int get hashCode {
+  final _this = this as WeatherEntityOptions;
+  return Object.hash(runtimeType,_this.precipitationUnit,_this.pressureUnit,_this.temperatureUnit,_this.visibilityUnit,_this.windSpeedUnit);
+}
 
 @override
 String toString() {
-  return 'WeatherEntityOptions(precipitationUnit: $precipitationUnit, pressureUnit: $pressureUnit, temperatureUnit: $temperatureUnit, visibilityUnit: $visibilityUnit, windSpeedUnit: $windSpeedUnit)';
+  final _this = this as WeatherEntityOptions;
+  return 'WeatherEntityOptions(precipitationUnit: ${_this.precipitationUnit}, pressureUnit: ${_this.pressureUnit}, temperatureUnit: ${_this.temperatureUnit}, visibilityUnit: ${_this.visibilityUnit}, windSpeedUnit: ${_this.windSpeedUnit})';
 }
 
 
@@ -1100,7 +1134,7 @@ class _$WeatherEntityOptionsCopyWithImpl<$Res>
 /// Create a copy of WeatherEntityOptions
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? precipitationUnit = freezed,Object? pressureUnit = freezed,Object? temperatureUnit = freezed,Object? visibilityUnit = freezed,Object? windSpeedUnit = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(WeatherEntityOptions(
 precipitationUnit: freezed == precipitationUnit ? _self.precipitationUnit : precipitationUnit // ignore: cast_nullable_to_non_nullable
 as String?,pressureUnit: freezed == pressureUnit ? _self.pressureUnit : pressureUnit // ignore: cast_nullable_to_non_nullable
 as String?,temperatureUnit: freezed == temperatureUnit ? _self.temperatureUnit : temperatureUnit // ignore: cast_nullable_to_non_nullable
@@ -1263,16 +1297,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WeatherEntityOptions&&(identical(other.precipitationUnit, precipitationUnit) || other.precipitationUnit == precipitationUnit)&&(identical(other.pressureUnit, pressureUnit) || other.pressureUnit == pressureUnit)&&(identical(other.temperatureUnit, temperatureUnit) || other.temperatureUnit == temperatureUnit)&&(identical(other.visibilityUnit, visibilityUnit) || other.visibilityUnit == visibilityUnit)&&(identical(other.windSpeedUnit, windSpeedUnit) || other.windSpeedUnit == windSpeedUnit));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _WeatherEntityOptions&&(identical(other.precipitationUnit, precipitationUnit) || other.precipitationUnit == precipitationUnit)&&(identical(other.pressureUnit, pressureUnit) || other.pressureUnit == pressureUnit)&&(identical(other.temperatureUnit, temperatureUnit) || other.temperatureUnit == temperatureUnit)&&(identical(other.visibilityUnit, visibilityUnit) || other.visibilityUnit == visibilityUnit)&&(identical(other.windSpeedUnit, windSpeedUnit) || other.windSpeedUnit == windSpeedUnit));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,precipitationUnit,pressureUnit,temperatureUnit,visibilityUnit,windSpeedUnit);
+int get hashCode {
+    return Object.hash(runtimeType,precipitationUnit,pressureUnit,temperatureUnit,visibilityUnit,windSpeedUnit);
+}
 
 @override
 String toString() {
-  return 'WeatherEntityOptions(precipitationUnit: $precipitationUnit, pressureUnit: $pressureUnit, temperatureUnit: $temperatureUnit, visibilityUnit: $visibilityUnit, windSpeedUnit: $windSpeedUnit)';
+    return 'WeatherEntityOptions(precipitationUnit: $precipitationUnit, pressureUnit: $pressureUnit, temperatureUnit: $temperatureUnit, visibilityUnit: $visibilityUnit, windSpeedUnit: $windSpeedUnit)';
 }
 
 
@@ -1331,16 +1367,21 @@ $LightEntityOptionsCopyWith<LightEntityOptions> get copyWith => _$LightEntityOpt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LightEntityOptions&&const DeepCollectionEquality().equals(other.favoriteColors, favoriteColors));
+  final _this = this as LightEntityOptions;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LightEntityOptions&&const DeepCollectionEquality().equals(other.favoriteColors, _this.favoriteColors));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(favoriteColors));
+int get hashCode {
+  final _this = this as LightEntityOptions;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.favoriteColors));
+}
 
 @override
 String toString() {
-  return 'LightEntityOptions(favoriteColors: $favoriteColors)';
+  final _this = this as LightEntityOptions;
+  return 'LightEntityOptions(favoriteColors: ${_this.favoriteColors})';
 }
 
 
@@ -1369,7 +1410,7 @@ class _$LightEntityOptionsCopyWithImpl<$Res>
 /// Create a copy of LightEntityOptions
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? favoriteColors = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(LightEntityOptions(
 favoriteColors: freezed == favoriteColors ? _self.favoriteColors : favoriteColors // ignore: cast_nullable_to_non_nullable
 as List<LightColor>?,
   ));
@@ -1506,7 +1547,7 @@ return $default(_that.favoriteColors);case _:
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _LightEntityOptions implements LightEntityOptions {
-  const _LightEntityOptions({@LightColorListConverter() final  List<LightColor>? favoriteColors}): _favoriteColors = favoriteColors;
+  const _LightEntityOptions({@LightColorListConverter()  List<LightColor>? favoriteColors}): _favoriteColors = favoriteColors;
   factory _LightEntityOptions.fromJson(Map<String, dynamic> json) => _$LightEntityOptionsFromJson(json);
 
  final  List<LightColor>? _favoriteColors;
@@ -1532,16 +1573,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LightEntityOptions&&const DeepCollectionEquality().equals(other._favoriteColors, _favoriteColors));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _LightEntityOptions&&const DeepCollectionEquality().equals(other.favoriteColors, _favoriteColors));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_favoriteColors));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_favoriteColors));
+}
 
 @override
 String toString() {
-  return 'LightEntityOptions(favoriteColors: $favoriteColors)';
+    return 'LightEntityOptions(favoriteColors: $favoriteColors)';
 }
 
 
@@ -1596,16 +1639,21 @@ $SwitchAsXEntityOptionsCopyWith<SwitchAsXEntityOptions> get copyWith => _$Switch
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SwitchAsXEntityOptions&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.invert, invert) || other.invert == invert));
+  final _this = this as SwitchAsXEntityOptions;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SwitchAsXEntityOptions&&(identical(other.entityId, _this.entityId) || other.entityId == _this.entityId)&&(identical(other.invert, _this.invert) || other.invert == _this.invert));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entityId,invert);
+int get hashCode {
+  final _this = this as SwitchAsXEntityOptions;
+  return Object.hash(runtimeType,_this.entityId,_this.invert);
+}
 
 @override
 String toString() {
-  return 'SwitchAsXEntityOptions(entityId: $entityId, invert: $invert)';
+  final _this = this as SwitchAsXEntityOptions;
+  return 'SwitchAsXEntityOptions(entityId: ${_this.entityId}, invert: ${_this.invert})';
 }
 
 
@@ -1634,7 +1682,7 @@ class _$SwitchAsXEntityOptionsCopyWithImpl<$Res>
 /// Create a copy of SwitchAsXEntityOptions
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? entityId = null,Object? invert = null,}) {
-  return _then(_self.copyWith(
+  return _then(SwitchAsXEntityOptions(
 entityId: null == entityId ? _self.entityId : entityId // ignore: cast_nullable_to_non_nullable
 as String,invert: null == invert ? _self.invert : invert // ignore: cast_nullable_to_non_nullable
 as bool,
@@ -1791,16 +1839,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SwitchAsXEntityOptions&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.invert, invert) || other.invert == invert));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SwitchAsXEntityOptions&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.invert, invert) || other.invert == invert));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entityId,invert);
+int get hashCode {
+    return Object.hash(runtimeType,entityId,invert);
+}
 
 @override
 String toString() {
-  return 'SwitchAsXEntityOptions(entityId: $entityId, invert: $invert)';
+    return 'SwitchAsXEntityOptions(entityId: $entityId, invert: $invert)';
 }
 
 
@@ -1856,16 +1906,21 @@ $EntityRegistryOptionsCopyWith<EntityRegistryOptions> get copyWith => _$EntityRe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityRegistryOptions&&(identical(other.number, number) || other.number == number)&&(identical(other.sensor, sensor) || other.sensor == sensor)&&(identical(other.alarmControlPanel, alarmControlPanel) || other.alarmControlPanel == alarmControlPanel)&&(identical(other.lock, lock) || other.lock == lock)&&(identical(other.weather, weather) || other.weather == weather)&&(identical(other.light, light) || other.light == light)&&(identical(other.switchAsX, switchAsX) || other.switchAsX == switchAsX)&&const DeepCollectionEquality().equals(other.conversation, conversation)&&const DeepCollectionEquality().equals(other.cloudAlexa, cloudAlexa)&&const DeepCollectionEquality().equals(other.cloudGoogleAssistant, cloudGoogleAssistant));
+  final _this = this as EntityRegistryOptions;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityRegistryOptions&&(identical(other.number, _this.number) || other.number == _this.number)&&(identical(other.sensor, _this.sensor) || other.sensor == _this.sensor)&&(identical(other.alarmControlPanel, _this.alarmControlPanel) || other.alarmControlPanel == _this.alarmControlPanel)&&(identical(other.lock, _this.lock) || other.lock == _this.lock)&&(identical(other.weather, _this.weather) || other.weather == _this.weather)&&(identical(other.light, _this.light) || other.light == _this.light)&&(identical(other.switchAsX, _this.switchAsX) || other.switchAsX == _this.switchAsX)&&const DeepCollectionEquality().equals(other.conversation, _this.conversation)&&const DeepCollectionEquality().equals(other.cloudAlexa, _this.cloudAlexa)&&const DeepCollectionEquality().equals(other.cloudGoogleAssistant, _this.cloudGoogleAssistant));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,number,sensor,alarmControlPanel,lock,weather,light,switchAsX,const DeepCollectionEquality().hash(conversation),const DeepCollectionEquality().hash(cloudAlexa),const DeepCollectionEquality().hash(cloudGoogleAssistant));
+int get hashCode {
+  final _this = this as EntityRegistryOptions;
+  return Object.hash(runtimeType,_this.number,_this.sensor,_this.alarmControlPanel,_this.lock,_this.weather,_this.light,_this.switchAsX,const DeepCollectionEquality().hash(_this.conversation),const DeepCollectionEquality().hash(_this.cloudAlexa),const DeepCollectionEquality().hash(_this.cloudGoogleAssistant));
+}
 
 @override
 String toString() {
-  return 'EntityRegistryOptions(number: $number, sensor: $sensor, alarmControlPanel: $alarmControlPanel, lock: $lock, weather: $weather, light: $light, switchAsX: $switchAsX, conversation: $conversation, cloudAlexa: $cloudAlexa, cloudGoogleAssistant: $cloudGoogleAssistant)';
+  final _this = this as EntityRegistryOptions;
+  return 'EntityRegistryOptions(number: ${_this.number}, sensor: ${_this.sensor}, alarmControlPanel: ${_this.alarmControlPanel}, lock: ${_this.lock}, weather: ${_this.weather}, light: ${_this.light}, switchAsX: ${_this.switchAsX}, conversation: ${_this.conversation}, cloudAlexa: ${_this.cloudAlexa}, cloudGoogleAssistant: ${_this.cloudGoogleAssistant})';
 }
 
 
@@ -1894,7 +1949,7 @@ class _$EntityRegistryOptionsCopyWithImpl<$Res>
 /// Create a copy of EntityRegistryOptions
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? number = freezed,Object? sensor = freezed,Object? alarmControlPanel = freezed,Object? lock = freezed,Object? weather = freezed,Object? light = freezed,Object? switchAsX = freezed,Object? conversation = freezed,Object? cloudAlexa = freezed,Object? cloudGoogleAssistant = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(EntityRegistryOptions(
 number: freezed == number ? _self.number : number // ignore: cast_nullable_to_non_nullable
 as NumberEntityOptions?,sensor: freezed == sensor ? _self.sensor : sensor // ignore: cast_nullable_to_non_nullable
 as SensorEntityOptions?,alarmControlPanel: freezed == alarmControlPanel ? _self.alarmControlPanel : alarmControlPanel // ignore: cast_nullable_to_non_nullable
@@ -2124,7 +2179,7 @@ return $default(_that.number,_that.sensor,_that.alarmControlPanel,_that.lock,_th
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _EntityRegistryOptions implements EntityRegistryOptions {
-  const _EntityRegistryOptions({this.number, this.sensor, this.alarmControlPanel, this.lock, this.weather, this.light, this.switchAsX, final  Map<String, dynamic>? conversation, @JsonKey(name: 'cloud.alexa') final  Map<String, dynamic>? cloudAlexa, @JsonKey(name: 'cloud.google_assistant') final  Map<String, dynamic>? cloudGoogleAssistant}): _conversation = conversation,_cloudAlexa = cloudAlexa,_cloudGoogleAssistant = cloudGoogleAssistant;
+  const _EntityRegistryOptions({this.number, this.sensor, this.alarmControlPanel, this.lock, this.weather, this.light, this.switchAsX,  Map<String, dynamic>? conversation, @JsonKey(name: 'cloud.alexa')  Map<String, dynamic>? cloudAlexa, @JsonKey(name: 'cloud.google_assistant')  Map<String, dynamic>? cloudGoogleAssistant}): _conversation = conversation,_cloudAlexa = cloudAlexa,_cloudGoogleAssistant = cloudGoogleAssistant;
   factory _EntityRegistryOptions.fromJson(Map<String, dynamic> json) => _$EntityRegistryOptionsFromJson(json);
 
 @override final  NumberEntityOptions? number;
@@ -2175,16 +2230,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityRegistryOptions&&(identical(other.number, number) || other.number == number)&&(identical(other.sensor, sensor) || other.sensor == sensor)&&(identical(other.alarmControlPanel, alarmControlPanel) || other.alarmControlPanel == alarmControlPanel)&&(identical(other.lock, lock) || other.lock == lock)&&(identical(other.weather, weather) || other.weather == weather)&&(identical(other.light, light) || other.light == light)&&(identical(other.switchAsX, switchAsX) || other.switchAsX == switchAsX)&&const DeepCollectionEquality().equals(other._conversation, _conversation)&&const DeepCollectionEquality().equals(other._cloudAlexa, _cloudAlexa)&&const DeepCollectionEquality().equals(other._cloudGoogleAssistant, _cloudGoogleAssistant));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityRegistryOptions&&(identical(other.number, number) || other.number == number)&&(identical(other.sensor, sensor) || other.sensor == sensor)&&(identical(other.alarmControlPanel, alarmControlPanel) || other.alarmControlPanel == alarmControlPanel)&&(identical(other.lock, lock) || other.lock == lock)&&(identical(other.weather, weather) || other.weather == weather)&&(identical(other.light, light) || other.light == light)&&(identical(other.switchAsX, switchAsX) || other.switchAsX == switchAsX)&&const DeepCollectionEquality().equals(other.conversation, _conversation)&&const DeepCollectionEquality().equals(other.cloudAlexa, _cloudAlexa)&&const DeepCollectionEquality().equals(other.cloudGoogleAssistant, _cloudGoogleAssistant));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,number,sensor,alarmControlPanel,lock,weather,light,switchAsX,const DeepCollectionEquality().hash(_conversation),const DeepCollectionEquality().hash(_cloudAlexa),const DeepCollectionEquality().hash(_cloudGoogleAssistant));
+int get hashCode {
+    return Object.hash(runtimeType,number,sensor,alarmControlPanel,lock,weather,light,switchAsX,const DeepCollectionEquality().hash(_conversation),const DeepCollectionEquality().hash(_cloudAlexa),const DeepCollectionEquality().hash(_cloudGoogleAssistant));
+}
 
 @override
 String toString() {
-  return 'EntityRegistryOptions(number: $number, sensor: $sensor, alarmControlPanel: $alarmControlPanel, lock: $lock, weather: $weather, light: $light, switchAsX: $switchAsX, conversation: $conversation, cloudAlexa: $cloudAlexa, cloudGoogleAssistant: $cloudGoogleAssistant)';
+    return 'EntityRegistryOptions(number: $number, sensor: $sensor, alarmControlPanel: $alarmControlPanel, lock: $lock, weather: $weather, light: $light, switchAsX: $switchAsX, conversation: $conversation, cloudAlexa: $cloudAlexa, cloudGoogleAssistant: $cloudGoogleAssistant)';
 }
 
 

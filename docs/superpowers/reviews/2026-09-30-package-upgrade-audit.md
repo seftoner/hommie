@@ -34,9 +34,13 @@ The rest of the initial lockfile changes are federated plugin implementations an
 
 ## Implementation verification
 
-Initial `cd app && flutter analyze --no-pub` exits 1 with 21 `extraneous_modifier` errors in old `*.freezed.dart` output generated before Dart 3.13 / Freezed 4. Source declarations are not implicated by these locations. Regeneration in Task 4 must remove them; do not edit generated output manually. Six pre-existing-style source/lint warnings and one test warning remain in the same analyzer output and will be compared after regeneration.
+Initial `cd app && flutter analyze --no-pub` exited 1 with 21 `extraneous_modifier` errors in old `*.freezed.dart` output generated before Dart 3.13 / Freezed 4. Regeneration removed those errors. It also updated typed-route generated calls with `hasOverriddenOnExit: false` and refreshed Drift/Riverpod output; no app-owned route or database declaration changed. The new build_runner ignores the removed `--delete-conflicting-outputs` option, so subsequent runs omit it.
 
-Pending: standalone UI tests/analyzer, generated-code review, Android API 37 build and permission flow, iOS/macOS SPM builds without Pods, RunnerUITests build-for-testing, credential and background-task checks, and any available Patrol run. Record exact commands and results here as tasks finish.
+After regeneration, `cd app && flutter analyze --no-pub` reported zero errors and seven warnings. The deprecated lint rule and six warning sites were corrected so the same command now reports `No issues found!`. `cd packages/home_assistant_client && flutter analyze --no-pub` also reports no issues. App tests before the warning cleanup: 233 passed, 2 debug-only tests skipped; rerun after the cleanup before the task is complete. Client tests: 51 passed. The new secure-storage test failed against the old implementation because `write` ran before `delete` completed, then passed after `save` awaited delete and wrote before caching.
+
+Workmanager's resolved Apple Swift package exposes module `workmanager_apple` and `WorkmanagerPlugin.registerPeriodicTask(withIdentifier:earliestBeginInSeconds:)`. Hommie's `AppDelegate.swift` still imports the old `workmanager` module and calls the deprecated `frequency:` overload; update both during iOS SPM integration. The Dart task identifier matches the iOS `Info.plist` and AppDelegate registration string. A Dart test that only repeats those string literals would not exercise scheduling; the native build and a device/simulator scheduling check are the relevant verification.
+
+Pending: standalone UI tests/analyzer, Android API 37 build and permission flow, iOS/macOS SPM builds without Pods, RunnerUITests build-for-testing, native background scheduling, and any available Patrol run. Record exact commands and results here as tasks finish.
 
 ## Sources
 

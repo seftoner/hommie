@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'ha_server.dart';
@@ -9,6 +9,7 @@ part of 'ha_server.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $HaServerCopyWith<HaServer> get copyWith => _$HaServerCopyWithImpl<HaServer>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HaServer&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.name, name) || other.name == name)&&(identical(other.uri, uri) || other.uri == uri)&&(identical(other.version, version) || other.version == version)&&(identical(other.internalUrl, internalUrl) || other.internalUrl == internalUrl)&&(identical(other.externalUrl, externalUrl) || other.externalUrl == externalUrl));
+  final _this = this as HaServer;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HaServer&&(identical(other.uuid, _this.uuid) || other.uuid == _this.uuid)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.uri, _this.uri) || other.uri == _this.uri)&&(identical(other.version, _this.version) || other.version == _this.version)&&(identical(other.internalUrl, _this.internalUrl) || other.internalUrl == _this.internalUrl)&&(identical(other.externalUrl, _this.externalUrl) || other.externalUrl == _this.externalUrl));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,uuid,name,uri,version,internalUrl,externalUrl);
+int get hashCode {
+  final _this = this as HaServer;
+  return Object.hash(runtimeType,_this.uuid,_this.name,_this.uri,_this.version,_this.internalUrl,_this.externalUrl);
+}
 
 @override
 String toString() {
-  return 'HaServer(uuid: $uuid, name: $name, uri: $uri, version: $version, internalUrl: $internalUrl, externalUrl: $externalUrl)';
+  final _this = this as HaServer;
+  return 'HaServer(uuid: ${_this.uuid}, name: ${_this.name}, uri: ${_this.uri}, version: ${_this.version}, internalUrl: ${_this.internalUrl}, externalUrl: ${_this.externalUrl})';
 }
 
 
@@ -63,7 +69,7 @@ class _$HaServerCopyWithImpl<$Res>
 /// Create a copy of HaServer
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? uuid = freezed,Object? name = null,Object? uri = null,Object? version = null,Object? internalUrl = freezed,Object? externalUrl = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(HaServer(
 uuid: freezed == uuid ? _self.uuid : uuid // ignore: cast_nullable_to_non_nullable
 as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,uri: null == uri ? _self.uri : uri // ignore: cast_nullable_to_non_nullable
@@ -234,16 +240,18 @@ _$HaServerCopyWith<_HaServer> get copyWith => __$HaServerCopyWithImpl<_HaServer>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HaServer&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.name, name) || other.name == name)&&(identical(other.uri, uri) || other.uri == uri)&&(identical(other.version, version) || other.version == version)&&(identical(other.internalUrl, internalUrl) || other.internalUrl == internalUrl)&&(identical(other.externalUrl, externalUrl) || other.externalUrl == externalUrl));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HaServer&&(identical(other.uuid, uuid) || other.uuid == uuid)&&(identical(other.name, name) || other.name == name)&&(identical(other.uri, uri) || other.uri == uri)&&(identical(other.version, version) || other.version == version)&&(identical(other.internalUrl, internalUrl) || other.internalUrl == internalUrl)&&(identical(other.externalUrl, externalUrl) || other.externalUrl == externalUrl));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,uuid,name,uri,version,internalUrl,externalUrl);
+int get hashCode {
+    return Object.hash(runtimeType,uuid,name,uri,version,internalUrl,externalUrl);
+}
 
 @override
 String toString() {
-  return 'HaServer(uuid: $uuid, name: $name, uri: $uri, version: $version, internalUrl: $internalUrl, externalUrl: $externalUrl)';
+    return 'HaServer(uuid: $uuid, name: $name, uri: $uri, version: $version, internalUrl: $internalUrl, externalUrl: $externalUrl)';
 }
 
 

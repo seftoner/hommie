@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'hass_service.dart';
@@ -9,6 +9,7 @@ part of 'hass_service.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $HassDomainServicesCopyWith<HassDomainServices> get copyWith => _$HassDomainServ
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassDomainServices&&const DeepCollectionEquality().equals(other.services, services));
+  final _this = this as HassDomainServices;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassDomainServices&&const DeepCollectionEquality().equals(other.services, _this.services));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(services));
+int get hashCode {
+  final _this = this as HassDomainServices;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.services));
+}
 
 @override
 String toString() {
-  return 'HassDomainServices(services: $services)';
+  final _this = this as HassDomainServices;
+  return 'HassDomainServices(services: ${_this.services})';
 }
 
 
@@ -66,8 +72,8 @@ class _$HassDomainServicesCopyWithImpl<$Res>
 /// Create a copy of HassDomainServices
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? services = null,}) {
-  return _then(_self.copyWith(
-services: null == services ? _self.services : services // ignore: cast_nullable_to_non_nullable
+  return _then(HassDomainServices(
+null == services ? _self.services : services // ignore: cast_nullable_to_non_nullable
 as Map<String, HassService>,
   ));
 }
@@ -203,7 +209,7 @@ return $default(_that.services);case _:
 @JsonSerializable()
 
 class _HassDomainServices implements HassDomainServices {
-   _HassDomainServices(final  Map<String, HassService> services): _services = services;
+   _HassDomainServices( Map<String, HassService> services): _services = services;
   factory _HassDomainServices.fromJson(Map<String, dynamic> json) => _$HassDomainServicesFromJson(json);
 
  final  Map<String, HassService> _services;
@@ -227,16 +233,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassDomainServices&&const DeepCollectionEquality().equals(other._services, _services));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassDomainServices&&const DeepCollectionEquality().equals(other.services, _services));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_services));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_services));
+}
 
 @override
 String toString() {
-  return 'HassDomainServices(services: $services)';
+    return 'HassDomainServices(services: $services)';
 }
 
 
@@ -291,16 +299,21 @@ $HassServicesCopyWith<HassServices> get copyWith => _$HassServicesCopyWithImpl<H
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassServices&&const DeepCollectionEquality().equals(other.domains, domains));
+  final _this = this as HassServices;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassServices&&const DeepCollectionEquality().equals(other.domains, _this.domains));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(domains));
+int get hashCode {
+  final _this = this as HassServices;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.domains));
+}
 
 @override
 String toString() {
-  return 'HassServices(domains: $domains)';
+  final _this = this as HassServices;
+  return 'HassServices(domains: ${_this.domains})';
 }
 
 
@@ -329,8 +342,8 @@ class _$HassServicesCopyWithImpl<$Res>
 /// Create a copy of HassServices
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? domains = null,}) {
-  return _then(_self.copyWith(
-domains: null == domains ? _self.domains : domains // ignore: cast_nullable_to_non_nullable
+  return _then(HassServices(
+null == domains ? _self.domains : domains // ignore: cast_nullable_to_non_nullable
 as Map<String, HassDomainServices>,
   ));
 }
@@ -466,7 +479,7 @@ return $default(_that.domains);case _:
 @JsonSerializable()
 
 class _HassServices implements HassServices {
-   _HassServices(final  Map<String, HassDomainServices> domains): _domains = domains;
+   _HassServices( Map<String, HassDomainServices> domains): _domains = domains;
   factory _HassServices.fromJson(Map<String, dynamic> json) => _$HassServicesFromJson(json);
 
  final  Map<String, HassDomainServices> _domains;
@@ -490,16 +503,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassServices&&const DeepCollectionEquality().equals(other._domains, _domains));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassServices&&const DeepCollectionEquality().equals(other.domains, _domains));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_domains));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_domains));
+}
 
 @override
 String toString() {
-  return 'HassServices(domains: $domains)';
+    return 'HassServices(domains: $domains)';
 }
 
 
@@ -554,16 +569,21 @@ $HassServiceCopyWith<HassService> get copyWith => _$HassServiceCopyWithImpl<Hass
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassService&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.target, target)&&const DeepCollectionEquality().equals(other.fields, fields)&&(identical(other.response, response) || other.response == response));
+  final _this = this as HassService;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassService&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.description, _this.description) || other.description == _this.description)&&const DeepCollectionEquality().equals(other.target, _this.target)&&const DeepCollectionEquality().equals(other.fields, _this.fields)&&(identical(other.response, _this.response) || other.response == _this.response));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,description,const DeepCollectionEquality().hash(target),const DeepCollectionEquality().hash(fields),response);
+int get hashCode {
+  final _this = this as HassService;
+  return Object.hash(runtimeType,_this.name,_this.description,const DeepCollectionEquality().hash(_this.target),const DeepCollectionEquality().hash(_this.fields),_this.response);
+}
 
 @override
 String toString() {
-  return 'HassService(name: $name, description: $description, target: $target, fields: $fields, response: $response)';
+  final _this = this as HassService;
+  return 'HassService(name: ${_this.name}, description: ${_this.description}, target: ${_this.target}, fields: ${_this.fields}, response: ${_this.response})';
 }
 
 
@@ -592,7 +612,7 @@ class _$HassServiceCopyWithImpl<$Res>
 /// Create a copy of HassService
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? name = freezed,Object? description = freezed,Object? target = freezed,Object? fields = null,Object? response = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(HassService(
 name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,target: freezed == target ? _self.target : target // ignore: cast_nullable_to_non_nullable
@@ -745,7 +765,7 @@ return $default(_that.name,_that.description,_that.target,_that.fields,_that.res
 @JsonSerializable()
 
 class _HassService implements HassService {
-  const _HassService({this.name, this.description, final  Map<String, dynamic>? target, required final  Map<String, Field> fields, this.response}): _target = target,_fields = fields;
+  const _HassService({this.name, this.description,  Map<String, dynamic>? target, required  Map<String, Field> fields, this.response}): _target = target,_fields = fields;
   factory _HassService.fromJson(Map<String, dynamic> json) => _$HassServiceFromJson(json);
 
 @override final  String? name;
@@ -781,16 +801,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassService&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other._target, _target)&&const DeepCollectionEquality().equals(other._fields, _fields)&&(identical(other.response, response) || other.response == response));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassService&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.target, _target)&&const DeepCollectionEquality().equals(other.fields, _fields)&&(identical(other.response, response) || other.response == response));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,description,const DeepCollectionEquality().hash(_target),const DeepCollectionEquality().hash(_fields),response);
+int get hashCode {
+    return Object.hash(runtimeType,name,description,const DeepCollectionEquality().hash(_target),const DeepCollectionEquality().hash(_fields),response);
+}
 
 @override
 String toString() {
-  return 'HassService(name: $name, description: $description, target: $target, fields: $fields, response: $response)';
+    return 'HassService(name: $name, description: $description, target: $target, fields: $fields, response: $response)';
 }
 
 
@@ -861,16 +883,21 @@ $FieldCopyWith<Field> get copyWith => _$FieldCopyWithImpl<Field>(this as Field, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Field&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.example, example)&&const DeepCollectionEquality().equals(other.selector, selector)&&(identical(other.filter, filter) || other.filter == filter));
+  final _this = this as Field;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Field&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.description, _this.description) || other.description == _this.description)&&const DeepCollectionEquality().equals(other.example, _this.example)&&const DeepCollectionEquality().equals(other.selector, _this.selector)&&(identical(other.filter, _this.filter) || other.filter == _this.filter));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,description,const DeepCollectionEquality().hash(example),const DeepCollectionEquality().hash(selector),filter);
+int get hashCode {
+  final _this = this as Field;
+  return Object.hash(runtimeType,_this.name,_this.description,const DeepCollectionEquality().hash(_this.example),const DeepCollectionEquality().hash(_this.selector),_this.filter);
+}
 
 @override
 String toString() {
-  return 'Field(name: $name, description: $description, example: $example, selector: $selector, filter: $filter)';
+  final _this = this as Field;
+  return 'Field(name: ${_this.name}, description: ${_this.description}, example: ${_this.example}, selector: ${_this.selector}, filter: ${_this.filter})';
 }
 
 
@@ -899,7 +926,7 @@ class _$FieldCopyWithImpl<$Res>
 /// Create a copy of Field
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? name = freezed,Object? description = freezed,Object? example = freezed,Object? selector = freezed,Object? filter = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(Field(
 name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,example: freezed == example ? _self.example : example // ignore: cast_nullable_to_non_nullable
@@ -1052,7 +1079,7 @@ return $default(_that.name,_that.description,_that.example,_that.selector,_that.
 @JsonSerializable()
 
 class _Field implements Field {
-  const _Field({this.name = '', this.description = '', this.example, final  Map<String, dynamic>? selector, this.filter}): _selector = selector;
+  const _Field({this.name = '', this.description = '', this.example,  Map<String, dynamic>? selector, this.filter}): _selector = selector;
   factory _Field.fromJson(Map<String, dynamic> json) => _$FieldFromJson(json);
 
 @override@JsonKey() final  String? name;
@@ -1082,16 +1109,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Field&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.example, example)&&const DeepCollectionEquality().equals(other._selector, _selector)&&(identical(other.filter, filter) || other.filter == filter));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Field&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.example, example)&&const DeepCollectionEquality().equals(other.selector, _selector)&&(identical(other.filter, filter) || other.filter == filter));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,description,const DeepCollectionEquality().hash(example),const DeepCollectionEquality().hash(_selector),filter);
+int get hashCode {
+    return Object.hash(runtimeType,name,description,const DeepCollectionEquality().hash(example),const DeepCollectionEquality().hash(_selector),filter);
+}
 
 @override
 String toString() {
-  return 'Field(name: $name, description: $description, example: $example, selector: $selector, filter: $filter)';
+    return 'Field(name: $name, description: $description, example: $example, selector: $selector, filter: $filter)';
 }
 
 
@@ -1149,7 +1178,6 @@ $FieldFilterCopyWith<$Res>? get filter {
 /// @nodoc
 mixin _$FieldFilter {
 
-// ignore: non_constant_identifier_names
  List<int>? get supported_features; Map<String, dynamic>? get attribute;
 /// Create a copy of FieldFilter
 /// with the given fields replaced by the non-null parameter values.
@@ -1163,16 +1191,21 @@ $FieldFilterCopyWith<FieldFilter> get copyWith => _$FieldFilterCopyWithImpl<Fiel
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FieldFilter&&const DeepCollectionEquality().equals(other.supported_features, supported_features)&&const DeepCollectionEquality().equals(other.attribute, attribute));
+  final _this = this as FieldFilter;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FieldFilter&&const DeepCollectionEquality().equals(other.supported_features, _this.supported_features)&&const DeepCollectionEquality().equals(other.attribute, _this.attribute));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(supported_features),const DeepCollectionEquality().hash(attribute));
+int get hashCode {
+  final _this = this as FieldFilter;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.supported_features),const DeepCollectionEquality().hash(_this.attribute));
+}
 
 @override
 String toString() {
-  return 'FieldFilter(supported_features: $supported_features, attribute: $attribute)';
+  final _this = this as FieldFilter;
+  return 'FieldFilter(supported_features: ${_this.supported_features}, attribute: ${_this.attribute})';
 }
 
 
@@ -1201,9 +1234,9 @@ class _$FieldFilterCopyWithImpl<$Res>
 /// Create a copy of FieldFilter
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? supported_features = freezed,Object? attribute = freezed,}) {
-  return _then(_self.copyWith(
-supported_features: freezed == supported_features ? _self.supported_features : supported_features // ignore: cast_nullable_to_non_nullable
-as List<int>?,attribute: freezed == attribute ? _self.attribute : attribute // ignore: cast_nullable_to_non_nullable
+  return _then(FieldFilter(
+freezed == supported_features ? _self.supported_features : supported_features // ignore: cast_nullable_to_non_nullable
+as List<int>?,freezed == attribute ? _self.attribute : attribute // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,
   ));
 }
@@ -1339,12 +1372,10 @@ return $default(_that.supported_features,_that.attribute);case _:
 @JsonSerializable()
 
 class _FieldFilter implements FieldFilter {
-   _FieldFilter(final  List<int>? supported_features, final  Map<String, dynamic>? attribute): _supported_features = supported_features,_attribute = attribute;
+   _FieldFilter( List<int>? supported_features,  Map<String, dynamic>? attribute): _supported_features = supported_features,_attribute = attribute;
   factory _FieldFilter.fromJson(Map<String, dynamic> json) => _$FieldFilterFromJson(json);
 
-// ignore: non_constant_identifier_names
  final  List<int>? _supported_features;
-// ignore: non_constant_identifier_names
 @override List<int>? get supported_features {
   final value = _supported_features;
   if (value == null) return null;
@@ -1376,16 +1407,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FieldFilter&&const DeepCollectionEquality().equals(other._supported_features, _supported_features)&&const DeepCollectionEquality().equals(other._attribute, _attribute));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _FieldFilter&&const DeepCollectionEquality().equals(other.supported_features, _supported_features)&&const DeepCollectionEquality().equals(other.attribute, _attribute));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_supported_features),const DeepCollectionEquality().hash(_attribute));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_supported_features),const DeepCollectionEquality().hash(_attribute));
+}
 
 @override
 String toString() {
-  return 'FieldFilter(supported_features: $supported_features, attribute: $attribute)';
+    return 'FieldFilter(supported_features: $supported_features, attribute: $attribute)';
 }
 
 
@@ -1441,16 +1474,21 @@ $ResponseCopyWith<Response> get copyWith => _$ResponseCopyWithImpl<Response>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Response&&(identical(other.optional, optional) || other.optional == optional));
+  final _this = this as Response;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Response&&(identical(other.optional, _this.optional) || other.optional == _this.optional));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,optional);
+int get hashCode {
+  final _this = this as Response;
+  return Object.hash(runtimeType,_this.optional);
+}
 
 @override
 String toString() {
-  return 'Response(optional: $optional)';
+  final _this = this as Response;
+  return 'Response(optional: ${_this.optional})';
 }
 
 
@@ -1479,7 +1517,7 @@ class _$ResponseCopyWithImpl<$Res>
 /// Create a copy of Response
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? optional = null,}) {
-  return _then(_self.copyWith(
+  return _then(Response(
 optional: null == optional ? _self.optional : optional // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -1634,16 +1672,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Response&&(identical(other.optional, optional) || other.optional == optional));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Response&&(identical(other.optional, optional) || other.optional == optional));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,optional);
+int get hashCode {
+    return Object.hash(runtimeType,optional);
+}
 
 @override
 String toString() {
-  return 'Response(optional: $optional)';
+    return 'Response(optional: $optional)';
 }
 
 

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'logs.dart';
@@ -9,6 +9,7 @@ part of 'logs.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $LogCopyWith<Log> get copyWith => _$LogCopyWithImpl<Log>(this as Log, _$identity
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Log&&(identical(other.time, time) || other.time == time)&&(identical(other.msg, msg) || other.msg == msg)&&(identical(other.level, level) || other.level == level)&&(identical(other.details, details) || other.details == details));
+  final _this = this as Log;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Log&&(identical(other.time, _this.time) || other.time == _this.time)&&(identical(other.msg, _this.msg) || other.msg == _this.msg)&&(identical(other.level, _this.level) || other.level == _this.level)&&(identical(other.details, _this.details) || other.details == _this.details));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,time,msg,level,details);
+int get hashCode {
+  final _this = this as Log;
+  return Object.hash(runtimeType,_this.time,_this.msg,_this.level,_this.details);
+}
 
 @override
 String toString() {
-  return 'Log(time: $time, msg: $msg, level: $level, details: $details)';
+  final _this = this as Log;
+  return 'Log(time: ${_this.time}, msg: ${_this.msg}, level: ${_this.level}, details: ${_this.details})';
 }
 
 
@@ -63,7 +69,7 @@ class _$LogCopyWithImpl<$Res>
 /// Create a copy of Log
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? time = null,Object? msg = null,Object? level = null,Object? details = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(Log(
 time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as DateTime,msg: null == msg ? _self.msg : msg // ignore: cast_nullable_to_non_nullable
 as String,level: null == level ? _self.level : level // ignore: cast_nullable_to_non_nullable
@@ -221,16 +227,18 @@ _$LogCopyWith<_Log> get copyWith => __$LogCopyWithImpl<_Log>(this, _$identity);
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Log&&(identical(other.time, time) || other.time == time)&&(identical(other.msg, msg) || other.msg == msg)&&(identical(other.level, level) || other.level == level)&&(identical(other.details, details) || other.details == details));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Log&&(identical(other.time, time) || other.time == time)&&(identical(other.msg, msg) || other.msg == msg)&&(identical(other.level, level) || other.level == level)&&(identical(other.details, details) || other.details == details));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,time,msg,level,details);
+int get hashCode {
+    return Object.hash(runtimeType,time,msg,level,details);
+}
 
 @override
 String toString() {
-  return 'Log(time: $time, msg: $msg, level: $level, details: $details)';
+    return 'Log(time: $time, msg: $msg, level: $level, details: $details)';
 }
 
 

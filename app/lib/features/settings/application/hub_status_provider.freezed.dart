@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'hub_status_provider.dart';
@@ -9,6 +9,7 @@ part of 'hub_status_provider.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $HubConnectionStatusCopyWith<HubConnectionStatus> get copyWith => _$HubConnectio
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HubConnectionStatus&&(identical(other.kind, kind) || other.kind == kind)&&(identical(other.label, label) || other.label == label)&&(identical(other.description, description) || other.description == description)&&(identical(other.server, server) || other.server == server));
+  final _this = this as HubConnectionStatus;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HubConnectionStatus&&(identical(other.kind, _this.kind) || other.kind == _this.kind)&&(identical(other.label, _this.label) || other.label == _this.label)&&(identical(other.description, _this.description) || other.description == _this.description)&&(identical(other.server, _this.server) || other.server == _this.server));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,kind,label,description,server);
+int get hashCode {
+  final _this = this as HubConnectionStatus;
+  return Object.hash(runtimeType,_this.kind,_this.label,_this.description,_this.server);
+}
 
 @override
 String toString() {
-  return 'HubConnectionStatus(kind: $kind, label: $label, description: $description, server: $server)';
+  final _this = this as HubConnectionStatus;
+  return 'HubConnectionStatus(kind: ${_this.kind}, label: ${_this.label}, description: ${_this.description}, server: ${_this.server})';
 }
 
 
@@ -63,7 +69,7 @@ class _$HubConnectionStatusCopyWithImpl<$Res>
 /// Create a copy of HubConnectionStatus
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? kind = null,Object? label = null,Object? description = null,Object? server = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(HubConnectionStatus(
 kind: null == kind ? _self.kind : kind // ignore: cast_nullable_to_non_nullable
 as HubConnectionStatusKind,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
@@ -221,16 +227,18 @@ _$HubConnectionStatusCopyWith<_HubConnectionStatus> get copyWith => __$HubConnec
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HubConnectionStatus&&(identical(other.kind, kind) || other.kind == kind)&&(identical(other.label, label) || other.label == label)&&(identical(other.description, description) || other.description == description)&&(identical(other.server, server) || other.server == server));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HubConnectionStatus&&(identical(other.kind, kind) || other.kind == kind)&&(identical(other.label, label) || other.label == label)&&(identical(other.description, description) || other.description == description)&&(identical(other.server, server) || other.server == server));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,kind,label,description,server);
+int get hashCode {
+    return Object.hash(runtimeType,kind,label,description,server);
+}
 
 @override
 String toString() {
-  return 'HubConnectionStatus(kind: $kind, label: $label, description: $description, server: $server)';
+    return 'HubConnectionStatus(kind: $kind, label: $label, description: $description, server: $server)';
 }
 
 
@@ -285,16 +293,21 @@ $HubStatusStateCopyWith<HubStatusState> get copyWith => _$HubStatusStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HubStatusState&&(identical(other.connectionStatus, connectionStatus) || other.connectionStatus == connectionStatus)&&(identical(other.authState, authState) || other.authState == authState)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName));
+  final _this = this as HubStatusState;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HubStatusState&&(identical(other.connectionStatus, _this.connectionStatus) || other.connectionStatus == _this.connectionStatus)&&(identical(other.authState, _this.authState) || other.authState == _this.authState)&&(identical(other.deviceName, _this.deviceName) || other.deviceName == _this.deviceName));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,connectionStatus,authState,deviceName);
+int get hashCode {
+  final _this = this as HubStatusState;
+  return Object.hash(runtimeType,_this.connectionStatus,_this.authState,_this.deviceName);
+}
 
 @override
 String toString() {
-  return 'HubStatusState(connectionStatus: $connectionStatus, authState: $authState, deviceName: $deviceName)';
+  final _this = this as HubStatusState;
+  return 'HubStatusState(connectionStatus: ${_this.connectionStatus}, authState: ${_this.authState}, deviceName: ${_this.deviceName})';
 }
 
 
@@ -323,7 +336,7 @@ class _$HubStatusStateCopyWithImpl<$Res>
 /// Create a copy of HubStatusState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? connectionStatus = null,Object? authState = null,Object? deviceName = null,}) {
-  return _then(_self.copyWith(
+  return _then(HubStatusState(
 connectionStatus: null == connectionStatus ? _self.connectionStatus : connectionStatus // ignore: cast_nullable_to_non_nullable
 as HubConnectionStatus,authState: null == authState ? _self.authState : authState // ignore: cast_nullable_to_non_nullable
 as AuthState,deviceName: null == deviceName ? _self.deviceName : deviceName // ignore: cast_nullable_to_non_nullable
@@ -497,16 +510,18 @@ _$HubStatusStateCopyWith<_HubStatusState> get copyWith => __$HubStatusStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HubStatusState&&(identical(other.connectionStatus, connectionStatus) || other.connectionStatus == connectionStatus)&&(identical(other.authState, authState) || other.authState == authState)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HubStatusState&&(identical(other.connectionStatus, connectionStatus) || other.connectionStatus == connectionStatus)&&(identical(other.authState, authState) || other.authState == authState)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,connectionStatus,authState,deviceName);
+int get hashCode {
+    return Object.hash(runtimeType,connectionStatus,authState,deviceName);
+}
 
 @override
 String toString() {
-  return 'HubStatusState(connectionStatus: $connectionStatus, authState: $authState, deviceName: $deviceName)';
+    return 'HubStatusState(connectionStatus: $connectionStatus, authState: $authState, deviceName: $deviceName)';
 }
 
 
@@ -557,7 +572,7 @@ $HubConnectionStatusCopyWith<$Res> get connectionStatus {
 @override
 @pragma('vm:prefer-inline')
 $AuthStateCopyWith<$Res> get authState {
-  
+
   return $AuthStateCopyWith<$Res>(_self.authState, (value) {
     return _then(_self.copyWith(authState: value));
   });

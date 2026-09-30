@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'entity_registry_entry.dart';
@@ -9,6 +9,7 @@ part of 'entity_registry_entry.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $EntityRegistryEntryCopyWith<EntityRegistryEntry> get copyWith => _$EntityRegist
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityRegistryEntry&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.id, id) || other.id == id)&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.name, name) || other.name == name)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.configEntryId, configEntryId) || other.configEntryId == configEntryId)&&(identical(other.configSubentryId, configSubentryId) || other.configSubentryId == configSubentryId)&&(identical(other.deviceId, deviceId) || other.deviceId == deviceId)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&const DeepCollectionEquality().equals(other.labels, labels)&&(identical(other.disabledBy, disabledBy) || other.disabledBy == disabledBy)&&(identical(other.hiddenBy, hiddenBy) || other.hiddenBy == hiddenBy)&&(identical(other.entityCategory, entityCategory) || other.entityCategory == entityCategory)&&(identical(other.hasEntityName, hasEntityName) || other.hasEntityName == hasEntityName)&&(identical(other.originalName, originalName) || other.originalName == originalName)&&(identical(other.uniqueId, uniqueId) || other.uniqueId == uniqueId)&&(identical(other.translationKey, translationKey) || other.translationKey == translationKey)&&(identical(other.options, options) || other.options == options)&&const DeepCollectionEquality().equals(other.categories, categories));
+  final _this = this as EntityRegistryEntry;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityRegistryEntry&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt)&&(identical(other.modifiedAt, _this.modifiedAt) || other.modifiedAt == _this.modifiedAt)&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.entityId, _this.entityId) || other.entityId == _this.entityId)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.icon, _this.icon) || other.icon == _this.icon)&&(identical(other.platform, _this.platform) || other.platform == _this.platform)&&(identical(other.configEntryId, _this.configEntryId) || other.configEntryId == _this.configEntryId)&&(identical(other.configSubentryId, _this.configSubentryId) || other.configSubentryId == _this.configSubentryId)&&(identical(other.deviceId, _this.deviceId) || other.deviceId == _this.deviceId)&&(identical(other.areaId, _this.areaId) || other.areaId == _this.areaId)&&const DeepCollectionEquality().equals(other.labels, _this.labels)&&(identical(other.disabledBy, _this.disabledBy) || other.disabledBy == _this.disabledBy)&&(identical(other.hiddenBy, _this.hiddenBy) || other.hiddenBy == _this.hiddenBy)&&(identical(other.entityCategory, _this.entityCategory) || other.entityCategory == _this.entityCategory)&&(identical(other.hasEntityName, _this.hasEntityName) || other.hasEntityName == _this.hasEntityName)&&(identical(other.originalName, _this.originalName) || other.originalName == _this.originalName)&&(identical(other.uniqueId, _this.uniqueId) || other.uniqueId == _this.uniqueId)&&(identical(other.translationKey, _this.translationKey) || other.translationKey == _this.translationKey)&&(identical(other.options, _this.options) || other.options == _this.options)&&const DeepCollectionEquality().equals(other.categories, _this.categories));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,createdAt,modifiedAt,id,entityId,name,icon,platform,configEntryId,configSubentryId,deviceId,areaId,const DeepCollectionEquality().hash(labels),disabledBy,hiddenBy,entityCategory,hasEntityName,originalName,uniqueId,translationKey,options,const DeepCollectionEquality().hash(categories)]);
+int get hashCode {
+  final _this = this as EntityRegistryEntry;
+  return Object.hashAll([runtimeType,_this.createdAt,_this.modifiedAt,_this.id,_this.entityId,_this.name,_this.icon,_this.platform,_this.configEntryId,_this.configSubentryId,_this.deviceId,_this.areaId,const DeepCollectionEquality().hash(_this.labels),_this.disabledBy,_this.hiddenBy,_this.entityCategory,_this.hasEntityName,_this.originalName,_this.uniqueId,_this.translationKey,_this.options,const DeepCollectionEquality().hash(_this.categories)]);
+}
 
 @override
 String toString() {
-  return 'EntityRegistryEntry(createdAt: $createdAt, modifiedAt: $modifiedAt, id: $id, entityId: $entityId, name: $name, icon: $icon, platform: $platform, configEntryId: $configEntryId, configSubentryId: $configSubentryId, deviceId: $deviceId, areaId: $areaId, labels: $labels, disabledBy: $disabledBy, hiddenBy: $hiddenBy, entityCategory: $entityCategory, hasEntityName: $hasEntityName, originalName: $originalName, uniqueId: $uniqueId, translationKey: $translationKey, options: $options, categories: $categories)';
+  final _this = this as EntityRegistryEntry;
+  return 'EntityRegistryEntry(createdAt: ${_this.createdAt}, modifiedAt: ${_this.modifiedAt}, id: ${_this.id}, entityId: ${_this.entityId}, name: ${_this.name}, icon: ${_this.icon}, platform: ${_this.platform}, configEntryId: ${_this.configEntryId}, configSubentryId: ${_this.configSubentryId}, deviceId: ${_this.deviceId}, areaId: ${_this.areaId}, labels: ${_this.labels}, disabledBy: ${_this.disabledBy}, hiddenBy: ${_this.hiddenBy}, entityCategory: ${_this.entityCategory}, hasEntityName: ${_this.hasEntityName}, originalName: ${_this.originalName}, uniqueId: ${_this.uniqueId}, translationKey: ${_this.translationKey}, options: ${_this.options}, categories: ${_this.categories})';
 }
 
 
@@ -66,7 +72,7 @@ class _$EntityRegistryEntryCopyWithImpl<$Res>
 /// Create a copy of EntityRegistryEntry
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? createdAt = null,Object? modifiedAt = null,Object? id = null,Object? entityId = null,Object? name = freezed,Object? icon = freezed,Object? platform = null,Object? configEntryId = freezed,Object? configSubentryId = freezed,Object? deviceId = freezed,Object? areaId = freezed,Object? labels = null,Object? disabledBy = freezed,Object? hiddenBy = freezed,Object? entityCategory = freezed,Object? hasEntityName = null,Object? originalName = freezed,Object? uniqueId = null,Object? translationKey = freezed,Object? options = freezed,Object? categories = null,}) {
-  return _then(_self.copyWith(
+  return _then(EntityRegistryEntry(
 createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as double,modifiedAt: null == modifiedAt ? _self.modifiedAt : modifiedAt // ignore: cast_nullable_to_non_nullable
 as double,id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
@@ -235,7 +241,7 @@ return $default(_that.createdAt,_that.modifiedAt,_that.id,_that.entityId,_that.n
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _EntityRegistryEntry implements EntityRegistryEntry, RegistryEntry {
-  const _EntityRegistryEntry({required this.createdAt, required this.modifiedAt, required this.id, required this.entityId, this.name, this.icon, required this.platform, this.configEntryId, this.configSubentryId, this.deviceId, this.areaId, required final  List<String> labels, this.disabledBy, this.hiddenBy, this.entityCategory, required this.hasEntityName, this.originalName, required this.uniqueId, this.translationKey, this.options, required final  Map<String, String> categories}): _labels = labels,_categories = categories;
+  const _EntityRegistryEntry({required this.createdAt, required this.modifiedAt, required this.id, required this.entityId, this.name, this.icon, required this.platform, this.configEntryId, this.configSubentryId, this.deviceId, this.areaId, required  List<String> labels, this.disabledBy, this.hiddenBy, this.entityCategory, required this.hasEntityName, this.originalName, required this.uniqueId, this.translationKey, this.options, required  Map<String, String> categories}): _labels = labels,_categories = categories;
   factory _EntityRegistryEntry.fromJson(Map<String, dynamic> json) => _$EntityRegistryEntryFromJson(json);
 
 @override final  double createdAt;
@@ -285,16 +291,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityRegistryEntry&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.id, id) || other.id == id)&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.name, name) || other.name == name)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.configEntryId, configEntryId) || other.configEntryId == configEntryId)&&(identical(other.configSubentryId, configSubentryId) || other.configSubentryId == configSubentryId)&&(identical(other.deviceId, deviceId) || other.deviceId == deviceId)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&const DeepCollectionEquality().equals(other._labels, _labels)&&(identical(other.disabledBy, disabledBy) || other.disabledBy == disabledBy)&&(identical(other.hiddenBy, hiddenBy) || other.hiddenBy == hiddenBy)&&(identical(other.entityCategory, entityCategory) || other.entityCategory == entityCategory)&&(identical(other.hasEntityName, hasEntityName) || other.hasEntityName == hasEntityName)&&(identical(other.originalName, originalName) || other.originalName == originalName)&&(identical(other.uniqueId, uniqueId) || other.uniqueId == uniqueId)&&(identical(other.translationKey, translationKey) || other.translationKey == translationKey)&&(identical(other.options, options) || other.options == options)&&const DeepCollectionEquality().equals(other._categories, _categories));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityRegistryEntry&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.id, id) || other.id == id)&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.name, name) || other.name == name)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.configEntryId, configEntryId) || other.configEntryId == configEntryId)&&(identical(other.configSubentryId, configSubentryId) || other.configSubentryId == configSubentryId)&&(identical(other.deviceId, deviceId) || other.deviceId == deviceId)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&const DeepCollectionEquality().equals(other.labels, _labels)&&(identical(other.disabledBy, disabledBy) || other.disabledBy == disabledBy)&&(identical(other.hiddenBy, hiddenBy) || other.hiddenBy == hiddenBy)&&(identical(other.entityCategory, entityCategory) || other.entityCategory == entityCategory)&&(identical(other.hasEntityName, hasEntityName) || other.hasEntityName == hasEntityName)&&(identical(other.originalName, originalName) || other.originalName == originalName)&&(identical(other.uniqueId, uniqueId) || other.uniqueId == uniqueId)&&(identical(other.translationKey, translationKey) || other.translationKey == translationKey)&&(identical(other.options, options) || other.options == options)&&const DeepCollectionEquality().equals(other.categories, _categories));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,createdAt,modifiedAt,id,entityId,name,icon,platform,configEntryId,configSubentryId,deviceId,areaId,const DeepCollectionEquality().hash(_labels),disabledBy,hiddenBy,entityCategory,hasEntityName,originalName,uniqueId,translationKey,options,const DeepCollectionEquality().hash(_categories)]);
+int get hashCode {
+    return Object.hashAll([runtimeType,createdAt,modifiedAt,id,entityId,name,icon,platform,configEntryId,configSubentryId,deviceId,areaId,const DeepCollectionEquality().hash(_labels),disabledBy,hiddenBy,entityCategory,hasEntityName,originalName,uniqueId,translationKey,options,const DeepCollectionEquality().hash(_categories)]);
+}
 
 @override
 String toString() {
-  return 'EntityRegistryEntry(createdAt: $createdAt, modifiedAt: $modifiedAt, id: $id, entityId: $entityId, name: $name, icon: $icon, platform: $platform, configEntryId: $configEntryId, configSubentryId: $configSubentryId, deviceId: $deviceId, areaId: $areaId, labels: $labels, disabledBy: $disabledBy, hiddenBy: $hiddenBy, entityCategory: $entityCategory, hasEntityName: $hasEntityName, originalName: $originalName, uniqueId: $uniqueId, translationKey: $translationKey, options: $options, categories: $categories)';
+    return 'EntityRegistryEntry(createdAt: $createdAt, modifiedAt: $modifiedAt, id: $id, entityId: $entityId, name: $name, icon: $icon, platform: $platform, configEntryId: $configEntryId, configSubentryId: $configSubentryId, deviceId: $deviceId, areaId: $areaId, labels: $labels, disabledBy: $disabledBy, hiddenBy: $hiddenBy, entityCategory: $entityCategory, hasEntityName: $hasEntityName, originalName: $originalName, uniqueId: $uniqueId, translationKey: $translationKey, options: $options, categories: $categories)';
 }
 
 

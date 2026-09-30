@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'web_socket_response.dart';
@@ -9,6 +9,7 @@ part of 'web_socket_response.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 WebSocketResponse _$WebSocketResponseFromJson(
@@ -59,16 +60,21 @@ $WebSocketResponseCopyWith<WebSocketResponse> get copyWith => _$WebSocketRespons
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketResponse&&(identical(other.id, id) || other.id == id));
+  final _this = this as WebSocketResponse;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketResponse&&(identical(other.id, _this.id) || other.id == _this.id));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id);
+int get hashCode {
+  final _this = this as WebSocketResponse;
+  return Object.hash(runtimeType,_this.id);
+}
 
 @override
 String toString() {
-  return 'WebSocketResponse(id: $id)';
+  final _this = this as WebSocketResponse;
+  return 'WebSocketResponse(id: ${_this.id})';
 }
 
 
@@ -252,7 +258,7 @@ return resultError(_that.id,_that.error);case _:
 @JsonSerializable()
 
 class WebSocketPongResponse implements WebSocketResponse {
-  const WebSocketPongResponse({required this.id, final  String? $type}): $type = $type ?? 'pong';
+  const WebSocketPongResponse({required this.id,  String? $type}): $type = $type ?? 'pong';
   factory WebSocketPongResponse.fromJson(Map<String, dynamic> json) => _$WebSocketPongResponseFromJson(json);
 
 @override final  int id;
@@ -274,16 +280,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketPongResponse&&(identical(other.id, id) || other.id == id));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketPongResponse&&(identical(other.id, id) || other.id == id));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id);
+int get hashCode {
+    return Object.hash(runtimeType,id);
+}
 
 @override
 String toString() {
-  return 'WebSocketResponse.pong(id: $id)';
+    return 'WebSocketResponse.pong(id: $id)';
 }
 
 
@@ -325,7 +333,7 @@ as int,
 @JsonSerializable()
 
 class WebSocketEventResponse implements WebSocketResponse {
-  const WebSocketEventResponse({required this.id, required this.event, final  String? $type}): $type = $type ?? 'event';
+  const WebSocketEventResponse({required this.id, required this.event,  String? $type}): $type = $type ?? 'event';
   factory WebSocketEventResponse.fromJson(Map<String, dynamic> json) => _$WebSocketEventResponseFromJson(json);
 
 @override final  int id;
@@ -348,16 +356,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketEventResponse&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.event, event));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketEventResponse&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.event, event));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(event));
+int get hashCode {
+    return Object.hash(runtimeType,id,const DeepCollectionEquality().hash(event));
+}
 
 @override
 String toString() {
-  return 'WebSocketResponse.event(id: $id, event: $event)';
+    return 'WebSocketResponse.event(id: $id, event: $event)';
 }
 
 
@@ -400,7 +410,7 @@ as dynamic,
 @JsonSerializable()
 
 class WebSocketResultResponseSuccess implements WebSocketResponse {
-  const WebSocketResultResponseSuccess({required this.id, required this.result, this.success = true, final  String? $type}): $type = $type ?? 'resultSuccess';
+  const WebSocketResultResponseSuccess({required this.id, required this.result, this.success = true,  String? $type}): $type = $type ?? 'resultSuccess';
   factory WebSocketResultResponseSuccess.fromJson(Map<String, dynamic> json) => _$WebSocketResultResponseSuccessFromJson(json);
 
 @override final  int id;
@@ -424,16 +434,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketResultResponseSuccess&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.result, result)&&(identical(other.success, success) || other.success == success));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketResultResponseSuccess&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.result, result)&&(identical(other.success, success) || other.success == success));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(result),success);
+int get hashCode {
+    return Object.hash(runtimeType,id,const DeepCollectionEquality().hash(result),success);
+}
 
 @override
 String toString() {
-  return 'WebSocketResponse.resultSuccess(id: $id, result: $result, success: $success)';
+    return 'WebSocketResponse.resultSuccess(id: $id, result: $result, success: $success)';
 }
 
 
@@ -477,7 +489,7 @@ as bool,
 @JsonSerializable()
 
 class WebSocketResultResponseError implements WebSocketResponse {
-  const WebSocketResultResponseError({required this.id, required this.error, final  String? $type}): $type = $type ?? 'resultError';
+  const WebSocketResultResponseError({required this.id, required this.error,  String? $type}): $type = $type ?? 'resultError';
   factory WebSocketResultResponseError.fromJson(Map<String, dynamic> json) => _$WebSocketResultResponseErrorFromJson(json);
 
 @override final  int id;
@@ -500,16 +512,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketResultResponseError&&(identical(other.id, id) || other.id == id)&&(identical(other.error, error) || other.error == error));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is WebSocketResultResponseError&&(identical(other.id, id) || other.id == id)&&(identical(other.error, error) || other.error == error));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,error);
+int get hashCode {
+    return Object.hash(runtimeType,id,error);
+}
 
 @override
 String toString() {
-  return 'WebSocketResponse.resultError(id: $id, error: $error)';
+    return 'WebSocketResponse.resultError(id: $id, error: $error)';
 }
 
 

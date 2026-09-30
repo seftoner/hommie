@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'entity_registry_display.dart';
@@ -9,6 +9,7 @@ part of 'entity_registry_display.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $EntityRegistryDisplayEntryCopyWith<EntityRegistryDisplayEntry> get copyWith => 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityRegistryDisplayEntry&&(identical(other.entity_id, entity_id) || other.entity_id == entity_id)&&(identical(other.name, name) || other.name == name)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.device_id, device_id) || other.device_id == device_id)&&(identical(other.area_id, area_id) || other.area_id == area_id)&&const DeepCollectionEquality().equals(other.labels, labels)&&(identical(other.hidden, hidden) || other.hidden == hidden)&&(identical(other.entity_category, entity_category) || other.entity_category == entity_category)&&(identical(other.translation_key, translation_key) || other.translation_key == translation_key)&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.display_precision, display_precision) || other.display_precision == display_precision)&&(identical(other.has_entity_name, has_entity_name) || other.has_entity_name == has_entity_name));
+  final _this = this as EntityRegistryDisplayEntry;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityRegistryDisplayEntry&&(identical(other.entity_id, _this.entity_id) || other.entity_id == _this.entity_id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.icon, _this.icon) || other.icon == _this.icon)&&(identical(other.device_id, _this.device_id) || other.device_id == _this.device_id)&&(identical(other.area_id, _this.area_id) || other.area_id == _this.area_id)&&const DeepCollectionEquality().equals(other.labels, _this.labels)&&(identical(other.hidden, _this.hidden) || other.hidden == _this.hidden)&&(identical(other.entity_category, _this.entity_category) || other.entity_category == _this.entity_category)&&(identical(other.translation_key, _this.translation_key) || other.translation_key == _this.translation_key)&&(identical(other.platform, _this.platform) || other.platform == _this.platform)&&(identical(other.display_precision, _this.display_precision) || other.display_precision == _this.display_precision)&&(identical(other.has_entity_name, _this.has_entity_name) || other.has_entity_name == _this.has_entity_name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entity_id,name,icon,device_id,area_id,const DeepCollectionEquality().hash(labels),hidden,entity_category,translation_key,platform,display_precision,has_entity_name);
+int get hashCode {
+  final _this = this as EntityRegistryDisplayEntry;
+  return Object.hash(runtimeType,_this.entity_id,_this.name,_this.icon,_this.device_id,_this.area_id,const DeepCollectionEquality().hash(_this.labels),_this.hidden,_this.entity_category,_this.translation_key,_this.platform,_this.display_precision,_this.has_entity_name);
+}
 
 @override
 String toString() {
-  return 'EntityRegistryDisplayEntry(entity_id: $entity_id, name: $name, icon: $icon, device_id: $device_id, area_id: $area_id, labels: $labels, hidden: $hidden, entity_category: $entity_category, translation_key: $translation_key, platform: $platform, display_precision: $display_precision, has_entity_name: $has_entity_name)';
+  final _this = this as EntityRegistryDisplayEntry;
+  return 'EntityRegistryDisplayEntry(entity_id: ${_this.entity_id}, name: ${_this.name}, icon: ${_this.icon}, device_id: ${_this.device_id}, area_id: ${_this.area_id}, labels: ${_this.labels}, hidden: ${_this.hidden}, entity_category: ${_this.entity_category}, translation_key: ${_this.translation_key}, platform: ${_this.platform}, display_precision: ${_this.display_precision}, has_entity_name: ${_this.has_entity_name})';
 }
 
 
@@ -66,7 +72,7 @@ class _$EntityRegistryDisplayEntryCopyWithImpl<$Res>
 /// Create a copy of EntityRegistryDisplayEntry
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? entity_id = null,Object? name = freezed,Object? icon = freezed,Object? device_id = freezed,Object? area_id = freezed,Object? labels = null,Object? hidden = freezed,Object? entity_category = freezed,Object? translation_key = freezed,Object? platform = freezed,Object? display_precision = freezed,Object? has_entity_name = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(EntityRegistryDisplayEntry(
 entity_id: null == entity_id ? _self.entity_id : entity_id // ignore: cast_nullable_to_non_nullable
 as String,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,icon: freezed == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
@@ -214,7 +220,7 @@ return $default(_that.entity_id,_that.name,_that.icon,_that.device_id,_that.area
 
 @JsonSerializable(explicitToJson: true)
 class _EntityRegistryDisplayEntry implements EntityRegistryDisplayEntry {
-  const _EntityRegistryDisplayEntry({required this.entity_id, this.name, this.icon, this.device_id, this.area_id, required final  List<String> labels, this.hidden, this.entity_category, this.translation_key, this.platform, this.display_precision, this.has_entity_name}): _labels = labels;
+  const _EntityRegistryDisplayEntry({required this.entity_id, this.name, this.icon, this.device_id, this.area_id, required  List<String> labels, this.hidden, this.entity_category, this.translation_key, this.platform, this.display_precision, this.has_entity_name}): _labels = labels;
   factory _EntityRegistryDisplayEntry.fromJson(Map<String, dynamic> json) => _$EntityRegistryDisplayEntryFromJson(json);
 
 @override final  String entity_id;
@@ -249,16 +255,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityRegistryDisplayEntry&&(identical(other.entity_id, entity_id) || other.entity_id == entity_id)&&(identical(other.name, name) || other.name == name)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.device_id, device_id) || other.device_id == device_id)&&(identical(other.area_id, area_id) || other.area_id == area_id)&&const DeepCollectionEquality().equals(other._labels, _labels)&&(identical(other.hidden, hidden) || other.hidden == hidden)&&(identical(other.entity_category, entity_category) || other.entity_category == entity_category)&&(identical(other.translation_key, translation_key) || other.translation_key == translation_key)&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.display_precision, display_precision) || other.display_precision == display_precision)&&(identical(other.has_entity_name, has_entity_name) || other.has_entity_name == has_entity_name));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityRegistryDisplayEntry&&(identical(other.entity_id, entity_id) || other.entity_id == entity_id)&&(identical(other.name, name) || other.name == name)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.device_id, device_id) || other.device_id == device_id)&&(identical(other.area_id, area_id) || other.area_id == area_id)&&const DeepCollectionEquality().equals(other.labels, _labels)&&(identical(other.hidden, hidden) || other.hidden == hidden)&&(identical(other.entity_category, entity_category) || other.entity_category == entity_category)&&(identical(other.translation_key, translation_key) || other.translation_key == translation_key)&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.display_precision, display_precision) || other.display_precision == display_precision)&&(identical(other.has_entity_name, has_entity_name) || other.has_entity_name == has_entity_name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entity_id,name,icon,device_id,area_id,const DeepCollectionEquality().hash(_labels),hidden,entity_category,translation_key,platform,display_precision,has_entity_name);
+int get hashCode {
+    return Object.hash(runtimeType,entity_id,name,icon,device_id,area_id,const DeepCollectionEquality().hash(_labels),hidden,entity_category,translation_key,platform,display_precision,has_entity_name);
+}
 
 @override
 String toString() {
-  return 'EntityRegistryDisplayEntry(entity_id: $entity_id, name: $name, icon: $icon, device_id: $device_id, area_id: $area_id, labels: $labels, hidden: $hidden, entity_category: $entity_category, translation_key: $translation_key, platform: $platform, display_precision: $display_precision, has_entity_name: $has_entity_name)';
+    return 'EntityRegistryDisplayEntry(entity_id: $entity_id, name: $name, icon: $icon, device_id: $device_id, area_id: $area_id, labels: $labels, hidden: $hidden, entity_category: $entity_category, translation_key: $translation_key, platform: $platform, display_precision: $display_precision, has_entity_name: $has_entity_name)';
 }
 
 
@@ -324,16 +332,21 @@ $EntityRegistryDisplayEntryResponseEntityCopyWith<EntityRegistryDisplayEntryResp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityRegistryDisplayEntryResponseEntity&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.deviceId, deviceId) || other.deviceId == deviceId)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&const DeepCollectionEquality().equals(other.labels, labels)&&(identical(other.entityCategoryId, entityCategoryId) || other.entityCategoryId == entityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.translationKey, translationKey) || other.translationKey == translationKey)&&(identical(other.hidden, hidden) || other.hidden == hidden)&&(identical(other.displayPrecision, displayPrecision) || other.displayPrecision == displayPrecision)&&(identical(other.hasEntityName, hasEntityName) || other.hasEntityName == hasEntityName));
+  final _this = this as EntityRegistryDisplayEntryResponseEntity;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityRegistryDisplayEntryResponseEntity&&(identical(other.entityId, _this.entityId) || other.entityId == _this.entityId)&&(identical(other.deviceId, _this.deviceId) || other.deviceId == _this.deviceId)&&(identical(other.areaId, _this.areaId) || other.areaId == _this.areaId)&&const DeepCollectionEquality().equals(other.labels, _this.labels)&&(identical(other.entityCategoryId, _this.entityCategoryId) || other.entityCategoryId == _this.entityCategoryId)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.icon, _this.icon) || other.icon == _this.icon)&&(identical(other.platform, _this.platform) || other.platform == _this.platform)&&(identical(other.translationKey, _this.translationKey) || other.translationKey == _this.translationKey)&&(identical(other.hidden, _this.hidden) || other.hidden == _this.hidden)&&(identical(other.displayPrecision, _this.displayPrecision) || other.displayPrecision == _this.displayPrecision)&&(identical(other.hasEntityName, _this.hasEntityName) || other.hasEntityName == _this.hasEntityName));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entityId,deviceId,areaId,const DeepCollectionEquality().hash(labels),entityCategoryId,name,icon,platform,translationKey,hidden,displayPrecision,hasEntityName);
+int get hashCode {
+  final _this = this as EntityRegistryDisplayEntryResponseEntity;
+  return Object.hash(runtimeType,_this.entityId,_this.deviceId,_this.areaId,const DeepCollectionEquality().hash(_this.labels),_this.entityCategoryId,_this.name,_this.icon,_this.platform,_this.translationKey,_this.hidden,_this.displayPrecision,_this.hasEntityName);
+}
 
 @override
 String toString() {
-  return 'EntityRegistryDisplayEntryResponseEntity(entityId: $entityId, deviceId: $deviceId, areaId: $areaId, labels: $labels, entityCategoryId: $entityCategoryId, name: $name, icon: $icon, platform: $platform, translationKey: $translationKey, hidden: $hidden, displayPrecision: $displayPrecision, hasEntityName: $hasEntityName)';
+  final _this = this as EntityRegistryDisplayEntryResponseEntity;
+  return 'EntityRegistryDisplayEntryResponseEntity(entityId: ${_this.entityId}, deviceId: ${_this.deviceId}, areaId: ${_this.areaId}, labels: ${_this.labels}, entityCategoryId: ${_this.entityCategoryId}, name: ${_this.name}, icon: ${_this.icon}, platform: ${_this.platform}, translationKey: ${_this.translationKey}, hidden: ${_this.hidden}, displayPrecision: ${_this.displayPrecision}, hasEntityName: ${_this.hasEntityName})';
 }
 
 
@@ -362,7 +375,7 @@ class _$EntityRegistryDisplayEntryResponseEntityCopyWithImpl<$Res>
 /// Create a copy of EntityRegistryDisplayEntryResponseEntity
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? entityId = null,Object? deviceId = freezed,Object? areaId = freezed,Object? labels = null,Object? entityCategoryId = freezed,Object? name = freezed,Object? icon = freezed,Object? platform = freezed,Object? translationKey = freezed,Object? hidden = freezed,Object? displayPrecision = freezed,Object? hasEntityName = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(EntityRegistryDisplayEntryResponseEntity(
 entityId: null == entityId ? _self.entityId : entityId // ignore: cast_nullable_to_non_nullable
 as String,deviceId: freezed == deviceId ? _self.deviceId : deviceId // ignore: cast_nullable_to_non_nullable
 as String?,areaId: freezed == areaId ? _self.areaId : areaId // ignore: cast_nullable_to_non_nullable
@@ -510,7 +523,7 @@ return $default(_that.entityId,_that.deviceId,_that.areaId,_that.labels,_that.en
 
 @JsonSerializable()
 class _EntityRegistryDisplayEntryResponseEntity implements EntityRegistryDisplayEntryResponseEntity {
-  const _EntityRegistryDisplayEntryResponseEntity({@JsonKey(name: 'ei') required this.entityId, @JsonKey(name: 'di') this.deviceId, @JsonKey(name: 'ai') this.areaId, @JsonKey(name: 'lb') required final  List<String> labels, @JsonKey(name: 'ec') this.entityCategoryId, @JsonKey(name: 'en') this.name, @JsonKey(name: 'ic') this.icon, @JsonKey(name: 'pl') this.platform, @JsonKey(name: 'tk') this.translationKey, @JsonKey(name: 'hb') this.hidden, @JsonKey(name: 'dp') this.displayPrecision, @JsonKey(name: 'hn') this.hasEntityName}): _labels = labels;
+  const _EntityRegistryDisplayEntryResponseEntity({@JsonKey(name: 'ei') required this.entityId, @JsonKey(name: 'di') this.deviceId, @JsonKey(name: 'ai') this.areaId, @JsonKey(name: 'lb') required  List<String> labels, @JsonKey(name: 'ec') this.entityCategoryId, @JsonKey(name: 'en') this.name, @JsonKey(name: 'ic') this.icon, @JsonKey(name: 'pl') this.platform, @JsonKey(name: 'tk') this.translationKey, @JsonKey(name: 'hb') this.hidden, @JsonKey(name: 'dp') this.displayPrecision, @JsonKey(name: 'hn') this.hasEntityName}): _labels = labels;
   factory _EntityRegistryDisplayEntryResponseEntity.fromJson(Map<String, dynamic> json) => _$EntityRegistryDisplayEntryResponseEntityFromJson(json);
 
 @override@JsonKey(name: 'ei') final  String entityId;
@@ -545,16 +558,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityRegistryDisplayEntryResponseEntity&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.deviceId, deviceId) || other.deviceId == deviceId)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&const DeepCollectionEquality().equals(other._labels, _labels)&&(identical(other.entityCategoryId, entityCategoryId) || other.entityCategoryId == entityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.translationKey, translationKey) || other.translationKey == translationKey)&&(identical(other.hidden, hidden) || other.hidden == hidden)&&(identical(other.displayPrecision, displayPrecision) || other.displayPrecision == displayPrecision)&&(identical(other.hasEntityName, hasEntityName) || other.hasEntityName == hasEntityName));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityRegistryDisplayEntryResponseEntity&&(identical(other.entityId, entityId) || other.entityId == entityId)&&(identical(other.deviceId, deviceId) || other.deviceId == deviceId)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&const DeepCollectionEquality().equals(other.labels, _labels)&&(identical(other.entityCategoryId, entityCategoryId) || other.entityCategoryId == entityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.translationKey, translationKey) || other.translationKey == translationKey)&&(identical(other.hidden, hidden) || other.hidden == hidden)&&(identical(other.displayPrecision, displayPrecision) || other.displayPrecision == displayPrecision)&&(identical(other.hasEntityName, hasEntityName) || other.hasEntityName == hasEntityName));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entityId,deviceId,areaId,const DeepCollectionEquality().hash(_labels),entityCategoryId,name,icon,platform,translationKey,hidden,displayPrecision,hasEntityName);
+int get hashCode {
+    return Object.hash(runtimeType,entityId,deviceId,areaId,const DeepCollectionEquality().hash(_labels),entityCategoryId,name,icon,platform,translationKey,hidden,displayPrecision,hasEntityName);
+}
 
 @override
 String toString() {
-  return 'EntityRegistryDisplayEntryResponseEntity(entityId: $entityId, deviceId: $deviceId, areaId: $areaId, labels: $labels, entityCategoryId: $entityCategoryId, name: $name, icon: $icon, platform: $platform, translationKey: $translationKey, hidden: $hidden, displayPrecision: $displayPrecision, hasEntityName: $hasEntityName)';
+    return 'EntityRegistryDisplayEntryResponseEntity(entityId: $entityId, deviceId: $deviceId, areaId: $areaId, labels: $labels, entityCategoryId: $entityCategoryId, name: $name, icon: $icon, platform: $platform, translationKey: $translationKey, hidden: $hidden, displayPrecision: $displayPrecision, hasEntityName: $hasEntityName)';
 }
 
 
@@ -620,16 +635,21 @@ $EntityRegistryDisplayEntryResponseCopyWith<EntityRegistryDisplayEntryResponse> 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityRegistryDisplayEntryResponse&&const DeepCollectionEquality().equals(other.entities, entities)&&const DeepCollectionEquality().equals(other.entityCategories, entityCategories));
+  final _this = this as EntityRegistryDisplayEntryResponse;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityRegistryDisplayEntryResponse&&const DeepCollectionEquality().equals(other.entities, _this.entities)&&const DeepCollectionEquality().equals(other.entityCategories, _this.entityCategories));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(entities),const DeepCollectionEquality().hash(entityCategories));
+int get hashCode {
+  final _this = this as EntityRegistryDisplayEntryResponse;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.entities),const DeepCollectionEquality().hash(_this.entityCategories));
+}
 
 @override
 String toString() {
-  return 'EntityRegistryDisplayEntryResponse(entities: $entities, entityCategories: $entityCategories)';
+  final _this = this as EntityRegistryDisplayEntryResponse;
+  return 'EntityRegistryDisplayEntryResponse(entities: ${_this.entities}, entityCategories: ${_this.entityCategories})';
 }
 
 
@@ -658,7 +678,7 @@ class _$EntityRegistryDisplayEntryResponseCopyWithImpl<$Res>
 /// Create a copy of EntityRegistryDisplayEntryResponse
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? entities = null,Object? entityCategories = null,}) {
-  return _then(_self.copyWith(
+  return _then(EntityRegistryDisplayEntryResponse(
 entities: null == entities ? _self.entities : entities // ignore: cast_nullable_to_non_nullable
 as List<EntityRegistryDisplayEntryResponseEntity>,entityCategories: null == entityCategories ? _self.entityCategories : entityCategories // ignore: cast_nullable_to_non_nullable
 as Map<int, EntityCategory>,
@@ -796,7 +816,7 @@ return $default(_that.entities,_that.entityCategories);case _:
 
 @JsonSerializable(explicitToJson: true)
 class _EntityRegistryDisplayEntryResponse implements EntityRegistryDisplayEntryResponse {
-  const _EntityRegistryDisplayEntryResponse({required final  List<EntityRegistryDisplayEntryResponseEntity> entities, @JsonKey(name: 'entity_categories', fromJson: _entityCategoriesFromJson, toJson: _entityCategoriesToJson) required final  Map<int, EntityCategory> entityCategories}): _entities = entities,_entityCategories = entityCategories;
+  const _EntityRegistryDisplayEntryResponse({required  List<EntityRegistryDisplayEntryResponseEntity> entities, @JsonKey(name: 'entity_categories', fromJson: _entityCategoriesFromJson, toJson: _entityCategoriesToJson) required  Map<int, EntityCategory> entityCategories}): _entities = entities,_entityCategories = entityCategories;
   factory _EntityRegistryDisplayEntryResponse.fromJson(Map<String, dynamic> json) => _$EntityRegistryDisplayEntryResponseFromJson(json);
 
  final  List<EntityRegistryDisplayEntryResponseEntity> _entities;
@@ -827,16 +847,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityRegistryDisplayEntryResponse&&const DeepCollectionEquality().equals(other._entities, _entities)&&const DeepCollectionEquality().equals(other._entityCategories, _entityCategories));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityRegistryDisplayEntryResponse&&const DeepCollectionEquality().equals(other.entities, _entities)&&const DeepCollectionEquality().equals(other.entityCategories, _entityCategories));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_entities),const DeepCollectionEquality().hash(_entityCategories));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_entities),const DeepCollectionEquality().hash(_entityCategories));
+}
 
 @override
 String toString() {
-  return 'EntityRegistryDisplayEntryResponse(entities: $entities, entityCategories: $entityCategories)';
+    return 'EntityRegistryDisplayEntryResponse(entities: $entities, entityCategories: $entityCategories)';
 }
 
 

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'logs_list_controller.dart';
@@ -9,6 +9,7 @@ part of 'logs_list_controller.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $LogsListStateCopyWith<LogsListState> get copyWith => _$LogsListStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsListState&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other.logs, logs)&&(identical(other.hasReachedEnd, hasReachedEnd) || other.hasReachedEnd == hasReachedEnd));
+  final _this = this as LogsListState;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsListState&&(identical(other.isLoadingMore, _this.isLoadingMore) || other.isLoadingMore == _this.isLoadingMore)&&const DeepCollectionEquality().equals(other.logs, _this.logs)&&(identical(other.hasReachedEnd, _this.hasReachedEnd) || other.hasReachedEnd == _this.hasReachedEnd));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoadingMore,const DeepCollectionEquality().hash(logs),hasReachedEnd);
+int get hashCode {
+  final _this = this as LogsListState;
+  return Object.hash(runtimeType,_this.isLoadingMore,const DeepCollectionEquality().hash(_this.logs),_this.hasReachedEnd);
+}
 
 @override
 String toString() {
-  return 'LogsListState(isLoadingMore: $isLoadingMore, logs: $logs, hasReachedEnd: $hasReachedEnd)';
+  final _this = this as LogsListState;
+  return 'LogsListState(isLoadingMore: ${_this.isLoadingMore}, logs: ${_this.logs}, hasReachedEnd: ${_this.hasReachedEnd})';
 }
 
 
@@ -63,7 +69,7 @@ class _$LogsListStateCopyWithImpl<$Res>
 /// Create a copy of LogsListState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? isLoadingMore = null,Object? logs = null,Object? hasReachedEnd = null,}) {
-  return _then(_self.copyWith(
+  return _then(LogsListState(
 isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,logs: null == logs ? _self.logs : logs // ignore: cast_nullable_to_non_nullable
 as List<Log>,hasReachedEnd: null == hasReachedEnd ? _self.hasReachedEnd : hasReachedEnd // ignore: cast_nullable_to_non_nullable
@@ -202,7 +208,7 @@ return $default(_that.isLoadingMore,_that.logs,_that.hasReachedEnd);case _:
 
 
 class _LogsListState implements LogsListState {
-   _LogsListState({required this.isLoadingMore, required final  List<Log> logs, this.hasReachedEnd = false}): _logs = logs;
+   _LogsListState({required this.isLoadingMore, required  List<Log> logs, this.hasReachedEnd = false}): _logs = logs;
   
 
 @override final  bool isLoadingMore;
@@ -225,16 +231,18 @@ _$LogsListStateCopyWith<_LogsListState> get copyWith => __$LogsListStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LogsListState&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other._logs, _logs)&&(identical(other.hasReachedEnd, hasReachedEnd) || other.hasReachedEnd == hasReachedEnd));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _LogsListState&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&const DeepCollectionEquality().equals(other.logs, _logs)&&(identical(other.hasReachedEnd, hasReachedEnd) || other.hasReachedEnd == hasReachedEnd));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoadingMore,const DeepCollectionEquality().hash(_logs),hasReachedEnd);
+int get hashCode {
+    return Object.hash(runtimeType,isLoadingMore,const DeepCollectionEquality().hash(_logs),hasReachedEnd);
+}
 
 @override
 String toString() {
-  return 'LogsListState(isLoadingMore: $isLoadingMore, logs: $logs, hasReachedEnd: $hasReachedEnd)';
+    return 'LogsListState(isLoadingMore: $isLoadingMore, logs: $logs, hasReachedEnd: $hasReachedEnd)';
 }
 
 

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'floor_registry_entry.dart';
@@ -9,6 +9,7 @@ part of 'floor_registry_entry.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $FloorRegistryEntryCopyWith<FloorRegistryEntry> get copyWith => _$FloorRegistryE
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FloorRegistryEntry&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.floorId, floorId) || other.floorId == floorId)&&(identical(other.name, name) || other.name == name)&&(identical(other.level, level) || other.level == level)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other.aliases, aliases));
+  final _this = this as FloorRegistryEntry;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FloorRegistryEntry&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt)&&(identical(other.modifiedAt, _this.modifiedAt) || other.modifiedAt == _this.modifiedAt)&&(identical(other.floorId, _this.floorId) || other.floorId == _this.floorId)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.level, _this.level) || other.level == _this.level)&&(identical(other.icon, _this.icon) || other.icon == _this.icon)&&const DeepCollectionEquality().equals(other.aliases, _this.aliases));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,createdAt,modifiedAt,floorId,name,level,icon,const DeepCollectionEquality().hash(aliases));
+int get hashCode {
+  final _this = this as FloorRegistryEntry;
+  return Object.hash(runtimeType,_this.createdAt,_this.modifiedAt,_this.floorId,_this.name,_this.level,_this.icon,const DeepCollectionEquality().hash(_this.aliases));
+}
 
 @override
 String toString() {
-  return 'FloorRegistryEntry(createdAt: $createdAt, modifiedAt: $modifiedAt, floorId: $floorId, name: $name, level: $level, icon: $icon, aliases: $aliases)';
+  final _this = this as FloorRegistryEntry;
+  return 'FloorRegistryEntry(createdAt: ${_this.createdAt}, modifiedAt: ${_this.modifiedAt}, floorId: ${_this.floorId}, name: ${_this.name}, level: ${_this.level}, icon: ${_this.icon}, aliases: ${_this.aliases})';
 }
 
 
@@ -66,7 +72,7 @@ class _$FloorRegistryEntryCopyWithImpl<$Res>
 /// Create a copy of FloorRegistryEntry
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? createdAt = null,Object? modifiedAt = null,Object? floorId = null,Object? name = null,Object? level = freezed,Object? icon = freezed,Object? aliases = null,}) {
-  return _then(_self.copyWith(
+  return _then(FloorRegistryEntry(
 createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as double,modifiedAt: null == modifiedAt ? _self.modifiedAt : modifiedAt // ignore: cast_nullable_to_non_nullable
 as double,floorId: null == floorId ? _self.floorId : floorId // ignore: cast_nullable_to_non_nullable
@@ -209,7 +215,7 @@ return $default(_that.createdAt,_that.modifiedAt,_that.floorId,_that.name,_that.
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _FloorRegistryEntry implements FloorRegistryEntry {
-  const _FloorRegistryEntry({required this.createdAt, required this.modifiedAt, required this.floorId, required this.name, this.level, this.icon, required final  List<String> aliases}): _aliases = aliases;
+  const _FloorRegistryEntry({required this.createdAt, required this.modifiedAt, required this.floorId, required this.name, this.level, this.icon, required  List<String> aliases}): _aliases = aliases;
   factory _FloorRegistryEntry.fromJson(Map<String, dynamic> json) => _$FloorRegistryEntryFromJson(json);
 
 @override final  double createdAt;
@@ -239,16 +245,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FloorRegistryEntry&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.floorId, floorId) || other.floorId == floorId)&&(identical(other.name, name) || other.name == name)&&(identical(other.level, level) || other.level == level)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other._aliases, _aliases));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _FloorRegistryEntry&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.floorId, floorId) || other.floorId == floorId)&&(identical(other.name, name) || other.name == name)&&(identical(other.level, level) || other.level == level)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other.aliases, _aliases));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,createdAt,modifiedAt,floorId,name,level,icon,const DeepCollectionEquality().hash(_aliases));
+int get hashCode {
+    return Object.hash(runtimeType,createdAt,modifiedAt,floorId,name,level,icon,const DeepCollectionEquality().hash(_aliases));
+}
 
 @override
 String toString() {
-  return 'FloorRegistryEntry(createdAt: $createdAt, modifiedAt: $modifiedAt, floorId: $floorId, name: $name, level: $level, icon: $icon, aliases: $aliases)';
+    return 'FloorRegistryEntry(createdAt: $createdAt, modifiedAt: $modifiedAt, floorId: $floorId, name: $name, level: $level, icon: $icon, aliases: $aliases)';
 }
 
 

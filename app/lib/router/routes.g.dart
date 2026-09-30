@@ -18,13 +18,18 @@ RouteBase get $mainShellRouteData => StatefulShellRouteData.$route(
   branches: [
     StatefulShellBranchData.$branch(
       routes: [
-        GoRouteData.$route(path: '/home', factory: $HomeRouteData._fromState),
+        GoRouteData.$route(
+          path: '/home',
+          hasOverriddenOnExit: false,
+          factory: $HomeRouteData._fromState,
+        ),
       ],
     ),
     StatefulShellBranchData.$branch(
       routes: [
         GoRouteData.$route(
           path: '/automations',
+          hasOverriddenOnExit: false,
           factory: $AutomationsRouteData._fromState,
         ),
       ],
@@ -80,23 +85,46 @@ mixin $AutomationsRouteData on GoRouteData {
 
 RouteBase get $settingsRouteData => GoRouteData.$route(
   path: '/settings',
+  hasOverriddenOnExit: false,
   factory: $SettingsRouteData._fromState,
   routes: [
-    GoRouteData.$route(path: 'hub', factory: $HubRouteData._fromState),
+    GoRouteData.$route(
+      path: 'hub',
+      hasOverriddenOnExit: false,
+      factory: $HubRouteData._fromState,
+    ),
     GoRouteData.$route(
       path: 'servers',
+      hasOverriddenOnExit: false,
       factory: $ServersRouteData._fromState,
       routes: [
         GoRouteData.$route(
           path: 'add',
+          hasOverriddenOnExit: false,
           factory: $AddServerRouteData._fromState,
         ),
       ],
     ),
-    GoRouteData.$route(path: 'logs', factory: $LogsRouteData._fromState),
-    GoRouteData.$route(path: 'about', factory: $AboutRouteData._fromState),
-    GoRouteData.$route(path: 'areas', factory: $AreasRouteData._fromState),
-    GoRouteData.$route(path: 'sensors', factory: $SensorsRouteData._fromState),
+    GoRouteData.$route(
+      path: 'logs',
+      hasOverriddenOnExit: false,
+      factory: $LogsRouteData._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'about',
+      hasOverriddenOnExit: false,
+      factory: $AboutRouteData._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'areas',
+      hasOverriddenOnExit: false,
+      factory: $AreasRouteData._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'sensors',
+      hasOverriddenOnExit: false,
+      factory: $SensorsRouteData._fromState,
+    ),
   ],
 );
 
@@ -268,6 +296,7 @@ mixin $SensorsRouteData on GoRouteData {
 
 RouteBase get $onboardingRoute => GoRouteData.$route(
   path: '/onboarding',
+  hasOverriddenOnExit: false,
   factory: $OnboardingRoute._fromState,
 );
 
@@ -292,8 +321,11 @@ mixin $OnboardingRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $startupRoute =>
-    GoRouteData.$route(path: '/startup', factory: $StartupRoute._fromState);
+RouteBase get $startupRoute => GoRouteData.$route(
+  path: '/startup',
+  hasOverriddenOnExit: false,
+  factory: $StartupRoute._fromState,
+);
 
 mixin $StartupRoute on GoRouteData {
   static StartupRoute _fromState(GoRouterState state) => const StartupRoute();
