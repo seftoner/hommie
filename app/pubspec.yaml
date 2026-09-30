@@ -15,8 +15,8 @@ dependencies:
   battery_plus: ^7.1.1
   connectivity_plus: ^7.3.0
   device_info_plus: ^13.1.0
+  network_info_plus: ^8.2.1
   share_plus: ^13.2.1
-  network_info_plus: ^8.1.0
   logger: ^2.7.0
   flutter:
     sdk: flutter
