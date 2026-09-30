@@ -8,9 +8,11 @@ Status: Proposed for review
 
 Upgrade Hommie to Flutter 3.47 and the newest compatible direct and transitive
 packages, migrate the app and local `drag_arrange` package to the standalone
-Material and Cupertino libraries, and build the iOS and macOS apps with Swift
-Package Manager (SPM) alone. Make `patrol: ^4.10.0` explicit, remove both
-platforms' CocoaPods integrations, and raise the iOS deployment target to 15.
+Material and Cupertino libraries, make `drag_arrange` independent of the stale
+`flutter_staggered_grid_view` package, and build the iOS and macOS apps with
+Swift Package Manager (SPM) alone. Make `patrol: ^4.10.0` explicit, remove
+both platforms' CocoaPods integrations, and raise the iOS deployment target to
+15.
 
 This is one coordinated migration because the Flutter UI split, `go_router` 18,
 Patrol's SPM support, and plugin build requirements interact. Preserve the
@@ -34,9 +36,17 @@ data migration is required.
   `package:flutter/material.dart`, so a clean analyzer result alone does not
   establish correct router behavior.
 - `dart fix --dry-run --code=migrate_design_widgets` proposes 49 changes in the
-  app and 10 in `drag_arrange`. Third-party `flutter_hooks` and
-  `flutter_staggered_grid_view` still use legacy UI imports. A compatibility
-  bridge is needed around their widgets until they migrate.
+  app and 10 in `drag_arrange`. Third-party `flutter_hooks` still uses legacy UI
+  imports. A compatibility bridge is needed around legacy widgets until their
+  dependencies migrate.
+- `drag_arrange` is the owner's own local library. Its grid uses only
+  `StaggeredGrid.count`, `StaggeredGridTile.count`, and
+  `StaggeredGridTile.extent` from `flutter_staggered_grid_view` 0.7.0. The
+  upstream package's last published release is roughly three years old. The
+  implementation of those APIs spans three interdependent source files
+  (widget, tile, and render object; about 700 lines), rather than two isolated
+  widget files. The app currently declares `drag_arrange` but never imports it;
+  only the package's own tests import it. The home screen renders `SliverList`.
 - The macOS Xcode project already contains `FlutterGeneratedPluginSwiftPackage`
   alongside Pods build phases and xcconfig includes. The iOS project still has
   Pods integration and needs Flutter's SPM project setup. Both Podfiles and
@@ -61,6 +71,19 @@ the app's local dependency constraint to match the compatibility break.
 `home_assistant_client` can raise its Dart floor to 3.13 for its Freezed 4
 development workflow; `computer` need not change its supported SDK range
 unless its source or dependencies require it.
+
+Keep `drag_arrange` in the workspace as a maintained local library. Bring only
+the staggered-grid implementation that it uses into that package: the grid
+widget, tile parent-data widget, and render-object layout code. Do not copy the
+upstream masonry, quilted, woven, staired, or aligned grid implementations.
+Adapt the three files to local imports and Flutter's foundation/widgets/rendering
+libraries; remove the `flutter_staggered_grid_view` dependency from
+`drag_arrange/pubspec.yaml` and the workspace lockfile. Preserve the upstream
+MIT license and attribution with the copied source. Keep the existing
+`DragGridView` API and verify count and extent tile layout, drag ordering,
+axis direction, and constraint behavior before treating the extraction as
+complete. This makes the maintained library independent of an unmaintained
+package while keeping the fork limited to code it actually uses.
 
 Add direct `material_ui` and `cupertino_ui` dependencies where their APIs are
 used. Apply Flutter's design-widget migration to the app and `drag_arrange`,
@@ -121,7 +144,8 @@ test runner is adequate and avoids an unnecessary migration variable.
 ## Implementation order and acceptance
 
 1. Finish the package constraint and SDK-floor updates. Resolve dependencies,
-   review package changelogs, and capture the final lockfile.
+   review package changelogs, extract the used staggered-grid implementation
+   into `drag_arrange`, and capture the final lockfile.
 2. Migrate the standalone UI imports and root app; resolve compatibility
    boundaries and regenerate Dart source.
 3. Set Android compile SDK 37 and the Apple deployment/build settings. Enable
@@ -136,9 +160,10 @@ test runner is adequate and avoids an unnecessary migration variable.
    available; otherwise report the compile-only limit explicitly.
 
 Completion means direct constraints and the lockfile reflect the newest
-compatible package set, migrated app code uses standalone Material/Cupertino
-types, iOS/macOS Xcode projects build through SPM without Pods references, and
-the supported iOS minimum is consistently 15. Record any plugin or test
+compatible package set, `drag_arrange` has no `flutter_staggered_grid_view`
+dependency, migrated app code uses standalone Material/Cupertino types,
+iOS/macOS Xcode projects build through SPM without Pods references, and the
+supported iOS minimum is consistently 15. Record any plugin or test
 environment limitation with its exact failing command and output.
 
 ## Tradeoffs and risks
@@ -159,3 +184,5 @@ package edits separate from this design-document commit.
 - [Patrol changelog](https://pub.dev/packages/patrol/changelog)
 - [Patrol compatibility table](https://patrol.leancode.co/documentation/compatibility-table)
 - [Patrol extension packages and SPM](https://patrol.leancode.co/documentation/native/extension-packages)
+- [flutter_staggered_grid_view releases](https://pub.dev/packages/flutter_staggered_grid_view/versions)
+- [flutter_staggered_grid_view MIT license](https://github.com/letsar/flutter_staggered_grid_view/blob/master/LICENSE)
