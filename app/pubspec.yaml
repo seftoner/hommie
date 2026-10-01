@@ -73,6 +73,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  config:
+    enable-swift-package-manager: true
 
 patrol:
   app_name: hommie
