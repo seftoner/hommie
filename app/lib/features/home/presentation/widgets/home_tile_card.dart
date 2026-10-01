@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:hommie/features/entities/domain/entity_display_name.dart';
 import 'package:hommie/features/entities/domain/entities/ha_entity.dart';
 import 'package:hommie/features/entities/presentation/widgets/entity_card.dart';

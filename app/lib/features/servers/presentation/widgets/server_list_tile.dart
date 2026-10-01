@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 

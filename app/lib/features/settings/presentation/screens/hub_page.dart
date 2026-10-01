@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:hommie/features/auth/domain/entities/auth_state.dart';
 import 'package:hommie/features/common/domain/entities/ha_version.dart';
 import 'package:hommie/features/servers/domain/entities/server.dart';

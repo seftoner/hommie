@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:hommie/application/session/active_server_session_controller.dart';
 import 'package:hommie/application/session/auth_revocation_handler.dart';
 import 'package:hommie/application/session/network_reconnect_supervisor.dart';
@@ -31,7 +31,11 @@ class _RootAppWidget extends ConsumerWidget {
       theme: HommieMaterialTheme.platform().light(),
       darkTheme: HommieMaterialTheme.platformDark().dark(),
       supportedLocales: const [Locale('en', '')],
-      builder: (context, child) => OfflineContainer(child: child),
+      // Legacy third-party Material widgets still need inherited theme/localizations.
+      // ignore: deprecated_member_use
+      builder: (context, child) => MaterialUiCompatibilityBridge(
+        child: OfflineContainer(child: child),
+      ),
     );
   }
 }
