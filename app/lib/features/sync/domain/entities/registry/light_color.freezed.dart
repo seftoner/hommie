@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'light_color.dart';
@@ -9,6 +9,7 @@ part of 'light_color.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -20,7 +21,7 @@ mixin _$LightColor {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColor);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColor);
 }
 
 
@@ -29,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LightColor()';
+    return 'LightColor()';
 }
 
 
@@ -208,16 +209,18 @@ $LightColorTempKelvinCopyWith<LightColorTempKelvin> get copyWith => _$LightColor
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColorTempKelvin&&(identical(other.colorTempKelvin, colorTempKelvin) || other.colorTempKelvin == colorTempKelvin));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColorTempKelvin&&(identical(other.colorTempKelvin, colorTempKelvin) || other.colorTempKelvin == colorTempKelvin));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,colorTempKelvin);
+int get hashCode {
+    return Object.hash(runtimeType,colorTempKelvin);
+}
 
 @override
 String toString() {
-  return 'LightColor.colorTempKelvin(colorTempKelvin: $colorTempKelvin)';
+    return 'LightColor.colorTempKelvin(colorTempKelvin: $colorTempKelvin)';
 }
 
 
@@ -259,7 +262,7 @@ as int,
 
 
 class LightColorHsColor implements LightColor {
-  const LightColorHsColor({@JsonKey(name: 'hs_color') required final  List<num> hsColor}): _hsColor = hsColor;
+  const LightColorHsColor({@JsonKey(name: 'hs_color') required  List<num> hsColor}): _hsColor = hsColor;
   
 
  final  List<num> _hsColor;
@@ -280,16 +283,18 @@ $LightColorHsColorCopyWith<LightColorHsColor> get copyWith => _$LightColorHsColo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColorHsColor&&const DeepCollectionEquality().equals(other._hsColor, _hsColor));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColorHsColor&&const DeepCollectionEquality().equals(other.hsColor, _hsColor));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_hsColor));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_hsColor));
+}
 
 @override
 String toString() {
-  return 'LightColor.hsColor(hsColor: $hsColor)';
+    return 'LightColor.hsColor(hsColor: $hsColor)';
 }
 
 
@@ -331,7 +336,7 @@ as List<num>,
 
 
 class LightColorRgbColor implements LightColor {
-  const LightColorRgbColor({@JsonKey(name: 'rgb_color') required final  List<num> rgbColor}): _rgbColor = rgbColor;
+  const LightColorRgbColor({@JsonKey(name: 'rgb_color') required  List<num> rgbColor}): _rgbColor = rgbColor;
   
 
  final  List<num> _rgbColor;
@@ -352,16 +357,18 @@ $LightColorRgbColorCopyWith<LightColorRgbColor> get copyWith => _$LightColorRgbC
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColorRgbColor&&const DeepCollectionEquality().equals(other._rgbColor, _rgbColor));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColorRgbColor&&const DeepCollectionEquality().equals(other.rgbColor, _rgbColor));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_rgbColor));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_rgbColor));
+}
 
 @override
 String toString() {
-  return 'LightColor.rgbColor(rgbColor: $rgbColor)';
+    return 'LightColor.rgbColor(rgbColor: $rgbColor)';
 }
 
 
@@ -403,7 +410,7 @@ as List<num>,
 
 
 class LightColorRgbwColor implements LightColor {
-  const LightColorRgbwColor({@JsonKey(name: 'rgbw_color') required final  List<num> rgbwColor}): _rgbwColor = rgbwColor;
+  const LightColorRgbwColor({@JsonKey(name: 'rgbw_color') required  List<num> rgbwColor}): _rgbwColor = rgbwColor;
   
 
  final  List<num> _rgbwColor;
@@ -424,16 +431,18 @@ $LightColorRgbwColorCopyWith<LightColorRgbwColor> get copyWith => _$LightColorRg
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColorRgbwColor&&const DeepCollectionEquality().equals(other._rgbwColor, _rgbwColor));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColorRgbwColor&&const DeepCollectionEquality().equals(other.rgbwColor, _rgbwColor));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_rgbwColor));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_rgbwColor));
+}
 
 @override
 String toString() {
-  return 'LightColor.rgbwColor(rgbwColor: $rgbwColor)';
+    return 'LightColor.rgbwColor(rgbwColor: $rgbwColor)';
 }
 
 
@@ -475,7 +484,7 @@ as List<num>,
 
 
 class LightColorRgbwwColor implements LightColor {
-  const LightColorRgbwwColor({@JsonKey(name: 'rgbww_color') required final  List<num> rgbwwColor}): _rgbwwColor = rgbwwColor;
+  const LightColorRgbwwColor({@JsonKey(name: 'rgbww_color') required  List<num> rgbwwColor}): _rgbwwColor = rgbwwColor;
   
 
  final  List<num> _rgbwwColor;
@@ -496,16 +505,18 @@ $LightColorRgbwwColorCopyWith<LightColorRgbwwColor> get copyWith => _$LightColor
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColorRgbwwColor&&const DeepCollectionEquality().equals(other._rgbwwColor, _rgbwwColor));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LightColorRgbwwColor&&const DeepCollectionEquality().equals(other.rgbwwColor, _rgbwwColor));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_rgbwwColor));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_rgbwwColor));
+}
 
 @override
 String toString() {
-  return 'LightColor.rgbwwColor(rgbwwColor: $rgbwwColor)';
+    return 'LightColor.rgbwwColor(rgbwwColor: $rgbwwColor)';
 }
 
 

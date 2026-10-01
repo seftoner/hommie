@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hommie/core/domain/entities/area.dart';
 import 'package:hommie/features/settings/application/active_server_areas_provider.dart';

@@ -11,7 +11,7 @@ class ComputerExecutor implements IParallelExecutor {
   Future<R> execute<P, R>(Function task, {P? param}) async {
     try {
       return await _computer.compute<P, R>(task, param: param);
-    } catch (e, _) {
+    } catch (e) {
       // Add logging or error handling here if needed
       logger.e('Error during task execution: $e');
       rethrow;
@@ -25,7 +25,7 @@ class ComputerExecutor implements IParallelExecutor {
   }) async {
     try {
       return await _computer.computeStream<P, R>(task, param: param);
-    } catch (e, _) {
+    } catch (e) {
       logger.e('Error during stream task execution: $e');
       rethrow;
     }
@@ -35,7 +35,7 @@ class ComputerExecutor implements IParallelExecutor {
   Future<Stream<R>> executeStreamNoArgs<R>(Stream<R> Function() task) async {
     try {
       return await _computer.computeStream<void, R>((_) => task());
-    } catch (e, _) {
+    } catch (e) {
       logger.e('Error during no-args stream task execution: $e');
       rethrow;
     }

@@ -131,7 +131,7 @@ Replace the comments with your actual widget configuration and data. This setup 
 
 ## Credits
 
-This package is built on top of [flutter_staggered_grid_view](https://pub.dev/packages/flutter_staggered_grid_view) and is a fork of the original work by [itisnajim](https://github.com/itisnajim).
+This package is a fork of the original work by [itisnajim](https://github.com/itisnajim). Its local staggered-grid widget, tile, and render-object files are adapted from [flutter_staggered_grid_view 0.7.0](https://github.com/letsar/flutter_staggered_grid_view) by Romain Rastel. The copied grid code is covered by [its MIT license](LICENSE.flutter_staggered_grid_view); no runtime dependency on that package remains.
 
 ## Authors
 

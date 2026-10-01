@@ -1,3 +1,6 @@
+analyzer:
+  exclude:
+    - build/**
 include: package:flutter_lints/flutter.yaml
 
 linter:
@@ -18,7 +21,6 @@ linter:
     - unnecessary_null_aware_assignments
     - unnecessary_null_in_if_null_operators
     - unnecessary_this
-    - unnecessary_await_in_return
 
     # Style
     - always_declare_return_types

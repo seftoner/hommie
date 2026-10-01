@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'hass_types.dart';
@@ -9,6 +9,7 @@ part of 'hass_types.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 HassError _$HassErrorFromJson(
@@ -35,16 +36,21 @@ $HassErrorCopyWith<HassError> get copyWith => _$HassErrorCopyWithImpl<HassError>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassError&&(identical(other.code, code) || other.code == code)&&(identical(other.message, message) || other.message == message));
+  final _this = this as HassError;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassError&&(identical(other.code, _this.code) || other.code == _this.code)&&(identical(other.message, _this.message) || other.message == _this.message));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,code,message);
+int get hashCode {
+  final _this = this as HassError;
+  return Object.hash(runtimeType,_this.code,_this.message);
+}
 
 @override
 String toString() {
-  return 'HassError(code: $code, message: $message)';
+  final _this = this as HassError;
+  return 'HassError(code: ${_this.code}, message: ${_this.message})';
 }
 
 
@@ -73,7 +79,7 @@ class _$HassErrorCopyWithImpl<$Res>
 /// Create a copy of HassError
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? code = null,Object? message = null,}) {
-  return _then(_self.copyWith(
+  return _then(HassError(
 code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
 as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,
@@ -230,16 +236,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.code, code) || other.code == code)&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.code, code) || other.code == code)&&(identical(other.message, message) || other.message == message));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,code,message);
+int get hashCode {
+    return Object.hash(runtimeType,code,message);
+}
 
 @override
 String toString() {
-  return 'HassError(code: $code, message: $message)';
+    return 'HassError(code: $code, message: $message)';
 }
 
 
@@ -295,16 +303,21 @@ $HassUserCopyWith<HassUser> get copyWith => _$HassUserCopyWithImpl<HassUser>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassUser&&(identical(other.id, id) || other.id == id)&&(identical(other.is_admin, is_admin) || other.is_admin == is_admin)&&(identical(other.is_owner, is_owner) || other.is_owner == is_owner)&&(identical(other.name, name) || other.name == name));
+  final _this = this as HassUser;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassUser&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.is_admin, _this.is_admin) || other.is_admin == _this.is_admin)&&(identical(other.is_owner, _this.is_owner) || other.is_owner == _this.is_owner)&&(identical(other.name, _this.name) || other.name == _this.name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,is_admin,is_owner,name);
+int get hashCode {
+  final _this = this as HassUser;
+  return Object.hash(runtimeType,_this.id,_this.is_admin,_this.is_owner,_this.name);
+}
 
 @override
 String toString() {
-  return 'HassUser(id: $id, is_admin: $is_admin, is_owner: $is_owner, name: $name)';
+  final _this = this as HassUser;
+  return 'HassUser(id: ${_this.id}, is_admin: ${_this.is_admin}, is_owner: ${_this.is_owner}, name: ${_this.name})';
 }
 
 
@@ -333,7 +346,7 @@ class _$HassUserCopyWithImpl<$Res>
 /// Create a copy of HassUser
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? is_admin = null,Object? is_owner = null,Object? name = null,}) {
-  return _then(_self.copyWith(
+  return _then(HassUser(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,is_admin: null == is_admin ? _self.is_admin : is_admin // ignore: cast_nullable_to_non_nullable
 as bool,is_owner: null == is_owner ? _self.is_owner : is_owner // ignore: cast_nullable_to_non_nullable
@@ -500,16 +513,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassUser&&(identical(other.id, id) || other.id == id)&&(identical(other.is_admin, is_admin) || other.is_admin == is_admin)&&(identical(other.is_owner, is_owner) || other.is_owner == is_owner)&&(identical(other.name, name) || other.name == name));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassUser&&(identical(other.id, id) || other.id == id)&&(identical(other.is_admin, is_admin) || other.is_admin == is_admin)&&(identical(other.is_owner, is_owner) || other.is_owner == is_owner)&&(identical(other.name, name) || other.name == name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,is_admin,is_owner,name);
+int get hashCode {
+    return Object.hash(runtimeType,id,is_admin,is_owner,name);
+}
 
 @override
 String toString() {
-  return 'HassUser(id: $id, is_admin: $is_admin, is_owner: $is_owner, name: $name)';
+    return 'HassUser(id: $id, is_admin: $is_admin, is_owner: $is_owner, name: $name)';
 }
 
 
@@ -554,8 +569,7 @@ as String,
 /// @nodoc
 mixin _$HassConfig {
 
- double get latitude; double get longitude; double get elevation; double get radius; UnitSystem get unit_system; String get location_name; String get time_zone; List<String> get components; String get config_dir; List<String> get allowlist_external_dirs; List<String> get allowlist_external_urls; String get version; String get config_source; bool get recovery_mode; bool get safe_mode;// @StringEnum('NOT_RUNNING', 'STARTING', 'RUNNING', 'STOPPING', 'FINAL_WRITE')
- State get state; String? get external_url; String? get internal_url; List<String>? get whitelist_external_dirs; String get currency; String? get country; String get language;
+ double get latitude; double get longitude; double get elevation; double get radius; UnitSystem get unit_system; String get location_name; String get time_zone; List<String> get components; String get config_dir; List<String> get allowlist_external_dirs; List<String> get allowlist_external_urls; String get version; String get config_source; bool get recovery_mode; bool get safe_mode; State get state; String? get external_url; String? get internal_url; List<String>? get whitelist_external_dirs; String get currency; String? get country; String get language;
 /// Create a copy of HassConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -568,16 +582,21 @@ $HassConfigCopyWith<HassConfig> get copyWith => _$HassConfigCopyWithImpl<HassCon
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassConfig&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.radius, radius) || other.radius == radius)&&(identical(other.unit_system, unit_system) || other.unit_system == unit_system)&&(identical(other.location_name, location_name) || other.location_name == location_name)&&(identical(other.time_zone, time_zone) || other.time_zone == time_zone)&&const DeepCollectionEquality().equals(other.components, components)&&(identical(other.config_dir, config_dir) || other.config_dir == config_dir)&&const DeepCollectionEquality().equals(other.allowlist_external_dirs, allowlist_external_dirs)&&const DeepCollectionEquality().equals(other.allowlist_external_urls, allowlist_external_urls)&&(identical(other.version, version) || other.version == version)&&(identical(other.config_source, config_source) || other.config_source == config_source)&&(identical(other.recovery_mode, recovery_mode) || other.recovery_mode == recovery_mode)&&(identical(other.safe_mode, safe_mode) || other.safe_mode == safe_mode)&&(identical(other.state, state) || other.state == state)&&(identical(other.external_url, external_url) || other.external_url == external_url)&&(identical(other.internal_url, internal_url) || other.internal_url == internal_url)&&const DeepCollectionEquality().equals(other.whitelist_external_dirs, whitelist_external_dirs)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.country, country) || other.country == country)&&(identical(other.language, language) || other.language == language));
+  final _this = this as HassConfig;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassConfig&&(identical(other.latitude, _this.latitude) || other.latitude == _this.latitude)&&(identical(other.longitude, _this.longitude) || other.longitude == _this.longitude)&&(identical(other.elevation, _this.elevation) || other.elevation == _this.elevation)&&(identical(other.radius, _this.radius) || other.radius == _this.radius)&&(identical(other.unit_system, _this.unit_system) || other.unit_system == _this.unit_system)&&(identical(other.location_name, _this.location_name) || other.location_name == _this.location_name)&&(identical(other.time_zone, _this.time_zone) || other.time_zone == _this.time_zone)&&const DeepCollectionEquality().equals(other.components, _this.components)&&(identical(other.config_dir, _this.config_dir) || other.config_dir == _this.config_dir)&&const DeepCollectionEquality().equals(other.allowlist_external_dirs, _this.allowlist_external_dirs)&&const DeepCollectionEquality().equals(other.allowlist_external_urls, _this.allowlist_external_urls)&&(identical(other.version, _this.version) || other.version == _this.version)&&(identical(other.config_source, _this.config_source) || other.config_source == _this.config_source)&&(identical(other.recovery_mode, _this.recovery_mode) || other.recovery_mode == _this.recovery_mode)&&(identical(other.safe_mode, _this.safe_mode) || other.safe_mode == _this.safe_mode)&&(identical(other.state, _this.state) || other.state == _this.state)&&(identical(other.external_url, _this.external_url) || other.external_url == _this.external_url)&&(identical(other.internal_url, _this.internal_url) || other.internal_url == _this.internal_url)&&const DeepCollectionEquality().equals(other.whitelist_external_dirs, _this.whitelist_external_dirs)&&(identical(other.currency, _this.currency) || other.currency == _this.currency)&&(identical(other.country, _this.country) || other.country == _this.country)&&(identical(other.language, _this.language) || other.language == _this.language));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,latitude,longitude,elevation,radius,unit_system,location_name,time_zone,const DeepCollectionEquality().hash(components),config_dir,const DeepCollectionEquality().hash(allowlist_external_dirs),const DeepCollectionEquality().hash(allowlist_external_urls),version,config_source,recovery_mode,safe_mode,state,external_url,internal_url,const DeepCollectionEquality().hash(whitelist_external_dirs),currency,country,language]);
+int get hashCode {
+  final _this = this as HassConfig;
+  return Object.hashAll([runtimeType,_this.latitude,_this.longitude,_this.elevation,_this.radius,_this.unit_system,_this.location_name,_this.time_zone,const DeepCollectionEquality().hash(_this.components),_this.config_dir,const DeepCollectionEquality().hash(_this.allowlist_external_dirs),const DeepCollectionEquality().hash(_this.allowlist_external_urls),_this.version,_this.config_source,_this.recovery_mode,_this.safe_mode,_this.state,_this.external_url,_this.internal_url,const DeepCollectionEquality().hash(_this.whitelist_external_dirs),_this.currency,_this.country,_this.language]);
+}
 
 @override
 String toString() {
-  return 'HassConfig(latitude: $latitude, longitude: $longitude, elevation: $elevation, radius: $radius, unit_system: $unit_system, location_name: $location_name, time_zone: $time_zone, components: $components, config_dir: $config_dir, allowlist_external_dirs: $allowlist_external_dirs, allowlist_external_urls: $allowlist_external_urls, version: $version, config_source: $config_source, recovery_mode: $recovery_mode, safe_mode: $safe_mode, state: $state, external_url: $external_url, internal_url: $internal_url, whitelist_external_dirs: $whitelist_external_dirs, currency: $currency, country: $country, language: $language)';
+  final _this = this as HassConfig;
+  return 'HassConfig(latitude: ${_this.latitude}, longitude: ${_this.longitude}, elevation: ${_this.elevation}, radius: ${_this.radius}, unit_system: ${_this.unit_system}, location_name: ${_this.location_name}, time_zone: ${_this.time_zone}, components: ${_this.components}, config_dir: ${_this.config_dir}, allowlist_external_dirs: ${_this.allowlist_external_dirs}, allowlist_external_urls: ${_this.allowlist_external_urls}, version: ${_this.version}, config_source: ${_this.config_source}, recovery_mode: ${_this.recovery_mode}, safe_mode: ${_this.safe_mode}, state: ${_this.state}, external_url: ${_this.external_url}, internal_url: ${_this.internal_url}, whitelist_external_dirs: ${_this.whitelist_external_dirs}, currency: ${_this.currency}, country: ${_this.country}, language: ${_this.language})';
 }
 
 
@@ -606,7 +625,7 @@ class _$HassConfigCopyWithImpl<$Res>
 /// Create a copy of HassConfig
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? latitude = null,Object? longitude = null,Object? elevation = null,Object? radius = null,Object? unit_system = null,Object? location_name = null,Object? time_zone = null,Object? components = null,Object? config_dir = null,Object? allowlist_external_dirs = null,Object? allowlist_external_urls = null,Object? version = null,Object? config_source = null,Object? recovery_mode = null,Object? safe_mode = null,Object? state = null,Object? external_url = freezed,Object? internal_url = freezed,Object? whitelist_external_dirs = freezed,Object? currency = null,Object? country = freezed,Object? language = null,}) {
-  return _then(_self.copyWith(
+  return _then(HassConfig(
 latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
 as double,elevation: null == elevation ? _self.elevation : elevation // ignore: cast_nullable_to_non_nullable
@@ -773,7 +792,7 @@ return $default(_that.latitude,_that.longitude,_that.elevation,_that.radius,_tha
 @JsonSerializable()
 
 class _HassConfig implements HassConfig {
-  const _HassConfig({required this.latitude, required this.longitude, required this.elevation, required this.radius, required this.unit_system, required this.location_name, required this.time_zone, required final  List<String> components, required this.config_dir, required final  List<String> allowlist_external_dirs, required final  List<String> allowlist_external_urls, required this.version, required this.config_source, required this.recovery_mode, required this.safe_mode, required this.state, this.external_url, this.internal_url, final  List<String>? whitelist_external_dirs, required this.currency, this.country, required this.language}): _components = components,_allowlist_external_dirs = allowlist_external_dirs,_allowlist_external_urls = allowlist_external_urls,_whitelist_external_dirs = whitelist_external_dirs;
+  const _HassConfig({required this.latitude, required this.longitude, required this.elevation, required this.radius, required this.unit_system, required this.location_name, required this.time_zone, required  List<String> components, required this.config_dir, required  List<String> allowlist_external_dirs, required  List<String> allowlist_external_urls, required this.version, required this.config_source, required this.recovery_mode, required this.safe_mode, required this.state, this.external_url, this.internal_url,  List<String>? whitelist_external_dirs, required this.currency, this.country, required this.language}): _components = components,_allowlist_external_dirs = allowlist_external_dirs,_allowlist_external_urls = allowlist_external_urls,_whitelist_external_dirs = whitelist_external_dirs;
   factory _HassConfig.fromJson(Map<String, dynamic> json) => _$HassConfigFromJson(json);
 
 @override final  double latitude;
@@ -809,7 +828,6 @@ class _HassConfig implements HassConfig {
 @override final  String config_source;
 @override final  bool recovery_mode;
 @override final  bool safe_mode;
-// @StringEnum('NOT_RUNNING', 'STARTING', 'RUNNING', 'STOPPING', 'FINAL_WRITE')
 @override final  State state;
 @override final  String? external_url;
 @override final  String? internal_url;
@@ -839,16 +857,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassConfig&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.radius, radius) || other.radius == radius)&&(identical(other.unit_system, unit_system) || other.unit_system == unit_system)&&(identical(other.location_name, location_name) || other.location_name == location_name)&&(identical(other.time_zone, time_zone) || other.time_zone == time_zone)&&const DeepCollectionEquality().equals(other._components, _components)&&(identical(other.config_dir, config_dir) || other.config_dir == config_dir)&&const DeepCollectionEquality().equals(other._allowlist_external_dirs, _allowlist_external_dirs)&&const DeepCollectionEquality().equals(other._allowlist_external_urls, _allowlist_external_urls)&&(identical(other.version, version) || other.version == version)&&(identical(other.config_source, config_source) || other.config_source == config_source)&&(identical(other.recovery_mode, recovery_mode) || other.recovery_mode == recovery_mode)&&(identical(other.safe_mode, safe_mode) || other.safe_mode == safe_mode)&&(identical(other.state, state) || other.state == state)&&(identical(other.external_url, external_url) || other.external_url == external_url)&&(identical(other.internal_url, internal_url) || other.internal_url == internal_url)&&const DeepCollectionEquality().equals(other._whitelist_external_dirs, _whitelist_external_dirs)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.country, country) || other.country == country)&&(identical(other.language, language) || other.language == language));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassConfig&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.radius, radius) || other.radius == radius)&&(identical(other.unit_system, unit_system) || other.unit_system == unit_system)&&(identical(other.location_name, location_name) || other.location_name == location_name)&&(identical(other.time_zone, time_zone) || other.time_zone == time_zone)&&const DeepCollectionEquality().equals(other.components, _components)&&(identical(other.config_dir, config_dir) || other.config_dir == config_dir)&&const DeepCollectionEquality().equals(other.allowlist_external_dirs, _allowlist_external_dirs)&&const DeepCollectionEquality().equals(other.allowlist_external_urls, _allowlist_external_urls)&&(identical(other.version, version) || other.version == version)&&(identical(other.config_source, config_source) || other.config_source == config_source)&&(identical(other.recovery_mode, recovery_mode) || other.recovery_mode == recovery_mode)&&(identical(other.safe_mode, safe_mode) || other.safe_mode == safe_mode)&&(identical(other.state, state) || other.state == state)&&(identical(other.external_url, external_url) || other.external_url == external_url)&&(identical(other.internal_url, internal_url) || other.internal_url == internal_url)&&const DeepCollectionEquality().equals(other.whitelist_external_dirs, _whitelist_external_dirs)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.country, country) || other.country == country)&&(identical(other.language, language) || other.language == language));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,latitude,longitude,elevation,radius,unit_system,location_name,time_zone,const DeepCollectionEquality().hash(_components),config_dir,const DeepCollectionEquality().hash(_allowlist_external_dirs),const DeepCollectionEquality().hash(_allowlist_external_urls),version,config_source,recovery_mode,safe_mode,state,external_url,internal_url,const DeepCollectionEquality().hash(_whitelist_external_dirs),currency,country,language]);
+int get hashCode {
+    return Object.hashAll([runtimeType,latitude,longitude,elevation,radius,unit_system,location_name,time_zone,const DeepCollectionEquality().hash(_components),config_dir,const DeepCollectionEquality().hash(_allowlist_external_dirs),const DeepCollectionEquality().hash(_allowlist_external_urls),version,config_source,recovery_mode,safe_mode,state,external_url,internal_url,const DeepCollectionEquality().hash(_whitelist_external_dirs),currency,country,language]);
+}
 
 @override
 String toString() {
-  return 'HassConfig(latitude: $latitude, longitude: $longitude, elevation: $elevation, radius: $radius, unit_system: $unit_system, location_name: $location_name, time_zone: $time_zone, components: $components, config_dir: $config_dir, allowlist_external_dirs: $allowlist_external_dirs, allowlist_external_urls: $allowlist_external_urls, version: $version, config_source: $config_source, recovery_mode: $recovery_mode, safe_mode: $safe_mode, state: $state, external_url: $external_url, internal_url: $internal_url, whitelist_external_dirs: $whitelist_external_dirs, currency: $currency, country: $country, language: $language)';
+    return 'HassConfig(latitude: $latitude, longitude: $longitude, elevation: $elevation, radius: $radius, unit_system: $unit_system, location_name: $location_name, time_zone: $time_zone, components: $components, config_dir: $config_dir, allowlist_external_dirs: $allowlist_external_dirs, allowlist_external_urls: $allowlist_external_urls, version: $version, config_source: $config_source, recovery_mode: $recovery_mode, safe_mode: $safe_mode, state: $state, external_url: $external_url, internal_url: $internal_url, whitelist_external_dirs: $whitelist_external_dirs, currency: $currency, country: $country, language: $language)';
 }
 
 
@@ -933,16 +953,21 @@ $UnitSystemCopyWith<UnitSystem> get copyWith => _$UnitSystemCopyWithImpl<UnitSys
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UnitSystem&&(identical(other.length, length) || other.length == length)&&(identical(other.mass, mass) || other.mass == mass)&&(identical(other.volume, volume) || other.volume == volume)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.wind_speed, wind_speed) || other.wind_speed == wind_speed)&&(identical(other.accumulated_precipitation, accumulated_precipitation) || other.accumulated_precipitation == accumulated_precipitation));
+  final _this = this as UnitSystem;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UnitSystem&&(identical(other.length, _this.length) || other.length == _this.length)&&(identical(other.mass, _this.mass) || other.mass == _this.mass)&&(identical(other.volume, _this.volume) || other.volume == _this.volume)&&(identical(other.temperature, _this.temperature) || other.temperature == _this.temperature)&&(identical(other.pressure, _this.pressure) || other.pressure == _this.pressure)&&(identical(other.wind_speed, _this.wind_speed) || other.wind_speed == _this.wind_speed)&&(identical(other.accumulated_precipitation, _this.accumulated_precipitation) || other.accumulated_precipitation == _this.accumulated_precipitation));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,length,mass,volume,temperature,pressure,wind_speed,accumulated_precipitation);
+int get hashCode {
+  final _this = this as UnitSystem;
+  return Object.hash(runtimeType,_this.length,_this.mass,_this.volume,_this.temperature,_this.pressure,_this.wind_speed,_this.accumulated_precipitation);
+}
 
 @override
 String toString() {
-  return 'UnitSystem(length: $length, mass: $mass, volume: $volume, temperature: $temperature, pressure: $pressure, wind_speed: $wind_speed, accumulated_precipitation: $accumulated_precipitation)';
+  final _this = this as UnitSystem;
+  return 'UnitSystem(length: ${_this.length}, mass: ${_this.mass}, volume: ${_this.volume}, temperature: ${_this.temperature}, pressure: ${_this.pressure}, wind_speed: ${_this.wind_speed}, accumulated_precipitation: ${_this.accumulated_precipitation})';
 }
 
 
@@ -971,7 +996,7 @@ class _$UnitSystemCopyWithImpl<$Res>
 /// Create a copy of UnitSystem
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? length = null,Object? mass = null,Object? volume = null,Object? temperature = null,Object? pressure = null,Object? wind_speed = null,Object? accumulated_precipitation = null,}) {
-  return _then(_self.copyWith(
+  return _then(UnitSystem(
 length: null == length ? _self.length : length // ignore: cast_nullable_to_non_nullable
 as String,mass: null == mass ? _self.mass : mass // ignore: cast_nullable_to_non_nullable
 as String,volume: null == volume ? _self.volume : volume // ignore: cast_nullable_to_non_nullable
@@ -1138,16 +1163,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UnitSystem&&(identical(other.length, length) || other.length == length)&&(identical(other.mass, mass) || other.mass == mass)&&(identical(other.volume, volume) || other.volume == volume)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.wind_speed, wind_speed) || other.wind_speed == wind_speed)&&(identical(other.accumulated_precipitation, accumulated_precipitation) || other.accumulated_precipitation == accumulated_precipitation));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _UnitSystem&&(identical(other.length, length) || other.length == length)&&(identical(other.mass, mass) || other.mass == mass)&&(identical(other.volume, volume) || other.volume == volume)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.wind_speed, wind_speed) || other.wind_speed == wind_speed)&&(identical(other.accumulated_precipitation, accumulated_precipitation) || other.accumulated_precipitation == accumulated_precipitation));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,length,mass,volume,temperature,pressure,wind_speed,accumulated_precipitation);
+int get hashCode {
+    return Object.hash(runtimeType,length,mass,volume,temperature,pressure,wind_speed,accumulated_precipitation);
+}
 
 @override
 String toString() {
-  return 'UnitSystem(length: $length, mass: $mass, volume: $volume, temperature: $temperature, pressure: $pressure, wind_speed: $wind_speed, accumulated_precipitation: $accumulated_precipitation)';
+    return 'UnitSystem(length: $length, mass: $mass, volume: $volume, temperature: $temperature, pressure: $pressure, wind_speed: $wind_speed, accumulated_precipitation: $accumulated_precipitation)';
 }
 
 
@@ -1208,16 +1235,21 @@ $HassAreaCopyWith<HassArea> get copyWith => _$HassAreaCopyWithImpl<HassArea>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassArea&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&(identical(other.name, name) || other.name == name)&&(identical(other.floorId, floorId) || other.floorId == floorId)&&(identical(other.humidityEntityId, humidityEntityId) || other.humidityEntityId == humidityEntityId)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.picture, picture) || other.picture == picture)&&(identical(other.temperatureEntityId, temperatureEntityId) || other.temperatureEntityId == temperatureEntityId)&&const DeepCollectionEquality().equals(other.aliases, aliases)&&const DeepCollectionEquality().equals(other.labels, labels));
+  final _this = this as HassArea;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassArea&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt)&&(identical(other.modifiedAt, _this.modifiedAt) || other.modifiedAt == _this.modifiedAt)&&(identical(other.areaId, _this.areaId) || other.areaId == _this.areaId)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.floorId, _this.floorId) || other.floorId == _this.floorId)&&(identical(other.humidityEntityId, _this.humidityEntityId) || other.humidityEntityId == _this.humidityEntityId)&&(identical(other.icon, _this.icon) || other.icon == _this.icon)&&(identical(other.picture, _this.picture) || other.picture == _this.picture)&&(identical(other.temperatureEntityId, _this.temperatureEntityId) || other.temperatureEntityId == _this.temperatureEntityId)&&const DeepCollectionEquality().equals(other.aliases, _this.aliases)&&const DeepCollectionEquality().equals(other.labels, _this.labels));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,createdAt,modifiedAt,areaId,name,floorId,humidityEntityId,icon,picture,temperatureEntityId,const DeepCollectionEquality().hash(aliases),const DeepCollectionEquality().hash(labels));
+int get hashCode {
+  final _this = this as HassArea;
+  return Object.hash(runtimeType,_this.createdAt,_this.modifiedAt,_this.areaId,_this.name,_this.floorId,_this.humidityEntityId,_this.icon,_this.picture,_this.temperatureEntityId,const DeepCollectionEquality().hash(_this.aliases),const DeepCollectionEquality().hash(_this.labels));
+}
 
 @override
 String toString() {
-  return 'HassArea(createdAt: $createdAt, modifiedAt: $modifiedAt, areaId: $areaId, name: $name, floorId: $floorId, humidityEntityId: $humidityEntityId, icon: $icon, picture: $picture, temperatureEntityId: $temperatureEntityId, aliases: $aliases, labels: $labels)';
+  final _this = this as HassArea;
+  return 'HassArea(createdAt: ${_this.createdAt}, modifiedAt: ${_this.modifiedAt}, areaId: ${_this.areaId}, name: ${_this.name}, floorId: ${_this.floorId}, humidityEntityId: ${_this.humidityEntityId}, icon: ${_this.icon}, picture: ${_this.picture}, temperatureEntityId: ${_this.temperatureEntityId}, aliases: ${_this.aliases}, labels: ${_this.labels})';
 }
 
 
@@ -1246,7 +1278,7 @@ class _$HassAreaCopyWithImpl<$Res>
 /// Create a copy of HassArea
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? createdAt = null,Object? modifiedAt = null,Object? areaId = null,Object? name = null,Object? floorId = freezed,Object? humidityEntityId = freezed,Object? icon = freezed,Object? picture = freezed,Object? temperatureEntityId = freezed,Object? aliases = null,Object? labels = null,}) {
-  return _then(_self.copyWith(
+  return _then(HassArea(
 createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as double,modifiedAt: null == modifiedAt ? _self.modifiedAt : modifiedAt // ignore: cast_nullable_to_non_nullable
 as double,areaId: null == areaId ? _self.areaId : areaId // ignore: cast_nullable_to_non_nullable
@@ -1393,7 +1425,7 @@ return $default(_that.createdAt,_that.modifiedAt,_that.areaId,_that.name,_that.f
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _HassArea implements HassArea {
-  const _HassArea({this.createdAt = 0, this.modifiedAt = 0, required this.areaId, required this.name, this.floorId, this.humidityEntityId, this.icon, this.picture, this.temperatureEntityId, final  List<String> aliases = const [], final  List<String> labels = const []}): _aliases = aliases,_labels = labels;
+  const _HassArea({this.createdAt = 0, this.modifiedAt = 0, required this.areaId, required this.name, this.floorId, this.humidityEntityId, this.icon, this.picture, this.temperatureEntityId,  List<String> aliases = const [],  List<String> labels = const []}): _aliases = aliases,_labels = labels;
   factory _HassArea.fromJson(Map<String, dynamic> json) => _$HassAreaFromJson(json);
 
 @override@JsonKey() final  double createdAt;
@@ -1433,16 +1465,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassArea&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&(identical(other.name, name) || other.name == name)&&(identical(other.floorId, floorId) || other.floorId == floorId)&&(identical(other.humidityEntityId, humidityEntityId) || other.humidityEntityId == humidityEntityId)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.picture, picture) || other.picture == picture)&&(identical(other.temperatureEntityId, temperatureEntityId) || other.temperatureEntityId == temperatureEntityId)&&const DeepCollectionEquality().equals(other._aliases, _aliases)&&const DeepCollectionEquality().equals(other._labels, _labels));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassArea&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.modifiedAt, modifiedAt) || other.modifiedAt == modifiedAt)&&(identical(other.areaId, areaId) || other.areaId == areaId)&&(identical(other.name, name) || other.name == name)&&(identical(other.floorId, floorId) || other.floorId == floorId)&&(identical(other.humidityEntityId, humidityEntityId) || other.humidityEntityId == humidityEntityId)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.picture, picture) || other.picture == picture)&&(identical(other.temperatureEntityId, temperatureEntityId) || other.temperatureEntityId == temperatureEntityId)&&const DeepCollectionEquality().equals(other.aliases, _aliases)&&const DeepCollectionEquality().equals(other.labels, _labels));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,createdAt,modifiedAt,areaId,name,floorId,humidityEntityId,icon,picture,temperatureEntityId,const DeepCollectionEquality().hash(_aliases),const DeepCollectionEquality().hash(_labels));
+int get hashCode {
+    return Object.hash(runtimeType,createdAt,modifiedAt,areaId,name,floorId,humidityEntityId,icon,picture,temperatureEntityId,const DeepCollectionEquality().hash(_aliases),const DeepCollectionEquality().hash(_labels));
+}
 
 @override
 String toString() {
-  return 'HassArea(createdAt: $createdAt, modifiedAt: $modifiedAt, areaId: $areaId, name: $name, floorId: $floorId, humidityEntityId: $humidityEntityId, icon: $icon, picture: $picture, temperatureEntityId: $temperatureEntityId, aliases: $aliases, labels: $labels)';
+    return 'HassArea(createdAt: $createdAt, modifiedAt: $modifiedAt, areaId: $areaId, name: $name, floorId: $floorId, humidityEntityId: $humidityEntityId, icon: $icon, picture: $picture, temperatureEntityId: $temperatureEntityId, aliases: $aliases, labels: $labels)';
 }
 
 

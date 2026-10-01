@@ -1,6 +1,6 @@
 import UIKit
 import Flutter
-import workmanager
+import workmanager_apple
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -25,7 +25,7 @@ import workmanager
     /// Run this command in debugger:
     /// `e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.hommie.workmanager.iOSBackgroundAppRefresh"]`
     
-    WorkmanagerPlugin.registerPeriodicTask(withIdentifier: "com.hommie.workmanager.sendSensorData", frequency: NSNumber(value: 60*10))
+    WorkmanagerPlugin.registerPeriodicTask(withIdentifier: "com.hommie.workmanager.sendSensorData", earliestBeginInSeconds: NSNumber(value: 60*10))
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

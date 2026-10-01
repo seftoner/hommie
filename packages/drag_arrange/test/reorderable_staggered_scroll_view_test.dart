@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'main.dart';
 
 void main() {
   group('ReorderableScrollView Tests', () {
-    testWidgets('Test if toggling drag enables works',
-        (WidgetTester tester) async {
+    testWidgets('Test if toggling drag enables works', (
+      WidgetTester tester,
+    ) async {
       // Build our app and trigger a frame.
       await tester.pumpWidget(const MaterialApp(home: MyApp()));
 

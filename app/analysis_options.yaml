@@ -4,6 +4,14 @@ analyzer:
   #https://pub.dev/packages/freezed#disabling-invalid_annotation_target-warning-and-warning-in-generates-files
   errors:
     invalid_annotation_target: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 linter:
   rules:
@@ -23,7 +31,6 @@ linter:
     - unnecessary_null_aware_assignments
     - unnecessary_null_in_if_null_operators
     - unnecessary_this
-    - unnecessary_await_in_return
 
     # Style
     - always_declare_return_types

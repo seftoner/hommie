@@ -24,8 +24,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.seftoner.hommie"
-    compileSdkVersion flutter.compileSdkVersion
-    ndkVersion "27.0.12077973"//flutter.ndkVersion
+    compileSdkVersion 37
+    ndkVersion "28.2.13676358"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:hommie/features/mobile_companion/application/sensors_controller.dart';
 import 'package:hommie/features/mobile_companion/sensors/sensor.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

@@ -64,7 +64,7 @@ final class ServerAuthTokenProvider
   }
 }
 
-String _$serverAuthTokenHash() => r'6af2aafd01444307219e88d440ed355423dc115c';
+String _$serverAuthTokenHash() => r'eb2c91dcc49cbe667b802dd2fd398eef1fb8135e';
 
 final class ServerAuthTokenFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<HAOAuth2Token>, int> {

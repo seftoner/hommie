@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'hass_event.dart';
@@ -9,6 +9,7 @@ part of 'hass_event.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $EntityStateRemoveCopyWith<EntityStateRemove> get copyWith => _$EntityStateRemov
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityStateRemove&&const DeepCollectionEquality().equals(other.a, a));
+  final _this = this as EntityStateRemove;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityStateRemove&&const DeepCollectionEquality().equals(other.a, _this.a));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(a));
+int get hashCode {
+  final _this = this as EntityStateRemove;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.a));
+}
 
 @override
 String toString() {
-  return 'EntityStateRemove(a: $a)';
+  final _this = this as EntityStateRemove;
+  return 'EntityStateRemove(a: ${_this.a})';
 }
 
 
@@ -66,8 +72,8 @@ class _$EntityStateRemoveCopyWithImpl<$Res>
 /// Create a copy of EntityStateRemove
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? a = null,}) {
-  return _then(_self.copyWith(
-a: null == a ? _self.a : a // ignore: cast_nullable_to_non_nullable
+  return _then(EntityStateRemove(
+null == a ? _self.a : a // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
 }
@@ -203,7 +209,7 @@ return $default(_that.a);case _:
 @JsonSerializable()
 
 class _EntityStateRemove implements EntityStateRemove {
-   _EntityStateRemove(final  List<String> a): _a = a;
+   _EntityStateRemove( List<String> a): _a = a;
   factory _EntityStateRemove.fromJson(Map<String, dynamic> json) => _$EntityStateRemoveFromJson(json);
 
  final  List<String> _a;
@@ -227,16 +233,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityStateRemove&&const DeepCollectionEquality().equals(other._a, _a));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityStateRemove&&const DeepCollectionEquality().equals(other.a, _a));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_a));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_a));
+}
 
 @override
 String toString() {
-  return 'EntityStateRemove(a: $a)';
+    return 'EntityStateRemove(a: $a)';
 }
 
 
@@ -293,16 +301,21 @@ $EntityStateCopyWith<EntityState> get copyWith => _$EntityStateCopyWithImpl<Enti
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityState&&(identical(other.state, state) || other.state == state)&&const DeepCollectionEquality().equals(other.attributes, attributes)&&(identical(other.context, context) || other.context == context)&&(identical(other.last_changed, last_changed) || other.last_changed == last_changed)&&(identical(other.last_updated, last_updated) || other.last_updated == last_updated));
+  final _this = this as EntityState;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityState&&(identical(other.state, _this.state) || other.state == _this.state)&&const DeepCollectionEquality().equals(other.attributes, _this.attributes)&&(identical(other.context, _this.context) || other.context == _this.context)&&(identical(other.last_changed, _this.last_changed) || other.last_changed == _this.last_changed)&&(identical(other.last_updated, _this.last_updated) || other.last_updated == _this.last_updated));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,state,const DeepCollectionEquality().hash(attributes),context,last_changed,last_updated);
+int get hashCode {
+  final _this = this as EntityState;
+  return Object.hash(runtimeType,_this.state,const DeepCollectionEquality().hash(_this.attributes),_this.context,_this.last_changed,_this.last_updated);
+}
 
 @override
 String toString() {
-  return 'EntityState(state: $state, attributes: $attributes, context: $context, last_changed: $last_changed, last_updated: $last_updated)';
+  final _this = this as EntityState;
+  return 'EntityState(state: ${_this.state}, attributes: ${_this.attributes}, context: ${_this.context}, last_changed: ${_this.last_changed}, last_updated: ${_this.last_updated})';
 }
 
 
@@ -331,7 +344,7 @@ class _$EntityStateCopyWithImpl<$Res>
 /// Create a copy of EntityState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? state = freezed,Object? attributes = freezed,Object? context = freezed,Object? last_changed = freezed,Object? last_updated = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(EntityState(
 state: freezed == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
 as String?,attributes: freezed == attributes ? _self.attributes : attributes // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,context: freezed == context ? _self.context : context // ignore: cast_nullable_to_non_nullable
@@ -484,7 +497,7 @@ return $default(_that.state,_that.attributes,_that.context,_that.last_changed,_t
 @JsonSerializable()
 
 class _EntityState implements EntityState {
-   _EntityState({@JsonKey(name: 's') this.state, @JsonKey(name: 'a') final  Map<String, dynamic>? attributes, @JsonKey(name: 'c') this.context, @JsonKey(name: 'lc') this.last_changed, @JsonKey(name: 'lu') this.last_updated}): _attributes = attributes;
+   _EntityState({@JsonKey(name: 's') this.state, @JsonKey(name: 'a')  Map<String, dynamic>? attributes, @JsonKey(name: 'c') this.context, @JsonKey(name: 'lc') this.last_changed, @JsonKey(name: 'lu') this.last_updated}): _attributes = attributes;
   factory _EntityState.fromJson(Map<String, dynamic> json) => _$EntityStateFromJson(json);
 
 @override@JsonKey(name: 's') final  String? state;
@@ -516,16 +529,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityState&&(identical(other.state, state) || other.state == state)&&const DeepCollectionEquality().equals(other._attributes, _attributes)&&(identical(other.context, context) || other.context == context)&&(identical(other.last_changed, last_changed) || other.last_changed == last_changed)&&(identical(other.last_updated, last_updated) || other.last_updated == last_updated));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityState&&(identical(other.state, state) || other.state == state)&&const DeepCollectionEquality().equals(other.attributes, _attributes)&&(identical(other.context, context) || other.context == context)&&(identical(other.last_changed, last_changed) || other.last_changed == last_changed)&&(identical(other.last_updated, last_updated) || other.last_updated == last_updated));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,state,const DeepCollectionEquality().hash(_attributes),context,last_changed,last_updated);
+int get hashCode {
+    return Object.hash(runtimeType,state,const DeepCollectionEquality().hash(_attributes),context,last_changed,last_updated);
+}
 
 @override
 String toString() {
-  return 'EntityState(state: $state, attributes: $attributes, context: $context, last_changed: $last_changed, last_updated: $last_updated)';
+    return 'EntityState(state: $state, attributes: $attributes, context: $context, last_changed: $last_changed, last_updated: $last_updated)';
 }
 
 
@@ -596,16 +611,21 @@ $EntityDiffCopyWith<EntityDiff> get copyWith => _$EntityDiffCopyWithImpl<EntityD
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityDiff&&(identical(other.add, add) || other.add == add)&&(identical(other.remove, remove) || other.remove == remove));
+  final _this = this as EntityDiff;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntityDiff&&(identical(other.add, _this.add) || other.add == _this.add)&&(identical(other.remove, _this.remove) || other.remove == _this.remove));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,add,remove);
+int get hashCode {
+  final _this = this as EntityDiff;
+  return Object.hash(runtimeType,_this.add,_this.remove);
+}
 
 @override
 String toString() {
-  return 'EntityDiff(add: $add, remove: $remove)';
+  final _this = this as EntityDiff;
+  return 'EntityDiff(add: ${_this.add}, remove: ${_this.remove})';
 }
 
 
@@ -634,7 +654,7 @@ class _$EntityDiffCopyWithImpl<$Res>
 /// Create a copy of EntityDiff
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? add = freezed,Object? remove = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(EntityDiff(
 add: freezed == add ? _self.add : add // ignore: cast_nullable_to_non_nullable
 as EntityState?,remove: freezed == remove ? _self.remove : remove // ignore: cast_nullable_to_non_nullable
 as EntityStateRemove?,
@@ -815,16 +835,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityDiff&&(identical(other.add, add) || other.add == add)&&(identical(other.remove, remove) || other.remove == remove));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntityDiff&&(identical(other.add, add) || other.add == add)&&(identical(other.remove, remove) || other.remove == remove));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,add,remove);
+int get hashCode {
+    return Object.hash(runtimeType,add,remove);
+}
 
 @override
 String toString() {
-  return 'EntityDiff(add: $add, remove: $remove)';
+    return 'EntityDiff(add: $add, remove: $remove)';
 }
 
 
@@ -904,16 +926,21 @@ $StatesUpdatesCopyWith<StatesUpdates> get copyWith => _$StatesUpdatesCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StatesUpdates&&const DeepCollectionEquality().equals(other.add, add)&&const DeepCollectionEquality().equals(other.remove, remove)&&const DeepCollectionEquality().equals(other.change, change));
+  final _this = this as StatesUpdates;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StatesUpdates&&const DeepCollectionEquality().equals(other.add, _this.add)&&const DeepCollectionEquality().equals(other.remove, _this.remove)&&const DeepCollectionEquality().equals(other.change, _this.change));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(add),const DeepCollectionEquality().hash(remove),const DeepCollectionEquality().hash(change));
+int get hashCode {
+  final _this = this as StatesUpdates;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.add),const DeepCollectionEquality().hash(_this.remove),const DeepCollectionEquality().hash(_this.change));
+}
 
 @override
 String toString() {
-  return 'StatesUpdates(add: $add, remove: $remove, change: $change)';
+  final _this = this as StatesUpdates;
+  return 'StatesUpdates(add: ${_this.add}, remove: ${_this.remove}, change: ${_this.change})';
 }
 
 
@@ -942,7 +969,7 @@ class _$StatesUpdatesCopyWithImpl<$Res>
 /// Create a copy of StatesUpdates
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? add = freezed,Object? remove = freezed,Object? change = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(StatesUpdates(
 add: freezed == add ? _self.add : add // ignore: cast_nullable_to_non_nullable
 as Map<String, EntityState>?,remove: freezed == remove ? _self.remove : remove // ignore: cast_nullable_to_non_nullable
 as List<String>?,change: freezed == change ? _self.change : change // ignore: cast_nullable_to_non_nullable
@@ -1081,7 +1108,7 @@ return $default(_that.add,_that.remove,_that.change);case _:
 @JsonSerializable()
 
 class _StatesUpdates implements StatesUpdates {
-  const _StatesUpdates({@JsonKey(name: 'a') final  Map<String, EntityState>? add, @JsonKey(name: 'r') final  List<String>? remove, @JsonKey(name: 'c') final  Map<String, EntityDiff>? change}): _add = add,_remove = remove,_change = change;
+  const _StatesUpdates({@JsonKey(name: 'a')  Map<String, EntityState>? add, @JsonKey(name: 'r')  List<String>? remove, @JsonKey(name: 'c')  Map<String, EntityDiff>? change}): _add = add,_remove = remove,_change = change;
   factory _StatesUpdates.fromJson(Map<String, dynamic> json) => _$StatesUpdatesFromJson(json);
 
  final  Map<String, EntityState>? _add;
@@ -1125,16 +1152,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StatesUpdates&&const DeepCollectionEquality().equals(other._add, _add)&&const DeepCollectionEquality().equals(other._remove, _remove)&&const DeepCollectionEquality().equals(other._change, _change));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _StatesUpdates&&const DeepCollectionEquality().equals(other.add, _add)&&const DeepCollectionEquality().equals(other.remove, _remove)&&const DeepCollectionEquality().equals(other.change, _change));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_add),const DeepCollectionEquality().hash(_remove),const DeepCollectionEquality().hash(_change));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_add),const DeepCollectionEquality().hash(_remove),const DeepCollectionEquality().hash(_change));
+}
 
 @override
 String toString() {
-  return 'StatesUpdates(add: $add, remove: $remove, change: $change)';
+    return 'StatesUpdates(add: $add, remove: $remove, change: $change)';
 }
 
 
@@ -1191,16 +1220,21 @@ $CallServiceResponseCopyWith<CallServiceResponse> get copyWith => _$CallServiceR
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallServiceResponse&&(identical(other.context, context) || other.context == context)&&const DeepCollectionEquality().equals(other.response, response));
+  final _this = this as CallServiceResponse;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallServiceResponse&&(identical(other.context, _this.context) || other.context == _this.context)&&const DeepCollectionEquality().equals(other.response, _this.response));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,context,const DeepCollectionEquality().hash(response));
+int get hashCode {
+  final _this = this as CallServiceResponse;
+  return Object.hash(runtimeType,_this.context,const DeepCollectionEquality().hash(_this.response));
+}
 
 @override
 String toString() {
-  return 'CallServiceResponse(context: $context, response: $response)';
+  final _this = this as CallServiceResponse;
+  return 'CallServiceResponse(context: ${_this.context}, response: ${_this.response})';
 }
 
 
@@ -1229,7 +1263,7 @@ class _$CallServiceResponseCopyWithImpl<$Res>
 /// Create a copy of CallServiceResponse
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? context = null,Object? response = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(CallServiceResponse(
 context: null == context ? _self.context : context // ignore: cast_nullable_to_non_nullable
 as Context,response: freezed == response ? _self.response : response // ignore: cast_nullable_to_non_nullable
 as dynamic,
@@ -1395,16 +1429,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CallServiceResponse&&(identical(other.context, context) || other.context == context)&&const DeepCollectionEquality().equals(other.response, response));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _CallServiceResponse&&(identical(other.context, context) || other.context == context)&&const DeepCollectionEquality().equals(other.response, response));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,context,const DeepCollectionEquality().hash(response));
+int get hashCode {
+    return Object.hash(runtimeType,context,const DeepCollectionEquality().hash(response));
+}
 
 @override
 String toString() {
-  return 'CallServiceResponse(context: $context, response: $response)';
+    return 'CallServiceResponse(context: $context, response: $response)';
 }
 
 
@@ -1469,16 +1505,21 @@ $ContextCopyWith<Context> get copyWith => _$ContextCopyWithImpl<Context>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Context&&(identical(other.id, id) || other.id == id)&&(identical(other.user_id, user_id) || other.user_id == user_id)&&(identical(other.parent_id, parent_id) || other.parent_id == parent_id));
+  final _this = this as Context;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Context&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.user_id, _this.user_id) || other.user_id == _this.user_id)&&(identical(other.parent_id, _this.parent_id) || other.parent_id == _this.parent_id));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,user_id,parent_id);
+int get hashCode {
+  final _this = this as Context;
+  return Object.hash(runtimeType,_this.id,_this.user_id,_this.parent_id);
+}
 
 @override
 String toString() {
-  return 'Context(id: $id, user_id: $user_id, parent_id: $parent_id)';
+  final _this = this as Context;
+  return 'Context(id: ${_this.id}, user_id: ${_this.user_id}, parent_id: ${_this.parent_id})';
 }
 
 
@@ -1507,7 +1548,7 @@ class _$ContextCopyWithImpl<$Res>
 /// Create a copy of Context
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? user_id = freezed,Object? parent_id = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(Context(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,user_id: freezed == user_id ? _self.user_id : user_id // ignore: cast_nullable_to_non_nullable
 as String?,parent_id: freezed == parent_id ? _self.parent_id : parent_id // ignore: cast_nullable_to_non_nullable
@@ -1666,16 +1707,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Context&&(identical(other.id, id) || other.id == id)&&(identical(other.user_id, user_id) || other.user_id == user_id)&&(identical(other.parent_id, parent_id) || other.parent_id == parent_id));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Context&&(identical(other.id, id) || other.id == id)&&(identical(other.user_id, user_id) || other.user_id == user_id)&&(identical(other.parent_id, parent_id) || other.parent_id == parent_id));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,user_id,parent_id);
+int get hashCode {
+    return Object.hash(runtimeType,id,user_id,parent_id);
+}
 
 @override
 String toString() {
-  return 'Context(id: $id, user_id: $user_id, parent_id: $parent_id)';
+    return 'Context(id: $id, user_id: $user_id, parent_id: $parent_id)';
 }
 
 
@@ -1732,16 +1775,21 @@ $HassEventCopyWith<HassEvent> get copyWith => _$HassEventCopyWithImpl<HassEvent>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEvent&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.time_fired, time_fired) || other.time_fired == time_fired)&&(identical(other.event_type, event_type) || other.event_type == event_type)&&const DeepCollectionEquality().equals(other.data, data));
+  final _this = this as HassEvent;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEvent&&(identical(other.context, _this.context) || other.context == _this.context)&&(identical(other.origin, _this.origin) || other.origin == _this.origin)&&(identical(other.time_fired, _this.time_fired) || other.time_fired == _this.time_fired)&&(identical(other.event_type, _this.event_type) || other.event_type == _this.event_type)&&const DeepCollectionEquality().equals(other.data, _this.data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,context,origin,time_fired,event_type,const DeepCollectionEquality().hash(data));
+int get hashCode {
+  final _this = this as HassEvent;
+  return Object.hash(runtimeType,_this.context,_this.origin,_this.time_fired,_this.event_type,const DeepCollectionEquality().hash(_this.data));
+}
 
 @override
 String toString() {
-  return 'HassEvent(context: $context, origin: $origin, time_fired: $time_fired, event_type: $event_type, data: $data)';
+  final _this = this as HassEvent;
+  return 'HassEvent(context: ${_this.context}, origin: ${_this.origin}, time_fired: ${_this.time_fired}, event_type: ${_this.event_type}, data: ${_this.data})';
 }
 
 
@@ -1770,7 +1818,7 @@ class _$HassEventCopyWithImpl<$Res>
 /// Create a copy of HassEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? context = null,Object? origin = null,Object? time_fired = null,Object? event_type = null,Object? data = null,}) {
-  return _then(_self.copyWith(
+  return _then(HassEvent(
 context: null == context ? _self.context : context // ignore: cast_nullable_to_non_nullable
 as Context,origin: null == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
 as String,time_fired: null == time_fired ? _self.time_fired : time_fired // ignore: cast_nullable_to_non_nullable
@@ -1920,7 +1968,7 @@ return $default(_that.context,_that.origin,_that.time_fired,_that.event_type,_th
 @JsonSerializable()
 
 class _HassEvent implements HassEvent {
-   _HassEvent({required this.context, required this.origin, required this.time_fired, required this.event_type, required final  Map<String, dynamic> data}): _data = data;
+   _HassEvent({required this.context, required this.origin, required this.time_fired, required this.event_type, required  Map<String, dynamic> data}): _data = data;
   factory _HassEvent.fromJson(Map<String, dynamic> json) => _$HassEventFromJson(json);
 
 @override final  Context context;
@@ -1948,16 +1996,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEvent&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.time_fired, time_fired) || other.time_fired == time_fired)&&(identical(other.event_type, event_type) || other.event_type == event_type)&&const DeepCollectionEquality().equals(other._data, _data));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEvent&&(identical(other.context, context) || other.context == context)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.time_fired, time_fired) || other.time_fired == time_fired)&&(identical(other.event_type, event_type) || other.event_type == event_type)&&const DeepCollectionEquality().equals(other.data, _data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,context,origin,time_fired,event_type,const DeepCollectionEquality().hash(_data));
+int get hashCode {
+    return Object.hash(runtimeType,context,origin,time_fired,event_type,const DeepCollectionEquality().hash(_data));
+}
 
 @override
 String toString() {
-  return 'HassEvent(context: $context, origin: $origin, time_fired: $time_fired, event_type: $event_type, data: $data)';
+    return 'HassEvent(context: $context, origin: $origin, time_fired: $time_fired, event_type: $event_type, data: $data)';
 }
 
 
@@ -2025,16 +2075,21 @@ $HassEntityCopyWith<HassEntity> get copyWith => _$HassEntityCopyWithImpl<HassEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEntity&&(identical(other.entity_id, entity_id) || other.entity_id == entity_id)&&(identical(other.state, state) || other.state == state)&&(identical(other.last_changed, last_changed) || other.last_changed == last_changed)&&(identical(other.last_updated, last_updated) || other.last_updated == last_updated)&&const DeepCollectionEquality().equals(other.attributes, attributes)&&(identical(other.context, context) || other.context == context));
+  final _this = this as HassEntity;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HassEntity&&(identical(other.entity_id, _this.entity_id) || other.entity_id == _this.entity_id)&&(identical(other.state, _this.state) || other.state == _this.state)&&(identical(other.last_changed, _this.last_changed) || other.last_changed == _this.last_changed)&&(identical(other.last_updated, _this.last_updated) || other.last_updated == _this.last_updated)&&const DeepCollectionEquality().equals(other.attributes, _this.attributes)&&(identical(other.context, _this.context) || other.context == _this.context));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entity_id,state,last_changed,last_updated,const DeepCollectionEquality().hash(attributes),context);
+int get hashCode {
+  final _this = this as HassEntity;
+  return Object.hash(runtimeType,_this.entity_id,_this.state,_this.last_changed,_this.last_updated,const DeepCollectionEquality().hash(_this.attributes),_this.context);
+}
 
 @override
 String toString() {
-  return 'HassEntity(entity_id: $entity_id, state: $state, last_changed: $last_changed, last_updated: $last_updated, attributes: $attributes, context: $context)';
+  final _this = this as HassEntity;
+  return 'HassEntity(entity_id: ${_this.entity_id}, state: ${_this.state}, last_changed: ${_this.last_changed}, last_updated: ${_this.last_updated}, attributes: ${_this.attributes}, context: ${_this.context})';
 }
 
 
@@ -2063,7 +2118,7 @@ class _$HassEntityCopyWithImpl<$Res>
 /// Create a copy of HassEntity
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? entity_id = null,Object? state = null,Object? last_changed = null,Object? last_updated = null,Object? attributes = null,Object? context = null,}) {
-  return _then(_self.copyWith(
+  return _then(HassEntity(
 entity_id: null == entity_id ? _self.entity_id : entity_id // ignore: cast_nullable_to_non_nullable
 as String,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
 as String,last_changed: null == last_changed ? _self.last_changed : last_changed // ignore: cast_nullable_to_non_nullable
@@ -2214,7 +2269,7 @@ return $default(_that.entity_id,_that.state,_that.last_changed,_that.last_update
 @JsonSerializable()
 
 class _HassEntity implements HassEntity {
-  const _HassEntity({required this.entity_id, required this.state, required this.last_changed, required this.last_updated, required final  HassEntityAttributeBase attributes, required this.context}): _attributes = attributes;
+  const _HassEntity({required this.entity_id, required this.state, required this.last_changed, required this.last_updated, required  HassEntityAttributeBase attributes, required this.context}): _attributes = attributes;
   factory _HassEntity.fromJson(Map<String, dynamic> json) => _$HassEntityFromJson(json);
 
 @override final  String entity_id;
@@ -2243,16 +2298,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEntity&&(identical(other.entity_id, entity_id) || other.entity_id == entity_id)&&(identical(other.state, state) || other.state == state)&&(identical(other.last_changed, last_changed) || other.last_changed == last_changed)&&(identical(other.last_updated, last_updated) || other.last_updated == last_updated)&&const DeepCollectionEquality().equals(other._attributes, _attributes)&&(identical(other.context, context) || other.context == context));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HassEntity&&(identical(other.entity_id, entity_id) || other.entity_id == entity_id)&&(identical(other.state, state) || other.state == state)&&(identical(other.last_changed, last_changed) || other.last_changed == last_changed)&&(identical(other.last_updated, last_updated) || other.last_updated == last_updated)&&const DeepCollectionEquality().equals(other.attributes, _attributes)&&(identical(other.context, context) || other.context == context));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,entity_id,state,last_changed,last_updated,const DeepCollectionEquality().hash(_attributes),context);
+int get hashCode {
+    return Object.hash(runtimeType,entity_id,state,last_changed,last_updated,const DeepCollectionEquality().hash(_attributes),context);
+}
 
 @override
 String toString() {
-  return 'HassEntity(entity_id: $entity_id, state: $state, last_changed: $last_changed, last_updated: $last_updated, attributes: $attributes, context: $context)';
+    return 'HassEntity(entity_id: $entity_id, state: $state, last_changed: $last_changed, last_updated: $last_updated, attributes: $attributes, context: $context)';
 }
 
 

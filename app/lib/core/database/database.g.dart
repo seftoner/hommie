@@ -4776,7 +4776,7 @@ class $$ServerEntitiesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$ServerEntitiesTable, ServerEntity>(table),
                   $$ServerEntitiesTableReferences(db, table, e),
                 ),
               )
@@ -5349,7 +5349,7 @@ class $$AreaEntitiesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$AreaEntitiesTable, AreaEntity>(table),
                   $$AreaEntitiesTableReferences(db, table, e),
                 ),
               )
@@ -5383,19 +5383,15 @@ class $$AreaEntitiesTableTableManager
                         >
                       >(state) {
                         if (serverId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.serverId,
-                                    referencedTable:
-                                        $$AreaEntitiesTableReferences
-                                            ._serverIdTable(db),
-                                    referencedColumn:
-                                        $$AreaEntitiesTableReferences
-                                            ._serverIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.serverId,
+                            referencedTable: $$AreaEntitiesTableReferences
+                                ._serverIdTable(db),
+                            referencedColumn: $$AreaEntitiesTableReferences
+                                ._serverIdTable(db)
+                                .id,
+                          ) as T;
                         }
 
                         return state;
@@ -5971,7 +5967,7 @@ class $$DeviceEntitiesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$DeviceEntitiesTable, DeviceEntity>(table),
                   $$DeviceEntitiesTableReferences(db, table, e),
                 ),
               )
@@ -6005,19 +6001,15 @@ class $$DeviceEntitiesTableTableManager
                         >
                       >(state) {
                         if (serverId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.serverId,
-                                    referencedTable:
-                                        $$DeviceEntitiesTableReferences
-                                            ._serverIdTable(db),
-                                    referencedColumn:
-                                        $$DeviceEntitiesTableReferences
-                                            ._serverIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.serverId,
+                            referencedTable: $$DeviceEntitiesTableReferences
+                                ._serverIdTable(db),
+                            referencedColumn: $$DeviceEntitiesTableReferences
+                                ._serverIdTable(db)
+                                .id,
+                          ) as T;
                         }
 
                         return state;
@@ -6389,7 +6381,7 @@ class $$DeviceAreaConfigsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$DeviceAreaConfigsTable, DeviceAreaConfig>(table),
                   $$DeviceAreaConfigsTableReferences(db, table, e),
                 ),
               )
@@ -6415,34 +6407,26 @@ class $$DeviceAreaConfigsTableTableManager
                     >
                   >(state) {
                     if (deviceId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.deviceId,
-                                referencedTable:
-                                    $$DeviceAreaConfigsTableReferences
-                                        ._deviceIdTable(db),
-                                referencedColumn:
-                                    $$DeviceAreaConfigsTableReferences
-                                        ._deviceIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.deviceId,
+                        referencedTable: $$DeviceAreaConfigsTableReferences
+                            ._deviceIdTable(db),
+                        referencedColumn: $$DeviceAreaConfigsTableReferences
+                            ._deviceIdTable(db)
+                            .id,
+                      ) as T;
                     }
                     if (areaId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.areaId,
-                                referencedTable:
-                                    $$DeviceAreaConfigsTableReferences
-                                        ._areaIdTable(db),
-                                referencedColumn:
-                                    $$DeviceAreaConfigsTableReferences
-                                        ._areaIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.areaId,
+                        referencedTable: $$DeviceAreaConfigsTableReferences
+                            ._areaIdTable(db),
+                        referencedColumn: $$DeviceAreaConfigsTableReferences
+                            ._areaIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
@@ -6713,18 +6697,18 @@ class $$HomeViewConfigsTableTableManager
               $$HomeViewConfigsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$HomeViewConfigsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                Value<int> serverId = const Value.absent(),
-              }) => HomeViewConfigsCompanion(id: id, serverId: serverId),
-          createCompanionCallback:
-              ({Value<int> id = const Value.absent(), required int serverId}) =>
-                  HomeViewConfigsCompanion.insert(id: id, serverId: serverId),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> serverId = const Value.absent(),
+          }) => HomeViewConfigsCompanion(id: id, serverId: serverId),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int serverId,
+          }) => HomeViewConfigsCompanion.insert(id: id, serverId: serverId),
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$HomeViewConfigsTable, HomeViewConfig>(table),
                   $$HomeViewConfigsTableReferences(db, table, e),
                 ),
               )
@@ -6753,19 +6737,15 @@ class $$HomeViewConfigsTableTableManager
                         >
                       >(state) {
                         if (serverId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.serverId,
-                                    referencedTable:
-                                        $$HomeViewConfigsTableReferences
-                                            ._serverIdTable(db),
-                                    referencedColumn:
-                                        $$HomeViewConfigsTableReferences
-                                            ._serverIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.serverId,
+                            referencedTable: $$HomeViewConfigsTableReferences
+                                ._serverIdTable(db),
+                            referencedColumn: $$HomeViewConfigsTableReferences
+                                ._serverIdTable(db)
+                                .id,
+                          ) as T;
                         }
 
                         return state;
@@ -7200,7 +7180,7 @@ class $$AreaHomeConfigsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$AreaHomeConfigsTable, AreaHomeConfig>(table),
                   $$AreaHomeConfigsTableReferences(db, table, e),
                 ),
               )
@@ -7233,34 +7213,26 @@ class $$AreaHomeConfigsTableTableManager
                         >
                       >(state) {
                         if (areaId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.areaId,
-                                    referencedTable:
-                                        $$AreaHomeConfigsTableReferences
-                                            ._areaIdTable(db),
-                                    referencedColumn:
-                                        $$AreaHomeConfigsTableReferences
-                                            ._areaIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.areaId,
+                            referencedTable: $$AreaHomeConfigsTableReferences
+                                ._areaIdTable(db),
+                            referencedColumn: $$AreaHomeConfigsTableReferences
+                                ._areaIdTable(db)
+                                .id,
+                          ) as T;
                         }
                         if (homeConfigId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.homeConfigId,
-                                    referencedTable:
-                                        $$AreaHomeConfigsTableReferences
-                                            ._homeConfigIdTable(db),
-                                    referencedColumn:
-                                        $$AreaHomeConfigsTableReferences
-                                            ._homeConfigIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.homeConfigId,
+                            referencedTable: $$AreaHomeConfigsTableReferences
+                                ._homeConfigIdTable(db),
+                            referencedColumn: $$AreaHomeConfigsTableReferences
+                                ._homeConfigIdTable(db)
+                                .id,
+                          ) as T;
                         }
 
                         return state;
@@ -7652,7 +7624,7 @@ class $$DeviceHomeConfigsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$DeviceHomeConfigsTable, DeviceHomeConfig>(table),
                   $$DeviceHomeConfigsTableReferences(db, table, e),
                 ),
               )
@@ -7678,34 +7650,26 @@ class $$DeviceHomeConfigsTableTableManager
                     >
                   >(state) {
                     if (deviceId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.deviceId,
-                                referencedTable:
-                                    $$DeviceHomeConfigsTableReferences
-                                        ._deviceIdTable(db),
-                                referencedColumn:
-                                    $$DeviceHomeConfigsTableReferences
-                                        ._deviceIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.deviceId,
+                        referencedTable: $$DeviceHomeConfigsTableReferences
+                            ._deviceIdTable(db),
+                        referencedColumn: $$DeviceHomeConfigsTableReferences
+                            ._deviceIdTable(db)
+                            .id,
+                      ) as T;
                     }
                     if (areaConfigId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.areaConfigId,
-                                referencedTable:
-                                    $$DeviceHomeConfigsTableReferences
-                                        ._areaConfigIdTable(db),
-                                referencedColumn:
-                                    $$DeviceHomeConfigsTableReferences
-                                        ._areaConfigIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.areaConfigId,
+                        referencedTable: $$DeviceHomeConfigsTableReferences
+                            ._areaConfigIdTable(db),
+                        referencedColumn: $$DeviceHomeConfigsTableReferences
+                            ._areaConfigIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
@@ -8136,7 +8100,9 @@ class $$HomeTileOverridesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$HomeTileOverridesTable, HomeTileOverrideRow>(
+                    table,
+                  ),
                   $$HomeTileOverridesTableReferences(db, table, e),
                 ),
               )
@@ -8162,19 +8128,15 @@ class $$HomeTileOverridesTableTableManager
                     >
                   >(state) {
                     if (serverId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.serverId,
-                                referencedTable:
-                                    $$HomeTileOverridesTableReferences
-                                        ._serverIdTable(db),
-                                referencedColumn:
-                                    $$HomeTileOverridesTableReferences
-                                        ._serverIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.serverId,
+                        referencedTable: $$HomeTileOverridesTableReferences
+                            ._serverIdTable(db),
+                        referencedColumn: $$HomeTileOverridesTableReferences
+                            ._serverIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
@@ -8202,38 +8164,36 @@ typedef $$HomeTileOverridesTableProcessedTableManager =
       HomeTileOverrideRow,
       PrefetchHooks Function({bool serverId})
     >;
-typedef $$EntitiesTableCreateCompanionBuilder =
-    EntitiesCompanion Function({
-      Value<int> id,
-      required String registryId,
-      required String uniqueId,
-      required String platform,
-      required String entityId,
-      required String name,
-      required String domain,
-      Value<String?> deviceId,
-      Value<String?> areaHaId,
-      Value<String?> entityCategory,
-      Value<bool> disabled,
-      Value<bool> hidden,
-      required int serverId,
-    });
-typedef $$EntitiesTableUpdateCompanionBuilder =
-    EntitiesCompanion Function({
-      Value<int> id,
-      Value<String> registryId,
-      Value<String> uniqueId,
-      Value<String> platform,
-      Value<String> entityId,
-      Value<String> name,
-      Value<String> domain,
-      Value<String?> deviceId,
-      Value<String?> areaHaId,
-      Value<String?> entityCategory,
-      Value<bool> disabled,
-      Value<bool> hidden,
-      Value<int> serverId,
-    });
+typedef $$EntitiesTableCreateCompanionBuilder = EntitiesCompanion Function({
+  Value<int> id,
+  required String registryId,
+  required String uniqueId,
+  required String platform,
+  required String entityId,
+  required String name,
+  required String domain,
+  Value<String?> deviceId,
+  Value<String?> areaHaId,
+  Value<String?> entityCategory,
+  Value<bool> disabled,
+  Value<bool> hidden,
+  required int serverId,
+});
+typedef $$EntitiesTableUpdateCompanionBuilder = EntitiesCompanion Function({
+  Value<int> id,
+  Value<String> registryId,
+  Value<String> uniqueId,
+  Value<String> platform,
+  Value<String> entityId,
+  Value<String> name,
+  Value<String> domain,
+  Value<String?> deviceId,
+  Value<String?> areaHaId,
+  Value<String?> entityCategory,
+  Value<bool> disabled,
+  Value<bool> hidden,
+  Value<int> serverId,
+});
 
 final class $$EntitiesTableReferences
     extends BaseReferences<_$AppDatabase, $EntitiesTable, EntityRow> {
@@ -8605,7 +8565,7 @@ class $$EntitiesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$EntitiesTable, EntityRow>(table),
                   $$EntitiesTableReferences(db, table, e),
                 ),
               )
@@ -8631,17 +8591,15 @@ class $$EntitiesTableTableManager
                     >
                   >(state) {
                     if (serverId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.serverId,
-                                referencedTable: $$EntitiesTableReferences
-                                    ._serverIdTable(db),
-                                referencedColumn: $$EntitiesTableReferences
-                                    ._serverIdTable(db)
-                                    .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.serverId,
+                        referencedTable: $$EntitiesTableReferences
+                            ._serverIdTable(db),
+                        referencedColumn: $$EntitiesTableReferences
+                            ._serverIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;

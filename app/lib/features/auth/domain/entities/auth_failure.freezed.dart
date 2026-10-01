@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'auth_failure.dart';
@@ -9,6 +9,7 @@ part of 'auth_failure.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -20,7 +21,7 @@ mixin _$AuthFailure {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthFailure);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthFailure);
 }
 
 
@@ -29,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure()';
+    return 'AuthFailure()';
 }
 
 
@@ -214,16 +215,18 @@ $ServerFailureCopyWith<ServerFailure> get copyWith => _$ServerFailureCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ServerFailure&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ServerFailure&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'AuthFailure.server(message: $message)';
+    return 'AuthFailure.server(message: $message)';
 }
 
 
@@ -280,16 +283,18 @@ $UserBrakeCopyWith<UserBrake> get copyWith => _$UserBrakeCopyWithImpl<UserBrake>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserBrake&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is UserBrake&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'AuthFailure.userBrake(message: $message)';
+    return 'AuthFailure.userBrake(message: $message)';
 }
 
 
@@ -341,7 +346,7 @@ class Storage extends AuthFailure {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Storage);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is Storage);
 }
 
 
@@ -350,7 +355,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.storage()';
+    return 'AuthFailure.storage()';
 }
 
 
@@ -373,7 +378,7 @@ class MissingCredentials extends AuthFailure {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MissingCredentials);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is MissingCredentials);
 }
 
 
@@ -382,7 +387,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.missingCredentials()';
+    return 'AuthFailure.missingCredentials()';
 }
 
 
@@ -410,16 +415,18 @@ $InvalidTokenCopyWith<InvalidToken> get copyWith => _$InvalidTokenCopyWithImpl<I
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InvalidToken&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is InvalidToken&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'AuthFailure.invalidToken(message: $message)';
+    return 'AuthFailure.invalidToken(message: $message)';
 }
 
 
@@ -471,7 +478,7 @@ class Connection extends AuthFailure {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Connection);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is Connection);
 }
 
 
@@ -480,7 +487,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AuthFailure.connection()';
+    return 'AuthFailure.connection()';
 }
 
 

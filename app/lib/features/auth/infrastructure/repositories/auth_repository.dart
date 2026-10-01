@@ -105,7 +105,7 @@ class AuthRepository implements IAuthRepository {
             storedCredentials,
           );
 
-          return failureOrCredentials.fold(
+          return await failureOrCredentials.fold(
             (failure) {
               logger.e('Token refresh failed: $failure');
               // Return stored credentials for offline access if connection failed

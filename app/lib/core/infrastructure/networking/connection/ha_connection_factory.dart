@@ -104,7 +104,7 @@ final class HAConnectionFactory implements IHAConnectionFactory {
         final result = await _ref
             .read(authRepositoryProvider)
             .getCredentials(serverId);
-        return result.match(_throwTokenFailure, authTokenFromCredentials);
+        return await result.match(_throwTokenFailure, authTokenFromCredentials);
       } on AuthFailure catch (failure) {
         _throwTokenFailure(failure);
       } on AuthFailureException catch (exception) {

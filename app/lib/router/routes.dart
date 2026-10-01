@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hommie/application/scopes/server_scope_host.dart';
 import 'package:hommie/core/bootstrap/app_startup.dart';

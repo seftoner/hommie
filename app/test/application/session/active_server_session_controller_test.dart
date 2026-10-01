@@ -182,7 +182,7 @@ void main() {
     );
     try {
       await container.read(activeServerProvider.future);
-      return waitForSession(
+      return await waitForSession(
         container,
         (state) => state is! ResolvingServerSession,
       );
