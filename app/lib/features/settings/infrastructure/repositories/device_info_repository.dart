@@ -16,7 +16,6 @@ class DeviceInfoRepository implements IDeviceInfoRepository {
       final LinuxDeviceInfo linuxInfo => linuxInfo.prettyName,
       final WindowsDeviceInfo windowsInfo => windowsInfo.computerName,
       final AndroidDeviceInfo androidInfo => androidInfo.name,
-      final WebBrowserInfo webInfo => webInfo.userAgent ?? 'This device',
       _ => 'This device',
     };
   }

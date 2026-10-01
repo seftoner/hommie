@@ -23,6 +23,8 @@ We're just getting started, but here's what's cooking:
 4. Windows - ⚠️ (Not tested)
 5. Linux - ⚠️ (Not tested)
 
+Web support is postponed. The Flutter web app and web release build are not maintained.
+
 ## 🛠️ Development Requirements
 - Flutter SDK 3.24 or higher
 - Dart SDK 3.6 or higher
