@@ -179,11 +179,11 @@ Defaults to implement, adjustable through runner configuration: CLI subprocess 2
 - Reachability step `homeAssistantBecomesReachableAgain(PatrolIntegrationTester $) -> Future<void>` calls `restoreHaRoute()`; reconnect assertion waits on real app connection/session and UI outcomes.
 - Banner assertions use rendered/clipped visibility under `AnimatedAlign` with the 20-second bound. Element presence alone is insufficient for either appearance or disappearance.
 
-- [ ] **Step 1: Write the loss/recovery feature and a banner visibility regression.** Online home and `light.kitchen_light` are visible; outage shows banner and retains the cached light; restored route yields a live session and hides banner. The helper test must include a mounted banner clipped by `heightFactor: 0`, and a delayed hide animation; absence of a widget is not required.
-- [ ] **Step 2: Generate and run `cd app && flutter test test/e2e/offline_assertions_test.dart test/ui/screens/widgets/offline_container_test.dart`, then the focused proxy scenario.** Expect the old `findsNothing` assertion/native toggles to fail the new contract.
-- [ ] **Step 3: Implement semantic steps with the one fault helper.** Remove native network actions and fixed 2/3/5-second sleeps from these flows. Use bounded UI polling that observes actual rendering and bounded real-session recovery. Retain the mounted-banner product behavior; do not change UI to accommodate a test. Move the old mock-based offline-launch scenario to the paired contract in Task 8.
-- [ ] **Step 4: Run `./scripts/e2e.sh --target offline_banner` on iOS.** Expect live WebSocket loss, visible banner, cached card retained, and real reconnection. While disconnected, CLI verification and cleanup remain usable. Confirm `rg 'disableWifi|disableCellular|enableWifi|enableCellular' app/integration_test` has no active fault steps and BDD regeneration is stable.
-- [ ] **Step 5: Commit** with `test: exercise offline recovery through Toxiproxy on iOS`.
+- [x] **Step 1: Write the loss/recovery feature and a banner visibility regression.** Online home and `light.kitchen_light` are visible; outage shows banner and retains the cached light; restored route yields a live session and hides banner. The helper test must include a mounted banner clipped by `heightFactor: 0`, and a delayed hide animation; absence of a widget is not required.
+- [x] **Step 2: Generate and run `cd app && flutter test test/e2e/offline_assertions_test.dart test/ui/screens/widgets/offline_container_test.dart`, then the focused proxy scenario.** Expect the old `findsNothing` assertion/native toggles to fail the new contract.
+- [x] **Step 3: Implement semantic steps with the one fault helper.** Remove native network actions and fixed 2/3/5-second sleeps from these flows. Use bounded UI polling that observes actual rendering and bounded real-session recovery. Retain the mounted-banner product behavior; do not change UI to accommodate a test. Move the old mock-based offline-launch scenario to the paired contract in Task 8.
+- [x] **Step 4: Run `./scripts/e2e.sh --target offline_banner` on iOS.** Expect live WebSocket loss, visible banner, cached card retained, and real reconnection. While disconnected, CLI verification and cleanup remain usable. Confirm `rg 'disableWifi|disableCellular|enableWifi|enableCellular' app/integration_test` has no active fault steps and BDD regeneration is stable.
+- [x] **Step 5: Commit** with `test: exercise offline recovery through Toxiproxy on iOS`.
 
 ## Task 8: Prove Persisted Offline Cold Launch Across Processes
 
@@ -194,12 +194,12 @@ Defaults to implement, adjustable through runner configuration: CLI subprocess 2
 - Seed scenario carries `@cold_start` and `@cold_seed`; verify carries `@cold_start` and `@cold_verify`, as scenario tags forwarded to `patrol()`. Seed requires `E2E_COLD_PHASE=seed`, initializes real stored session/cache, and intentionally defers owned-token/storage cleanup. Verify requires `verify` and skips all seed/reset/login operations. The wrapper combines its phase gate with the caller's existing skip value; it skips phase-only scenarios during ordinary discovery and ordinary scenarios during a phase run.
 - Each phase runs through Task 6 `runTargets(..., preserveApp: true)` and explicitly passes `--no-uninstall`. Keep `FULL_ISOLATION=0`, `CLEAR_PERMISSIONS=0`, and runtime discovery; do not use manifest-dependent `test-without-building --only`.
 
-- [ ] **Step 1: Add a runner sequence test with failure injection.** Assert order: seed → successful persisted-state checkpoint → host `simctl terminate` of the configured app → route disabled → verify launched with no uninstall/reset → restore → cleanup. Seed failure must prevent offline verification; verify failure/timeout must still restore and reconcile. Both phases use the same device, run ID, app bundle ID, and owned session; the phase defines are atomically updated between invocations.
-- [ ] **Step 2: Run `cd app && flutter test test/e2e/cold_start_runner_test.dart`.** Expect missing paired coordination to fail; retain the test's event-order assertion.
-- [ ] **Step 3: Implement the two actual Patrol targets.** Seed authenticates using real repositories/UI, waits for `light.kitchen_light` in the persisted database, and returns without removing its token/data. Host terminates the app and verifies it is no longer running before disabling the route. Verify launches against the same persisted sandbox/Keychain, performs no login/seeding, proves cached home and visible banner while HA is unreachable, then restores the route and proves live recovery. Reinstall of an updated test binary must demonstrably preserve data; a `pumpWidget` or foreground action within one process cannot satisfy this task.
-- [ ] **Step 4: Wire default and filtered execution.** Default suite runs the three ordinary features and this paired flow. `--target cold_start` selects the pair; `--target offline_banner` selects the connection-loss feature only. Phase targets are not independently user-selectable. Tags select the logical cold pair together; `--develop` rejects it. Pair cleanup runs on success/failure and before the next ordinary scenario, including Keychain-owned keys.
-- [ ] **Step 5: Run `./scripts/e2e.sh --target cold_start` twice on iOS.** Retain separate seed/verify native results, termination/relaunch timestamps or process evidence, and the persisted-cache observation. Prove no credential/server mocks, no second online authentication in verify, no management-token revocation, and clean state after the pair. If Patrol's runtime runner cannot preserve the sandbox as expected, report the actual failure and revise this task explicitly; do not replace the contract with warm launch or enable static discovery silently.
-- [ ] **Step 6: Commit** with `test: verify cached offline cold launch across iOS processes`.
+- [x] **Step 1: Add a runner sequence test with failure injection.** Assert order: seed → successful persisted-state checkpoint → host `simctl terminate` of the configured app → route disabled → verify launched with no uninstall/reset → restore → cleanup. Seed failure must prevent offline verification; verify failure/timeout must still restore and reconcile. Both phases use the same device, run ID, app bundle ID, and owned session; the phase defines are atomically updated between invocations.
+- [x] **Step 2: Run `cd app && flutter test test/e2e/cold_start_runner_test.dart`.** Expect missing paired coordination to fail; retain the test's event-order assertion.
+- [x] **Step 3: Implement the two actual Patrol targets.** Seed authenticates using real repositories/UI, waits for `light.kitchen_light` in the persisted database, and returns without removing its token/data. Host terminates the app and verifies it is no longer running before disabling the route. Verify launches against the same persisted sandbox/Keychain, performs no login/seeding, proves cached home and visible banner while HA is unreachable, then restores the route and proves live recovery. Reinstall of an updated test binary must demonstrably preserve data; a `pumpWidget` or foreground action within one process cannot satisfy this task.
+- [x] **Step 4: Wire default and filtered execution.** Default suite runs the three ordinary features and this paired flow. `--target cold_start` selects the pair; `--target offline_banner` selects the connection-loss feature only. Phase targets are not independently user-selectable. Tags select the logical cold pair together; `--develop` rejects it. Pair cleanup runs on success/failure and before the next ordinary scenario, including Keychain-owned keys.
+- [x] **Step 5: Run `./scripts/e2e.sh --target cold_start` twice on iOS.** Retain separate seed/verify native results, termination/relaunch timestamps or process evidence, and the persisted-cache observation. Prove no credential/server mocks, no second online authentication in verify, no management-token revocation, and clean state after the pair. If Patrol's runtime runner cannot preserve the sandbox as expected, report the actual failure and revise this task explicitly; do not replace the contract with warm launch or enable static discovery silently.
+- [x] **Step 6: Commit** with `test: verify cached offline cold launch across iOS processes`.
 
 ## Task 9: Finish Local Repeat/Watch Rails and Failure Artifacts
 
@@ -210,13 +210,13 @@ Defaults to implement, adjustable through runner configuration: CLI subprocess 2
 - Produces `RunArtifacts.capture({required String runId, required int exitCode, required List<FileSystemEntity> nativeResults, required Map<String,Object?> metadata}) -> Future<void>` and `redact(String text, Iterable<String> secrets) -> String` used before output is persisted. Constructor receives the run directory and known secret values; metadata includes target/device, tool versions, stage durations, and primary/cleanup errors.
 - Produces watch mode that coalesces changes under app `lib`, integration `.feature`/step/utils, relevant build/pubspec files, and fixture scripts into one queued run; ignores generated files, `.dart_tool`, builds, and artifacts.
 
-- [ ] **Step 1: Add interruption/concurrency/artifact tests.** Fake child failures/timeouts/SIGINT/SIGTERM must trigger route restoration and every cleanup attempt, keep the primary exit, terminate children, and release lock after capture. A live second runner never starts Compose/Patrol; a stale owner is reconciled. Test sentinel token/password redaction, failing artifact capture, overlapping watch events, and ignored generated-file changes. Assert exactly three runs for `--repeat 3` and no continuing repeat after failure.
-- [ ] **Step 2: Run `cd app && flutter test test/e2e/runner_lifecycle_test.dart test/e2e/artifacts_test.dart`.** Expect incomplete runner cleanup/logging rails to fail the contracts.
-- [ ] **Step 3: Implement the full local workflow.** Default `test` performs toolchain checks, locking, backend readiness/reconciliation, generation, deterministic iOS execution, cold pair, and artifact capture. Add fail-fast repeat, serialized watch, and single-target Patrol develop with the same preflight/fault cleanup. Forward target/tag filters consistently, including phase-only discovery rules. Bound readiness and whole run; terminate active children before cleanup to prevent further mutations. Use process argument arrays, never a constructed shell command containing secrets.
-- [ ] **Step 4: Capture useful evidence without credentials.** Retain runner/bridge/HA/proxy logs, target/device/version/timing/exit metadata, and relevant failure screenshots. The verified native SDK logs typed passwords inside `.xcresult`: keep exact original bundles private in ignored build/run storage and retain their paths, while exporting sanitized diagnostics/issues and safe attachments into shareable artifacts. Use actual run paths, not an arbitrary newest stale bundle. Never copy a credential-bearing original bundle into shareable exports. Scrub credentials before writing log streams; validate sentinel redaction, including error bodies and native attachments. A capture failure is secondary to a test failure but fails an otherwise successful run. Keep generated define files private and excluded from artifacts.
-- [ ] **Step 5: Update user entrypoints and operational docs.** VS Code `patrol: run tests` invokes `${workspaceFolder}/scripts/e2e.sh` with default iOS; add a watch task. Document root and absolute-path commands, device selection, targets/tags, repeat/watch/develop, explicit migration/stop/reset, crash recovery, artifacts, and the scope of proxy outages. Explain that fixtures execute through the bridge from Dart, while only the Mac runner controls Docker. Do not add a schedule.
-- [ ] **Step 6: Verify normal and failure paths end to end.** Run from repo root and another cwd; force one assertion failure, SIGINT during outage, and a second concurrent invocation. Confirm actionable nonzero status, route restoration, preserved service/volume IDs, cleanup, and retained sanitized native evidence. Confirm the next ordinary default run succeeds without manual repair. Re-run focused runner tests.
-- [ ] **Step 7: Commit** with `test: add repeatable local iOS E2E rails and diagnostics`.
+- [x] **Step 1: Add interruption/concurrency/artifact tests.** Fake child failures/timeouts/SIGINT/SIGTERM must trigger route restoration and every cleanup attempt, keep the primary exit, terminate children, and release lock after capture. A live second runner never starts Compose/Patrol; a stale owner is reconciled. Test sentinel token/password redaction, failing artifact capture, overlapping watch events, and ignored generated-file changes. Assert exactly three runs for `--repeat 3` and no continuing repeat after failure.
+- [x] **Step 2: Run `cd app && flutter test test/e2e/runner_lifecycle_test.dart test/e2e/artifacts_test.dart`.** Expect incomplete runner cleanup/logging rails to fail the contracts.
+- [x] **Step 3: Implement the full local workflow.** Default `test` performs toolchain checks, locking, backend readiness/reconciliation, generation, deterministic iOS execution, cold pair, and artifact capture. Add fail-fast repeat, serialized watch, and single-target Patrol develop with the same preflight/fault cleanup. Forward target/tag filters consistently, including phase-only discovery rules. Bound readiness and whole run; terminate active children before cleanup to prevent further mutations. Use process argument arrays, never a constructed shell command containing secrets.
+- [x] **Step 4: Capture useful evidence without credentials.** Retain runner/bridge/HA/proxy logs, target/device/version/timing/exit metadata, and relevant failure screenshots. The verified native SDK logs typed passwords inside `.xcresult`: keep exact original bundles private in ignored build/run storage and retain their paths, while exporting sanitized diagnostics/issues and safe attachments into shareable artifacts. Use actual run paths, not an arbitrary newest stale bundle. Never copy a credential-bearing original bundle into shareable exports. Scrub credentials before writing log streams; validate sentinel redaction, including error bodies and native attachments. A capture failure is secondary to a test failure but fails an otherwise successful run. Keep generated define files private and excluded from artifacts.
+- [x] **Step 5: Update user entrypoints and operational docs.** VS Code `patrol: run tests` invokes `${workspaceFolder}/scripts/e2e.sh` with default iOS; add a watch task. Document root and absolute-path commands, device selection, targets/tags, repeat/watch/develop, explicit migration/stop/reset, crash recovery, artifacts, and the scope of proxy outages. Explain that fixtures execute through the bridge from Dart, while only the Mac runner controls Docker. Do not add a schedule.
+- [x] **Step 6: Verify normal and failure paths end to end.** Run from repo root and another cwd; force one assertion failure, SIGINT during outage, and a second concurrent invocation. Confirm actionable nonzero status, route restoration, preserved service/volume IDs, cleanup, and retained sanitized native evidence. Confirm the next ordinary default run succeeds without manual repair. Re-run focused runner tests.
+- [x] **Step 7: Commit** with `test: add repeatable local iOS E2E rails and diagnostics`.
 
 ## Task 10: Demonstrate Recovery and Record the Completion Gate
 
@@ -224,11 +224,11 @@ Defaults to implement, adjustable through runner configuration: CLI subprocess 2
 
 **Interfaces:** Consumes the complete runner. Produces reviewable results for all eleven spec acceptance checks, with any remaining failures explicitly listed.
 
-- [ ] **Step 1: Run focused regressions and generation verification.** From `app`, run all new `test/e2e` tests, `test/hass_area_manager_test.dart`, `test/ui/screens/widgets/offline_container_test.dart`, `test/application/session`, `test/features/auth`, `test/core/infrastructure/networking/connection`, and the existing settings area widget/controller tests. Run bridge Python tests in its pinned test environment. Analyze changed Dart files, regenerate BDD output twice, and check `git diff --check`. Expect green checks, stable generation, and no tracked Patrol bundle.
-- [ ] **Step 2: Run `./scripts/e2e.sh --repeat 3` with the default iOS suite.** Each iteration includes authorization, areas, loss/recovery, and the cold pair with independent state. Record first-build and warm-run durations and artifact paths; do not claim an Android speed advantage without a separate measured comparison.
-- [ ] **Step 3: Audit each acceptance check against real evidence.** Check discovery/filters, healthy and fresh fixture readiness, preserved migrated data, bridge failure contracts, established-socket interruption, cold-process persistence, single fault mechanism/default iOS, repeated runs, regression suite, artifacts/exits, owned crash cleanup, and unchanged Compose project. Confirm no residual namespaced resources, invalidated management token, disabled route, or changed baseline data.
-- [ ] **Step 4: Resolve any demonstrated failures with a targeted regression and rerun affected checks.** Changes to app behavior require their own failing reproducer and scoped fix; mark added paths and the reason in completion evidence. Do not broaden tests once checks pass without a new concern. Do not claim completion with skipped mobile/cold-start gates.
-- [ ] **Step 5: Commit verified documentation/evidence** with `docs: record restored local iOS E2E workflow`; do not create an empty commit if there are no changes.
+- [x] **Step 1: Run focused regressions and generation verification.** From `app`, run all new `test/e2e` tests, `test/hass_area_manager_test.dart`, `test/ui/screens/widgets/offline_container_test.dart`, `test/application/session`, `test/features/auth`, `test/core/infrastructure/networking/connection`, and the existing settings area widget/controller tests. Run bridge Python tests in its pinned test environment. Analyze changed Dart files, regenerate BDD output twice, and check `git diff --check`. Expect green checks, stable generation, and no tracked Patrol bundle.
+- [x] **Step 2: Run `./scripts/e2e.sh --repeat 3` with the default iOS suite.** Each iteration includes authorization, areas, loss/recovery, and the cold pair with independent state. Record first-build and warm-run durations and artifact paths; do not claim an Android speed advantage without a separate measured comparison.
+- [x] **Step 3: Audit each acceptance check against real evidence.** Check discovery/filters, healthy and fresh fixture readiness, preserved migrated data, bridge failure contracts, established-socket interruption, cold-process persistence, single fault mechanism/default iOS, repeated runs, regression suite, artifacts/exits, owned crash cleanup, and unchanged Compose project. Confirm no residual namespaced resources, invalidated management token, disabled route, or changed baseline data.
+- [x] **Step 4: Resolve any demonstrated failures with a targeted regression and rerun affected checks.** Changes to app behavior require their own failing reproducer and scoped fix; mark added paths and the reason in completion evidence. Do not broaden tests once checks pass without a new concern. Do not claim completion with skipped mobile/cold-start gates.
+- [x] **Step 5: Commit verified documentation/evidence** with `docs: record restored local iOS E2E workflow`; do not create an empty commit if there are no changes.
 
 ## Self-Review and Execution Notes
 
@@ -241,4 +241,61 @@ Defaults to implement, adjustable through runner configuration: CLI subprocess 2
 
 ## Completion Evidence
 
-To be filled during execution with actual commands, results, timings, and artifact paths. Planning has not executed or passed the restored mobile suite.
+Verified locally on 2026-10-02, on `codex/local-e2e-recovery`, using iPhone 17
+Simulator `BB2C8749-5BB7-431B-A7DB-35823A75530F` / iOS 26.5. The fixture remains
+`homeassistant-test`; production app source was not changed.
+
+| Acceptance | Evidence |
+| --- | --- |
+| 1. Discovery / BDD / filters | Six generated targets in `app/integration_test`; two regenerations produced identical SHA-256 hashes. Runtime Patrol discovery, no tracked bundle or extra integration binding. Focused `quick` and `revocation` native runs passed; cold phases are internal. |
+| 2. Fixture readiness | Healthy repeated starts and an isolated fresh-volume bootstrap passed. Missing-credential, writable-container, anonymous-volume, unhealthy service and missing-light regressions passed. Existing auth/config was backed up and verified before named-volume adoption. |
+| 3. Independent CLI operations | Five Python bridge tests passed in the pinned service image; Dart tests cover argument arrays, HA/CLI/HTTP errors and uncertain timeouts without blind mutation retries. Live owned area/token operations and token revocation passed. |
+| 4. Real proxy fault | An established app/host WebSocket was cut; independent CLI access stayed usable; recovery passed. SIGINT during a live outage returned 130, restored the route and cleared app-owned state. |
+| 5. Real iOS / cold launch | Real native authorization, area and offline scenarios passed. Every cold verify read the seed's SQLite/Keychain/checkpoint without login/reseeding and recorded a different process PID. |
+| 6. One mechanism / iOS default | Root and VS Code entrypoints select iOS; semantic faults use the single Toxiproxy route. No native Wi-Fi/cellular fault actions remain. |
+| 7. Three consecutive suites | `./scripts/e2e.sh --repeat 3` exited 0. Each iteration ran five ordinary scenarios plus seed and verify: 21 native executions, no skips or failures. Exact report paths are in each invocation's metadata. |
+| 8. Regressions | 292 app unit/widget tests passed from `app`; 146 focused tests passed before the final lifecycle regression was added, and affected/full tests were rerun afterwards. Pinned Python bridge tests: 5/5. Runner analysis has no issues; BDD output is stable. |
+| 9. Failures / artifacts | Controlled native assertion failures exited 1 and retained sanitized issues/logs plus private failure images. SIGTERM during recovery preserved the original exit 1 and completed cleanup. A second concurrent command was rejected before Compose/Patrol. Shareable exports from all three default suites contain no known management token/password. |
+| 10. Owned cleanup / persistence | Post-repeat audit found zero owned tokens/areas/journals, no missing or extra baseline tokens, valid management authentication, unchanged original HA areas and identical IDs for all three services. Failed native runs additionally execute the internal SQLite/Keychain recovery target. |
+| 11. Same project / migration | Only `homeassistant-test` is used. The original container-writable config was copied into `homeassistant-test_ha_config`; the private config backup, rollback image and verified migration record are retained. No automatic reset or second fixture stack. |
+
+### Repeated native evidence
+
+| Invocation | Measured run seconds* | Cold PID transition | Native result bundles |
+| --- | ---: | --- | ---: |
+| `run_1790947541453172` | 360.4 | 98922 → 187 | 3 |
+| `run_1790947913594521` | 382.1 | 3816 → 5405 | 3 |
+| `run_1790948306511594` | 357.6 | 8758 → 9909 | 3 |
+
+Artifacts are under `artifacts/e2e/<invocation>/`. Originals remain private under
+`app/build/ios_results_*.xcresult`; metadata records the exact paths. These are
+local measured iOS results, not an Android comparison. The first acceptance
+ordinary build was 37.5 seconds; subsequent ordinary builds were 37.6 and 46.2
+seconds. Cold phase builds ranged from 36.8 to 63.4 seconds.
+
+*These three invocation timers were recorded before native export; the final
+runner additionally includes artifact time in its total duration. Exported text
+was scanned for known password/token leaks: zero. Binary bundles and screenshots
+are deliberately retained privately for local review.
+
+### Execution corrections
+
+- Standalone `light.kitchen_light` needs an explicit persisted home tile override
+  when preserved legacy demo devices populate device tiles. Test fixtures now
+  select it through the real repository; product projection behavior is unchanged.
+- Write BDD tags on separate lines. This generator treats multiple tags on one
+  line as one combined tag.
+- Resolve the live simulator sandbox after installing the verification binary;
+  iOS may change its path while preserving the actual data.
+- Added an internal recovery target because a killed native child cannot run Dart
+  teardown, and uninstalling an iOS app does not prove Keychain cleanup.
+- Signal protection remains active through recovery and artifact capture. Its
+  regression failed before the helper existed, then passed; live SIGTERM during
+  recovery completed with the original failure preserved.
+- Watch explicitly ignores `test_bundle.dart`; otherwise generated bundle writes
+  would self-queue runs. The path-filter regression failed first, then passed.
+
+The normal absolute-path runner from `/private/tmp` also passed after the lifecycle
+fixes (`run_1790949153065887`, exit 0). Independent whole-branch review and final
+clean-checkout verification follow
+these implementation gates. No schedule, merge, push or PR is part of this work.

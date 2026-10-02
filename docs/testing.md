@@ -56,7 +56,7 @@ Stop preserves the volume and credentials. Migration copies an old container-wri
 
 The runner holds `.dart_tool/e2e/run.lock` for the whole command. A second live invocation fails before Compose/Patrol starts. The stable lock file remains after release; its `released` status is normal. A dead previous owner is detected and the next run restores the route and reconciles private ownership journals. Ambiguous OAuth ownership fails with the journal retained rather than deleting unrelated sessions. SIGINT/SIGTERM and deadlines terminate owned child processes before recovery. A failed/interrupted test keeps its original nonzero status even if diagnostics also fail.
 
-Ports default to HA 8123, bridge 3000, data proxy 18124, proxy control 18474. Set `E2E_HA_PORT`, `E2E_BRIDGE_PORT`, `E2E_PROXY_PORT`, `E2E_CONTROL_PORT` together when needed; each must be distinct. Credentials live in ignored owner-only `app/.patrol.env` and `docker/hass_init_conf/.env`. Don't publish them.
+Ports default to HA 8123, bridge 3000, data proxy 18124, proxy control 18474. Set `E2E_HA_PORT`, `E2E_BRIDGE_PORT`, `E2E_PROXY_PORT`, `E2E_CONTROL_PORT` together when needed; each must be distinct. Stop the existing fixture before applying different port mappings. Credentials live in ignored owner-only `app/.patrol.env` and `docker/hass_init_conf/.env`. Don't publish them.
 
 ## Evidence and troubleshooting
 
@@ -67,3 +67,7 @@ Patrol's native SDK records typed credentials inside `.xcresult`. Exact original
 If startup fails, check Docker Desktop, the four ports and Xcode simulator availability. For bridge/HA failures inspect sanitized backend logs and the named volume; do not reset credentials to work around readiness failures. The independent `smoke` command proves a real WebSocket outage, continued CLI access and route recovery without building the app. Unit regressions run with `flutter test app/test/e2e`; generate features with `cd app && dart run build_runner build --delete-conflicting-outputs`.
 
 These rails are local. No recurring automation or CI schedule is installed.
+
+## Verified baseline
+
+On 2026-10-02, three complete iOS Simulator suites passed (21 native scenarios), including three persisted cold-launch pairs. The acceptance runs took roughly six minutes each before native export; ordinary build times were 37.5–46.2 seconds. All 292 app unit/widget tests and five pinned Python bridge tests passed. These measurements do not establish an Android speed comparison. See [the recovery plan](superpowers/plans/2026-10-02-local-e2e-recovery.md#completion-evidence) for exact invocation IDs and process evidence.
