@@ -73,7 +73,7 @@ Defaults to implement, adjustable through runner configuration: CLI subprocess 2
 - Produces mobile `E2eTestConfig.fromEnvironment()` with `Uri appServerUrl`, `Uri fixtureControlUrl`, `Uri faultControlUrl`, management credentials, run ID, and cold phase. Runtime validation must not depend on Dart assertions being enabled.
 - CLI activation resolves 4.8.0 into `.dart_tool/e2e/pub-cache`; activation's `PUB_CACHE` override does not replace the user's global configuration or Flutter's normal dependency cache.
 
-- [ ] **Step 1: Add meaningful configuration/process failure tests.** Cover default iOS endpoints, explicit endpoint overrides (including an optional manually run Android emulator's host), URI/port validation, paths containing spaces, invalid repeat/deadline, missing credentials, and a hanging child. Pin assertions such as:
+- [x] **Step 1: Add meaningful configuration/process failure tests.** Cover default iOS endpoints, explicit endpoint overrides (including an optional manually run Android emulator's host), URI/port validation, paths containing spaces, invalid repeat/deadline, missing credentials, and a hanging child. Pin assertions such as:
 
   ```dart
   expect(config.platform, 'ios');
@@ -83,10 +83,10 @@ Defaults to implement, adjustable through runner configuration: CLI subprocess 2
   expect(errorText, isNot(contains(managementToken)));
   ```
 
-- [ ] **Step 2: Run `cd app && flutter test test/e2e/config_test.dart test/e2e/process_runner_test.dart`.** Expect failure because the contracts do not exist; distinguish that from a toolchain failure.
-- [ ] **Step 3: Implement the contracts and discovery migration.** Add `test_directory: integration_test`; keep app/platform identifiers and BDD configuration. Add exact bundle and runtime ignores; `git rm --cached app/integration_test/test_bundle.dart`. The shell wrapper uses quoted paths and `exec`; the Dart entrypoint derives repo root independently of cwd. Resolve the local CLI by its activation package config and `bin/main.dart`, running Flutter subprocesses with the normal environment. Add `--help` and backend/test dispatch, with unimplemented stages failing explicitly until later tasks supply them.
-- [ ] **Step 4: Verify generation and native discovery.** Run helper tests and `cd app && dart run build_runner build --delete-conflicting-outputs` twice. The second run produces no additional scenario changes; no generated scenario calls `IntegrationTestWidgetsFlutterBinding.ensureInitialized()`. Verify local CLI `--version` is 4.8.0; run its `build ios --simulator -t integration_test/authorization_test.dart` from `app`. Expect successful Patrol/Xcode build using the existing runtime runner; this is a build gate, not a passing E2E claim.
-- [ ] **Step 5: Commit the scoped migration and runner foundation** with `test: restore Patrol discovery and local E2E configuration`; include only this task's files and intentional regenerated differences.
+- [x] **Step 2: Run `cd app && flutter test test/e2e/config_test.dart test/e2e/process_runner_test.dart`.** Expect failure because the contracts do not exist; distinguish that from a toolchain failure.
+- [x] **Step 3: Implement the contracts and discovery migration.** Add `test_directory: integration_test`; keep app/platform identifiers and BDD configuration. Add exact bundle and runtime ignores; `git rm --cached app/integration_test/test_bundle.dart`. The shell wrapper uses quoted paths and `exec`; the Dart entrypoint derives repo root independently of cwd. Resolve the local CLI by its activation package config and `bin/main.dart`, running Flutter subprocesses with the normal environment. Add `--help` and backend/test dispatch, with unimplemented stages failing explicitly until later tasks supply them.
+- [x] **Step 4: Verify generation and native discovery.** Run helper tests and `cd app && dart run build_runner build --delete-conflicting-outputs` twice. The second run produces no additional scenario changes; no generated scenario calls `IntegrationTestWidgetsFlutterBinding.ensureInitialized()`. Verify local CLI `--version` is 4.8.0; run its `build ios --simulator -t integration_test/authorization_test.dart` from `app`. Expect successful Patrol/Xcode build using the existing runtime runner; this is a build gate, not a passing E2E claim.
+- [x] **Step 5: Commit the scoped migration and runner foundation** with `test: restore Patrol discovery and local E2E configuration`; include only this task's files and intentional regenerated differences.
 
 ## Task 2: Harden the Independent CLI Bridge
 
