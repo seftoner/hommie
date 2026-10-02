@@ -15,6 +15,7 @@ class FaultProxyClient {
        _timeout = timeout;
   Future<void> disconnectFromHa() => _set(false);
   Future<void> restoreHaRoute() => _set(true);
+  void close() => _client.close();
   Future<void> _set(bool enabled) async {
     try {
       final response = await _client

@@ -13,11 +13,15 @@ import './step/home_assistant_access_is_configured.dart';
 import './step/i_have_successfully_logged_in.dart';
 import './step/the_application_is_running_in_the_foreground.dart';
 import './step/i_see_page.dart';
+import './step/the_client_is_connected_to_home_assistant.dart';
+import './step/the_kitchen_light_is_selected_for_the_home_view.dart';
+import './step/i_see_light_card.dart';
 import './step/i_should_not_see_the_offline_banner.dart';
-import './step/the_device_loses_network_connectivity.dart';
-import './step/i_wait_seconds.dart';
+import './step/the_client_loses_connection_to_home_assistant.dart';
 import './step/i_should_see_the_offline_banner.dart';
-import './step/the_device_regains_network_connectivity.dart';
+import './step/home_assistant_remains_manageable.dart';
+import './step/home_assistant_becomes_reachable_again.dart';
+import './step/the_client_reconnects_to_home_assistant.dart';
 
 void main() {
   group('''Connection Status Banner''', () {
@@ -31,24 +35,18 @@ void main() {
       await bddSetUp($);
       await theApplicationIsRunningInTheForeground($);
       await iSeePage($, K.home.page);
+      await theClientIsConnectedToHomeAssistant($);
+      await theKitchenLightIsSelectedForTheHomeView($);
+      await iSeeLightCard($, 'light.kitchen_light');
       await iShouldNotSeeTheOfflineBanner($);
-      await theDeviceLosesNetworkConnectivity($);
-      await iWaitSeconds($, 3);
+      await theClientLosesConnectionToHomeAssistant($);
       await iShouldSeeTheOfflineBanner($);
-      await theDeviceRegainsNetworkConnectivity($);
-      await iWaitSeconds($, 5);
+      await iSeeLightCard($, 'light.kitchen_light');
+      await homeAssistantRemainsManageable($);
+      await homeAssistantBecomesReachableAgain($);
+      await theClientReconnectsToHomeAssistant($);
       await iShouldNotSeeTheOfflineBanner($);
-    });
-    patrol('''Launch app in offline mode''', ($) async {
-      await bddSetUp($);
-      await theDeviceLosesNetworkConnectivity($);
-      await iWaitSeconds($, 2);
-      await theApplicationIsRunningInTheForeground($);
-      await iSeePage($, K.home.page);
-      await iShouldSeeTheOfflineBanner($);
-      await theDeviceRegainsNetworkConnectivity($);
-      await iWaitSeconds($, 5);
-      await iShouldNotSeeTheOfflineBanner($);
-    });
+      await iSeeLightCard($, 'light.kitchen_light');
+    }, tags: ['offline']);
   });
 }

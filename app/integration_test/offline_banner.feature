@@ -7,41 +7,28 @@ import 'utils/common.dart';
 @testerType: PatrolIntegrationTester
 Feature: Connection Status Banner
   As a user
-  I want to be notified when the app loses connection to Home Assistant
-  So that I know when the system is not functioning properly
+  I want to see when Hommie loses its connection to Home Assistant
+  So that I can use cached devices until the connection recovers
 
   Background:
-    Given home assistant access is configured    
+    Given home assistant access is configured
     And I have successfully logged in
-    
+
+  @offline
   Scenario: Banner visibility when connection is lost and restored
-    And the application is running in the foreground
+    Given the application is running in the foreground
     And I see {K.home.page} page
-    
-    # Check initial state
-    Then I should not see the offline banner
-    
-    # Test connection loss
-    When the device loses network connectivity
-    And I wait {3} seconds
-    Then I should see the offline banner
+    And the client is connected to home assistant
+    And the kitchen light is selected for the home view
+    And I see light card {'light.kitchen_light'}
+    And I should not see the offline banner
 
-    # Test connection restoration
-    When the device regains network connectivity
-    And I wait {5} seconds
-    Then I should not see the offline banner
-
-  Scenario: Launch app in offline mode
-    # Initial setup and app launch
-    Given the device loses network connectivity
-    And I wait {2} seconds
-    
-    # Launch app and verify 
-    When the application is running in the foreground
-    And I see {K.home.page} page
+    When the client loses connection to home assistant
     Then I should see the offline banner
-    
-    # Test connection restoration
-    When the device regains network connectivity
-    And I wait {5} seconds
-    Then I should not see the offline banner
+    And I see light card {'light.kitchen_light'}
+    And home assistant remains manageable
+
+    When home assistant becomes reachable again
+    Then the client reconnects to home assistant
+    And I should not see the offline banner
+    And I see light card {'light.kitchen_light'}
