@@ -56,9 +56,11 @@ network-availability notifications are outside this scope.
 - Setup waits for 30 seconds but checks for a 180-second timeout. It relies on
   files rather than authenticated API readiness. `((elapsed++))` is also unsafe
   under `set -e` on newer Bash versions, although this Mac's Bash 3.2 continued.
-- Cleanup deletes the root `.patrol.env` instead of `app/.patrol.env`. HA data
-  lives in an anonymous `/config` volume while host-side markers have a separate
-  lifecycle. Removing containers/markers can leave an inconsistent restart.
+- Cleanup deletes the root `.patrol.env` instead of `app/.patrol.env`. Execution
+  inspection found no `/config` mount: HA data lives in the container's writable
+  layer, while host-side markers have a separate lifecycle. Removing the container
+  can erase that data. Named-volume adoption must first preserve this actual layout
+  with a private config backup and local rollback image, then verify the copy.
 - HA bootstrap imports private HA internals and performs external onboarding
   integration setup. The HA image, Python base image, and `homeassistant-cli`
   installation are unpinned, so rebuilding can change the fixture contract.

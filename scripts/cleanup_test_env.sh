@@ -1,20 +1,5 @@
-#!/bin/bash
-set -e
-
-# Navigate to project root
-cd "$(dirname "$0")/.."
-
-# Remove .patrol.env
-rm -f .patrol.env
-
-# Navigate to docker directory
-cd docker
-
-# Stop containers
-docker compose down
-
-# Clean up initialization files
-rm -f hass_init_conf/.initialized
-rm -f hass_init_conf/.env
-
-echo "✅ Test environment cleanup complete!"
+#!/bin/sh
+set -eu
+e2e_script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+# Normal cleanup stops services and preserves fixture data and credentials.
+exec "$e2e_script_dir/e2e.sh" backend stop "$@"

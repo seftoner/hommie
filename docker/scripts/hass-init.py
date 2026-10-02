@@ -9,6 +9,7 @@ import logging
 import os
 import string
 import random
+from hass_fixture import _write_test_fixture_config
 from typing import TYPE_CHECKING
 
 from homeassistant import (runner, loader)
@@ -120,9 +121,11 @@ async def init_hass(
     
     # Create default areas using translations
     await _create_default_areas(hass)
+    registry = ar.async_get(hass)
+    await registry._store.async_save(registry._data_to_save())
     
     # Initialize analytics and integrations
-    await _initialize_analytics(hass)
+    # No external onboarding integrations in the offline fixture.
     
 
 async def _create_admin_user(hass: HomeAssistant, provider: hass_auth.HassAuthProvider, args: argparse.Namespace):
@@ -165,42 +168,6 @@ async def _create_admin_user(hass: HomeAssistant, provider: hass_auth.HassAuthPr
 
     return user, credentials, username, password
 
-def _write_test_fixture_config(config_dir: str) -> None:
-    """Append deterministic entities used by integration tests."""
-    configuration_path = os.path.join(config_dir, "configuration.yaml")
-    existing = ""
-    if os.path.exists(configuration_path):
-        with open(configuration_path, "r", encoding="utf-8") as config_file:
-            existing = config_file.read()
-
-    if TEST_FIXTURE_MARKER in existing:
-        return
-
-    fixture = f"""
-
-{TEST_FIXTURE_MARKER}
-input_boolean:
-  kitchen_light_backing:
-    name: Kitchen Light Backing
-
-light:
-  - platform: template
-    lights:
-      kitchen_light:
-        unique_id: kitchen_light
-        friendly_name: Kitchen Light
-        value_template: "{{{{ is_state('input_boolean.kitchen_light_backing', 'on') }}}}"
-        turn_on:
-          service: input_boolean.turn_on
-          target:
-            entity_id: input_boolean.kitchen_light_backing
-        turn_off:
-          service: input_boolean.turn_off
-          target:
-            entity_id: input_boolean.kitchen_light_backing
-"""
-    with open(configuration_path, "a", encoding="utf-8") as config_file:
-        config_file.write(fixture)
 
 async def create_and_verify_token(hass: HomeAssistant, provider, user, credentials):
     """Create and verify token persistence."""

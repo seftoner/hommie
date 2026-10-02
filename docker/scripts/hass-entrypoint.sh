@@ -1,32 +1,30 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
-INIT_FLAG="/hass_init_conf/.initialized"
-ENV_FILE="/hass_init_conf/.env"
-
-# Make scripts executable
-chmod +x /scripts/hass-init.py
-
-# Run initialization
-if [ ! -f "$INIT_FLAG" ]; then
-    echo "[$(date)] Running first-time initialization..."
-    
-    if ! python3 /scripts/hass-init.py -c /config -u "${USERNAME:-}" -p "${PASSWORD:-}" | tee "$INIT_FLAG"; then
-        echo "[$(date)] Initialization failed!"
-        rm -f "$INIT_FLAG"
-        exit 1
+# Config repair is idempotent and never recreates users or tokens.
+python3 /scripts/hass_fixture.py /config
+marker=/config/.hommie-e2e-initialized
+if [ ! -f "$marker" ]; then
+    if [ -f /config/.storage/auth ]; then
+        # Adopt existing persistent config; readiness verifies its credentials.
+        touch "$marker"
+    else
+        private_result=/config/.hommie-e2e-bootstrap.json
+        python3 /scripts/hass-init.py -c /config -u "${USERNAME:-admin}" -p "${PASSWORD:-yourpassword}" > "$private_result"
+        python3 - "$private_result" <<'PY'
+import json, os, sys
+with open(sys.argv[1]) as f:
+    data = json.load(f)
+path = '/hass_init_conf/.env'
+with open(path + '.tmp', 'w') as f:
+    f.write('HASS_TOKEN=' + data['access_token'] + '\n')
+    f.write('HASS_USERNAME=' + data['username'] + '\n')
+    f.write('HASS_PASSWORD=' + data['password'] + '\n')
+os.chmod(path + '.tmp', 0o600)
+os.replace(path + '.tmp', path)
+PY
+        rm -f "$private_result"
+        touch "$marker"
     fi
-
-    echo "[$(date)] Initialization completed successfully"
-    TOKEN=$(jq -r '.access_token' "$INIT_FLAG")
-    
-
-    cat > "$ENV_FILE" <<EOF
-HASS_SERVER=http://localhost:8123
-HASS_TOKEN=$TOKEN
-EOF
-
 fi
-
-# Start Home Assistant
 exec python3 -m homeassistant --config /config

@@ -2,17 +2,18 @@ name: homeassistant-test
 
 services:
   homeassistant:
-    image: homeassistant/home-assistant
+    image: homeassistant/home-assistant:2024.12.5
     container_name: homeassistant-test
     environment:
       - TZ=UTC
       - USERNAME=admin
       - PASSWORD=yourpassword
     ports:
-      - "8123:8123"
+      - "${E2E_HA_PORT:-8123}:8123"
     volumes:
       - ./hass_init_conf:/hass_init_conf
-      - ./scripts:/scripts
+      - ./scripts:/scripts:ro
+      - ha_config:/config
     command: ["/bin/bash", "/scripts/hass-entrypoint.sh"]
     restart: unless-stopped
 
@@ -26,10 +27,20 @@ services:
       context: .
       dockerfile: Dockerfile.hass-cli-web
     ports:
-      - "3000:3000"
+      - "${E2E_BRIDGE_PORT:-3000}:3000"
     environment:
       - HASS_URL=http://homeassistant:8123
     volumes:
       - ./hass_init_conf:/hass_init_conf:ro
     depends_on:
       - homeassistant
+
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy:2.12.0@sha256:9378ed52a28bc50edc1350f936f518f31fa95f0d15917d6eb40b8e376d1a214e
+    ports:
+      - "${E2E_PROXY_PORT:-18124}:18124"
+      - "${E2E_CONTROL_PORT:-18474}:8474"
+
+volumes:
+  ha_config:
+    name: homeassistant-test_ha_config
