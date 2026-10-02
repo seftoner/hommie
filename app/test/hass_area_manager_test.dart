@@ -108,7 +108,7 @@ void main() {
     );
   });
 
-  test('cleanup deletes every deterministic area by name or area id', () async {
+  test('cleanup deletes only owned IDs or reserved scenario names', () async {
     final cli = _FakeRemoteHassCli([
       const CommandResult(
         stdout: '''
@@ -133,7 +133,10 @@ void main() {
     ]);
     final manager = HassAreaManager(cli: cli);
 
-    await manager.cleanupDeterministicAreas();
+    await manager.cleanupOwnedAreas(
+      ids: {'e2e_area_initial'},
+      reservedNames: {'E2E_Area_Initial', 'E2E_Area_Renamed'},
+    );
 
     expect(cli.commands, [
       ['raw', 'ws', 'config/area_registry/list'],

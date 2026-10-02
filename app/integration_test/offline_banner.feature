@@ -10,11 +10,6 @@ Feature: Connection Status Banner
   I want to be notified when the app loses connection to Home Assistant
   So that I know when the system is not functioning properly
 
-  After:
-    Then the device regains network connectivity
-    And I wait {3} seconds
-    And perform cleanup
-    
   Background:
     Given home assistant access is configured    
     And I have successfully logged in

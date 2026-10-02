@@ -10,9 +10,6 @@ Feature: Sign In
   I want to sign in to my Home Assistant server
   So that I can control my devices
 
-  After:
-    Then perform cleanup
-  
   @quick
   Scenario: Enter address manually and sign in
     Given the application is running in the foreground

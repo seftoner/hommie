@@ -39,8 +39,9 @@ class RemoteHassCli {
        _token = managementToken,
        _client = client ?? http.Client(),
        _timeout = timeout {
-    if (_token.isEmpty)
+    if (_token.isEmpty) {
       throw const FormatException('Management token is required');
+    }
   }
   factory RemoteHassCli.fromEnvironment() {
     final config = E2eTestConfig.fromEnvironment();
@@ -59,8 +60,9 @@ class RemoteHassCli {
             body: jsonEncode({'args': args, 'token': _token}),
           )
           .timeout(_timeout);
-      if (response.statusCode != 200)
+      if (response.statusCode != 200) {
         return Left(CommandError('CLI HTTP failure (${response.statusCode})'));
+      }
       final data = jsonDecode(response.body);
       if (data is! Map<String, dynamic> ||
           data['stdout'] is! String ||
@@ -73,10 +75,11 @@ class RemoteHassCli {
         stderr: _redact(data['stderr'] as String),
         exitCode: data['exit_code'] as int,
       );
-      if (!result.isSuccess)
+      if (!result.isSuccess) {
         return Left(
           CommandError('CLI failure (${result.exitCode}): ${result.stderr}'),
         );
+      }
       return Right(result);
     } on TimeoutException {
       return const Left(

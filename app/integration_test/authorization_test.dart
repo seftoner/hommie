@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import './step/perform_cleanup.dart';
 import './step/the_application_is_running_in_the_foreground.dart';
 import './step/i_complete_onboarding.dart';
 import './step/i_see_page.dart';
@@ -28,58 +27,42 @@ import './step/i_should_see_the_offline_banner.dart';
 
 void main() {
   group('''Sign In''', () {
-    Future<void> bddTearDown(PatrolIntegrationTester $) async {
-      await performCleanup($);
-    }
-
     patrol('''Enter address manually and sign in''', ($) async {
-      try {
-        await theApplicationIsRunningInTheForeground($);
-        await iCompleteOnboarding($);
-        await iSeePage($, K.serversDiscovery.page);
-        await iSeeButton($, K.serversDiscovery.enterManuallyButton);
-        await iTapOnButton($, K.serversDiscovery.enterManuallyButton);
-        await iSeePage($, K.manualAddress.page);
-        await iEnterIntoField(
-            $, 'http://10.0.2.2:8123', K.manualAddress.addressField);
-        await iTapOnButton($, K.manualAddress.connectButton);
-        await iSeeCredentialsWebViewForm($);
-        await iEnterCredentials($, 'admin', 'yourpassword');
-        await iTapOnLoginButton($);
-        await iSeePage($, K.home.page);
-      } finally {
-        await bddTearDown($);
-      }
+      await theApplicationIsRunningInTheForeground($);
+      await iCompleteOnboarding($);
+      await iSeePage($, K.serversDiscovery.page);
+      await iSeeButton($, K.serversDiscovery.enterManuallyButton);
+      await iTapOnButton($, K.serversDiscovery.enterManuallyButton);
+      await iSeePage($, K.manualAddress.page);
+      await iEnterIntoField(
+          $, 'http://10.0.2.2:8123', K.manualAddress.addressField);
+      await iTapOnButton($, K.manualAddress.connectButton);
+      await iSeeCredentialsWebViewForm($);
+      await iEnterCredentials($, 'admin', 'yourpassword');
+      await iTapOnLoginButton($);
+      await iSeePage($, K.home.page);
     }, tags: ['quick']);
     patrol('''Sign out''', ($) async {
-      try {
-        await homeAssistantAccessIsConfigured($);
-        await iHaveSuccessfullyLoggedIn($);
-        await theApplicationIsRunningInTheForeground($);
-        await iTapOnButton($, K.appScaffold.settingsButton);
-        await iSeePage($, K.settings.page);
-        await iTapOnListItem($, K.settings.hubItem);
-        await iSeePage($, K.hub.page);
-        await iTapOnButton($, K.hub.signOutButton);
-        await iSeeAlert($, K.hub.signOutAlert);
-        await iTapOnButton($, K.hub.signOutButton);
-        await iSeePage($, K.serversDiscovery.page);
-      } finally {
-        await bddTearDown($);
-      }
+      await homeAssistantAccessIsConfigured($);
+      await iHaveSuccessfullyLoggedIn($);
+      await theApplicationIsRunningInTheForeground($);
+      await iTapOnButton($, K.appScaffold.settingsButton);
+      await iSeePage($, K.settings.page);
+      await iTapOnListItem($, K.settings.hubItem);
+      await iSeePage($, K.hub.page);
+      await iTapOnButton($, K.hub.signOutButton);
+      await iSeeAlert($, K.hub.signOutAlert);
+      await iTapOnButton($, K.hub.signOutButton);
+      await iSeePage($, K.serversDiscovery.page);
     });
     patrol('''Logged out on server side''', ($) async {
-      try {
-        await homeAssistantAccessIsConfigured($);
-        await iHaveSuccessfullyLoggedIn($);
-        await theApplicationIsRunningInTheForeground($);
-        await iSeePage($, K.home.page);
-        await homeAssistantRevokesAccess($);
-        await iShouldSeeTheOfflineBanner($);
-        await iSeePage($, K.serversDiscovery.page);
-      } finally {
-        await bddTearDown($);
-      }
+      await homeAssistantAccessIsConfigured($);
+      await iHaveSuccessfullyLoggedIn($);
+      await theApplicationIsRunningInTheForeground($);
+      await iSeePage($, K.home.page);
+      await homeAssistantRevokesAccess($);
+      await iShouldSeeTheOfflineBanner($);
+      await iSeePage($, K.serversDiscovery.page);
     });
   });
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'remote_hass_cli.dart';
+import 'test_context.dart';
 
 class HassTestArea {
   final String areaId;
@@ -12,10 +13,8 @@ class HassTestArea {
 class HassAreaManager {
   final RemoteHassCli _cli;
 
-  static const initialName = 'E2E_Area_Initial';
-  static const renamedName = 'E2E_Area_Renamed';
-  static const _initialAreaId = 'e2e_area_initial';
-  static const _renamedAreaId = 'e2e_area_renamed';
+  static String get initialName => TestContext.instance().initialAreaName;
+  static String get renamedName => TestContext.instance().renamedAreaName;
 
   HassAreaManager({RemoteHassCli? cli})
     : _cli = cli ?? RemoteHassCli.fromEnvironment();
@@ -90,10 +89,13 @@ class HassAreaManager {
     return true;
   }
 
-  Future<void> cleanupDeterministicAreas() async {
+  Future<void> cleanupOwnedAreas({
+    required Set<String> ids,
+    required Set<String> reservedNames,
+  }) async {
     final areas = await list();
     for (final area in areas) {
-      if (_isDeterministicArea(area)) {
+      if (ids.contains(area.areaId) || reservedNames.contains(area.name)) {
         await deleteById(area.areaId);
       }
     }
@@ -123,12 +125,5 @@ class HassAreaManager {
         }
       },
     );
-  }
-
-  static bool _isDeterministicArea(HassTestArea area) {
-    return area.areaId == _initialAreaId ||
-        area.areaId == _renamedAreaId ||
-        area.name == initialName ||
-        area.name == renamedName;
   }
 }

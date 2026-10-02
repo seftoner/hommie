@@ -11,10 +11,6 @@ Feature: Area Management
   I want to create, rename, and delete Home Assistant areas
   So that Hommie stays synchronized with Home Assistant area registry state
 
-  After:
-    Then perform cleanup
-    And home assistant test areas are clean
-
   Background:
     Given home assistant access is configured
     And home assistant test areas are clean

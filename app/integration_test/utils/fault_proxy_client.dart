@@ -24,13 +24,15 @@ class FaultProxyClient {
             body: jsonEncode({'enabled': enabled}),
           )
           .timeout(_timeout);
-      if (response.statusCode != 200)
+      if (response.statusCode != 200) {
         throw StateError('Proxy control HTTP ${response.statusCode}');
+      }
       final data = jsonDecode(response.body);
       if (data is! Map ||
           data['name'] != 'hommie_ha' ||
-          data['enabled'] != enabled)
+          data['enabled'] != enabled) {
         throw StateError('Proxy state was not confirmed');
+      }
     } catch (_) {
       throw StateError(
         'Cannot ${enabled ? 'restore' : 'disable'} hommie_ha route; check Toxiproxy control',

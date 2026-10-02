@@ -53,15 +53,18 @@ class E2eTestConfig {
 
     final token = values['HASS_TOKEN'] ?? '',
         runId = values['E2E_RUN_ID'] ?? '';
-    if (token.isEmpty)
+    if (token.isEmpty) {
       throw const FormatException(
         'HASS_TOKEN management credential is required',
       );
-    if (!RegExp(r'^[a-zA-Z0-9_-]+$').hasMatch(runId))
+    }
+    if (!RegExp(r'^[a-zA-Z0-9_-]+$').hasMatch(runId)) {
       throw const FormatException('Valid E2E_RUN_ID is required');
+    }
     final phase = values['E2E_COLD_PHASE'] ?? 'none';
-    if (!['none', 'seed', 'verify'].contains(phase))
+    if (!['none', 'seed', 'verify'].contains(phase)) {
       throw const FormatException('Invalid E2E_COLD_PHASE');
+    }
     return E2eTestConfig._(
       url('E2E_APP_SERVER_URL', 18124),
       url('E2E_FIXTURE_CONTROL_URL', 3000),
