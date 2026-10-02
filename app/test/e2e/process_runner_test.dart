@@ -43,6 +43,30 @@ void main() {
     final alive = await Process.run('/bin/kill', ['-0', '$child']);
     expect(alive.exitCode, isNot(0));
   }, timeout: const Timeout(Duration(seconds: 10)));
+  test('deadline includes pipes held after the parent exits', () async {
+    final dir = Directory.systemTemp.createTempSync('exited-parent');
+    final childFile = File('${dir.path}/child.pid');
+    addTearDown(() {
+      if (childFile.existsSync())
+        Process.killPid(
+          int.parse(childFile.readAsStringSync()),
+          ProcessSignal.sigkill,
+        );
+      dir.deleteSync(recursive: true);
+    });
+    await expectLater(
+      ProcessRunner().run(
+        '/usr/bin/python3',
+        [
+          '-c',
+          'import subprocess,pathlib; p=subprocess.Popen(["/bin/sleep","60"]); pathlib.Path("${childFile.path}").write_text(str(p.pid))',
+        ],
+        cwd: dir,
+        timeout: const Duration(milliseconds: 500),
+      ),
+      throwsA(isA<ProcessTimeout>()),
+    );
+  }, timeout: const Timeout(Duration(seconds: 5)));
   test(
     'arguments containing spaces are passed without shell interpretation',
     () async {

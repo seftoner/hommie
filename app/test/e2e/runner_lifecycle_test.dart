@@ -36,6 +36,75 @@ void main() {
       expect(await result, 7);
     },
   );
+  test('watch stop waits for a later file-triggered recovery', () async {
+    final dir = Directory.systemTemp.createTempSync('watch-recovery');
+    final source = File('${dir.path}/app/lib/widget.dart');
+    source.parent.createSync(recursive: true);
+    source.writeAsStringSync('initial');
+    final signals = StreamController<int>();
+    final initial = Completer<void>(), later = Completer<void>();
+    final recovered = Completer<void>();
+    var calls = 0, finished = false;
+    final watching =
+        watchRuns(dir, () async {
+          if (++calls == 1) {
+            initial.complete();
+            return 0;
+          }
+          later.complete();
+          await recovered.future;
+          return 7;
+        }, stopEvents: signals.stream).then((code) {
+          finished = true;
+          return code;
+        });
+    await initial.future;
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+    source.writeAsStringSync('edited');
+    await later.future.timeout(const Duration(seconds: 5));
+    signals.add(143);
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    expect(finished, isFalse);
+    recovered.complete();
+    expect(await watching, 7);
+    await signals.close();
+    dir.deleteSync(recursive: true);
+  });
+  test(
+    'smoke interruption restores route before releasing ownership',
+    () async {
+      final signals = StreamController<int>();
+      final disabled = Completer<void>(), cancelled = Completer<void>();
+      final restoring = Completer<void>(), restored = Completer<void>();
+      var finished = false;
+      final result =
+          runSmokeLifecycle(
+            () async {
+              disabled.complete();
+              await cancelled.future;
+              throw StateError('cancelled request');
+            },
+            () async {
+              cancelled.complete();
+            },
+            () async {
+              restoring.complete();
+              await restored.future;
+            },
+            events: signals.stream,
+          ).then((code) {
+            finished = true;
+            return code;
+          });
+      await disabled.future;
+      signals.add(143);
+      await restoring.future;
+      expect(finished, isFalse);
+      restored.complete();
+      expect(await result, 143);
+      await signals.close();
+    },
+  );
   test('dead owner is flagged for fixture reconciliation', () async {
     final dir = Directory.systemTemp.createTempSync('stale-lock');
     addTearDown(() => dir.deleteSync(recursive: true));
@@ -83,6 +152,8 @@ void main() {
   test(
     'watch filters generated files and coalesces events without overlap',
     () async {
+      expect(watchRelevant('docker/hass_init_conf/.env'), isFalse);
+      expect(watchRelevant('docker/hass_init_conf/.env.tmp'), isFalse);
       expect(watchRelevant('app/lib/widget.dart'), isTrue);
       expect(watchRelevant('app/lib/widget.g.dart'), isFalse);
       expect(watchRelevant('app/integration_test/test_bundle.dart'), isFalse);

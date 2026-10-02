@@ -41,30 +41,48 @@ class ProcessRunner {
       );
       unawaited(p.stdin.done.catchError((_) {}));
     }
-    Future<String> collect(Stream<List<int>> stream) async {
+    final outputSubscriptions = <StreamSubscription<String>>[];
+    Future<String> collect(Stream<List<int>> stream) {
       final buffer = StringBuffer();
       var pending = '';
-      await for (final text in stream.transform(utf8.decoder)) {
-        buffer.write(text);
-        pending += text;
-        final last = pending.lastIndexOf('\n');
-        if (last >= 0) {
-          onOutput?.call(pending.substring(0, last + 1));
-          pending = pending.substring(last + 1);
-        }
-      }
-      if (pending.isNotEmpty) onOutput?.call(pending);
-      return buffer.toString();
+      final done = Completer<String>();
+      outputSubscriptions.add(
+        stream
+            .transform(utf8.decoder)
+            .listen(
+              (text) {
+                buffer.write(text);
+                pending += text;
+                final last = pending.lastIndexOf('\n');
+                if (last >= 0) {
+                  onOutput?.call(pending.substring(0, last + 1));
+                  pending = pending.substring(last + 1);
+                }
+              },
+              onDone: () {
+                if (pending.isNotEmpty) onOutput?.call(pending);
+                done.complete(buffer.toString());
+              },
+              onError: done.completeError,
+            ),
+      );
+      return done.future;
     }
 
     final stdout = collect(p.stdout), stderr = collect(p.stderr);
     try {
-      final code = await p.exitCode.timeout(timeout);
-      return ProcessResult(p.pid, code, await stdout, await stderr);
+      return await (() async {
+        final code = await p.exitCode;
+        return ProcessResult(p.pid, code, await stdout, await stderr);
+      })().timeout(timeout);
     } on TimeoutException {
       await _killTree(p);
       await p.exitCode;
-      await Future.wait([stdout, stderr]).timeout(const Duration(seconds: 3));
+      // A reparented descendant may still own a pipe after its parent exits.
+      // Close our pipe subscriptions; output draining is part of the deadline.
+      for (final subscription in outputSubscriptions) {
+        await subscription.cancel();
+      }
       throw ProcessTimeout(executable);
     } finally {
       await inputSubscription?.cancel();

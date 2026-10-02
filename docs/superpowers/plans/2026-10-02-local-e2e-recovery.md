@@ -254,7 +254,7 @@ Simulator `BB2C8749-5BB7-431B-A7DB-35823A75530F` / iOS 26.5. The fixture remains
 | 5. Real iOS / cold launch | Real native authorization, area and offline scenarios passed. Every cold verify read the seed's SQLite/Keychain/checkpoint without login/reseeding and recorded a different process PID. |
 | 6. One mechanism / iOS default | Root and VS Code entrypoints select iOS; semantic faults use the single Toxiproxy route. No native Wi-Fi/cellular fault actions remain. |
 | 7. Three consecutive suites | `./scripts/e2e.sh --repeat 3` exited 0. Each iteration ran five ordinary scenarios plus seed and verify: 21 native executions, no skips or failures. Exact report paths are in each invocation's metadata. |
-| 8. Regressions | 292 app unit/widget tests passed from `app`; 146 focused tests passed before the final lifecycle regression was added, and affected/full tests were rerun afterwards. Pinned Python bridge tests: 5/5. Runner analysis has no issues; BDD output is stable. |
+| 8. Regressions | 295 app unit/widget tests passed from `app`; 146 focused tests passed before the final lifecycle regression was added, and affected/full tests were rerun afterwards. Pinned Python bridge tests: 5/5. Runner analysis has no issues; BDD output is stable. |
 | 9. Failures / artifacts | Controlled native assertion failures exited 1 and retained sanitized issues/logs plus private failure images. SIGTERM during recovery preserved the original exit 1 and completed cleanup. A second concurrent command was rejected before Compose/Patrol. Shareable exports from all three default suites contain no known management token/password. |
 | 10. Owned cleanup / persistence | Post-repeat audit found zero owned tokens/areas/journals, no missing or extra baseline tokens, valid management authentication, unchanged original HA areas and identical IDs for all three services. Failed native runs additionally execute the internal SQLite/Keychain recovery target. |
 | 11. Same project / migration | Only `homeassistant-test` is used. The original container-writable config was copied into `homeassistant-test_ha_config`; the private config backup, rollback image and verified migration record are retained. No automatic reset or second fixture stack. |
@@ -296,6 +296,49 @@ are deliberately retained privately for local review.
   would self-queue runs. The path-filter regression failed first, then passed.
 
 The normal absolute-path runner from `/private/tmp` also passed after the lifecycle
-fixes (`run_1790949153065887`, exit 0). Independent whole-branch review and final
-clean-checkout verification follow
-these implementation gates. No schedule, merge, push or PR is part of this work.
+fixes (`run_1790949153065887`, exit 0). The independent whole-branch review found five important gaps; all five were addressed in one fix pass, with final verification below. No schedule, merge, push or PR is part of this work.
+
+
+### Final independent review and fixes
+
+The fresh read-only review of `81cec53..2a81066` reported no critical or minor
+findings and five important findings. All were accepted and fixed:
+
+- Watch ignores derived fixture credentials/state and waits for every active run
+  through recovery before returning and releasing fixture ownership. A real
+  filesystem-edit regression proves a later run cannot outlive watch shutdown.
+- Fixture installation merges YAML nodes, preserving existing helpers, lights and
+  unrelated include tags. Duplicate keys, collisions and includes directly under
+  the two fixture keys fail before writing. Reformatting removes YAML comments;
+  private original configuration backups remain available.
+- Smoke uses signal handling through independent bounded route restoration,
+  retaining ownership until recovery completes; interruptions return 130/143.
+- Process deadlines now cover child exit plus stdout/stderr drain. On deadline,
+  current descendants are killed and inherited pipe subscriptions are closed,
+  preventing a reparented pipe holder from hanging the runner.
+
+Final checks: 295 app tests passed; 13 focused process/lifecycle tests passed;
+runner analysis reported no issues; 5 bridge tests and 4 YAML preservation tests
+passed in their pinned service images. Normal live smoke passed. A live SIGTERM delivered while smoke disabled the proxy returned 143 and restored the route before exit. Baseline audit
+again confirmed authenticated management, zero missing/extra baseline tokens,
+zero owned tokens/areas/journals, unchanged original areas and enabled proxy.
+No review findings were deferred. Three complete native suites remain the native
+acceptance evidence; the final changes affect host lifecycle/configuration.
+
+### Exhaustive implementation rulings
+
+- Ruling: use the explicitly requested new branch in the current checkout rather than create a separate worktree — user asked for a branch and this preserves the active app/fixture context — cost if wrong: changes share this checkout.
+- Task 1: Ruling: isolate CLI activation in patrol_cli.dart and validate the resolved pubspec version, normalizing the package URI as a directory — actual pub emits an absolute root URI without trailing slash — cost if wrong: CLI cannot launch; covered by RED→GREEN resolver test.
+- Task 2: Ruling: pin Python 3.11.11, the version actually running in the trusted bridge, rather than resolve the moving 3.11-slim version — preserves the working dependency baseline — cost if wrong: an explicit future runtime upgrade is needed.
+- Task 3: Ruling: actual docker inspect shows /config in the container's writable layer, not an anonymous volume as the audit assumed — preserve it by a private ignored config export plus local rollback image before any container recreation — cost if wrong: retained private backups consume disk. New writable-layer guard failed first then passed. Spec and plan corrected.
+- Task 3: Ruling: populated legacy HA has three custom area IDs (my_sweet_area, lovely_room, wow), not the deterministic fixture areas — preserve them and create only missing fixture areas after independent registry reconciliation — cost if wrong: three extra fixture areas remain as the stable test baseline.
+- Task 7: Ruling: preserved demo devices suppress the standalone-entity fallback — explicitly select the deterministic kitchen light using the real home override repository — cost if wrong: fixture selection must follow future home-layout semantics.
+- Task 8: Ruling: bdd_widget_test emits same-line tags as one combined string — put each cold phase tag on its own line so runtime phase gating sees distinct tags — cost if wrong: regenerate tags for future generator versions.
+- Task 8: Ruling: iOS installation may change the sandbox path while preserving data — resolve the live app container after verify instead of trusting the seed file path — cost if wrong: cold proof fails explicitly rather than accepting stale evidence.
+- Task 9: Ruling: use an internal native recovery target after failure/interruption — killed tests cannot execute Dart teardown and uninstall does not clear Keychain — cost if wrong: failure cleanup adds a bounded extra build/native invocation.
+- Task 9: Ruling: retain the installed test app for ordinary runs while clearing its actual repositories/Keychain — this preserves failure images for private host collection and avoids assuming uninstall clears credentials — cost if wrong: next scenario's real reset must remain reliable.
+- Task 9: Ruling: original xcresult and screenshots stay private; shareable exports contain sanitized text only — actual native SDK diagnostics include typed passwords — cost if wrong: binary evidence needs local visual review before sharing.
+- Final: Ruling: merge YAML nodes and reject unsupported fixture-key includes before writing — preserve configured entities without assuming include semantics — cost if wrong: explicit configuration adjustment is required; serialization removes comments.
+- Final: Ruling: bound output draining by closing subscriptions after descendant cleanup — reparented children no longer appear under the exited parent — cost if wrong: output after the deadline is discarded; detached children are not assumed killed.
+
+Deferred minors: none.

@@ -3,6 +3,7 @@ import 'dart:io';
 
 bool watchRelevant(String path) {
   path = path.replaceAll('\\', '/');
+  if (path.startsWith('docker/hass_init_conf/')) return false;
   if (path == 'app/integration_test/test_bundle.dart') return false;
   if (path
       .split('/')
@@ -41,6 +42,8 @@ class SerializedRunQueue {
     return _active ??= _drain();
   }
 
+  Future<void> waitForIdle() => _active ?? Future.value();
+
   void stop() {
     _stopped = true;
     _queued = false;
@@ -58,13 +61,18 @@ class SerializedRunQueue {
   }
 }
 
-Future<int> watchRuns(Directory root, Future<int> Function() run) async {
+Future<int> watchRuns(
+  Directory root,
+  Future<int> Function() run, {
+  Stream<int>? stopEvents,
+}) async {
   var code = 0;
   final queue = SerializedRunQueue(() async {
     code = await run();
   });
   Timer? debounce;
   final subscription = root.watch(recursive: true).listen((event) {
+    if (!event.path.startsWith('${root.path}/')) return;
     final path = event.path.substring(root.path.length + 1);
     if (!watchRelevant(path)) return;
     debounce?.cancel();
@@ -73,22 +81,28 @@ Future<int> watchRuns(Directory root, Future<int> Function() run) async {
     });
   });
   final stopped = Completer<void>();
-  final signals = [
-    ProcessSignal.sigint.watch().listen((_) {
-      queue.stop();
-      if (!stopped.isCompleted) stopped.complete();
-    }),
-    ProcessSignal.sigterm.watch().listen((_) {
-      queue.stop();
-      if (!stopped.isCompleted) stopped.complete();
-    }),
-  ];
+  final signals =
+      (stopEvents == null
+              ? [
+                  ProcessSignal.sigint.watch().map((_) => 130),
+                  ProcessSignal.sigterm.watch().map((_) => 143),
+                ]
+              : [stopEvents])
+          .map(
+            (stream) => stream.listen((_) {
+              queue.stop();
+              if (!stopped.isCompleted) stopped.complete();
+            }),
+          )
+          .toList();
   try {
     await queue.request();
     await stopped.future;
   } finally {
     debounce?.cancel();
+    queue.stop();
     await subscription.cancel();
+    await queue.waitForIdle();
     for (final s in signals) {
       await s.cancel();
     }

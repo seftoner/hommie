@@ -116,3 +116,40 @@ class RunLock {
     await handle.flush();
   }
 }
+
+/// Smoke keeps ownership through cancellation and independent route recovery.
+Future<int> runSmokeLifecycle(
+  Future<void> Function() body,
+  Future<void> Function() cancel,
+  Future<void> Function() restore, {
+  Stream<int>? events,
+  Duration timeout = const Duration(minutes: 4),
+}) async {
+  int? interrupted;
+  Future<void>? cancellation;
+  Future<void> interrupt(int code) {
+    interrupted ??= code;
+    return cancellation ??= cancel();
+  }
+
+  final deadline = Timer(timeout, () => interrupt(124).ignore());
+  return withRunSignals(
+    () async {
+      try {
+        await body();
+      } catch (_) {
+        if (interrupted == null) rethrow;
+      } finally {
+        deadline.cancel();
+        try {
+          await cancellation;
+        } finally {
+          await restore().timeout(const Duration(seconds: 30));
+        }
+      }
+      return interrupted ?? 0;
+    },
+    interrupt,
+    events: events,
+  );
+}

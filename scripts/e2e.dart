@@ -64,11 +64,25 @@ Future<void> main(List<String> args) async {
     if (config.command == 'smoke') {
       final backend = BackendFixture(config, ProcessRunner());
       try {
-        await backend.start();
-        await backend.smokeConnectionLoss();
+        exitCode = await runSmokeLifecycle(
+          () async {
+            await backend.start();
+            await backend.smokeConnectionLoss();
+          },
+          backend.cancel,
+          () async {
+            final recovery = BackendFixture(config, ProcessRunner());
+            try {
+              await recovery.setRouteEnabled(true);
+            } finally {
+              recovery.close();
+            }
+          },
+        );
       } finally {
         backend.close();
       }
+      if (exitCode != 0) return;
       stdout.writeln(
         'Real WebSocket outage, independent CLI access, and recovery passed',
       );

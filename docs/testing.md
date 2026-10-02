@@ -71,3 +71,10 @@ These rails are local. No recurring automation or CI schedule is installed.
 ## Verified baseline
 
 On 2026-10-02, three complete iOS Simulator suites passed (21 native scenarios), including three persisted cold-launch pairs. The acceptance runs took roughly six minutes each before native export; ordinary build times were 37.5–46.2 seconds. All 292 app unit/widget tests and five pinned Python bridge tests passed. These measurements do not establish an Android speed comparison. See [the recovery plan](superpowers/plans/2026-10-02-local-e2e-recovery.md#completion-evidence) for exact invocation IDs and process evidence.
+
+
+Fixture YAML setup preserves existing helper/light definitions and unrelated
+`!include` tags. It rejects duplicate keys, fixture-name collisions, and includes
+at `input_boolean` or `light` before changing the file; adjust those configurations
+explicitly rather than allowing an unsafe overwrite. First-time fixture merging
+serializes YAML and removes comments; retain the original configuration backup.
