@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -6,6 +7,35 @@ import '../../../scripts/e2e/lifecycle.dart';
 import '../../../scripts/e2e/watch.dart';
 
 void main() {
+  test(
+    'interruption remains handled until asynchronous cleanup finishes',
+    () async {
+      final signals = StreamController<int>();
+      addTearDown(signals.close);
+      final cleanupStarted = Completer<void>(), cleanupDone = Completer<void>();
+      final received = <int>[];
+      final result = withRunSignals(
+        () async {
+          try {
+            return 7;
+          } finally {
+            cleanupStarted.complete();
+            await cleanupDone.future;
+          }
+        },
+        (code) async {
+          received.add(code);
+        },
+        events: signals.stream,
+      );
+      await cleanupStarted.future;
+      signals.add(143);
+      await Future<void>.delayed(Duration.zero);
+      expect(received, [143]);
+      cleanupDone.complete();
+      expect(await result, 7);
+    },
+  );
   test('dead owner is flagged for fixture reconciliation', () async {
     final dir = Directory.systemTemp.createTempSync('stale-lock');
     addTearDown(() => dir.deleteSync(recursive: true));
@@ -55,6 +85,7 @@ void main() {
     () async {
       expect(watchRelevant('app/lib/widget.dart'), isTrue);
       expect(watchRelevant('app/lib/widget.g.dart'), isFalse);
+      expect(watchRelevant('app/integration_test/test_bundle.dart'), isFalse);
       expect(
         watchRelevant('app/integration_test/offline_banner_test.dart'),
         isFalse,

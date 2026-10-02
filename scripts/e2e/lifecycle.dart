@@ -1,5 +1,35 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
+
+/// Keep signal handling alive through recovery and evidence capture, not just
+/// the primary child. A second interruption must not orphan a recovery child.
+Future<T> withRunSignals<T>(
+  Future<T> Function() body,
+  Future<void> Function(int) interrupt, {
+  Stream<int>? events,
+}) async {
+  final streams = events == null
+      ? [
+          ProcessSignal.sigint.watch().map((_) => 130),
+          ProcessSignal.sigterm.watch().map((_) => 143),
+        ]
+      : [events];
+  final subscriptions = streams
+      .map(
+        (stream) => stream.listen((code) {
+          interrupt(code).ignore();
+        }),
+      )
+      .toList();
+  try {
+    return await body();
+  } finally {
+    for (final subscription in subscriptions) {
+      await subscription.cancel();
+    }
+  }
+}
 
 Future<int> repeatRuns(int count, Future<int> Function() run) async {
   for (var i = 0; i < count; i++) {

@@ -3,6 +3,7 @@ import 'dart:io';
 
 bool watchRelevant(String path) {
   path = path.replaceAll('\\', '/');
+  if (path == 'app/integration_test/test_bundle.dart') return false;
   if (path
       .split('/')
       .any(
@@ -17,7 +18,7 @@ bool watchRelevant(String path) {
     return false;
   if (path.endsWith('.g.dart') ||
       path.endsWith('.freezed.dart') ||
-      (path.contains('integration_test/') && path.endsWith('_test.dart')))
+      RegExp(r'^app/integration_test/[^/]+_test\.dart$').hasMatch(path))
     return false;
   return path.startsWith('app/lib/') ||
       path.startsWith('app/integration_test/') ||
