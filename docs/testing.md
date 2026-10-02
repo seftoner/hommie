@@ -1,80 +1,117 @@
-# Local end-to-end testing
+# End-to-end testing
 
-Run from the repository root on a Mac with Docker Desktop, Xcode and an installed iPhone Simulator runtime, Flutter 3.47+ and Dart 3.13+:
+Install Flutter/Dart, Xcode with an iPhone Simulator runtime, Docker Desktop,
+[Patrol CLI](https://pub.dev/packages/patrol_cli), and `jq` locally. The verified
+baseline is Flutter 3.47+, Dart 3.13+, Patrol CLI 4.8.0 and Patrol 4.10.0. Run
+`patrol doctor` to check the native toolchain. The repository does not install,
+activate, or resolve a separate CLI copy.
 
-```sh
-./scripts/e2e.sh
-./scripts/e2e.sh --target offline_banner
-./scripts/e2e.sh --target cold_start
-./scripts/e2e.sh --target authorization --tags revocation
-./scripts/e2e.sh --device 'iPhone 17' --repeat 3
-./scripts/e2e.sh --watch
-./scripts/e2e.sh --develop --target areas
-```
-
-An absolute invocation works from any directory:
+Prepare the persistent fixture from the repository root:
 
 ```sh
-/Users/hurricane/Development/hommie/scripts/e2e.sh --target offline_banner
+./scripts/setup_test_env.sh
 ```
 
-The default suite runs authorization, areas, connection loss/recovery, and the paired cold launch. The runner selects an available booted iPhone Simulator first, otherwise the newest available runtime; `--device` accepts its name or UDID. Physical devices are excluded. iOS is the primary local lane. Android remains a manual alternative using the same bridge and proxy endpoints; there is no native network-toggle fault lane.
+Then run the installed CLI from `app/`, selecting an iPhone Simulator through
+Patrol's device option or prompt:
 
-The runner starts missing services, checks authenticated HA/bridge/fixture readiness, reconciles owned leftovers, generates BDD tests, and invokes the pinned Patrol CLI 4.8.0 with Patrol 4.10.0. A global CLI installation is unnecessary. Tests stay in `app/integration_test`; `patrol.test_directory` points there. Feature files and handwritten steps are the sources; commit regenerated `_test.dart` files. Write each Gherkin tag on its own line for this BDD generator.
+```sh
+cd app
+patrol test --no-uninstall
+```
 
-VS Code provides `patrol: run tests` and `patrol: watch tests`. Repeat executes exactly N runs and stops on the first failure. Watch serializes runs and coalesces edits to source, feature/step/helper files and relevant fixture/build configuration; generated files and build/artifact directories are ignored. Develop accepts one ordinary target, with the same fixture setup and cleanup. Cold phases are internal and cannot be selected separately. Boolean tag expressions select `cold_start` as a whole pair; `cold_seed` and `cold_verify` are reserved. The default whole-run deadline is 1800 seconds, configurable with `--timeout-seconds`.
+Patrol reads the generated, ignored `app/.patrol.env` automatically. Keep
+`--no-uninstall` so a subsequent test can recover an interrupted scenario's
+ownership journal from the app sandbox. Scenarios explicitly clear actual
+SQLite/Keychain state; uninstall is not the cleanup mechanism.
 
-## Persistent fixtures and control
+Use Patrol's own commands, target/tag filters, device selection and development
+workflow. See [Patrol documentation](https://patrol.leancode.co/documentation).
+There is no repository test-runner CLI, custom watch command, or private pub
+cache. The VS Code `patrol: run tests` task also calls `patrol` directly.
 
-The existing Compose project is `homeassistant-test`. HA uses the named `/config` volume `homeassistant-test_ha_config`. Services stay running between scenarios; test cleanup removes only owned tokens and namespaced areas. Management credentials, baseline areas, containers and configuration survive repeated runs.
+BDD source remains in `app/integration_test/` with handwritten steps and helpers.
+Generate tests using build_runner from `app/`; commit the generated `_test.dart`
+files. Write each Gherkin tag on its own line. Patrol's runtime runner discovers
+tests; cold phases and the internal recovery scenario are skipped in ordinary
+runs. iOS is the primary local platform; Android can use the same proxy/bridge
+with emulator-reachable endpoints in `.patrol.env`.
+
+## Persistent fixture
+
+The shell setup starts only missing services in `homeassistant-test`, checks HA
+management authentication and bridge health, ensures the fixture areas and
+`light.kitchen_light`, and reconciles the `hommie_ha` Toxiproxy route. It writes
+credentials/endpoints/run ID to owner-only `.patrol.env`. `curl`, `jq`, Docker
+Compose and the already-installed Patrol are the only host tools it uses.
+
+HA `/config` remains in `homeassistant-test_ha_config`. Original areas, management
+credentials and container state survive ordinary repeated runs. If an old
+container has not been migrated to this volume, setup fails without replacing
+it. The completed migration's private config backup, rollback image and
+`.dart_tool/e2e/volume-migration.json` remain available; automatic migration/reset
+commands were removed with the custom runner.
 
 ```mermaid
 flowchart LR
-  Runner[Mac runner] -->|start / readiness| Docker[Existing Compose project]
-  Test[Dart Gherkin step on iOS] -->|fixture commands| Bridge[HTTP hass-cli bridge]
-  Bridge -->|independent admin connection| HA[Home Assistant]
-  Test -->|disconnect / restore| Control[Toxiproxy control API]
+  Shell[Shell setup] --> Docker[Persistent Compose fixture]
+  Patrol[Installed Patrol CLI] --> Test[Dart Gherkin scenarios]
+  Test --> Bridge[HTTP hass-cli bridge]
+  Bridge --> HA[Home Assistant]
+  Test --> Control[Toxiproxy control API]
   App[App HA connection] --> Proxy[Toxiproxy data route]
   Proxy --> HA
 ```
 
-The simulator never invokes Docker. A semantic `client loses connection` step disables the `hommie_ha` proxy route; all app HA HTTP/WebSocket traffic uses that route. The bridge reaches HA directly and remains usable for fixture checks, live token revocation and cleanup during outages. This models losing reachability to HA, not disabling all device internet or testing OS network indicators.
+The simulator never invokes Docker. Semantic loss/recovery steps disable/enable
+the proxy route. The independent hass-cli bridge reaches HA directly, so token
+revocation, fixture verification and cleanup stay usable during app outages.
+This models losing reachability to HA; no native Wi-Fi/cellular toggle is used.
 
-Cold launch is a real two-process test: seed persists session, selected kitchen-light tile and synced database; the host checks a non-secret checkpoint, terminates the app, verifies it stopped, and disables the proxy before launching verify. Both phases use `--no-uninstall`, with native isolation/permission clearing disabled. Verify checks a different PID and retained SQLite/Keychain state without login or reseeding, then reconnects and removes the owned session. An internal recovery target clears actual app-owned SQLite/Keychain data if native execution was killed before Dart teardown.
+Scenario teardown restores the proxy, removes exact owned tokens/areas and
+clears actual SQLite/Keychain data. A small journal in the app's support directory
+records baseline ownership before mutations. If native execution is interrupted,
+the next ordinary run restores the route and reconciles pending journals before
+starting a scenario. Ambiguous OAuth ownership fails with the journal retained.
+Run scenarios sequentially against this shared fixture.
 
-## Backend operations and recovery
+Stop services without deleting the volume or credentials:
 
 ```sh
-./scripts/e2e.sh backend start
-./scripts/e2e.sh smoke
-./scripts/e2e.sh backend stop
-./scripts/e2e.sh backend migrate-config
-./scripts/e2e.sh backend reset --confirm-test-data-reset
+./scripts/cleanup_test_env.sh
 ```
 
-Stop preserves the volume and credentials. Migration copies an old container-writable `/config` into the named volume after taking a private configuration backup and rollback image; it verifies the copied auth state. Keep `.dart_tool/e2e/config-backup-*`, the rollback image and `volume-migration.json` until you intentionally retire rollback. Reset explicitly destroys only this test fixture's configuration and derived credentials; it is never automatic.
+Ports default to 8123 (HA), 3000 (bridge), 18124 (app proxy), 18474 (proxy control).
+`E2E_HA_PORT`, `E2E_BRIDGE_PORT`, `E2E_PROXY_PORT`, `E2E_CONTROL_PORT` can override
+host mappings; each must be distinct. Stop services before changing mappings.
 
-The runner holds `.dart_tool/e2e/run.lock` for the whole command. A second live invocation fails before Compose/Patrol starts. The stable lock file remains after release; its `released` status is normal. A dead previous owner is detected and the next run restores the route and reconciles private ownership journals. Ambiguous OAuth ownership fails with the journal retained rather than deleting unrelated sessions. SIGINT/SIGTERM and deadlines terminate owned child processes before recovery. A failed/interrupted test keeps its original nonzero status even if diagnostics also fail.
+Fixture YAML merges preserve helpers/lights and unrelated `!include` tags.
+Duplicate keys, fixture-name collisions and includes directly under
+`input_boolean` or `light` fail before writing. First-time serialization removes
+comments; retain the original configuration backup.
 
-Ports default to HA 8123, bridge 3000, data proxy 18124, proxy control 18474. Set `E2E_HA_PORT`, `E2E_BRIDGE_PORT`, `E2E_PROXY_PORT`, `E2E_CONTROL_PORT` together when needed; each must be distinct. Stop the existing fixture before applying different port mappings. Credentials live in ignored owner-only `app/.patrol.env` and `docker/hass_init_conf/.env`. Don't publish them.
+## Cold launch
 
-## Evidence and troubleshooting
+A real cold launch needs host actions between two app processes. The narrow
+`scripts/test_cold_start.sh` script calls the installed Patrol twice, preserving
+the app, terminating seed, disabling the proxy before verify, and checking the
+same run's checkpoint with different process IDs. Pass an already booted iPhone
+Simulator UDID as its sole argument. There are no alternate target/device/filter
+options. Checkpoint evidence is under ignored `.dart_tool/cold-start/`.
 
-Each invocation writes sanitized `artifacts/e2e/<run-id>/runner.log`, service logs, metadata (device, versions, stage durations, exit/cleanup errors, cold PID proof), and exported native summaries/text diagnostics. Generated define files are private and removed after cleanup. Known passwords/tokens, JWTs and credential fields are scrubbed before logs are saved.
+Verify reads persisted SQLite/Keychain without login or reseeding, restores the
+connection and cleans up the owned seed session. Shell exit traps restore the
+route on failure/interruption. Pending journal recovery occurs on the next
+ordinary Patrol run if a process was killed before teardown.
 
-Patrol's native SDK records typed credentials inside `.xcresult`. Exact original bundles remain **private** in ignored `app/build/ios_results_*.xcresult`; artifact metadata records the exact paths from this invocation. Shareable exports contain sanitized text; binary native attachments are not automatically copied because they may include credential fields. Flutter failure images and interruption screenshots are retained privately under `.dart_tool/e2e/screenshots/<run-id>`; metadata records their paths. Inspect originals locally when investigating an image or native failure, and redact any screenshot before sharing it.
+## Diagnostics
 
-If startup fails, check Docker Desktop, the four ports and Xcode simulator availability. For bridge/HA failures inspect sanitized backend logs and the named volume; do not reset credentials to work around readiness failures. The independent `smoke` command proves a real WebSocket outage, continued CLI access and route recovery without building the app. Unit regressions run with `flutter test app/test/e2e`; generate features with `cd app && dart run build_runner build --delete-conflicting-outputs`.
+Use Patrol's console output and native result paths. The custom artifact
+exporter has been removed. Original `.xcresult` diagnostics can contain typed
+credentials and must remain private. Flutter failure images remain inside the
+simulator app support directory. Inspect and redact evidence before sharing it.
 
-These rails are local. No recurring automation or CI schedule is installed.
-
-## Verified baseline
-
-On 2026-10-02, three complete iOS Simulator suites passed (21 native scenarios), including three persisted cold-launch pairs. The acceptance runs took roughly six minutes each before native export; ordinary build times were 37.5–46.2 seconds. All 292 app unit/widget tests and five pinned Python bridge tests passed. These measurements do not establish an Android speed comparison. See [the recovery plan](superpowers/plans/2026-10-02-local-e2e-recovery.md#completion-evidence) for exact invocation IDs and process evidence.
-
-
-Fixture YAML setup preserves existing helper/light definitions and unrelated
-`!include` tags. It rejects duplicate keys, fixture-name collisions, and includes
-at `input_boolean` or `light` before changing the file; adjust those configurations
-explicitly rather than allowing an unsafe overwrite. First-time fixture merging
-serializes YAML and removes comments; retain the original configuration backup.
+The original recovery baseline passed three complete iOS suites (21 native
+executions). Those historical results are recorded in the recovery plan. Current
+verification after simplification is recorded separately there. No schedule or
+CI automation is installed.

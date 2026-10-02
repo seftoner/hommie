@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../scripts/e2e/backend_fixture.dart';
-import '../../../scripts/e2e/config.dart';
-import '../../../scripts/e2e/process_runner.dart';
-import '../../../scripts/e2e/ownership_journal.dart';
+import '../../integration_test/utils/remote_hass_cli.dart';
+import '../../integration_test/utils/ownership_journal.dart';
 
 void main() {
   test(
@@ -45,16 +43,22 @@ void main() {
   });
 }
 
-class _Fixture extends BackendFixture {
+class _Fixture extends RemoteHassCli {
   final tokens = <Map<String, Object?>>[
     {'id': 'management', 'client_name': 'Admin'},
   ];
   final areas = <Map<String, Object?>>[];
   final deletedTokens = <String>[], deletedAreas = <String>[];
   _Fixture()
-    : super(E2eConfig.parse([], {}, Directory('/tmp')), ProcessRunner());
+    : super(
+        fixtureControlUrl: Uri.parse('http://localhost:3000'),
+        managementToken: 'test-only',
+      );
   @override
-  Future<Object?> cliWs(String type, {Map<String, Object?>? payload}) async {
+  Future<Object?> executeWs(
+    String type, {
+    Map<String, Object?>? payload,
+  }) async {
     switch (type) {
       case 'auth/current_user':
         return {'id': 'test-user'};

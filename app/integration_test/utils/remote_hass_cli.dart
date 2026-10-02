@@ -50,6 +50,8 @@ class RemoteHassCli {
       managementToken: config.managementToken,
     );
   }
+  void close() => _client.close();
+
   String _redact(String text) => text.replaceAll(_token, '[REDACTED]');
   Future<Either<CommandError, CommandResult>> execute(List<String> args) async {
     try {

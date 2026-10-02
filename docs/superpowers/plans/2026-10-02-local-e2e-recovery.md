@@ -1,5 +1,15 @@
 # Local E2E Recovery Implementation Plan
 
+> Revised on 2026-10-02 after user review: the installed Patrol CLI owns ordinary
+> test execution, targets/tags, device selection and development. The custom
+> `scripts/e2e.dart`, private CLI activation, runner commands, watch/repeat and
+> artifact exporter have been removed. Shell setup/cleanup owns persistent
+> Docker/Toxiproxy preparation; a narrow cold-start shell flow calls Patrol twice.
+> Ownership recovery lives with integration-test helpers in the app sandbox.
+> [Current usage and architecture](../../testing.md) supersede the host-runner
+> contracts below. The original plan and acceptance evidence remain historical.
+
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Restore real, repeatable Patrol E2E runs on iOS Simulator, including HA connection loss and persisted offline cold launch, through one local command.
@@ -342,3 +352,46 @@ acceptance evidence; the final changes affect host lifecycle/configuration.
 - Final: Ruling: bound output draining by closing subscriptions after descendant cleanup — reparented children no longer appear under the exited parent — cost if wrong: output after the deadline is discarded; detached children are not assumed killed.
 
 Deferred minors: none.
+
+
+## Patrol CLI simplification after user review
+
+The user requested removal of the overbuilt host runner and direct use of the
+already-installed Patrol CLI. This supersedes the runner API in the original
+completed plan. Removed all 12 host Dart modules plus `e2e.dart`/`e2e.sh`, their
+obsolete runner tests, the direct `boolean_selector` dependency, private CLI
+activation/cache, custom watch/repeat/develop controls and artifact exporter.
+
+- `setup_test_env.sh`: shell-only persistent Compose preparation, existing-volume
+  guard, authenticated read readiness, fixture reconciliation and `.patrol.env`.
+- `cleanup_test_env.sh`: direct Compose stop, preserving config and credentials.
+- Ordinary scenarios and VS Code invoke installed `patrol` directly. Patrol's
+  normal target/tag/device/develop features are the only runner interface.
+- The two-process cold contract uses a narrow shell flow invoking installed
+  Patrol twice. It checks persistence/PIDs and restores the proxy on exit.
+- Existing owned-resource journaling moved alongside integration-test helpers,
+  using the independent bridge; scenario teardown removes exact owned state.
+  Pending journals are recovered on the next ordinary run, using `--no-uninstall`
+  to preserve their app-support directory across native invocations.
+- Tests/builds/results are handled by Patrol; credential-bearing native result
+  bundles remain private. Original fixture migration backups remain intact.
+
+Verification on the revised tree: shell fixture setup passed against the
+preserved services; 255 remaining app tests passed; integration-helper analysis
+has no issues. Direct globally installed Patrol 4.8.0 ran all five ordinary iOS
+scenarios successfully (zero failures): area lifecycle, three authorization
+scenarios and live offline/reconnection. Build: 35.4 seconds; native execution:
+160.2 seconds. The shell cold pair also passed with distinct process IDs, as recorded below. BDD output was regenerated before native verification.
+
+
+Cold pair verification: seed and verify each passed with zero failures via the
+installed CLI. Seed build/native execution: 50.1/39.9 seconds; verify: 39.4/36.9
+seconds. Same-run checkpoint recorded seed PID 51457 and verify PID 52647;
+verify read persisted SQLite/Keychain offline without login/reseeding. Shell flow
+exited 0 and restored the route. Evidence remains in `.dart_tool/cold-start/`.
+
+Final preservation audit passed: management authentication valid; zero missing or
+extra baseline tokens, zero owned tokens/areas and zero pending app journals;
+original areas unchanged; proxy enabled. Shell syntax checks and invalid-port /
+missing-device validation passed. The custom CLI cache was removed, while the
+original migration backups and native evidence were retained.

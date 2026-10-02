@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -6,10 +9,11 @@ import 'package:hommie/core/bootstrap/bootstrap.dart';
 
 import 'test_context.dart';
 import 'fault_proxy_client.dart';
-import 'hass_token_manager.dart';
 import 'hass_area_manager.dart';
 import 'cold_phase.dart';
 import 'failure_evidence.dart';
+import 'ownership_journal.dart';
+import 'remote_hass_cli.dart';
 
 bool _bootstrapped = false;
 int _scenario = 0;
@@ -48,7 +52,9 @@ void patrol(
       var primaryFailed = false;
       context.cleanup.register('provider resources', context.appState.close);
       context.cleanup.register('app persisted state', () async {
-        if (!context.preserveSeed) await context.appState.reset();
+        if (!context.preserveSeed) {
+          await context.appState.reset();
+        }
       });
       final proxy = FaultProxyClient(
         faultControlUrl: context.config.faultControlUrl,
@@ -81,8 +87,38 @@ void patrol(
           }
           _bootstrapped = true;
         }
-        if (context.config.coldPhase != 'verify')
+        final cli = RemoteHassCli.fromEnvironment();
+        context.cleanup.register(
+          'journal HTTP client',
+          () async => cli.close(),
+        );
+        final journals = Directory(
+          '${(await getApplicationSupportDirectory()).path}/hommie_e2e_ownership',
+        );
+        await journals.create(recursive: true);
+        if (context.config.coldPhase != 'verify') {
+          await proxy.restoreHaRoute();
+          for (final file in journals.listSync().whereType<File>().where(
+            (file) => file.path.endsWith('.json'),
+          )) {
+            await OwnershipJournal.read(file).reconcile(cli);
+          }
           await context.appState.reset();
+        }
+        final journal = context.config.coldPhase == 'verify'
+            ? OwnershipJournal.read(
+                File('${journals.path}/${context.config.runId}.json'),
+              )
+            : await OwnershipJournal.create(
+                cli,
+                journals,
+                context.config.runId,
+              );
+        context.cleanup.register('owned HA session and fixtures', () async {
+          if (!context.preserveSeed) {
+            await journal.reconcile(cli);
+          }
+        });
         context.cleanup.register(
           'owned HA areas',
           () => HassAreaManager().cleanupOwnedAreas(
@@ -90,25 +126,6 @@ void patrol(
             reservedNames: {context.initialAreaName, context.renamedAreaName},
           ),
         );
-        final tokens = HassTokenManager();
-        final baseline = (await tokens.list()).map((t) => t.id).toSet();
-        context.cleanup.register('owned UI OAuth session', () async {
-          final candidates = (await tokens.list())
-              .where(
-                (t) =>
-                    !baseline.contains(t.id) &&
-                    t.clientId == 'https://seftoner.github.io',
-              )
-              .toList();
-          if (candidates.length > 1) {
-            throw StateError(
-              'Ambiguous OAuth session; manual ownership repair required',
-            );
-          }
-          if (candidates.isNotEmpty) {
-            await tokens.deleteById(candidates.single.id);
-          }
-        });
         await callback($);
         context.preserveSeed = context.config.coldPhase == 'seed';
       } catch (_) {

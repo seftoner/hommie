@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'backend_fixture.dart';
+import 'remote_hass_cli.dart';
 
 class OwnershipJournal {
   final File file;
@@ -11,18 +11,20 @@ class OwnershipJournal {
   String get namespace => 'Hommie E2E $runId ';
   OwnershipJournal._(this.file, this.runId, this.userId, this.baselineTokenIds);
   static Future<OwnershipJournal> create(
-    BackendFixture fixture,
+    RemoteHassCli fixture,
     Directory directory,
     String runId,
   ) async {
-    if (!RegExp(r'^[a-zA-Z0-9_-]+$').hasMatch(runId))
+    if (!RegExp(r'^[a-zA-Z0-9_-]+$').hasMatch(runId)) {
       throw ArgumentError('Invalid run ID');
+    }
     await directory.create(recursive: true);
-    final tokens = await fixture.cliWs('auth/refresh_tokens') as List;
-    final user = await fixture.cliWs('auth/current_user') as Map;
+    final tokens = await fixture.executeWs('auth/refresh_tokens') as List;
+    final user = await fixture.executeWs('auth/current_user') as Map;
     final file = File('${directory.path}/$runId.json');
-    if (file.existsSync())
+    if (file.existsSync()) {
       throw StateError('Ownership journal already exists; reconcile it first');
+    }
     final journal = OwnershipJournal._(
       file,
       runId,
@@ -50,8 +52,9 @@ class OwnershipJournal {
     final runId = data['runId'] as String;
     if (!RegExp(r'^[a-zA-Z0-9_-]+$').hasMatch(runId) ||
         data['namespace'] != 'Hommie E2E $runId ' ||
-        data['clientId'] != clientId)
+        data['clientId'] != clientId) {
       throw StateError('Invalid ownership journal');
+    }
     return OwnershipJournal._(
       file,
       runId,
@@ -59,21 +62,26 @@ class OwnershipJournal {
       (data['baselineTokenIds'] as List).cast<String>().toSet(),
     );
   }
-  Future<void> reconcile(BackendFixture fixture) async {
-    if (!file.existsSync()) return;
-    final user = await fixture.cliWs('auth/current_user') as Map;
-    if (user['id'] != userId)
+  Future<void> reconcile(RemoteHassCli fixture) async {
+    if (!file.existsSync()) {
+      return;
+    }
+    final user = await fixture.executeWs('auth/current_user') as Map;
+    if (user['id'] != userId) {
       throw StateError('Ownership user differs; repair required');
-    final tokens = await fixture.cliWs('auth/refresh_tokens') as List;
+    }
+    final tokens = await fixture.executeWs('auth/refresh_tokens') as List;
     final oauth = tokens
         .where(
           (t) =>
               !baselineTokenIds.contains(t['id']) && t['client_id'] == clientId,
         )
         .toList();
-    final areas = await fixture.cliWs('config/area_registry/list') as List;
+    final areas = await fixture.executeWs('config/area_registry/list') as List;
     final failures = <String>[];
-    if (oauth.length > 1) failures.add('ambiguous OAuth session');
+    if (oauth.length > 1) {
+      failures.add('ambiguous OAuth session');
+    }
     final ownedTokens = tokens
         .where(
           (t) =>
@@ -82,10 +90,12 @@ class OwnershipJournal {
               (t['client_name'] as String).startsWith(namespace),
         )
         .toList();
-    if (oauth.length == 1) ownedTokens.add(oauth.single);
+    if (oauth.length == 1) {
+      ownedTokens.add(oauth.single);
+    }
     for (final token in ownedTokens) {
       try {
-        await fixture.cliWs(
+        await fixture.executeWs(
           'auth/delete_refresh_token',
           payload: {'refresh_token_id': token['id']},
         );
@@ -97,7 +107,7 @@ class OwnershipJournal {
       (a) => a['name'] is String && (a['name'] as String).startsWith(namespace),
     )) {
       try {
-        await fixture.cliWs(
+        await fixture.executeWs(
           'config/area_registry/delete',
           payload: {'area_id': area['area_id']},
         );
@@ -105,10 +115,13 @@ class OwnershipJournal {
         failures.add('owned area cleanup');
       }
     }
-    if (failures.isNotEmpty)
+    if (failures.isNotEmpty) {
       throw StateError(
         'Ownership repair required: ${failures.join(', ')}; journal retained',
       );
-    if (file.existsSync()) await file.delete();
+    }
+    if (file.existsSync()) {
+      await file.delete();
+    }
   }
 }

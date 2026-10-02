@@ -1,5 +1,5 @@
 #!/bin/sh
+# Stop services without deleting the persistent fixture or credentials.
 set -eu
-e2e_script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-# Normal cleanup stops services and preserves fixture data and credentials.
-exec "$e2e_script_dir/e2e.sh" backend stop "$@"
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+exec docker compose -f "$script_dir/../docker/docker-compose.yml" -p homeassistant-test stop

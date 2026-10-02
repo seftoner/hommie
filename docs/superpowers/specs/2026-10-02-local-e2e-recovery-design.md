@@ -1,5 +1,15 @@
 # Local E2E recovery: design
 
+> Revised on 2026-10-02 after user review: the installed Patrol CLI owns ordinary
+> test execution, targets/tags, device selection and development. The custom
+> `scripts/e2e.dart`, private CLI activation, runner commands, watch/repeat and
+> artifact exporter have been removed. Shell setup/cleanup owns persistent
+> Docker/Toxiproxy preparation; a narrow cold-start shell flow calls Patrol twice.
+> Ownership recovery lives with integration-test helpers in the app sandbox.
+> [Current usage and architecture](../../testing.md) supersede the host-runner
+> contracts below. The original plan and acceptance evidence remain historical.
+
+
 Date: 2026-10-02
 Status: Design agreed; implementation plan prepared. Implementation has not started.
 
