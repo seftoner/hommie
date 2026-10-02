@@ -1,10 +1,9 @@
-FROM python:3.11-slim
+FROM python:3.11.11-slim@sha256:081075da77b2b55c23c088251026fb69a7b2bf92471e491ff5fd75c192fd38e5
 
 WORKDIR /app
 
-COPY ./web-server/requirements.txt .
-RUN pip install -r requirements.txt
-RUN pip install homeassistant-cli
+COPY ./web-server/requirements.lock.txt .
+RUN pip install --no-cache-dir -r requirements.lock.txt
 
 COPY ./web-server/hass_cli_web.py .
 

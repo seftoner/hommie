@@ -1,0 +1,2 @@
+# unittest is provided by Python; tests use the same locked dependencies.
+-r requirements.lock.txt

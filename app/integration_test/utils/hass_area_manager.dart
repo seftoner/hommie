@@ -17,7 +17,8 @@ class HassAreaManager {
   static const _initialAreaId = 'e2e_area_initial';
   static const _renamedAreaId = 'e2e_area_renamed';
 
-  HassAreaManager({RemoteHassCli? cli}) : _cli = cli ?? RemoteHassCli();
+  HassAreaManager({RemoteHassCli? cli})
+    : _cli = cli ?? RemoteHassCli.fromEnvironment();
 
   static List<HassTestArea> parseAreas(String stdout) {
     final response = jsonDecode(stdout);
@@ -54,7 +55,11 @@ class HassAreaManager {
   }
 
   Future<List<HassTestArea>> list() async {
-    final result = await _cli.execute('raw ws config/area_registry/list');
+    final result = await _cli.execute([
+      'raw',
+      'ws',
+      'config/area_registry/list',
+    ]);
 
     return result.fold(
       (error) => throw Exception(
@@ -100,7 +105,7 @@ class HassAreaManager {
       'ws',
       'config/area_registry/delete',
       '--json={"area_id":"$areaId"}',
-    ].join(' ');
+    ];
 
     final result = await _cli.execute(command);
 
@@ -111,6 +116,10 @@ class HassAreaManager {
       (success) {
         if (!success.isSuccess) {
           throw Exception('Failed to delete area $areaId: ${success.stderr}');
+        }
+        final response = jsonDecode(success.stdout);
+        if (response is! Map || response['success'] != true) {
+          throw Exception('Home Assistant rejected deletion of area $areaId');
         }
       },
     );

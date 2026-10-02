@@ -1,25 +1,31 @@
 import 'dart:convert';
+
 import 'remote_hass_cli.dart';
 
 class HassTokenManager {
   final RemoteHassCli _cli;
   static const _clientName = 'hommie_integration_test';
 
-  HassTokenManager({RemoteHassCli? cli}) : _cli = cli ?? RemoteHassCli();
+  HassTokenManager({RemoteHassCli? cli})
+    : _cli = cli ?? RemoteHassCli.fromEnvironment();
 
   /// Lists all refresh tokens and returns them as a List
   Future<List<dynamic>> _listTokens() async {
-    final listTokens = 'raw ws auth/refresh_tokens';
+    final listTokens = ['raw', 'ws', 'auth/refresh_tokens'];
     final result = await _cli.execute(listTokens);
 
     return result.fold(
       (error) => throw Exception(
-          'Failed to list tokens: ${error.message}. ${error.error}'),
+        'Failed to list tokens: ${error.message}. ${error.error}',
+      ),
       (success) {
         if (!success.isSuccess) {
           throw Exception('Failed to list tokens: ${success.stderr}');
         }
         final response = jsonDecode(success.stdout);
+        if (response['success'] != true) {
+          throw Exception('Home Assistant rejected token listing');
+        }
         return response['result'] as List;
       },
     );
@@ -31,8 +37,8 @@ class HassTokenManager {
       'raw',
       'ws',
       'auth/delete_refresh_token',
-      '--json={"refresh_token_id":"$tokenId"}'
-    ].join(' ');
+      '--json={"refresh_token_id":"$tokenId"}',
+    ];
 
     final deleteResult = await _cli.execute(deleteToken);
     return deleteResult.fold(
@@ -45,6 +51,9 @@ class HassTokenManager {
         final response = jsonDecode(success.stdout);
         if (response['error']?['code'] == 'invalid_token_id') {
           return false;
+        }
+        if (response['success'] != true) {
+          throw Exception('Home Assistant rejected token deletion');
         }
 
         return true;
@@ -64,19 +73,23 @@ class HassTokenManager {
       'raw',
       'ws',
       'auth/long_lived_access_token',
-      '--json={"lifespan":3650,"client_name":"$_clientName"}'
-    ].join(' ');
+      '--json={"lifespan":3650,"client_name":"$_clientName"}',
+    ];
 
     final result = await _cli.execute(createToken);
 
     return result.fold(
       (error) => throw Exception(
-          'Failed to create token: ${error.message}. ${error.error}'),
+        'Failed to create token: ${error.message}. ${error.error}',
+      ),
       (success) {
         if (!success.isSuccess) {
           throw Exception('Failed to create token: ${success.stderr}');
         }
         final response = jsonDecode(success.stdout);
+        if (response['success'] != true) {
+          throw Exception('Home Assistant rejected token creation');
+        }
         return response['result'] as String;
       },
     );

@@ -67,7 +67,9 @@ void main() {
 
     await manager.list();
 
-    expect(cli.commands, ['raw ws config/area_registry/list']);
+    expect(cli.commands, [
+      ['raw', 'ws', 'config/area_registry/list'],
+    ]);
   });
 
   test('deleteById sends compact area registry delete command', () async {
@@ -79,7 +81,12 @@ void main() {
     await manager.deleteById('e2e_area_initial');
 
     expect(cli.commands, [
-      'raw ws config/area_registry/delete --json={"area_id":"e2e_area_initial"}',
+      [
+        'raw',
+        'ws',
+        'config/area_registry/delete',
+        '--json={"area_id":"e2e_area_initial"}',
+      ],
     ]);
   });
 
@@ -129,29 +136,44 @@ void main() {
     await manager.cleanupDeterministicAreas();
 
     expect(cli.commands, [
-      'raw ws config/area_registry/list',
-      'raw ws config/area_registry/delete --json={"area_id":"e2e_area_initial"}',
-      'raw ws config/area_registry/delete --json={"area_id":"generated_1"}',
-      'raw ws config/area_registry/delete --json={"area_id":"generated_2"}',
+      ['raw', 'ws', 'config/area_registry/list'],
+      [
+        'raw',
+        'ws',
+        'config/area_registry/delete',
+        '--json={"area_id":"e2e_area_initial"}',
+      ],
+      [
+        'raw',
+        'ws',
+        'config/area_registry/delete',
+        '--json={"area_id":"generated_1"}',
+      ],
+      [
+        'raw',
+        'ws',
+        'config/area_registry/delete',
+        '--json={"area_id":"generated_2"}',
+      ],
     ]);
   });
 }
 
-class _FakeRemoteHassCli implements RemoteHassCli {
+class _FakeRemoteHassCli extends RemoteHassCli {
   final List<CommandResult> _results;
-  final commands = <String>[];
+  final commands = <List<String>>[];
 
-  _FakeRemoteHassCli(this._results);
+  _FakeRemoteHassCli(this._results)
+    : super(
+        fixtureControlUrl: Uri.parse('http://localhost'),
+        managementToken: 'test',
+      );
 
   @override
-  Future<Either<CommandError, CommandResult>> execute(String command) async {
+  Future<Either<CommandError, CommandResult>> execute(
+    List<String> command,
+  ) async {
     commands.add(command);
     return Right(_results.removeAt(0));
   }
-
-  @override
-  Future<void> initialize() async {}
-
-  @override
-  void setToken(String token) {}
 }
