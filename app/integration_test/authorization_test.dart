@@ -14,16 +14,17 @@ import './step/i_complete_onboarding.dart';
 import './step/i_see_page.dart';
 import './step/i_see_button.dart';
 import './step/i_tap_on_button.dart';
-import './step/i_enter_into_field.dart';
+import './step/i_enter_the_home_assistant_address.dart';
 import './step/i_see_credentials_web_view_form.dart';
-import './step/i_enter_credentials.dart';
+import './step/i_enter_the_configured_credentials.dart';
 import './step/i_tap_on_login_button.dart';
 import './step/home_assistant_access_is_configured.dart';
 import './step/i_have_successfully_logged_in.dart';
-import './step/i_tap_on_list_item.dart';
+import './step/i_scroll_to_button.dart';
 import './step/i_see_alert.dart';
+import './step/the_active_session_is_removed.dart';
+import './step/the_client_is_connected_to_home_assistant.dart';
 import './step/home_assistant_revokes_access.dart';
-import './step/i_should_see_the_offline_banner.dart';
 
 void main() {
   group('''Sign In''', () {
@@ -34,11 +35,10 @@ void main() {
       await iSeeButton($, K.serversDiscovery.enterManuallyButton);
       await iTapOnButton($, K.serversDiscovery.enterManuallyButton);
       await iSeePage($, K.manualAddress.page);
-      await iEnterIntoField(
-          $, 'http://10.0.2.2:8123', K.manualAddress.addressField);
+      await iEnterTheHomeAssistantAddress($);
       await iTapOnButton($, K.manualAddress.connectButton);
       await iSeeCredentialsWebViewForm($);
-      await iEnterCredentials($, 'admin', 'yourpassword');
+      await iEnterTheConfiguredCredentials($);
       await iTapOnLoginButton($);
       await iSeePage($, K.home.page);
     }, tags: ['quick']);
@@ -48,11 +48,13 @@ void main() {
       await theApplicationIsRunningInTheForeground($);
       await iTapOnButton($, K.appScaffold.settingsButton);
       await iSeePage($, K.settings.page);
-      await iTapOnListItem($, K.settings.hubItem);
-      await iSeePage($, K.hub.page);
+      await iScrollToButton($, K.hub.signOutButton);
       await iTapOnButton($, K.hub.signOutButton);
       await iSeeAlert($, K.hub.signOutAlert);
       await iTapOnButton($, K.hub.signOutButton);
+      await iSeePage($, K.onboarding.welcomePage);
+      await theActiveSessionIsRemoved($);
+      await iCompleteOnboarding($);
       await iSeePage($, K.serversDiscovery.page);
     });
     patrol('''Logged out on server side''', ($) async {
@@ -60,9 +62,12 @@ void main() {
       await iHaveSuccessfullyLoggedIn($);
       await theApplicationIsRunningInTheForeground($);
       await iSeePage($, K.home.page);
+      await theClientIsConnectedToHomeAssistant($);
       await homeAssistantRevokesAccess($);
-      await iShouldSeeTheOfflineBanner($);
+      await iSeePage($, K.onboarding.welcomePage);
+      await theActiveSessionIsRemoved($);
+      await iCompleteOnboarding($);
       await iSeePage($, K.serversDiscovery.page);
-    });
+    }, tags: ['revocation']);
   });
 }

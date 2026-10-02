@@ -264,6 +264,9 @@ class BackendFixture {
       await tmp.writeAsString(
         credentials.entries.map((e) => '${e.key}=${e.value}').join('\n') + '\n',
       );
+      final permissions = await Process.run('chmod', ['600', tmp.path]);
+      if (permissions.exitCode != 0)
+        throw StateError('Cannot protect fixture credential file');
       await tmp.rename(f.path);
     }
   }

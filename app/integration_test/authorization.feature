@@ -19,11 +19,11 @@ Feature: Sign In
     When I tap on {K.serversDiscovery.enterManuallyButton} button
     Then I see {K.manualAddress.page} page
     
-    When I enter {'http://10.0.2.2:8123'} into {K.manualAddress.addressField} field
+    When I enter the home assistant address
     And I tap on {K.manualAddress.connectButton} button
     Then I see credentials web view form
     
-    When I enter {'admin'} {'yourpassword'} credentials
+    When I enter the configured credentials
     And I tap on login button
     Then I see {K.home.page} page
 
@@ -34,19 +34,25 @@ Feature: Sign In
     
     When I tap on {K.appScaffold.settingsButton} button  
     Then I see {K.settings.page} page  
-    When I tap on {K.settings.hubItem} list item  
-    Then I see {K.hub.page} page  
+    When I scroll to {K.hub.signOutButton} button
     When I tap on {K.hub.signOutButton} button  
     Then I see {K.hub.signOutAlert} alert
     When I tap on {K.hub.signOutButton} button 
-    Then I see {K.serversDiscovery.page} page 
+    Then I see {K.onboarding.welcomePage} page
+    And the active session is removed
+    When I complete onboarding
+    Then I see {K.serversDiscovery.page} page
 
+  @revocation
   Scenario: Logged out on server side
     Given home assistant access is configured    
     And I have successfully logged in   
     And the application is running in the foreground
     And I see {K.home.page} page
+    And the client is connected to home assistant
     
     When home assistant revokes access
-    Then I should see the offline banner
-    And I see {K.serversDiscovery.page} page
+    Then I see {K.onboarding.welcomePage} page
+    And the active session is removed
+    When I complete onboarding
+    Then I see {K.serversDiscovery.page} page

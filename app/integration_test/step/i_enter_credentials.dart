@@ -1,4 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'dart:io';
+
 import 'package:patrol/patrol.dart';
 
 Future<void> iEnterCredentials(
@@ -6,6 +7,15 @@ Future<void> iEnterCredentials(
   String usernmae,
   String password,
 ) async {
-  await $.platform.mobile.enterTextByIndex(usernmae, index: 0);
-  await $.platform.mobile.enterTextByIndex(password, index: 1);
+  final keyboardBehavior = Platform.isIOS ? KeyboardBehavior.alternative : null;
+  await $.platform.mobile.enterTextByIndex(
+    usernmae,
+    index: 0,
+    keyboardBehavior: keyboardBehavior,
+  );
+  await $.platform.mobile.enterTextByIndex(
+    password,
+    index: 1,
+    keyboardBehavior: keyboardBehavior,
+  );
 }

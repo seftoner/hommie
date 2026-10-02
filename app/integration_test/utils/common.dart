@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:patrol/patrol.dart';
 import 'package:hommie/core/bootstrap/bootstrap.dart';
 
@@ -57,7 +58,16 @@ void patrol(
       });
       try {
         if (!_bootstrapped) {
-          await bootstrap();
+          final flutterError = FlutterError.onError;
+          final platformError = PlatformDispatcher.instance.onError;
+          final errorWidget = ErrorWidget.builder;
+          try {
+            await bootstrap();
+          } finally {
+            FlutterError.onError = flutterError;
+            PlatformDispatcher.instance.onError = platformError;
+            ErrorWidget.builder = errorWidget;
+          }
           _bootstrapped = true;
         }
         await context.appState.reset();

@@ -383,8 +383,10 @@ helpers; there is no separate Android offline lane.
 
 Banner assertions verify rendered visibility and bounded disappearance, not key
 absence. Replace fixed sleeps with bounded polling of UI/backend outcomes.
-Revocation verifies removal of the active authenticated session and routing to
-discovery; an offline banner is not required on the logged-out screen.
+Revocation verifies removal of the active authenticated session and its stored
+credentials. The current router first opens onboarding; completing that existing
+flow must lead to discovery. An offline banner is not required on the logged-out
+screen. Sign-out uses the current Settings-page action.
 
 ## Local workflow
 
@@ -407,6 +409,14 @@ fixture and proxy; reject a second run clearly instead of racing mutable state.
 Use timestamped ignored run directories for runner/HA/Patrol logs, native test
 results, and relevant failure screenshots. Redact tokens and passwords. Configure
 whole-run and readiness timeouts so unattended runs return an actionable failure.
+
+The verified Patrol iOS implementation logs native text-entry values inside
+`.xcresult` diagnostics even when console test steps are hidden. Keep the original
+bundle in the private ignored build/run area, record its exact path, and export
+sanitized native diagnostics, issues, and safe failure attachments into shareable
+artifacts. Do not copy an untouched credential-bearing bundle into those exports.
+This preserves native evidence without pretending that console redaction also
+sanitizes Apple's binary result store.
 
 The first repeatability rail is a single local command plus watch/repeat mode.
 Scheduled unattended execution should use that same verified runner after its

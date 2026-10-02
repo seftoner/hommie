@@ -19,6 +19,7 @@ Feature: Area Management
   Scenario: Create rename and delete an area
     Given the application is running in the foreground
     And I see {K.home.page} page
+    And the client is connected to home assistant
 
     When I tap on {K.appScaffold.settingsButton} button
     Then I see {K.settings.page} page

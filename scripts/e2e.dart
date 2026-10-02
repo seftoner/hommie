@@ -3,6 +3,7 @@ import 'dart:io';
 import 'e2e/config.dart';
 import 'e2e/backend_fixture.dart';
 import 'e2e/process_runner.dart';
+import 'e2e/local_runner.dart';
 
 Future<void> main(List<String> args) async {
   try {
@@ -48,7 +49,7 @@ Future<void> main(List<String> args) async {
       );
       return;
     }
-    throw StateError('E2E ${config.command} is not implemented yet');
+    exitCode = await runOrdinary(config);
   } catch (error) {
     stderr.writeln(error);
     exitCode = 1;
