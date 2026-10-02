@@ -40,6 +40,7 @@ docker/hass_init_conf/.env
 integration_test/test_bundle.dart
 app/integration_test/test_bundle.dart
 .patrol.env
+artifacts/e2e/
 
 # Symbolication related
 app.*.symbols

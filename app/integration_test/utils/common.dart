@@ -9,6 +9,7 @@ import 'fault_proxy_client.dart';
 import 'hass_token_manager.dart';
 import 'hass_area_manager.dart';
 import 'cold_phase.dart';
+import 'failure_evidence.dart';
 
 bool _bootstrapped = false;
 int _scenario = 0;
@@ -112,6 +113,13 @@ void patrol(
         context.preserveSeed = context.config.coldPhase == 'seed';
       } catch (_) {
         primaryFailed = true;
+        try {
+          await captureFailureImage(context.config.runId);
+        } catch (_) {
+          debugPrint(
+            'Failure screenshot capture failed; primary error retained',
+          );
+        }
         rethrow;
       }
     },

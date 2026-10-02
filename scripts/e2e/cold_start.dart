@@ -24,6 +24,9 @@ class ColdStartRunner {
       await route(false);
       await _setPhase(defines, 'verify');
       code = await phase('verify', defines);
+    } catch (_) {
+      code = 1;
+      rethrow;
     } finally {
       Object? failure;
       StackTrace? trace;

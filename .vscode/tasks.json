@@ -22,16 +22,14 @@
 		},
 		{
 			"label": "patrol: run tests",
-			"type": "shell",
-			"command": "patrol",
-			"args": [
-				"test"
-			],
+			"type": "process",
+			"command": "${workspaceFolder}/scripts/e2e.sh",
+			"args": [],
 			"group": "test",
 			"problemMatcher": [],
-			"detail": "Run patrol integration tests",
+			"detail": "Run local iOS E2E with persistent Home Assistant and Toxiproxy",
 			"options": {
-				"cwd": "${workspaceFolder}/app"
+				"cwd": "${workspaceFolder}"
 			}
 		},
 		{
@@ -47,6 +45,20 @@
 			],
 			"problemMatcher": [],
 			"detail": "Creates a new feature folder structure under ./app/lib/features."
+		},
+		{
+			"label": "patrol: watch tests",
+			"type": "process",
+			"command": "${workspaceFolder}/scripts/e2e.sh",
+			"args": [
+				"--watch"
+			],
+			"group": "test",
+			"problemMatcher": [],
+			"detail": "Run serialized local iOS E2E after source or feature changes",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
 		}
 	],
 	"inputs": [

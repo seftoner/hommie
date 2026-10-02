@@ -5,6 +5,31 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../scripts/e2e/cold_start.dart';
 
 void main() {
+  test(
+    'verify exception survives restoration failure; cleanup still runs',
+    () async {
+      final events = <String>[];
+      final dir = Directory.systemTemp.createTempSync('cold-errors');
+      addTearDown(() => dir.deleteSync(recursive: true));
+      final file = File('${dir.path}/defines.json')..writeAsStringSync('{}');
+      final runner = ColdStartRunner(
+        phase: (name, _) async {
+          if (name == 'verify') throw const FormatException('primary');
+          return 0;
+        },
+        checkpoint: () async {},
+        terminate: () async {},
+        route: (enabled) async {
+          if (enabled) throw StateError('secondary');
+        },
+        cleanup: () async {
+          events.add('cleanup');
+        },
+      );
+      await expectLater(runner.run(defines: file), throwsFormatException);
+      expect(events, ['cleanup']);
+    },
+  );
   for (final failure in ['none', 'seed', 'verify', 'checkpoint']) {
     test('cold pair ordering and cleanup on $failure', () async {
       final events = <String>[];

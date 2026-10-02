@@ -11,6 +11,7 @@ class PatrolCli {
   Future<ProcessResult> run(
     List<String> args, {
     Duration timeout = const Duration(minutes: 30),
+    bool interactive = false,
   }) async {
     final cache = Directory('${root.path}/.dart_tool/e2e/pub-cache');
     final packageConfig = File(
@@ -51,6 +52,7 @@ class PatrolCli {
       ],
       cwd: Directory('${root.path}/app'),
       timeout: timeout,
+      input: interactive ? stdin : null,
     );
   }
 }

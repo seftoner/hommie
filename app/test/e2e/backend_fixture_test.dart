@@ -287,6 +287,7 @@ class _Processes extends ProcessRunner {
     required Directory cwd,
     required Duration timeout,
     Map<String, String>? environment,
+    Stream<List<int>>? input,
   }) async {
     calls.add(args);
     return results.removeAt(0);

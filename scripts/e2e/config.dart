@@ -96,7 +96,10 @@ class E2eConfig {
     if (tags != null) {
       final selector = BooleanSelector.parse(tags);
       if (selector.variables.any(
-        (tag) => tag == 'cold_seed' || tag == 'cold_verify',
+        (tag) =>
+            tag == 'cold_seed' ||
+            tag == 'cold_verify' ||
+            tag == 'internal_cleanup',
       )) {
         throw const FormatException(
           'Select the logical cold_start pair; phase tags are internal',

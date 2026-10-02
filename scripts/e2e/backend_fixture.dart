@@ -14,6 +14,7 @@ class BackendFixture {
   final Uri directHaUrl, bridgeUrl;
   final HttpClient _http = HttpClient();
   Map<String, String>? _credentials;
+  bool _cancelled = false;
   BackendFixture(
     this.config,
     this.processes, {
@@ -106,8 +107,12 @@ class BackendFixture {
   Future<void> reset({required bool confirmed}) async {
     if (!confirmed)
       throw StateError('Reset requires --confirm-test-data-reset');
-    if (File('${config.repoRoot.path}/.dart_tool/e2e/run.lock').existsSync())
-      throw StateError('Cannot reset during an E2E run');
+    final lock = File('${config.repoRoot.path}/.dart_tool/e2e/run.lock');
+    if (lock.existsSync()) {
+      final state = jsonDecode(await lock.readAsString()) as Map;
+      if (state['status'] == 'active' && state['pid'] != pid)
+        throw StateError('Cannot reset during an E2E run');
+    }
     await _compose(['down']);
     final r = await _docker(['volume', 'rm', volume]);
     if (r.exitCode != 0)
@@ -277,6 +282,7 @@ class BackendFixture {
     Object? body,
     Map<String, String> headers = const {},
   }) async {
+    if (_cancelled) throw StateError('Fixture operation was interrupted');
     final req = await _http
         .openUrl(method, url)
         .timeout(const Duration(seconds: 5));
@@ -358,6 +364,7 @@ class BackendFixture {
         await _writeCredentials();
         return;
       } catch (_) {
+        if (_cancelled) rethrow;
         if (DateTime.now().isAfter(end))
           throw StateError(
             'Fixture readiness timed out at $stage; credentials retained, HA not reset',
@@ -365,6 +372,12 @@ class BackendFixture {
         await Future<void>.delayed(const Duration(milliseconds: 100));
       }
     }
+  }
+
+  Future<void> cancel() async {
+    _cancelled = true;
+    _http.close(force: true);
+    await processes.cancel();
   }
 
   Future<void> reconcileProxy() async {

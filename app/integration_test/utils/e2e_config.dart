@@ -62,7 +62,7 @@ class E2eTestConfig {
       throw const FormatException('Valid E2E_RUN_ID is required');
     }
     final phase = values['E2E_COLD_PHASE'] ?? 'none';
-    if (!['none', 'seed', 'verify'].contains(phase)) {
+    if (!['none', 'seed', 'verify', 'cleanup'].contains(phase)) {
       throw const FormatException('Invalid E2E_COLD_PHASE');
     }
     return E2eTestConfig._(

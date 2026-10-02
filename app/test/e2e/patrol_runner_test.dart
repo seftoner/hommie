@@ -64,6 +64,7 @@ class _Processes extends ProcessRunner {
     required Directory cwd,
     required Duration timeout,
     Map<String, String>? environment,
+    Stream<List<int>>? input,
   }) async {
     calls.add(args);
     return ProcessResult(
@@ -105,6 +106,7 @@ class _Cli extends PatrolCli {
   Future<ProcessResult> run(
     List<String> args, {
     Duration timeout = const Duration(minutes: 30),
+    bool interactive = false,
   }) async {
     this.args = args;
     return ProcessResult(1, 7, '', '');
