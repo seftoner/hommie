@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:drift/drift.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -80,13 +84,88 @@ class E2eAppState {
   Future<void> selectHomeEntity(String entityId) async {
     await waitForCachedEntity(entityId);
     final db = container.read(databaseConnectionProvider);
-    final server = await container.read(serverManagerProvider).getActiveServer();
+    final server = await container
+        .read(serverManagerProvider)
+        .getActiveServer();
     if (server == null) throw StateError('No active server');
-    final entity = await (db.select(db.entities)..where((row) =>
-      row.entityId.equals(entityId) & row.serverId.equals(server.id!))).getSingle();
-    await container.read(homeTileOverrideRepositoryProvider).upsert(
-      serverId: server.id!,
-      override: HomeTileOverride(kind: HomeTileKind.entity, targetId: entity.registryId, order: 0),
+    final entity =
+        await (db.select(db.entities)..where(
+              (row) =>
+                  row.entityId.equals(entityId) &
+                  row.serverId.equals(server.id!),
+            ))
+            .getSingle();
+    await container
+        .read(homeTileOverrideRepositoryProvider)
+        .upsert(
+          serverId: server.id!,
+          override: HomeTileOverride(
+            kind: HomeTileKind.entity,
+            targetId: entity.registryId,
+            order: 0,
+          ),
+        );
+  }
+
+  Future<File> get checkpointFile async => File(
+    '${(await getApplicationSupportDirectory()).path}/hommie_e2e_checkpoint.json',
+  );
+
+  Future<void> writeCheckpoint(String runId) async {
+    await waitForCachedEntity('light.kitchen_light');
+    final server = await container
+        .read(serverManagerProvider)
+        .getActiveServer();
+    if (server == null ||
+        await container.read(credentialRepositoryProvider).read(server.id!) ==
+            null) {
+      throw StateError('Seed session was not persisted');
+    }
+    final overrides = await container
+        .read(homeTileOverrideRepositoryProvider)
+        .getByServer(server.id!);
+    if (overrides.isEmpty) throw StateError('Home selection was not persisted');
+    final file = await checkpointFile;
+    await file.writeAsString(
+      jsonEncode({
+        'runId': runId,
+        'pid': pid,
+        'serverId': server.id,
+        'entityId': 'light.kitchen_light',
+        'createdAt': DateTime.now().toUtc().toIso8601String(),
+      }),
+      flush: true,
+    );
+  }
+
+  Future<void> verifyCheckpoint(String runId) async {
+    final data = jsonDecode(await (await checkpointFile).readAsString()) as Map;
+    if (data['runId'] != runId || data['pid'] == pid)
+      throw StateError(
+        'Cold launch requires a different process and the same run',
+      );
+    final server = await container
+        .read(serverManagerProvider)
+        .getActiveServer();
+    if (server?.id != data['serverId'] ||
+        server == null ||
+        await container.read(credentialRepositoryProvider).read(server.id!) ==
+            null) {
+      throw StateError('Persisted session did not survive relaunch');
+    }
+    await waitForCachedEntity('light.kitchen_light');
+    final overrides = await container
+        .read(homeTileOverrideRepositoryProvider)
+        .getByServer(server.id!);
+    if (overrides.isEmpty)
+      throw StateError('Persisted home selection did not survive');
+    await (await checkpointFile).writeAsString(
+      jsonEncode({
+        ...data,
+        'verifyPid': pid,
+        'verifiedAt': DateTime.now().toUtc().toIso8601String(),
+      }),
+      flush: true,
     );
   }
 

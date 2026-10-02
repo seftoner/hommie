@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:boolean_selector/boolean_selector.dart';
+
 import 'backend_fixture.dart';
 import 'config.dart';
 import 'ownership_journal.dart';
@@ -8,12 +10,9 @@ import 'patrol_cli.dart';
 import 'patrol_runner.dart';
 import 'process_runner.dart';
 import 'simulator.dart';
+import 'cold_start.dart';
 
 Future<int> runOrdinary(E2eConfig config) async {
-  if (config.target == null || config.target == 'cold_start')
-    throw StateError(
-      'Cold-start/default suite orchestration is not implemented yet; select an ordinary target',
-    );
   if (config.watch || config.develop || config.repeat != 1)
     throw StateError('Repeat/watch/develop rails are not implemented yet');
   final backend = BackendFixture(config, ProcessRunner());
@@ -75,16 +74,66 @@ Future<int> runOrdinary(E2eConfig config) async {
       flush: true,
     );
     await Process.run('chmod', ['600', defines.path]);
-    code =
-        await PatrolRunner(
-          PatrolCli(config.repoRoot, processes),
-          timeout: config.timeout,
-        ).runTargets(
-          [config.target!],
+    final patrol = PatrolRunner(
+      PatrolCli(config.repoRoot, processes),
+      timeout: config.timeout,
+    );
+    final ordinary = config.target == null
+        ? ['authorization', 'areas', 'offline_banner']
+        : config.target == 'cold_start'
+        ? <String>[]
+        : [config.target!];
+    code = ordinary.isEmpty
+        ? 0
+        : await patrol.runTargets(
+            ordinary,
+            device: device,
+            defines: defines,
+            tags: config.tags,
+          );
+    final coldSelected =
+        (config.target == null || config.target == 'cold_start') &&
+        (config.tags == null ||
+            BooleanSelector.parse(config.tags!)
+                .evaluate((tag) => tag == 'cold_start'));
+    if (code == 0 && coldSelected) {
+      File? checkpoint;
+      code = await ColdStartRunner(
+        phase: (phase, file) => patrol.runTargets(
+          ['cold_start_$phase'],
           device: device,
-          defines: defines,
-          tags: config.tags,
+          defines: file,
+          preserveApp: true,
+        ),
+        checkpoint: () async {
+          checkpoint = await simulator.checkpointFile(device);
+          final value = jsonDecode(await checkpoint!.readAsString()) as Map;
+          if (value['runId'] != runId || value['pid'] is! int)
+            throw StateError('Invalid cold seed checkpoint');
+          stdout.writeln(
+            'Cold seed persisted: PID ${value['pid']}, entity ${value['entityId']}',
+          );
+        },
+        terminate: () => simulator.terminateAndVerify(device),
+        route: backend.setRouteEnabled,
+        cleanup: () async {
+          await journal!.reconcile(backend);
+        },
+      ).run(defines: defines);
+      if (code == 0) checkpoint = await simulator.checkpointFile(device);
+      if (checkpoint != null && checkpoint!.existsSync()) {
+        final value = jsonDecode(await checkpoint!.readAsString()) as Map;
+        if (code == 0 &&
+            (value['verifyPid'] is! int ||
+                value['verifyPid'] == value['pid'])) {
+          throw StateError('Cold verify process proof is missing');
+        }
+        stdout.writeln(
+          'Cold process proof: ${value['pid']} → ${value['verifyPid']}',
         );
+        await checkpoint!.delete();
+      }
+    }
   } finally {
     try {
       await backend.setRouteEnabled(true);

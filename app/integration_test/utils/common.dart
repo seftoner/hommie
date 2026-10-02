@@ -8,6 +8,7 @@ import 'test_context.dart';
 import 'fault_proxy_client.dart';
 import 'hass_token_manager.dart';
 import 'hass_area_manager.dart';
+import 'cold_phase.dart';
 
 bool _bootstrapped = false;
 int _scenario = 0;
@@ -34,17 +35,26 @@ void patrol(
     platformAutomatorConfig:
         platformAutomatorConfig ?? _platformAutomatorConfig,
     framePolicy: framePolicy,
-    skip: skip,
+    skip: coldPhaseSkip(
+      const String.fromEnvironment('E2E_COLD_PHASE', defaultValue: 'none'),
+      tags is String ? [tags] : (tags as Iterable?)?.cast<String>() ?? [],
+      skip,
+    ),
     tags: tags,
     ($) async {
       final context = TestContext.instance();
       context.begin('scenario${++_scenario}');
       var primaryFailed = false;
       context.cleanup.register('provider resources', context.appState.close);
-      context.cleanup.register('app persisted state', context.appState.reset);
+      context.cleanup.register('app persisted state', () async {
+        if (!context.preserveSeed) await context.appState.reset();
+      });
       final proxy = FaultProxyClient(
         faultControlUrl: context.config.faultControlUrl,
       );
+      context.cleanup.register('proxy HTTP client', () async {
+        proxy.close();
+      });
       context.cleanup.register('HA route restoration', proxy.restoreHaRoute);
       addTearDown(() async {
         try {
@@ -70,7 +80,8 @@ void patrol(
           }
           _bootstrapped = true;
         }
-        await context.appState.reset();
+        if (context.config.coldPhase != 'verify')
+          await context.appState.reset();
         context.cleanup.register(
           'owned HA areas',
           () => HassAreaManager().cleanupOwnedAreas(
@@ -98,6 +109,7 @@ void patrol(
           }
         });
         await callback($);
+        context.preserveSeed = context.config.coldPhase == 'seed';
       } catch (_) {
         primaryFailed = true;
         rethrow;

@@ -14,6 +14,7 @@ class TestContext {
   late E2eAppState appState;
   HassTokenRef? token;
   String namespace = '';
+  bool preserveSeed = false;
   final ownedAreaIds = <String>{};
   String get initialAreaName => '$namespace Initial';
   String get renamedAreaName => '$namespace Renamed';
@@ -34,6 +35,7 @@ class TestContext {
   void clear() {
     _authToken = null;
     token = null;
+    preserveSeed = false;
     ownedAreaIds.clear();
   }
 }

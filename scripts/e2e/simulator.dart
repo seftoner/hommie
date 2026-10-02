@@ -85,4 +85,41 @@ class IosSimulator {
     if ((await _run(['bootstatus', device.id, '-b'])).exitCode != 0)
       throw StateError('Simulator ${device.name} did not become ready');
   }
+
+  Future<File> checkpointFile(SimulatorDevice device) async {
+    final result = await _run([
+      'get_app_container',
+      device.id,
+      'com.seftoner.hommie',
+      'data',
+    ]);
+    if (result.exitCode != 0)
+      throw StateError('Cannot locate persisted app sandbox');
+    final directory = Directory('${(result.stdout as String).trim()}/Library');
+    final files = directory
+        .listSync(recursive: true, followLinks: false)
+        .whereType<File>()
+        .where((f) => f.path.endsWith('/hommie_e2e_checkpoint.json'))
+        .toList();
+    if (files.length != 1)
+      throw StateError('Cold seed checkpoint is missing or ambiguous');
+    return files.single;
+  }
+
+  Future<void> terminateAndVerify(SimulatorDevice device) async {
+    await _run(['terminate', device.id, 'com.seftoner.hommie']);
+    final result = await _run(['spawn', device.id, 'launchctl', 'list']);
+    if (result.exitCode != 0)
+      throw StateError('Cannot verify simulator process boundary');
+    final lines = (result.stdout as String)
+        .split('\n')
+        .where(
+          (line) => line.contains('UIKitApplication:com.seftoner.hommie['),
+        );
+    if (lines.any(
+      (line) => int.tryParse(line.trim().split(RegExp(r'\s+')).first) != null,
+    )) {
+      throw StateError('App is still running before offline cold launch');
+    }
+  }
 }

@@ -60,6 +60,7 @@ class OwnershipJournal {
     );
   }
   Future<void> reconcile(BackendFixture fixture) async {
+    if (!file.existsSync()) return;
     final user = await fixture.cliWs('auth/current_user') as Map;
     if (user['id'] != userId)
       throw StateError('Ownership user differs; repair required');

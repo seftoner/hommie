@@ -82,7 +82,7 @@ packages:
     source: hosted
     version: "2.1.4"
   boolean_selector:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: boolean_selector
       sha256: "8aab1771e1243a5063b8b0ff68042d67334e3feab9e95b9490f9a6ebf73b42ea"

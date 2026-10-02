@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:boolean_selector/boolean_selector.dart';
+
 class E2eConfig {
   final Directory repoRoot;
   final String command;
@@ -90,6 +92,16 @@ class E2eConfig {
       throw const FormatException(
         'Target must be authorization, areas, offline_banner, or cold_start',
       );
+    }
+    if (tags != null) {
+      final selector = BooleanSelector.parse(tags);
+      if (selector.variables.any(
+        (tag) => tag == 'cold_seed' || tag == 'cold_verify',
+      )) {
+        throw const FormatException(
+          'Select the logical cold_start pair; phase tags are internal',
+        );
+      }
     }
     if (develop &&
         (target == null || target == 'cold_start' || watch || repeat != 1)) {
