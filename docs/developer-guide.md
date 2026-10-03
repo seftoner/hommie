@@ -61,51 +61,6 @@ Resolve workspace dependencies from the repository root. Run build_runner, analy
 ### Troubleshooting
 If generated files are missing or stale (compile errors referencing *.g.dart / *.freezed.dart / router files), rerun the codegen step.
 
-#### macOS Swift Package Manager / CocoaPods troubleshooting
-
-The current project uses Swift Package Manager (SPM):
-`app/pubspec.yaml` enables it, the macOS Runner links
-`FlutterGeneratedPluginSwiftPackage`, and `app/macos/Podfile` is absent. Patrol
-supports SPM on iOS and macOS from 4.7.0; 4.9.0 fixed the macOS
-`module 'PatrolImpl' not found` error. The resolved baseline is Patrol 4.10.0.
-See the [Patrol changelog](https://pub.dev/packages/patrol/changelog).
-
-If an older checkout or stale dependency resolution prints:
-
-```text
-The following plugins do not support Swift Package Manager for macos:
-  - patrol
-```
-
-check the resolved Patrol version in the root `pubspec.lock` against
-`app/pubspec.yaml`, then resolve dependencies and build from the correct package:
-
-```bash
-# From the repository root
-flutter pub get
-cd app
-flutter build macos --debug
-```
-
-Do not treat this old warning as a reason to disable SPM or add CocoaPods wiring
-by default. If the current resolved package still produces it, inspect the
-verbose build output and generated plugin metadata for the actual cause.
-
-For a checkout that intentionally uses CocoaPods and has `app/macos/Podfile`,
-this separate warning means the local CocoaPods installation needs diagnosis:
-
-```text
-Warning: CocoaPods is installed but broken. Skipping pod install.
-```
-
-Run `pod --version`, then `pod install` from `app/macos/` to reveal the underlying
-error. If the Homebrew installation is broken, repair it with
-`brew reinstall cocoapods`. If installation succeeds but Xcode reports missing
-Runner base configurations, verify the CocoaPods checkout's Debug, Release and
-Profile configurations include their corresponding `Pods-Runner.*.xcconfig`
-files. These instructions apply to CocoaPods checkouts, not the current SPM
-configuration.
-
 ## Complete Testing Guide
 
 ### Unit & Widget Tests
