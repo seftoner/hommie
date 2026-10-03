@@ -16,7 +16,7 @@ This repo is a **Dart pub workspace** (monorepo). The root `pubspec.yaml` declar
 
 ## Commands
 
-Run codegen-dependent commands from the repo root (`flutter pub get` resolves the whole workspace); run `flutter test` / `flutter run` from `app/`.
+Run `flutter pub get` from the repository root to resolve the whole workspace. Run build_runner, `flutter analyze`, `flutter test` and `flutter run` from `app/`.
 
 ```bash
 flutter pub get                                              # after any pubspec change (root)
@@ -32,13 +32,13 @@ Codegen drives `*.g.dart` / `*.freezed.dart` (Riverpod, freezed, json_serializab
 
 ### Integration tests (Patrol + Docker)
 
-Requires Docker and a local HA instance on ports 8123 / 3000.
+Requires locally installed Patrol CLI, Docker Desktop, Xcode/iPhone Simulator and `jq`. The persistent fixture uses HA 8123, bridge 3000, proxy 18124 and proxy control 18474.
 
 ```bash
 dart pub global activate patrol_cli && patrol doctor        # one-time
 ./scripts/setup_test_env.sh                                 # spins up HA, writes .patrol.env with token
-patrol test                                                 # run integration specs (from app/)
-./scripts/cleanup_test_env.sh                               # tear down
+patrol test --no-uninstall                                  # run specs; preserve recovery journals (from app/)
+./scripts/cleanup_test_env.sh                               # stop services; preserve fixture data
 ```
 
 BDD specs live in `app/integration_test/` as `.feature` files with step implementations under `integration_test/step/` (bdd_widget_test + patrol). See `docs/testing.md`.
@@ -113,3 +113,24 @@ When adding server-dependent data, depend on the `serverScope*` providers -- nev
 - **Branches:** off `main`; `feature/ABC-123-desc`, `fix/ABC-123-desc`, `hotfix/ABC-123-desc`. `main` is protected — PRs only.
 - **Tests required:** new features must have test coverage (`docs/development_workflow.md`).
 - Entities are immutable `@freezed` classes, JSON-mapped with `@JsonSerializable(fieldRename: FieldRename.snake)`.
+
+## Documentation maintenance
+
+Update affected documentation in the same change whenever setup requirements,
+SDK/dependency compatibility, build/test commands, architecture, persistence or
+observable behavior changes. Treat documentation updates as part of completion.
+
+- Keep `docs/developer-guide.md` accurate for onboarding, local prerequisites,
+  working directories, platform builds and troubleshooting.
+- Keep `docs/testing.md` accurate for Patrol, fixture lifecycle, offline faults,
+  cleanup and cold-launch testing. Link to it from general guides rather than
+  duplicating detailed workflows or recreating Patrol's CLI reference.
+- Update the relevant architecture guide and this file when repository-wide
+  contracts or agent instructions change. Mark superseded specs/plans as
+  historical so old instructions cannot be mistaken for the current workflow.
+- Verify claims against `pubspec.yaml`, `pubspec.lock`, platform configuration and
+  actual scripts. Check upstream release notes for version-sensitive limitations;
+  distinguish a current project configuration from a historical package bug.
+- Check documented paths, command working directories and local links. Record
+  material verification limits; do not describe a build/test as verified unless
+  it was actually run. Avoid documenting credentials or personal machine paths.

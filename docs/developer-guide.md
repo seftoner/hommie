@@ -4,11 +4,11 @@ This comprehensive guide contains detailed workflows, setup instructions, and be
 
 ## Project Overview
 
-Hommie is a Flutter (Dart 3.6+) multi‑platform client for Home Assistant focusing on fast, offline‑aware control and a polished UX. Targets iOS, Android, macOS (desktop adaptations in progress); Windows/Linux not primary yet. Communicates mainly via Home Assistant WebSocket API plus REST for setup and discovery.
+Hommie is a Flutter (Dart 3.13+) multi‑platform client for Home Assistant focusing on fast, offline‑aware control and a polished UX. Targets iOS, Android, macOS (desktop adaptations in progress); Windows/Linux not primary yet. Communicates mainly via Home Assistant WebSocket API plus REST for setup and discovery.
 
 ## Complete Tech Stack & Libraries
 
-- **Flutter SDK** ~3.27 (stable), Dart >=3.6 <4.0
+- **Flutter SDK** ^3.47.0, Dart >=3.13.0 <4.0 (see the workspace `pubspec.yaml`)
 - **State Management**: Riverpod (codegen via `riverpod_generator`), hooks_riverpod, freezed, json_serializable
 - **Navigation**: go_router (+ builder)
 - **Data Persistence**: Drift (SQLite, primary local cache), plus shared_preferences & secure storage
@@ -21,7 +21,7 @@ Hommie is a Flutter (Dart 3.6+) multi‑platform client for Home Assistant focus
 ## Repository Layout (Complete)
 
 ```
-lib/
+app/lib/
 ├── main.dart                 # entrypoint
 ├── app.dart                  # root widget
 ├── features/                 # feature‑oriented structure
@@ -31,13 +31,13 @@ lib/
 │       ├── infrastructure/   # data sources, implementations
 │       └── presentation/     # screens, widgets
 ├── core/                     # cross‑cutting primitives
-├── providers/                # higher‑level or global providers
+├── application/              # app-level scopes and session lifecycle
 ├── router/                   # navigation setup (go_router)
-├── services/                 # external service facades
+├── config/                   # app configuration
 └── ui/                       # shared design system components
 
-integration_test/             # patrol / integration specs (+ .feature BDD files)
-test/                        # unit & widget tests (mocks, data samples, utils)
+app/integration_test/         # patrol / integration specs (+ .feature BDD files)
+app/test/                    # unit & widget tests (mocks, data samples, utils)
 scripts/                     # helper shell scripts (test env setup / teardown)
 docker/                      # local HA & ancillary services for integration tests
 docs/                        # workflow & testing guides
@@ -46,59 +46,88 @@ analysis_options.yaml       # lints (enforced in CI/local)
 
 ## Complete Build & Run Workflow
 
-Always run these from repo root unless stated.
+Resolve workspace dependencies from the repository root. Run build_runner, analysis, tests and app commands from `app/`.
 
 ### Initial Setup
 1. Install Flutter (stable) & ensure `flutter doctor` is clean
-2. Dependencies: `flutter pub get` (ALWAYS after pubspec changes)
-3. Codegen & watchers (Riverpod / freezed / json): either
+2. From the repository root, resolve dependencies with `flutter pub get` after pubspec changes.
+3. Change to the application package: `cd app`.
+4. Codegen & watchers (Riverpod / freezed / json): either
    - **Continuous**: `dart run build_runner watch --delete-conflicting-outputs` (preferred during development)
    - **One‑off before commits**: `dart run build_runner build --delete-conflicting-outputs`
-4. Launch app (example): `flutter run -d macos` (or other device id)
-5. Hot reload/hot restart as usual. Keep build_runner watcher running to avoid stale generated code
+5. Launch app (example): `flutter run -d macos` (or other device id)
+6. Hot reload/hot restart as usual. Keep build_runner watcher running to avoid stale generated code
 
 ### Troubleshooting
-If generated files are missing or stale (compile errors referencing *.g.dart / *.freezed.dart / router files), rerun step 3.
+If generated files are missing or stale (compile errors referencing *.g.dart / *.freezed.dart / router files), rerun the codegen step.
 
-#### macOS CocoaPods / Patrol gotcha
+#### macOS Swift Package Manager / CocoaPods troubleshooting
 
-`patrol` does not currently support Flutter's Swift Package Manager flow for macOS, so the app still needs CocoaPods for macOS builds. If `flutter run -d macos` prints:
+The current project uses Swift Package Manager (SPM):
+`app/pubspec.yaml` enables it, the macOS Runner links
+`FlutterGeneratedPluginSwiftPackage`, and `app/macos/Podfile` is absent. Patrol
+supports SPM on iOS and macOS from 4.7.0; 4.9.0 fixed the macOS
+`module 'PatrolImpl' not found` error. The resolved baseline is Patrol 4.10.0.
+See the [Patrol changelog](https://pub.dev/packages/patrol/changelog).
+
+If an older checkout or stale dependency resolution prints:
 
 ```text
 The following plugins do not support Swift Package Manager for macos:
   - patrol
-Warning: CocoaPods is installed but broken. Skipping pod install.
 ```
 
-first run CocoaPods directly so it shows the real error:
+check the resolved Patrol version in the root `pubspec.lock` against
+`app/pubspec.yaml`, then resolve dependencies and build from the correct package:
 
 ```bash
-cd app
+# From the repository root
 flutter pub get
-cd macos
-pod install
-cd ..
+cd app
 flutter build macos --debug
 ```
 
-If `pod --version` fails, reinstall CocoaPods (`brew reinstall cocoapods` when using Homebrew). If `pod install` succeeds but Xcode warns that CocoaPods did not set the Runner base configuration, check that `app/macos/Runner/Configs/Debug.xcconfig`, `Release.xcconfig`, and `Profile.xcconfig` include the corresponding `Pods-Runner.*.xcconfig` files and that the Runner target points at those configuration files.
+Do not treat this old warning as a reason to disable SPM or add CocoaPods wiring
+by default. If the current resolved package still produces it, inspect the
+verbose build output and generated plugin metadata for the actual cause.
+
+For a checkout that intentionally uses CocoaPods and has `app/macos/Podfile`,
+this separate warning means the local CocoaPods installation needs diagnosis:
+
+```text
+Warning: CocoaPods is installed but broken. Skipping pod install.
+```
+
+Run `pod --version`, then `pod install` from `app/macos/` to reveal the underlying
+error. If the Homebrew installation is broken, repair it with
+`brew reinstall cocoapods`. If installation succeeds but Xcode reports missing
+Runner base configurations, verify the CocoaPods checkout's Debug, Release and
+Profile configurations include their corresponding `Pods-Runner.*.xcconfig`
+files. These instructions apply to CocoaPods checkouts, not the current SPM
+configuration.
 
 ## Complete Testing Guide
 
 ### Unit & Widget Tests
-- **Command**: `flutter test` (ensure codegen step 3 completed first to avoid missing part errors)
+- **Command**: `flutter test` (run from `app/` after codegen to avoid missing part errors)
 
-### Integration / Patrol Tests (requires Docker + local HA)
-1. Ensure Docker daemon running
-2. `chmod +x scripts/setup_test_env.sh scripts/cleanup_test_env.sh` (first time)
-3. `./scripts/setup_test_env.sh` (creates containers & `.patrol.env` with HASS_TOKEN) – wait for success message
-4. **Run**: `patrol test` (CLI must be installed: `dart pub global activate patrol_cli`; run `patrol doctor` once)
-5. **Cleanup** (optional): `./scripts/cleanup_test_env.sh`
+### Integration / Patrol Tests
+
+Use the locally installed Patrol CLI with Docker Desktop, Xcode/iPhone Simulator
+and `jq`; check the native toolchain with `patrol doctor`. Prepare the persistent
+HA/Toxiproxy fixture with `./scripts/setup_test_env.sh` from the repository root,
+then run `patrol test --no-uninstall` from `app/`. Patrol reads
+`app/.patrol.env` automatically. Optional `./scripts/cleanup_test_env.sh` stops
+services while preserving configuration and credentials.
+
+See [end-to-end testing](testing.md) for fixture lifecycle, owned cleanup,
+cold-launch verification and troubleshooting. Use Patrol's own device/target/tag
+options; the repository does not provide an alternative runner CLI.
 
 ### Common Test Failures
-- **Missing `.patrol.env`**: re‑run setup script
-- **Port conflicts (8123 / 3000)**: stop other processes
-- **Stale generated code**: re‑run build_runner
+- **Missing `app/.patrol.env`**: rerun fixture setup from the repository root.
+- **Port conflicts**: check HA 8123, bridge 3000, proxy 18124 and control 18474.
+- **Stale generated code**: rerun build_runner from `app/`.
 
 ## MCP (Model Context Protocol) Setup & Advanced Usage
 
@@ -299,7 +328,6 @@ class ServerEntities extends Table {
 Map between Drift rows/companions and domain entities inside the feature's
 `infrastructure/` repository (e.g. `DriftServerRepository`); never expose Drift
 types from `domain/` or `application/`.
-```
 
 ## Security & Secrets Management
 
@@ -438,11 +466,11 @@ test(integration): add server discovery tests
 ## Pre-PR Validation Workflow
 
 Run sequentially (stop on first failure):
-1. `flutter pub get`
-2. `dart run build_runner build --delete-conflicting-outputs`
-3. `flutter analyze`
-4. `flutter test`
-5. (Optional) Integration tests: Setup env + `patrol test`
+1. From the repository root: `flutter pub get`.
+2. From `app/`: `dart run build_runner build --delete-conflicting-outputs`.
+3. From `app/`: `flutter analyze`.
+4. From `app/`: `flutter test`.
+5. Optional E2E: prepare the fixture from the root, then use installed Patrol from `app/` (see [testing](testing.md)).
 
 ### Validation Checklist
 - [ ] No analyzer warnings introduced
@@ -456,8 +484,11 @@ Run sequentially (stop on first failure):
 
 ### Development Commands
 ```bash
-# Dependencies
+# Dependencies (repository root)
 flutter pub get
+
+# Application commands
+cd app
 
 # Code Generation
 dart run build_runner watch --delete-conflicting-outputs  # Continuous
@@ -470,32 +501,36 @@ flutter test --coverage
 
 # App Running
 flutter run -d macos
-flutter run -d ios
-flutter run -d android
+flutter devices              # list IDs for other simulators/devices
+# Pass the selected device ID to flutter run -d
 
-# Integration Testing
-./scripts/setup_test_env.sh
-patrol test
-./scripts/cleanup_test_env.sh
+# Integration Testing (currently in app/)
+../scripts/setup_test_env.sh
+patrol test --no-uninstall
+../scripts/cleanup_test_env.sh
 
 # MCP Server (debugging)
 dart mcp-server
 ```
 
 ### Docker Commands (Integration Testing)
+
+From the repository root:
+
 ```bash
-# Start test environment
-docker compose -f docker/docker-compose.yml up -d
+# Prepare the persistent fixture and Patrol environment
+./scripts/setup_test_env.sh
 
-# Check container status
-docker compose -f docker/docker-compose.yml ps
+# Inspect the existing project
+docker compose -f docker/docker-compose.yml -p homeassistant-test ps
 
-# Stop test environment
-docker compose -f docker/docker-compose.yml down
-
-# Clean up volumes
-docker compose -f docker/docker-compose.yml down -v
+# Stop services while retaining configuration and credentials
+./scripts/cleanup_test_env.sh
 ```
+
+The HA named volume is persistent test data. Routine cleanup stops services;
+volume deletion is an explicit destructive maintenance action, not normal test
+teardown. See [testing](testing.md).
 
 ## When to Search vs Trust Instructions
 
@@ -549,8 +584,8 @@ Only perform searches when:
 4. Use MCP: "Analyze widget tree for performance issues"
 
 ### Integration Test Debugging
-1. Check Docker logs: `docker compose logs`
-2. Verify .patrol.env exists and contains valid token
+1. From the root, inspect service logs with `docker compose -f docker/docker-compose.yml -p homeassistant-test logs`; keep credential-bearing diagnostics private.
+2. Verify `app/.patrol.env` exists and contains valid credentials without printing them
 3. Ensure Home Assistant is accessible on localhost:8123
 4. Use MCP: "Debug integration test failures"
 
