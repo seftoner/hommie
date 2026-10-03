@@ -8,7 +8,7 @@
 > Ownership recovery lives with integration-test helpers in the app sandbox.
 > [Current usage and architecture](../../testing.md) supersede the host-runner
 > contracts below. The original plan and acceptance evidence remain historical.
-> The next planned extension is [per-scenario mDNS discovery](2026-10-03-e2e-server-discovery-design.md),
+> The next planned extension is [controlled discovery scenarios](2026-10-03-e2e-server-discovery-design.md),
 > with its [implementation plan](../plans/2026-10-03-e2e-server-discovery.md).
 
 
