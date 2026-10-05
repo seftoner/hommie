@@ -37,7 +37,7 @@ Feature: Sign In
     When I complete onboarding
     Then I see {K.serversDiscovery.page} page
     And I see the discovered home assistant {'Hommie E2E'}
-    When I tap the discovered home assistant {'Hommie E2E'}
+    When I tap on {'Hommie E2E'}
     Then I see credentials web view form
     When I enter the configured credentials
     And I tap on login button

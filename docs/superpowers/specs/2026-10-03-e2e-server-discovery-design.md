@@ -73,9 +73,11 @@ Extend `authorization.feature` rather than creating a parallel sign-in feature:
    configure no discovery results, wait for the existing `No servers found.`
    successful empty state, and continue through manual entry and real sign-in.
 
-Name-only matching is insufficient; a same-name row with another URI must not
-satisfy the positive assertion or be tapped. The empty-state assertion must fail
-on loading, populated results or `Error discovering servers.`. Give asynchronous
+The discovery assertion matches both name and proxy URL; a same-name row with
+another URI must not satisfy it. Selection uses the generic
+`When I tap on {'Hommie E2E'}` step, which requires a unique visible text label
+and fails on ambiguity rather than choosing a same-name row. The empty-state
+assertion must fail on loading, populated results or `Error discovering servers.`. Give asynchronous
 UI assertions a 20-second deadline and use pumping rather than fixed sleeps.
 Test both execution orders and retain the existing sign-out, revocation, offline,
 area and cold-launch coverage.

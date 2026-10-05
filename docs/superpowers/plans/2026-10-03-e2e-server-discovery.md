@@ -29,7 +29,7 @@
 
 - Populated results leak into the next scenario: fresh fixture/container starts empty; Task 1 isolation test and Task 3 order acceptance.
 - Loading/error is mistaken for no servers: absence requires successful empty-state UI; Task 2 assertion regressions.
-- Another server shares the fixture name: match the exact name and configured proxy URL; Task 2 row/tap regressions.
+- Another server shares the fixture name: assert the exact name and configured proxy URL; the generic text-label tap rejects ambiguity.
 - A caller mutates fixture input or cache hides changed results: immutable snapshots and real force refresh; Task 1 fixture/cache tests.
 - A broad override accidentally bypasses OAuth, persistence or offline faults: discovery-only scope and real HA flow remain required; Tasks 1 and 3 persistence/cold checks.
 
@@ -43,7 +43,7 @@
 | `app/integration_test/utils/test_context.dart` | Fresh fixture and discovery-only provider override per scenario. |
 | `app/test/e2e/discovery_fixture_test.dart`, `app/test/e2e/app_state_test.dart` | Fixture/cache isolation and preserved real persistence. |
 | `app/integration_test/authorization.feature`, generated `authorization_test.dart` | Add discovered sign-in; strengthen existing manual-entry scenario. |
-| `app/integration_test/step/a_home_assistant_server_is_discoverable_as.dart`, `no_home_assistant_servers_are_discoverable.dart`, `i_see_the_discovered_home_assistant.dart`, `i_tap_the_discovered_home_assistant.dart`, `i_see_no_discovered_home_assistant_servers.dart` | Five semantic fixture/row/empty-state steps. |
+| `app/integration_test/step/a_home_assistant_server_is_discoverable_as.dart`, `no_home_assistant_servers_are_discoverable.dart`, `i_see_the_discovered_home_assistant.dart`, `i_tap_on.dart`, `i_see_no_discovered_home_assistant_servers.dart` | Fixture/row/empty-state steps and a reusable text-label tap. |
 | `app/integration_test/utils/discovery_assertions.dart`, `app/test/e2e/discovery_assertions_test.dart` | Exact row selection and successful empty-state assertions. |
 | `docs/testing.md`, this plan | Coverage boundary, native smoke instructions and actual acceptance evidence. |
 
@@ -75,7 +75,7 @@ reuse the manual-entry and configured-credential steps instead.
 **Interfaces:**
 - `aHomeAssistantServerIsDiscoverableAs(PatrolIntegrationTester $, String name)` populates the fixture with URI/internal URL from `config.appServerUrl`, UUID `e2e-discovery` and fake version `2024.12.5`.
 - `noHomeAssistantServersAreDiscoverable(PatrolIntegrationTester $)` clears it before mounting.
-- Name-bearing assertion/tap steps take `(PatrolIntegrationTester $, String name)`; the empty-state step takes only `$`.
+- The name-bearing assertion takes `(PatrolIntegrationTester $, String name)`; the generic `iTapOn(PatrolIntegrationTester $, String label)` taps a unique visible text label without discovery dependencies. The empty-state step takes only `$`.
 - `Finder discoveredServerRow({required String name, required Uri url})` matches one `ListTile` containing both exact texts.
 - `Future<void> waitForNoDiscoveredServers(WidgetTester tester, {Duration timeout = const Duration(seconds: 20)})` requires visible `No servers found.` and no server rows; loading/error do not pass. Row steps also use the 20-second deadline and existing Patrol pumping conventions.
 
@@ -130,3 +130,11 @@ A fresh read-only review found no correctness issues in the discovery changes or
 final iOS helper. Raw native logs, result bundles and fixture ownership snapshots
 remain private. The history audit for previous mocked-discovery tests is recorded
 in the spec.
+
+Follow-up (2026-10-05): replace the discovery-specific tap with the reusable
+`When I tap on {'Hommie E2E'}` text-label step. Keep the separate name-and-URL
+discovery assertion and reject ambiguous visible labels. BDD generation passed,
+all nine discovery assertion tests passed, the changed step/generated test had
+no analysis issues, and the focused iOS discovered-server sign-in passed 1/1
+through real HA authentication. The broader suite above was not rerun for this
+follow-up.

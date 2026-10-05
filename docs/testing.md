@@ -62,6 +62,8 @@ And the application is running in the foreground
 
 `authorization.feature` covers sign-in through the discovered row and the
 existing manual-entry flow. Row assertions match both name and proxy URL.
+Selection uses the reusable `When I tap on {'Hommie E2E'}` step, which taps a
+unique visible text label and fails on ambiguous labels.
 The no-server assertion waits for the successful `No servers found.` state;
 loading and errors cannot satisfy it. Fixture and cache state end with the
 scenario container. The production cache is retained; focused tests use the

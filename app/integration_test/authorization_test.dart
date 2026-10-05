@@ -22,7 +22,7 @@ import './step/i_enter_the_configured_credentials.dart';
 import './step/i_tap_on_login_button.dart';
 import './step/a_home_assistant_server_is_discoverable_as.dart';
 import './step/i_see_the_discovered_home_assistant.dart';
-import './step/i_tap_the_discovered_home_assistant.dart';
+import './step/i_tap_on.dart';
 import './step/home_assistant_access_is_configured.dart';
 import './step/i_have_successfully_logged_in.dart';
 import './step/i_scroll_to_button.dart';
@@ -55,7 +55,7 @@ void main() {
       await iCompleteOnboarding($);
       await iSeePage($, K.serversDiscovery.page);
       await iSeeTheDiscoveredHomeAssistant($, 'Hommie E2E');
-      await iTapTheDiscoveredHomeAssistant($, 'Hommie E2E');
+      await iTapOn($, 'Hommie E2E');
       await iSeeCredentialsWebViewForm($);
       await iEnterTheConfiguredCredentials($);
       await iTapOnLoginButton($);
