@@ -6,9 +6,12 @@ import 'package:hommie/core/database/database.dart';
 import 'package:hommie/core/infrastructure/database/database_provider.dart';
 import 'package:hommie/core/infrastructure/logging/logger.dart';
 import 'package:hommie/features/auth/infrastructure/providers/credential_repository_provider.dart';
+import 'package:hommie/features/auth/infrastructure/providers/ha_servers_repository_provider.dart';
+import 'package:hommie/features/auth/infrastructure/repositories/cached_ha_servers_repository.dart';
 import 'package:hommie/features/servers/infrastructure/providers/server_manager_provider.dart';
 
 import '../../integration_test/utils/app_state.dart';
+import '../../integration_test/utils/discovery_fixture.dart';
 import '../utils/tests_logger.dart';
 
 void main() {
@@ -22,8 +25,14 @@ void main() {
         'oauthCredentialsForServer:99': 'stale',
       });
       final db = AppDatabase(NativeDatabase.memory());
+      final discovery = DiscoveryFixture();
       final container = ProviderContainer(
-        overrides: [databaseConnectionProvider.overrideWithValue(db)],
+        overrides: [
+          databaseConnectionProvider.overrideWithValue(db),
+          haServersRepositoryProvider.overrideWith(
+            (_) => CachedHAServersRepository(baseRepository: discovery),
+          ),
+        ],
       );
       final state = E2eAppState(container: container);
       addTearDown(() async {
@@ -31,6 +40,10 @@ void main() {
         await db.close();
       });
       await state.reset();
+      expect(
+        await container.read(haServersRepositoryProvider).getAvailableServers(),
+        isEmpty,
+      );
       await state.seedSession(
         serverUrl: Uri.parse('http://127.0.0.1:18124'),
         accessToken: 'app-token',

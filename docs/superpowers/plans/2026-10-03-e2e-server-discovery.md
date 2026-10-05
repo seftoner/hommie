@@ -1,6 +1,6 @@
 # E2E Server Discovery Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Cover discovered-server selection and manual entry with controlled discovery data while keeping real HA authentication.
 
@@ -62,11 +62,11 @@ reuse the manual-entry and configured-credential steps instead.
 - Preserve `TestContext.begin(String scenarioId)`; add optional `E2eTestConfig? config` only as a test seam: `begin(String scenarioId, {E2eTestConfig? config})`.
 - Each begin creates `CachedHAServersRepository(baseRepository: fixture)` through `haServersRepositoryProvider.overrideWith(...)` in a fresh `ProviderContainer`, retaining `retry: (_, _) => null`, then passes it to `E2eAppState(container: ...)`.
 
-- [ ] **Write failing tests.** `starts_empty` expects `[]`; `returns_immutable_copied_results` changes the input list after setup and verifies the stored server survives and returned lists cannot be mutated. `new_scenario_does_not_inherit_results` begins two scenarios with supplied config and expects the second repository to return `[]`. `force_refresh_reads_changed_fixture` listens to the real discovery controller, loads one server, clears the fake, calls `forceRefresh()` and expects successful empty data without a 15-second wait. Extend the in-memory DB/secure-storage app-state test to use this discovery override while verifying real session persistence/reset still works.
-- [ ] **Confirm RED.** From `app/`: `flutter test test/e2e/discovery_fixture_test.dart test/e2e/app_state_test.dart`. Require missing-fixture/interface or behavior failures.
-- [ ] **Implement the fixture and scope.** Copy lists on set/read. Allocate one fixture and cached wrapper per scenario; expose it through context, configure the provider before mounting, and drop its reference on clear. Let existing app-state cleanup dispose the container; unit tests dispose their test containers and injected DB explicitly. Keep credentials, server manager and networking providers real.
-- [ ] **Confirm GREEN.** Repeat the two test files. Check the cache-refresh test uses the real controller/cache wrapper, retains a provider subscription while awaiting, and disposes it afterward; no timer waits or notifier mock.
-- [ ] **Commit** as `test(e2e): isolate discovery results per scenario`.
+- [x] **Write failing tests.** `starts_empty` expects `[]`; `returns_immutable_copied_results` changes the input list after setup and verifies the stored server survives and returned lists cannot be mutated. `new_scenario_does_not_inherit_results` begins two scenarios with supplied config and expects the second repository to return `[]`. `force_refresh_reads_changed_fixture` listens to the real discovery controller, loads one server, clears the fake, calls `forceRefresh()` and expects successful empty data without a 15-second wait. Extend the in-memory DB/secure-storage app-state test to use this discovery override while verifying real session persistence/reset still works.
+- [x] **Confirm RED.** From `app/`: `flutter test test/e2e/discovery_fixture_test.dart test/e2e/app_state_test.dart`. Require missing-fixture/interface or behavior failures.
+- [x] **Implement the fixture and scope.** Copy lists on set/read. Allocate one fixture and cached wrapper per scenario; expose it through context, configure the provider before mounting, and drop its reference on clear. Let existing app-state cleanup dispose the container; unit tests dispose their test containers and injected DB explicitly. Keep credentials, server manager and networking providers real.
+- [x] **Confirm GREEN.** Repeat the two test files. Check the cache-refresh test uses the real controller/cache wrapper, retains a provider subscription while awaiting, and disposes it afterward; no timer waits or notifier mock.
+- [x] **Commit** as `test(e2e): isolate discovery results per scenario`.
 
 ### Task 2: Cover discovered and manual sign-in in existing BDD
 

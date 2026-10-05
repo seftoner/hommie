@@ -1,4 +1,9 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hommie/features/auth/infrastructure/providers/ha_servers_repository_provider.dart';
+import 'package:hommie/features/auth/infrastructure/repositories/cached_ha_servers_repository.dart';
+
 import 'app_state.dart';
+import 'discovery_fixture.dart';
 import 'e2e_config.dart';
 import 'hass_token_manager.dart';
 import 'scenario_cleanup.dart';
@@ -9,6 +14,7 @@ class TestContext {
   static final TestContext _singleton = TestContext._();
 
   String? _authToken;
+  DiscoveryFixture? _discoveryFixture;
   late E2eTestConfig config;
   late ScenarioCleanup cleanup;
   late E2eAppState appState;
@@ -18,12 +24,26 @@ class TestContext {
   final ownedAreaIds = <String>{};
   String get initialAreaName => '$namespace Initial';
   String get renamedAreaName => '$namespace Renamed';
-  void begin(String scenarioId) {
+  DiscoveryFixture get discoveryFixture =>
+      _discoveryFixture ?? (throw StateError('No active discovery fixture'));
+
+  void begin(String scenarioId, {E2eTestConfig? config}) {
     clear();
-    config = E2eTestConfig.fromEnvironment();
-    namespace = 'Hommie E2E ${config.runId} $scenarioId';
+    this.config = config ?? E2eTestConfig.fromEnvironment();
+    namespace = 'Hommie E2E ${this.config.runId} $scenarioId';
     cleanup = ScenarioCleanup();
-    appState = E2eAppState();
+    final fixture = DiscoveryFixture();
+    _discoveryFixture = fixture;
+    appState = E2eAppState(
+      container: ProviderContainer(
+        retry: (_, _) => null,
+        overrides: [
+          haServersRepositoryProvider.overrideWith(
+            (_) => CachedHAServersRepository(baseRepository: fixture),
+          ),
+        ],
+      ),
+    );
   }
 
   void setAuthToken(String token) {
@@ -34,6 +54,7 @@ class TestContext {
 
   void clear() {
     _authToken = null;
+    _discoveryFixture = null;
     token = null;
     preserveSeed = false;
     ownedAreaIds.clear();
