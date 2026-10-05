@@ -12,7 +12,7 @@ dependencies:
   home_assistant_client: ^0.1.0
   computer: ^3.3.0
   drag_arrange: ^0.1.0
-  battery_plus: ^7.1.1
+  battery_plus: ^7.1.2
   connectivity_plus: ^7.3.0
   device_info_plus: ^13.2.0
   network_info_plus: ^8.2.1
