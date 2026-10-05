@@ -13,7 +13,9 @@ Future<void> homeAssistantAccessIsConfigured(PatrolIntegrationTester $) async {
   );
   context.token = token;
   context.cleanup.register('owned access token', () async {
-    if (!context.preserveSeed) await tokenManager.deleteById(token.id);
+    if (!context.preserveSeed) {
+      await tokenManager.deleteById(token.id);
+    }
   });
   context.setAuthToken(token.accessToken);
 }

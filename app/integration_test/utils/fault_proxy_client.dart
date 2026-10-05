@@ -9,13 +9,13 @@ class FaultProxyClient {
   FaultProxyClient({
     required Uri faultControlUrl,
     http.Client? client,
-    Duration timeout = const Duration(seconds: 5),
+    this._timeout = const Duration(seconds: 5),
   }) : _url = faultControlUrl.resolve('/proxies/hommie_ha'),
-       _client = client ?? http.Client(),
-       _timeout = timeout;
+       _client = client ?? http.Client();
   Future<void> disconnectFromHa() => _set(false);
   Future<void> restoreHaRoute() => _set(true);
   void close() => _client.close();
+
   Future<void> _set(bool enabled) async {
     try {
       final response = await _client
