@@ -11,10 +11,13 @@ Feature: Sign In
   So that I can control my devices
 
   @quick
+  @discovery
   Scenario: Enter address manually and sign in
-    Given the application is running in the foreground
+    Given no home assistant servers are discoverable
+    And the application is running in the foreground
     When I complete onboarding
     And I see {K.serversDiscovery.page} page
+    Then I see no discovered home assistant servers
     And I see {K.serversDiscovery.enterManuallyButton} button
     When I tap on {K.serversDiscovery.enterManuallyButton} button
     Then I see {K.manualAddress.page} page
@@ -23,6 +26,19 @@ Feature: Sign In
     And I tap on {K.manualAddress.connectButton} button
     Then I see credentials web view form
     
+    When I enter the configured credentials
+    And I tap on login button
+    Then I see {K.home.page} page
+
+  @discovery
+  Scenario: Sign in through a discovered server
+    Given a home assistant server is discoverable as {'Hommie E2E'}
+    And the application is running in the foreground
+    When I complete onboarding
+    Then I see {K.serversDiscovery.page} page
+    And I see the discovered home assistant {'Hommie E2E'}
+    When I tap the discovered home assistant {'Hommie E2E'}
+    Then I see credentials web view form
     When I enter the configured credentials
     And I tap on login button
     Then I see {K.home.page} page
