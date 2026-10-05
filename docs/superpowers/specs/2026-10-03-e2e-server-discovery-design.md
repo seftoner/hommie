@@ -1,11 +1,12 @@
 # Per-scenario Home Assistant discovery: design
 
 Date: 2026-10-03
-Status: Revised after user review; simplified implementation planned.
+Status: Implemented and verified on `codex/local-e2e-recovery` (2026-10-05).
 
 This revision replaces the host HTTP discovery-controller proposal committed in
 `ab6cac6`. Use a Dart discovery fixture for regular BDD tests, with a separate
-manual real-mDNS smoke check. Implementation has not started.
+manual real-mDNS smoke check. The Dart fixture and BDD scenarios are implemented;
+actual validation evidence is recorded in the implementation plan.
 
 Implementation plan: [E2E server discovery](../plans/2026-10-03-e2e-server-discovery.md).
 [Current testing workflow](../../testing.md) remains authoritative for installed

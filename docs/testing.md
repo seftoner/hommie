@@ -37,6 +37,62 @@ tests; cold phases and the internal recovery scenario are skipped in ordinary
 runs. iOS is the primary local platform; Android can use the same proxy/bridge
 with emulator-reachable endpoints in `.patrol.env`.
 
+## Controlled discovery
+
+Each BDD scenario has a fresh `DiscoveryFixture` and Riverpod container.
+`haServersRepositoryProvider` wraps that fixture in the production
+`CachedHAServersRepository`; discovery defaults to an empty list. The production
+controller and screen still run. The discovered fixture's address is
+`E2E_APP_SERVER_URL`, so selection leads to real HA OAuth, credential storage,
+SQLite persistence and connections through Toxiproxy.
+
+Configure the result before the foreground step mounts the app:
+
+```gherkin
+Given a home assistant server is discoverable as {'Hommie E2E'}
+And the application is running in the foreground
+```
+
+For manual entry:
+
+```gherkin
+Given no home assistant servers are discoverable
+And the application is running in the foreground
+```
+
+`authorization.feature` covers sign-in through the discovered row and the
+existing manual-entry flow. Row assertions match both name and proxy URL.
+The no-server assertion waits for the successful `No servers found.` state;
+loading and errors cannot satisfy it. Fixture and cache state end with the
+scenario container. The production cache is retained; focused tests use the
+real controller's force refresh to read changed fixture results.
+
+On iOS, the credential step uses HA's `Show password` control before typing the
+configured password, avoiding XCTest's intermittent secure-field focus failure
+during repeated sign-ins. It continues through real OAuth.
+
+These cases control discovery input. They do not verify mDNS packets, TXT
+parsing, multicast reachability or platform permissions. There are no additional
+host services, ports, dotenv keys or publisher prerequisites for routine BDD.
+
+### Separate real mDNS smoke check
+
+When changing discovery networking or platform permissions, prepare the existing
+fixture and register one `_home-assistant._tcp` service in the `local.` domain
+using the host's `dns-sd` on macOS or `avahi-publish-service` on Linux. Supply
+`location_name`, `uuid`, a valid `version`, and `internal_url` pointing to the
+device-reachable Toxiproxy URL, including its mapped port.
+
+Launch the ordinary production app with `flutter run` from `app/`, without the
+BDD discovery override. Verify that the exact published name and proxy URL
+appear, tap the row and reach the real HA authentication form. Stop the owned
+publisher afterward. This is a separate manual check; no per-scenario publisher
+controller or runner is needed.
+
+Record the tested host, device/emulator/runtime and publisher versions, actual
+app discovery and HTTP reachability separately. Native mDNS on iOS and
+Linux/Android remains unverified by the controlled-discovery BDD tests.
+
 ## Persistent fixture
 
 The shell setup starts only missing services in `homeassistant-test`, checks HA

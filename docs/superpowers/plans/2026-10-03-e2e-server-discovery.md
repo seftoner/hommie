@@ -92,16 +92,41 @@ reuse the manual-entry and configured-credential steps instead.
 
 **Interfaces:** Keep installed `patrol test --no-uninstall`, existing setup/cleanup scripts and `scripts/test_cold_start.sh <booted-iOS-Simulator-UDID>`; add no runner or environment contract.
 
-- [ ] **Run checks.** From `app/`, regenerate code, run `flutter test` and analyze changed files. Require no introduced issues; record unrelated pre-existing analyzer failures separately.
-- [ ] **Run native regression acceptance.** Exercise discovered → manual and manual → discovered, then the ordinary full suite on iOS. Run existing cold-launch acceptance and audit HA owned-token/area cleanup, persisted-state cleanup and proxy restoration. Only controlled discovery results may differ; real auth/DB/connection behavior must still pass.
-- [ ] **Document implemented coverage.** Update `docs/testing.md` with the discovery-only override, default empty fixture, two semantic BDD cases and the fact that mDNS/permissions/TXT parsing are outside their coverage. Retain Patrol as the CLI reference and existing local prerequisites.
-- [ ] **Document a separate manual real-mDNS smoke check.** Start one host `dns-sd`/Avahi advertisement with the proxy URL, launch the production app without the test override, inspect the exact discovered row, tap to HA authentication and stop the owned publisher. Record actual platform/tool evidence when run; mark unrun lanes pending. This check adds no routine BDD dependency or completion gate for mocked-discovery acceptance.
-- [ ] **Commit** as `docs(e2e): document controlled discovery coverage` after verifying paths, local links and working-directory instructions.
+- [x] **Run checks.** From `app/`, regenerate code, run `flutter test` and analyze changed files. Require no introduced issues; record unrelated pre-existing analyzer failures separately.
+- [x] **Run native regression acceptance.** Exercise discovered → manual and manual → discovered, then the ordinary full suite on iOS. Run existing cold-launch acceptance and audit HA owned-token/area cleanup, persisted-state cleanup and proxy restoration. Only controlled discovery results may differ; real auth/DB/connection behavior must still pass.
+- [x] **Document implemented coverage.** Update `docs/testing.md` with the discovery-only override, default empty fixture, two semantic BDD cases and the fact that mDNS/permissions/TXT parsing are outside their coverage. Retain Patrol as the CLI reference and existing local prerequisites.
+- [x] **Document a separate manual real-mDNS smoke check.** Start one host `dns-sd`/Avahi advertisement with the proxy URL, launch the production app without the test override, inspect the exact discovered row, tap to HA authentication and stop the owned publisher. Record actual platform/tool evidence when run; mark unrun lanes pending. This check adds no routine BDD dependency or completion gate for mocked-discovery acceptance.
+- [x] **Commit** as `docs(e2e): document controlled discovery coverage` after verifying paths, local links and working-directory instructions.
 
 ## Acceptance record
 
-At revision: documentation only; controlled-discovery implementation and native
-BDD acceptance are pending. Current/reachable Git history was searched for prior
-mocked-discovery coverage; the related historical helpers/test are recorded in
-the spec. Populate this section with actual BDD/regression results during execution.
-Real iOS and Linux/Android mDNS smoke checks remain separately unverified.
+2026-10-05, macOS host, iPhone 17 Simulator / iOS 26.5, installed Patrol CLI 4.8.0
+and Patrol 4.10.0. Persistent Docker HA, hass-cli bridge and Toxiproxy were reused.
+
+| Check | Actual result |
+| --- | --- |
+| Fixture, scenario/cache isolation and real app-state persistence | 5 focused tests passed. |
+| Production discovery-list selection and successful-empty assertions | 9 focused tests passed. |
+| Full app unit/widget suite | 268 tests passed. |
+| Analysis | Changed discovery files and the iOS credential step have no issues. The broader E2E harness has 25 pre-existing informational lints in unchanged files, with no errors or warnings. |
+| Native discovery order | Discovered → manual passed 2/2 in the focused run; manual → discovered passed in the final ordinary run. Both paths use real OAuth and reach home. |
+| Ordinary iOS suite | 6/6 passed: manual sign-in, discovered sign-in, sign-out, revocation, offline/recovery banner and area CRUD. |
+| Two-process cold launch | Seed and verify each passed 1/1. The host script confirmed different process IDs, persistent real credentials/cache, offline content and subsequent reconnection. |
+| HA ownership, app persistence and proxy restoration | Management authentication valid; original HA token IDs and areas unchanged; proxy enabled; zero ownership journals and persisted SQLite server rows; cold-start lock removed. Native sign-out/revocation also verified no OAuth credential keys remain. |
+| Real mDNS on iOS and Linux/Android | Separately unverified; manual smoke instructions documented. |
+
+Native acceptance exposed an intermittent XCTest secure-password-field focus
+failure during repeated iOS sign-ins. The existing credential step now taps HA's
+`Show password` control on iOS before its original indexed password entry. This
+keeps authentication real and leaves the Android path unchanged. No native
+framework patch, retry layer or runner was added.
+
+For reverse-order acceptance, the discovered scenario title was temporarily
+changed to `Discover a server and sign in`, placing its XCTest selector before
+manual entry. The committed title was restored and BDD output regenerated before
+the final ordinary run. No permanent scenario-order mechanism was introduced.
+
+A fresh read-only review found no correctness issues in the discovery changes or
+final iOS helper. Raw native logs, result bundles and fixture ownership snapshots
+remain private. The history audit for previous mocked-discovery tests is recorded
+in the spec.
