@@ -40,7 +40,7 @@ dependencies:
   path_provider: ^2.1.6
   permission_handler: ^13.0.2
   shared_preferences: ^2.5.5
-  url_launcher: ^6.3.2
+  url_launcher: ^6.3.3
   flutter_secure_storage: ^11.2.0
   flutter_web_auth_2: ^5.0.3
 
