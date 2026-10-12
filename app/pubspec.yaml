@@ -51,7 +51,7 @@ dependencies:
 
   workmanager: ^0.10.10
   flow_builder: ^0.1.0
-  drift: ^2.35.1
+  drift: ^2.35.2
   drift_flutter: ^0.3.1
 dev_dependencies:
   bdd_widget_test: ^2.1.4
