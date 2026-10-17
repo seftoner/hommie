@@ -245,107 +245,107 @@ Future<void> _showAreaNameDialog({
   required Future<void> Function(String name) onSave,
   String initialName = '',
 }) {
-  final controller = TextEditingController(text: initialName);
-  var currentName = initialName;
-  var isSubmitting = false;
-  String? errorText;
-
   return showDialog<void>(
     context: context,
-    builder: (dialogContext) => StatefulBuilder(
-      builder: (context, setState) {
-        final trimmed = currentName.trim();
-        final canSave =
-            !isSubmitting &&
-            trimmed.isNotEmpty &&
-            trimmed != initialName.trim();
-
-        return AlertDialog(
-          title: Text(title),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                key: K.areas.nameField,
-                controller: controller,
-                autofocus: true,
-                decoration: const InputDecoration(labelText: 'Name'),
-                onChanged: (value) => setState(() {
-                  currentName = value;
-                  errorText = null;
-                }),
-                onSubmitted: canSave
-                    ? (_) => _submitAreaName(
-                        dialogContext: dialogContext,
-                        setState: setState,
-                        updateSubmitting: (value) => isSubmitting = value,
-                        updateError: (value) => errorText = value,
-                        name: trimmed,
-                        onSave: onSave,
-                      )
-                    : null,
-              ),
-              if (errorText != null) ...[
-                const SizedBox(height: 12),
-                Text(
-                  errorText!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              ],
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: isSubmitting
-                  ? null
-                  : () => Navigator.of(dialogContext).pop(),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              key: K.areas.saveButton,
-              onPressed: canSave
-                  ? () => _submitAreaName(
-                      dialogContext: dialogContext,
-                      setState: setState,
-                      updateSubmitting: (value) => isSubmitting = value,
-                      updateError: (value) => errorText = value,
-                      name: trimmed,
-                      onSave: onSave,
-                    )
-                  : null,
-              child: Text(actionLabel),
-            ),
-          ],
-        );
-      },
+    builder: (_) => _AreaNameDialog(
+      title: title,
+      actionLabel: actionLabel,
+      initialName: initialName,
+      onSave: onSave,
     ),
-  ).whenComplete(controller.dispose);
+  );
 }
 
-Future<void> _submitAreaName({
-  required BuildContext dialogContext,
-  required StateSetter setState,
-  required ValueChanged<bool> updateSubmitting,
-  required ValueChanged<String?> updateError,
-  required String name,
-  required Future<void> Function(String name) onSave,
-}) async {
-  setState(() {
-    updateSubmitting(true);
-    updateError(null);
+class _AreaNameDialog extends StatefulWidget {
+  const _AreaNameDialog({
+    required this.title,
+    required this.actionLabel,
+    required this.initialName,
+    required this.onSave,
   });
-  try {
-    await onSave(name);
-    if (dialogContext.mounted) {
-      Navigator.of(dialogContext).pop();
-    }
-  } catch (error) {
-    if (dialogContext.mounted) {
-      setState(() {
-        updateError(error.toString());
-        updateSubmitting(false);
-      });
+
+  final String title;
+  final String actionLabel;
+  final String initialName;
+  final Future<void> Function(String name) onSave;
+
+  @override
+  State<_AreaNameDialog> createState() => _AreaNameDialogState();
+}
+
+class _AreaNameDialogState extends State<_AreaNameDialog> {
+  late final _controller = TextEditingController(text: widget.initialName);
+  bool _isSubmitting = false;
+  String? _errorText;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final trimmed = _controller.text.trim();
+    final canSave =
+        !_isSubmitting &&
+        trimmed.isNotEmpty &&
+        trimmed != widget.initialName.trim();
+
+    return AlertDialog(
+      title: Text(widget.title),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            key: K.areas.nameField,
+            controller: _controller,
+            autofocus: true,
+            decoration: const InputDecoration(labelText: 'Name'),
+            onChanged: (_) => setState(() => _errorText = null),
+            onSubmitted: canSave ? (_) => _submit(trimmed) : null,
+          ),
+          if (_errorText != null) ...[
+            const SizedBox(height: 12),
+            Text(
+              _errorText!,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ],
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          key: K.areas.saveButton,
+          onPressed: canSave ? () => _submit(trimmed) : null,
+          child: Text(widget.actionLabel),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _submit(String name) async {
+    setState(() {
+      _isSubmitting = true;
+      _errorText = null;
+    });
+    try {
+      await widget.onSave(name);
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _errorText = error.toString();
+          _isSubmitting = false;
+        });
+      }
     }
   }
 }
