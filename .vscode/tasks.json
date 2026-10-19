@@ -22,14 +22,17 @@
 		},
 		{
 			"label": "patrol: run tests",
-			"type": "shell",
+			"type": "process",
 			"command": "patrol",
 			"args": [
-				"test"
+				"test",
+				"--device",
+				"iPhone 17",
+				"--no-uninstall"
 			],
 			"group": "test",
 			"problemMatcher": [],
-			"detail": "Run patrol integration tests",
+			"detail": "Run E2E with the locally installed Patrol CLI",
 			"options": {
 				"cwd": "${workspaceFolder}/app"
 			}

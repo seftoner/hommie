@@ -1,0 +1,140 @@
+# E2E Server Discovery Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
+
+**Goal:** Cover discovered-server selection and manual entry with controlled discovery data while keeping real HA authentication.
+
+**Architecture:** A fresh Dart fixture supplies discovery results through a repository override in each scenario's existing Riverpod container. Keep the production cached repository, controller and UI, and connect to real Docker HA through Toxiproxy. Real mDNS has a separate manual smoke check.
+
+**Tech Stack:** Existing Flutter/Dart, Riverpod, Patrol, bdd_widget_test/build_runner and Docker HA/hass-cli/Toxiproxy; no new dependencies.
+
+**Spec:** [Per-scenario Home Assistant discovery](../specs/2026-10-03-e2e-server-discovery-design.md).
+
+> Revised after user review: supersedes the host-controller plan in `ab6cac6`.
+> Implement the tasks below in the existing `codex/local-e2e-recovery` branch.
+
+## Global Constraints
+
+- iOS Simulator remains the primary local E2E platform.
+- Use installed Patrol and the existing `app/integration_test/` BDD/codegen workflow.
+- Override only the discovery repository; authentication, persistence and HA transport remain real.
+- Each scenario gets a fresh fixture and container; discovery defaults to an empty list.
+- Keep the production discovery controller and `CachedHAServersRepository` behavior.
+- Configure discovery before mounting the app; use the existing force refresh for focused cache tests.
+- Preserve the persistent Docker HA fixture, hass-cli administration and Toxiproxy faults.
+- Add no host controller, Python daemon, discovery HTTP API, dotenv keys or native prerequisites to routine BDD.
+- Keep real mDNS verification separate and record its actual platform evidence.
+
+## Review Focus
+
+- Populated results leak into the next scenario: fresh fixture/container starts empty; Task 1 isolation test and Task 3 order acceptance.
+- Loading/error is mistaken for no servers: absence requires successful empty-state UI; Task 2 assertion regressions.
+- Another server shares the fixture name: assert the exact name and configured proxy URL; the generic text-label tap rejects ambiguity.
+- A caller mutates fixture input or cache hides changed results: immutable snapshots and real force refresh; Task 1 fixture/cache tests.
+- A broad override accidentally bypasses OAuth, persistence or offline faults: discovery-only scope and real HA flow remain required; Tasks 1 and 3 persistence/cold checks.
+
+---
+
+## File map
+
+| Files | Responsibility |
+| --- | --- |
+| `app/integration_test/utils/discovery_fixture.dart` | Small `IHAServersRepository` fake with copied immutable results. |
+| `app/integration_test/utils/test_context.dart` | Fresh fixture and discovery-only provider override per scenario. |
+| `app/test/e2e/discovery_fixture_test.dart`, `app/test/e2e/app_state_test.dart` | Fixture/cache isolation and preserved real persistence. |
+| `app/integration_test/authorization.feature`, generated `authorization_test.dart` | Add discovered sign-in; strengthen existing manual-entry scenario. |
+| `app/integration_test/step/a_home_assistant_server_is_discoverable_as.dart`, `no_home_assistant_servers_are_discoverable.dart`, `i_see_the_discovered_home_assistant.dart`, `i_tap_on.dart`, `i_see_no_discovered_home_assistant_servers.dart` | Fixture/row/empty-state steps and a reusable text-label tap. |
+| `app/integration_test/utils/discovery_assertions.dart`, `app/test/e2e/discovery_assertions_test.dart` | Exact row selection and successful empty-state assertions. |
+| `docs/testing.md`, this plan | Coverage boundary, native smoke instructions and actual acceptance evidence. |
+
+No production discovery/UI refactor is planned. Existing `E2eAppState`, foreground
+step, common cleanup and Docker scripts already provide the required lifecycle.
+The audit in the spec found no existing discovered-server selection case to reuse;
+reuse the manual-entry and configured-credential steps instead.
+
+### Task 1: Add an isolated Dart discovery fixture
+
+**Files:** Create `discovery_fixture.dart` and `discovery_fixture_test.dart` at the paths above; modify `test_context.dart` and extend `app_state_test.dart`.
+
+**Interfaces:**
+- `DiscoveryFixture implements IHAServersRepository` with `void setServers(List<HaServer> servers)`, `void clear()` and `Future<List<HaServer>> getAvailableServers()`.
+- `TestContext.discoveryFixture` exposes the active scenario fixture.
+- Preserve `TestContext.begin(String scenarioId)`; add optional `E2eTestConfig? config` only as a test seam: `begin(String scenarioId, {E2eTestConfig? config})`.
+- Each begin creates `CachedHAServersRepository(baseRepository: fixture)` through `haServersRepositoryProvider.overrideWith(...)` in a fresh `ProviderContainer`, retaining `retry: (_, _) => null`, then passes it to `E2eAppState(container: ...)`.
+
+- [x] **Write failing tests.** `starts_empty` expects `[]`; `returns_immutable_copied_results` changes the input list after setup and verifies the stored server survives and returned lists cannot be mutated. `new_scenario_does_not_inherit_results` begins two scenarios with supplied config and expects the second repository to return `[]`. `force_refresh_reads_changed_fixture` listens to the real discovery controller, loads one server, clears the fake, calls `forceRefresh()` and expects successful empty data without a 15-second wait. Extend the in-memory DB/secure-storage app-state test to use this discovery override while verifying real session persistence/reset still works.
+- [x] **Confirm RED.** From `app/`: `flutter test test/e2e/discovery_fixture_test.dart test/e2e/app_state_test.dart`. Require missing-fixture/interface or behavior failures.
+- [x] **Implement the fixture and scope.** Copy lists on set/read. Allocate one fixture and cached wrapper per scenario; expose it through context, configure the provider before mounting, and drop its reference on clear. Let existing app-state cleanup dispose the container; unit tests dispose their test containers and injected DB explicitly. Keep credentials, server manager and networking providers real.
+- [x] **Confirm GREEN.** Repeat the two test files. Check the cache-refresh test uses the real controller/cache wrapper, retains a provider subscription while awaiting, and disposes it afterward; no timer waits or notifier mock.
+- [x] **Commit** as `test(e2e): isolate discovery results per scenario`.
+
+### Task 2: Cover discovered and manual sign-in in existing BDD
+
+**Files:** Modify `authorization.feature`; generate `authorization_test.dart`; create the five step files, `discovery_assertions.dart` and its test from the file map.
+
+**Interfaces:**
+- `aHomeAssistantServerIsDiscoverableAs(PatrolIntegrationTester $, String name)` populates the fixture with URI/internal URL from `config.appServerUrl`, UUID `e2e-discovery` and fake version `2024.12.5`.
+- `noHomeAssistantServersAreDiscoverable(PatrolIntegrationTester $)` clears it before mounting.
+- The name-bearing assertion takes `(PatrolIntegrationTester $, String name)`; the generic `iTapOn(PatrolIntegrationTester $, String label)` taps a unique visible text label without discovery dependencies. The empty-state step takes only `$`.
+- `Finder discoveredServerRow({required String name, required Uri url})` matches one `ListTile` containing both exact texts.
+- `Future<void> waitForNoDiscoveredServers(WidgetTester tester, {Duration timeout = const Duration(seconds: 20)})` requires visible `No servers found.` and no server rows; loading/error do not pass. Row steps also use the 20-second deadline and existing Patrol pumping conventions.
+
+- [x] **Write BDD scenarios.** Add `Sign in through a discovered server`: configure `Hommie E2E`, launch/complete onboarding, see its exact row, tap, enter real configured credentials and reach `K.home.page`. Strengthen existing manual sign-in with an explicit empty-discovery Given before foreground launch and successful empty-state Then before manual entry. Preserve existing tags/steps and add a separate `@discovery` tag to each of these two cases.
+- [x] **Write assertion regressions.** A same-name row at another URL does not match or get selected; the matching row's callback receives the configured URL. Empty success passes, loading/error/populated states do not, and delayed empty success is awaited. Use short injected deadlines for negative unit tests.
+- [x] **Generate and confirm RED.** From `app/`, run `dart run build_runner build --delete-conflicting-outputs`; retain generated step stubs until tests prove missing behavior. Run `flutter test test/e2e/discovery_assertions_test.dart`; missing helpers/stub semantics must fail. Never edit generated `_test.dart` by hand.
+- [x] **Implement steps and helpers.** Keep fixture changes before app mounting. Reuse existing onboarding, HA web-form, configured credentials and login steps. Match row name plus proxy URL; wait for successful empty UI rather than merely a missing row. Do not add a refresh toolbar, native publisher or controller override.
+- [x] **Confirm GREEN.** Run assertion tests, regenerate code and analyze changed integration helpers/steps. Run the two scenarios on iOS Simulator through installed Patrol using its own selection/device options; require real HA authentication and home in both. Inspect generated output to verify both use the common `patrol` lifecycle.
+- [x] **Commit** as `test(e2e): cover discovered server sign-in`.
+
+### Task 3: Verify existing coverage and document the boundary
+
+**Files:** Modify `docs/testing.md` and this plan with results. Update general guides only if an existing documented requirement actually changes.
+
+**Interfaces:** Keep installed `patrol test --no-uninstall`, existing setup/cleanup scripts and `scripts/test_cold_start.sh <booted-iOS-Simulator-UDID>`; add no runner or environment contract.
+
+- [x] **Run checks.** From `app/`, regenerate code, run `flutter test` and analyze changed files. Require no introduced issues; record unrelated pre-existing analyzer failures separately.
+- [x] **Run native regression acceptance.** Exercise discovered → manual and manual → discovered, then the ordinary full suite on iOS. Run existing cold-launch acceptance and audit HA owned-token/area cleanup, persisted-state cleanup and proxy restoration. Only controlled discovery results may differ; real auth/DB/connection behavior must still pass.
+- [x] **Document implemented coverage.** Update `docs/testing.md` with the discovery-only override, default empty fixture, two semantic BDD cases and the fact that mDNS/permissions/TXT parsing are outside their coverage. Retain Patrol as the CLI reference and existing local prerequisites.
+- [x] **Document a separate manual real-mDNS smoke check.** Start one host `dns-sd`/Avahi advertisement with the proxy URL, launch the production app without the test override, inspect the exact discovered row, tap to HA authentication and stop the owned publisher. Record actual platform/tool evidence when run; mark unrun lanes pending. This check adds no routine BDD dependency or completion gate for mocked-discovery acceptance.
+- [x] **Commit** as `docs(e2e): document controlled discovery coverage` after verifying paths, local links and working-directory instructions.
+
+## Acceptance record
+
+2026-10-05, macOS host, iPhone 17 Simulator / iOS 26.5, installed Patrol CLI 4.8.0
+and Patrol 4.10.0. Persistent Docker HA, hass-cli bridge and Toxiproxy were reused.
+
+| Check | Actual result |
+| --- | --- |
+| Fixture, scenario/cache isolation and real app-state persistence | 5 focused tests passed. |
+| Production discovery-list selection and successful-empty assertions | 9 focused tests passed. |
+| Full app unit/widget suite | 268 tests passed. |
+| Analysis | Changed discovery files and the iOS credential step have no issues. The broader E2E harness has 25 pre-existing informational lints in unchanged files, with no errors or warnings. |
+| Native discovery order | Discovered → manual passed 2/2 in the focused run; manual → discovered passed in the final ordinary run. Both paths use real OAuth and reach home. |
+| Ordinary iOS suite | 6/6 passed: manual sign-in, discovered sign-in, sign-out, revocation, offline/recovery banner and area CRUD. |
+| Two-process cold launch | Seed and verify each passed 1/1. The host script confirmed different process IDs, persistent real credentials/cache, offline content and subsequent reconnection. |
+| HA ownership, app persistence and proxy restoration | Management authentication valid; original HA token IDs and areas unchanged; proxy enabled; zero ownership journals and persisted SQLite server rows; cold-start lock removed. Native sign-out/revocation also verified no OAuth credential keys remain. |
+| Real mDNS on iOS and Linux/Android | Separately unverified; manual smoke instructions documented. |
+
+Native acceptance exposed an intermittent XCTest secure-password-field focus
+failure during repeated iOS sign-ins. The existing credential step now taps HA's
+`Show password` control on iOS before its original indexed password entry. This
+keeps authentication real and leaves the Android path unchanged. No native
+framework patch, retry layer or runner was added.
+
+For reverse-order acceptance, the discovered scenario title was temporarily
+changed to `Discover a server and sign in`, placing its XCTest selector before
+manual entry. The committed title was restored and BDD output regenerated before
+the final ordinary run. No permanent scenario-order mechanism was introduced.
+
+A fresh read-only review found no correctness issues in the discovery changes or
+final iOS helper. Raw native logs, result bundles and fixture ownership snapshots
+remain private. The history audit for previous mocked-discovery tests is recorded
+in the spec.
+
+Follow-up (2026-10-05): replace the discovery-specific tap with the reusable
+`When I tap on {'Hommie E2E'}` text-label step. Keep the separate name-and-URL
+discovery assertion and reject ambiguous visible labels. BDD generation passed,
+all nine discovery assertion tests passed, the changed step/generated test had
+no analysis issues, and the focused iOS discovered-server sign-in passed 1/1
+through real HA authentication. The broader suite above was not rerun for this
+follow-up.

@@ -1,5 +1,21 @@
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:patrol/patrol.dart';
+import 'package:hommie/core/bootstrap/bootstrap.dart';
+
+import 'test_context.dart';
+import 'fault_proxy_client.dart';
+import 'cold_phase.dart';
+import 'failure_evidence.dart';
+import 'ownership_journal.dart';
+import 'remote_hass_cli.dart';
+
+bool _bootstrapped = false;
+int _scenario = 0;
 
 final _patrolTesterConfig = const PatrolTesterConfig(printLogs: true);
 final _platformAutomatorConfig = PlatformAutomatorConfig.fromOptions(
@@ -23,8 +39,104 @@ void patrol(
     platformAutomatorConfig:
         platformAutomatorConfig ?? _platformAutomatorConfig,
     framePolicy: framePolicy,
-    skip: skip,
+    skip: coldPhaseSkip(
+      const String.fromEnvironment('E2E_COLD_PHASE', defaultValue: 'none'),
+      tags is String ? [tags] : (tags as Iterable?)?.cast<String>() ?? [],
+      callerSkip: skip,
+    ),
     tags: tags,
-    callback,
+    ($) async {
+      final context = TestContext.instance();
+      context.begin('scenario${++_scenario}');
+      var primaryFailed = false;
+      context.cleanup.register('provider resources', context.appState.close);
+      context.cleanup.register('app persisted state', () async {
+        if (!context.preserveSeed) {
+          await context.appState.reset();
+        }
+      });
+      final proxy = context.proxy = FaultProxyClient(
+        faultControlUrl: context.config.faultControlUrl,
+      );
+      context.cleanup.register('proxy HTTP client', () async {
+        proxy.close();
+      });
+      context.cleanup.register('HA route restoration', proxy.restoreHaRoute);
+      addTearDown(() async {
+        try {
+          await context.cleanup.finish(
+            primaryFailed: primaryFailed,
+            diagnostic: debugPrint,
+            secrets: [
+              context.config.managementToken,
+              context.config.username,
+              context.config.password,
+              ?context.authToken,
+            ],
+          );
+        } finally {
+          context.clear();
+        }
+      });
+      try {
+        if (!_bootstrapped) {
+          final flutterError = FlutterError.onError;
+          final platformError = PlatformDispatcher.instance.onError;
+          final errorWidget = ErrorWidget.builder;
+          try {
+            await bootstrap();
+          } finally {
+            FlutterError.onError = flutterError;
+            PlatformDispatcher.instance.onError = platformError;
+            ErrorWidget.builder = errorWidget;
+          }
+          _bootstrapped = true;
+        }
+        final cli = context.cli = RemoteHassCli.fromEnvironment();
+        context.cleanup.register(
+          'journal HTTP client',
+          () async => cli.close(),
+        );
+        final journals = Directory(
+          '${(await getApplicationSupportDirectory()).path}/hommie_e2e_ownership',
+        );
+        await journals.create(recursive: true);
+        if (context.config.coldPhase != 'verify') {
+          await proxy.restoreHaRoute();
+          for (final file in journals.listSync().whereType<File>().where(
+            (file) => file.path.endsWith('.json'),
+          )) {
+            await OwnershipJournal.read(file).reconcile(cli);
+          }
+          await context.appState.reset();
+        }
+        final journal = context.config.coldPhase == 'verify'
+            ? OwnershipJournal.read(
+                File('${journals.path}/${context.config.runId}.json'),
+              )
+            : await OwnershipJournal.create(
+                cli,
+                journals,
+                context.config.runId,
+              );
+        context.cleanup.register('owned HA session and fixtures', () async {
+          if (!context.preserveSeed) {
+            await journal.reconcile(cli);
+          }
+        });
+        await callback($);
+        context.preserveSeed = context.config.coldPhase == 'seed';
+      } catch (_) {
+        primaryFailed = true;
+        try {
+          await captureFailureImage(context.config.runId);
+        } catch (_) {
+          debugPrint(
+            'Failure screenshot capture failed; primary error retained',
+          );
+        }
+        rethrow;
+      }
+    },
   );
 }

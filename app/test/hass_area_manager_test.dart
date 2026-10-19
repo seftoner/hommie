@@ -67,91 +67,27 @@ void main() {
 
     await manager.list();
 
-    expect(cli.commands, ['raw ws config/area_registry/list']);
-  });
-
-  test('deleteById sends compact area registry delete command', () async {
-    final cli = _FakeRemoteHassCli([
-      const CommandResult(stdout: '{"success":true}', stderr: '', exitCode: 0),
-    ]);
-    final manager = HassAreaManager(cli: cli);
-
-    await manager.deleteById('e2e_area_initial');
-
     expect(cli.commands, [
-      'raw ws config/area_registry/delete --json={"area_id":"e2e_area_initial"}',
-    ]);
-  });
-
-  test('delete failure includes area id in thrown message', () async {
-    final cli = _FakeRemoteHassCli([
-      const CommandResult(stdout: '', stderr: 'area not found', exitCode: 1),
-    ]);
-    final manager = HassAreaManager(cli: cli);
-
-    expect(
-      () => manager.deleteById('e2e_area_initial'),
-      throwsA(
-        isA<Exception>().having(
-          (error) => error.toString(),
-          'message',
-          contains('e2e_area_initial'),
-        ),
-      ),
-    );
-  });
-
-  test('cleanup deletes every deterministic area by name or area id', () async {
-    final cli = _FakeRemoteHassCli([
-      const CommandResult(
-        stdout: '''
-{
-  "id": 1,
-  "type": "result",
-  "success": true,
-  "result": [
-    {"area_id": "e2e_area_initial", "name": "Interrupted Old Name"},
-    {"area_id": "generated_1", "name": "E2E_Area_Initial"},
-    {"area_id": "generated_2", "name": "E2E_Area_Renamed"},
-    {"area_id": "living_room", "name": "Living Room"}
-  ]
-}
-''',
-        stderr: '',
-        exitCode: 0,
-      ),
-      const CommandResult(stdout: '{"success":true}', stderr: '', exitCode: 0),
-      const CommandResult(stdout: '{"success":true}', stderr: '', exitCode: 0),
-      const CommandResult(stdout: '{"success":true}', stderr: '', exitCode: 0),
-    ]);
-    final manager = HassAreaManager(cli: cli);
-
-    await manager.cleanupDeterministicAreas();
-
-    expect(cli.commands, [
-      'raw ws config/area_registry/list',
-      'raw ws config/area_registry/delete --json={"area_id":"e2e_area_initial"}',
-      'raw ws config/area_registry/delete --json={"area_id":"generated_1"}',
-      'raw ws config/area_registry/delete --json={"area_id":"generated_2"}',
+      ['raw', 'ws', 'config/area_registry/list'],
     ]);
   });
 }
 
-class _FakeRemoteHassCli implements RemoteHassCli {
+class _FakeRemoteHassCli extends RemoteHassCli {
   final List<CommandResult> _results;
-  final commands = <String>[];
+  final commands = <List<String>>[];
 
-  _FakeRemoteHassCli(this._results);
+  _FakeRemoteHassCli(this._results)
+    : super(
+        fixtureControlUrl: Uri.parse('http://localhost'),
+        managementToken: 'test',
+      );
 
   @override
-  Future<Either<CommandError, CommandResult>> execute(String command) async {
+  Future<Either<CommandError, CommandResult>> execute(
+    List<String> command,
+  ) async {
     commands.add(command);
     return Right(_results.removeAt(0));
   }
-
-  @override
-  Future<void> initialize() async {}
-
-  @override
-  void setToken(String token) {}
 }

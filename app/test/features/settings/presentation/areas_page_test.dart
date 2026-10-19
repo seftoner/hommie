@@ -103,6 +103,31 @@ void main() {
     expect(find.text('Delete'), findsNothing);
   });
 
+  testWidgets('keeps the rename field alive until its dialog is removed', (
+    tester,
+  ) async {
+    await _pumpAreasPage(
+      tester,
+      state: const ActiveServerAreasState(
+        areas: [Area(id: 'kitchen', name: 'Kitchen')],
+        canEdit: true,
+        hasActiveServer: true,
+      ),
+    );
+
+    await tester.tap(find.byIcon(Symbols.more_vert_rounded));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Rename'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(K.areas.nameField), 'New kitchen');
+    await tester.pump();
+    await tester.tap(find.byKey(K.areas.saveButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Rename area'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('shows delete confirmation copy', (tester) async {
     final controller = _FakeAreasSettingsController();
     await _pumpAreasPage(

@@ -9,77 +9,84 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import './step/perform_cleanup.dart';
+import './step/no_home_assistant_servers_are_discoverable.dart';
 import './step/the_application_is_running_in_the_foreground.dart';
 import './step/i_complete_onboarding.dart';
 import './step/i_see_page.dart';
+import './step/i_see_no_discovered_home_assistant_servers.dart';
 import './step/i_see_button.dart';
 import './step/i_tap_on_button.dart';
-import './step/i_enter_into_field.dart';
+import './step/i_enter_the_home_assistant_address.dart';
 import './step/i_see_credentials_web_view_form.dart';
-import './step/i_enter_credentials.dart';
+import './step/i_enter_the_configured_credentials.dart';
 import './step/i_tap_on_login_button.dart';
+import './step/a_home_assistant_server_is_discoverable_as.dart';
+import './step/i_see_the_discovered_home_assistant.dart';
+import './step/i_tap_on.dart';
 import './step/home_assistant_access_is_configured.dart';
 import './step/i_have_successfully_logged_in.dart';
-import './step/i_tap_on_list_item.dart';
+import './step/i_scroll_to_button.dart';
 import './step/i_see_alert.dart';
+import './step/the_active_session_is_removed.dart';
+import './step/the_client_is_connected_to_home_assistant.dart';
 import './step/home_assistant_revokes_access.dart';
-import './step/i_should_see_the_offline_banner.dart';
 
 void main() {
   group('''Sign In''', () {
-    Future<void> bddTearDown(PatrolIntegrationTester $) async {
-      await performCleanup($);
-    }
-
     patrol('''Enter address manually and sign in''', ($) async {
-      try {
-        await theApplicationIsRunningInTheForeground($);
-        await iCompleteOnboarding($);
-        await iSeePage($, K.serversDiscovery.page);
-        await iSeeButton($, K.serversDiscovery.enterManuallyButton);
-        await iTapOnButton($, K.serversDiscovery.enterManuallyButton);
-        await iSeePage($, K.manualAddress.page);
-        await iEnterIntoField(
-            $, 'http://10.0.2.2:8123', K.manualAddress.addressField);
-        await iTapOnButton($, K.manualAddress.connectButton);
-        await iSeeCredentialsWebViewForm($);
-        await iEnterCredentials($, 'admin', 'yourpassword');
-        await iTapOnLoginButton($);
-        await iSeePage($, K.home.page);
-      } finally {
-        await bddTearDown($);
-      }
-    }, tags: ['quick']);
+      await noHomeAssistantServersAreDiscoverable($);
+      await theApplicationIsRunningInTheForeground($);
+      await iCompleteOnboarding($);
+      await iSeePage($, K.serversDiscovery.page);
+      await iSeeNoDiscoveredHomeAssistantServers($);
+      await iSeeButton($, K.serversDiscovery.enterManuallyButton);
+      await iTapOnButton($, K.serversDiscovery.enterManuallyButton);
+      await iSeePage($, K.manualAddress.page);
+      await iEnterTheHomeAssistantAddress($);
+      await iTapOnButton($, K.manualAddress.connectButton);
+      await iSeeCredentialsWebViewForm($);
+      await iEnterTheConfiguredCredentials($);
+      await iTapOnLoginButton($);
+      await iSeePage($, K.home.page);
+    }, tags: ['quick', 'discovery']);
+    patrol('''Sign in through a discovered server''', ($) async {
+      await aHomeAssistantServerIsDiscoverableAs($, 'Hommie E2E');
+      await theApplicationIsRunningInTheForeground($);
+      await iCompleteOnboarding($);
+      await iSeePage($, K.serversDiscovery.page);
+      await iSeeTheDiscoveredHomeAssistant($, 'Hommie E2E');
+      await iTapOn($, 'Hommie E2E');
+      await iSeeCredentialsWebViewForm($);
+      await iEnterTheConfiguredCredentials($);
+      await iTapOnLoginButton($);
+      await iSeePage($, K.home.page);
+    }, tags: ['discovery']);
     patrol('''Sign out''', ($) async {
-      try {
-        await homeAssistantAccessIsConfigured($);
-        await iHaveSuccessfullyLoggedIn($);
-        await theApplicationIsRunningInTheForeground($);
-        await iTapOnButton($, K.appScaffold.settingsButton);
-        await iSeePage($, K.settings.page);
-        await iTapOnListItem($, K.settings.hubItem);
-        await iSeePage($, K.hub.page);
-        await iTapOnButton($, K.hub.signOutButton);
-        await iSeeAlert($, K.hub.signOutAlert);
-        await iTapOnButton($, K.hub.signOutButton);
-        await iSeePage($, K.serversDiscovery.page);
-      } finally {
-        await bddTearDown($);
-      }
+      await homeAssistantAccessIsConfigured($);
+      await iHaveSuccessfullyLoggedIn($);
+      await theApplicationIsRunningInTheForeground($);
+      await iTapOnButton($, K.appScaffold.settingsButton);
+      await iSeePage($, K.settings.page);
+      await iScrollToButton($, K.hub.signOutButton);
+      await iTapOnButton($, K.hub.signOutButton);
+      await iSeeAlert($, K.hub.signOutAlert);
+      await iTapOnButton($, K.hub.signOutButton);
+      await iSeePage($, K.onboarding.welcomePage);
+      await theActiveSessionIsRemoved($);
+      await iCompleteOnboarding($);
+      await iSeePage($, K.serversDiscovery.page);
     });
     patrol('''Logged out on server side''', ($) async {
-      try {
-        await homeAssistantAccessIsConfigured($);
-        await iHaveSuccessfullyLoggedIn($);
-        await theApplicationIsRunningInTheForeground($);
-        await iSeePage($, K.home.page);
-        await homeAssistantRevokesAccess($);
-        await iShouldSeeTheOfflineBanner($);
-        await iSeePage($, K.serversDiscovery.page);
-      } finally {
-        await bddTearDown($);
-      }
-    });
+      await homeAssistantAccessIsConfigured($);
+      await iHaveSuccessfullyLoggedIn($);
+      await theApplicationIsRunningInTheForeground($);
+      await iSeePage($, K.home.page);
+      await theClientIsConnectedToHomeAssistant($);
+      await homeAssistantRevokesAccess($);
+      await iSeePage($, K.onboarding.welcomePage);
+      await theActiveSessionIsRemoved($);
+      await iCompleteOnboarding($);
+      await iSeePage($, K.serversDiscovery.page);
+    }, tags: ['revocation']);
   });
 }

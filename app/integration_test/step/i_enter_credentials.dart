@@ -1,11 +1,30 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'dart:io';
+
 import 'package:patrol/patrol.dart';
 
 Future<void> iEnterCredentials(
   PatrolIntegrationTester $,
-  String usernmae,
+  String username,
   String password,
 ) async {
-  await $.platform.mobile.enterTextByIndex(usernmae, index: 0);
-  await $.platform.mobile.enterTextByIndex(password, index: 1);
+  final keyboardBehavior = Platform.isIOS ? KeyboardBehavior.alternative : null;
+  await $.platform.mobile.enterTextByIndex(
+    username,
+    index: 0,
+    keyboardBehavior: keyboardBehavior,
+  );
+  if (Platform.isIOS) {
+    // Avoid XCTest's intermittent secure-field focus failure in the HA web form.
+    await $.platform.ios.tap(
+      const IOSSelector(
+        elementType: IOSElementType.button,
+        label: 'Show password',
+      ),
+    );
+  }
+  await $.platform.mobile.enterTextByIndex(
+    password,
+    index: 1,
+    keyboardBehavior: keyboardBehavior,
+  );
 }

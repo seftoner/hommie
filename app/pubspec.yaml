@@ -78,6 +78,7 @@ flutter:
 
 patrol:
   app_name: hommie
+  test_directory: integration_test
   android:
     package_name: com.seftoner.hommie
   ios:
