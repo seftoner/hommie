@@ -70,7 +70,9 @@ class E2eAppState {
       final found = await (db.select(
         db.entities,
       )..where((row) => row.entityId.equals(entityId))).get();
-      if (found.isNotEmpty) return;
+      if (found.isNotEmpty) {
+        return;
+      }
       if (DateTime.now().isAfter(end)) {
         throw TimeoutException(
           'Entity $entityId was not persisted',
@@ -87,7 +89,9 @@ class E2eAppState {
     final server = await container
         .read(serverManagerProvider)
         .getActiveServer();
-    if (server == null) throw StateError('No active server');
+    if (server == null) {
+      throw StateError('No active server');
+    }
     final entity =
         await (db.select(db.entities)..where(
               (row) =>
@@ -124,7 +128,9 @@ class E2eAppState {
     final overrides = await container
         .read(homeTileOverrideRepositoryProvider)
         .getByServer(server.id!);
-    if (overrides.isEmpty) throw StateError('Home selection was not persisted');
+    if (overrides.isEmpty) {
+      throw StateError('Home selection was not persisted');
+    }
     final file = await checkpointFile;
     await file.writeAsString(
       jsonEncode({
@@ -140,10 +146,11 @@ class E2eAppState {
 
   Future<void> verifyCheckpoint(String runId) async {
     final data = jsonDecode(await (await checkpointFile).readAsString()) as Map;
-    if (data['runId'] != runId || data['pid'] == pid)
+    if (data['runId'] != runId || data['pid'] == pid) {
       throw StateError(
         'Cold launch requires a different process and the same run',
       );
+    }
     final server = await container
         .read(serverManagerProvider)
         .getActiveServer();
@@ -157,8 +164,9 @@ class E2eAppState {
     final overrides = await container
         .read(homeTileOverrideRepositoryProvider)
         .getByServer(server.id!);
-    if (overrides.isEmpty)
+    if (overrides.isEmpty) {
       throw StateError('Persisted home selection did not survive');
+    }
     await (await checkpointFile).writeAsString(
       jsonEncode({
         ...data,

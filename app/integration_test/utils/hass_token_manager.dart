@@ -22,11 +22,12 @@ class HassRefreshToken {
 
 class HassTokenManager {
   final RemoteHassCli _cli;
-  HassTokenManager({RemoteHassCli? cli})
-    : _cli = cli ?? RemoteHassCli.fromEnvironment();
+  HassTokenManager({required this._cli});
   Future<List<HassRefreshToken>> list() async {
     final result = await _cli.executeWs('auth/refresh_tokens');
-    if (result is! List) throw StateError('Invalid refresh token registry');
+    if (result is! List) {
+      throw StateError('Invalid refresh token registry');
+    }
     return result
         .map(
           (entry) => HassRefreshToken.fromJson(
@@ -39,7 +40,9 @@ class HassTokenManager {
   Future<HassTokenRef> createLongLivedToken({
     required String clientName,
   }) async {
-    if (clientName.isEmpty) throw ArgumentError('Token client name required');
+    if (clientName.isEmpty) {
+      throw ArgumentError('Token client name required');
+    }
     final baseline = (await list()).map((t) => t.id).toSet();
     final value = await _cli.executeWs(
       'auth/long_lived_access_token',
@@ -68,7 +71,9 @@ class HassTokenManager {
     ]);
     return response.fold((error) => throw StateError(error.message), (success) {
       final data = jsonDecode(success.stdout);
-      if (data is Map && data['success'] == true) return true;
+      if (data is Map && data['success'] == true) {
+        return true;
+      }
       if (data is Map &&
           data['error'] is Map &&
           data['error']['code'] == 'invalid_token_id') {

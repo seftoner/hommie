@@ -33,8 +33,8 @@ cache. The VS Code `patrol: run tests` task also calls `patrol` directly.
 BDD source remains in `app/integration_test/` with handwritten steps and helpers.
 Generate tests using build_runner from `app/`; commit the generated `_test.dart`
 files. Write each Gherkin tag on its own line. Patrol's runtime runner discovers
-tests; cold phases and the internal recovery scenario are skipped in ordinary
-runs. iOS is the primary local platform; Android can use the same proxy/bridge
+tests; cold phases are skipped in ordinary runs.
+iOS is the primary local platform; Android can use the same proxy/bridge
 with emulator-reachable endpoints in `.patrol.env`.
 
 ## Controlled discovery
@@ -126,6 +126,12 @@ the proxy route. The independent hass-cli bridge reaches HA directly, so token
 revocation, fixture verification and cleanup stay usable during app outages.
 This models losing reachability to HA; no native Wi-Fi/cellular toggle is used.
 
+Each scenario shares one CLI client and one proxy client, closed by the common
+wrapper. The ownership journal handles token/area cleanup once, including after
+an interrupted run; area steps use the CLI only for independent reads.
+Cleanup failures report reasons with configured credentials redacted and retain
+the original assertion or cleanup stack.
+
 Scenario teardown restores the proxy, removes exact owned tokens/areas and
 clears actual SQLite/Keychain data. A small journal in the app's support directory
 records baseline ownership before mutations. If native execution is interrupted,
@@ -172,4 +178,4 @@ simulator app support directory. Inspect and redact evidence before sharing it.
 The original recovery baseline passed three complete iOS suites (21 native
 executions). Those historical results are recorded in the recovery plan. Current
 verification after simplification is recorded separately there. No schedule or
-CI automation is installed.
+native E2E CI lane is installed.

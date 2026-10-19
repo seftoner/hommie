@@ -5,7 +5,9 @@ import 'package:hommie/features/auth/infrastructure/repositories/cached_ha_serve
 import 'app_state.dart';
 import 'discovery_fixture.dart';
 import 'e2e_config.dart';
+import 'fault_proxy_client.dart';
 import 'hass_token_manager.dart';
+import 'remote_hass_cli.dart';
 import 'scenario_cleanup.dart';
 
 class TestContext {
@@ -18,10 +20,11 @@ class TestContext {
   late E2eTestConfig config;
   late ScenarioCleanup cleanup;
   late E2eAppState appState;
+  late RemoteHassCli cli;
+  late FaultProxyClient proxy;
   HassTokenRef? token;
   String namespace = '';
   bool preserveSeed = false;
-  final ownedAreaIds = <String>{};
   String get initialAreaName => '$namespace Initial';
   String get renamedAreaName => '$namespace Renamed';
   DiscoveryFixture get discoveryFixture =>
@@ -57,6 +60,5 @@ class TestContext {
     _discoveryFixture = null;
     token = null;
     preserveSeed = false;
-    ownedAreaIds.clear();
   }
 }

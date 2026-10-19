@@ -5,8 +5,10 @@ import '../utils/test_context.dart';
 
 /// Usage: home assistant revokes access
 Future<void> homeAssistantRevokesAccess(PatrolIntegrationTester $) async {
-  final tokenManager = HassTokenManager();
+  final tokenManager = HassTokenManager(cli: TestContext.instance().cli);
   final token = TestContext.instance().token;
-  if (token == null) throw StateError('No owned app token to revoke');
+  if (token == null) {
+    throw StateError('No owned app token to revoke');
+  }
   await tokenManager.deleteById(token.id);
 }

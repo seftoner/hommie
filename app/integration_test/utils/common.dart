@@ -9,7 +9,6 @@ import 'package:hommie/core/bootstrap/bootstrap.dart';
 
 import 'test_context.dart';
 import 'fault_proxy_client.dart';
-import 'hass_area_manager.dart';
 import 'cold_phase.dart';
 import 'failure_evidence.dart';
 import 'ownership_journal.dart';
@@ -43,7 +42,7 @@ void patrol(
     skip: coldPhaseSkip(
       const String.fromEnvironment('E2E_COLD_PHASE', defaultValue: 'none'),
       tags is String ? [tags] : (tags as Iterable?)?.cast<String>() ?? [],
-      skip,
+      callerSkip: skip,
     ),
     tags: tags,
     ($) async {
@@ -56,7 +55,7 @@ void patrol(
           await context.appState.reset();
         }
       });
-      final proxy = FaultProxyClient(
+      final proxy = context.proxy = FaultProxyClient(
         faultControlUrl: context.config.faultControlUrl,
       );
       context.cleanup.register('proxy HTTP client', () async {
@@ -68,6 +67,12 @@ void patrol(
           await context.cleanup.finish(
             primaryFailed: primaryFailed,
             diagnostic: debugPrint,
+            secrets: [
+              context.config.managementToken,
+              context.config.username,
+              context.config.password,
+              ?context.authToken,
+            ],
           );
         } finally {
           context.clear();
@@ -87,7 +92,7 @@ void patrol(
           }
           _bootstrapped = true;
         }
-        final cli = RemoteHassCli.fromEnvironment();
+        final cli = context.cli = RemoteHassCli.fromEnvironment();
         context.cleanup.register(
           'journal HTTP client',
           () async => cli.close(),
@@ -119,13 +124,6 @@ void patrol(
             await journal.reconcile(cli);
           }
         });
-        context.cleanup.register(
-          'owned HA areas',
-          () => HassAreaManager().cleanupOwnedAreas(
-            ids: context.ownedAreaIds,
-            reservedNames: {context.initialAreaName, context.renamedAreaName},
-          ),
-        );
         await callback($);
         context.preserveSeed = context.config.coldPhase == 'seed';
       } catch (_) {

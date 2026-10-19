@@ -26,12 +26,15 @@ Future<void> waitForOfflineBanner(
         clippedHeight >= fullHeight - 0.5 &&
         banner.hitTestable().evaluate().isNotEmpty;
     final disappeared = !mounted || clippedHeight <= 0.5;
-    if (visible ? appeared : disappeared) return;
-    if (tester.binding.clock.now().isAfter(deadline))
+    if (visible ? appeared : disappeared) {
+      return;
+    }
+    if (tester.binding.clock.now().isAfter(deadline)) {
       throw TimeoutException(
         'Offline banner did not ${visible ? 'become visible' : 'disappear'}',
         timeout,
       );
+    }
     await tester.pump(const Duration(milliseconds: 100));
   }
 }

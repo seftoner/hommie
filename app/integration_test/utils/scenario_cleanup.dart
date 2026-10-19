@@ -9,7 +9,9 @@ class ScenarioCleanup {
   final _actions = <({String label, Future<void> Function() action})>[];
   Future<List<CleanupFailure>>? _result;
   void register(String label, Future<void> Function() action) {
-    if (_result != null) throw StateError('Cleanup already started');
+    if (_result != null) {
+      throw StateError('Cleanup already started');
+    }
     _actions.add((label: label, action: action));
   }
 
@@ -17,15 +19,21 @@ class ScenarioCleanup {
   Future<void> finish({
     required bool primaryFailed,
     required void Function(String) diagnostic,
+    Iterable<String> secrets = const [],
   }) async {
     final failures = await run();
-    if (failures.isEmpty) return;
-    final message =
-        'Cleanup failures: ${failures.map((f) => f.label).join(', ')}';
+    if (failures.isEmpty) {
+      return;
+    }
+    var message =
+        'Cleanup failures: ${failures.map((f) => '${f.label}: ${f.error}').join('; ')}';
+    for (final secret in secrets.where((value) => value.isNotEmpty)) {
+      message = message.replaceAll(secret, '[REDACTED]');
+    }
     if (primaryFailed) {
       diagnostic(message);
     } else {
-      throw StateError(message);
+      Error.throwWithStackTrace(StateError(message), failures.first.stackTrace);
     }
   }
 

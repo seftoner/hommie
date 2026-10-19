@@ -22,9 +22,12 @@ Future<void> iSeeCredentialsWebViewForm(PatrolIntegrationTester $) async {
       final form = await $.platform.ios.getNativeViews(
         const IOSSelector(text: 'Home Assistant'),
       );
-      if (form.roots.isNotEmpty) break;
-      if (DateTime.now().isAfter(deadline))
+      if (form.roots.isNotEmpty) {
+        break;
+      }
+      if (DateTime.now().isAfter(deadline)) {
         throw TimeoutException('iOS sign-in consent or HA form did not appear');
+      }
       await Future<void>.delayed(const Duration(milliseconds: 100));
     }
   }

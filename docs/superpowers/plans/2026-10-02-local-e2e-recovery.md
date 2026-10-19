@@ -395,3 +395,84 @@ extra baseline tokens, zero owned tokens/areas and zero pending app journals;
 original areas unchanged; proxy enabled. Shell syntax checks and invalid-port /
 missing-device validation passed. The custom CLI cache was removed, while the
 original migration backups and native evidence were retained.
+
+## Task 11: Simplify E2E helpers after PR review (2026-10-17)
+
+The approved recovery/discovery specs and later CLI simplification remain the
+baseline. Keep real iOS flows, persistent HA, independent CLI administration,
+proxy failure coverage, ownership recovery, immutable discovery inputs and the
+two-process offline relaunch.
+
+**Files:** `integration_test/utils/{common,test_context,hass_area_manager,hass_token_manager,scenario_cleanup,cold_phase,e2e_config}.dart`, their step callers, `areas.feature`, generated BDD tests, affected helper tests and `docs/testing.md` (app paths relative to `app/`).
+
+**Interfaces:** Require an injected `RemoteHassCli` in area/token managers;
+`TestContext` exposes the wrapper-owned CLI/proxy. The ownership journal is the
+sole destructive teardown owner. Cleanup reports sanitized reasons and retains
+the primary failure. Only `none`, `seed` and `verify` cold phases remain.
+
+- [x] Pin missing cleanup reasons with a failing assertion; verify configured
+  secrets are removed from diagnostic output and successful-scenario failures.
+- [x] Share and close scenario clients, remove duplicate cleanup registrations,
+  unused area mutation APIs/steps and the orphaned internal-cleanup phase.
+- [x] Remove assertions for unused APIs and overlapping config/discovery checks;
+  preserve the planned proxy, ownership, isolation and cache contracts.
+- [x] Regenerate BDD, analyze, run the full app suite, ordinary iOS scenarios and
+  both offline-relaunch phases. Verify fixture restoration, update docs/PR and
+  commit the simplification.
+
+## Task 12: Fix the area dialog defect exposed by native validation (2026-10-17)
+
+Native area CRUD reached Save during rename, then rendered Flutter errors:
+`TextEditingController` used after disposal and `_dependents.isEmpty`. The
+controller was disposed when the dialog route's future completed, before the
+closing animation removed its text field. This is an application defect; retain
+the E2E assertion and fix the dialog lifecycle.
+
+**Files:** `app/lib/features/settings/presentation/screens/areas_page.dart` and
+`app/test/features/settings/presentation/areas_page_test.dart`.
+
+- [x] Reproduce the actual rename/save crash in a focused widget regression.
+- [x] Let the dialog's state own and dispose its text controller, preserving
+  validation, disabled actions and error handling.
+- [x] Verify the six area-page tests and complete 263-test app suite; analyze the
+  changed files and review the production fix.
+- [x] Re-run ordinary iOS scenarios and the persisted offline-relaunch pair;
+  record outcomes and limitations in this plan and the draft PR.
+
+### Verification and implementation rulings for Tasks 11–12
+
+- Full app suite: 263 passed, including six area-page tests. The new rename/save
+  regression reproduced both disposal errors before the production fix and
+  passed afterward. The production fix is isolated in commit `b8dfbcc`.
+- Native validation on 2026-10-17: all six ordinary iOS scenarios passed, with
+  the two cold-phase cases intentionally skipped. Build: 37.2 seconds; native
+  execution: 3 minutes 8 seconds. The seed and verify invocations then each
+  passed, with the same fixture run and different app process IDs.
+- Final lint cleanup on 2026-10-19: the previous CI failure came from E2E style
+  diagnostics. `flutter analyze` now reports no issues, and all 263 app tests
+  passed again. The remaining existing CI command, the Home Assistant client
+  package suite, also passed all 51 tests. This final cleanup changes formatting
+  and parameter names;
+  native results above precede that cleanup. BDD was regenerated, and unrelated
+  formatter/Freezed output and an automatic dependency suggestion were reverted.
+- Fixture/app audit: all original HA areas and sessions preserved, no owned HA
+  sessions or areas remain, proxy enabled, no pending journals, and persisted
+  server/area/entity rows cleared. One additional unowned local browser session
+  was preserved rather than deleted to force exact baseline equality.
+- The genuine native area failure occurred after creation and before explicit
+  deletion. Its abandoned area and owned session were removed by journal
+  teardown. This provided real failure-path cleanup acceptance without adding
+  another artificial failure scenario.
+- Both simplification and production-fix reviews found no actionable issues.
+  Retain the planned fault/error, ownership, isolation, immutable discovery,
+  cache and persisted offline-relaunch coverage. No utility framework or custom
+  runner was introduced. XcodeBuildMCP supplied screen inspection; Patrol MCP
+  was not added as a project dependency.
+- Earlier investigation also observed intermittent manual/discovered sign-in
+  failures and a simulator installation failure. Both OAuth cases passed in
+  the final ordinary suite. A password-saving prompt was not established as
+  the cause, so no speculative handler or delay was added. Those intermittent
+  observations remain a verification limit, rather than a claimed auth fix.
+
+Android execution and real mDNS remain unverified. Native results stay private
+under ignored build output; the existing draft PR records the final changes.

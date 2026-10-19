@@ -16,8 +16,7 @@ class HassAreaManager {
   static String get initialName => TestContext.instance().initialAreaName;
   static String get renamedName => TestContext.instance().renamedAreaName;
 
-  HassAreaManager({RemoteHassCli? cli})
-    : _cli = cli ?? RemoteHassCli.fromEnvironment();
+  HassAreaManager({required this._cli});
 
   static List<HassTestArea> parseAreas(String stdout) {
     final response = jsonDecode(stdout);
@@ -64,66 +63,12 @@ class HassAreaManager {
       (error) => throw Exception(
         'Failed to list areas: ${error.message}. ${error.error}',
       ),
-      (success) {
-        if (!success.isSuccess) {
-          throw Exception('Failed to list areas: ${success.stderr}');
-        }
-
-        return parseAreas(success.stdout);
-      },
+      (success) => parseAreas(success.stdout),
     );
   }
 
   Future<HassTestArea?> findRemoteByName(String name) async {
     final areas = await list();
     return findByName(areas, name);
-  }
-
-  Future<bool> deleteByNameIfPresent(String name) async {
-    final area = await findRemoteByName(name);
-    if (area == null) {
-      return false;
-    }
-
-    await deleteById(area.areaId);
-    return true;
-  }
-
-  Future<void> cleanupOwnedAreas({
-    required Set<String> ids,
-    required Set<String> reservedNames,
-  }) async {
-    final areas = await list();
-    for (final area in areas) {
-      if (ids.contains(area.areaId) || reservedNames.contains(area.name)) {
-        await deleteById(area.areaId);
-      }
-    }
-  }
-
-  Future<void> deleteById(String areaId) async {
-    final command = [
-      'raw',
-      'ws',
-      'config/area_registry/delete',
-      '--json={"area_id":"$areaId"}',
-    ];
-
-    final result = await _cli.execute(command);
-
-    return result.fold(
-      (error) => throw Exception(
-        'Failed to delete area $areaId: ${error.message}. ${error.error}',
-      ),
-      (success) {
-        if (!success.isSuccess) {
-          throw Exception('Failed to delete area $areaId: ${success.stderr}');
-        }
-        final response = jsonDecode(success.stdout);
-        if (response is! Map || response['success'] != true) {
-          throw Exception('Home Assistant rejected deletion of area $areaId');
-        }
-      },
-    );
   }
 }

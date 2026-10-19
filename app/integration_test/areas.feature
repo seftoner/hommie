@@ -13,7 +13,6 @@ Feature: Area Management
 
   Background:
     Given home assistant access is configured
-    And home assistant test areas are clean
     And I have successfully logged in
 
   Scenario: Create rename and delete an area

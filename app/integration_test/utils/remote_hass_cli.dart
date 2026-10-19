@@ -34,11 +34,10 @@ class RemoteHassCli {
     required Uri fixtureControlUrl,
     required String managementToken,
     http.Client? client,
-    Duration timeout = const Duration(seconds: 25),
+    this._timeout = const Duration(seconds: 25),
   }) : _url = fixtureControlUrl.resolve('/cli'),
        _token = managementToken,
-       _client = client ?? http.Client(),
-       _timeout = timeout {
+       _client = client ?? http.Client() {
     if (_token.isEmpty) {
       throw const FormatException('Management token is required');
     }

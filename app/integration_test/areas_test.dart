@@ -11,7 +11,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import './step/home_assistant_access_is_configured.dart';
-import './step/home_assistant_test_areas_are_clean.dart';
 import './step/i_have_successfully_logged_in.dart';
 import './step/the_application_is_running_in_the_foreground.dart';
 import './step/i_see_page.dart';
@@ -28,7 +27,6 @@ void main() {
   group('''Area Management''', () {
     Future<void> bddSetUp(PatrolIntegrationTester $) async {
       await homeAssistantAccessIsConfigured($);
-      await homeAssistantTestAreasAreClean($);
       await iHaveSuccessfullyLoggedIn($);
     }
 

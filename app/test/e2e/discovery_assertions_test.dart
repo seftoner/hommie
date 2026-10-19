@@ -47,11 +47,6 @@ void main() {
       discoveredServerRow(name: 'Another name', url: fixtureUrl),
       findsNothing,
     );
-  });
-
-  testWidgets('same name at a different URL cannot satisfy discovery', (
-    tester,
-  ) async {
     await tester.pumpWidget(
       discoveryScreen(
         const ListTile(
@@ -60,10 +55,7 @@ void main() {
         ),
       ),
     );
-    expect(
-      discoveredServerRow(name: 'Hommie E2E', url: fixtureUrl),
-      findsNothing,
-    );
+    expect(row, findsNothing);
   });
 
   testWidgets('successful empty discovery satisfies absence', (tester) async {

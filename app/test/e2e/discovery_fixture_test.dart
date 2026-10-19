@@ -22,12 +22,9 @@ void main() {
     version: HaVersion.fromString('2024.12.5'),
   );
 
-  test('starts empty', () async {
-    expect(await DiscoveryFixture().getAvailableServers(), isEmpty);
-  });
-
   test('returns immutable copied results and preserves snapshots', () async {
     final fixture = DiscoveryFixture();
+    expect(await fixture.getAvailableServers(), isEmpty);
     final input = [server];
     fixture.setServers(input);
     input.clear();
