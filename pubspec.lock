@@ -77,10 +77,10 @@ packages:
     dependency: transitive
     description:
       name: bdd_widget_test
-      sha256: "534130fc07fa877ce25c375035c652ca326ffcaeca82a79aa694943fac75dd9b"
+      sha256: "401fb770c471a2a77b8881d039c05279315ed7b481990af2c2c4b3f1eaac1363"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "3.0.4"
   boolean_selector:
     dependency: transitive
     description:
@@ -257,6 +257,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
+  cucumber_gherkin:
+    dependency: transitive
+    description:
+      name: cucumber_gherkin
+      sha256: "64d7801d0b25ddb5b9129434dff2290d92b8c31a3809e50c6c7bfe8da8a37af4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "42.0.1"
+  cucumber_messages:
+    dependency: transitive
+    description:
+      name: cucumber_messages
+      sha256: d4ee7dfe53da26d5748d08dd64c28e234ad1f6a6833ffa99dd4c7a847e77e196
+      url: "https://pub.dev"
+    source: hosted
+    version: "34.2.1"
   cupertino_ui:
     dependency: transitive
     description:
