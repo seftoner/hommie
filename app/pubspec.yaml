@@ -54,7 +54,7 @@ dependencies:
   drift: ^2.35.1
   drift_flutter: ^0.3.1
 dev_dependencies:
-  bdd_widget_test: ^2.1.4
+  bdd_widget_test: ^3.0.4
   build_runner: ^2.15.1
   flutter_lints: ^6.0.0
   flutter_test:
